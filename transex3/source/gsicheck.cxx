@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:53:17 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,50 @@ BOOL LanguageOK( ByteString aLang )
     }
 
     return FALSE;
+}
+
+
+//
+// class LazySvFileStream
+//
+
+
+class LazySvFileStream : public SvFileStream
+{
+
+private:
+    String aFileName;
+    BOOL bOpened;
+    StreamMode eOpenMode;
+
+public:
+    LazySvFileStream()
+    : aFileName()
+    , bOpened( FALSE )
+    , eOpenMode( 0 )
+    {};
+
+    void SetOpenParams( const String& rFileName, StreamMode eOpenModeP )
+    {
+        aFileName = rFileName;
+        eOpenMode = eOpenModeP;
+    };
+
+    void LazyOpen();
+};
+
+void LazySvFileStream::LazyOpen()
+{
+    if ( !bOpened )
+    {
+        Open( aFileName, eOpenMode );
+        if ( !IsOpen())
+        {
+            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            exit ( 4 );
+        }
+        bOpened = TRUE;
+    }
 }
 
 
@@ -566,7 +610,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
     return bHasError || bHasBlockError;
 }
 
-void GSIBlock::WriteError( SvStream &aErrOut, BOOL bRequireSourceLine  )
+void GSIBlock::WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine  )
 {
     if ( pSourceLine && pSourceLine->IsOK() && bCheckSourceLang && !bHasBlockError )
         return;
@@ -579,15 +623,19 @@ void GSIBlock::WriteError( SvStream &aErrOut, BOOL bRequireSourceLine  )
         if ( !GetObject( i )->IsOK() || bCopyAll )
         {
             bHasError = TRUE;
+            aErrOut.LazyOpen();
             aErrOut.WriteLine( *GetObject( i ) );
         }
     }
 
     if ( pSourceLine && ( bHasError || !pSourceLine->IsOK() ) && !( !bHasError && bCheckTranslationLang ) )
+    {
+        aErrOut.LazyOpen();
         aErrOut.WriteLine( *pSourceLine );
+    }
 }
 
-void GSIBlock::WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine )
+void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine )
 {
     if ( ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) )
         return;
@@ -599,15 +647,19 @@ void GSIBlock::WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine )
         if ( ( GetObject( i )->IsOK() || bCheckSourceLang ) && !bHasBlockError )
         {
             bHasOK = TRUE;
+            aOkOut.LazyOpen();
             aOkOut.WriteLine( *GetObject( i ) );
         }
     }
 
     if ( ( pSourceLine && pSourceLine->IsOK() && ( Count() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
+    {
+        aOkOut.LazyOpen();
         aOkOut.WriteLine( *pSourceLine );
+    }
 }
 
-void GSIBlock::WriteFixed( SvStream &aFixOut, BOOL /*bRequireSourceLine*/ )
+void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, BOOL /*bRequireSourceLine*/ )
 {
     if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
         return;
@@ -619,13 +671,18 @@ void GSIBlock::WriteFixed( SvStream &aFixOut, BOOL /*bRequireSourceLine*/ )
         if ( GetObject( i )->IsFixed() )
         {
             bHasFixes = TRUE;
+            aFixOut.LazyOpen();
             aFixOut.WriteLine( *GetObject( i ) );
         }
     }
 
     if ( pSourceLine && bHasFixes )
+    {
+        aFixOut.LazyOpen();
         aFixOut.WriteLine( *pSourceLine );
+    }
 }
+
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -640,7 +697,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.8.7 (c)1999 - 2006 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.8.7a (c)1999 - 2006 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
@@ -885,7 +942,7 @@ int _cdecl main( int argc, char *argv[] )
         }
     }
 
-    SvFileStream aOkOut;
+    LazySvFileStream aOkOut;
     String aBaseName = aSource.GetBase();
     if ( bWriteCorrect )
     {
@@ -896,15 +953,10 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aCorrectFilename = aSource.GetFull();
         }
-        aOkOut.Open( aCorrectFilename , STREAM_STD_WRITE | STREAM_TRUNC );
-        if ( !aOkOut.IsOpen())
-        {
-            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aCorrectFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            exit ( 4 );
-        }
+        aOkOut.SetOpenParams( aCorrectFilename , STREAM_STD_WRITE | STREAM_TRUNC );
     }
 
-    SvFileStream aErrOut;
+    LazySvFileStream aErrOut;
     if ( bWriteError )
     {
         if ( !aErrorFilename.Len() )
@@ -914,15 +966,10 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aErrorFilename = aSource.GetFull();
         }
-        aErrOut.Open( aErrorFilename , STREAM_STD_WRITE | STREAM_TRUNC );
-        if ( !aErrOut.IsOpen())
-        {
-            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aErrorFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            exit ( 4 );
-        }
+        aErrOut.SetOpenParams( aErrorFilename , STREAM_STD_WRITE | STREAM_TRUNC );
     }
 
-    SvFileStream aFixOut;
+    LazySvFileStream aFixOut;
     if ( bWriteFixed )
     {
         if ( !aFixedFilename.Len() )
@@ -932,12 +979,7 @@ int _cdecl main( int argc, char *argv[] )
             aSource.SetBase( sTmpBase );
             aFixedFilename = aSource.GetFull();
         }
-        aFixOut.Open( aFixedFilename , STREAM_STD_WRITE | STREAM_TRUNC );
-        if ( !aFixOut.IsOpen())
-        {
-            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aFixedFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            exit ( 4 );
-        }
+        aFixOut.SetOpenParams( aFixedFilename , STREAM_STD_WRITE | STREAM_TRUNC );
     }
 
 
@@ -969,13 +1011,17 @@ int _cdecl main( int argc, char *argv[] )
                 if ( bWriteError )
                 {
                     bFileHasError = TRUE;
+                    aErrOut.LazyOpen();
                     aErrOut.WriteLine( *pGSILine );
                 }
             }
             else if ( pGSILine->GetLineType().EqualsIgnoreCaseAscii("res-comment") )
             {   // ignore comment lines, but write them to Correct Items File
                 if ( bWriteCorrect )
+                {
+                    aOkOut.LazyOpen();
                        aOkOut.WriteLine( *pGSILine );
+                }
             }
             else
             {
