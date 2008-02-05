@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setupstrings.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:34:31 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,6 +426,18 @@ en-US = "No components have been selected for installation."
 [STRING_NO_COMPONENTS_SELECTED_2]
 en-US = "Click 'OK' to select one or more components for installation or to exit the Installation Wizard."
 
+[STRING_NO_LANGUAGE_SELECTED_1]
+en-US = "No languages have been selected for installation."
+
+[STRING_NO_LANGUAGE_SELECTED_2]
+en-US = "Click 'OK' to select one or more languages for installation or to exit the Installation Wizard."
+
+[STRING_NO_APPLICATION_SELECTED_1]
+en-US = "No applications have been selected for installation."
+
+[STRING_NO_APPLICATION_SELECTED_2]
+en-US = "Click 'OK' to select one or more application for installation or to exit the Installation Wizard."
+
 [STRING_NOTHING_TO_UNINSTALL]
 en-US = "Nothing to uninstall"
 
@@ -434,3 +446,18 @@ en-US = "No components have been selected for uninstallation."
 
 [STRING_NO_UNINSTALLCOMPONENTS_SELECTED_2]
 en-US = "Click 'OK' to select one or more components for uninstallation or to exit the Uninstallation Wizard."
+
+[STRING_ALL_LANGUAGECOMPONENTS_SELECTED_1]
+en-US = "All language components have been selected for uninstallation."
+
+[STRING_ALL_LANGUAGECOMPONENTS_SELECTED_2]
+en-US = "Click 'OK' to select one or more language components not for uninstallation or to exit the Uninstallation Wizard."
+
+[STRING_ALL_APPLICATIONCOMPONENTS_SELECTED_1]
+en-US = "All application components have been selected for uninstallation."
+
+[STRING_ALL_APPLICATIONCOMPONENTS_SELECTED_2]
+en-US = "Click 'OK' to select one or more application components not for uninstallation or to exit the Uninstallation Wizard."
+
+[STRING_CHANGE_SELECTION]
+en-US = "Please change selection"
