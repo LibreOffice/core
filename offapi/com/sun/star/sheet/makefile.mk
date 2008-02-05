@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 12:43:34 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 15:53:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,12 @@ IDLFILES=\
     XViewPanesSupplier.idl\
     XViewSplitable.idl\
     XVolatileResult.idl\
-    _NamedRange.idl
+    _NamedRange.idl\
+    SolverConstraintOperator.idl\
+    SolverConstraint.idl\
+    XSolver.idl\
+    XSolverDescription.idl\
+    Solver.idl
 
 # ------------------------------------------------------------------
 
