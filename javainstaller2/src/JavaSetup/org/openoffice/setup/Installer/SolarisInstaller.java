@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SolarisInstaller.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:32:47 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ public class SolarisInstaller extends Installer {
             // not analyzed before (when going back in installation wizard)
             if ( ! databasePath.equals(oldDatabasePath) ) {
                 data.setDatabaseAnalyzed(false);
+                data.setDatabaseQueried(false);
             }
         }
     }
@@ -313,7 +314,7 @@ public class SolarisInstaller extends Installer {
 
     }
 
-    public boolean isPackageNameInstalled(String packageName, InstallData installData) {
+    public boolean isPackageNameInstalledClassic(String packageName, InstallData installData) {
         String rootString = "";
         String rootPath = null;
         String pkgCommand;
@@ -354,6 +355,77 @@ public class SolarisInstaller extends Installer {
         } else {
             String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is not installed" + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
+        }
+
+        return isInstalled;
+    }
+
+    private void queryAllDatabase(InstallData installData) {
+
+        String rootString = "";
+        String rootPath = null;
+        String pkgCommand;
+        String[] pkgCommandArray;
+        boolean useLocalRoot = false;
+        HashMap map = new HashMap();;
+
+        if (installData.isUserInstallation()) {
+            rootPath = installData.getDatabasePath();
+        }
+
+        if (( rootPath != null ) && (! rootPath.equals("null"))) {
+            rootString = "-R";
+            useLocalRoot = true;
+        }
+
+        if (useLocalRoot) {
+            pkgCommand = "pkginfo " + rootString + " " + rootPath;
+            pkgCommandArray = new String[4];
+            pkgCommandArray[0] = "pkginfo";
+            pkgCommandArray[1] = "-x";
+            pkgCommandArray[2] = rootString;
+            pkgCommandArray[3] = rootPath;
+        } else {
+            pkgCommand = "pkginfo -x";
+            pkgCommandArray = new String[2];
+            pkgCommandArray[0] = "pkginfo";
+            pkgCommandArray[1] = "-x";
+        }
+
+        Vector returnVector = new Vector();
+        Vector returnErrorVector = new Vector();
+        int returnValue = ExecuteProcess.executeProcessReturnVector(pkgCommandArray, returnVector, returnErrorVector);
+
+        String log = pkgCommand + "<br><b>Returns: " + returnValue + "</b><br>";
+        LogManager.addCommandsLogfileComment(log);
+        String value = "1";
+
+        if ( ! returnVector.isEmpty()) {
+            for (int i = 0; i < returnVector.size(); i++) {
+                String onePackage = (String)returnVector.get(i);
+                int pos1 = onePackage.indexOf(" ");
+                map.put(onePackage.substring(0, pos1), value);
+            }
+        }
+
+        installData.setDatabaseQueried(true);
+        installData.setDatabaseMap(map);
+
+    }
+
+    public boolean isPackageNameInstalled(String packageName, InstallData installData) {
+
+        boolean isInstalled = false;
+
+        HashMap map = null;
+        if ( ! installData.databaseQueried() ) {
+            queryAllDatabase(installData);
+        }
+
+        map = installData.getDatabaseMap();
+
+        if ( map.containsKey(packageName)) {
+            isInstalled = true;
         }
 
         return isInstalled;
