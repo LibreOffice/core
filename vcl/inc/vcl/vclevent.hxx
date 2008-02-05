@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclevent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:16:08 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,8 @@ class Menu;
 #define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = BOOL
 #define VCLEVENT_WINDOW_TOGGLEFLOATING          1221
 #define VCLEVENT_WINDOW_ENDPOPUPMODE            1222    // pData = EndPopupModeData
+
+#define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
