@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:33:10 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -822,7 +822,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // (for this build an array of all relevant attributes and
             // remove the languages from that)
             SvUShortsSort aAttribs;
-            USHORT __FAR_DATA *pUShorts = aTxtNodeSetRange;
+
+            USHORT __FAR_DATA aResetableSetRange[] = {
+                RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+                RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1,
+                RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1,
+                RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
+                RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
+                RES_PARATR_BEGIN, RES_PARATR_END-1,
+                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+                0
+            };
+            USHORT __FAR_DATA *pUShorts = aResetableSetRange;
             while (*pUShorts)
             {
                 USHORT nL = pUShorts[1] - pUShorts[0] + 1;
@@ -831,9 +845,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aAttribs.Insert( nE++ );
                 pUShorts += 2;
             }
-            aAttribs.Remove( RES_CHRATR_LANGUAGE );
-            aAttribs.Remove( RES_CHRATR_CJK_LANGUAGE );
-            aAttribs.Remove( RES_CHRATR_CTL_LANGUAGE );
 
             rWrtSh.ResetAttr( &aAttribs );
             rReq.Done();
