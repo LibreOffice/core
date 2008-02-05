@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrologueCtrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:32:23 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,19 @@ public class PrologueCtrl extends PanelController {
                         Dumper.logModuleStates(packageData, "Prologue Dialog");
                     }
 
-                    if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                    if (( installData.getOSType().equalsIgnoreCase("SunOS") ) && ( installData.isMultiLingual() )) {
                         ModuleCtrl.checkLanguagesPackages(packageData, installData);
 
                         if ( installData.logModuleStates() ) {
                             Dumper.logModuleStates(packageData, "Prologue Dialog Language Selection");
+                        }
+                    }
+
+                    if ( ! installData.isMultiLingual() ) {
+                        ModuleCtrl.setHiddenLanguageModuleDefaultSettings(packageData);
+
+                        if ( installData.logModuleStates() ) {
+                            Dumper.logModuleStates(packageData, "after setHiddenLanguageModuleDefaultSettings");
                         }
                     }
 
