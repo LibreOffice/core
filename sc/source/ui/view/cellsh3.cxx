@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:12:35 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_DATA_SELECT:
             case SID_OPENDLG_CONSOLIDATE:
             case SID_OPENDLG_SOLVE:
+            case SID_OPENDLG_OPTSOLVER:
 
                     pScMod->InputEnterHandler();
                     pTabViewShell->UpdateInputHandler();
@@ -366,6 +367,16 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_SOLVE:
             {
                 USHORT          nId  = ScSolverDlgWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+            }
+            break;
+
+        case SID_OPENDLG_OPTSOLVER:
+            {
+                USHORT nId = ScOptSolverDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
