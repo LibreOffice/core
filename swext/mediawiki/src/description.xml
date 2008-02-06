@@ -3,6 +3,6 @@
     <version value="0.9.1"/>
     <identifier value="com.sun.sun-mediawiki"/>
     <dependencies>
-        <OpenOffice.org-minimal-version value="2.4" d:name="OpenOffice.org 2.4 or StarOffice 8 Update 9"/>
+        <OpenOffice.org-minimal-version value="2.4" d:name="OpenOffice.org 2.4 or StarOffice 8 Update 10"/>
     </dependencies>
 </description>
