@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:54:56 $
+ *  last change: $Author: ihi $ $Date: 2008-02-06 17:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 #ifdef UNX
             sleep( 3 );
 #else
-            _sleep( 3 );
+            Sleep( 3 );
 #endif
             res = xmlParseFile(filePath.native_file_string().c_str());
         }
@@ -95,7 +95,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 #ifdef UNX
             sleep( 3 );
 #else
-            _sleep( 3 );
+            Sleep( 3 );
 #endif
             doc = xmlParseFile(filePath.native_file_string().c_str());
         }
@@ -420,7 +420,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
 #ifdef UNX
         sleep( 3 );
 #else
-        _sleep( 3 );
+        Sleep( 3 );
 #endif
         docResolvedOrg = getSourceDocument(inputFile);
         if( !docResolvedOrg )
