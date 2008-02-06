@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:56:12 $
+ *  last change: $Author: ihi $ $Date: 2008-02-06 17:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ BOOL XMLFile::Write( ByteString &aFilename )
 #ifdef UNX
                 sleep( 3 );
 #else
-                _sleep( 3 );
+                Sleep( 3 );
 #endif
             }
             else

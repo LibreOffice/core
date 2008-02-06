@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:54 $
+ *  last change: $Author: ihi $ $Date: 2008-02-06 17:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 #ifdef UNX
         sleep( 3 );
 #else
-        _sleep( 3 );
+        Sleep( 3 );
 #endif
         if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
         {
@@ -491,7 +491,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 #ifdef UNX
         sleep( 3 );
 #else
-        _sleep( 3 );
+        Sleep( 3 );
 #endif
         aFSTest.Update( aTar );
         if( aFSTest.GetSize() < 1 )
