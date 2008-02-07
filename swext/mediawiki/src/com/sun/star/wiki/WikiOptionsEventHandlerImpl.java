@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-07 09:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,23 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                 throw new WrappedTargetException( sMethod, this, e );
             }
         }
+        else if ( sMethod.equals( sAdd ) )
+        {
+            AddSetting();
+        }
+        else if ( sMethod.equals( sEdit ) || sMethod.equals( sListEdit ) )
+        {
+            EditSetting();
+        }
+        else if ( sMethod.equals( sRemove ) )
+        {
+            RemoveSetting();
+            CheckButtonState();
+        }
+        else if ( sMethod.equals( sListStatus ) )
+        {
+            CheckButtonState();
+        }
 
         return true;
     }
@@ -279,26 +296,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     public boolean callHandlerMethod( XDialog xDialog, Object aEventObject, String sMethod )
         throws WrappedTargetException, com.sun.star.uno.RuntimeException
     {
-        if ( m_xDialog != null && xDialog == m_xDialog )
-        {
-            if ( sMethod.equals( sAdd ) )
-            {
-                AddSetting();
-            }
-            else if ( sMethod.equals( sEdit ) || sMethod.equals( sListEdit ) )
-            {
-                EditSetting();
-            }
-            else if ( sMethod.equals( sRemove ) )
-            {
-                RemoveSetting();
-                CheckButtonState();
-            }
-            else if ( sMethod.equals( sListStatus ) )
-            {
-                CheckButtonState();
-            }
-        }
+
 
         return true;
     }
