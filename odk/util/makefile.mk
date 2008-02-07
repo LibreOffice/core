@@ -27,7 +27,6 @@ ODK_OO_FILES=\
     $(PRJ)$/index.html \
     $(PRJ)$/docs$/tools.html \
     $(PRJ)$/docs$/notsupported.html \
-    $(PRJ)$/docs$/DevelopersGuide_intro.html \
     $(PRJ)$/docs$/install.html \
     $(PRJ)$/docs$/sdk_styles.css \
     $(PRJ)$/docs$/images$/arrow-1.gif \
