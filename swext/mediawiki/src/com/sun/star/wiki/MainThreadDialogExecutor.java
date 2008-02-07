@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MainThreadDialogExecutor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-07 16:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,11 @@ public class MainThreadDialogExecutor implements XCallback
             }
         }
         else if ( m_xMessageBox != null )
-            m_bResult = ( m_xMessageBox.execute() == 1 );
+        {
+            int nRes = m_xMessageBox.execute();
+            m_bResult = ( nRes == com.sun.star.awt.MessageBoxCommand.OK
+                          || nRes == com.sun.star.awt.MessageBoxCommand.YES );
+        }
 
         m_bCalled = true;
     }
