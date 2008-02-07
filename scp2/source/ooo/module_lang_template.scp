@@ -138,7 +138,8 @@ Module gid_Module_Langpack_Calc_Template
              gid_File_Res_Analysis,
              gid_File_Res_Bf_Sc,
              gid_File_Res_Date,
-             gid_File_Res_Sc);
+             gid_File_Res_Sc,
+             gid_File_Res_Solver);
 End
 
 Module gid_Module_Langpack_Impress_Template

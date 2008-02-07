@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 15:54:24 $
+ *  last change: $Author: rt $ $Date: 2008-02-07 11:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ Module gid_Module_Prg_Calc_Bin
     Minimal = YES;
     Default = YES;
     Files = (gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
-    gid_File_Lib_Solver,gid_File_Res_Solver,gid_File_Lib_Lpsolve,
+    gid_File_Lib_Solver,gid_File_Lib_Lpsolve,
     gid_File_Oo_Office_Ui_Calccommands_Xcs,gid_File_Oo_Office_Ui_Calccommands_Xcu,gid_File_Oo_Office_Ui_Calcwindowstate_Xcs,
     gid_File_Registry_Spool_Oo_Common_Calc_Xcu,gid_File_Registry_Spool_Oo_Setup_Calc_Xcu, gid_File_Xdg_Calc, gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu,
     gid_File_Lib_Bf_Sc,gid_File_Oo_Office_Ui_Calcwindowstate_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu, gid_File_Tmp_Userinstall_Calc_Inf);
