@@ -28,6 +28,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\metafileprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\metafileprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\oleprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\oleprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\pagepreviewprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\pagepreviewprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\pointarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\pointarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx

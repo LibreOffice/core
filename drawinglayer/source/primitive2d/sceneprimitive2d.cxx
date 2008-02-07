@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,9 @@ namespace drawinglayer
             {
                 // test visibility
                 const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
 
-                if(aShadow2DRange.overlaps(rViewInformation.getViewport()))
+                if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
                     // add extracted 2d shadows (before 3d scene creations itself)
                     aRetval = maShadowPrimitives;
@@ -236,8 +237,9 @@ namespace drawinglayer
             {
                 // test visibility
                 const basegfx::B2DRange aLabel2DRange(getB2DRangeFromPrimitive2DSequence(maLabelPrimitives, rViewInformation));
+                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
 
-                if(aLabel2DRange.overlaps(rViewInformation.getViewport()))
+                if(aViewRange.isEmpty() || aLabel2DRange.overlaps(aViewRange))
                 {
                     // add extracted 2d labels (after 3d scene creations)
                     appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, maLabelPrimitives);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 12:57:55 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #endif
 
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#endif
+
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -89,15 +89,15 @@ namespace drawinglayer
             return getLocalDecomposition();
         }
 
-        Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const graphic::Primitive2DParameters& aPrimitive2DParameters ) throw ( uno::RuntimeException )
+        Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            const geometry::ViewInformation2D aViewInformation(aPrimitive2DParameters);
+            const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return get2DDecomposition(aViewInformation);
         }
 
-        com::sun::star::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const graphic::Primitive2DParameters& aPrimitive2DParameters ) throw ( uno::RuntimeException )
+        com::sun::star::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            const geometry::ViewInformation2D aViewInformation(aPrimitive2DParameters);
+            const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
         }
     } // end of namespace primitive2d
@@ -128,13 +128,8 @@ namespace drawinglayer
                 else
                 {
                     // use UNO API call instead
-                    graphic::Primitive2DParameters aPrimitive2DParameters;
-
-                    basegfx::unotools::affineMatrixFromHomMatrix(aPrimitive2DParameters.ViewTransformation, aViewInformation.getViewTransformation());
-                    aPrimitive2DParameters.Viewport = basegfx::unotools::rectangle2DFromB2DRectangle(aViewInformation.getViewport());
-                    aPrimitive2DParameters.Time = aViewInformation.getViewTime();
-
-                    aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(rCandidate->getRange(aPrimitive2DParameters)));
+                    const uno::Sequence< beans::PropertyValue >& rViewParameters(aViewInformation.getViewInformationSequence());
+                    aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(rCandidate->getRange(rViewParameters)));
                 }
             }
 

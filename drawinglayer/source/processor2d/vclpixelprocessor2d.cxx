@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-13 16:43:09 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDALPHAPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #endif
 
 #include <cstdio>
@@ -320,6 +324,12 @@ namespace drawinglayer
                 {
                     // transform group.
                     RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
+                {
+                    // new XDrawPage for ViewInformation2D
+                    RenderPagePreviewPrimitive2D(static_cast< const primitive2d::PagePreviewPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :

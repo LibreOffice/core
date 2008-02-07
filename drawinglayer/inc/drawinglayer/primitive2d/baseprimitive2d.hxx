@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,12 +141,12 @@ namespace drawinglayer
             //
 
             // The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
-            // will construct a ViewInformation2D from the Primitive2DParameters for that purpose
-            virtual Primitive2DSequence SAL_CALL getDecomposition( const ::com::sun::star::graphic::Primitive2DParameters& aPrimitive2DParameters ) throw ( ::com::sun::star::uno::RuntimeException );
+            // will construct a ViewInformation2D from the ViewParameters for that purpose
+            virtual Primitive2DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException );
 
             // The getRange implementation for UNO API will use getRange from this implementation. It
-            // will construct a ViewInformation2D from the Primitive2DParameters for that purpose
-            virtual ::com::sun::star::geometry::RealRectangle2D SAL_CALL getRange( const ::com::sun::star::graphic::Primitive2DParameters& aPrimitive2DParameters ) throw ( ::com::sun::star::uno::RuntimeException );
+            // will construct a ViewInformation2D from the ViewParameters for that purpose
+            virtual ::com::sun::star::geometry::RealRectangle2D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException );
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

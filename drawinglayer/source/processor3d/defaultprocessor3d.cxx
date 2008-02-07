@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -956,6 +960,12 @@ namespace drawinglayer
                     }
                 }
             }
+        }
+
+        const ::rtl::OUString& getNamePropertyTime()
+        {
+            static ::rtl::OUString s_sNamePropertyTime(RTL_CONSTASCII_USTRINGPARAM("Time"));
+            return s_sNamePropertyTime;
         }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -1820,9 +1830,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            com::sun::star::graphic::Primitive3DParameters aPrimitive3DParameters;
-                            aPrimitive3DParameters.Time = getTime();
-                            process(xReference->getDecomposition(aPrimitive3DParameters));
+                            const uno::Sequence< beans::PropertyValue > xViewParameters(primitive3d::TimeToViewParameters(getTime()));
+                            process(xReference->getDecomposition(xViewParameters));
                         }
                     }
                 }

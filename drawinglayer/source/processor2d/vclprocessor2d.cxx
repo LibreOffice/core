@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-13 16:43:09 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,6 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #endif
 
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WRONGSPELLPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #endif
@@ -143,6 +139,10 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -174,6 +174,10 @@
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -840,13 +844,36 @@ namespace drawinglayer
             maViewInformation2D = geometry::ViewInformation2D(
                 getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
                 getViewInformation2D().getViewport(),
-                getViewInformation2D().getViewTime());
+                getViewInformation2D().getVisualizedPage(),
+                getViewInformation2D().getViewTime(),
+                getViewInformation2D().getExtendedInformationSequence());
 
             // proccess content
             process(rTransformCandidate.getChildren());
 
             // restore transformations
             maCurrentTransformation = aLastCurrentTransformation;
+            maViewInformation2D = aLastViewInformation2D;
+        }
+
+        // new XDrawPage for ViewInformation2D
+        void VclProcessor2D::RenderPagePreviewPrimitive2D(const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate)
+        {
+            // remember current transformation and ViewInformation
+            const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+
+            // create new local ViewInformation2D
+            maViewInformation2D = geometry::ViewInformation2D(
+                getViewInformation2D().getViewTransformation(),
+                getViewInformation2D().getViewport(),
+                rPagePreviewCandidate.getXDrawPage(),
+                getViewInformation2D().getViewTime(),
+                getViewInformation2D().getExtendedInformationSequence());
+
+            // proccess decomposed content
+            process(rPagePreviewCandidate.get2DDecomposition(getViewInformation2D()));
+
+            // restore transformations
             maViewInformation2D = aLastViewInformation2D;
         }
 
@@ -1229,13 +1256,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            com::sun::star::graphic::Primitive2DParameters aPrimitive2DParameters;
-
-                            basegfx::unotools::affineMatrixFromHomMatrix(aPrimitive2DParameters.ViewTransformation, getViewInformation2D().getViewTransformation());
-                            aPrimitive2DParameters.Viewport = basegfx::unotools::rectangle2DFromB2DRectangle(getViewInformation2D().getViewport());
-                            aPrimitive2DParameters.Time = getViewInformation2D().getViewTime();
-
-                            process(xReference->getDecomposition(aPrimitive2DParameters));
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
                         }
                     }
                 }

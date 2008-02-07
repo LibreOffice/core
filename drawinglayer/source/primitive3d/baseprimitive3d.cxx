@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,17 @@
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+    const ::rtl::OUString& getNamePropertyTime()
+    {
+        static ::rtl::OUString s_sNamePropertyTime(RTL_CONSTASCII_USTRINGPARAM("Time"));
+        return s_sNamePropertyTime;
+    }
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -87,14 +98,14 @@ namespace drawinglayer
             return getLocalDecomposition();
         }
 
-        Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const graphic::Primitive3DParameters& aPrimitive2DParameters ) throw ( uno::RuntimeException )
+        Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            return get3DDecomposition(aPrimitive2DParameters.Time);
+            return get3DDecomposition(ViewParametersToTime(rViewParameters));
         }
 
-        geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const graphic::Primitive3DParameters& aPrimitive2DParameters ) throw ( uno::RuntimeException )
+        geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aPrimitive2DParameters.Time));
+            return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(ViewParametersToTime(rViewParameters)));
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -124,9 +135,8 @@ namespace drawinglayer
                 else
                 {
                     // use UNO API call instead
-                    graphic::Primitive3DParameters aPrimitive3DParameters;
-                    aPrimitive3DParameters.Time = fTime;
-                    aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(aPrimitive3DParameters)));
+                    const uno::Sequence< beans::PropertyValue > xViewParameters(TimeToViewParameters(fTime));
+                    aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(xViewParameters)));
                 }
             }
 
@@ -259,6 +269,42 @@ namespace drawinglayer
             }
         }
 
+        // conversion helpers for 3D ViewParameters (only time used ATM)
+        double ViewParametersToTime(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+        {
+            double fRetval(0.0);
+
+            if(rViewParameters.hasElements())
+            {
+                const sal_Int32 nCount(rViewParameters.getLength());
+
+                for(sal_Int32 a(0); a < nCount; a++)
+                {
+                    const beans::PropertyValue& rProp = rViewParameters[a];
+
+                    if(rProp.Name == getNamePropertyTime())
+                    {
+                        rProp.Value >>= fRetval;
+                    }
+                }
+            }
+
+            return fRetval;
+        }
+
+        const uno::Sequence< beans::PropertyValue > TimeToViewParameters(double fTime)
+        {
+            uno::Sequence< beans::PropertyValue > xViewParameters;
+
+            if(0.0 < fTime)
+            {
+                xViewParameters.realloc(1);
+                xViewParameters[0].Name = getNamePropertyTime();
+                xViewParameters[0].Value <<= fTime;
+            }
+
+            return xViewParameters;
+        }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

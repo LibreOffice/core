@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,10 @@
 
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1631,8 +1635,15 @@ namespace drawinglayer
                                     aViewTransform.scale(fDPIXChange, fDPIYChange);
                                 }
 
-                                // create view information and pixel renderer
-                                const geometry::ViewInformation2D aViewInfo(aViewTransform, aViewRange, 0.0);
+                                // create view information and pixel renderer. Reuse known ViewInformation
+                                // except new transformation and range
+                                const geometry::ViewInformation2D aViewInfo(
+                                    aViewTransform,
+                                    aViewRange,
+                                    getViewInformation2D().getVisualizedPage(),
+                                    getViewInformation2D().getViewTime(),
+                                    getViewInformation2D().getExtendedInformationSequence());
+
                                 VclPixelProcessor2D aBufferProcessor(aViewInfo, aBufferDevice);
 
                                 // draw content using pixel renderer
@@ -1668,6 +1679,12 @@ namespace drawinglayer
                 {
                     // use default transform group pocessing
                     RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
+                {
+                    // new XDrawPage for ViewInformation2D
+                    RenderPagePreviewPrimitive2D(static_cast< const primitive2d::PagePreviewPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :

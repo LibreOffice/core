@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:35:55 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,9 +310,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            com::sun::star::graphic::Primitive3DParameters aPrimitive3DParameters;
-                            aPrimitive3DParameters.Time = getTime();
-                            process(xReference->getDecomposition(aPrimitive3DParameters));
+                            const uno::Sequence< beans::PropertyValue > xViewParameters(primitive3d::TimeToViewParameters(getTime()));
+                            process(xReference->getDecomposition(xViewParameters));
                         }
                     }
                 }

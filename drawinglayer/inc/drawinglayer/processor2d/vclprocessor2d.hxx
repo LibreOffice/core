@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-18 15:10:11 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ namespace drawinglayer { namespace primitive2d {
     class WrongSpellPrimitive2D;
     class PolygonStrokePrimitive2D;
     class ControlPrimitive2D;
+    class PagePreviewPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -114,6 +115,7 @@ namespace drawinglayer
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
             void RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate);
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
+            void RenderPagePreviewPrimitive2D(const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate);
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);

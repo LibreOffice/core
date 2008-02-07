@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1345,7 +1345,9 @@ namespace drawinglayer
                     maViewInformation2D = geometry::ViewInformation2D(
                         getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
                         getViewInformation2D().getViewport(),
-                        getViewInformation2D().getViewTime());
+                        getViewInformation2D().getVisualizedPage(),
+                        getViewInformation2D().getViewTime(),
+                        getViewInformation2D().getExtendedInformationSequence());
 
                     // set at canvas
                     canvas::tools::setViewStateTransform(maViewState, maCurrentTransformation);
@@ -1399,13 +1401,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            com::sun::star::graphic::Primitive2DParameters aPrimitive2DParameters;
-
-                            basegfx::unotools::affineMatrixFromHomMatrix(aPrimitive2DParameters.ViewTransformation, getViewInformation2D().getViewTransformation());
-                            aPrimitive2DParameters.Viewport = basegfx::unotools::rectangle2DFromB2DRectangle(getViewInformation2D().getViewport());
-                            aPrimitive2DParameters.Time = getViewInformation2D().getViewTime();
-
-                            process(xReference->getDecomposition(aPrimitive2DParameters));
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
                         }
                     }
                 }

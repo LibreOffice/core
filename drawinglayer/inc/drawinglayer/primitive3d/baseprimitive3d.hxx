@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:31:19 $
+ *  last change: $Author: aw $ $Date: 2008-02-07 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,12 +132,12 @@ namespace drawinglayer
             //
 
             // The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
-            // will get the time from the Primitive2DParameters for that purpose
-            virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::graphic::Primitive3DParameters& aPrimitive2DParameters ) throw ( ::com::sun::star::uno::RuntimeException );
+            // will get the time from the ViewParameters for that purpose
+            virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException );
 
             // the getRange default implemenation will use getDecomposition to create the range information from merging
             // getRange results from the single local decomposition primitives.
-            virtual ::com::sun::star::geometry::RealRectangle3D SAL_CALL getRange( const ::com::sun::star::graphic::Primitive3DParameters& aPrimitive2DParameters ) throw ( ::com::sun::star::uno::RuntimeException );
+            virtual ::com::sun::star::geometry::RealRectangle3D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException );
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -168,6 +168,9 @@ namespace drawinglayer
         // concatenate single Primitive3D
         void appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
 
+        // conversion helpers for 3D ViewParameters (only time used ATM)
+        double ViewParametersToTime(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > TimeToViewParameters(double fTime);
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
