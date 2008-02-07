@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-07 12:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ public class WikiEditSettingDialog extends WikiDialog
         setting = new Hashtable();
         addMode = true;
 
-        InsertThrobber( 184, 24, 10, 10 );
+        InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
         InitSaveCheckbox( xContext );
     }
@@ -93,7 +93,7 @@ public class WikiEditSettingDialog extends WikiDialog
         addMode = false;
         m_bAllowURLChange = bAllowURLChange;
 
-        InsertThrobber( 184, 24, 10, 10 );
+        InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
         InitSaveCheckbox( xContext );
     }

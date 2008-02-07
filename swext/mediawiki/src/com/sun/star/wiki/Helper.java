@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-07 12:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,9 @@ public class Helper
     public final static int DLG_EDITSETTING_SAVEBOX = 29;
 
     public final static int CANCELSENDING_ERROR = 30;
+    public final static int DLG_MEDIAWIKIEXTENSION_STRING = 31;
 
-    public final static int STRINGS_NUM = 31;
+    public final static int STRINGS_NUM = 32;
 
     private final static String[] m_pEntryNames = { "GeneralSendError",
                                                     "NoWikiFilter",
@@ -155,7 +156,8 @@ public class Helper
                                                     "Dlg_EditSetting_AccountLine",
                                                     "Dlg_EditSetting_WikiLine",
                                                     "Dlg_EditSetting_SaveBox",
-                                                    "CancelSending" };
+                                                    "CancelSending",
+                                                    "Dlg_MediaWiki_Extension_String" };
 
     private static String[] m_pConfigStrings;
 

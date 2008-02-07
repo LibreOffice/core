@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-07 09:17:30 $
+ *  last change: $Author: mav $ $Date: 2008-02-07 12:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,8 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     {
         try
         {
+
+            GetPropSet( "FixedLine1" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_MEDIAWIKIEXTENSION_STRING ) );
             GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_ADDBUTTON ) );
             GetPropSet( "EditButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_EDITBUTTON ) );
             GetPropSet( "RemoveButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_REMOVEBUTTON ) );
