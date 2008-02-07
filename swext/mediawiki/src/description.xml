@@ -2,6 +2,9 @@
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
     <version value="0.9.1"/>
     <identifier value="com.sun.sun-mediawiki"/>
+    <display-name>
+        <name lang="en-US">MediaWiki Extension</name>
+    </display-name>
     <dependencies>
         <OpenOffice.org-minimal-version value="2.4" d:name="OpenOffice.org 2.4 or StarOffice 8 Update 10"/>
     </dependencies>
