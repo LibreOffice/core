@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
+ *  last change: $Author: aw $ $Date: 2008-02-08 09:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,8 +251,8 @@ namespace drawinglayer
                 maInverseViewTransformation(maViewTransformation),
                 maViewport(rViewport),
                 maDiscreteViewport(),
-                mfViewTime(fViewTime),
                 mxVisualizedPage(rxDrawPage),
+                mfViewTime(fViewTime),
                 mxViewInformation(),
                 mxExtendedInformation(),
                 mbInverseValid(false),
@@ -267,8 +267,8 @@ namespace drawinglayer
                 maInverseViewTransformation(),
                 maViewport(),
                 maDiscreteViewport(),
-                mfViewTime(),
                 mxVisualizedPage(),
+                mfViewTime(),
                 mxViewInformation(rViewParameters),
                 mxExtendedInformation(),
                 mbInverseValid(false),
