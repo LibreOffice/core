@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: WikiExtension.xcu,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mav $ $Date: 2008-02-08 15:14:40 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="WikiExtension" oor:package="org.openoffice.Office.Custom">
+    <node oor:name="SpecialData">
+        <node oor:name="so-wiki.germany.sun.com" oor:op="fuse">
+            <prop oor:name="AllowUnknownCertificate">
+                <value>true</value>
+            </prop>
+            <node oor:name="AdditionalLoginArguments">
+                <node oor:name="wpDomain" oor:op="fuse">
+                    <prop oor:name="Value">
+                        <value>sun</value>
+                    </prop>
+                </node>
+            </node>
+        </node>
+    </node>
+
+    <node oor:name="ConnectionList">
+    </node>
+
+    <node oor:name="RecentDocs">
+    </node>
+
+    <node oor:name="Settings">
+        <prop oor:name="PreselectShowBrowser">
+            <value>true</value>
+        </prop>
+    </node>
+    <node oor:name="Strings">
+        <prop oor:name="GeneralSendError">
+            <value xml:lang="en-US">The operation 'Send to MediaWiki' could not be completed successfully.</value>
+        </prop>
+        <prop oor:name="NoWikiFilter">
+            <value xml:lang="en-US">The MediaWiki export filter cannot be found. Choose 'Tools-XML Filter Settings' to install the filter, or use the setup to install the component.</value>
+        </prop>
+        <prop oor:name="NoConnectionToURL">
+            <value xml:lang="en-US">A connection to the MediaWiki system at '$ARG1' could not be created.</value>
+        </prop>
+        <prop oor:name="WrongLogin">
+            <value xml:lang="en-US">User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection.</value>
+        </prop>
+        <prop oor:name="InvalidURL">
+            <value xml:lang="en-US">A connection could not be created, because the URL is invalid.</value>
+        </prop>
+        <prop oor:name="NoURL">
+            <value xml:lang="en-US">Specify a MediaWiki server by providing a URL.</value>
+        </prop>
+        <prop oor:name="CancelSending">
+            <value xml:lang="en-US">The transfer has been interrupted. Please check the integrity of the wiki article.</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_UrlLabel">
+            <value xml:lang="en-US">U~RL</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_UsernameLabel">
+            <value xml:lang="en-US">~Username</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_PasswordLabel">
+            <value xml:lang="en-US">~Password</value>
+        </prop>
+        <prop oor:name="Dlg_SendTitle">
+            <value xml:lang="en-US">Send to MediaWiki</value>
+        </prop>
+        <prop oor:name="Dlg_WikiArticle">
+            <value xml:lang="en-US">Wiki article</value>
+        </prop>
+        <prop oor:name="Dlg_No">
+            <value xml:lang="en-US">No</value>
+        </prop>
+        <prop oor:name="Dlg_OK">
+            <value xml:lang="en-US">OK</value>
+        </prop>
+        <prop oor:name="Dlg_Yes">
+            <value xml:lang="en-US">Yes</value>
+        </prop>
+        <prop oor:name="Dlg_Help">
+            <value xml:lang="en-US">~Help</value>
+        </prop>
+        <prop oor:name="Dlg_AddButton">
+            <value xml:lang="en-US">~Add...</value>
+        </prop>
+        <prop oor:name="Dlg_EditButton">
+            <value xml:lang="en-US">~Edit...</value>
+        </prop>
+        <prop oor:name="Dlg_SendButton">
+            <value xml:lang="en-US">~Send</value>
+        </prop>
+        <prop oor:name="Dlg_RemoveButton">
+            <value xml:lang="en-US">~Remove</value>
+        </prop>
+        <prop oor:name="Dlg_NewWikiPage_Label1">
+            <value xml:lang="en-US">A wiki article with the title '$ARG1' does not exist yet. Do you want to create a new article with that name?</value>
+        </prop>
+        <prop oor:name="Dlg_SendToMediaWiki_Label1">
+            <value xml:lang="en-US">Media~Wiki Server</value>
+        </prop>
+        <prop oor:name="Dlg_SendToMediaWiki_Label2">
+            <value xml:lang="en-US">~Title</value>
+        </prop>
+        <prop oor:name="Dlg_SendToMediaWiki_Label3">
+            <value xml:lang="en-US">S~ummary</value>
+        </prop>
+        <prop oor:name="Dlg_SendToMediaWiki_MinorCheck">
+            <value xml:lang="en-US">This is a ~minor edit</value>
+        </prop>
+        <prop oor:name="Dlg_SendToMediaWiki_BrowserCheck">
+            <value xml:lang="en-US">Show in web ~browser</value>
+        </prop>
+        <prop oor:name="UnknownCert">
+            <value xml:lang="en-US">The certificate of the selected site is unknown.</value>
+        </prop>
+        <prop oor:name="Dlg_MediaWiki_Title">
+            <value xml:lang="en-US">MediaWiki</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_AccountLine">
+            <value xml:lang="en-US">Account</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_WikiLine">
+            <value xml:lang="en-US">MediaWiki Server</value>
+        </prop>
+        <prop oor:name="Dlg_EditSetting_SaveBox">
+            <value xml:lang="en-US">~Save password</value>
+        </prop>
+        <prop oor:name="Dlg_MediaWiki_Extension_String">
+            <value xml:lang="en-US">MediaWiki Extension</value>
+        </prop>
+
+    </node>
+</oor:component-data>
