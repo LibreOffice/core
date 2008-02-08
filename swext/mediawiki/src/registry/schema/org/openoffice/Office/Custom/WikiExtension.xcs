@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: WikiExtension.xcs,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mav $ $Date: 2008-02-08 14:32:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<oor:component-schema 
+    xmlns:oor="http://openoffice.org/2001/registry" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    oor:name="WikiExtension" 
+    oor:package="org.openoffice.Office.Custom" 
+    xml:lang="en-US">
+    <info>
+        <desc>Configuration parameters for the accounts.</desc>
+    </info>
+    
+    <templates>
+        <group oor:name="RequestArgument">
+            <info><desc>An argument for a request.</desc></info>
+            <prop oor:name="Value" oor:type="xs:string">
+                <info><desc>The value of the argument.</desc></info>
+            </prop>
+        </group>
+
+        <group oor:name="WikiServerSpecialData">
+            <info><desc>The smart configuration for the MediaWikiServer.</desc></info>
+            <prop oor:name="AllowUnknownCertificate" oor:type="xs:boolean">
+                <info><desc>The value of the argument.</desc></info>
+            </prop>
+            <set oor:name="AdditionalLoginArguments" oor:node-type="RequestArgument">
+                <info><desc>The additional arguments that can be used on login. The name of an entry is the argument name.</desc></info>
+            </set>
+        </group>
+
+        <group oor:name="ConnectionURL">
+            <info><desc>The name of the entry is a connection URL of a wiki server.</desc></info>
+            <prop oor:name="UnusedString" oor:type="xs:string">
+                <info><desc>The UnusedString is necessary, since the current configuration accepts only structs in sets</desc></info>
+            </prop>
+        </group>
+
+        <group oor:name="Document">
+            <info><desc>Wiki Document</desc></info>
+            <prop oor:name="Url" oor:type="xs:string">
+                <info><desc>Main URL for this Wiki</desc></info>
+            </prop>
+            <prop oor:name="Doc" oor:type="xs:string">
+                <info><desc>The Document name</desc></info>
+            </prop>
+            <prop oor:name="CompleteUrl" oor:type="xs:string">
+                <info><desc>Identifier</desc></info>
+            </prop>
+        </group>
+    </templates>
+    
+    <component>
+        <set oor:name="SpecialData" oor:node-type="WikiServerSpecialData">
+            <info><desc>The set of smart configurations for MediaWiki Servers.</desc></info>
+        </set>
+        <set oor:name="ConnectionList" oor:node-type="ConnectionURL">
+            <info><desc>The list of the MediaWiki servers.</desc></info>
+        </set>
+	    <set oor:name="RecentDocs" oor:node-type="Document">
+            <info><desc>The recenly stored documents.</desc></info>
+        </set>
+        <group oor:name="Settings">
+            <info><desc>The addon related settings.</desc></info>
+            <prop oor:name="PreselectShowBrowser" oor:type="xs:boolean">
+                <info><desc>Specifies whether "Show in webbrowser" checkbox should be preselected.</desc></info>
+            </prop>
+        </group>
+        <group oor:name="Strings">
+            <info>
+                <desc>Contains the strings that should be localized</desc>
+            </info>
+            <prop oor:name="GeneralSendError" oor:type="xs:string" oor:localized="true">
+				<info><desc>The general error shown in case the document could not be sent to the wiki server.</desc></info>
+			</prop>
+            <prop oor:name="NoWikiFilter" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case wiki filter is not evailable.</desc></info>
+			</prop>
+            <prop oor:name="NoConnectionToURL" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case no wiki system was found on specified URL.</desc></info>
+			</prop>
+            <prop oor:name="WrongLogin" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case user name or password is incorrect.</desc></info>
+			</prop>
+            <prop oor:name="InvalidURL" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case the provided URL has invalid syntax.</desc></info>
+			</prop>
+            <prop oor:name="NoURL" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case no wiki server was specified.</desc></info>
+			</prop>
+            <prop oor:name="CancelSending" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case transfer was interrupted by user. The user is notified that the integrity of the wiki article should be checked.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendTitle" oor:type="xs:string" oor:localized="true">
+				<info><desc>The title of the send dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_WikiArticle" oor:type="xs:string" oor:localized="true">
+				<info><desc>The dialog string used to border the wiki article related information.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_No" oor:type="xs:string" oor:localized="true">
+				<info><desc>"No" button in dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_OK" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Ok" button in dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_Yes" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Yes" button in dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_Help" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Help" button in dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_AddButton" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Add..." button text.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditButton" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Edit..." button text.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendButton" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Send" button text.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_RemoveButton" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Remove" button text.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_UrlLabel" oor:type="xs:string" oor:localized="true">
+				<info><desc>"URL" label.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_UsernameLabel" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Username" label.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_PasswordLabel" oor:type="xs:string" oor:localized="true">
+				<info><desc>"Password" label.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_NewWikiPage_Label1" oor:type="xs:string" oor:localized="true">
+				<info><desc>The text asking whether a new wiki page should be created.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendToMediaWiki_Label1" oor:type="xs:string" oor:localized="true">
+				<info><desc>The label reffering to the MediaWiki server selection.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendToMediaWiki_Label2" oor:type="xs:string" oor:localized="true">
+				<info><desc>The label reffering to the input of wiki article title.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendToMediaWiki_Label3" oor:type="xs:string" oor:localized="true">
+				<info><desc>The label reffering to the comments input.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendToMediaWiki_MinorCheck" oor:type="xs:string" oor:localized="true">
+				<info><desc>Text for checkbox specifying whether it is a minor input.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_SendToMediaWiki_BrowserCheck" oor:type="xs:string" oor:localized="true">
+				<info><desc>Text for checkbox specifying whether the article should be shown in browser after editing.</desc></info>
+			</prop>
+            <prop oor:name="UnknownCert" oor:type="xs:string" oor:localized="true">
+				<info><desc>The error is shown in case a wiki site is accessed using https and has an unknown certificate.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_MediaWiki_Title" oor:type="xs:string" oor:localized="true">
+				<info><desc>"MediaWiki" string that is used as title in some dialogs.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_AccountLine" oor:type="xs:string" oor:localized="true">
+				<info><desc>The text bordering the account information in the dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_WikiLine" oor:type="xs:string" oor:localized="true">
+				<info><desc>The text bordering wiki server information in the dialog.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_EditSetting_SaveBox" oor:type="xs:string" oor:localized="true">
+				<info><desc>The checkbox specifying whether the password should be stored using the password container.</desc></info>
+			</prop>
+            <prop oor:name="Dlg_MediaWiki_Extension_String" oor:type="xs:string" oor:localized="true">
+				<info><desc>The string containing the name of the extension.</desc></info>
+			</prop>
+        </group>
+    </component>
+
+</oor:component-schema>
