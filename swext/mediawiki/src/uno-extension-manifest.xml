@@ -5,9 +5,9 @@
  *
  *  $RCSfile: uno-extension-manifest.xml,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:10:22 $
+ *  last change: $Author: mav $ $Date: 2008-02-10 12:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,4 +48,6 @@
                        manifest:full-path="WikiExtension.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
                        manifest:full-path="OptionsDialog.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.help"
+                       manifest:full-path="help"/>
 </manifest:manifest>
