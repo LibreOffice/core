@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-07 12:49:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ public class WikiEditSettingDialog extends WikiDialog
         return super.show();
     }
 
-    private void EnableControls( boolean bEnable )
+    public void EnableControls( boolean bEnable )
     {
         if ( !bEnable )
             SetFocusTo( "CancelButton" );
@@ -121,6 +121,10 @@ public class WikiEditSettingDialog extends WikiDialog
             {
                 GetPropSet( "UrlField" ).setPropertyValue( "Enabled", new Boolean( m_bAllowURLChange ) );
                 GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( m_xContext ) ) );
+                if ( m_bAllowURLChange )
+                    SetFocusTo( "UrlField" );
+                else
+                    SetFocusTo( "UsernameField" );
             }
             else
             {
@@ -343,6 +347,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 final WikiEditSettingDialog aThis = this;
 
                 // the thread name is used to allow the error dialogs
+                m_bThreadFinished = false;
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
                     public void run()
@@ -350,15 +355,17 @@ public class WikiEditSettingDialog extends WikiDialog
                         try
                         {
                             Thread.yield();
-                            DoLogin( xDialogForThread );
-                        } catch( java.lang.Exception e )
-                        {}
-                        finally
-                        {
-                            ThreadStop( true );
+                        } catch( java.lang.Exception e ){}
+
+                        DoLogin( xDialogForThread );
+                        aThis.EnableControls( true );
+                        aThis.SetThrobberActive( false );
+                        aThis.SetThrobberVisible( false );
+
+                        ThreadStop( true );
+
+                        if ( m_bAction )
                             MainThreadDialogExecutor.Close( xContext, xDialogForThread );
-                            Helper.AllowConnection( true );
-                        }
                     }
                 };
 
@@ -373,7 +380,13 @@ public class WikiEditSettingDialog extends WikiDialog
                 {}
                 finally
                 {
-                    xDialog.endExecute();
+                    EnableControls( true );
+                    SetThrobberActive( false );
+                    SetThrobberVisible( false );
+
+                    if ( m_bAction )
+                        xDialog.endExecute();
+
                     Helper.AllowConnection( true );
                 }
             }

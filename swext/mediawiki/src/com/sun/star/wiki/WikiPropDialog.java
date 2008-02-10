@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,12 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
+    public boolean show()
+    {
+        EnableControls( true );
+        return super.show();
+    }
+
     public synchronized void ThreadStop( boolean bSelf )
     {
         boolean bShowError = ( !bSelf && m_aThread != null && !m_bThreadFinished );
@@ -210,6 +216,37 @@ public class WikiPropDialog extends WikiDialog{
         }
     }
 
+    public void EnableControls( boolean bEnable )
+    {
+        try
+        {
+            String[] pControls = { "WikiList",
+                                   "ArticleText",
+                                   "CommentText",
+                                   "MinorCheck",
+                                   "BrowserCheck",
+                                   "HelpButton",
+                                   "AddButton" };
+
+            for ( int nInd = 0; nInd < pControls.length; nInd++ )
+                GetPropSet( pControls[nInd] ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+
+            if ( bEnable )
+            {
+                SetFocusTo( "WikiList" );
+                switchSendButtonIfNecessary();
+            }
+            else
+            {
+                GetPropSet( "SendButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+                SetFocusTo( "CancelButton" );
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
@@ -222,9 +259,6 @@ public class WikiPropDialog extends WikiDialog{
                 XPropertySet aCommentTextProps = GetPropSet( "CommentText" );
                 XPropertySet aMinorCheckProps = GetPropSet( "MinorCheck" );
                 XPropertySet aBrowserCheckProps = GetPropSet( "BrowserCheck" );
-                XPropertySet aHelpButtonProps = GetPropSet( "HelpButton" );
-                XPropertySet aSendButtonProps = GetPropSet( "SendButton" );
-                XPropertySet aAddButtonProps = GetPropSet( "AddButton" );
 
                 short [] sel = (short[]) aWikiListProps.getPropertyValue("SelectedItems");
                 String [] items = (String []) aWikiListProps.getPropertyValue("StringItemList");
@@ -243,10 +277,7 @@ public class WikiPropDialog extends WikiDialog{
                 Helper.SetShowInBrowserByDefault( m_xContext, nBrowserState != 0 );
 
                 // allow to disable other buttons
-                SetFocusTo( "CancelButton" );
-                XPropertySet[] aToDisable = { aWikiListProps, aArticleTextProps, aCommentTextProps, aMinorCheckProps, aBrowserCheckProps, aHelpButtonProps, aSendButtonProps, aAddButtonProps };
-                for ( int nInd = 0; nInd < aToDisable.length; nInd++ )
-                    aToDisable[nInd].setPropertyValue( "Enabled", Boolean.FALSE );
+                EnableControls( false );
             }
             catch (Exception ex)
             {
@@ -272,17 +303,18 @@ public class WikiPropDialog extends WikiDialog{
                             if ( m_aWikiEditor != null )
                             {
                                 Thread.yield();
-                                m_aWikiEditor.SendArticleImpl( aThisDialog );
-                                m_bAction = true;
+                                m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog );
                             }
-                        } catch( java.lang.Exception e )
-                        {}
+                        }
                         finally
                         {
+                            EnableControls( true );
+                            SetThrobberActive( false );
+                            SetThrobberVisible( false );
+
                             ThreadStop( true );
-                            MainThreadDialogExecutor.Close( xContext, xDialogToClose );
-                            // should be marked as finished after dialog closing if an exception was thrown
-                            Helper.AllowConnection( true );
+                            if ( m_bAction )
+                                MainThreadDialogExecutor.Close( xContext, xDialogToClose );
                         }
                     }
                 };
@@ -295,15 +327,18 @@ public class WikiPropDialog extends WikiDialog{
                 {
                     if ( m_aWikiEditor != null )
                     {
-                        m_aWikiEditor.SendArticleImpl( aThisDialog );
-                        m_bAction = true;
+                        m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog );
                     }
                 } catch( java.lang.Exception e )
                 {}
                 finally
                 {
-                    xDialogToClose.endExecute();
-                    Helper.AllowConnection( true );
+                    EnableControls( true );
+                    SetThrobberActive( false );
+                    SetThrobberVisible( false );
+
+                    if ( m_bAction )
+                        xDialogToClose.endExecute();
                 }
             }
 

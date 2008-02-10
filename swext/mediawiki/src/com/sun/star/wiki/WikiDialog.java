@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,21 +92,15 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
 
     public synchronized void ThreadStop( boolean bSelf )
     {
-        if ( !bSelf )
+        if ( bSelf || m_aThread != null && !m_bThreadFinished )
         {
-            if ( m_aThread != null && !m_bThreadFinished )
+            try
             {
-                try
-                {
-                    Helper.AllowConnection( false );
-                }
-                catch( Exception ex )
-                {
-                    ex.printStackTrace();
-                }
-                finally
-                {
-                }
+                Helper.AllowConnection( bSelf );
+            }
+            catch( Exception ex )
+            {
+                ex.printStackTrace();
             }
         }
 

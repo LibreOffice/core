@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiArticle.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,34 +100,34 @@ public class WikiArticle
                     }
         }
 
-        while( bLogin && !bGotLogin && !Login() )
+        if ( bLogin && !bGotLogin )
         {
-            WikiEditSettingDialog aDialog = null;
+            WikiEditSettingDialog aDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
             try
             {
-                aDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
-
-                if ( aPropDialog != null )
-                    aPropDialog.SetThrobberActive( false );
-
-                if ( MainThreadDialogExecutor.Show( xContext, aDialog ) )
+                while( !Login() )
                 {
-                    m_sWikiUser = (String) wikiSettings.get("Username");
-                    m_sWikiPass = (String) wikiSettings.get("Password");
-                }
-                else
-                    throw new WikiCancelException();
+                    if ( aPropDialog != null )
+                        aPropDialog.SetThrobberActive( false );
 
-                if ( aPropDialog != null )
-                {
-                    aPropDialog.SetThrobberActive( true );
-                    Thread.yield();
+                    if ( MainThreadDialogExecutor.Show( xContext, aDialog ) )
+                    {
+                        m_sWikiUser = (String) wikiSettings.get("Username");
+                        m_sWikiPass = (String) wikiSettings.get("Password");
+                    }
+                    else
+                        throw new WikiCancelException();
+
+                    if ( aPropDialog != null )
+                    {
+                        aPropDialog.SetThrobberActive( true );
+                        Thread.yield();
+                    }
                 }
             }
             finally
             {
-                if ( aDialog != null )
-                    aDialog.DisposeDialog();
+                aDialog.DisposeDialog();
             }
         }
 
