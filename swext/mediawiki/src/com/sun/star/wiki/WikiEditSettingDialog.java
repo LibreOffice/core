@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 08:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,10 @@ public class WikiEditSettingDialog extends WikiDialog
             XPropertySet xUrlField = GetPropSet( "UrlField" );
 
             xUrlField.setPropertyValue( "Text", ht.get( "Url" ) );
+
             GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
-            GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
+            // the password should be entered or the Cancel should be pressed
+            // GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
         catch ( Exception ex )
         {

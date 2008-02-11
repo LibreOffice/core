@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-07 12:49:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 08:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,7 +782,7 @@ public class Helper
     {
         HostConfiguration aHostConfig = null;
 
-        if ( sWikiUser != null && sWikiUser.length() > 0 && sWikiPass != null && xContext != null )
+        if ( sWikiUser != null && sWikiPass != null && xContext != null )
         {
             HostConfiguration aNewHostConfig = new HostConfiguration();
 
