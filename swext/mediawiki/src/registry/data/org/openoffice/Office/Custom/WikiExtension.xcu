@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WikiExtension.xcu,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-08 15:14:40 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,6 @@
         </prop>
         <prop oor:name="Dlg_Yes">
             <value xml:lang="en-US">Yes</value>
-        </prop>
-        <prop oor:name="Dlg_Help">
-            <value xml:lang="en-US">~Help</value>
         </prop>
         <prop oor:name="Dlg_AddButton">
             <value xml:lang="en-US">~Add...</value>

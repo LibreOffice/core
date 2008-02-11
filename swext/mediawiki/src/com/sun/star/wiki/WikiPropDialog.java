@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,11 @@ public class WikiPropDialog extends WikiDialog{
     WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
-    private final String sHelpMethod = "Help";
     private final String sWikiListMethod = "WikiListChange";
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
 
-    String[] m_pMethods = {sSendMethod, sHelpMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     private String m_sWikiTitle = "";
     protected String m_sWikiEngineURL = "";
@@ -94,7 +93,6 @@ public class WikiPropDialog extends WikiDialog{
             GetPropSet( "Label3" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL3 ) );
             GetPropSet( "MinorCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_MINORCHECK ) );
             GetPropSet( "BrowserCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_BROWSERCHECK ) );
-            GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
             GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_ADDBUTTON ) );
             GetPropSet( "SendButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDBUTTON ) );
         }
@@ -342,10 +340,6 @@ public class WikiPropDialog extends WikiDialog{
                 }
             }
 
-            return true;
-        }
-        else if ( MethodName.equals( sHelpMethod ) )
-        {
             return true;
         }
         else if ( MethodName.equals( sWikiListMethod ) )

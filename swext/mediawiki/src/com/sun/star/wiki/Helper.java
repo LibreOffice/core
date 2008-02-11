@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 10:31:29 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ public class Helper
     public final static int DLG_NO = 8;
     public final static int DLG_OK = 9;
     public final static int DLG_YES = 10;
-    public final static int DLG_HELP = 11;
+    // 11 is reserved
     public final static int DLG_ADDBUTTON = 12;
     public final static int DLG_EDITBUTTON = 13;
     public final static int DLG_SENDBUTTON = 14;
@@ -137,7 +137,7 @@ public class Helper
                                                     "Dlg_No",
                                                     "Dlg_OK",
                                                     "Dlg_Yes",
-                                                    "Dlg_Help",
+                                                    null, // reserved
                                                     "Dlg_AddButton",
                                                     "Dlg_EditButton",
                                                     "Dlg_SendButton",

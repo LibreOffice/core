@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 08:35:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,9 @@ public class WikiEditSettingDialog extends WikiDialog
 {
 
     private final String sOKMethod = "OK";
-    private final String sHelpMethod = "Help";
 
     String[] Methods =
-    {sOKMethod, sHelpMethod};
+    {sOKMethod };
     private Hashtable setting;
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
@@ -152,7 +151,6 @@ public class WikiEditSettingDialog extends WikiDialog
             GetPropSet( "WikiLine" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_WIKILINE ) );
             GetPropSet( "SaveBox" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_SAVEBOX ) );
             GetPropSet( "OkButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_OK ) );
-            GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
         }
         catch( Exception e )
         {
@@ -393,10 +391,6 @@ public class WikiEditSettingDialog extends WikiDialog
                 }
             }
 
-            return true;
-        }
-        else if ( MethodName.equals( sHelpMethod ) )
-        {
             return true;
         }
 
