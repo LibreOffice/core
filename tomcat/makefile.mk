@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-04 09:02:14 $
+#   last change: $Author: mav $ $Date: 2008-02-11 14:37:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ TARGET=servlet
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE : antsettings.mk
 
 # --- Files --------------------------------------------------------
 
