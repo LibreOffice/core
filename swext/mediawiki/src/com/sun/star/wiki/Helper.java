@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 08:35:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 10:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,12 +866,19 @@ public class Helper
         }
     }
 
-    protected static UrlRecord GetUsersForURL( XComponentContext xContext, String sURL )
+    protected static String[] GetPasswordsForURLAndUser( XComponentContext xContext, String sURL, String sUserName )
     {
-        UrlRecord aResult = null;
+        String[] aResult = null;
+
         try
         {
-            aResult = GetPasswordContainer( xContext ).find( sURL, GetInteractionHandler( xContext ) );
+            if ( xContext != null && sURL != null && sURL.length() > 0 && sUserName != null && sUserName.length() > 0 )
+            {
+                UrlRecord aRec = GetPasswordContainer( xContext ).findForName( sURL, sUserName, GetInteractionHandler( xContext ) );
+                if ( aRec != null && aRec.UserList != null && aRec.UserList.length > 0
+                  && aRec.UserList[0].UserName.equals( sUserName ) )
+                    aResult = aRec.UserList[0].Passwords;
+            }
         }
         catch( Exception e )
         {

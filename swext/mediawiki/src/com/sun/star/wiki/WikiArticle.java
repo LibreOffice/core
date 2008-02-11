@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiArticle.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-10 15:56:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 10:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,24 +83,7 @@ public class WikiArticle
 //         loginURL = sMainUrl + "index.php?title=Special:Userlogin";
 //         loginSubmitURL = sMainUrl + "index.php?title=Special:Userlogin&action=submitlogin";
 
-        boolean bGotLogin = false;
-        if ( bLogin && m_sWikiUser.equals( "" ) && m_sWikiPass.equals( "" ) )
-        {
-            UrlRecord aRecord = Helper.GetUsersForURL( m_xContext, m_aMainURI.toString() );
-            // TODO: there could be more users available, it should probably be possible to select from them
-            // from other side, asking each time for the user name could disturb the user
-            // For now the first acceptable user will be used.
-            if ( aRecord != null && aRecord.UserList != null )
-                for ( int nUserInd = 0; !bGotLogin && nUserInd < aRecord.UserList.length; nUserInd++ )
-                    for ( int nPassInd = 0; !bGotLogin && nPassInd < aRecord.UserList[nUserInd].Passwords.length; nPassInd++ )
-                    {
-                        m_sWikiUser = aRecord.UserList[nUserInd].UserName;
-                        m_sWikiPass = aRecord.UserList[nUserInd].Passwords[nPassInd];
-                        bGotLogin = Login();
-                    }
-        }
-
-        if ( bLogin && !bGotLogin )
+        if ( bLogin )
         {
             WikiEditSettingDialog aDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
             try

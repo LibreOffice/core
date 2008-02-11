@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Settings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 08:35:34 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 10:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,12 @@
 
 package com.sun.star.wiki;
 
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.task.UrlRecord;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XChangesBatch;
@@ -228,7 +229,12 @@ public class Settings
             {
                 Object oNewConnection = xConnectionFactory.createInstance();
                 Hashtable ht = ( Hashtable ) m_WikiConnections.get( i );
-                xContainer.insertByName( (String)ht.get( "Url" ), oNewConnection );
+                XNameReplace xNewConn = ( XNameReplace ) UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
+
+                if ( xNewConn != null )
+                    xNewConn.replaceByName( "UserName", ht.get( "Username" ) );
+
+                xContainer.insertByName( (String)ht.get( "Url" ), xNewConn );
             }
             // commit changes
             XChangesBatch xBatch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
@@ -291,15 +297,26 @@ public class Settings
                     ht.put( "Username", "" );
                     ht.put( "Password", "" );
 
-                    //TODO/LATER: how to handle more than one user?
-                    // for now use the first one
-                    UrlRecord aRecord = Helper.GetUsersForURL( m_xContext, allCons[i] );
-                    if ( aRecord != null && aRecord.UserList != null && aRecord.UserList.length > 0 )
+                    try
                     {
-                        ht.put( "Username", aRecord.UserList[0] );
-                        if ( aRecord.UserList[0].Passwords != null && aRecord.UserList[0].Passwords.length > 0 )
-                            ht.put( "Password", aRecord.UserList[0].Passwords[0] );
+                        XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xConnectionList.getByName( allCons[i] ) );
+                        if ( xProps != null )
+                        {
+                            String aUsername = AnyConverter.toString( xProps.getPropertyValue( "UserName" ) );
+                            if ( aUsername != null && aUsername.length() > 0 )
+                            {
+                                ht.put( "Username", aUsername );
+                                String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, allCons[i], aUsername );
+                                if ( pPasswords != null && pPasswords.length > 0 )
+                                    ht.put( "Password", pPasswords[0] );
+                            }
+                        }
                     }
+                    catch( Exception e )
+                    {
+                        e.printStackTrace();
+                    }
+
                     addWikiCon( ht );
                 }
 
