@@ -5,9 +5,9 @@
  *
  *  $RCSfile: SendToMediaWiki.xdl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-07 15:55:11 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="SendToMediaWiki" dlg:left="62" dlg:top="57" dlg:width="242" dlg:height="164" dlg:closeable="true" dlg:moveable="true" dlg:title="TOREPLACE">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="SendToMediaWiki" dlg:left="62" dlg:top="57" dlg:width="242" dlg:height="164" dlg:closeable="true" dlg:moveable="true" dlg:title="TOREPLACE" dlg:help-url="vnd.com.sun.star.wiki:sendDialog">
  <dlg:bulletinboard>
   <dlg:text dlg:id="Label1" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="65" dlg:height="10" dlg:value="TOREPLACE"/>
   <dlg:text dlg:id="Label2" dlg:tab-index="2" dlg:left="11" dlg:top="38" dlg:width="59" dlg:height="10" dlg:value="TOREPLACE"/>
@@ -56,9 +56,7 @@
   <dlg:button dlg:id="SendButton" dlg:tab-index="11" dlg:disabled="true" dlg:left="134" dlg:top="145" dlg:width="50" dlg:height="14" dlg:default="true" dlg:value="TOREPLACE" dlg:help-url="com.sun.star.wiki.MediaWiki.SendToMediaWiki.SendButton">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Send" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="HelpButton" dlg:tab-index="12" dlg:left="5" dlg:top="145" dlg:width="50" dlg:height="14" dlg:value="TOREPLACE">
-   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Help" script:language="UNO"/>
-  </dlg:button>
+  <dlg:button dlg:id="HelpButton" dlg:tab-index="12" dlg:left="5" dlg:top="145" dlg:width="50" dlg:height="14" dlg:button-type="help"/>
   <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="13" dlg:left="5" dlg:top="25" dlg:width="234" dlg:height="6" dlg:value="TOREPLACE"/>
  </dlg:bulletinboard>
 </dlg:window>

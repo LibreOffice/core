@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Settings.xdl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-07 12:49:36 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 12:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Settings" dlg:left="142" dlg:top="89" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:withtitlebar="false">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Settings" dlg:left="142" dlg:top="89" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:withtitlebar="false" dlg:help-url="vnd.com.sun.star.wiki:settings">
  <dlg:bulletinboard>
   <dlg:button dlg:id="AddButton" dlg:tab-index="1" dlg:left="204" dlg:top="20" dlg:width="50" dlg:height="14" dlg:help-url="com.sun.star.wiki.MediaWiki.Settings.AddButton" dlg:value="TOREPLACE">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Add" script:language="UNO"/>
