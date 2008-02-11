@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rene $ $Date: 2008-02-04 09:02:13 $
+ *  last change: $Author: mav $ $Date: 2008-02-11 13:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,14 @@
  ************************************************************************ -->
 <project default="all">
     <target name="init">
+        <property environment="env"/>
         <property name="ext" value="oxt"/>
         <property name="officeroot" value="/export/home/mav/OFFICES/OOG680/m5_netbeans_pro"/>
         <property name="office.home" value="${officeroot}"/>
 
         <!-- fallbacks for locations, when solenv is not used -->
-        <condition property="prjname" value="wikiaddon">
-            <not><isset property="prjname"/></not>
+        <condition property="target" value="wikiaddon">
+            <not><isset property="target"/></not>
         </condition>
         <condition property="out" value="./build">
             <not><isset property="out"/></not>
@@ -103,7 +104,13 @@
     <target name="uno-package" depends="jar, init">
         <delete file="${dist}/${name}.${ext}"/>
         <zip  destfile="${dist}/${name}.${ext}">
-            <fileset dir="src" includes="**/*.xcu,**/*.xcs,**/*.xml" excludes="uno-extension-manifest.xml" casesensitive="yes"/>
+            <fileset dir="src" includes="description.xml" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}" includes="**/*.xhp" casesensitive="yes"/>
             <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
             <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <file file="${commons-codec-jar}"/>

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-04 09:02:13 $
+#   last change: $Author: mav $ $Date: 2008-02-11 13:25:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ TARGET=mediawiki
 
 .IF "$(ENABLE_MEDIAWIKI)" == "YES"
 .INCLUDE : ant.mk
-ALLTAR: ANTBUILD
 
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
 COMMONS_CODEC_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-codec-1.3.jar 
@@ -53,6 +52,8 @@ XML_APIS_JAR = $(SOLARVER)$/$(INPATH)$/lib/xml-apis.jar
 .ENDIF
 
 ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dxml-apis-jar=$(XML_APIS_JAR)
+
+ALLTAR: ANTBUILD
 
 .ELSE
 @all:
