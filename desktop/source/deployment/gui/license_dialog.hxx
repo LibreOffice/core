@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:25:41 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ class LicenseDialog
     Reference<awt::XWindow> /* const */ m_parent;
     OUString /* const */ m_sLicenseText;
     OUString m_initialTitle;
+
+    sal_Int16 solar_execute();
 
 public:
     LicenseDialog( Sequence<Any> const & args,
