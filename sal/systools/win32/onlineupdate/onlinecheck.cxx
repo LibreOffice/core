@@ -4,9 +4,9 @@
  *
  *  $RCSfile: onlinecheck.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 13:55:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #define _UNICODE
 #endif
 #include <tchar.h>
+#ifdef __MINGW32__
+#include <excpt.h>
+#endif
 
 #define elementsof(a) (sizeof(a)/sizeof((a)[0]))
 
@@ -58,7 +61,15 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
 
+#ifdef __MINGW32__
+        jmp_buf jmpbuf;
+        __SEHandler han;
+        if (__builtin_setjmp(jmpbuf) == 0)
+        {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try {
+#endif
     BOOL fIsConnected = InternetGetConnectedStateEx(
         &dwFlags,
         szConnectionName,
@@ -67,7 +78,13 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
 
     return fIsConnected ? sal_True : sal_False;
 
+#ifdef __MINGW32__
+        }
+        else return sal_False;
+        han.Reset();
+#else
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
         return sal_False;
     }
+#endif
 }
