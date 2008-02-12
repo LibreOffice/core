@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:45:36 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1679,7 +1679,7 @@ FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayer
     // #108867# Only now determine background color from background shapes
     if( !bRet && !bSkipBackgroundShape )
     {
-        rCol = GetBackgroundColor();
+        rCol = GetPageBackgroundColor();
         return TRUE;
     }
 
@@ -1792,11 +1792,12 @@ FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 }
 
 /** returns an averaged background color of this page */
-Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
+// #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
+Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay ) const
 {
     Color aColor;
 
-    if( (NULL == pView) || (pView->GetApplicationDocumentColor() == COL_AUTO) )
+    if(bScreenDisplay && (!pView || pView->GetApplicationDocumentColor() == COL_AUTO))
     {
         svtools::ColorConfig aColorConfig;
         aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
@@ -1843,9 +1844,10 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 }
 
 /** *deprecated, use GetBackgroundColor with SdrPageView */
-Color SdrPage::GetBackgroundColor() const
+Color SdrPage::GetPageBackgroundColor() const
+// #i75566# GetBackgroundColor -> GetPageBackgroundColor
 {
-    return GetBackgroundColor( NULL );
+    return GetPageBackgroundColor( NULL, true );
 }
 
 /** this method returns true if the object from the ViewObjectContact should
