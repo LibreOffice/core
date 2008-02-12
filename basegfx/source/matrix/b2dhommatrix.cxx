@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:17:35 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,6 @@
 
 #ifndef _HOMMATRIX_TEMPLATE_HXX
 #include <hommatrixtemplate.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_TUPLE_B3DTUPLE_HXX
-#include <basegfx/tuple/b3dtuple.hxx>
 #endif
 
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
@@ -352,7 +344,166 @@ namespace basegfx
         }
     }
 
-    // Decomposition
+    /** Decomposition
+
+       New, optimized version with local shearX detection. Old version (keeping
+       below, is working well, too) used the 3D matrix decomposition when
+       shear was used. Keeping old version as comment below since it may get
+       necessary to add the determinant() test from there here, too.
+    */
+    bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
+    {
+        // when perspective is used, decompose is not made here
+        if(!mpImpl->isLastLineDefault())
+        {
+            return false;
+        }
+
+        // reset rotate and shear and copy translation values in every case
+        rRotate = rShearX = 0.0;
+        rTranslate.setX(get(0, 2));
+        rTranslate.setY(get(1, 2));
+
+        // test for rotation and shear
+        if(fTools::equalZero(get(0, 1)) && fTools::equalZero(get(1, 0)))
+        {
+            // no rotation and shear, copy scale values
+            rScale.setX(get(0, 0));
+            rScale.setY(get(1, 1));
+        }
+        else
+        {
+            // get the unit vectors of the transformation -> the perpendicular vectors
+            B2DVector aUnitVecX(get(0, 0), get(1, 0));
+            B2DVector aUnitVecY(get(0, 1), get(1, 1));
+            const double fScalarXY(aUnitVecX.scalar(aUnitVecY));
+
+            // Test if shear is zero. That's the case if the unit vectors in the matrix
+            // are perpendicular -> scalar is zero. This is also the case when one of
+            // the unit vectors is zero.
+            if(fTools::equalZero(fScalarXY))
+            {
+                // calculate unsigned scale values
+                rScale.setX(aUnitVecX.getLength());
+                rScale.setY(aUnitVecY.getLength());
+
+                // check unit vectors for zero lengths
+                const bool bXIsZero(fTools::equalZero(rScale.getX()));
+                const bool bYIsZero(fTools::equalZero(rScale.getY()));
+
+                if(bXIsZero || bYIsZero)
+                {
+                    // still extract as much as possible. Scalings are already set
+                    if(!bXIsZero)
+                    {
+                        // get rotation of X-Axis
+                        rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
+                    }
+                    else if(!bYIsZero)
+                    {
+                        // get rotation of X-Axis. When assuming X and Y perpendicular
+                        // and correct rotation, it's the Y-Axis rotation minus 90 degrees
+                        rRotate = atan2(aUnitVecY.getY(), aUnitVecY.getX()) - M_PI_2;
+                    }
+
+                    // one or both unit vectors do not extist, determinant is zero, no decomposition possible.
+                    // Eventually used rotations or shears are lost
+                    return false;
+                }
+                else
+                {
+                    // no shear
+                    // calculate rotation of X unit vector relative to (1, 0)
+                    rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
+
+                    // use orientation to evtl. correct sign of Y-Scale
+                    const double fCrossXY(aUnitVecX.cross(aUnitVecY));
+
+                    if(fCrossXY < 0.0)
+                    {
+                        rScale.setY(-rScale.getY());
+                    }
+                }
+            }
+            else
+            {
+                // fScalarXY is not zero, thus both unit vectors exist. No need to handle that here
+                // shear, extract it
+                double fCrossXY(aUnitVecX.cross(aUnitVecY));
+
+                // get rotation by calculating angle of X unit vector relative to (1, 0).
+                // This is before the parallell test following the motto to extract
+                // as much as possible
+                rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
+
+                // get unsigned scale value for X. It will not change and is useful
+                // for further corrections
+                rScale.setX(aUnitVecX.getLength());
+
+                if(fTools::equalZero(fCrossXY))
+                {
+                    // extract as much as possible
+                    rScale.setY(aUnitVecY.getLength());
+
+                    // unit vectors are parallel, thus not linear independent. No
+                    // useful decomposition possible. This should not happen since
+                    // the only way to get the unit vectors nearly parallell is
+                    // a very big shearing. Anyways, be prepared for hand-filled
+                    // matrices
+                    // Eventually used rotations or shears are lost
+                    return false;
+                }
+                else
+                {
+                    // calculate the contained shear
+                    rShearX = fScalarXY / fCrossXY;
+
+                    if(!fTools::equalZero(rRotate))
+                    {
+                        // To be able to correct the shear for aUnitVecY, rotation needs to be
+                        // removed first. Correction of aUnitVecX is easy, it will be rotated back to (1, 0).
+                        aUnitVecX.setX(rScale.getX());
+                        aUnitVecX.setY(0.0);
+
+                        // for Y correction we rotate the UnitVecY back about -rRotate
+                        const double fNegRotate(-rRotate);
+                        const double fSin(sin(fNegRotate));
+                        const double fCos(cos(fNegRotate));
+
+                        const double fNewX(aUnitVecY.getX() * fCos - aUnitVecY.getY() * fSin);
+                        const double fNewY(aUnitVecY.getX() * fSin + aUnitVecY.getY() * fCos);
+
+                        aUnitVecY.setX(fNewX);
+                        aUnitVecY.setY(fNewY);
+                    }
+
+                    // Correct aUnitVecY and fCrossXY to fShear=0. Rotation is already removed.
+                    // Shear correction can only work with removed rotation
+                    aUnitVecY.setX(aUnitVecY.getX() - (aUnitVecY.getY() * rShearX));
+                    fCrossXY = aUnitVecX.cross(aUnitVecY);
+
+                    // calculate unsigned scale value for Y, after the corrections since
+                    // the shear correction WILL change the length of aUnitVecY
+                    rScale.setY(aUnitVecY.getLength());
+
+                    // use orientation to set sign of Y-Scale
+                    if(fCrossXY < 0.0)
+                    {
+                        rScale.setY(-rScale.getY());
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+/* Old version: Used 3D decompose when shaer was involved and also a determinant test
+   (but only in that case). Keeping as comment since it also worked and to allow a
+   fallback in case the new version makes trouble somehow. Definitely missing in the 2nd
+   case is the sign correction for Y-Scale, this would need to be added following the above
+   pattern
+
     bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
     {
         // when perspective is used, decompose is not made here
@@ -389,6 +540,7 @@ namespace basegfx
                 rShearX = 0.0;
 
                 // calculate rotation
+                rShearX = 0.0;
                 rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
 
                 // calculate scale values
@@ -441,7 +593,8 @@ namespace basegfx
         }
 
         return false;
-    }
+    } */
+
 } // end of namespace basegfx
 
 // eof
