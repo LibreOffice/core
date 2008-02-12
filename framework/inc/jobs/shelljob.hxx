@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shelljob.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 15:01:24 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,34 +188,24 @@ class ShellJob : public css::lang::XTypeProvider
         ::rtl::OUString impl_substituteCommandVariables(const ::rtl::OUString& sCommand);
 
         //---------------------------------------
-        /** converts the configured command to a system path.
-
-            Because the used service XSystemShellExecute supports
-            URLs and system pathes ... but the office works on
-            URLs only ... we have to make those conversion
-            explicit. This will be triggered by another configuration entry
-            named "NeedsSystemPathConversion".
-
-            @param  sURL
-                    the command URL for conversion.
-
-            @return the command as system path ... or an empty string on errors.
-         */
-        ::rtl::OUString impl_convertCommandURL2SystemPath(const ::rtl::OUString& sURL);
-
-        //---------------------------------------
         /** executes the command.
 
             @param  sCommand
                     the absolute command as URL or system path (without any argument !).
 
-            @param  sArguments
-                    the complete list of arguments formated as one string.
+            @param  lArguments
+                    the complete list of arguments configured for these job.
+
+            @param  bCheckExitCode
+                    bind the execution result to the exit code of the started process.
+                    If it's set to false we return false only in case executable couldnt be found
+                    or couldnt be started.
 
             @return TRUE if command was executed successfully; FALSE otherwise.
          */
-        ::sal_Bool impl_execute(const ::rtl::OUString& sCommand  ,
-                                const ::rtl::OUString& sArguments);
+        ::sal_Bool impl_execute(const ::rtl::OUString&                       sCommand      ,
+                                const css::uno::Sequence< ::rtl::OUString >& lArguments    ,
+                                      ::sal_Bool                             bCheckExitCode);
 };
 
 } // namespace framework
