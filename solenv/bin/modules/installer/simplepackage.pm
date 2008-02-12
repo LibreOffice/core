@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 12:53:40 $
+#   last change: $Author: vg $ $Date: 2008-02-12 13:32:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ sub create_package
     {
         installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
         my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
-        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name $allvariables->{'PRODUCTNAME'} -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && rm -f $installdir/tmp.dmg";
+        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && rm -f $installdir/tmp.dmg";
     }
     else
     {
