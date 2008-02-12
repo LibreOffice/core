@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:12:05 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1244,6 +1244,13 @@ BOOL ScTable::IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     for (SCCOL i = nCol1; !bInUse && (i <= nCol2) && (ValidCol(i)); i++)
         bInUse = aCol[i].IsRangeNameInUse(nRow1, nRow2, nIndex);
     return bInUse;
+}
+
+void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                               std::set<USHORT>& rIndexes) const
+{
+    for (SCCOL i = nCol1; i <= nCol2 && ValidCol(i); i++)
+        aCol[i].FindRangeNamesInUse(nRow1, nRow2, rIndexes);
 }
 
 void ScTable::ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1,
