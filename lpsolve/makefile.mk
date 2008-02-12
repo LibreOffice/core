@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nn $ $Date: 2007-12-21 09:32:37 $
+#   last change: $Author: vg $ $Date: 2008-02-12 16:04:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,13 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=lpsolve55
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+BUILD_ACTION=cmd /c cgcc.bat
+.ELSE
 BUILD_ACTION=cmd /c cvc6.bat
-OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
+.ENDIF
+OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
 .ELSE
 .IF "$(OS)"=="MACOSX"
 BUILD_ACTION=sh ccc.osx
