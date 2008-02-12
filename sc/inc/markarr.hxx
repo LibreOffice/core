@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markarr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:44:22 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,9 @@ public:
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked );
     BOOL    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     BOOL    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
-    BOOL    HasMarks() const;
+
+    BOOL    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
+
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
     BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
