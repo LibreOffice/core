@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 mkdir: %_DEST%\inc%_EXT%\vcl\plug
 mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 
+..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\bin%_EXT%\*.zip
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\vcl*.res %_DEST%\bin%_EXT%\vcl*.res
 ..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
@@ -149,3 +150,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 ..\inc\vcl\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
 
+..\%__SRC%\misc\macosxrc.txt %_DEST%\bin%_EXT%\macosxrc.txt
