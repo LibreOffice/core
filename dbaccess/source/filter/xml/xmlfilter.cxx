@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:18:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,11 +473,11 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_STYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext( rLocalName, xAttrList, sal_False);
+            pContext = CreateStylesContext( nPrefix,rLocalName, xAttrList, sal_False);
             break;
         case XML_TOK_DOC_AUTOSTYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext( rLocalName, xAttrList, sal_True);
+            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, sal_True);
             break;
     }
 
@@ -769,13 +769,13 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
     return *m_pColumnElemTokenMap;
 }
 // -----------------------------------------------------------------------------
-SvXMLImportContext* ODBFilter::CreateStylesContext(const ::rtl::OUString& rLocalName,
+SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::rtl::OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = NULL;
     if (!pContext)
     {
-        pContext = new OTableStylesContext(*this, XML_NAMESPACE_OOO, rLocalName, xAttrList, bIsAutoStyle);
+        pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
             //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
