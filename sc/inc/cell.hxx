@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:14:49 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #define SC_CELL_HXX
 
 #include <stddef.h>
+
+#include <set>
 
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
@@ -369,6 +371,7 @@ public:
     BOOL            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     BOOL            IsRangeNameInUse(USHORT nIndex) const;
+    void            FindRangeNamesInUse(std::set<USHORT>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
     BOOL            IsSubTotal() const                      { return bSubTotal; }
     BOOL            IsChanged() const                       { return bChanged; }
