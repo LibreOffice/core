@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.212 $
+ *  $Revision: 1.213 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:29:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,9 @@
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
 #endif
@@ -242,6 +245,7 @@
 #ifndef _OSL_SIGNAL_H_
 #include <osl/signal.h>
 #endif
+#include <rtl/uuid.h>
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -347,6 +351,15 @@ namespace desktop
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
+
+static const ::rtl::OUString CFG_PACKAGE_COMMON_HELP   ( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help"));
+static const ::rtl::OUString CFG_PATH_REG              ( RTL_CONSTASCII_USTRINGPARAM( "Registration"                     ));
+static const ::rtl::OUString CFG_ENTRY_INSTANCEUUID    ( RTL_CONSTASCII_USTRINGPARAM( "InstanceUUID"                     ));
+static const ::rtl::OUString CFG_ENTRY_PRODVERSIONID   ( RTL_CONSTASCII_USTRINGPARAM( "ProductVersionID"                 ));
+static const ::rtl::OUString CFG_ENTRY_REGURL          ( RTL_CONSTASCII_USTRINGPARAM( "URL"                              ));
+static const ::rtl::OUString CFG_ENTRY_TEMPLATEREGURL  ( RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"                      ));
+static const ::rtl::OUString PLACEHOLDER_INSTANCE_URN  ( RTL_CONSTASCII_USTRINGPARAM( "${INSTANCE_URN}"                  ));
+static const ::rtl::OUString CONFIGPATH_PRODUCTVERSIONS( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help/Registration/ProductVersions"));
 
 // ----------------------------------------------------------------------------
 
@@ -1298,6 +1311,208 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
+::rtl::OUString Desktop::GetProductVersionID()
+{
+    ::rtl::OUString aProdVersionID;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    if ( xSMGR.is() )
+    {
+        try
+        {
+            // Read URL from configuration
+            css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                        xSMGR,
+                                        CFG_PACKAGE_COMMON_HELP,
+                                        CFG_PATH_REG,
+                                        CFG_ENTRY_PRODVERSIONID,
+                                        ::comphelper::ConfigurationHelper::E_READONLY);
+
+            aVal >>= aProdVersionID;
+        }
+        catch ( css::uno::Exception& )
+        {
+        }
+    }
+
+    return aProdVersionID;
+}
+
+::rtl::OUString Desktop::GetInstanceUUID( const ::rtl::OUString& rProductVersionID )
+{
+    ::rtl::OUString aUUID;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+    if ( xSMGR.is() )
+    {
+        try
+        {
+            css::uno::Reference< css::uno::XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                                                                    ::comphelper::getProcessServiceFactory(),
+                                                                    CONFIGPATH_PRODUCTVERSIONS,
+                                                                    ::comphelper::ConfigurationHelper::E_STANDARD);
+
+            css::uno::Reference< css::container::XNameAccess > xRead(xCfg, css::uno::UNO_QUERY_THROW);
+            css::uno::Any a = xRead->getByName( rProductVersionID );
+
+            css::uno::Reference< css::container::XNameAccess > xProductVersionAccess;
+            if ( a >>= xProductVersionAccess )
+            {
+                a = xProductVersionAccess->getByName( CFG_ENTRY_INSTANCEUUID );
+                a >>= aUUID;
+            }
+        }
+        catch ( css::uno::Exception& )
+        {
+        }
+    }
+
+    return aUUID;
+}
+
+::rtl::OUString Desktop::GenerateUUID()
+{
+    const sal_Int32 UUID_LEN        = 16;
+    const sal_Int32 BASE_HEX        = 16;
+    const sal_Int32 UUID_STRING_LEN = 36;
+
+    sal_uInt8 nUUID[UUID_LEN];
+
+    rtl_createUuid( nUUID, NULL, false );
+
+    ::rtl::OUStringBuffer aUUIDBuf(UUID_STRING_LEN);
+    for ( sal_Int32 i = 0; i < UUID_LEN; i++ )
+    {
+        ::rtl::OUString aStrValue = ::rtl::OUString::valueOf( sal_Int32( nUUID[i] ), BASE_HEX );
+        if ( aStrValue.getLength() == 1 )
+            aUUIDBuf.appendAscii( "0" );
+        aUUIDBuf.append( aStrValue );
+        if (( i == 3 ) || ( i == 5 ) || ( i == 7 ) || ( i == 9 ))
+            aUUIDBuf.appendAscii( "-" );
+    }
+
+    return aUUIDBuf.makeStringAndClear();
+}
+
+void impl_setInstanceUIDForSTClientJob(const ::rtl::OUString& sInstUID)
+{
+    static const ::rtl::OUString CONFIGPATH_STCLIENT_JOBARGS     = ::rtl::OUString::createFromAscii("org.openoffice.Office.Jobs/Jobs/com.sun.star.jobs.STClient/Arguments");
+    static const ::rtl::OUString CONFIGPATH_STCLIENT_COMMANDLINE = ::rtl::OUString::createFromAscii("Arguments");
+    static const ::rtl::OUString CONFIGPROP_STCLIENT_COMMANDLINE = ::rtl::OUString::createFromAscii("Arguments");
+    static const ::rtl::OUString PARAM_INSTANCE_URN              = ::rtl::OUString::createFromAscii( "-i" );
+
+    ::rtl::OUStringBuffer sGenerator(256);
+    sGenerator.appendAscii ("urn:st:");
+    sGenerator.append      (sInstUID   );
+
+    const ::rtl::OUString sInstURN = sGenerator.makeStringAndClear ();
+
+    css::uno::Reference< css::uno::XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                                                            ::comphelper::getProcessServiceFactory(),
+                                                            CONFIGPATH_STCLIENT_JOBARGS,
+                                                            ::comphelper::ConfigurationHelper::E_STANDARD);
+
+    css::uno::Reference< css::container::XNameAccess > xRead(xCfg, css::uno::UNO_QUERY_THROW);
+    css::uno::Sequence< ::rtl::OUString > lCmdLine;
+    xRead->getByName (CONFIGPROP_STCLIENT_COMMANDLINE) >>= lCmdLine;
+
+    const ::sal_Int32 c        = lCmdLine.getLength ();
+          ::sal_Int32 i        = 0;
+          ::sal_Bool  bPatched = sal_False;
+    for (i=0; i<c; ++i)
+    {
+        const ::rtl::OUString& sArg = lCmdLine[i];
+        if (sArg.equals(PLACEHOLDER_INSTANCE_URN))
+        {
+            lCmdLine[i] = sInstURN;
+            bPatched = sal_True;
+            break;
+        }
+    }
+
+    if (bPatched)
+    {
+        css::uno::Reference< css::container::XNameReplace > xWrite (xCfg, css::uno::UNO_QUERY_THROW);
+        xWrite->replaceByName(CONFIGPROP_STCLIENT_COMMANDLINE, css::uno::makeAny(lCmdLine));
+        ::comphelper::ConfigurationHelper::flush(xCfg);
+    }
+}
+
+void impl_setInstanceUUIDForProductVersionID( const ::rtl::OUString& rProductVersionID, const ::rtl::OUString& rUUID )
+{
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    if ( xSMGR.is() )
+    {
+        css::uno::Reference< css::uno::XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                                                                ::comphelper::getProcessServiceFactory(),
+                                                                CONFIGPATH_PRODUCTVERSIONS,
+                                                                ::comphelper::ConfigurationHelper::E_STANDARD);
+
+        css::uno::Reference< css::container::XNameContainer > xWrite(xCfg, css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::lang::XSingleServiceFactory > xFactory(xCfg, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::beans::XPropertySet > xPropSet( xFactory->createInstance(), css::uno::UNO_QUERY_THROW );
+
+        xPropSet->setPropertyValue( CFG_ENTRY_INSTANCEUUID, css::uno::makeAny( rUUID ));
+
+        xWrite->insertByName( rProductVersionID, css::uno::makeAny( xPropSet ));
+        ::comphelper::ConfigurationHelper::flush(xCfg);
+    }
+}
+
+void Desktop::StoreInstanceUUID( const ::rtl::OUString& rProductVersionID, const ::rtl::OUString& rUUID )
+{
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+    if ( xSMGR.is() )
+    {
+        try
+        {
+            // exchange place holder in job configuration
+            impl_setInstanceUIDForSTClientJob( rUUID );
+
+            // Exchange place holder ${INSTANCE_URN} in registration URL
+            ::rtl::OUString aURL;
+
+            // Read URL from configuration
+            css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                        xSMGR,
+                                        CFG_PACKAGE_COMMON_HELP,
+                                        CFG_PATH_REG,
+                                        CFG_ENTRY_TEMPLATEREGURL,
+                                        ::comphelper::ConfigurationHelper::E_READONLY);
+            aVal >>= aURL;
+
+            // Detect and replace id parameter with the latest instance uuid
+            sal_Int32 nIndex = aURL.indexOf( PLACEHOLDER_INSTANCE_URN );
+            if ( nIndex >= 0 )
+            {
+                sal_Int32 nIdLen = PLACEHOLDER_INSTANCE_URN.getLength();
+
+                rtl::OUStringBuffer aBuf( 40 );
+                aBuf.appendAscii( "urn:st:" );
+                aBuf.append( rUUID );
+                aURL = aURL.replaceAt( nIndex, nIdLen, aBuf.makeStringAndClear() );
+            }
+
+            // Write changed URL to configuration
+            ::comphelper::ConfigurationHelper::writeDirectKey(
+                    xSMGR,
+                    CFG_PACKAGE_COMMON_HELP,
+                    CFG_PATH_REG,
+                    CFG_ENTRY_REGURL,
+                    ::com::sun::star::uno::makeAny( aURL ),
+                    ::comphelper::ConfigurationHelper::E_STANDARD );
+
+            // Write instance UUID for product version to configuration
+            impl_setInstanceUUIDForProductVersionID( rProductVersionID, rUUID );
+        }
+        catch ( css::uno::Exception& )
+        {
+        }
+    }
+}
+
 void Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
@@ -1491,6 +1706,19 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ tools::InitTestToolLib" );
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
+
+        // Important: The UUID generation must be placed before the first start wizard
+        ::rtl::OUString aProductVersionID = GetProductVersionID();
+        if ( aProductVersionID.getLength() > 0 )
+        {
+            ::rtl::OUString aUUID = GetInstanceUUID( aProductVersionID );
+            if ( aUUID.getLength() == 0 )
+            {
+                // UUID generation
+                aUUID = GenerateUUID();
+                StoreInstanceUUID( aProductVersionID, aUUID );
+            }
+        }
 
         // First Start Wizard
         if ( IsFirstStartWizardNeeded() && !pCmdLineArgs->IsNoFirstStartWizard() )
