@@ -14,5 +14,7 @@
  <toolbar:toolbaritem xlink:href=".uno:PageFormatDialog" toolbar:helpid="helpid:26295"  />
  <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter" toolbar:helpid="helpid:26235"  toolbar:visible="false" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Margins" toolbar:helpid="helpid:26504" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="helpid:5325"  />
 </toolbar:toolbar>
