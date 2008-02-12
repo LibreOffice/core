@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:41:47 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1054,6 +1054,7 @@ void WW8_WrPlcSepx::OutHeader( SwWW8Writer& rWrt, const SwFmt& rFmt,
 {
     if( nFlag & nHFFlags )
     {
+        rWrt.bHasHdr = true;
         const SwFmtHeader& rHd = rFmt.GetHeader();
         ASSERT( rHd.GetHeaderFmt(), "KopfText nicht richtig da" );
         const SwFmtCntnt& rCntnt = rHd.GetHeaderFmt()->GetCntnt();
@@ -1065,8 +1066,12 @@ void WW8_WrPlcSepx::OutHeader( SwWW8Writer& rWrt, const SwFmt& rFmt,
     else if( rWrt.bWrtWW8 )
     {
         pTxtPos->Append( rCpPos );
-        rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
-        rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        if (rWrt.bHasHdr)
+        {
+            rWrt.WriteStringAsPara( aEmptyStr ); // Empty paragraph for empty header
+            rWrt.WriteStringAsPara( aEmptyStr ); // a CR that WW8 needs for end of the stream
+            rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        }
     }
 }
 void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
@@ -1074,6 +1079,7 @@ void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
 {
     if( nFlag & nHFFlags )
     {
+        rWrt.bHasFtr = true;
         const SwFmtFooter& rFt = rFmt.GetFooter();
         ASSERT( rFt.GetFooterFmt(), "KopfText nicht richtig da" );
         const SwFmtCntnt& rCntnt = rFt.GetFooterFmt()->GetCntnt();
@@ -1085,8 +1091,12 @@ void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
     else if( rWrt.bWrtWW8 )
     {
         pTxtPos->Append( rCpPos );
-        rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
-        rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        if (rWrt.bHasFtr)
+        {
+            rWrt.WriteStringAsPara( aEmptyStr ); // Empty paragraph for empty footer
+            rWrt.WriteStringAsPara( aEmptyStr ); // a CR that WW8 needs for end of the stream
+            rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+        }
     }
 }
 
