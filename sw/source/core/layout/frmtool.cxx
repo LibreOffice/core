@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:03:08 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3338,9 +3338,14 @@ void Notify_Background( const SdrObject* pObj,
     if ( pFlyFrm && pAnchor->GetUpper() && pAnchor->IsInTab() )//MA_FLY_HEIGHT
         pAnchor->GetUpper()->InvalidateSize();
 
-    ViewShell *pSh;
-    if( bInva && 0 != (pSh = pPage->GetShell()) )
+    // --> OD 2008-01-30 #i82258# - make code robust
+    ViewShell* pSh = 0;
+    if ( bInva && pPage &&
+         0 != (pSh = pPage->GetShell()) )
+    {
         pSh->InvalidateWindows( rRect );
+    }
+    // <--
 }
 
 /*************************************************************************
