@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:05:32 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,12 +503,19 @@ void SwPageFrm::PreparePage( BOOL bFtn )
 {
     SetFtnPage( bFtn );
 
-    //Klare Verhaeltnisse schaffen, sprich LayoutFrms der Seite formatieren.
-    if ( Lower() )
-        ::lcl_FormatLay( this );
-
-    //Vorhandene Flys bei der Seite anmelden.
+    // --> OD 2008-01-30 #i82258#
+    // Due to made change on OOo 2.0 code line, method <::lcl_FormatLay(..)> has
+    // the side effect, that the content of page header and footer are formatted.
+    // For this formatting it is needed that the anchored objects are registered
+    // at the <SwPageFrm> instance.
+    // Thus, first calling <::RegistFlys(..)>, then call <::lcl_FormatLay(..)>
     ::RegistFlys( this, this );
+
+        if ( Lower() )
+    {
+                ::lcl_FormatLay( this );
+    }
+    // <--
 
     //Flys und DrawObjekte die noch am Dokument bereitstehen.
     //Fussnotenseiten tragen keine Seitengebundenen Flys!
