@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:23:29 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,9 +299,13 @@ void ScColumn::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkD
 
     if ( rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
-            pAttrArray->MergePatternArea( nTop, nBottom, rState, bDeep );
+        const ScMarkArray* pArray = rMark.GetArray() + nCol;
+        if ( pArray->HasMarks() )
+        {
+            ScMarkArrayIter aMarkIter( pArray );
+            while (aMarkIter.Next( nTop, nBottom ))
+                pAttrArray->MergePatternArea( nTop, nBottom, rState, bDeep );
+        }
     }
 }
 
