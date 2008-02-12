@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 15:44:34 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7581,6 +7581,31 @@ SfxVoidItem FocusInputLine SID_FOCUS_INPUTLINE
 
 //--------------------------------------------------------------------------
 SfxVoidItem ClosePreview SID_PREVIEW_CLOSE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem Margins SID_PREVIEW_MARGIN
 ()
 [
     /* flags: */
