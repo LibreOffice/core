@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-04 09:02:06 $
+#   last change: $Author: mav $ $Date: 2008-02-12 15:09:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ PATCH_FILE_NAME=patches$/logging.patch
 OUT2CLASS=target$/commons-logging-1.1.1-SNAPSHOT.jar
 
 .IF "$(SYSTEM_TOMCAT)" != "YES"
-SERVLETAPI_JAR := $(SOLARVER)$/$(INPATH)$/bin$/servlet-api.jar
+SERVLETAPI_JAR := $(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/servlet-api.jar
 .ENDIF
 
 .IF "$(JAVACISGCJ)"=="yes"
