@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:16:21 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1997,6 +1997,15 @@ BOOL ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const
     return bInUse;
 }
 
+void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& rIndexes) const
+{
+    if (pItems)
+        for (SCSIZE i = 0; i < nCount; i++)
+            if ((pItems[i].nRow >= nRow1) &&
+                (pItems[i].nRow <= nRow2) &&
+                (pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA))
+                    ((ScFormulaCell*)pItems[i].pCell)->FindRangeNamesInUse(rIndexes);
+}
 
 void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
                                      const ScIndexMap& rMap )
