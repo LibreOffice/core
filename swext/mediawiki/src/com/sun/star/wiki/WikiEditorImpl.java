@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-12 18:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,9 +421,6 @@ public final class WikiEditorImpl extends WeakBase
                         aDocInfo.put( "CompleteUrl", aArticle.GetMainURL() + aArticle.GetTitle() );
                         m_aSettings.addWikiDoc( aDocInfo );
                         m_aSettings.storeConfiguration();
-
-                        if ( Helper.GetShowInBrowserByDefault( m_xContext ) )
-                           Helper.ShowURLInBrowser( m_xContext, aArticle.GetViewURL() );
                     }
                     else
                     {

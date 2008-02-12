@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
+ *  last change: $Author: mav $ $Date: 2008-02-12 18:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,12 @@ public class WikiPropDialog extends WikiDialog{
     public boolean show()
     {
         EnableControls( true );
-        return super.show();
+        boolean bResult = super.show();
+
+        if ( bResult && Helper.GetShowInBrowserByDefault( m_xContext ) )
+           Helper.ShowURLInBrowser( m_xContext, m_sWikiEngineURL + "index.php?title=" + m_sWikiTitle );
+
+        return bResult;
     }
 
     public synchronized void ThreadStop( boolean bSelf )
