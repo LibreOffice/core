@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:32:49 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ using namespace com::sun::star;
 
 #define SC10TOSTRING(p)     String(p,DEFCHARSET)
 
+const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
 void lcl_ReadDateTime(SvStream& rStream, Sc10DateTime& rDateTime)
 {
@@ -1683,7 +1684,7 @@ void Sc10Import::LoadTables()
             nError = errUnknownID;
             return;
         }
-        for (SCCOL Col = 0; (Col <= MAXCOL) && (nError == 0); Col++)
+        for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == 0); Col++)
         {
             rStream >> Count;
             nError = rStream.GetError();
