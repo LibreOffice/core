@@ -213,6 +213,11 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Margins" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Margins</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ClosePreview" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Close Preview</value>
