@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:19:27 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "view/SlsViewOverlay.hxx"
@@ -53,45 +52,21 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 
-#ifndef _SV_SVAPP_HXX
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/sdrpagewindow.hxx>
 #include <vcl/svapp.hxx>
-#endif
+
+using namespace ::sdr::overlay;
 
 namespace {
-class ShowingModeGuard
-{
-public:
-    explicit ShowingModeGuard (::sd::slidesorter::view::OverlayBase& rOverlay,
-        bool bHideAndSave = false)
-        : mrOverlay (rOverlay),
-          mbIsShowing (mrOverlay.IsShowing()),
-          mbRestorePending(false)
-    {
-        if (mbIsShowing)
-            if (bHideAndSave)
-            {
-                mrOverlay.GetViewOverlay().HideAndSave (
-                    ::sd::slidesorter::view::ViewOverlay::OPT_XOR);
-                mbRestorePending = true;
-            }
-            mrOverlay.Hide();
-    }
-
-    ~ShowingModeGuard (void)
-    {
-        if (mbIsShowing)
-        {
-            mrOverlay.Show();
-            if (mbRestorePending)
-                mrOverlay.GetViewOverlay().Restore ();
-        }
-    }
-
-private:
-    ::sd::slidesorter::view::OverlayBase& mrOverlay;
-    bool mbIsShowing;
-    bool mbRestorePending;
-};
+    const static sal_Int32 gnSubstitutionStripeLength (3);
 }
 
 namespace sd { namespace slidesorter { namespace view {
@@ -99,16 +74,11 @@ namespace sd { namespace slidesorter { namespace view {
 //=====  ViewOverlay  =========================================================
 
 ViewOverlay::ViewOverlay (SlideSorterViewShell& rViewShell)
-    : mrViewShell (rViewShell),
+    : mrViewShell(rViewShell),
       maSelectionRectangleOverlay(*this),
-      maMouseOverIndicatorOverlay(*this),
-      maInsertionIndicatorOverlay(*this),
-      maSubstitutionOverlay(*this),
-      mbSelectionRectangleWasVisible(false),
-      mbMouseOverIndicatorWasVisible(false),
-      mbInsertionIndicatorWasVisible(false),
-      mbSubstitutionDisplayWasVisible(false),
-      mnHideAndSaveLevel(0)
+      maMouseOverIndicatorOverlay(*this, rViewShell),
+      maInsertionIndicatorOverlay(*this, rViewShell),
+      maSubstitutionOverlay(*this)
 {
 }
 
@@ -154,87 +124,20 @@ SubstitutionOverlay& ViewOverlay::GetSubstitutionOverlay (void)
 
 
 
-void ViewOverlay::Paint (void)
+OverlayManager* ViewOverlay::GetOverlayManager (void) const
 {
-    maSelectionRectangleOverlay.Paint();
-    maMouseOverIndicatorOverlay.Paint();
-    maInsertionIndicatorOverlay.Paint();
-    maSubstitutionOverlay.Paint();
-}
+    OverlayManager* pOverlayManager = NULL;
 
-
-
-
-controller::SlideSorterController& ViewOverlay::GetController (void)
-{
-    return mrViewShell.GetSlideSorterController();
-}
-
-
-
-
-SlideSorterViewShell& ViewOverlay::GetViewShell (void)
-{
-    return mrViewShell;
-}
-
-
-
-
-void ViewOverlay::HideAndSave (OverlayPaintType eType)
-{
-    if (mnHideAndSaveLevel++ == 0)
+    SlideSorterView& rView (mrViewShell.GetSlideSorterController().GetView());
+    SdrPageView* pPageView = rView.GetSdrPageView();
+    if (pPageView != NULL && pPageView->PageWindowCount()>0)
     {
-        // Remember the current state of the visiblities of the overlays.
-        mbSelectionRectangleWasVisible = maSelectionRectangleOverlay.IsShowing();
-        mbMouseOverIndicatorWasVisible = maMouseOverIndicatorOverlay.IsShowing();
-        mbInsertionIndicatorWasVisible = maInsertionIndicatorOverlay.IsShowing();
-        mbSubstitutionDisplayWasVisible = maSubstitutionOverlay.IsShowing();
-
-        // Remember that we have saved the current state.
-        meSavedStateType = eType;
-
-        // Hide the overlays.
-        if (eType==OPT_ALL || eType==OPT_XOR)
-        {
-            if (mbSelectionRectangleWasVisible)
-                maSelectionRectangleOverlay.Hide();
-        }
-        if (mbSubstitutionDisplayWasVisible)
-            maSubstitutionOverlay.Hide();
-
-        if (eType==OPT_ALL || eType==OPT_PAINT)
-        {
-            if (mbMouseOverIndicatorWasVisible)
-                maMouseOverIndicatorOverlay.Hide();
-            if (mbInsertionIndicatorWasVisible)
-                maInsertionIndicatorOverlay.Hide();
-        }
+        SdrPageWindow* pPageWindow = pPageView->GetPageWindow(0);
+        if (pPageWindow != NULL)
+            pOverlayManager = pPageWindow->GetOverlayManager();
     }
-}
 
-
-
-
-void ViewOverlay::Restore (void)
-{
-    if (--mnHideAndSaveLevel == 0)
-    {
-        if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_PAINT)
-        {
-            if (mbInsertionIndicatorWasVisible)
-                maInsertionIndicatorOverlay.Show();
-            if (mbMouseOverIndicatorWasVisible)
-                maMouseOverIndicatorOverlay.Show();
-        }
-        if (mbSubstitutionDisplayWasVisible)
-            maSubstitutionOverlay.Show();
-        if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_XOR)
-        {
-            if (mbSelectionRectangleWasVisible)
-                maSelectionRectangleOverlay.Show();
-        }
-    }
+    return pOverlayManager;
 }
 
 
@@ -243,9 +146,10 @@ void ViewOverlay::Restore (void)
 //=====  OverlayBase  =========================================================
 
 OverlayBase::OverlayBase (ViewOverlay& rViewOverlay)
-    : mrViewOverlay(rViewOverlay),
-      mbIsShowing (false)
+    : OverlayObject(Color(0,0,0)),
+      mrViewOverlay(rViewOverlay)
 {
+    setVisible(false);
 }
 
 
@@ -253,6 +157,9 @@ OverlayBase::OverlayBase (ViewOverlay& rViewOverlay)
 
 OverlayBase::~OverlayBase (void)
 {
+    OverlayManager* pOverlayManager = getOverlayManager();
+    if (pOverlayManager != NULL)
+        pOverlayManager->remove(*this);
 }
 
 
@@ -267,7 +174,7 @@ void OverlayBase::Paint (void)
 
 bool OverlayBase::IsShowing (void)
 {
-    return mbIsShowing;
+    return isVisible();
 }
 
 
@@ -286,11 +193,7 @@ void OverlayBase::Toggle (void)
 
 void OverlayBase::Show (void)
 {
-    if ( ! IsShowing())
-    {
-        mbIsShowing = true;
-        Paint ();
-    }
+    setVisible(true);
 }
 
 
@@ -298,11 +201,7 @@ void OverlayBase::Show (void)
 
 void OverlayBase::Hide (void)
 {
-    if (IsShowing())
-    {
-        mbIsShowing = false;
-        Paint ();
-    }
+    setVisible(false);
 }
 
 
@@ -316,11 +215,35 @@ ViewOverlay& OverlayBase::GetViewOverlay (void)
 
 
 
+void OverlayBase::transform (const basegfx::B2DHomMatrix& rMatrix)
+{
+    (void)rMatrix;
+}
+
+
+
+
+void OverlayBase::EnsureRegistration (void)
+{
+    if (getOverlayManager() == NULL)
+    {
+        OverlayManager* pOverlayManager = mrViewOverlay.GetOverlayManager();
+        if (pOverlayManager != NULL)
+            pOverlayManager->add(*this);
+    }
+}
+
+
+
+
 //=====  SubstitutionOverlay  =================================================
 
 SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
-    : OverlayBase(rViewOverlay)
-{
+    : OverlayBase(rViewOverlay),
+      maPosition(0,0),
+      maBoundingBox(),
+      maShapes()
+ {
 }
 
 
@@ -333,38 +256,31 @@ SubstitutionOverlay::~SubstitutionOverlay (void)
 
 
 
-void SubstitutionOverlay::Paint (void)
-
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    SubstitutionShapeList::const_iterator aShape (maShapes.begin());
-    SubstitutionShapeList::const_iterator aShapeEnd (maShapes.end());
-    while (aShape!=aShapeEnd)
-    {
-        mrViewOverlay.GetViewShell().DrawMarkRect (*aShape);
-        aShape++;
-    }
-
-    OverlayBase::Paint();
-}
-
-
-
-
 void SubstitutionOverlay::Create (
     model::PageEnumeration& rSelection,
     const Point& rPosition)
 {
-    ShowingModeGuard aGuard (*this);
+    EnsureRegistration();
+
     maPosition = rPosition;
 
     maShapes.clear();
     while (rSelection.HasMoreElements())
     {
-        maShapes.push_back(
-            rSelection.GetNextElement()->GetPageObject()->GetCurrentBoundRect());
+        const Rectangle aBox (rSelection.GetNextElement()->GetPageObject()->GetCurrentBoundRect());
+        basegfx::B2DRectangle aB2DBox(
+            aBox.Left(),
+            aBox.Top(),
+            aBox.Right(),
+            aBox.Bottom());
+        maShapes.append(basegfx::tools::createPolygonFromRect(aB2DBox), 4);
+        maBoundingBox = basegfx::tools::getRange(maShapes);
     }
+
+    setVisible(maShapes.count() > 0);
+    // The selection indicator may have been visible already so call
+    // objectChange() to enforce an update.
+    objectChange();
 }
 
 
@@ -372,9 +288,9 @@ void SubstitutionOverlay::Create (
 
 void SubstitutionOverlay::Clear (void)
 {
-    ShowingModeGuard aGuard (*this);
-
     maShapes.clear();
+    maBoundingBox = basegfx::B2DRange();
+    setVisible(false);
 }
 
 
@@ -382,7 +298,14 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    SetPosition (maPosition + rOffset);
+    basegfx::B2DHomMatrix aTranslation;
+    aTranslation.translate(rOffset.X(), rOffset.Y());
+    maShapes.transform(aTranslation);
+    maBoundingBox.transform(aTranslation);
+
+    maPosition += rOffset;
+
+    objectChange();
 }
 
 
@@ -390,21 +313,41 @@ void SubstitutionOverlay::Move (const Point& rOffset)
 
 void SubstitutionOverlay::SetPosition (const Point& rPosition)
 {
-    ShowingModeGuard aGuard (*this);
-    Point rOffset = rPosition - maPosition;
-
-    SubstitutionShapeList::iterator aShape (maShapes.begin());
-    SubstitutionShapeList::const_iterator aShapeEnd (maShapes.end());
-    for (;aShape!=aShapeEnd; aShape++)
-        aShape->SetPos (aShape->TopLeft() + rOffset);
-
-    maPosition = rPosition;
+    Move(rPosition - maPosition);
 }
 
 
 
 
-const Point& SubstitutionOverlay::GetPosition (void) const
+void SubstitutionOverlay::drawGeometry (OutputDevice& rOutputDevice)
+{
+    if (getOverlayManager() != NULL)
+    {
+        const sal_uInt32 nOldStripeLength (getOverlayManager()->getStripeLengthPixel());
+        getOverlayManager()->setStripeLengthPixel(gnSubstitutionStripeLength);
+
+        const sal_uInt32 nCount (maShapes.count());
+        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
+            ImpDrawPolygonStriped(rOutputDevice, maShapes.getB2DPolygon(nIndex));
+
+        getOverlayManager()->setStripeLengthPixel(nOldStripeLength);
+    }
+}
+
+
+
+
+void SubstitutionOverlay::createBaseRange (OutputDevice& rOutputDevice)
+{
+    (void)rOutputDevice;
+
+    maBaseRange = maBoundingBox;
+}
+
+
+
+
+Point SubstitutionOverlay::GetPosition (void) const
 {
     return maPosition;
 }
@@ -424,41 +367,6 @@ SelectionRectangleOverlay::SelectionRectangleOverlay (
 
 
 
-
-void SelectionRectangleOverlay::Paint (void)
-{
-    //  mrViewOverlay.GetViewShell().DrawMarkRect (maSelectionRectangle);
-}
-
-
-
-
-void SelectionRectangleOverlay::Show (void)
-{
-    if ( ! mbIsShowing)
-    {
-        SlideSorterView& rView (mrViewOverlay.GetViewShell().GetSlideSorterController().GetView());
-        rView.BegEncirclement(maAnchor);
-        rView.MovEncirclement(maSecondCorner);
-        OverlayBase::Show();
-    }
-}
-
-
-
-
-void SelectionRectangleOverlay::Hide (void)
-{
-    if (mbIsShowing)
-    {
-        mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().EndEncirclement();
-        OverlayBase::Hide();
-    }
-}
-
-
-
-
 Rectangle SelectionRectangleOverlay::GetSelectionRectangle (void)
 {
     return Rectangle(maAnchor, maSecondCorner);
@@ -469,10 +377,9 @@ Rectangle SelectionRectangleOverlay::GetSelectionRectangle (void)
 
 void SelectionRectangleOverlay::Start (const Point& rAnchor)
 {
+    EnsureRegistration();
+    setVisible(false);
     maAnchor = rAnchor;
-    maSecondCorner = rAnchor;
-    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().BegEncirclement(maAnchor);
-    OverlayBase::Show();
 }
 
 
@@ -481,7 +388,37 @@ void SelectionRectangleOverlay::Start (const Point& rAnchor)
 void SelectionRectangleOverlay::Update (const Point& rSecondCorner)
 {
     maSecondCorner = rSecondCorner;
-    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().MovEncirclement(maSecondCorner);
+    setVisible(true);
+    // The selection rectangle may have been visible already so call
+    // objectChange() to enforce an update.
+    objectChange();
+}
+
+
+
+
+void SelectionRectangleOverlay::drawGeometry (OutputDevice& rOutputDevice)
+{
+    ImpDrawRangeStriped(
+        rOutputDevice,
+        basegfx::B2DRange(
+            maAnchor.X(),
+            maAnchor.Y(),
+            maSecondCorner.X(),
+            maSecondCorner.Y()));
+}
+
+
+
+
+void SelectionRectangleOverlay::createBaseRange (OutputDevice& rOutputDevice)
+{
+    (void)rOutputDevice;
+    maBaseRange = basegfx::B2DRange(
+        maAnchor.X(),
+        maAnchor.Y(),
+        maSecondCorner.X(),
+        maSecondCorner.Y());
 }
 
 
@@ -490,39 +427,26 @@ void SelectionRectangleOverlay::Update (const Point& rSecondCorner)
 //=====  InsertionIndicatorOverlay  ===========================================
 
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (
-    ViewOverlay& rViewOverlay)
-    : OverlayBase (rViewOverlay)
+    ViewOverlay& rViewOverlay,
+    SlideSorterViewShell& rViewShell)
+    : OverlayBase (rViewOverlay),
+      mrViewShell(rViewShell),
+      mnInsertionIndex(-1),
+      maBoundingBox()
 {
 }
 
 
 
 
-void InsertionIndicatorOverlay::SetPositionAndSize (
-    const Rectangle& aNewBoundingBox)
+void InsertionIndicatorOverlay::SetPositionAndSize (const Rectangle& aNewBoundingBox)
 {
-    if (maBoundingBox != aNewBoundingBox)
-    {
-        ShowingModeGuard aGuard (*this, true);
-
-        maBoundingBox = aNewBoundingBox;
-    }
-}
-
-
-
-
-void InsertionIndicatorOverlay::Paint (void)
-{
-    Color aColor;
-    if (mbIsShowing)
-        aColor = Application::GetSettings().GetStyleSettings().GetFontColor();
-    else
-        aColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    mrViewOverlay.GetViewShell().DrawFilledRect (
-        maBoundingBox,
-        aColor,
-        aColor);
+    EnsureRegistration();
+    maBoundingBox = aNewBoundingBox;
+    setVisible( ! maBoundingBox.IsEmpty());
+    // The insertion indicator may have been visible already so call
+    // objectChange() to enforce an update.
+    objectChange();
 }
 
 
@@ -532,9 +456,9 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
 {
     static const bool bAllowHorizontalInsertMarker = true;
     Layouter& rLayouter (
-        mrViewOverlay.GetController().GetView().GetLayouter());
+        mrViewShell.GetSlideSorterController().GetView().GetLayouter());
     USHORT nPageCount
-        = (USHORT)mrViewOverlay.GetController().GetModel().GetPageCount();
+        = (USHORT)mrViewShell.GetSlideSorterController().GetModel().GetPageCount();
 
     sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint,
         bAllowHorizontalInsertMarker);
@@ -599,12 +523,55 @@ sal_Int32 InsertionIndicatorOverlay::GetInsertionPageIndex (void) const
 
 
 
+void InsertionIndicatorOverlay::drawGeometry (OutputDevice& rOutputDevice)
+{
+    const Color aFillColor (rOutputDevice.GetFillColor());
+    const Color aLineColor (rOutputDevice.GetLineColor());
+
+    if (isVisible())
+    {
+        const Color aColor (rOutputDevice.GetSettings().GetStyleSettings().GetFontColor());
+        rOutputDevice.SetLineColor(aColor);
+        rOutputDevice.SetFillColor(aColor);
+        rOutputDevice.DrawRect (maBoundingBox);
+    }
+
+    rOutputDevice.SetFillColor(aFillColor);
+    rOutputDevice.SetLineColor(aLineColor);
+}
+
+
+
+
+void InsertionIndicatorOverlay::createBaseRange (OutputDevice& rOutputDevice)
+{
+    (void)rOutputDevice;
+    const sal_Int32 nBorder (10);
+    maBaseRange = basegfx::B2DRange(
+        maBoundingBox.Left()-nBorder,
+        maBoundingBox.Top()-nBorder,
+        maBoundingBox.Right()-nBorder,
+        maBoundingBox.Bottom()-nBorder);
+}
+
+
+
+
 //=====  MouseOverIndicatorOverlay  ===========================================
 
 MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
-    ViewOverlay& rViewOverlay)
+    ViewOverlay& rViewOverlay,
+    SlideSorterViewShell& rViewShell)
     : OverlayBase (rViewOverlay),
+      mrViewShell(rViewShell),
       mpPageUnderMouse()
+{
+}
+
+
+
+
+MouseOverIndicatorOverlay::~MouseOverIndicatorOverlay (void)
 {
 }
 
@@ -614,8 +581,7 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
 void MouseOverIndicatorOverlay::SetSlideUnderMouse (
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
-    if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
+    if ( ! mrViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
     {
         model::SharedPageDescriptor pDescriptor;
         if ( ! mpPageUnderMouse.expired())
@@ -631,9 +597,16 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
 
          if (pDescriptor != rpDescriptor)
         {
-            ShowingModeGuard aGuard (*this, true);
-
+            // Switch to the new (possibly empty) descriptor.
             mpPageUnderMouse = rpDescriptor;
+
+            EnsureRegistration();
+
+            // Show the indicator when a valid page descriptor is given.
+            setVisible( ! mpPageUnderMouse.expired());
+            // The mouse over indicator may have been visible already so call
+            // objectChange() to enforce an update.
+            objectChange();
         }
     }
 }
@@ -641,39 +614,51 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
 
 
 
-void MouseOverIndicatorOverlay::Paint (void)
+void MouseOverIndicatorOverlay::drawGeometry (OutputDevice& rOutputDevice)
+{
+    const Color aFillColor (rOutputDevice.GetFillColor());
+    const Color aLineColor (rOutputDevice.GetLineColor());
+
+    view::PageObjectViewObjectContact* pContact = GetViewObjectContact();
+    if (pContact != NULL)
+        pContact->PaintMouseOverEffect(rOutputDevice, true);
+
+    rOutputDevice.SetFillColor(aFillColor);
+    rOutputDevice.SetLineColor(aLineColor);
+}
+
+
+
+
+void MouseOverIndicatorOverlay::createBaseRange (OutputDevice& rOutputDevice)
+{
+    (void)rOutputDevice;
+    view::PageObjectViewObjectContact* pContact = GetViewObjectContact();
+    if (pContact != NULL)
+    {
+        Rectangle aBox (pContact->GetBoundingBox(
+            rOutputDevice,
+            view::PageObjectViewObjectContact::MouseOverIndicatorBoundingBox,
+            view::PageObjectViewObjectContact::ModelCoordinateSystem));
+        maBaseRange = basegfx::B2DRange(aBox.Left(),aBox.Top(),aBox.Right(),aBox.Bottom());
+    }
+}
+
+
+
+
+view::PageObjectViewObjectContact* MouseOverIndicatorOverlay::GetViewObjectContact (void) const
 {
     if ( ! mpPageUnderMouse.expired())
     {
-        model::SharedPageDescriptor pDescriptor;
-        try
-        {
-            pDescriptor = model::SharedPageDescriptor(mpPageUnderMouse);
-        }
-        catch (::boost::bad_weak_ptr)
-        {
-        }
-
-        if (pDescriptor.get() != NULL)
-        {
-            SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
-            if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
-            {
-                SlideSorterView& rView (rViewShell.GetSlideSorterController().GetView());
-                OutputDevice* pDevice = rView.GetWindow();
-                PageObjectViewObjectContact* pContact = pDescriptor->GetViewObjectContact();
-                if (pDevice != NULL
-                    && pContact != NULL)
-                {
-                    pContact->PaintFrame(*pDevice, mbIsShowing);
-                }
-            }
-        }
+        model::SharedPageDescriptor pDescriptor (mpPageUnderMouse);
+        return pDescriptor->GetViewObjectContact();
     }
+    return NULL;
 }
-
 
 
 
 
 } } } // end of namespace ::sd::slidesorter::view
+
