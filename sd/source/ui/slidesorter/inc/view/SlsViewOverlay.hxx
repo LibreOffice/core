@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:25:38 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,13 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <osl/mutex.hxx>
+#include <svx/sdr/overlay/overlayobject.hxx>
 #include <tools/gen.hxx>
 #include <vector>
 #include <boost/weak_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 class OutputDevice;
 class Region;
@@ -58,20 +61,25 @@ namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
 } } }
 
+namespace sdr { namespace overlay {
+class OverlayManager;
+} }
+
 namespace sd { namespace slidesorter { namespace view {
 
 
-class ViewOverlay;
-class SelectionRectangleOverlay;
 class InsertionIndicatorOverlay;
+class PageObjectViewObjectContact;
+class SelectionRectangleOverlay;
 class SubstitutionOverlay;
+class ViewOverlay;
 
-/** This base class of overlay graphics keeps track of the visibility of
-    graphical objects that possibly are drawn in XOR paint mode.  This makes
-    it possibly to switch such an overlay on or off without knowing whether
-    it is visible.
+/** This base class of slide sorter overlays uses the drawing layer overlay
+    support for the display.
 */
 class OverlayBase
+    : private ::boost::noncopyable,
+      public sdr::overlay::OverlayObject
 {
 public:
     OverlayBase (ViewOverlay& rViewOverlay);
@@ -90,15 +98,19 @@ protected:
 
     ViewOverlay& mrViewOverlay;
 
-    bool mbIsShowing;
+    virtual void transform (const basegfx::B2DHomMatrix& rMatrix);
+
+    /** Make sure that the overlay object is registered at the
+        OverlayManager.  This registration is done on demand.
+    */
+    void EnsureRegistration (void);
 };
 
 
 
 
-/** This class manages the substitution display of the page objects.  This
-    subsitution is used to visualize the selected page objects during a
-    mouse drag operation.
+/** During internal drag and drop the outlines of the selected slides are
+    painted at the mouse position in dashed lines.
 */
 class SubstitutionOverlay
     : public OverlayBase
@@ -106,8 +118,6 @@ class SubstitutionOverlay
 public:
     SubstitutionOverlay (ViewOverlay& rViewOverlay);
     virtual ~SubstitutionOverlay (void);
-
-    virtual void Paint (void);
 
     /** Setup the substitution display of the given set of selected pages.
         The given mouse position is remembered so that it later can be
@@ -126,33 +136,39 @@ public:
     */
     void Move (const Point& rOffset);
     void SetPosition (const Point& rPosition);
-    const Point& GetPosition (void) const;
+    Point GetPosition (void) const;
+
+protected:
+    virtual void drawGeometry (OutputDevice& rOutputDevice);
+    virtual void createBaseRange (OutputDevice& rOutputDevice);
 
 private:
-    /// List of page object substitution displays.
-    typedef ::std::vector<Rectangle> SubstitutionShapeList;
-    SubstitutionShapeList maShapes;
     Point maPosition;
+    basegfx::B2DRange maBoundingBox;
+    basegfx::B2DPolyPolygon maShapes;
 };
 
 
 
 
+/** Slides can be selected by drawing a selection rectangle in the slide
+    sorter.  When the left mouse button is released all slides that are at
+    least partially in the rectangle are selected.
+*/
 class SelectionRectangleOverlay
     : public OverlayBase
 {
 public:
     SelectionRectangleOverlay (ViewOverlay& rViewOverlay);
 
-    virtual void Paint (void);
-
-    virtual void Show (void);
-    virtual void Hide (void);
-
     void Start (const Point& rAnchor);
     void Update (const Point& rSecondCorner);
 
     Rectangle GetSelectionRectangle (void);
+
+protected:
+    virtual void drawGeometry (OutputDevice& rOutputDevice);
+    virtual void createBaseRange (OutputDevice& rOutputDevice);
 
 private:
     Point maAnchor;
@@ -169,11 +185,9 @@ class InsertionIndicatorOverlay
     : public OverlayBase
 {
 public:
-    InsertionIndicatorOverlay (ViewOverlay& rViewOverlay);
-
-    void SetPositionAndSize (const Rectangle& rBoundingBox);
-
-    virtual void Paint (void);
+    InsertionIndicatorOverlay (
+        ViewOverlay& rViewOverlay,
+        SlideSorterViewShell& mrViewShell);
 
     /** Given a position in model coordinates this method calculates the
         insertion marker both as an index in the document and as a rectangle
@@ -183,9 +197,16 @@ public:
 
     sal_Int32 GetInsertionPageIndex (void) const;
 
+protected:
+    virtual void drawGeometry (OutputDevice& rOutputDevice);
+    virtual void createBaseRange (OutputDevice& rOutputDevice);
+
 private:
-    Rectangle maBoundingBox;
+    SlideSorterViewShell& mrViewShell;
     sal_Int32 mnInsertionIndex;
+    Rectangle maBoundingBox;
+
+    void SetPositionAndSize (const Rectangle& rBoundingBox);
 };
 
 
@@ -193,14 +214,15 @@ private:
 
 /** Paint a frame around the slide preview under the mouse.  The actual
     painting is done by the PageObjectViewObjectContact of the slidesorter.
-    This class is responsible for the coordination of the right time for the
-    painting.
 */
 class MouseOverIndicatorOverlay
     : public OverlayBase
 {
 public:
-    MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay);
+    MouseOverIndicatorOverlay (
+        ViewOverlay& rViewOverlay,
+        SlideSorterViewShell& mrViewShell);
+    virtual ~MouseOverIndicatorOverlay (void);
 
     /** Set the page object for which to paint a mouse over indicator.
         @param pContact
@@ -208,14 +230,22 @@ public:
     */
     void SetSlideUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
 
-    virtual void Paint (void);
+protected:
+    virtual void drawGeometry (OutputDevice& rOutputDevice);
+    virtual void createBaseRange (OutputDevice& rOutputDevice);
 
 private:
+    class MouseOverIndicator;
+
+    SlideSorterViewShell& mrViewShell;
+
     /** The page under the mouse is stored as weak shared pointer so that
         model changes can be handled without having the SlideSorterModel
         inform this class explicitly.
     */
     ::boost::weak_ptr<model::PageDescriptor> mpPageUnderMouse;
+
+    view::PageObjectViewObjectContact* GetViewObjectContact (void) const;
 };
 
 
@@ -224,11 +254,12 @@ private:
 /** The view overlay manages and paints some indicators that are painted on
     top of the regular view content (the page objects).  It is separated
     from the view to allow the indicators to be altered in position and size
-    without to repaint the whole view content (inside that the bounding box
-    of the indicator).  One technique to achive this is to use XOR-painting.
+    without repainting the whole view content (inside that the bounding box
+    of the indicator).  This is achieved by using the drawing layer overlay
+    support.
 
-    The view overlay itself simply provides the more specialized classes
-    that handle individual indicators.
+    The view overlay itself simply gives access to the more specialized
+    classes that handle individual indicators.
 
 */
 class ViewOverlay
@@ -242,29 +273,7 @@ public:
     InsertionIndicatorOverlay& GetInsertionIndicatorOverlay (void);
     SubstitutionOverlay& GetSubstitutionOverlay (void);
 
-    void Paint (void);
-
-    /** The overlay paint type describes how an overlay is painted.  That can be
-        either by using XOR operation or by doing a regular paint.
-    */
-    enum OverlayPaintType { OPT_ALL, OPT_XOR, OPT_PAINT };
-
-    /** As a preparation for draw operations that are not caused by the
-        overlays this method saves the current state of all overlays so that
-        the next call to Restore() can restore them.  After that it hides
-        the overlays so they do not interfere with the drawing operations.
-        @param eType
-            This parameter specifies what overlays to hide.
-    */
-    void HideAndSave (OverlayPaintType eType = OPT_ALL);
-
-    /** Restore the state of the overlays that has been saved in an earlier
-        call of HideAndSave().
-    */
-    void Restore (void);
-
-    controller::SlideSorterController& GetController (void);
-    SlideSorterViewShell& GetViewShell (void);
+    sdr::overlay::OverlayManager* GetOverlayManager (void) const;
 
 private:
     SlideSorterViewShell& mrViewShell;
@@ -272,18 +281,6 @@ private:
     MouseOverIndicatorOverlay maMouseOverIndicatorOverlay;
     InsertionIndicatorOverlay maInsertionIndicatorOverlay;
     SubstitutionOverlay maSubstitutionOverlay;
-
-    OverlayPaintType meSavedStateType;
-
-    bool mbSelectionRectangleWasVisible;
-    bool mbMouseOverIndicatorWasVisible;
-    bool mbInsertionIndicatorWasVisible;
-    bool mbSubstitutionDisplayWasVisible;
-
-    /** The number HideAndSave() has been called more than Restore(). Only
-        when the value is 1 does Restore() really restore the overlays.
-    */
-    int mnHideAndSaveLevel;
 };
 
 
