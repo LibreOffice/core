@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:47 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -610,11 +610,9 @@ bool ScrollBarManager::RepeatAutoScroll (void)
 {
     if (maAutoScrollOffset != Size(0,0))
     {
-        mrController.GetView().GetOverlay().HideAndSave();
         mrController.GetViewShell().ScrollLines(
             maAutoScrollOffset.Width(),
             maAutoScrollOffset.Height());
-        mrController.GetView().GetOverlay().Restore();
         return true;
     }
     else
