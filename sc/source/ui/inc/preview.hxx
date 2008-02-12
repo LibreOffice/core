@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:25:29 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,31 @@ private:
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 
+    BOOL            bLeftRulerMove;
+    BOOL            bRightRulerMove;
+    BOOL            bTopRulerMove;
+    BOOL            bBottomRulerMove;
+    BOOL            bHeaderRulerMove;
+    BOOL            bFooterRulerMove;
+
+    BOOL            bLeftRulerChange;
+    BOOL            bRightRulerChange;
+    BOOL            bTopRulerChange;
+    BOOL            bBottomRulerChange;
+    BOOL            bHeaderRulerChange;
+    BOOL            bFooterRulerChange;
+    BOOL            bPageMargin;
+    BOOL            bColRulerMove;
+    ScRange         aPageArea;
+    long            nRight[ MAXCOL+1 ];
+    long            nLeftPosition;
+    long            mnScale;
+    SCCOL           nColNumberButttonDown;
+    Point           aButtonDownChangePoint;
+    Point           aButtonDownPt;
+    Point           aButtonUpPt;
+    long            nHeaderHeight;
+    long            nFooterHeight;
 
     void    TestLastPage();
     void    CalcPages( SCTAB nToWhichTab );
@@ -91,12 +116,15 @@ private:
     using Window::SetZoom;
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void   Paint( const Rectangle& rRect );
+    virtual void   Command( const CommandEvent& rCEvt );
+    virtual void   KeyInput( const KeyEvent& rKEvt );
+    virtual void   MouseMove( const MouseEvent& rMEvt );
+    virtual void   MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void   MouseButtonUp( const MouseEvent& rMEvt );
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void   GetFocus();
+    virtual void   LoseFocus();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -113,6 +141,12 @@ public:
     void    SetYOffset( long nY );
     void    SetZoom(USHORT nNewZoom);
     void    SetPageNo( long nPage );
+
+    BOOL    GetPageMargins()const { return bPageMargin; }
+    void    SetPageMargins( BOOL bVal )  { bPageMargin = bVal; }
+    void    DrawInvert( long nDragPos, USHORT nFlags );
+    void    DragMove( long nDragMovePos, USHORT nFlags );
+
 
     const ScPreviewLocationData& GetLocationData();
 
