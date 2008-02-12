@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:07 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1275,6 +1275,8 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
     //calls to "unopkg gui ext", for example, double-clicking and extension.
     ::osl::MutexGuard actionGuard(ActionMutex::get());
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    //Todo: m_pUpdateDialog can never be != NULL. It is not accessed outside of this
+    //function and it will be deleted at the end of this function.
     if ( m_pUpdateDialog != NULL )
     {
         m_pUpdateDialog->ToTop();
