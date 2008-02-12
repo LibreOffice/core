@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:17:20 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1593,12 +1593,15 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             ScIndexMap aSrcRangeMap( nSrcRangeNames );
             BOOL bRangeNameReplace = FALSE;
 
+            // find named ranges that are used in the source sheet
+            std::set<USHORT> aUsedNames;
+            pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
+
             for (USHORT i = 0; i < nSrcRangeNames; i++)     //! DB-Bereiche Pivot-Bereiche auch !!!
             {
                 ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
                 USHORT nOldIndex = pSrcData->GetIndex();
-                // only the copied source table is interesting for bInUse
-                BOOL bInUse = pSrcDoc->pTab[nSrcPos]->IsRangeNameInUse(0, 0, MAXCOL, MAXROW, nOldIndex);
+                bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                 if (bInUse)
                 {
                     USHORT nExisting = 0;
