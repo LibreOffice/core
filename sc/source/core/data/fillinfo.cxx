@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:06:07 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,39 +569,41 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         nArrY = 1;
                         nCurRow = nY1;                                      // einzelne Zeile
                         nThisRow = nY1;                                     // Ende des Bereichs
-                        (void) pThisMarkArr->Search( nY1, nIndex );
 
-                        do
+                        if ( pThisMarkArr->Search( nY1, nIndex ) )
                         {
-                            nThisRow=pThisMarkArr->pData[nIndex].nRow;      // Ende des Bereichs
-                            bThisMarked=pThisMarkArr->pData[nIndex].bMarked;
-
                             do
                             {
-                                if ( !RowHidden( nCurRow,nTab ) )
+                                nThisRow=pThisMarkArr->pData[nIndex].nRow;      // Ende des Bereichs
+                                bThisMarked=pThisMarkArr->pData[nIndex].bMarked;
+
+                                do
                                 {
-                                    if ( bThisMarked )
+                                    if ( !RowHidden( nCurRow,nTab ) )
                                     {
-                                        BOOL bSkip = bSkipMarks &&
-                                                    nX      >= nBlockStartX &&
-                                                    nX      <= nBlockEndX   &&
-                                                    nCurRow >= nBlockStartY &&
-                                                    nCurRow <= nBlockEndY;
-                                        if (!bSkip)
+                                        if ( bThisMarked )
                                         {
-                                            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                                            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                                            pInfo->bMarked = TRUE;
+                                            BOOL bSkip = bSkipMarks &&
+                                                        nX      >= nBlockStartX &&
+                                                        nX      <= nBlockEndX   &&
+                                                        nCurRow >= nBlockStartY &&
+                                                        nCurRow <= nBlockEndY;
+                                            if (!bSkip)
+                                            {
+                                                RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+                                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                                                pInfo->bMarked = TRUE;
+                                            }
                                         }
+                                        ++nArrY;
                                     }
-                                    ++nArrY;
+                                    ++nCurRow;
                                 }
-                                ++nCurRow;
+                                while (nCurRow <= nThisRow && nCurRow <= nY2);
+                                ++nIndex;
                             }
-                            while (nCurRow <= nThisRow && nCurRow <= nY2);
-                            ++nIndex;
+                            while ( nIndex < pThisMarkArr->nCount && nThisRow < nY2 );
                         }
-                        while ( nIndex < pThisMarkArr->nCount && nThisRow < nY2 );
                     }
                 }
                 else                                    // vordere Spalten
@@ -723,8 +725,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     {
                         const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nStartX;
                         SCSIZE nIndex;
-                        (void) pThisMarkArr->Search( nStartY, nIndex );
-                        bCellMarked=pThisMarkArr->pData[nIndex].bMarked;
+                        if ( pThisMarkArr->Search( nStartY, nIndex ) )
+                            bCellMarked=pThisMarkArr->pData[nIndex].bMarked;
                     }
 
                     pInfo->bMarked = bCellMarked;
