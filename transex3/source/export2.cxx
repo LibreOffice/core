@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:28 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,6 +483,29 @@ ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
     ByteString sFallback=nLanguage;
     GetIsoFallback( sFallback );
     return sFallback;
+}
+
+void Export::replaceEncoding( ByteString& rString )
+{
+// &#x2122; -> \u2122
+
+    for( int idx = 0; idx <= rString.Len()-8 ; idx++ )
+    {
+        if( rString.GetChar( idx )   == '&' &&
+            rString.GetChar( idx+1 ) == '#' &&
+            rString.GetChar( idx+2 ) == 'x' &&
+            rString.GetChar( idx+7 ) == ';' )
+        {
+            ByteString sTmp = rString.Copy( 0 , idx );
+            sTmp.Append( "\\u" );
+            sTmp.Append( rString.GetChar( idx+3 ) );
+            sTmp.Append( rString.GetChar( idx+4 ) );
+            sTmp.Append( rString.GetChar( idx+5 ) );
+            sTmp.Append( rString.GetChar( idx+6 ) );
+            sTmp.Append( rString.Copy( idx+8 , rString.Len() ) );
+            rString = sTmp;
+         }
+    }
 }
 
 /*****************************************************************************/
