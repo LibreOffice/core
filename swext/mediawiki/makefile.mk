@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mav $ $Date: 2008-02-11 13:25:15 $
+#   last change: $Author: mav $ $Date: 2008-02-12 16:00:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,10 @@ TARGET=mediawiki
 .INCLUDE : ant.mk
 
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-COMMONS_CODEC_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-codec-1.3.jar 
-COMMONS_LANG_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-lang-2.3.jar
-COMMONS_HTTPCLIENT_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-httpclient-3.1.jar
-COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-logging-1.1.1.jar
-.ENDIF
-
-.IF "$(SYSTEM_XML_APIS)" != "YES"
-XML_APIS_JAR = $(SOLARVER)$/$(INPATH)$/lib/xml-apis.jar
+COMMONS_CODEC_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-codec-1.3.jar 
+COMMONS_LANG_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-lang-2.3.jar
+COMMONS_HTTPCLIENT_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-httpclient-3.1.jar
+COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-logging-1.1.1.jar
 .ENDIF
 
 ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dxml-apis-jar=$(XML_APIS_JAR)

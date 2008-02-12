@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 13:25:15 $
+ *  last change: $Author: mav $ $Date: 2008-02-12 16:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
             <pathelement location="${officeclasses}/jut.jar"/>
             <pathelement location="${officeclasses}/ridl.jar"/>
             <pathelement location="${officeclasses}/unoil.jar"/>
-        <pathelement location="${officeclasses}/xml-apis.jar"/>
             <!-- 3rd party libs -->
             <pathelement location="${commons-codec-jar}"/>
             <pathelement location="${commons-httpclient-jar}"/>
