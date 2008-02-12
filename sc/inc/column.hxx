@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:15:03 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <set>
 
 class Fraction;
 class OutputDevice;
@@ -312,6 +314,7 @@ public:
 
     void        SetTabNo(SCTAB nNewTab);
     BOOL        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const;
+    void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& rIndexes) const;
     void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScIndexMap& rMap );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
