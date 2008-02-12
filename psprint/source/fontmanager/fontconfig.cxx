@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:07:51 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ class FontCfgWrapper
     FcFontSet*      m_pOutlineSet;
 
     FcBool          (*m_pFcInit)();
-    int             (*m_pFcVersion)();
+    int             (*m_pFcGetVersion)();
     FcConfig*       (*m_pFcConfigGetCurrent)();
     FcObjectSet*    (*m_pFcObjectSetVaBuild)(const char*,va_list);
     void            (*m_pFcObjectSetDestroy)(FcObjectSet* pSet);
@@ -160,10 +160,11 @@ public:
     FcBool FcInit()
     { return m_pFcInit(); }
 
+    int FcGetVersion()
+    { return m_pFcGetVersion(); }
+
     FcConfig* FcConfigGetCurrent()
-    {
-        return m_pFcConfigGetCurrent();
-    }
+    { return m_pFcConfigGetCurrent(); }
 
     FcObjectSet* FcObjectSetBuild( const char* first, ... )
     {
@@ -268,7 +269,7 @@ FontCfgWrapper::FontCfgWrapper()
           m_pDefConfig( NULL ),
           m_pOutlineSet( NULL )
 {
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
+     OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
     m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( !m_pLib )
     {
@@ -286,7 +287,7 @@ FontCfgWrapper::FontCfgWrapper()
 
     m_pFcInit = (FcBool(*)())
         loadSymbol( "FcInit" );
-    m_pFcVersion = (int(*)())
+    m_pFcGetVersion = (int(*)())
         loadSymbol( "FcGetVersion" );
     m_pFcConfigGetCurrent = (FcConfig *(*)())
         loadSymbol( "FcConfigGetCurrent" );
@@ -351,7 +352,7 @@ FontCfgWrapper::FontCfgWrapper()
 
     if( ! (
             m_pFcInit                       &&
-            m_pFcVersion                    &&
+            m_pFcGetVersion                 &&
             m_pFcConfigGetCurrent           &&
             m_pFcObjectSetVaBuild           &&
             m_pFcObjectSetDestroy           &&
@@ -422,8 +423,9 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         FcPatternReference(pOutlinePattern);
         FcFontSetAdd(m_pOutlineSet, pOutlinePattern);
     }
+    // TODO: FcFontSetDestroy( pOrig );
     #else
-    (void)eSetName;
+    (void)eSetName; // prevent compiler warning about unused parameter
     #endif
 }
 
@@ -434,8 +436,8 @@ FcFontSet* FontCfgWrapper::getFontSet()
     {
         m_pOutlineSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
-        const int nVersion = (*m_pFcVersion)();
-        if( nVersion > 20400 )
+        const int nVersion = FcGetVersion();
+    if( nVersion > 20400 )
             addFontSet( FcSetApplication );
     }
     #endif
@@ -486,7 +488,7 @@ namespace
     {
         FcChar8* candidate = families.begin()->second;
         rtl::OString sLangMatch(rtl::OUStringToOString(maLoc.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
-        rtl::OString sFullMatch = sLangMatch;
+    rtl::OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
         sFullMatch += rtl::OUStringToOString(maLoc.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
@@ -801,7 +803,9 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
         return false;
 
     // libfontcconfig's AppFontAddDir was broken in version 2.4.0
-    // TODO: is there a workaround?
+    const int nVersion = rWrapper.FcGetVersion();
+    if( nVersion <= 20400 )
+    return false;
     const char* pDirName = (const char*)rDirName.getStr();
     bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.getDefConfig(), (FcChar8*)pDirName ) == FcTrue);
 
