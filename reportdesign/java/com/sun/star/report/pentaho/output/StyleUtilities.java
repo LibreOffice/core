@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleUtilities.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:50:59 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Node;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.util.Log;
 
@@ -304,6 +305,24 @@ public class StyleUtilities
       if (autoDataStyle != null)
       {
         final DataStyle derivedStyle = (DataStyle) autoDataStyle.clone();
+        Node[] nodes = autoDataStyle.getNodeArray();
+        for (int i = 0; i < nodes.length; i++) {
+            Node node = nodes[i];
+            if (node instanceof DataStyle) {
+                DataStyle element = (DataStyle) node;
+                final Object apply = element.getAttribute(OfficeNamespaces.STYLE_NS, "apply-style-name");
+                if (apply != null) {
+                    final String applyStyleName = String.valueOf(apply);
+                    if (!stylesCollection.getAutomaticStyles().containsDataStyle(applyStyleName)) {
+                        final DataStyle autoApplyDataStyle = automaticStyles.getDataStyle(applyStyleName);
+                        if (autoApplyDataStyle != null) {
+                            stylesCollection.getAutomaticStyles().addDataStyle((DataStyle) autoApplyDataStyle.clone());
+                        }
+                    }
+                    break;
+                }
+            }
+        }
         stylesCollection.getAutomaticStyles().addDataStyle(derivedStyle);
         return;
       }
