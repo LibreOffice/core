@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:22:30 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1191,7 +1191,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_ISDARK:
     {
-        aAny <<= (sal_Bool)GetPage()->GetBackgroundColor().IsDark();
+        aAny <<= (sal_Bool)GetPage()->GetPageBackgroundColor().IsDark();
         break;
     }
     case WID_PAGE_HEADERVISIBLE:
