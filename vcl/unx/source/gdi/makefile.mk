@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:23:02 $
+#   last change: $Author: vg $ $Date: 2008-02-12 14:07:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,9 @@ EXCEPTIONSFILES=\
 
 
 .IF "$(OS)"=="MACOSX"
-SLOFILES +=	\
-        $(SLO)$/macosxint.obj
+SLOFILES += $(SLO)$/macosxint.obj
+MACOSXRC = $(MISC)$/macosxrc.txt
 .ENDIF # "$(OS)"=="MACOSX"
-
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
@@ -109,6 +108,8 @@ CFLAGS+=-DXRENDER_LINK
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
 
+ALLTAR : $(MACOSXRC)
+
 XSALSETLIBNAME=$(DLLPRE)spa$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 $(INCCOM)$/rtsname.hxx:
@@ -118,3 +119,5 @@ $(INCCOM)$/rtsname.hxx:
 $(SLO)$/salpimpl.obj : $(INCCOM)$/rtsname.hxx
 $(SLO)$/salprnpsp.obj : $(INCCOM)$/rtsname.hxx
 
+$(MISC)$/macosxrc.txt : $$(@:f)
+    $(COPY) $< $@
