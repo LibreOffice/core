@@ -91,9 +91,6 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 ..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin%_EXT%\mozwrapper
 
-..\%COMMON_OUTDIR%\bin\osx*.zip %_DEST%\bin%_EXT%\osx*.zip
-..\%__SRC%\misc\macosxrc.txt %_DEST%\bin%_EXT%\macosxrc.txt
-
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_nologo
