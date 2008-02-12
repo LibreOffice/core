@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:57:49 $
+#   last change: $Author: vg $ $Date: 2008-02-12 13:30:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@ TARGET=slackware
 
 MENUFILES=$(PKGDIR)$/{$(PRODUCTLIST)}-$(TARGET)-menus-$(PKGVERSION)-noarch-$(PKGREV).tgz
 
+.IF "$(USE_SHELL)"=="bash"
+ECHOPARAM=-e
+.ENDIF
+
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -79,7 +83,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
     @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
     @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/program/soffice soffice )" >> $@
-    @echo $(foreach,i,$(shell @sed  's/extension.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )") >> $@
+    @echo $(ECHOPARAM) $(foreach,i,$(shell @sed  's/extension.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )") >> $@
     @cat $< >> $@
 
 %$/install$/slack-desc : slack-desc
