@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:18:39 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1347,17 +1347,18 @@ void ScDocument::CopyToClip(SCCOL nCol1, SCROW nRow1,
         pClipDoc->ResetClip( this, pMarks );
         USHORT i;
         SCTAB j;
+
+        std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
+        for (j = 0; j <= MAXTAB; j++)
+            if (pTab[j] && pClipDoc->pTab[j])
+                if ( bAllTabs || !pMarks || pMarks->GetTableSelect(j) )
+                    pTab[j]->FindRangeNamesInUse( nCol1, nRow1, nCol2, nRow2, aUsedNames );
+
         pClipDoc->pRangeName->FreeAll();
         for (i = 0; i < pRangeName->GetCount(); i++)        //! DB-Bereiche Pivot-Bereiche auch !!!
         {
             USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
-            BOOL bInUse = FALSE;
-            for (j = 0; !bInUse && (j <= MAXTAB); j++)
-            {
-                if (pTab[j])
-                    bInUse = pTab[j]->IsRangeNameInUse(nCol1, nRow1, nCol2, nRow2,
-                                                       nIndex);
-            }
+            bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
             if (bInUse)
             {
                 ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
