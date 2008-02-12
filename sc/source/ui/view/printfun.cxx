@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:50:53 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:12:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@
 #include "fillinfo.hxx"
 #include "postit.hxx"
 
+#include <vcl/lineinfo.hxx>
+#include <tools/pstm.hxx>
 
 #define ZOOM_MIN    10
 
@@ -290,6 +292,54 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         pPageData           ( NULL )
 {
     pDev = pOutDev;
+
+    nPrintTab   = rState.nPrintTab;
+    nStartCol   = rState.nStartCol;
+    nStartRow   = rState.nStartRow;
+    nEndCol     = rState.nEndCol;
+    nEndRow     = rState.nEndRow;
+    nZoom       = rState.nZoom;
+    nPagesX     = rState.nPagesX;
+    nPagesY     = rState.nPagesY;
+    nTabPages   = rState.nTabPages;
+    nTotalPages = rState.nTotalPages;
+    nPageStart  = rState.nPageStart;
+    nDocPages   = rState.nDocPages;
+    bState      = TRUE;
+
+    Construct( pOptions );
+}
+ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
+                            long nPage, long nDocP, const ScRange* pArea,
+                            const ScPrintOptions* pOptions )
+    :   pDocShell           ( pShell ),
+        pPrinter            ( NULL ),
+        pDrawView           ( NULL ),
+        nPrintTab           ( nTab ),
+        nPageStart          ( nPage ),
+        nDocPages           ( nDocP ),
+        pUserArea           ( pArea ),
+        bState              ( FALSE ),
+        bPrintCurrentTable  ( FALSE ),
+        bMultiArea          ( FALSE ),
+        nTabPages           ( 0 ),
+        nTotalPages         ( 0 ),
+        pPageData           ( NULL )
+{
+    pDev = pWindow;
+    Construct( pOptions );
+}
+ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
+                             const ScPrintState& rState, const ScPrintOptions* pOptions )
+    :   pDocShell           ( pShell ),
+        pPrinter            ( NULL ),
+        pDrawView           ( NULL ),
+        pUserArea           ( NULL ),
+        bPrintCurrentTable  ( FALSE ),
+        bMultiArea          ( FALSE ),
+        pPageData           ( NULL )
+{
+    pDev = pWindow;
 
     nPrintTab   = rState.nPrintTab;
     nStartCol   = rState.nStartCol;
