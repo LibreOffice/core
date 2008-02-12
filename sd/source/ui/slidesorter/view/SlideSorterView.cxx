@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:32:48 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,10 @@ sal_Int32 SlideSorterView::GetFadePageIndexAtPoint (
                 = mrModel.GetPageDescriptor(nIndex)->GetViewObjectContact();
             if (pContact != NULL)
             {
-                if ( ! pContact->GetFadeEffectIndicatorArea(pWindow).IsInside (
+                if ( ! pContact->GetBoundingBox(
+                    *pWindow,
+                    PageObjectViewObjectContact::FadeEffectIndicatorBoundingBox,
+                    PageObjectViewObjectContact::ModelCoordinateSystem).IsInside (
                     aModelPosition))
                 {
                     nIndex = -1;
@@ -577,12 +580,8 @@ void SlideSorterView::CompleteRedraw (
             UpdatePreciousFlags();
 
         // Call the base class InitRedraw even when re-drawing is locked to
-        // let it remember the request for a redraw.  The overlay is hidden
-        // during this call and restored afterwards so that its XOR painting
-        // works properly.
-        GetOverlay().HideAndSave(ViewOverlay::OPT_PAINT);
+        // let it remember the request for a redraw.
         View::CompleteRedraw (pDevice, rPaintArea, nPaintMode, pRedirector);
-        GetOverlay().Restore();
     }
     else
     {
