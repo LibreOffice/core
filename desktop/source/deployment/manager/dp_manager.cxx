@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:33:53 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -693,94 +693,101 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             mediaType = detectMediaType( sourceContent );
 
         Reference<deployment::XPackage> xPackage;
+        // copy file:
+        progressUpdate(
+            getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
+        if (m_activePackages.getLength() == 0)
         {
-            const ::osl::MutexGuard guard( getMutex() );
+            ::ucbhelper::Content docFolderContent;
+            create_folder( &docFolderContent, m_context, xCmdEnv );
+            // copy into document, first:
+            if (! docFolderContent.transferContent(
+                    sourceContent, ::ucbhelper::InsertOperation_COPY,
+                    OUString(),
+                    NameClash::ASK /* xxx todo: ASK not needed? */))
+                throw RuntimeException(
+                    OUSTR("UCB transferContent() failed!"), 0 );
+            // set media-type:
+            ::ucbhelper::Content docContent(
+                makeURL( m_context, title_enc ), xCmdEnv );
+                //TODO #i73136#: using title instead of id can lead to
+                // clashes, but the whole m_activePackages.getLength()==0
+                // case (i.e., document-relative deployment) currently does
+                // not work, anyway.
+            docContent.setPropertyValue(
+                OUSTR("MediaType"), Any(mediaType) );
 
-            // copy file:
-            progressUpdate(
-                getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
-            if (m_activePackages.getLength() == 0)
-            {
-                ::ucbhelper::Content docFolderContent;
-                create_folder( &docFolderContent, m_context, xCmdEnv );
-                // copy into document, first:
-                if (! docFolderContent.transferContent(
-                        sourceContent, ::ucbhelper::InsertOperation_COPY,
-                        OUString(),
-                        NameClash::ASK /* xxx todo: ASK not needed? */))
-                    throw RuntimeException(
-                        OUSTR("UCB transferContent() failed!"), 0 );
-                // set media-type:
-                ::ucbhelper::Content docContent(
-                    makeURL( m_context, title_enc ), xCmdEnv );
-                    //TODO #i73136#: using title instead of id can lead to
-                    // clashes, but the whole m_activePackages.getLength()==0
-                    // case (i.e., document-relative deployment) currently does
-                    // not work, anyway.
-                docContent.setPropertyValue(
-                    OUSTR("MediaType"), Any(mediaType) );
-
-                // xxx todo: obsolete in the future
-                try {
-                    docFolderContent.executeCommand( OUSTR("flush"), Any() );
-                }
-                catch (UnsupportedCommandException &) {
-                }
+            // xxx todo: obsolete in the future
+            try {
+                docFolderContent.executeCommand( OUSTR("flush"), Any() );
             }
-            ActivePackages::Data dbData;
-            destFolder = insertToActivationLayer(
-                mediaType, sourceContent, title, &dbData );
+            catch (UnsupportedCommandException &) {
+            }
+        }
+        ActivePackages::Data dbData;
+        destFolder = insertToActivationLayer(
+            mediaType, sourceContent, title, &dbData );
 
-            // xxx todo: fire before bind(), registration?
-            // fireModified();
 
-            // bind activation package:
-            xPackage = m_xRegistry->bindPackage(
-                makeURL( destFolder, title_enc ), mediaType, xCmdEnv );
+        // bind activation package:
+        //Because every extension will be unpacked in a folder, which was created with a unique name
+        //we will always have two different XPackage objects, even if the second extension is the same.
+        //Therefore bindPackage does not need a guard here.
+        xPackage = m_xRegistry->bindPackage(
+            makeURL( destFolder, title_enc ), mediaType, xCmdEnv );
 
-            OSL_ASSERT( xPackage.is() );
-            if (xPackage.is())
+        OSL_ASSERT( xPackage.is() );
+        if (xPackage.is())
+        {
+            bool install = false;
+            OUString id;
+
+            try
             {
-                bool install = false;
-                OUString id;
-                try
-                {
-                    id = dp_misc::getIdentifier( xPackage );
-                    //checkInstall throws an exception if the user denies the installation
-                    checkInstall(xPackage, xCmdEnv);
-                    //checkUpdate throws an exception if the user cancels the interaction.
-                    //For example, he may be asked if he wants to replace the older version
-                    //with the new version.
-                    //checkUpdates must be called before checkPrerequisites
-                    bool removeExisting = checkUpdate(
-                        xPackage, xCmdEnv_, xCmdEnv );
+                id = dp_misc::getIdentifier( xPackage );
+                //checkInstall throws an exception if the user denies the installation
+                checkInstall(xPackage, xCmdEnv);
+                //checkUpdate throws an exception if the user cancels the interaction.
+                //For example, he may be asked if he wants to replace the older version
+                //with the new version.
+                //checkUpdates must be called before checkPrerequisites
+                bool removeExisting = checkUpdate(
+                    xPackage, xCmdEnv_, xCmdEnv );
 
-                    if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, removeExisting, m_context))
-                    {
-                        if (removeExisting)
-                            // remove extension which is already installed
-                            removePackage_(id, xPackage->getName(), xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
-                        install = true;
-                    }
-                }
-                catch (...)
+                if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, removeExisting, m_context))
                 {
-                    deletePackageFromCache( xPackage, destFolder );
-                    throw;
-                }
-                if (install)
-                {
+                    //This guard is used to prevent that an extension is installed twice. Do not use it in other
+                    //functions.
+                    //Imagine addPackage is called two times by different threads for the same extension quickly
+                    //after each other.
+                    //The second call would calculate "removeExisting = false" if the first thread has not yet reached
+                    //insertToActivationLayerDB.
+                    ::osl::MutexGuard g(m_addMutex);
+
+                    if (removeExisting)
+                        // remove extension which is already installed
+                        //do not guard the complete function with the getMutex
+                        removePackage_(id, xPackage->getName(), xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+                    install = true;
+                    const ::osl::MutexGuard guard( getMutex() );
+                    //throws CommandAbortedException if the user cancelled the installation.
+                    xPackage->registerPackage(xAbortChannel, xCmdEnv);
                     //install new version of extension
-                    insertToActivationLayerDB( id, dbData );
-                    xPackage->registerPackage( xAbortChannel, xCmdEnv );
+                    //access to the database must be guarded. See removePackage_
+                    insertToActivationLayerDB(id, dbData);
                 }
-                else
-                {
-                    deletePackageFromCache( xPackage, destFolder );
-                }
-                fireModified();
             }
-        } // guard
+            catch (...)
+            {
+                deletePackageFromCache( xPackage, destFolder );
+                throw;
+            }
+            if (!install)
+            {
+                deletePackageFromCache( xPackage, destFolder );
+            }
+            fireModified();
+        }
         return xPackage;
     }
     catch (RuntimeException &) {
@@ -828,16 +835,18 @@ void PackageManagerImpl::removePackage_(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    const ::osl::MutexGuard guard( getMutex() );
-    Reference<deployment::XPackage> xPackage( getDeployedPackage_(
-                                                  id, fileName, xCmdEnv ) );
-    beans::Optional< beans::Ambiguous<sal_Bool> > option(
-        xPackage->isRegistered( Reference<task::XAbortChannel>(),
-                                xCmdEnv ) );
-    if (!option.IsPresent || option.Value.IsAmbiguous || option.Value.Value)
-        xPackage->revokePackage( xAbortChannel, xCmdEnv );
+    Reference<deployment::XPackage> xPackage;
+    {
+        const ::osl::MutexGuard guard(getMutex());
+        xPackage =  getDeployedPackage_(id, fileName, xCmdEnv );
+        beans::Optional< beans::Ambiguous<sal_Bool> > option(
+            xPackage->isRegistered( Reference<task::XAbortChannel>(),
+                                    xCmdEnv ) );
+        if (!option.IsPresent || option.Value.IsAmbiguous || option.Value.Value)
+            xPackage->revokePackage( xAbortChannel, xCmdEnv );
+        m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+    }
     try_dispose( xPackage );
-    m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
 }
 
 //______________________________________________________________________________
