@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:24:00 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2852,18 +2852,24 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 
 SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize) const
 {
-    if ( ValidTab(nTab) && pTab[nTab] )
+    if ( ValidTab(nTab) && pTab[nTab] && pTab[nTab]->GetRowFlagsArray() && pTab[nTab]->GetRowHeightArray() )
     {
         BYTE nStartFlags = pTab[nTab]->GetRowFlags(nStart);
         USHORT nStartHeight = pTab[nTab]->GetOriginalHeight(nStart);
         for (SCROW nRow = nStart + 1; nRow <= MAXROW; nRow++)
         {
-            BYTE nFlags = pTab[nTab]->GetRowFlags(nRow);
+            size_t nIndex;          // ignored
+            SCROW nFlagsEndRow;
+            SCROW nHeightEndRow;
+            BYTE nFlags = pTab[nTab]->GetRowFlagsArray()->GetValue( nRow, nIndex, nFlagsEndRow );
+            USHORT nHeight = pTab[nTab]->GetRowHeightArray()->GetValue( nRow, nIndex, nHeightEndRow );
             if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
                 ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
-                (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != pTab[nTab]->GetOriginalHeight(nRow))) ||
-                (!bCareManualSize && ((nStartHeight != pTab[nTab]->GetOriginalHeight(nRow)))))
+                (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
+                (!bCareManualSize && ((nStartHeight != nHeight))))
                 return nRow;
+
+            nRow = std::min( nFlagsEndRow, nHeightEndRow );
         }
         return MAXROW+1;
     }
