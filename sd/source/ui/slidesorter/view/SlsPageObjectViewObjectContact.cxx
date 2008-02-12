@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:47:12 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,33 +133,96 @@ void PageObjectViewObjectContact::SetCache (const ::boost::shared_ptr<cache::Pag
 
 
 
-Rectangle PageObjectViewObjectContact::GetModelBoundingBox (void) const
+Rectangle PageObjectViewObjectContact::GetBoundingBox (
+    OutputDevice& rDevice,
+    BoundingBoxType eType,
+    CoordinateSystem eCoordinateSystem) const
 {
-    return static_cast<PageObjectViewContact&>(GetViewContact())
-        .GetPageObjectBoundingBox();
-}
-
-
-
-
-Rectangle PageObjectViewObjectContact::GetPixelBox (const OutputDevice& rDevice) const
-{
-    Rectangle aBox (GetViewContact().GetPaintRectangle());
-    return Rectangle(
-        rDevice.LogicToPixel(aBox.TopLeft()),
-        rDevice.LogicToPixel(aBox.GetSize()));
-}
-
-
-
-
-Rectangle PageObjectViewObjectContact::GetPreviewPixelBox (const OutputDevice& rDevice) const
-{
-    Rectangle aBBox (static_cast<PageObjectViewContact&>(GetViewContact()
+    // Most of the bounding boxes are based on the bounding box of the preview.
+    Rectangle aBoundingBox (static_cast<PageObjectViewContact&>(GetViewContact()
             ).GetPageObject().GetCurrentBoundRect());
-    return Rectangle(
-        rDevice.LogicToPixel(aBBox.TopLeft()),
-        rDevice.LogicToPixel(aBBox.GetSize()));
+
+    CoordinateSystem eCurrentCoordinateSystem (ModelCoordinateSystem);
+    switch(eType)
+    {
+        case PageObjectBoundingBox:
+            aBoundingBox = GetViewContact().GetPaintRectangle();
+            break;
+        case PreviewBoundingBox:
+            // The aBoundingBox already has the right value.
+            break;
+        case MouseOverIndicatorBoundingBox:
+        {
+            const sal_Int32 nBorderWidth (mnMouseOverEffectOffset+mnMouseOverEffectThickness);
+            const Size aBorderSize (rDevice.PixelToLogic(Size(nBorderWidth,nBorderWidth)));
+            aBoundingBox.Left() -= aBorderSize.Width();
+            aBoundingBox.Top() -= aBorderSize.Height();
+            aBoundingBox.Right() += aBorderSize.Width();
+            aBoundingBox.Bottom() += aBorderSize.Height();
+            break;
+        }
+        case FocusIndicatorBoundingBox:
+        {
+            const sal_Int32 nBorderWidth (mnFocusIndicatorOffset+1);
+            const Size aBorderSize (rDevice.PixelToLogic(Size(nBorderWidth,nBorderWidth)));
+            aBoundingBox.Left() -= aBorderSize.Width();
+            aBoundingBox.Top() -= aBorderSize.Height();
+            aBoundingBox.Right() += aBorderSize.Width();
+            aBoundingBox.Bottom() += aBorderSize.Height();
+            break;
+        }
+        case SelectionIndicatorBoundingBox:
+        {
+            const sal_Int32 nBorderWidth(mnSelectionIndicatorOffset+mnSelectionIndicatorThickness);
+            const Size aBorderSize (rDevice.PixelToLogic(Size(nBorderWidth,nBorderWidth)));
+            aBoundingBox.Left() -= aBorderSize.Width();
+            aBoundingBox.Top() -= aBorderSize.Height();
+            aBoundingBox.Right() += aBorderSize.Width();
+            aBoundingBox.Bottom() += aBorderSize.Height();
+            break;
+        }
+        case PageNumberBoundingBox:
+        {
+            Size aModelOffset = rDevice.PixelToLogic(Size(mnPageNumberOffset,mnPageNumberOffset));
+            Size aNumberSize (GetPageDescriptor().GetPageNumberAreaModelSize());
+            aBoundingBox = Rectangle (
+                Point (
+                    aBoundingBox.Left() - aModelOffset.Width() - aNumberSize.Width(),
+                    aBoundingBox.Top()),
+                aNumberSize);
+            break;
+        }
+
+        case NameBoundingBox:
+            break;
+
+        case FadeEffectIndicatorBoundingBox:
+            Size aModelOffset = rDevice.PixelToLogic(Size (0, mnFadeEffectIndicatorOffset));
+            // Flush left just outside the selection rectangle.
+            aBoundingBox = Rectangle (
+                Point (
+                    aBoundingBox.Left(),
+                    aBoundingBox.Bottom() + aModelOffset.Height()
+                    ),
+                rDevice.PixelToLogic (
+                    IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR).GetSizePixel())
+                );
+            break;
+    }
+
+    // Make sure the bounding box uses the requested coordinate system.
+    if (eCurrentCoordinateSystem != eCoordinateSystem)
+    {
+        if (eCoordinateSystem == ModelCoordinateSystem)
+            aBoundingBox = Rectangle(
+                rDevice.PixelToLogic(aBoundingBox.TopLeft()),
+                rDevice.PixelToLogic(aBoundingBox.GetSize()));
+        else
+            aBoundingBox = Rectangle(
+                rDevice.LogicToPixel(aBoundingBox.TopLeft()),
+                rDevice.LogicToPixel(aBoundingBox.GetSize()));
+    }
+    return aBoundingBox;
 }
 
 
@@ -169,7 +232,7 @@ BitmapEx PageObjectViewObjectContact::CreatePreview (DisplayInfo& rDisplayInfo)
 {
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPreviewPixelBox (GetPreviewPixelBox (*pDevice));
+    Rectangle aPreviewPixelBox (GetBoundingBox(*pDevice,PreviewBoundingBox,PixelCoordinateSystem));
 
     PreviewRenderer aRenderer (pDevice);
     Image aPreview (aRenderer.RenderPage(
@@ -350,7 +413,8 @@ void PageObjectViewObjectContact::PaintPreview  (
     OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
     if (pDevice != NULL)
     {
-        Rectangle aNewSizePixel = GetPreviewPixelBox(*pDevice);
+        Rectangle aNewSizePixel (
+            GetBoundingBox(*pDevice,PreviewBoundingBox,PixelCoordinateSystem));
         BitmapEx aPreview (GetPreview(rDisplayInfo, aNewSizePixel));
 
         // Paint using cached bitmap.
@@ -368,8 +432,6 @@ void PageObjectViewObjectContact::PaintFrame (
     OutputDevice& rDevice,
     bool bShowMouseOverEffect) const
 {
-
-
     PaintBorder (rDevice);
     PaintSelectionIndicator (rDevice);
     if ( ! GetPageDescriptor().IsSelected())
@@ -386,8 +448,7 @@ void PageObjectViewObjectContact::PaintFrame (
 void PageObjectViewObjectContact::PaintBorder (
     OutputDevice& rDevice) const
 {
-    Rectangle aFrameBox (//rDevice.LogicToPixel(GetModelBoundingBox()));
-        GetPreviewPixelBox(rDevice));
+    Rectangle aFrameBox (GetBoundingBox(rDevice, PreviewBoundingBox, PixelCoordinateSystem));
     rDevice.EnableMapMode(FALSE);
     rDevice.SetFillColor ();
     svtools::ColorConfig aColorConfig;
@@ -423,8 +484,7 @@ void PageObjectViewObjectContact::PaintSelectionIndicator (
         ULONG nPreviousDrawMode = rDevice.GetDrawMode();
         rDevice.SetDrawMode (DRAWMODE_DEFAULT);
 
-        Rectangle aInner (//rDevice.LogicToPixel(aSelectionFrame));
-            GetPreviewPixelBox(rDevice));
+        Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
         rDevice.EnableMapMode (FALSE);
 
         rDevice.SetFillColor ();
@@ -496,7 +556,7 @@ void PageObjectViewObjectContact::PaintMouseOverEffect (
 {
     ULONG nPreviousDrawMode = rDevice.GetDrawMode();
     rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-    Rectangle aInner (GetPreviewPixelBox(rDevice));
+    Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
     rDevice.EnableMapMode (FALSE);
 
     svtools::ColorConfig aColorConfig;
@@ -552,33 +612,19 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
     OutputDevice& rDevice,
     bool bEraseBackground) const
 {
+    (void)bEraseBackground;
+
     if (GetPageDescriptor().IsFocused())
     {
-        Rectangle aPagePixelBBox (GetPreviewPixelBox(rDevice));
+        Rectangle aPagePixelBBox (
+            GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
 
         aPagePixelBBox.Left() -= mnFocusIndicatorOffset;
         aPagePixelBBox.Top() -= mnFocusIndicatorOffset;
         aPagePixelBBox.Right() += mnFocusIndicatorOffset;
         aPagePixelBBox.Bottom() += mnFocusIndicatorOffset;
 
-        rDevice.EnableMapMode (FALSE);
-        rDevice.SetFillColor();
-        if (bEraseBackground)
-        {
-            rDevice.SetLineColor(COL_WHITE);
-            rDevice.DrawRect (aPagePixelBBox);
-        }
-
-        LineInfo aDottedStyle (LINE_DASH);
-        aDottedStyle.SetDashCount (0);
-        aDottedStyle.SetDotCount (1);
-        aDottedStyle.SetDotLen (1);
-        aDottedStyle.SetDistance (1);
-
-        rDevice.SetLineColor(COL_BLACK);
-        rDevice.DrawPolyLine (Polygon(aPagePixelBBox), aDottedStyle);
-
-        rDevice.EnableMapMode (TRUE);
+        PaintDottedRectangle(rDevice, aPagePixelBBox);
     }
 }
 
@@ -593,16 +639,19 @@ void PageObjectViewObjectContact::PaintFadeEffectIndicator (
         && static_cast<const SdPage*>(GetPage())->getTransitionType() > 0)
     {
         OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
+        if (pDevice != NULL)
+        {
+            Rectangle aIndicatorBox (
+                GetBoundingBox(*pDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
 
-        Rectangle aIndicatorBox (GetFadeEffectIndicatorArea (pDevice));
+            USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
+            if (pDevice->GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
+                nIconId = BMP_FADE_EFFECT_INDICATOR_H;
 
-        USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
-        if (pDevice->GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
-            nIconId = BMP_FADE_EFFECT_INDICATOR_H;
-
-        pDevice->DrawImage (
-            aIndicatorBox.TopLeft(),
-            IconCache::Instance().GetIcon(nIconId));
+            pDevice->DrawImage (
+                aIndicatorBox.TopLeft(),
+                IconCache::Instance().GetIcon(nIconId));
+        }
     }
 }
 
@@ -613,7 +662,7 @@ void PageObjectViewObjectContact::PaintPageName (
     DisplayInfo& rDisplayInfo) const
 {
     OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPageBox (GetModelBoundingBox ());
+    Rectangle aPageBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
 
     Font aOriginalFont (pDevice->GetFont());
     pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
@@ -624,7 +673,8 @@ void PageObjectViewObjectContact::PaintPageName (
     Point aPos = aPageBox.BottomLeft();
     Size aPageSize (aPageBox.GetSize());
     Size aSize (pDevice->PixelToLogic (Size (0, mnFadeEffectIndicatorOffset)));
-    Rectangle aIndicatorBox (GetFadeEffectIndicatorArea (pDevice));
+    Rectangle aIndicatorBox (
+        GetBoundingBox(*pDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
 
     aPos.Y() += aSize.Height();
     aPos.X() += 2 * aIndicatorBox.GetWidth();
@@ -654,7 +704,7 @@ void PageObjectViewObjectContact::PaintPageNumber (
     DisplayInfo& rDisplayInfo)
 {
     OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPageBox (GetModelBoundingBox ());
+    Rectangle aPageBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
 
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     int nPageNumber ((pPage->GetPageNum()-1) / 2 + 1);
@@ -693,34 +743,10 @@ void PageObjectViewObjectContact::PaintPageNumber (
 
 
 
-Rectangle PageObjectViewObjectContact::GetFadeEffectIndicatorArea (
-    OutputDevice* pDevice) const
-{
-    Rectangle aPageModelBox (GetModelBoundingBox ());
-    Size aModelOffset = pDevice->PixelToLogic (
-        Size (0, mnFadeEffectIndicatorOffset));
-
-    // Flush left just outside the selection rectangle.
-    Rectangle aIndicatorArea (
-        Point (
-            aPageModelBox.Left(),
-            aPageModelBox.Bottom() + aModelOffset.Height()
-            ),
-        pDevice->PixelToLogic (
-            IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)
-            .GetSizePixel())
-        );
-
-    return aIndicatorArea;
-}
-
-
-
-
 Rectangle PageObjectViewObjectContact::GetPageNumberArea (
     OutputDevice* pDevice)
 {
-    Rectangle aPageModelBox (GetModelBoundingBox ());
+    Rectangle aPageModelBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
     Size aModelOffset = pDevice->PixelToLogic (
         Size (mnPageNumberOffset, mnPageNumberOffset));
     Size aNumberSize (GetPageDescriptor().GetPageNumberAreaModelSize());
@@ -824,5 +850,51 @@ model::PageDescriptor&
 }
 
 
+
+
+void PageObjectViewObjectContact::PaintDottedRectangle (
+    OutputDevice& rDevice,
+    const Rectangle& rRectangle,
+    const DashType eDashType)
+{
+    const Color aOriginalFillColor (rDevice.GetFillColor());
+    const Color aOriginalLineColor (rDevice.GetLineColor());
+
+    // The dots or dashes are painted indepently of the zoom factor because
+    // selection or focus rectangles are not part of the model.
+    const bool bOriginalMapModeState(rDevice.IsMapModeEnabled());
+    rDevice.EnableMapMode(FALSE);
+
+    // Paint a solid rectangle first.
+    rDevice.SetFillColor();
+    rDevice.SetLineColor(COL_WHITE);
+    rDevice.DrawRect(rRectangle);
+
+    // Now paint the dots or dashes.
+    LineInfo aDottedStyle (LINE_DASH);
+    aDottedStyle.SetDashCount(0);
+    aDottedStyle.SetDotCount(1);
+    switch (eDashType)
+    {
+        case Dotted:
+        default:
+            aDottedStyle.SetDotLen(1);
+            aDottedStyle.SetDistance(1);
+            break;
+
+        case Dashed:
+            aDottedStyle.SetDotLen(3);
+            aDottedStyle.SetDistance(3);
+            break;
+    }
+
+    rDevice.SetLineColor(COL_BLACK);
+    rDevice.DrawPolyLine(Polygon(rRectangle), aDottedStyle);
+
+    // Restore the original state.
+    rDevice.EnableMapMode(bOriginalMapModeState);
+    rDevice.SetFillColor(aOriginalFillColor);
+    rDevice.SetLineColor(aOriginalLineColor);
+}
 
 } } } // end of namespace ::sd::slidesorter::view
