@@ -6,9 +6,9 @@
 //
 //  $RCSfile: sqlflex.l,v $
 //
-//  $Revision: 1.32 $
+//  $Revision: 1.33 $
 //
-//  last change: $Author: hr $ $Date: 2007-11-01 14:52:20 $
+//  last change: $Author: vg $ $Date: 2008-02-12 13:22:12 $
 //
 //  The Contents of this file are made available subject to
 //  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,9 +120,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 //=============================================================================
 
 %}
-%e 2500
-%n 2900 
-%p 8500
 
 %s SQL
 %s PREDICATE_ENG
@@ -416,9 +413,9 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 \n              {}
 
-[ \t\r]+        ;       
+[ \t\r]+        {}
 
-"--".*$         ;       
+"--".*$         {}
 
 .				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
@@ -736,7 +733,9 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IPars
 //------------------------------------------------------------------------------
 sal_Int32 OSQLScanner::SQLyygetc(void)
 {
-	return (m_nCurrentPos >= m_sStatement.getLength()) ? -1 : m_sStatement.getStr()[m_nCurrentPos++];
+	sal_Int32 nPos = (m_nCurrentPos >= m_sStatement.getLength()) ? -1 : m_sStatement.getStr()[m_nCurrentPos];
+    m_nCurrentPos++;
+    return nPos;
 }
 
 //------------------------------------------------------------------------------
