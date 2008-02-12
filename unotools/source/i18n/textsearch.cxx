@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:03:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,6 +376,8 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
                             break;
                     }
                 }
+                else
+                    ++nPos;
             }
             else
             {
@@ -401,6 +403,8 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
                         break;
                     }
                 }
+                else
+                    ++nPos;
             }
         }
     }
