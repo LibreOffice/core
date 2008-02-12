@@ -57,7 +57,11 @@ sub unpack_solpkg
 sed -e '1 d' -e 's/[0-9][0-9]* [0-9][0-9]* [0-9]\\{10\\}\$//' $package/pkgmap > filelist
 grep -v "^PSTAMP=" $package/pkginfo > pkginfo
 cp $package/install/* .
-bzcat $package/archive/none.bz2 | cpio -i -d
+if [ -f $package/archive/none.bz2 ]; then
+  bzcat $package/archive/none.bz2 | cpio -i -d
+else
+  cp -pr $package/reloc/* .
+fi
 EOF
 }
 
