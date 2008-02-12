@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:44:13 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,6 @@ public:
     virtual void PaintContent (
         ::sdr::contact::DisplayInfo& rDisplayInfo);
 
-    Rectangle GetModelBoundingBox (void) const;
-
     /** Return the page descriptor of the slide sorter model that is
         associated with the same page object as this contact object is.
     */
@@ -158,11 +156,6 @@ public:
         OutputDevice* pDevice,
         int nPageCount);
 
-    /** Return the bounding box of where the fade effect indicator is
-        painted (when it is painted).
-    */
-    Rectangle GetFadeEffectIndicatorArea (OutputDevice* pDevice) const;
-
     /** Paint all parts of the frame arround a preview.  These are the
         border, the selection frame, the focus rectangle, and the mouse over
         effect.
@@ -175,14 +168,57 @@ public:
         OutputDevice& rDevice,
         bool bShowMouseOverEffect = false) const;
 
-    /** Return the rectangle of the whole page object, the preview toghether
-        with frames, indicators, and title, in pixel coordinates.
+    /** Paint a mouse over effect.
+        @param bVisible
+            When bVisible is <FALSE/> then paint the area of the mouse over
+            effect in the background color, i.e. erase it.
     */
-    Rectangle GetPixelBox (const OutputDevice& rDevice) const;
+    void PaintMouseOverEffect (OutputDevice& rDevice, bool bVisible) const;
 
-    /** Return the rectangle of the preview in pixel coordinates.
+    enum BoundingBoxType {
+        // This is the outer bounding box that includes the preview, page
+        // number, title.
+        PageObjectBoundingBox,
+        // Bounding box of the actual preview.
+        PreviewBoundingBox,
+        // Bounding box of the mouse indicator indicator frame.
+        MouseOverIndicatorBoundingBox,
+        // Bounding box of the focus indicator frame.
+        FocusIndicatorBoundingBox,
+        // Bounding box of the selection indicator frame.
+        SelectionIndicatorBoundingBox,
+        // Bounding box of the page number.
+        PageNumberBoundingBox,
+        // Bounding box of the pane name.
+        NameBoundingBox,
+        FadeEffectIndicatorBoundingBox
+    };
+    enum CoordinateSystem { ModelCoordinateSystem, PixelCoordinateSystem };
+    /** Return the bounding box of the page object or one of its graphical
+        parts.
+        @param rDevice
+            This device is used to translate between model and window
+            coordinates.
+        @param eType
+            The part of the page object for which to return the bounding
+            box.
+        @param eCoodinateSystem
+            The bounding box can be returned in model and in pixel
+            (window) coordinates.
     */
-    Rectangle GetPreviewPixelBox (const OutputDevice& rDevice) const;
+    Rectangle GetBoundingBox (
+        OutputDevice& rDevice,
+        BoundingBoxType eType,
+        CoordinateSystem eCoordinateSystem) const;
+
+    /** This convenience method paints a dotted or dashed rectangle.  The
+        length of dots or dashes is indepent of zoom factor or map mode.
+    */
+    enum DashType { Dotted, Dashed };
+    static void PaintDottedRectangle (
+        OutputDevice& rDevice,
+        const Rectangle& rRectangle,
+        const DashType eDashType = Dotted);
 
 private:
     /// Gap between border of page object and inside of selection rectangle.
@@ -240,13 +276,6 @@ private:
         Otherwise the call is ignored.
     */
     void PaintSelectionIndicator (OutputDevice& rDevice) const;
-
-    /** Paint a mouse over effect.
-        @param bVisible
-            When bVisible is <FALSE/> then paint the area of the mouse over
-            effect in the background color, i.e. erase it.
-    */
-    void PaintMouseOverEffect (OutputDevice& rDevice, bool bVisible) const;
 
     /** Paint the fade effect indicator which indicates whether a fade
         effect is currently associated with a page.
