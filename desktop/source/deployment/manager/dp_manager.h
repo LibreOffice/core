@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:28 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     ::rtl::OUString m_activePackages;
     ::rtl::OUString m_activePackages_expanded;
     ::std::auto_ptr< ActivePackages > m_activePackagesDB;
-
+    //This mutex is only used for synchronization in addPackage
+    ::osl::Mutex m_addMutex;
     css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
     inline void logIntern( css::uno::Any const & status );
     void fireModified();
