@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:23:14 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,7 +842,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
-    rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pView->GetSdrPageView()) );
+    rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pView->GetSdrPageView()) );
 
     std::vector< SdrObject* > aShapes;
 
