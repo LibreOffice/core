@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newerverwarn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:22:34 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,9 +107,11 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
                 uno::UNO_QUERY_THROW );
             uno::Reference< frame::XDispatchProvider > xDispatchProvider(
                 xDesktop->getCurrentFrame(), uno::UNO_QUERY );
+            if ( !xDispatchProvider.is() )
+                xDispatchProvider = uno::Reference < frame::XDispatchProvider > ( xDesktop, uno::UNO_QUERY );
+
             uno::Reference< frame::XDispatch > xDispatch =
                 xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
-
             if ( xDispatch.is() )
                 xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
         }
