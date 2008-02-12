@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:01:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,13 @@
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
 #include "AccessibleDocumentPagePreview.hxx"
+#include <vcl/lineinfo.hxx>
+#include <svx/algitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/sizeitem.hxx>
+#include "attrib.hxx"
+#include "pagepar.hxx"
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -117,7 +124,25 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     bInPaint( FALSE ),
     bInGetState( FALSE ),
     pDocShell( pDocSh ),
-    pViewShell( pViewSh )
+    pViewShell( pViewSh ),
+    bLeftRulerMove( FALSE ),
+    bRightRulerMove( FALSE ),
+    bTopRulerMove( FALSE ),
+    bBottomRulerMove( FALSE ),
+    bHeaderRulerMove( FALSE ),
+    bFooterRulerMove( FALSE ),
+    bLeftRulerChange( FALSE ),
+    bRightRulerChange( FALSE ),
+    bTopRulerChange( FALSE ),
+    bBottomRulerChange( FALSE ),
+    bHeaderRulerChange( FALSE ),
+    bFooterRulerChange( FALSE ),
+    bPageMargin ( FALSE ),
+    bColRulerMove( FALSE ),
+    mnScale( 0 ),
+    nColNumberButttonDown( 0 ),
+    nHeaderHeight ( 0 ),
+    nFooterHeight ( 0 )
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
     SetBackground();
@@ -461,13 +486,194 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 }
 
-
+//Issue51656 Add resizeable margin on page preview from maoyg
 void __EXPORT ScPreview::Paint( const Rectangle& /* rRect */ )
 {
-    DoPrint( NULL );
+    if (!bValid)
+    {
+        CalcPages(0);
+        RecalcPages();
+        UpdateDrawView();       // Table possibly amended
+    }
+
+    Fraction aPreviewZoom( nZoom, 100 );
+    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+
+    ScModule* pScMod = SC_MOD();
+    const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
+    Color aBackColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
+
+    if ( aOffset.X() < 0 || aOffset.Y() < 0 )
+    {
+        SetMapMode( aMMMode );
+        SetLineColor();
+        SetFillColor(aBackColor);
+
+        Size aWinSize = GetOutputSize();
+        if ( aOffset.X() < 0 )
+            DrawRect(Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
+        if ( aOffset.Y() < 0 )
+            DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
+    }
+
+    long   nLeftMargin = 0;
+    long   nRightMargin = 0;
+    long   nTopMargin = 0;
+    long   nBottomMargin = 0;
+    BOOL   bHeaderOn = FALSE;
+    BOOL   bFooterOn = FALSE;
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    BOOL   bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+    Size aPaintPageSize;
+    if ( nPageNo < nTotalPages )
+    {
+        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+
+        ScPrintFunc* pPrintFunc;
+        if ( bStateValid )
+            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
+        else
+            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
+
+        pPrintFunc->SetOffset(aOffset);
+        pPrintFunc->SetManualZoom(nZoom);
+        pPrintFunc->SetDateTime(aDate,aTime);
+        pPrintFunc->SetClearFlag(TRUE);
+        pPrintFunc->SetUseStyleColor( pScMod->GetAccessOptions().GetIsForPagePreviews() );
+        pPrintFunc->SetDrawView( pDrawView );
+
+        // Multi Selection for one side must be something umstaendlich generated ...
+        Range aPageRange( nPageNo+1, nPageNo+1 );
+        MultiSelection aPage( aPageRange );
+        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+        aPage.Select( aPageRange );
+
+        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart );
+        DBG_ASSERT(nPrinted<=1, "was'n nu los?");
+
+        SetMapMode(aMMMode);
+
+        //init nLeftMargin ... in the ScPrintFunc::InitParam!!!
+        nLeftMargin = pPrintFunc->GetLeftMargin();
+        nRightMargin = pPrintFunc->GetRightMargin();
+        nTopMargin = pPrintFunc->GetTopMargin();
+        nBottomMargin = pPrintFunc->GetBottomMargin();
+        nHeaderHeight = pPrintFunc->GetHeader().nHeight;
+        nFooterHeight = pPrintFunc->GetFooter().nHeight;
+        bHeaderOn = pPrintFunc->GetHeader().bEnable;
+        bFooterOn = pPrintFunc->GetFooter().bEnable;
+        mnScale = pPrintFunc->GetZoom();
+
+        Rectangle aPixRect;
+        Rectangle aRectCellPosition;
+        Rectangle aRectPosition;
+        GetLocationData().GetMainCellRange( aPageArea, aPixRect );
+        if( !bLayoutRTL )
+        {
+            GetLocationData().GetCellPosition( aPageArea.aStart, aRectPosition );
+            nLeftPosition = aRectPosition.Left();
+            for( SCCOL i = aPageArea.aStart.Col(); i <= aPageArea.aEnd.Col(); i++ )
+            {
+                GetLocationData().GetCellPosition( ScAddress( i,aPageArea.aStart.Row(),aPageArea.aStart.Tab()),aRectCellPosition );
+                nRight[i] = aRectCellPosition.Right();
+            }
+        }
+        else
+        {
+            GetLocationData().GetCellPosition( aPageArea.aEnd, aRectPosition );
+            nLeftPosition = aRectPosition.Right()+1;
+
+            GetLocationData().GetCellPosition( aPageArea.aStart,aRectCellPosition );
+            nRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
+            for( SCCOL i = aPageArea.aEnd.Col(); i > aPageArea.aStart.Col(); i-- )
+            {
+                GetLocationData().GetCellPosition( ScAddress( i,aPageArea.aEnd.Row(),aPageArea.aEnd.Tab()),aRectCellPosition );
+                nRight[ i-1 ] = nRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
+            }
+        }
+
+        if ( nPrinted ) // If nothing, all gray draw
+        {
+            aPaintPageSize = pPrintFunc->GetPageSize();
+            aPaintPageSize.Width()  = (long) (aPaintPageSize.Width()  * HMM_PER_TWIPS );
+            aPaintPageSize.Height() = (long) (aPaintPageSize.Height() * HMM_PER_TWIPS );
+
+            nLeftMargin = (long) ( nLeftMargin * HMM_PER_TWIPS );
+            nRightMargin = (long) ( nRightMargin * HMM_PER_TWIPS );
+            nTopMargin = (long) ( nTopMargin * HMM_PER_TWIPS );
+            nBottomMargin = (long) ( nBottomMargin * HMM_PER_TWIPS );
+            nHeaderHeight = (long) ( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
+            nFooterHeight = (long) ( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
+        }
+
+        if ( !bStateValid )
+        {
+            pPrintFunc->GetPrintState( aState );
+            aState.nDocPages = nTotalPages;
+            bStateValid = TRUE;
+        }
+
+        delete pPrintFunc;
+    }
+
+
+    long nPageEndX = aPaintPageSize.Width()  - aOffset.X();
+    long nPageEndY = aPaintPageSize.Height() - aOffset.Y();
+    Size aWinSize = GetOutputSize();
+    Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
+    BOOL bRight  = nPageEndX <= aWinEnd.X();
+    BOOL bBottom = nPageEndY <= aWinEnd.Y();
+
+    if( bPageMargin )
+    {
+        SetMapMode(aMMMode);
+        SetLineColor( COL_BLACK );
+        DrawInvert( (long)( nTopMargin - aOffset.Y() ), POINTER_VSIZEBAR );
+        DrawInvert( (long)(nPageEndY - nBottomMargin ), POINTER_VSIZEBAR );
+        DrawInvert( (long)( nLeftMargin - aOffset.X() ), POINTER_HSIZEBAR );
+        DrawInvert( (long)( nPageEndX - nRightMargin ) , POINTER_HSIZEBAR );
+        if( bHeaderOn )
+        {
+            DrawInvert( nHeaderHeight - aOffset.Y(), POINTER_VSIZEBAR );
+        }
+        if( bFooterOn )
+        {
+            DrawInvert( nPageEndY - nFooterHeight, POINTER_VSIZEBAR );
+        }
+
+        SetMapMode( MapMode( MAP_PIXEL ) );
+        for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
+        {
+            Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
+            SetLineColor( COL_BLACK );
+            SetFillColor( COL_BLACK );
+            DrawRect( Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
+            DrawLine( Point( nRight[i], aColumnTop.Y() ), Point( nRight[i],  10 + aColumnTop.Y()) );
+        }
+        SetMapMode( aMMMode );
+    }
+
+    if (bRight || bBottom)
+    {
+        SetMapMode(aMMMode);
+        SetLineColor();
+        SetFillColor(aBackColor);
+        if (bRight)
+            DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
+        if (bBottom)
+        {
+            if (bRight)
+                DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Ecke nicht doppelt
+            else
+                DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
+        }
+    }
     pViewShell->UpdateScrollBars();
 }
-
+//Issue51656 Add resizeable margin on page preview from maoyg
 
 void __EXPORT ScPreview::Command( const CommandEvent& rCEvt )
 {
@@ -707,6 +913,7 @@ void ScPreview::SetXOffset( long nX )
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    Paint(Rectangle());
 }
 
 
@@ -733,6 +940,7 @@ void ScPreview::SetYOffset( long nY )
             Invalidate();
     }
     InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    Paint(Rectangle());
 }
 
 
@@ -802,6 +1010,484 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+//Issue51656 Add resizeable margin on page preview from maoyg
+void __EXPORT ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    Fraction  aPreviewZoom( nZoom, 100 );
+    Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    MapMode   aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+
+    aButtonDownChangePoint = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
+    aButtonDownPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
+
+    CaptureMouse();
+
+    if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
+    {
+        SetMapMode( aMMMode );
+        if( bLeftRulerChange )
+        {
+           DrawInvert( aButtonDownChangePoint.X(), POINTER_HSIZEBAR );
+           bLeftRulerMove = TRUE;
+           bRightRulerMove = FALSE;
+        }
+        else if( bRightRulerChange )
+        {
+           DrawInvert( aButtonDownChangePoint.X(), POINTER_HSIZEBAR );
+           bLeftRulerMove = FALSE;
+           bRightRulerMove = TRUE;
+        }
+    }
+
+    if( rMEvt.IsLeft() && GetPointer() == POINTER_VSIZEBAR )
+    {
+        SetMapMode( aMMMode );
+        if( bTopRulerChange )
+        {
+            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            bTopRulerMove = TRUE;
+            bBottomRulerMove = FALSE;
+        }
+        else if( bBottomRulerChange )
+        {
+            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            bTopRulerMove = FALSE;
+            bBottomRulerMove = TRUE;
+        }
+        else if( bHeaderRulerChange )
+        {
+            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            bHeaderRulerMove = TRUE;
+            bFooterRulerMove = FALSE;
+        }
+        else if( bFooterRulerChange )
+        {
+            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            bHeaderRulerMove = FALSE;
+            bFooterRulerMove = TRUE;
+        }
+    }
+
+    if( rMEvt.IsLeft() && GetPointer() == POINTER_HSPLIT )
+    {
+        Point  aNowPt = rMEvt.GetPosPixel();
+        SCCOL i = 0;
+        for( i = aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
+        {
+            if( aNowPt.X() < nRight[i] + 2 && aNowPt.X() > nRight[i] - 2 )
+            {
+                nColNumberButttonDown = i;
+                break;
+            }
+        }
+        if( i == aPageArea.aEnd.Col()+1 )
+            return;
+
+        SetMapMode( aMMMode );
+        if( nColNumberButttonDown == aPageArea.aStart.Col() )
+            DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+        else
+            DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+
+        DrawInvert( aButtonDownChangePoint.X(), POINTER_HSPLIT );
+        bColRulerMove = TRUE;
+    }
+}
+
+void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
+{
+        Fraction  aPreviewZoom( nZoom, 100 );
+        Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        MapMode   aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+
+        aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
+
+        long  nWidth = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Width();
+        long  nHeight = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Height();
+
+        if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
+        {
+            SetPointer( Pointer( POINTER_ARROW ) );
+
+            BOOL bMoveRulerAction= TRUE;
+
+            ScDocument * pDoc = pDocShell->GetDocument();
+            ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+            SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+
+            SfxItemSet* pParamSet = NULL;
+            if (pStyleSheet)
+                pParamSet = &pStyleSheet->GetItemSet();
+            SvxLRSpaceItem* pLRItem = ( SvxLRSpaceItem*) &pParamSet->Get( ATTR_LRSPACE );
+
+            if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > nWidth * HMM_PER_TWIPS - aOffset.X() ) )
+            {
+                bMoveRulerAction = FALSE;
+                Paint(Rectangle(0,0,10000,10000));
+            }
+            else if( bLeftRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS > nWidth - pLRItem->GetRight() - aOffset.X() / HMM_PER_TWIPS ) )
+            {
+                bMoveRulerAction = FALSE;
+                Paint(Rectangle(0,0,10000,10000));
+            }
+            else if( bRightRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS < pLRItem->GetLeft() - aOffset.X() / HMM_PER_TWIPS ) )
+            {
+                bMoveRulerAction = FALSE;
+                Paint(Rectangle(0,0,10000,10000));
+            }
+            else if( aButtonDownPt.X() == aButtonUpPt.X() )
+            {
+                bMoveRulerAction = FALSE;
+                DrawInvert( aButtonUpPt.X(), POINTER_HSIZEBAR );
+            }
+            if( bMoveRulerAction )
+            {
+                if( bLeftRulerChange && bLeftRulerMove )
+                    pLRItem->SetLeft( (long)( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ), 100 );
+                else if( bRightRulerChange && bRightRulerMove )
+                    pLRItem->SetRight( (long)( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ),100 );
+
+                if ( ValidTab( nTab ) )
+                {
+                    ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                    aPrintFunc.UpdatePages();
+                }
+
+                Rectangle aRect(0,0,10000,10000);
+                Paint( aRect );
+                bLeftRulerChange = FALSE;
+                bRightRulerChange = FALSE;
+            }
+            bLeftRulerMove = FALSE;
+            bRightRulerMove = FALSE;
+        }
+
+        if( rMEvt.IsLeft() && GetPointer() == POINTER_VSIZEBAR )
+        {
+            SetPointer( POINTER_ARROW );
+
+            BOOL  bMoveRulerAction = TRUE;
+            if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > nHeight * HMM_PER_TWIPS -aOffset.Y() ) )
+            {
+                bMoveRulerAction = FALSE;
+                Paint( Rectangle(0,0,10000,10000) );
+            }
+            else if( aButtonDownPt.Y() == aButtonUpPt.Y() )
+            {
+                bMoveRulerAction = FALSE;
+                DrawInvert( aButtonUpPt.Y(), POINTER_VSIZEBAR );
+            }
+            if( bMoveRulerAction )
+            {
+                ScDocument * pDoc = pDocShell->GetDocument();
+                ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+                SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+                DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+                if ( pStyleSheet )
+                {
+                    SfxItemSet& rSet = pStyleSheet->GetItemSet();
+                    SvxULSpaceItem* pULItem = ( SvxULSpaceItem*) &rSet.Get( ATTR_ULSPACE );
+
+                    if( bTopRulerMove && bTopRulerChange )
+                        pULItem->SetUpper( (USHORT)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ), 100 );
+                    else if( bBottomRulerMove && bBottomRulerChange )
+                        pULItem->SetLower( (USHORT)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ), 100 );
+                    else if( bHeaderRulerMove && bHeaderRulerChange )
+                    {
+                        const SfxPoolItem* pItem = NULL;
+                        if ( rSet.GetItemState( ATTR_PAGE_HEADERSET, FALSE, &pItem ) == SFX_ITEM_SET )
+                        {
+                            SfxItemSet& pHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
+                            Size  aHeaderSize = ((const SvxSizeItem&)pHeaderSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            aHeaderSize.Height() = (long)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - pULItem->GetUpper());
+                            aHeaderSize.Height() = aHeaderSize.Height() * 100 / mnScale;
+                            SvxSetItem  aNewHeader( (const SvxSetItem&)rSet.Get(ATTR_PAGE_HEADERSET) );
+                            aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
+                            rSet.Put( aNewHeader );
+                        }
+                    }
+                    else if( bFooterRulerMove && bFooterRulerChange )
+                    {
+                        const SfxPoolItem* pItem = NULL;
+                        if( rSet.GetItemState( ATTR_PAGE_FOOTERSET, FALSE, &pItem ) == SFX_ITEM_SET )
+                        {
+                            SfxItemSet& pFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
+                            Size aFooterSize = ((const SvxSizeItem&)pFooterSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                            aFooterSize.Height() = (long)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - pULItem->GetLower() );
+                            aFooterSize.Height() = aFooterSize.Height() * 100 / mnScale;
+                            SvxSetItem  aNewFooter( (const SvxSetItem&)rSet.Get(ATTR_PAGE_FOOTERSET) );
+                            aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
+                            rSet.Put( aNewFooter );
+                        }
+                    }
+
+                    if ( ValidTab( nTab ) )
+                    {
+                        ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                        aPrintFunc.UpdatePages();
+                    }
+
+                    Rectangle  aRect(0,0,10000,10000);
+                    Paint( aRect );
+                    bTopRulerChange = FALSE;
+                    bBottomRulerChange = FALSE;
+                    bHeaderRulerChange = FALSE;
+                    bFooterRulerChange = FALSE;
+                 }
+              }
+              bTopRulerMove = FALSE;
+              bBottomRulerMove = FALSE;
+              bHeaderRulerMove = FALSE;
+              bFooterRulerMove = FALSE;
+        }
+        if( rMEvt.IsLeft() && GetPointer() == POINTER_HSPLIT )
+        {
+            SetPointer(POINTER_ARROW);
+            ScDocument* pDoc = pDocShell->GetDocument();
+            BOOL  bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            BOOL  bMoveRulerAction = TRUE;
+            if( aButtonDownPt.X() == aButtonUpPt.X() )
+            {
+                bMoveRulerAction = FALSE;
+                if( nColNumberButttonDown == aPageArea.aStart.Col() )
+                    DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+                else
+                    DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+                DrawInvert( aButtonUpPt.X(), POINTER_HSPLIT );
+            }
+            if( bMoveRulerAction )
+            {
+                long  nNewColWidth = 0;
+
+                if( !bLayoutRTL )
+                {
+                    nNewColWidth = (long) ( PixelToLogic( Point( rMEvt.GetPosPixel().X() - nRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth += pDocShell->GetDocument()->GetColWidth( nColNumberButttonDown, nTab );
+                }
+                else
+                {
+
+                    nNewColWidth = (long) ( PixelToLogic( Point( nRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth += pDocShell->GetDocument()->GetColWidth( nColNumberButttonDown, nTab );
+                }
+
+                if( nNewColWidth >= 0 )
+                {
+                    pDocShell->GetDocument()->SetColWidth( nColNumberButttonDown, nTab, (USHORT)nNewColWidth );
+                }
+                if ( ValidTab( nTab ) )
+                {
+                    ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                    aPrintFunc.UpdatePages();
+                }
+                Rectangle  nRect(0,0,10000,10000);
+                Paint( nRect );
+            }
+            bColRulerMove = FALSE;
+        }
+        ReleaseMouse();
+}
+
+void __EXPORT ScPreview::MouseMove( const MouseEvent& rMEvt )
+{
+    Fraction aPreviewZoom( nZoom, 100 );
+    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+    Point    aMouseMovePoint = PixelToLogic( rMEvt.GetPosPixel(), aMMMode );
+
+    long    nLeftMargin = 0;
+    long    nRightMargin = 0;
+    long    nTopMargin = 0;
+    long    nBottomMargin = 0;
+    Size    PageSize;
+
+    long    nWidth = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Width();
+    long    nHeight = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Height();
+
+    if ( nPageNo < nTotalPages )
+    {
+        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+
+        ScPrintFunc* pPrintFunc;
+
+        if (bStateValid)
+            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
+        else
+            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
+
+        nLeftMargin = (long)( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
+        nRightMargin = (long)( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
+        nRightMargin = (long)( nWidth * HMM_PER_TWIPS - nRightMargin - aOffset.X() );
+        nTopMargin = (long)( pPrintFunc->GetTopMargin() * HMM_PER_TWIPS - aOffset.Y() );
+        nBottomMargin = (long)( pPrintFunc->GetBottomMargin() * HMM_PER_TWIPS );
+        nBottomMargin = (long)( nHeight * HMM_PER_TWIPS - nBottomMargin - aOffset.Y() );
+        if( mnScale > 0 )
+        {
+            nHeaderHeight = (long)( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS * mnScale / 100 );
+            nFooterHeight = (long)( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS * mnScale / 100 );
+        }
+        else
+        {
+            nHeaderHeight = (long)( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS );
+            nFooterHeight = (long)( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS );
+        }
+        delete pPrintFunc;
+    }
+
+    Point   aPixPt( rMEvt.GetPosPixel() );
+    Point   aLeftTop = LogicToPixel( Point( nLeftMargin, -aOffset.Y() ) , aMMMode );
+    Point   aLeftBottom = LogicToPixel( Point( nLeftMargin ,(long)(nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+    Point   aRightTop = LogicToPixel( Point( nRightMargin, -aOffset.Y() ), aMMMode );
+    Point   aTopLeft = LogicToPixel( Point( -aOffset.X(), nTopMargin ), aMMMode );
+    Point   aTopRight = LogicToPixel( Point( (long)(nWidth * HMM_PER_TWIPS - aOffset.X()), nTopMargin ), aMMMode );
+    Point   aBottomLeft = LogicToPixel( Point( -aOffset.X(), nBottomMargin ), aMMMode );
+    Point   aHeaderLeft = LogicToPixel( Point(  -aOffset.X(), nHeaderHeight ), aMMMode );
+    Point   aFooderLeft = LogicToPixel( Point( -aOffset.X(), nFooterHeight ), aMMMode );
+
+    BOOL   bOnColRulerChange = FALSE;
+
+    for( SCCOL i=aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
+    {
+        Point   aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
+        Point   aColumnBottom = LogicToPixel( Point( 0, (long)( nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+        if( aPixPt.X() < ( nRight[i] + 2 ) && ( aPixPt.X() > ( nRight[i] - 2 ) ) && ( aPixPt.X() < aRightTop.X() ) && ( aPixPt.X() > aLeftTop.X() )
+            && ( aPixPt.Y() > aColumnTop.Y() ) && ( aPixPt.Y() < aColumnBottom.Y() ) && !bLeftRulerMove && !bRightRulerMove
+            && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+        {
+            bOnColRulerChange = TRUE;
+            if( !rMEvt.GetButtons() && GetPointer() == POINTER_HSPLIT )
+                nColNumberButttonDown = i;
+            break;
+        }
+    }
+
+    if( aPixPt.X() < ( aLeftTop.X() + 2 ) && aPixPt.X() > ( aLeftTop.X() - 2 ) && !bRightRulerMove )
+    {
+        bLeftRulerChange = TRUE;
+        bRightRulerChange = FALSE;
+    }
+    else if( aPixPt.X() < ( aRightTop.X() + 2 ) && aPixPt.X() > ( aRightTop.X() - 2 ) && !bLeftRulerMove )
+    {
+        bLeftRulerChange = FALSE;
+        bRightRulerChange = TRUE;
+    }
+    else if( aPixPt.Y() < ( aTopLeft.Y() + 2 ) && aPixPt.Y() > ( aTopLeft.Y() - 2 ) && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+    {
+        bTopRulerChange = TRUE;
+        bBottomRulerChange = FALSE;
+        bHeaderRulerChange = FALSE;
+        bFooterRulerChange = FALSE;
+    }
+    else if( aPixPt.Y() < ( aBottomLeft.Y() + 2 ) && aPixPt.Y() > ( aBottomLeft.Y() - 2 ) && !bTopRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+    {
+        bTopRulerChange = FALSE;
+        bBottomRulerChange = TRUE;
+        bHeaderRulerChange = FALSE;
+        bFooterRulerChange = FALSE;
+    }
+    else if( aPixPt.Y() < ( aHeaderLeft.Y() + 2 ) && aPixPt.Y() > ( aHeaderLeft.Y() - 2 ) && !bTopRulerMove && !bBottomRulerMove && !bFooterRulerMove )
+    {
+        bTopRulerChange = FALSE;
+        bBottomRulerChange = FALSE;
+        bHeaderRulerChange = TRUE;
+        bFooterRulerChange = FALSE;
+    }
+    else if( aPixPt.Y() < ( aFooderLeft.Y() + 2 ) && aPixPt.Y() > ( aFooderLeft.Y() - 2 ) && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove )
+    {
+        bTopRulerChange = FALSE;
+        bBottomRulerChange = FALSE;
+        bHeaderRulerChange = FALSE;
+        bFooterRulerChange = TRUE;
+    }
+
+    if( bPageMargin )
+    {
+        if(( aPixPt.X() < ( aLeftTop.X() + 2 ) && aPixPt.X() > ( aLeftTop.X() - 2 ) || bLeftRulerMove ||
+            ( aPixPt.X() < ( aRightTop.X() + 2 ) && aPixPt.X() > ( aRightTop.X() - 2 ) ) || bRightRulerMove || bOnColRulerChange || bColRulerMove )
+            && aPixPt.Y() > aLeftTop.Y() && aPixPt.Y() < aLeftBottom.Y() )
+        {
+            if( bOnColRulerChange || bColRulerMove )
+            {
+                SetPointer( Pointer( POINTER_HSPLIT ) );
+                if( bColRulerMove )
+                {
+                    if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                       DragMove( aMouseMovePoint.X(), POINTER_HSPLIT );
+                }
+            }
+            else
+            {
+                if( bLeftRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+                {
+                    SetPointer( Pointer( POINTER_HSIZEBAR ) );
+                    if( bLeftRulerMove )
+                    {
+                       if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                           DragMove( aMouseMovePoint.X(), POINTER_HSIZEBAR );
+                    }
+                }
+                else if( bRightRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
+                {
+                    SetPointer( Pointer( POINTER_HSIZEBAR ) );
+                    if( bRightRulerMove )
+                    {
+                       if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                           DragMove( aMouseMovePoint.X(), POINTER_HSIZEBAR );
+                    }
+                }
+            }
+        }
+        else
+        {
+            if( ( ( aPixPt.Y() < ( aTopLeft.Y() + 2 ) && aPixPt.Y() > ( aTopLeft.Y() - 2 ) ) || bTopRulerMove ||
+                ( aPixPt.Y() < ( aBottomLeft.Y() + 2 ) && aPixPt.Y() > ( aBottomLeft.Y() - 2 ) ) || bBottomRulerMove ||
+                ( aPixPt.Y() < ( aHeaderLeft.Y() + 2 ) && aPixPt.Y() > ( aHeaderLeft.Y() - 2 ) ) || bHeaderRulerMove ||
+                ( aPixPt.Y() < ( aFooderLeft.Y() + 2 ) && aPixPt.Y() > ( aFooderLeft.Y() - 2 ) ) || bFooterRulerMove )
+                && aPixPt.X() > aTopLeft.X() && aPixPt.X() < aTopRight.X() )
+            {
+                if( bTopRulerChange )
+                {
+                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    if( bTopRulerMove )
+                    {
+                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                    }
+                }
+                else if( bBottomRulerChange )
+                {
+                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    if( bBottomRulerMove )
+                    {
+                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                    }
+                }
+                else if( bHeaderRulerChange )
+                {
+                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    if( bHeaderRulerMove )
+                    {
+                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                    }
+                }
+                else if( bFooterRulerChange )
+                {
+                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    if( bFooterRulerMove )
+                    {
+                        if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                    }
+                }
+            }
+            else
+                SetPointer( Pointer( POINTER_ARROW ) );
+        }
+    }
+}
+//Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::InvalidateLocationData(ULONG nId)
 {
     bLocationValid = FALSE;
@@ -830,4 +1516,47 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     return xAccessible;
 }
 
+//Issue51656 Add resizeable margin on page preview from maoyg
+void ScPreview::DragMove( long nDragMovePos, USHORT nFlags )
+{
+    Fraction aPreviewZoom( nZoom, 100 );
+    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+    SetMapMode( aMMMode );
+    long  nPos = nDragMovePos;
+    if( nFlags == POINTER_HSIZEBAR || nFlags == POINTER_HSPLIT )
+    {
+        if( nDragMovePos != aButtonDownChangePoint.X() )
+        {
+            DrawInvert( aButtonDownChangePoint.X(), nFlags );
+            aButtonDownChangePoint.X() = nPos;
+            DrawInvert( aButtonDownChangePoint.X(), nFlags );
+        }
+    }
+    else if( nFlags == POINTER_VSIZEBAR )
+    {
+        if( nDragMovePos != aButtonDownChangePoint.Y() )
+        {
+            DrawInvert( aButtonDownChangePoint.Y(), nFlags );
+            aButtonDownChangePoint.Y() = nPos;
+            DrawInvert( aButtonDownChangePoint.Y(), nFlags );
+        }
+    }
+}
 
+void ScPreview::DrawInvert( long nDragPos, USHORT nFlags )
+{
+    long  nHeight = (long) lcl_GetDocPageSize( pDocShell->GetDocument(), nTab ).Height();
+    long  nWidth = (long) lcl_GetDocPageSize( pDocShell->GetDocument(), nTab ).Width();
+    if( nFlags == POINTER_HSIZEBAR || nFlags == POINTER_HSPLIT )
+    {
+        Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
+        Invert( aRect,INVERT_50 );
+    }
+    else if( nFlags == POINTER_VSIZEBAR )
+    {
+        Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
+        Invert( aRect,INVERT_50 );
+    }
+}
+//Issue51656 Add resizeable margin on page preview from maoyg
