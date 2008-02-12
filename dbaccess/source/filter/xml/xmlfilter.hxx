@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:19:11 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ private:
     */
     void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
-    SvXMLImportContext* CreateStylesContext(const ::rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const ::rtl::OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
 protected:
     // SvXMLImport
