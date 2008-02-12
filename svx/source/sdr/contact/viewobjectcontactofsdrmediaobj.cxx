@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:48:06 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,18 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 
     if(pObjectContactOfPageView)
     {
-        OutputDevice& rOutDev = pObjectContactOfPageView->GetPageWindow().GetPaintWindow().GetOutputDevice();
+        const SdrPageWindow& rPageWindow = pObjectContactOfPageView->GetPageWindow();
+        const SdrPaintWindow* pPaintWindow = &rPageWindow.GetPaintWindow();
+
+        if(rPageWindow.GetOriginalPaintWindow())
+        {
+            // #i83183# prefer OriginalPaintWindow if set; this is
+            // the real target device. GetPaintWindow() may return
+            // the current buffer device instead
+            pPaintWindow = rPageWindow.GetOriginalPaintWindow();
+        }
+
+        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
         if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
         {
