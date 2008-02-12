@@ -1,4 +1,4 @@
-fx	basegfx	:	o3tl sal offuh cppuhelper cppu NULL
+fx	basegfx	:	o3tl sal offuh cppuhelper cppu testshl2 NULL
 fx	basegfx									usr1	-	all	fx_mkout NULL
 fx	basegfx\inc								nmake	-	all	fx_inc NULL
 fx	basegfx\prj								get		-	all	fx_prj NULL
@@ -12,3 +12,4 @@ fx	basegfx\source\tuple					nmake	-	all	fx_tuple fx_inc NULL
 fx	basegfx\source\tools					nmake	-	all	fx_tools fx_inc NULL
 fx	basegfx\source\vector					nmake	-	all	fx_vector fx_inc NULL
 fx	basegfx\util							nmake	-	all	fx_util fx_curve fx_matrix fx_numeric fx_point fx_polygon fx_range fx_tuple fx_tools fx_vector NULL
+fx	basegfx\test					        nmake	-	all	fx_tests fx_util NULL
