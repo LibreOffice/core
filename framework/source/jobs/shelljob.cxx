@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shelljob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:54:22 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 // include others
 
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -76,27 +77,11 @@ static const ::rtl::OUString PROP_COMMAND = ::rtl::OUString::createFromAscii("Co
 /** adress job configuration property "Arguments". */
 static const ::rtl::OUString PROP_ARGUMENTS = ::rtl::OUString::createFromAscii("Arguments");
 
-/** adress job configuration property "NeedsSystemPathConversion". */
-static const ::rtl::OUString PROP_NEEDSSYSTEMPATHCONVERSION = ::rtl::OUString::createFromAscii("NeedsSystemPathConversion");
-
 /** adress job configuration property "DeactivateJobIfDone". */
 static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE = ::rtl::OUString::createFromAscii("DeactivateJobIfDone");
 
-/** special and magic number to make XSystemShellExecute working .-)
-
-    The problem behind: SystemShellExecute is used inside SFX to open hyperlinks
-    within a browser. But such URLs must be encoded ... otherwise they can be used
-    differently by adding real shell commands at the end of the URL !
-
-    On the other side real shell commands cant be used at the XSystemShellExecute
-    so. Because a list of arguments will be handled as one single argument then.
-
-    Solution: We must have two services differ between thos two use cases ...
-    Workaround: XSystemShellExecute uses last parameter (long flags) ins special manner
-    to know that the given command is realy a shell command and not an URL.
-    And the answer to all questions is (as everytime) ... 42 :-))
-*/
-static const ::sal_Int32 ANSWER_TO_ALL_QUESTIONS = 42;
+/** adress job configuration property "CheckExitCode". */
+static const ::rtl::OUString PROP_CHECKEXITCODE = ::rtl::OUString::createFromAscii("CheckExitCode");
 
 //-----------------------------------------------
 
@@ -139,35 +124,30 @@ ShellJob::~ShellJob()
 }
 
 //-----------------------------------------------
-css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
+css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
     throw(css::lang::IllegalArgumentException,
           css::uno::Exception                ,
           css::uno::RuntimeException         )
 {
-    ::comphelper::SequenceAsHashMap lArgs  (lArguments);
+    ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(PROP_JOBCONFIG, css::uno::Sequence< css::beans::NamedValue >()));
 
-    ::rtl::OUString sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , ::rtl::OUString());
-    ::rtl::OUString sArguments                 = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , ::rtl::OUString());
-    ::sal_Bool      bNeedsSystemPathConversion = lOwnCfg.getUnpackedValueOrDefault(PROP_NEEDSSYSTEMPATHCONVERSION, sal_False        );
-    ::sal_Bool      bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
+    const ::rtl::OUString                       sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , ::rtl::OUString());
+    const css::uno::Sequence< ::rtl::OUString > lCommandArguments          = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , css::uno::Sequence< ::rtl::OUString >());
+    const ::sal_Bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
+    const ::sal_Bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , sal_True         );
 
     // replace all might existing place holder.
-    ::rtl::OUString sCompleteCommand = impl_substituteCommandVariables(sCommand);
-
-    // see if URL->system path conversion is needed.
-    if (bNeedsSystemPathConversion)
-        sCompleteCommand = impl_convertCommandURL2SystemPath(sCompleteCommand);
+    ::rtl::OUString sRealCommand = impl_substituteCommandVariables(sCommand);
 
     // Command is required as minimum.
-    // If it does not exists ... or conversion to system path failed
-    // we cant do our job.
+    // If it does not exists ... we cant do our job.
     // Deactivate such miss configured job silently .-)
-    if (sCompleteCommand.getLength() < 1)
+    if (sRealCommand.getLength() < 1)
         return ShellJob::impl_generateAnswer4Deactivation();
 
     // do it
-    ::sal_Bool bDone = impl_execute(sCompleteCommand, sArguments);
+    ::sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
         return css::uno::Any();
 
@@ -215,41 +195,36 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 }
 
 //-----------------------------------------------
-::rtl::OUString ShellJob::impl_convertCommandURL2SystemPath(const ::rtl::OUString& sURL)
+::sal_Bool ShellJob::impl_execute(const ::rtl::OUString&                       sCommand      ,
+                                  const css::uno::Sequence< ::rtl::OUString >& lArguments    ,
+                                        ::sal_Bool                             bCheckExitCode)
 {
-    ::rtl::OUString sPath;
+          ::rtl_uString**  pArgs    = NULL;
+    const ::sal_Int32      nArgs    = lArguments.getLength ();
+          oslProcessOption nOptions = osl_Process_WAIT;
+          oslProcess       hProcess(0);
 
-    if (::osl::FileBase::getSystemPathFromFileURL(sURL, sPath) == ::osl::FileBase::E_None)
-        return sPath;
+    if (nArgs > 0)
+        pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< ::rtl::OUString* >(lArguments.getConstArray()));
 
-    return ::rtl::OUString();
-}
+    oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
 
-//-----------------------------------------------
-::sal_Bool ShellJob::impl_execute(const ::rtl::OUString& sCommand  ,
-                                  const ::rtl::OUString& sArguments)
-{
-    // SYNCHRONIZED ->
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aReadLock.unlock();
-    // <- SYNCHRONIZED
-
-    try
-    {
-        css::uno::Reference< css::system::XSystemShellExecute > xExecute(xSMGR->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY_THROW);
-#ifdef UNX
-        xExecute->execute(sCommand, sArguments, ANSWER_TO_ALL_QUESTIONS);
-#elif defined( WNT )
-        xExecute->execute(sCommand, sArguments, css::system::SystemShellExecuteFlags::NO_SYSTEM_ERROR_MESSAGE);
-#endif
-    }
-    catch(const css::uno::Exception&)
-    {
+    // executable not found or couldnt be started
+    if (eError != osl_Process_E_None)
         return sal_False;
-    }
 
-    return sal_True;
+    if (! bCheckExitCode)
+        return sal_True;
+
+    // check it's return codes ...
+    oslProcessInfo aInfo;
+    aInfo.Size = sizeof (oslProcessInfo);
+        eError = osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &aInfo);
+
+    if (eError != osl_Process_E_None)
+        return sal_False;
+
+    return (aInfo.Code == 0);
 }
 
 } // namespace framework
