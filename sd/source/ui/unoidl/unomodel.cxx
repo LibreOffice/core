@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:03:09 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1950,7 +1950,25 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     if( pPage )
                     {
                         SdrOutliner& rOutl = mpDoc->GetDrawOutliner( NULL );
-                        rOutl.SetBackgroundColor( pPage->GetBackgroundColor( pPV ) );
+                        bool bScreenDisplay(true);
+
+                        if(bScreenDisplay && pOut && OUTDEV_PRINTER == pOut->GetOutDevType())
+                        {
+                            // #i75566# printing; suppress AutoColor BackgroundColor generation
+                            // for visibility reasons by giving GetPageBackgroundColor()
+                            // the needed hint
+                            bScreenDisplay = false;
+                        }
+
+                        if(bScreenDisplay && pOut && pOut->GetPDFWriter())
+                        {
+                            // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
+                            bScreenDisplay = false;
+                        }
+
+                        // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+                        // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+                        rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
                     }
                     pView->SdrPaintView::CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
 
