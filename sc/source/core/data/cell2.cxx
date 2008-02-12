@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:06:25 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1281,6 +1281,27 @@ BOOL lcl_IsRangeNameInUse(USHORT nIndex, ScTokenArray* pCode, ScRangeName* pName
 BOOL ScFormulaCell::IsRangeNameInUse(USHORT nIndex) const
 {
     return lcl_IsRangeNameInUse( nIndex, pCode, pDocument->GetRangeName() );
+}
+
+void lcl_FindRangeNamesInUse(std::set<USHORT>& rIndexes, ScTokenArray* pCode, ScRangeName* pNames)
+{
+    for (ScToken* p = pCode->First(); p; p = pCode->Next())
+    {
+        if (p->GetOpCode() == ocName)
+        {
+            USHORT nTokenIndex = p->GetIndex();
+            rIndexes.insert( nTokenIndex );
+
+            ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
+            if (pSubName)
+                lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pNames);
+        }
+    }
+}
+
+void ScFormulaCell::FindRangeNamesInUse(std::set<USHORT>& rIndexes) const
+{
+    lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
 void ScFormulaCell::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
