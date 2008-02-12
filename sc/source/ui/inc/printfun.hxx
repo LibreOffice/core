@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:45:37 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,14 @@ public:
                                  const ScPrintState& rState,
                                  const ScPrintOptions* pOptions );
 
+                    ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
+                                 long nPage = 0, long nDocP = 0,
+                                 const ScRange* pArea = NULL,
+                                 const ScPrintOptions* pOptions = NULL );
+
+                    ScPrintFunc( ScDocShell* pShell, Window* pWindow,
+                                 const ScPrintState& rState,
+                                 const ScPrintOptions* pOptions );
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
@@ -284,8 +292,10 @@ public:
 
     void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
     long            DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart, BOOL bDoPrint,
-                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );
+                                /*long nStartPage, long nDisplayStart, BOOL bDoPrint,
+                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );*/
+                                long nStartPage, long nDisplayStart, BOOL bDoPrint = TRUE,
+                                SfxProgress* pProgress = NULL, ScPreviewLocationData* pLocationData = NULL);
 
                     //  Werte abfragen - sofort
 
@@ -305,6 +315,16 @@ public:
 
     void            GetPrintState( ScPrintState& rState );
     BOOL            GetLastSourceRange( ScRange& rRange ) const;
+    USHORT          GetLeftMargin() const{return nLeftMargin;}
+    USHORT          GetRightMargin() const{return nRightMargin;}
+    USHORT          GetTopMargin() const{return nTopMargin;}
+    USHORT          GetBottomMargin() const{return nBottomMargin;}
+    void            SetLeftMargin(USHORT nRulerLeftDistance){ nLeftMargin = nRulerLeftDistance; }
+    void            SetRightMargin(USHORT nRulerRightDistance){ nRightMargin = nRulerRightDistance; }
+    void            SetTopMargin(USHORT nRulerTopDistance){ nTopMargin = nRulerTopDistance; }
+    void            SetBottomMargin(USHORT nRulerBottomDistance){ nBottomMargin = nRulerBottomDistance; }
+    ScPrintHFParam  GetHeader(){return aHdr;}
+    ScPrintHFParam  GetFooter(){return aFtr;}
 
 private:
     void            Construct( const ScPrintOptions* pOptions );
