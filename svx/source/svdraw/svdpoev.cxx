@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:49:41 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,40 +599,42 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
                 if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))
                 {
+                    //#i83671# used nLocalPointNum (which was the polygon point count)
+                    // instead of the point index (nPointNum). This of course leaded
+                    // to a wrong point access to the B2DPolygon.
                     basegfx::B2DPolygon aNewXP(aXPP.getB2DPolygon(nPolyNum));
-                    const sal_uInt32 nLocalPointNum(aNewXP.count());
                     Point aPos, aC1, aC2;
                     bool bC1(false);
                     bool bC2(false);
 
-                    const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nLocalPointNum));
+                    const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nPointNum));
                     aPos = Point(FRound(aB2DPos.getX()), FRound(aB2DPos.getY()));
 
-                    if(aNewXP.isPrevControlPointUsed(nLocalPointNum))
+                    if(aNewXP.isPrevControlPointUsed(nPointNum))
                     {
-                        const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nLocalPointNum));
+                        const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nPointNum));
                         aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
                         bC1 = true;
                     }
 
-                    if(aNewXP.isNextControlPointUsed(nLocalPointNum))
+                    if(aNewXP.isNextControlPointUsed(nPointNum))
                     {
-                        const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nLocalPointNum));
+                        const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nPointNum));
                         aC2 = Point(FRound(aB2DC2.getX()), FRound(aB2DC2.getY()));
                         bC2 = true;
                     }
 
                     (*pTrFunc)(aPos,&aC1,&aC2,p1,p2,p3,p4,p5);
-                    aNewXP.setB2DPoint(nLocalPointNum, basegfx::B2DPoint(aPos.X(), aPos.Y()));
+                    aNewXP.setB2DPoint(nPointNum, basegfx::B2DPoint(aPos.X(), aPos.Y()));
 
                     if (bC1)
                     {
-                        aNewXP.setPrevControlPoint(nLocalPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
+                        aNewXP.setPrevControlPoint(nPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
                     }
 
                     if (bC2)
                     {
-                        aNewXP.setNextControlPoint(nLocalPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
+                        aNewXP.setNextControlPoint(nPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
                     }
 
                     aXPP.setB2DPolygon(nPolyNum, aNewXP);
