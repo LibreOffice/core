@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:10:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:19:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -824,6 +824,44 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
     }
     return pOverlappedObj;
 }
+// -----------------------------------------------------------------------------
+bool checkArrayForOccurance(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+{
+    for(int i=0;i<_nListLength;i++)
+    {
+        SdrObject *pIgnore = _pIgnore[i];
+        if (pIgnore == _pObjToCheck)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
+{
+    SdrObject* pOverlappedObj = NULL;
+    SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
+    SdrObject* pObjIter = NULL;
+
+    while( !pOverlappedObj && (pObjIter = aIter.Next()) != NULL )
+    {
+        if (checkArrayForOccurance(pObjIter, _pIgnoreList, _nIgnoreListLength))
+        {
+            continue;
+        }
+
+        if ( (_bAllObjects || !_rView.IsObjMarked(pObjIter))
+             && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+        {
+            Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
+            if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
+                pOverlappedObj = pObjIter;
+        }
+    }
+    return pOverlappedObj;
+}
+
 //----------------------------------------------------------------------------
 SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
 {
@@ -869,28 +907,46 @@ uno::Sequence< ::rtl::OUString > getParameterNames( const uno::Reference< sdbc::
     return aNames;
 }
 // -----------------------------------------------------------------------------
+Rectangle getRectangleFromControl(SdrObject* _pControl)
+{
+    if (_pControl)
+    {
+        uno::Reference< report::XReportComponent > xComponent( _pControl->getUnoShape(), uno::UNO_QUERY);
+        if (xComponent.is())
+        {
+            Rectangle aRect(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
+            aRect.setHeight(aRect.getHeight() + 1);
+            aRect.setWidth(aRect.getWidth() + 1);
+            return aRect;
+        }
+    }
+    return Rectangle();
+}
+// -----------------------------------------------------------------------------
 // check overlapping
-void correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert)
+void correctOverlapping(SdrObject* _pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert)
 {
     OSectionView* pSectionView = _pReportSection->getView();
-    uno::Reference< report::XReportComponent> xComponent(pControl->getUnoShape(),uno::UNO_QUERY);
-    Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
-    aRet.setHeight(aRet.getHeight() + 1);
-    aRet.setWidth(aRet.getWidth() + 1);
+    uno::Reference< report::XReportComponent> xComponent(_pControl->getUnoShape(),uno::UNO_QUERY);
+    // Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
+    // aRet.setHeight(aRet.getHeight() + 1);
+    // aRet.setWidth(aRet.getWidth() + 1);
+    Rectangle aRect = getRectangleFromControl(_pControl);
+
     bool bOverlapping = true;
     while ( bOverlapping )
     {
-        SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
+        SdrObject* pOverlappedObj = isOver(aRect,*_pReportSection->getPage(),*pSectionView,true, _pControl);
         bOverlapping = pOverlappedObj != NULL;
         if ( bOverlapping )
         {
             const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
-            aRet.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRet.Top());
-            xComponent->setPositionY(aRet.Top());
+            aRect.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRect.Top());
+            xComponent->setPositionY(aRect.Top());
         }
     }
     if ( !bOverlapping && _bInsert ) // now insert objects
-        pSectionView->InsertObjectAtView(pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
+        pSectionView->InsertObjectAtView(_pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
 }
 // -----------------------------------------------------------------------------
 } // namespace rptui

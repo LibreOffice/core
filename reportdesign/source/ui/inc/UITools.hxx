@@ -6,9 +6,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:48:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 class SdrPage;
 class SdrObject;
+class SdrUnoObj;
 class SdrView;
 class Rectangle;
 namespace comphelper
@@ -138,6 +139,8 @@ namespace rptui
     */
     SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = NULL);
 
+    SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj* _pIgnoreList[], int _nIgnoreListLength);
+
     /** checks whether the given OUnoObject object rectangle overlapps another object in that view.
     *
     * \param _pObj
@@ -160,6 +163,13 @@ namespace rptui
     * \param _bInsert           TRUE whe the control should be inserted, otherwise not.
     */
     void correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert = true);
+
+    /** returns a Rectangle of a given SdrObject
+     *
+     * \param pControl          the SdrObject
+     */
+
+    Rectangle getRectangleFromControl(SdrObject* pControl);
 }
 #endif //RPTUI_UITOOLS_HXX
 
