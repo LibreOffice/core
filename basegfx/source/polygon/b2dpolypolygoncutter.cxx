@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:06:55 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,8 +101,9 @@ namespace basegfx
             else
             {
                 // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
-                const bool bBoolA(fTools::more(aVecA.cross(aVecTest), 0.0));
-                const bool bBoolB(fTools::more(aVecB.cross(aVecTest), 0.0));
+                // #i81852# border is included (see above), use moreOrEqual(), not more()
+                const bool bBoolA(fTools::moreOrEqual(aVecA.cross(aVecTest), 0.0));
+                const bool bBoolB(fTools::moreOrEqual(aVecB.cross(aVecTest), 0.0));
                 return (!(bBoolA && bBoolB));
             }
         }
@@ -271,10 +272,42 @@ namespace basegfx
             void impHandleCommon(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB)
             {
                 const B2DPoint aPoint(maGeometry.getB2DPoint(rCandA.mnSelf));
-                const B2DPoint aPrevA(maGeometry.getB2DPoint(rCandA.mnPrev));
-                const B2DPoint aNextA(maGeometry.getB2DPoint(rCandA.mnNext));
-                const B2DPoint aPrevB(maGeometry.getB2DPoint(rCandB.mnPrev));
-                const B2DPoint aNextB(maGeometry.getB2DPoint(rCandB.mnNext));
+                B2DPoint aPrevA(maGeometry.getB2DPoint(rCandA.mnPrev));
+                B2DPoint aNextA(maGeometry.getB2DPoint(rCandA.mnNext));
+                B2DPoint aPrevB(maGeometry.getB2DPoint(rCandB.mnPrev));
+                B2DPoint aNextB(maGeometry.getB2DPoint(rCandB.mnNext));
+
+                if(maGeometry.areControlPointsUsed())
+                {
+                    // #i81852# Of course control point vectors need to be used for self-intersections, too
+                    const B2DPoint aCandidatePrevA(maGeometry.getPrevControlPoint(rCandA.mnPoint));
+                    const B2DPoint aCandidatePrevB(maGeometry.getPrevControlPoint(rCandB.mnPoint));
+                    const impPolyPolygonPointNode& rNextControlA = maPointVector[rCandA.mnNextControl];
+                    const B2DPoint aCandidateNextA(maGeometry.getNextControlPoint(rNextControlA.mnPoint));
+                    const impPolyPolygonPointNode& rNextControlB = maPointVector[rCandB.mnNextControl];
+                    const B2DPoint aCandidateNextB(maGeometry.getNextControlPoint(rNextControlB.mnPoint));
+
+                    if(!aCandidatePrevA.equal(aPoint))
+                    {
+                        aPrevA = aCandidatePrevA;
+                    }
+
+                    if(!aCandidatePrevB.equal(aPoint))
+                    {
+                        aPrevB = aCandidatePrevB;
+                    }
+
+                    if(!aCandidateNextA.equal(aPoint))
+                    {
+                        aNextA = aCandidateNextA;
+                    }
+
+                    if(!aCandidateNextB.equal(aPoint))
+                    {
+                        aNextB = aCandidateNextB;
+                    }
+                }
+
                 const CommonPointType aType(impGetCommonPointType(aPoint, aPrevA, aNextA, aPrevB, aNextB));
 
                 switch(aType)
@@ -498,40 +531,61 @@ namespace basegfx
                 // entering edge. Get the point values from there for the crossover test
                 impPolyPolygonPointNode& rEnterCandA = maPointVector[nIndexA];
                 impPolyPolygonPointNode& rEnterCandB = maPointVector[nIndexB];
-                const B2DPoint aPoint(impGetB2DPoint(rEnterCandA, maGeometry));
-                const B2DPoint aPrevA(impGetB2DPoint(maPointVector[rEnterCandA.mnPrev], maGeometry));
-                const B2DPoint aNextA(impGetB2DPoint(maPointVector[rEnterCandA.mnNext], maGeometry));
-                bool bSideOfEnter;
 
                 if(bOpposite)
                 {
-                    const B2DPoint aNextB(impGetB2DPoint(maPointVector[rEnterCandB.mnNext], maGeometry));
-                    bSideOfEnter = impLeftOfEdges(aPrevA, aPoint, aNextA, aNextB);
-                }
-                else
-                {
-                    const B2DPoint aPrevB(impGetB2DPoint(maPointVector[rEnterCandB.mnPrev], maGeometry));
-                    bSideOfEnter = impLeftOfEdges(aPrevA, aPoint, aNextA, aPrevB);
-                }
-
-                if(bSideOfLeave != bSideOfEnter)
-                {
-                    // crossover, needs to be solved
-                    if(bOpposite)
-                    {
-                        // switch at enter and leave, make the common edge(s) an own neutral
-                        // polygon
-                        impSwitchNext(rEnterCandA, rEnterCandB, maPointVector);
-                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
-                    }
-                    else
-                    {
-                        // switch at leave
-                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
-                    }
+                    // #i81852# switch at enter and leave, make the common edge(s) an own neutral polygon
+                    // Always switch at bOpposite, no need to figure out enter/leave
+                    impSwitchNext(rEnterCandA, rEnterCandB, maPointVector);
+                    impSwitchNext(rCandidateA, rCandidateB, maPointVector);
 
                     // set changed flag
                     mbChanged = true;
+                }
+                else
+                {
+                    // #i81852# enter/leave needs to be figured out. Calculate points for test
+                    const B2DPoint aPoint(impGetB2DPoint(rEnterCandA, maGeometry));
+                    B2DPoint aPrevA(impGetB2DPoint(maPointVector[rEnterCandA.mnPrev], maGeometry));
+                    B2DPoint aNextA(impGetB2DPoint(maPointVector[rEnterCandA.mnNext], maGeometry));
+                    B2DPoint aNextB(impGetB2DPoint(maPointVector[rEnterCandB.mnNext], maGeometry));
+
+                    if(maGeometry.areControlPointsUsed())
+                    {
+                        // #i81852# of course also these points need to be adapted to control vectors
+                        const B2DPoint aCandidatePrevA(maGeometry.getB2DPolygon(rEnterCandA.mnPoly).getPrevControlPoint(rEnterCandA.mnPoint));
+                        const impPolyPolygonPointNode& rNextControlA = maPointVector[rEnterCandA.mnNextControl];
+                        const B2DPoint aCandidateNextA(maGeometry.getB2DPolygon(rNextControlA.mnPoly).getNextControlPoint(rNextControlA.mnPoint));
+                        const impPolyPolygonPointNode& rNextControlB = maPointVector[rEnterCandB.mnNextControl];
+                        const B2DPoint aCandidateNextB(maGeometry.getB2DPolygon(rNextControlB.mnPoly).getNextControlPoint(rNextControlB.mnPoint));
+
+                        if(!aCandidatePrevA.equal(aPoint))
+                        {
+                            aPrevA = aCandidatePrevA;
+                        }
+
+                        if(!aCandidateNextA.equal(aPoint))
+                        {
+                            aNextA = aCandidateNextA;
+                        }
+
+                        if(!aCandidateNextB.equal(aPoint))
+                        {
+                            aNextB = aCandidateNextB;
+                        }
+                    }
+
+                    const bool bSideOfEnter(impLeftOfEdges(aPrevA, aPoint, aNextA, aNextB));
+
+                    if(bSideOfLeave != bSideOfEnter)
+                    {
+                        // crossover, needs to be solved
+                        // switch at leave
+                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
+
+                        // set changed flag
+                        mbChanged = true;
+                    }
                 }
             }
 
@@ -586,7 +640,9 @@ namespace basegfx
                     }
                     case COMMON_IS_LEAVE_OPPOSITE : // A leaving B in opposite direction
                     {
-                        impHandleLeaving(rCandA, rCandB, true, impLeftOfEdges(aPrevA, aPoint, aNextA, aPrevB));
+                        // #i81852# Since opposite will always be switched, it is not necessary to calculate
+                        // the leave value for evaluation of cross/tutch
+                        impHandleLeaving(rCandA, rCandB, true, true);
                         break;
                     }
                     case COMMON_IS_CROSS : // A crossing B
