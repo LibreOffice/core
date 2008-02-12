@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFileBasedDatabase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:17:05 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         else if ( sMediaType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "application/msaccess" ) ) )
         {
             if ( sFileTypeExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "mdb" ) ) )
-                sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
+                sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
             else
                 sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE="));
         }
