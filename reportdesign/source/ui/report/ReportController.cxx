@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:11:10 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,7 +341,7 @@ uno::Reference< report::XReportControlFormat> lcl_getReportControlFormat(const S
         _xWindow = VCLUnoHelper::GetInterface(_pView);
     return xReportControlFormat;
 }
-//------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
@@ -3533,29 +3533,55 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
-                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
+                    for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i) // insert controls
+                    {
                         correctOverlapping(pControl[i],pReportSection[1-i]);
+                    }
 
                     if (!bLabelAboveTextField )
                     {
-                        uno::Reference< report::XReportComponent> xComponent(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
-                        sal_Int32 nY1 = xShapeProp->getPositionY();
-                        sal_Int32 nY2 = xComponent->getPositionY();
-                        while( nY1 != nY2 )
+                        if ( pSectionViews[0] == pSectionViews[1] )
                         {
-                            size_t nWhich = 0;
-                            if ( nY1 > nY2 )
-                            {
-                                ++nWhich;
-                                xComponent->setPositionY(nY1);
-                            }
-                            else
-                                xShapeProp->setPositionY(nY2);
-                            correctOverlapping(pControl[nWhich],pReportSection[1 - nWhich],false);
+                            Rectangle aLabel = getRectangleFromControl(pControl[0]);
+                            Rectangle aTextfield = getRectangleFromControl(pControl[1]);
 
-                            nY1 = xShapeProp->getPositionY();
-                            nY2 = xComponent->getPositionY();
+                            // create a Union of the given Label and Textfield
+                            Rectangle aLabelAndTextfield( aLabel );
+                            aLabelAndTextfield.Union(aTextfield);
+
+                            // check if there exists other fields and if yes, move down
+                            bool bOverlapping = true;
+                            bool bHasToMove = false;
+                            while ( bOverlapping )
+                            {
+                                const SdrObject* pOverlappedObj = isOver(aLabelAndTextfield, *pReportSection[0]->getPage(), *pSectionViews[0], true, pControl, 2);
+                                bOverlapping = pOverlappedObj != NULL;
+                                if ( bOverlapping )
+                                {
+                                    const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
+                                    aLabelAndTextfield.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aLabelAndTextfield.Top());
+                                    bHasToMove = true;
+                                }
+                            }
+
+                            if (bHasToMove)
+                            {
+                                // There was a move down, we need to move the Label and the Textfield down
+                                aLabel.Move(0, aLabelAndTextfield.Top() - aLabel.Top());
+                                aTextfield.Move(0, aLabelAndTextfield.Top() - aTextfield.Top());
+
+                                uno::Reference< report::XReportComponent> xLabel(pControl[0]->getUnoShape(),uno::UNO_QUERY_THROW);
+                                xLabel->setPositionY(aLabel.Top());
+
+                                uno::Reference< report::XReportComponent> xTextfield(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
+                                xTextfield->setPositionY(aTextfield.Top());
                         }
+                    }
+                        // this should never happen.
+                        // else
+                        // {
+                        //  DBG_ERROR("unhandled case.");
+                        // }
                     }
                 }
             }
@@ -3571,6 +3597,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
 // -----------------------------------------------------------------------------
 OSectionView* OReportController::getCurrentSectionView() const
 {
