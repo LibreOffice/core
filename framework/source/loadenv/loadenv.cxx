@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:45:13 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,22 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     return xComponent;
 }
 
+//-----------------------------------------------
+::comphelper::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
+{
+    ::comphelper::MediaDescriptor             lDescriptor(lOutsideDescriptor);
+    css::uno::Reference< css::frame::XModel > xModel     = lDescriptor.getUnpackedValueOrDefault(
+                                                            ::comphelper::MediaDescriptor::PROP_MODEL (),
+                                                            css::uno::Reference< css::frame::XModel > ());
+    if (xModel.is ())
+    {
+        ::comphelper::MediaDescriptor lModelDescriptor(xModel->getArgs());
+        lDescriptor.update (lModelDescriptor);
+    }
+
+    return lDescriptor;
+}
+
 /*-----------------------------------------------
     20.08.2003 09:49
 -----------------------------------------------*/
@@ -410,7 +426,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     // take over all new parameters.
     m_xTargetFrame.clear();
     m_xBaseFrame                    = xBaseFrame        ;
-    m_lMediaDescriptor              << lMediaDescriptor ;
+    m_lMediaDescriptor              = impl_mergeMediaDescriptorWithMightExistingModelArgs(lMediaDescriptor);
     m_sTarget                       = sTarget           ;
     m_nSearchFlags                  = nSearchFlags      ;
     m_eFeature                      = eFeature          ;
