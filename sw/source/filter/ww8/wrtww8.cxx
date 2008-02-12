@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:45:19 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2533,7 +2533,8 @@ ULONG SwWW8Writer::WriteMedium( SfxMedium& )
 SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
     pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
-    mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
+    mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0),
+    bHasHdr(false), bHasFtr(false)
 {
     SetBaseURL( rBaseURL );
     bWrtWW8 = rFltName.EqualsAscii(FILTER_WW8);
