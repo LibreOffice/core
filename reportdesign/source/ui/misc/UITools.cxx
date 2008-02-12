@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:50:20 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,7 +703,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         SID_ATTR_CHAR_CTL_FONT,
         SID_ATTR_CHAR_CTL_WEIGHT
         */
-        ITEMID_FONT,ITEMID_VERJUSTIFY
+        ITEMID_FONT,ITEMID_VERJUSTIFY,
+        0
     };
 
     bool bSuccess = false;
