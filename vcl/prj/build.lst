@@ -30,6 +30,7 @@ vc  vcl\unx\headless						nmake   -   u   vc__hl   vc_inc NULL
 vc  vcl\unx\kde							nmake   -   u   vc__kde  vc_inc NULL
 vc	vcl\aqua\source\app						nmake	-	u	vc__appa vc_inc NULL
 vc	vcl\aqua\source\gdi						nmake	-	u	vc__gdia vc_inc NULL
+vc	vcl\aqua\source\res                 nmake   -   u   vc__resa NULL
 vc	vcl\aqua\source\window					nmake	-	u	vc__wina vc_inc NULL
 vc	vcl\mac\source\app						nmake	-	m	vc__appm vc_inc NULL
 vc	vcl\mac\source\gdi						nmake	-	m	vc__gdim vc_inc NULL
