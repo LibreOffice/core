@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:25:15 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3940,6 +3940,14 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
+
+                if( (nModCode & (KEY_MOD1|KEY_MOD2)) == (KEY_MOD1|KEY_MOD2) &&
+                    aKeyEvt.mnCharCode )
+                {
+                     // this is actually AltGr and should not be handled as Alt
+                     aKeyEvt.mnCode &= ~(KEY_MOD1|KEY_MOD2);
+                }
+
                 bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
