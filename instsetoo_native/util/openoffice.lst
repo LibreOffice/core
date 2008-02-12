@@ -27,7 +27,7 @@ OpenOffice
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
 			BASEPRODUCTVERSION 2.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update24.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			ADDSYSTEMINTEGRATION 1
@@ -80,7 +80,7 @@ OpenOffice_wJRE
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
 			BASEPRODUCTVERSION 2.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update24.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
@@ -133,7 +133,7 @@ OpenOffice_Dev
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
 			BASEPRODUCTVERSION 2.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update24.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
@@ -250,7 +250,7 @@ BrOffice
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			ADDSYSTEMINTEGRATION 1
@@ -303,7 +303,7 @@ BrOffice_wJRE
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
@@ -356,7 +356,7 @@ BrOffice_Dev
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
 			ABOUTBOXPRODUCTVERSION 2.4.0
-			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
@@ -440,7 +440,7 @@ OpenOffice_woURE
             LONG_PRODUCTEXTENSION
             USERDIRPRODUCTVERSION 2
             ABOUTBOXPRODUCTVERSION 2.4.0
-            REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+			REGISTRATIONURL http://registration.services.openoffice.org/OOo2.4/register.html?id=${INSTANCE_URN}&amp;cid=923142
             UPDATEURL http://update24.services.openoffice.org/ProductUpdateService/check.Update
             ADD_INCLUDE_FILES cliureversion.mk
             EVAL
