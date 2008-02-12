@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:46:46 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <svx/editstat.hxx>
 #include <svx/escpitem.hxx>
 #include <svx/flditem.hxx>
+#include <svx/numitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/inethist.hxx>
@@ -572,72 +573,27 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
 //
 
-String lcl_GetRomanStr( USHORT nNo )
-{
-    String aStr;
-    if( nNo < 4000 )        // mehr kann nicht dargestellt werden
-    {
-//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//                          (Dummy),1000,500,100,50,10,5,1
-        const sal_Char *cRomanArr = "mdclxvi--";    // +2 Dummy-Eintraege !!
-        USHORT nMask = 1000;
-        while( nMask )
-        {
-            BYTE nZahl = BYTE(nNo / nMask);
-            BYTE nDiff = 1;
-            nNo %= nMask;
-
-            if( 5 < nZahl )
-            {
-                if( nZahl < 9 )
-                    aStr += *(cRomanArr-1);
-                ++nDiff;
-                nZahl -= 5;
-            }
-            switch( nZahl )
-            {
-            case 3:     { aStr += *cRomanArr; }
-            case 2:     { aStr += *cRomanArr; }
-            case 1:     { aStr += *cRomanArr; }
-                        break;
-
-            case 4:     {
-                          aStr += *cRomanArr;
-                          aStr += *(cRomanArr-nDiff);
-                        }
-                        break;
-            case 5:     { aStr += *(cRomanArr-nDiff); }
-                        break;
-            }
-
-            nMask /= 10;            // zur naechsten Dekade
-            cRomanArr += 2;
-        }
-    }
-    return aStr;
-}
-
-String lcl_GetCharStr( USHORT nNo )
+String lcl_GetCharStr( sal_Int32 nNo )
 {
     DBG_ASSERT( nNo, "0 ist eine ungueltige Nummer !!" );
     String aStr;
 
-    const USHORT coDiff = 'Z' - 'A' +1;
-    USHORT nCalc;
+    const sal_Int32 coDiff = 'Z' - 'A' +1;
+    sal_Int32 nCalc;
 
     do {
         nCalc = nNo % coDiff;
         if( !nCalc )
             nCalc = coDiff;
         aStr.Insert( (sal_Unicode)('a' - 1 + nCalc ), 0 );
-        nNo = sal::static_int_cast<USHORT>( nNo - nCalc );
+        nNo = sal::static_int_cast<sal_Int32>( nNo - nCalc );
         if( nNo )
             nNo /= coDiff;
     } while( nNo );
     return aStr;
 }
 
-String lcl_GetNumStr( USHORT nNo, SvxNumType eType )
+String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
 {
     String aTmpStr( '0' );
     if( nNo )
@@ -651,7 +607,10 @@ String lcl_GetNumStr( USHORT nNo, SvxNumType eType )
 
         case SVX_ROMAN_UPPER:
         case SVX_ROMAN_LOWER:
-            aTmpStr = lcl_GetRomanStr( nNo );
+            if( nNo < 4000 )
+                aTmpStr = SvxNumberFormat::CreateRomanString( nNo, ( eType == SVX_ROMAN_UPPER ) );
+            else
+                aTmpStr.Erase();
             break;
 
         case SVX_NUMBER_NONE:
@@ -667,7 +626,7 @@ String lcl_GetNumStr( USHORT nNo, SvxNumType eType )
             break;
         }
 
-        if( SVX_CHARS_UPPER_LETTER == eType || SVX_ROMAN_UPPER == eType )
+        if( SVX_CHARS_UPPER_LETTER == eType )
             aTmpStr.ToUpperAscii();
     }
     return aTmpStr;
@@ -694,9 +653,9 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     {
         TypeId aType = pFieldData->Type();
         if (aType == TYPE(SvxPageField))
-            aRet = lcl_GetNumStr( (USHORT)aData.nPageNo,aData.eNumType );
+            aRet = lcl_GetNumStr( aData.nPageNo,aData.eNumType );
         else if (aType == TYPE(SvxPagesField))
-            aRet = lcl_GetNumStr( (USHORT)aData.nTotalPages,aData.eNumType );
+            aRet = lcl_GetNumStr( aData.nTotalPages,aData.eNumType );
         else if (aType == TYPE(SvxTimeField))
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         else if (aType == TYPE(SvxFileField))
