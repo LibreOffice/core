@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.200 $
+ *  $Revision: 1.201 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:27:56 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -943,9 +943,10 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 ::rtl::OUString sTemp;
                 if ( (aAny >>= sTemp) && sTemp.getLength() )
                 {
-                    if ( !sTemp.equalsAscii( "1.0") && !sTemp.equalsAscii("1.1") )
+                    double nVersion = sTemp.toDouble();
+                    if ( nVersion > 1.10001 )
                     {
-                        // newer ODF version than OOo2.4
+                        // ODF version greater than 1.1 - added some decimal places to be safe against floating point conversion errors (hack)
                         sfx2::NewerVersionWarningDialog aDlg( NULL );
                         aDlg.Execute();
                     }
