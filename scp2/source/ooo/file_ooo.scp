@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.227 $
+ *  $Revision: 1.228 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-15 10:34:47 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3325,7 +3325,7 @@ File gid_File_Dat_Root5
 End
 #endif
 
-#ifdef MACOSX
+#if defined MACOSX && !defined QUARTZ
 File gid_File_Bin_Macosxrc
     TXT_FILE_BODY;
     Dir = gid_Dir_User;
@@ -3334,7 +3334,24 @@ File gid_File_Bin_Macosxrc
 End
 #endif
 
-#ifdef MACOSX
+#ifdef MACOSX 
+File gid_File_App_PkgInfo
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "PkgInfo";
+End
+#endif
+
+#ifdef MACOSX 
+File gid_File_App_InfoPlist
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "Info.plist";
+    Styles = (SCPZIP_REPLACE);
+End
+#endif
+
+#if defined MACOSX && !defined QUARTZ
 File gid_File_App_Bundle
     ARCHIVE_TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents;
@@ -3348,6 +3365,15 @@ File gid_File_Icns_Bundle
     ARCHIVE_TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents_Resources;
     Name = "osxicons.zip";
+    Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Res_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Resources;
+    Name = "osxres.zip";
     Styles = (ARCHIVE);
 End
 #endif
