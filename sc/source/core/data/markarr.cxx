@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:06:54 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,41 +50,34 @@
 
 //------------------------------------------------------------------------
 
-ScMarkArray::ScMarkArray()
+ScMarkArray::ScMarkArray() :
+    nCount( 0 ),
+    nLimit( 0 ),
+    pData( NULL )
 {
-    nCount = nLimit = 1;
-    pData = new ScMarkEntry[1];
-    if (pData)
-    {
-        pData[0].nRow = MAXROW;
-        pData[0].bMarked = FALSE;
-    }
+    // special case "no marks" with pData = NULL
 }
 
 //------------------------------------------------------------------------
 
 ScMarkArray::~ScMarkArray()
 {
-    if (pData)
-        delete[] pData;
+    delete[] pData;
 }
 
 //------------------------------------------------------------------------
 
 void ScMarkArray::Reset( BOOL bMarked )
 {
-    if (pData)
-    {
-        delete[] pData;
+    // always create pData here
+    // (or have separate method to ensure pData)
 
-        nCount = nLimit = 1;
-        pData = new ScMarkEntry[1];
-        if (pData)
-        {
-            pData[0].nRow = MAXROW;
-            pData[0].bMarked = bMarked;
-        }
-    }
+    delete[] pData;
+
+    nCount = nLimit = 1;
+    pData = new ScMarkEntry[1];
+    pData[0].nRow = MAXROW;
+    pData[0].bMarked = bMarked;
 }
 
 //------------------------------------------------------------------------
@@ -153,6 +146,9 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
         }
         else
         {
+            if (!pData)
+                Reset(FALSE);   // create pData for further processing - could use special case handling!
+
             SCSIZE nNeeded = nCount + 2;
             if ( nLimit < nNeeded )
             {
@@ -325,11 +321,6 @@ BOOL ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
     return bRet;
 }
 
-BOOL ScMarkArray::HasMarks() const
-{
-    return ( nCount > 1 || pData[0].bMarked );
-}
-
 void ScMarkArray::SwapCol(ScMarkArray& rMarkArray)
 {
     SCSIZE nTemp = rMarkArray.nCount;
@@ -376,6 +367,9 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 
 SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, BOOL bUp ) const
 {
+    if (!pData)
+        const_cast<ScMarkArray*>(this)->Reset(FALSE);   // create pData for further processing
+
     SCsROW nRet = nRow;
     if (VALIDROW(nRow))
     {
@@ -399,6 +393,9 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, BOOL bUp ) const
 
 SCROW ScMarkArray::GetMarkEnd( SCROW nRow, BOOL bUp ) const
 {
+    if (!pData)
+        const_cast<ScMarkArray*>(this)->Reset(FALSE);   // create pData for further processing
+
     SCROW nRet;
     SCSIZE nIndex;
     Search(nRow, nIndex);
