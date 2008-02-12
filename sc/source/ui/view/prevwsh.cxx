@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:50:40 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -710,6 +710,14 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+        case SID_PREVIEW_MARGIN:
+            {
+                BOOL bMargin = pPreview->GetPageMargins();
+                pPreview->SetPageMargins( !bMargin );
+                pPreview->Invalidate();
+                rReq.Done();
+            }
+            break;
         case SID_PRINTPREVIEW:
         case SID_PREVIEW_CLOSE:
             //  print preview is now always in the same frame as the tab view
@@ -792,8 +800,8 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxBoolItem( nWhich, TRUE ) );
                 break;
             case SID_FORMATPAGE:
-                //! bei geschuetzten Tabellen ???
-                if (pDocShell->IsReadOnly())
+            case SID_PREVIEW_MARGIN:
+                if( pDocShell->IsReadOnly() )
                     rSet.DisableItem( nWhich );
                 break;
         }
