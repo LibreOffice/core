@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:28:16 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,6 +353,8 @@ Base3D* Base3D::Create(OutputDevice* pOutDev, BOOL bForcePrinter)
             if(bForcePrinter)
             {
                 DBG_ERROR("Base3D::Create(): Printer renderer not supported ATM, if needed migrate from old goodies lib.");
+                // #i82966# fallback to default renderer instead of returning NULL
+                pRetval = new Base3DDefault(pOutDev);
                 //pRetval = new Base3DPrinter(pOutDev);
             }
             else if(bOwnDevice)
