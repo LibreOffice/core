@@ -8,7 +8,7 @@ mkdir: %_DEST%\bin%_EXT%\desktop-integration\pkg
 
 ..\%__SRC%\misc\*.ico %_DEST%\res%_EXT%\icons\*.ico
 ..\%__SRC%\misc\*.gif %_DEST%\res%_EXT%\icons\*.gif
-..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%\*.zip
 ..\%__SRC%\bin\*.tar.gz %_DEST%\bin%_EXT%\*.tar.gz
 ..\%__SRC%\bin\rpm\*.tar.gz %_DEST%\bin%_EXT%\desktop-integration\rpm\*.tar.gz
 ..\%__SRC%\bin\deb\*.tar.gz %_DEST%\bin%_EXT%\desktop-integration\deb\*.tar.gz
@@ -23,3 +23,5 @@ mkdir: %_DEST%\bin%_EXT%\desktop-integration\pkg
 ..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
 ..\%__SRC%\misc\desktopshare\*.desktop %_DEST%\pck%_EXT%\*.desktop
+..\%__SRC%\misc\PkgInfo %_DEST%\pck%_EXT%\PkgInfo
+..\%__SRC%\misc\Info.plist %_DEST%\pck%_EXT%\Info.plist
