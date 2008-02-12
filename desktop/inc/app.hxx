@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:29:39 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,11 @@ class Desktop : public Application
 
         static void             PreloadModuleData( CommandLineArgs* );
         static void             PreloadConfigurationData();
+
+        static ::rtl::OUString  GetProductVersionID();
+        static ::rtl::OUString  GetInstanceUUID( const ::rtl::OUString& rProductVersionID );
+        static ::rtl::OUString  GenerateUUID();
+        static void             StoreInstanceUUID( const ::rtl::OUString& rProductVersionID, const ::rtl::OUString& rUUID );
 
         Reference<XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
