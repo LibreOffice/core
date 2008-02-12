@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:40:08 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,39 +807,45 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
         if( m_pHandler != NULL )
         {
+            //JL: We must not pass a particular usage in the requiredUsages argument (the 4th) because,
+            //then ONLY these are verified. For example, we pass
+            //certificateUsageSSLClient | certificateUsageSSLServer. Then checking a certificate which
+            // is a valid certificateUsageEmailSigner but no certificateUsageSSLClient | certificateUsageSSLServer
+            //will result in CertificateValidity::INVALID.
+            //Only if the argument "requiredUsages" has a value (other than zero)
+            //then the function will return SECFailure in case
+            //the certificate is not suitable for the provided usage. That is, in the previous
+            //example the function returns SECFailure.
             status = CERT_VerifyCertificate(
                 m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
-                (SECCertificateUsage)certificateUsageSSLClient | certificateUsageSSLServer, timeboundary , NULL, log, &usage);
+                (SECCertificateUsage)0, timeboundary , NULL, log, &usage);
         }
         else
         {
             status = CERT_VerifyCertificate(
                 CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
-                PR_TRUE, (SECCertificateUsage)certificateUsageSSLClient | certificateUsageSSLServer, timeboundary ,NULL, log, &usage);
+                PR_TRUE, (SECCertificateUsage)0, timeboundary ,NULL, log, &usage);
         }
 
         if( status == SECSuccess )
         {
-            //do not use certificateUsageSSLClient. The problem is that we create the certificate
-            //from the embedded certificate and another time, when we view the certificate path,
-            //it is probably taken from store. In the first case cert->trust is NIL, in the  latter
-            //it contains a value that may make the verification fail in CERT_VerifyCertificate
-            //The expression  if ( flags & CERTDB_TRUSTED ) fails. This occurred with openssl
-            //generated certificates, when the trust settings of the root certificate had only the
-            //item "This certificate can identify web sites" checked.
-
-
-            // (TKR) use for backward compatibility (digital signatures)
-
-
             // JL & TKR : certificateUsageUserCertImport,
             // certificateUsageVerifyCA and certificateUsageAnyCA dont check the chain
+
+            //When an intermediate or root certificate is checked then we expect the usage
+            //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
+            //the button "This certificate can identify websites" is checked. If for example only
+            //"This certificate can identify mail users" is set then the end certificate can
+            //be validated and the returned usage will conain certificateUsageEmailRecipient.
+            //But checking directly the root or intermediate certificate will fail. In the
+            //certificate path view the end certificate will be shown as valid but the others
+            //will be displayed as invalid.
 
             if (usage & certificateUsageEmailSigner
                 || usage & certificateUsageEmailRecipient
                 || usage & certificateUsageSSLCA
                 || usage & certificateUsageSSLServer
-                // || usage & certificateUsageSSLClient
+                || usage & certificateUsageSSLClient
                 // || usage & certificateUsageUserCertImport
                 // || usage & certificateUsageVerifyCA
                 || usage & certificateUsageStatusResponder )
@@ -848,41 +854,45 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
             else
                 validity = csss::CertificateValidity::INVALID;
 
-            //---
         }
         // always check what kind of error occured, even SECStatus says Success
-        CERTVerifyLogNode *logNode = 0;
+        //JL: When we call CERT_VerifyCertificate whit the parameter requiredUsages == 0 then all
+        //possible usages are checked. Then there are certainly usages for which the certificate
+        //is not intended. For these usages there will be NO flag set in the argument returnedUsages
+        // (the last arg) and there will be error codes set in the log. Therefore we cannot
+        //set the CertificateValidity to INVALID because there is a log entry.
+//         CERTVerifyLogNode *logNode = 0;
 
-        logNode = log->head;
-        while ( logNode != NULL )
-        {
-            sal_Int32 errorCode = 0;
-            errorCode = logNode->error;
+//         logNode = log->head;
+//         while ( logNode != NULL )
+//         {
+//             sal_Int32 errorCode = 0;
+//             errorCode = logNode->error;
 
-            switch ( errorCode )
-            {
-                // JL & TKR: Any error are treated as invalid because we cannot say that we get all occurred errors from NSS
-/*
-                case ( SEC_ERROR_REVOKED_CERTIFICATE ):
-                    validity |= csss::CertificateValidity::REVOKED;
-                break;
-                case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
-                    validity |= csss::CertificateValidity::TIME_INVALID;
-                break;
-                case ( SEC_ERROR_CERT_USAGES_INVALID):
-                    validity |= csss::CertificateValidity::INVALID;
-                break;
-                case ( SEC_ERROR_UNTRUSTED_ISSUER ):
-                case ( SEC_ERROR_UNTRUSTED_CERT ):
-                    validity |= csss::CertificateValidity::UNTRUSTED;
-                break;
- */
-                default:
-                    validity |= csss::CertificateValidity::INVALID;
-                break;
-            }
-            logNode = logNode->next;
-        }
+//             switch ( errorCode )
+//             {
+//                 // JL & TKR: Any error are treated as invalid because we cannot say that we get all occurred errors from NSS
+// /*
+//                 case ( SEC_ERROR_REVOKED_CERTIFICATE ):
+//                     validity |= csss::CertificateValidity::REVOKED;
+//                 break;
+//                 case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
+//                     validity |= csss::CertificateValidity::TIME_INVALID;
+//                 break;
+//                 case ( SEC_ERROR_CERT_USAGES_INVALID):
+//                     validity |= csss::CertificateValidity::INVALID;
+//                 break;
+//                 case ( SEC_ERROR_UNTRUSTED_ISSUER ):
+//                 case ( SEC_ERROR_UNTRUSTED_CERT ):
+//                     validity |= csss::CertificateValidity::UNTRUSTED;
+//                 break;
+//  */
+//                 default:
+//                     validity |= csss::CertificateValidity::INVALID;
+//                 break;
+//             }
+//             logNode = logNode->next;
+//        }
     }
     else
     {
