@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:57:24 $
+#   last change: $Author: vg $ $Date: 2008-02-12 16:25:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,23 +46,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:tests by codegen.pl 
 SHL1OBJS=  \
     $(SLO)$/basegfx1d.obj \
     $(SLO)$/basegfx2d.obj \
     $(SLO)$/basegfx3d.obj \
-    $(SLO)$/tools.obj	
+    $(SLO)$/testtools.obj	
+
+# linking statically against basegfx parts
+SHL1LIBS=\
+    $(SLB)$/curve.lib	\
+    $(SLB)$/matrix.lib	\
+    $(SLB)$/numeric.lib	\
+    $(SLB)$/point.lib	\
+    $(SLB)$/polygon.lib	\
+    $(SLB)$/range.lib	\
+    $(SLB)$/tuple.lib	\
+    $(SLB)$/tools.lib	\
+    $(SLB)$/vector.lib
 
 SHL1TARGET= tests
-SHL1STDLIBS= 	$(TOOLSLIB)		 \
-                $(SALLIB)		 \
-                $(BASEGFXLIB)	 \
-                $(VOSLIB)		 \
+SHL1STDLIBS= \
+                $(SALLIB)        \
                 $(CPPUHELPERLIB) \
-                $(CPPULIB)		 \
-                $(CPPUNITLIB)	 \
-                $(UNOTOOLSLIB)	
+                        $(CPPULIB)       \
+                $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
@@ -79,3 +86,14 @@ SLOFILES=$(SHL1OBJS)
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk 
+
+# --- Enable testshl2 execution in normal build ------------------------
+
+$(MISC)$/unittest_succeeded : $(SHL1TARGETN)
+        @echo ----------------------------------------------------------
+        @echo - start unit test on library $(SHL1TARGETN)
+        @echo ----------------------------------------------------------
+        testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
+        $(TOUCH) $@
+
+ALLTAR : $(MISC)$/unittest_succeeded
