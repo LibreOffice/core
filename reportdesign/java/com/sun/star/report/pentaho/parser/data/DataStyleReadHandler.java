@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataStyleReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:08 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,9 @@ public class DataStyleReadHandler extends ElementReadHandler
                                               final Attributes atts)
       throws SAXException
   {
-    if (OfficeNamespaces.DATASTYLE_NS.equals(uri))
+    if (OfficeNamespaces.DATASTYLE_NS.equals(uri) || OfficeNamespaces.STYLE_NS.equals(uri) )
     {
-      final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName));
+      final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName) || "currency-symbol".equals(tagName));
       children.add(xrh);
       return xrh;
     }
