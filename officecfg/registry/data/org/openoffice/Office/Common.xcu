@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:24:43 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,17 @@
   </node>
   <node oor:name="Help">
     <node oor:name="Registration">
-      <prop oor:name="URL">
+      <prop oor:name="TemplateURL">
         <value>${REGISTRATIONURL}</value>
       </prop>
+      <prop oor:name="URL">
+        <value/>
+      </prop>
+      <prop oor:name="ProductVersionID">
+        <value>${SERVICETAG_URN}</value>
+      </prop>
+      <node oor:name="ProductVersions">
+      </node>
     </node>
     <prop oor:name="System">
       <value install:module="unx">UNIX</value>
