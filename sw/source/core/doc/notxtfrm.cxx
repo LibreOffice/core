@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:48:11 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -942,8 +942,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 pGrfNd->UpdateLinkWithInputStream();
             }
             // <--
-            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
-                pGrfNd->IsLinkedFile() )
+            // --> OD 2008-01-30 #i85717#
+//            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
+            else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
+                        rGrfObj.GetType() == GRAPHIC_NONE ) &&
+                      pGrfNd->IsLinkedFile() )
+            // <--
             {
                 Size aTmpSz;
                 ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
