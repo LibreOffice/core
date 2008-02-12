@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basegfx2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:08:37 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -941,6 +941,102 @@ public:
         CPPUNIT_ASSERT_MESSAGE("multiply: none compact", temp == perspectivePerspectiveProd);
     }
 
+    void impFillMatrix(B2DHomMatrix& rSource, double fScaleX, double fScaleY, double fShearX, double fRotate)
+    {
+        // fill rSource with a linear combination of scale, shear and rotate
+        rSource.identity();
+        rSource.scale(fScaleX, fScaleY);
+        rSource.shearX(fShearX);
+        rSource.rotate(fRotate);
+    }
+
+    bool impDecomposeComposeTest(double fScaleX, double fScaleY, double fShearX, double fRotate)
+    {
+        // linear combine matrix with given values
+        B2DHomMatrix aSource;
+        impFillMatrix(aSource, fScaleX, fScaleY, fShearX, fRotate);
+
+        // decompose that matrix
+        B2DTuple aDScale;
+        B2DTuple aDTrans;
+        double fDRot;
+        double fDShX;
+        bool bWorked = aSource.decompose(aDScale, aDTrans, fDRot, fDShX);
+
+        // linear combine another matrix with decomposition results
+        B2DHomMatrix aRecombined;
+        impFillMatrix(aRecombined, aDScale.getX(), aDScale.getY(), fDShX, fDRot);
+
+        // if decomposition worked, matrices need to be the same
+        return bWorked && aSource == aRecombined;
+    }
+
+    void decompose()
+    {
+        // test matrix decompositions. Each matrix decomposed and rebuilt
+        // using the decompose result should be the same as before. Test
+        // with all ranges of values. Translations are not tested since these
+        // are just the two rightmost values and uncritical
+        static double fSX(10.0);
+        static double fSY(12.0);
+        static double fR(45.0 * F_PI180);
+        static double fS(15.0 * F_PI180);
+
+        // check all possible scaling combinations
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test A1", impDecomposeComposeTest(fSX, fSY, 0.0, 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test A2", impDecomposeComposeTest(-fSX, fSY, 0.0, 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test A3", impDecomposeComposeTest(fSX, -fSY, 0.0, 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test A4", impDecomposeComposeTest(-fSX, -fSY, 0.0, 0.0));
+
+        // check all possible scaling combinations with positive rotation
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test B1", impDecomposeComposeTest(fSX, fSY, 0.0, fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test B2", impDecomposeComposeTest(-fSX, fSY, 0.0, fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test B3", impDecomposeComposeTest(fSX, -fSY, 0.0, fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test B4", impDecomposeComposeTest(-fSX, -fSY, 0.0, fR));
+
+        // check all possible scaling combinations with negative rotation
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test C1", impDecomposeComposeTest(fSX, fSY, 0.0, -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test C2", impDecomposeComposeTest(-fSX, fSY, 0.0, -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test C3", impDecomposeComposeTest(fSX, -fSY, 0.0, -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test C4", impDecomposeComposeTest(-fSX, -fSY, 0.0, -fR));
+
+        // check all possible scaling combinations with positive shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test D1", impDecomposeComposeTest(fSX, fSY, tan(fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test D2", impDecomposeComposeTest(-fSX, fSY, tan(fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test D3", impDecomposeComposeTest(fSX, -fSY, tan(fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test D4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), 0.0));
+
+        // check all possible scaling combinations with negative shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test E1", impDecomposeComposeTest(fSX, fSY, tan(-fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test E2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test E3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), 0.0));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test E4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), 0.0));
+
+        // check all possible scaling combinations with positive rotate and positive shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test F1", impDecomposeComposeTest(fSX, fSY, tan(fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test F2", impDecomposeComposeTest(-fSX, fSY, tan(fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test F3", impDecomposeComposeTest(fSX, -fSY, tan(fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test F4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), fR));
+
+        // check all possible scaling combinations with negative rotate and positive shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test G1", impDecomposeComposeTest(fSX, fSY, tan(fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test G2", impDecomposeComposeTest(-fSX, fSY, tan(fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test G3", impDecomposeComposeTest(fSX, -fSY, tan(fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test G4", impDecomposeComposeTest(-fSX, -fSY, tan(fS), -fR));
+
+        // check all possible scaling combinations with positive rotate and negative shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test H1", impDecomposeComposeTest(fSX, fSY, tan(-fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test H2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test H3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test H4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), fR));
+
+        // check all possible scaling combinations with negative rotate and negative shear
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test I1", impDecomposeComposeTest(fSX, fSY, tan(-fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test I2", impDecomposeComposeTest(-fSX, fSY, tan(-fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test I3", impDecomposeComposeTest(fSX, -fSY, tan(-fS), -fR));
+        CPPUNIT_ASSERT_MESSAGE("decompose: error test I4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), -fR));
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -952,6 +1048,7 @@ public:
     CPPUNIT_TEST(translate);
     CPPUNIT_TEST(shear);
     CPPUNIT_TEST(multiply);
+    CPPUNIT_TEST(decompose);
     CPPUNIT_TEST_SUITE_END();
 
 }; // class b2dhommatrix
