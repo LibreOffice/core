@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:24:31 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,33 +367,42 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
     USHORT nLast = 0;
     for (SCSIZE i=0; i<nCount; i++)
     {
-        BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i);
+        size_t nIndex;
+        SCROW nRegionEndRow;
+        BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i, nIndex, nRegionEndRow );
+        if ( nRegionEndRow > nEndRow )
+            nRegionEndRow = nEndRow;
+        SCSIZE nMoreRows = nRegionEndRow - ( nStartRow+i );     // additional equal rows after first
+
         bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
         if ( bAutoSize || bForce )
         {
             if (nExtra)
             {
                 if (bAutoSize)
-                    pRowFlags->SetValue( nStartRow+i, nRowFlag | CR_MANUALSIZE);
+                    pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
             }
             else if (!bAutoSize)
-                pRowFlags->SetValue( nStartRow+i, nRowFlag & ~CR_MANUALSIZE);
+                pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
 
-            if (nLast)
+            for (SCSIZE nInner = i; nInner <= i + nMoreRows; ++nInner)
             {
-                if (pHeight[i]+nExtra == nLast)
-                    nRngEnd = nStartRow+i;
-                else
+                if (nLast)
                 {
-                    bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
-                    nLast = 0;
+                    if (pHeight[nInner]+nExtra == nLast)
+                        nRngEnd = nStartRow+nInner;
+                    else
+                    {
+                        bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
+                        nLast = 0;
+                    }
                 }
-            }
-            if (!nLast)
-            {
-                nLast = pHeight[i]+nExtra;
-                nRngStart = nStartRow+i;
-                nRngEnd = nStartRow+i;
+                if (!nLast)
+                {
+                    nLast = pHeight[nInner]+nExtra;
+                    nRngStart = nStartRow+nInner;
+                    nRngEnd = nStartRow+nInner;
+                }
             }
         }
         else
@@ -402,6 +411,7 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
                 bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
             nLast = 0;
         }
+        i += nMoreRows;     // already handled - skip
     }
     if (nLast)
         bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
@@ -466,12 +476,27 @@ BOOL ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     return bFound;
 */
 
+const SCCOL SC_COLUMNS_STOP = 30;
+
 BOOL ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const
 {
     BOOL bFound = FALSE;
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
     SCCOL i;
+
+    for (i=0; i<=MAXCOL; i++)               // Daten testen
+        if (!aCol[i].IsEmptyVisData(bNotes))
+        {
+            bFound = TRUE;
+            if (i>nMaxX)
+                nMaxX = i;
+            SCROW nColY = aCol[i].GetLastVisDataPos(bNotes);
+            if (nColY > nMaxY)
+                nMaxY = nColY;
+        }
+
+    SCCOL nMaxDataX = nMaxX;
 
     for (i=0; i<=MAXCOL; i++)               // Attribute testen
     {
@@ -492,16 +517,32 @@ BOOL ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const
             --nMaxX;
     }
 
-    for (i=0; i<=MAXCOL; i++)               // Daten testen
-        if (!aCol[i].IsEmptyVisData(bNotes))
+    if ( nMaxX < nMaxDataX )
+    {
+        nMaxX = nMaxDataX;
+    }
+    else if ( nMaxX > nMaxDataX )
+    {
+        SCCOL nAttrStartX = nMaxDataX + 1;
+        while ( nAttrStartX < MAXCOL )
         {
-            bFound = TRUE;
-            if (i>nMaxX)
-                nMaxX = i;
-            SCROW nColY = aCol[i].GetLastVisDataPos(bNotes);
-            if (nColY > nMaxY)
-                nMaxY = nColY;
+            SCCOL nAttrEndX = nAttrStartX;
+            while ( nAttrEndX < MAXCOL && aCol[nAttrStartX].IsVisibleAttrEqual(aCol[nAttrEndX+1]) )
+                ++nAttrEndX;
+            if ( nAttrEndX + 1 - nAttrStartX >= SC_COLUMNS_STOP )
+            {
+                // found equally-formatted columns behind data -> stop before these columns
+                nMaxX = nAttrStartX - 1;
+
+                // also don't include default-formatted columns before that
+                SCROW nDummyRow;
+                while ( nMaxX > nMaxDataX && !aCol[nMaxX].GetLastVisibleAttr( nDummyRow ) )
+                    --nMaxX;
+                break;
+            }
+            nAttrStartX = nAttrEndX + 1;
         }
+    }
 
     rEndCol = nMaxX;
     rEndRow = nMaxY;
