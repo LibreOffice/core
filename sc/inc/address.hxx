@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:51:08 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // The maximum values. Defines are needed for preprocessor checks in
 // bcaslot.cxx, otherwise type safe constants are preferred.
 #define MAXROWCOUNT_DEFINE 65536
-#define MAXCOLCOUNT_DEFINE 256
+#define MAXCOLCOUNT_DEFINE 1024
 
 // Count values
 const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
