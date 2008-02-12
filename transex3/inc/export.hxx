@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:16 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,6 +360,8 @@ public:
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
     static void getRandomName( ByteString& sRandStr );
+
+    static void replaceEncoding( ByteString& rString );
 
     static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
