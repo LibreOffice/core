@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:24:09 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,10 +254,10 @@ bool PreviewRenderer::Initialize (
             break;
         // Set background color of page view and outliner.
         svtools::ColorConfig aColorConfig;
-        pPageView->SetApplicationBackgroundColor(
-            pPage->GetBackgroundColor(pPageView));
+        const Color aPageBackgroundColor(pPage->GetPageBackgroundColor(pPageView));
+        pPageView->SetApplicationBackgroundColor(aPageBackgroundColor);
         SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
-        rOutliner.SetBackgroundColor(pPage->GetBackgroundColor(pPageView));
+        rOutliner.SetBackgroundColor(aPageBackgroundColor);
         rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
         mpView->SetApplicationBackgroundColor(
             Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
