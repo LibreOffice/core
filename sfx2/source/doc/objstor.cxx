@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:12:04 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,7 +775,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
                 if ( bOk )
                 {
-                    bHasName = sal_True;
+                    // the document loaded from template has no name
+                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+                    if ( !pTemplateItem || !pTemplateItem->GetValue() )
+                        bHasName = sal_True;
+
                     if ( !IsReadOnly() && IsLoadReadonly() )
                         SetReadOnlyUI();
                 }
