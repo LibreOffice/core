@@ -1,0 +1,33 @@
+#
+# Configure file for UI colors in OpenOffice.org Mac OS X port
+# Created by Mox  2006/01/27
+# This file follows the format of .kderc files
+#
+# The settings under label [General] are used. Modify it according to
+# the other labels, if you want to change it.
+#
+
+[Aqua]
+background=244,244,244
+foreground=0,0,0
+selectBackground=52,112,204
+selectForeground=255,255,255
+
+[Graphite]
+background=244,244,244
+foreground=0,0,0
+selectBackground=94,106,121
+selectForeground=255,255,255
+
+[General]
+background=244,244,244
+foreground=0,0,0
+selectBackground=52,112,204
+selectForeground=255,255,255
+#comment out if you want to use a customized font
+# only one font can be choosen
+#font=Andale Mono,Andale Sans UI
+# another nice font example
+#font=Futura, Futura Sans UI
+#Apple recommandation is Lucida Grande
+font=Lucida Grande, Futura Sans UI
