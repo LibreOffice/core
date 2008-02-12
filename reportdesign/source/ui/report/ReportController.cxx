@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:58:28 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2573,7 +2573,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     static USHORT pRanges[] =
     {
         RPTUI_ID_LRSPACE,RPTUI_ID_BRUSH,
-        SID_ATTR_METRIC,SID_ATTR_METRIC
+        SID_ATTR_METRIC,SID_ATTR_METRIC,
+        0
     };
 
     try
