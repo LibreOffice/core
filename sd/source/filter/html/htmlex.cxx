@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:39:09 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,7 +907,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     }
 
     // Standard Hintergrundfarbe aus Background der MasterPage der ersten Seite
-    maBackColor = pPage->GetBackgroundColor();
+    maBackColor = pPage->GetPageBackgroundColor();
 
     if( maTextColor == COL_AUTO )
     {
@@ -1176,7 +1176,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         if( mbDocColors )
         {
             SetDocColors( pPage );
-//          maBackColor = pPage->GetBackgroundColor();
+//          maBackColor = pPage->GetPageBackgroundColor();
         }
 
 // HTML Kopf
@@ -1193,11 +1193,11 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
 // Seitentitel
         aStr.AppendAscii( "<h1>" );
-        aStr += CreateTextForTitle(pOutliner,pPage, pPage->GetBackgroundColor());
+        aStr += CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor());
         aStr.AppendAscii( "</h1>\r\n" );
 
 // Gliederungstext schreiben
-        aStr += CreateTextForPage( pOutliner, pPage, true, pPage->GetBackgroundColor() );
+        aStr += CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() );
 
 // Notizen
         if(mbNotes)
