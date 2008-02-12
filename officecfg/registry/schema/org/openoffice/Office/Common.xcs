@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:01 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 17:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,6 +853,17 @@
 Dymamic border coloring means that when the mouse is hovered over a control, and when a control receives the focus, this is indicated with special border colors.</desc>
 				</info>
 				<value>false</value>
+			</prop>
+		</group>
+		<group oor:name="ProductVersionID">
+			<info>
+				<desc>Stores registration data which is related to a specific product version.</desc>
+			</info>
+			<prop oor:name="InstanceUUID" oor:type="xs:string">
+				<info>
+					<desc>An instance UUID associated with the product version ID.</desc>
+				</info>
+				<value/>
 			</prop>
 		</group>
 	</templates>
@@ -3311,9 +3322,16 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<author>FS</author>
 					<desc>Contains various settings regarding the product registration feature.</desc>
 				</info>
+				<prop oor:name="TemplateURL" oor:type="xs:string">
+					<info>
+						<desc>Contains a string specifying the URL with placeholders to be used for online registration.</desc>
+					</info>
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				</prop>
 				<prop oor:name="URL" oor:type="xs:string">
 					<info>
-						<desc>Contains a string specifying the URL to be used for online registration.</desc>
+						<desc>Contains a string specifying the real URL to be used for online registration.</desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -3337,6 +3355,17 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 					<value>true</value>
 				</prop>
+				<prop oor:name="ProductVersionID" oor:type="xs:string">
+					<info>
+						<desc>Current product ID.</desc>
+					</info>
+				</prop>
+				<set oor:name="ProductVersions" oor:node-type="ProductVersionID">
+					<info>
+						<author>CD</author>
+						<desc>Specifies product specific IDs and associated instance UUIDs</desc>
+					</info>
+				</set>
 			</group>
 		</group>
 		<group oor:name="Java">
