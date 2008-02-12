@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:02:45 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 14:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,6 +536,8 @@ public:
     BYTE bInWriteTOX : 1;       // true: all content are in a TOX
     BYTE bFtnAtTxtEnd : 1;      // true: all FTN at Textend
     BYTE bEndAtTxtEnd : 1;      // true: all END at Textend
+    BYTE bHasHdr : 1;
+    BYTE bHasFtr : 1;
 
 
 
