@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:46 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,12 @@
 #include "svtools/svmedit.hxx"
 #include "svtools/lstner.hxx"
 #include "svtools/xtextedt.hxx"
-//#include <vcl/mnemonic.hxx>
-//#include <vcl/tabpage.hxx>
-//#include <vcl/fixed.hxx>
-//#include <vcl/button.hxx>
-//#include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>
-//#include <svtools/wizardmachine.hxx>
+#include "vcl/threadex.hxx"
 
 
 
-//#include "boost/bind.hpp"
+#include "boost/bind.hpp"
 #include "dp_gui_shared.hxx"
 #include "license_dialog.hxx"
 #include "dp_gui.hrc"
@@ -322,29 +317,17 @@ void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 //______________________________________________________________________________
 sal_Int16 LicenseDialog::execute() throw (RuntimeException)
 {
-    //if (! dp_gui::DialogImpl::s_dialog.is())
-    //{
-    //
-    //}
+    return vcl::solarthread::syncExecute(
+        boost::bind( &LicenseDialog::solar_execute, this));
+}
 
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+sal_Int16 LicenseDialog::solar_execute()
+{
     std::auto_ptr<LicenseDialogImpl> dlg(new LicenseDialogImpl(
         VCLUnoHelper::GetWindow(m_parent), m_xComponentContext, m_sLicenseText));
 
-    //if (m_initialTitle.getLength() > 0) {
-//          dialog->SetText( m_initialTitle );
-//          m_initialTitle = OUString();
-//      }
-
     return dlg->Execute();
 }
-
-// XJobExecutor
-//______________________________________________________________________________
-//void LicenseDialog::trigger( OUString const & event ) throw (RuntimeException)
-//{
-//    execute();
-//}
 
 } // namespace dp_gui
 
