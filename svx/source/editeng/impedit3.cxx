@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:59:22 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2672,7 +2672,11 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
 
     if ( ( ( rFont.GetColor() == COL_AUTO ) || ( IsForceAutoColor() ) ) && pOut )
     {
-        if ( IsAutoColorEnabled() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+        // #i75566# Do not use AutoColor when printing OR Pdf export
+        const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
+        const bool bPDFExporting(0 != pOut->GetPDFWriter());
+
+        if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {
             // Never use WindowTextColor on the printer
             rFont.SetColor( GetAutoColor() );
