@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-27 12:06:42 $
+#   last change: $Author: vg $ $Date: 2008-02-12 13:24:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ SLOFILES =  \
 EXCEPTIONSFILES= \
     $(SLO)$/autonamecache.obj \
     $(SLO)$/bcaslot.obj \
+    $(SLO)$/cell2.obj \
     $(SLO)$/column.obj \
     $(SLO)$/documen2.obj \
     $(SLO)$/document.obj \
