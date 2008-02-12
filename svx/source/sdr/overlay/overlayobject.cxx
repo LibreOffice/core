@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlayobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:12:59 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,13 +198,10 @@ namespace sdr
         {
             for(sal_uInt32 a(0L); a < rPolyPolygon.count();a ++)
             {
-                const basegfx::B2DPolygon aPolygon = rPolyPolygon.getB2DPolygon(a);
-                DBG_ASSERT(aPolygon.count() > 1L, "OverlayObject::ImpDrawStripes: Too view points in stripe polygon (!)");
-                const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(0L));
-                const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 1L));
-                const Point aStartPoint(FRound(aStart.getX()), FRound(aStart.getY()));
-                const Point aEndPoint(FRound(aEnd.getX()), FRound(aEnd.getY()));
-                rOutputDevice.DrawLine(aStartPoint, aEndPoint);
+                // #i82889# Do not just paint from start point to end point
+                // assuming that each partial Polygon contains a single line. Instead,
+                // paint the whole polygon
+                rOutputDevice.DrawPolyLine(Polygon(rPolyPolygon.getB2DPolygon(a)));
             }
         }
 
