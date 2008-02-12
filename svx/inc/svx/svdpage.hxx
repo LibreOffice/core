@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:37:17 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,10 +595,12 @@ public:
     FASTBOOL HasTransparentObjects( BOOL bCheckForAlphaChannel = FALSE ) const;
 
     /** *deprecated* returns an averaged background color of this page */
-    Color GetBackgroundColor() const;
+    // #i75566# GetBackgroundColor -> GetPageBackgroundColor
+    Color GetPageBackgroundColor() const;
 
     /** *deprecated* returns an averaged background color of this page */
-    Color GetBackgroundColor( SdrPageView* pView ) const;
+    // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
+    Color GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay = true) const;
 
     /** this method returns true if the object from the ViewObjectContact should
         be visible on this page while rendering.
