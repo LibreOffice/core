@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:45:06 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+
+#include <view/SlsPageObjectViewObjectContact.hxx>
 
 // Uncomment the define below to have some more OSL_TRACE messages.
 #ifdef DEBUG
@@ -207,8 +209,10 @@ template <class Queue, class RequestData, class BitmapFactory>
                     // Save some values while we hold the mutex of the queue.
                     pPage = pRequest->GetPage();
                     aDirtyRectangle = pRequest->GetViewContact().GetPaintRectangle();
-                        // - mrView.GetPageViewPvNum(0)->GetOffset();
-                    aPreviewPixelSize = pRequest->GetPreviewPixelBox(*mrView.GetWindow()).GetSize();
+                    aPreviewPixelSize = pRequest->GetBoundingBox(
+                        *mrView.GetWindow(),
+                        view::PageObjectViewObjectContact::PreviewBoundingBox,
+                        view::PageObjectViewObjectContact::PixelCoordinateSystem).GetSize();
                     bRequestIsValid = true;
                     SSCD_SET_STATUS(pPage,RENDERING);
                 }
