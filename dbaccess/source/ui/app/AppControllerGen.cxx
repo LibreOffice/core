@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:41:45 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,11 +653,11 @@ void OApplicationController::addDocumentListener(const Reference< XComponent >& 
     {
         try
         {
+            m_aDocuments[_xDocument] = _xDefintion;
+            _xDocument->addEventListener(static_cast<XFrameActionListener*>(this));
             Reference<XPropertySet> xProp(_xDefintion,UNO_QUERY_THROW);
             if ( xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
                 xProp->addPropertyChangeListener(PROPERTY_NAME,static_cast<XPropertyChangeListener*>(this));
-            m_aDocuments[_xDocument] = _xDefintion;
-            _xDocument->addEventListener(static_cast<XFrameActionListener*>(this));
         }
         catch(Exception&)
         {
