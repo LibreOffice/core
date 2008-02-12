@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:14:57 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,7 +495,25 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPai
             if( pPage )
             {
                 SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
-                rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pPgView) );
+                bool bScreenDisplay(true);
+
+                if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
+                {
+                    // #i75566# printing; suppress AutoColor BackgroundColor generation
+                    // for visibility reasons by giving GetPageBackgroundColor()
+                    // the needed hint
+                    bScreenDisplay = false;
+                }
+
+                if(bScreenDisplay && pOutDev && pOutDev->GetPDFWriter())
+                {
+                    // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
+                    bScreenDisplay = false;
+                }
+
+                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+                // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+                rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
             }
         }
 
@@ -701,7 +719,7 @@ sal_Bool View::BeginTextEdit(
         ::Outliner* pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
-            pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor(pPV) );
+            pOL->SetBackgroundColor( pObj->GetPage()->GetPageBackgroundColor(pPV) );
 
         pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
         pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
