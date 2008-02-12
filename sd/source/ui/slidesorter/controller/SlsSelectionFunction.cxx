@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:17:50 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,9 +499,6 @@ void SelectionFunction::Deactivate()
 
 void SelectionFunction::ScrollStart (void)
 {
-    // About to start scrolling (i.e. the whole window content changes
-    // without complete redraws).  Hide the overlays to avoid conflicts.
-    mrController.GetView().GetOverlay().HideAndSave();
 }
 
 
@@ -509,8 +506,6 @@ void SelectionFunction::ScrollStart (void)
 
 void SelectionFunction::ScrollEnd (void)
 {
-    // Scrolling has ended so we can turn on the overlays again.
-    mrController.GetView().GetOverlay().Restore();
 }
 
 
@@ -542,7 +537,6 @@ void SelectionFunction::DoPaste (void)
 
 void SelectionFunction::Paint (const Rectangle&, ::sd::Window* )
 {
-    mrController.GetView().GetOverlay().Paint ();
 }
 
 
