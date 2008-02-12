@@ -1,36 +1,42 @@
-*** misc/openssl-0.9.8e/Makefile.shared	Sat May 20 17:51:09 2006
---- misc/build/openssl-0.9.8e/Makefile.shared	Fri Nov 23 17:19:37 2007
+*** misc/openssl-0.9.8g/Makefile.shared	Sun Sep 16 23:11:51 2007
+--- misc/build/openssl-0.9.8g/Makefile.shared	Mon Feb  4 21:12:51 2008
 ***************
-*** 248,260 ****
-  	@ $(CALC_VERSIONS); \
-  	INHIBIT_SYMLINKS=yes; \
+*** 238,251 ****
   	SHLIB=cyg$(LIBNAME); \
-! 	expr $(PLATFORM) : 'mingw' > /dev/null && SHLIB=$(LIBNAME)eay32; \
+  	base=-Wl,--enable-auto-image-base; \
+  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
+! 		SHLIB=$(LIBNAME)eay32; base=; \
+  	fi; \
   	SHLIB_SUFFIX=.dll; \
-! 	SHLIB_SOVER=-$(LIBVERSION); \
+  	LIBVERSION="$(LIBVERSION)"; \
+! 	SHLIB_SOVER=${LIBVERSION:+"-$(LIBVERSION)"}; \
   	ALLSYMSFLAGS='-Wl,--whole-archive'; \
   	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
-  	base=;  [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
 ! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
-  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
-  	$(LINK_SO_A) || exit 1; \
---- 248,260 ----
+  	$(LINK_SO_O)
+  link_a.cygwin:
   	@ $(CALC_VERSIONS); \
-  	INHIBIT_SYMLINKS=yes; \
+--- 238,255 ----
   	SHLIB=cyg$(LIBNAME); \
-! 	expr $(PLATFORM) : 'mingw' > /dev/null && SHLIB=$(LIBNAME)eay32 && [ $(LIBNAME) = "crypto" ] && SHLIB=libeay32 ; \
+  	base=-Wl,--enable-auto-image-base; \
+  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
+! 		SHLIB=$(LIBNAME)eay32; \
+!                 if test $(LIBNAME) = "crypto"; then \
+!                         SHLIB=libeay32; \
+!                 fi; \
+!                 base=; \
+  	fi; \
   	SHLIB_SUFFIX=.dll; \
+  	LIBVERSION="$(LIBVERSION)"; \
 ! 	SHLIB_SOVER=; \
   	ALLSYMSFLAGS='-Wl,--whole-archive'; \
   	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
-  	base=;  [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
 ! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--export-all-symbols -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
-  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
-  	$(LINK_SO_A) || exit 1; \
-*** misc/openssl-0.9.8e/ms/mingw32.bat	Fri May  5 22:19:33 2006
---- misc/build/openssl-0.9.8e/ms/mingw32.bat	Fri Nov 23 17:19:37 2007
+  	$(LINK_SO_O)
+  link_a.cygwin:
+  	@ $(CALC_VERSIONS); \
+*** misc/openssl-0.9.8g/ms/mingw32.bat	Fri May  5 22:19:33 2006
+--- misc/build/openssl-0.9.8g/ms/mingw32.bat	Mon Feb  4 20:11:50 2008
 ***************
 *** 79,91 ****
   rem copy ms\tlhelp32.h outinc
@@ -66,8 +72,8 @@
   if errorlevel 1 goto end
   
   echo Done compiling OpenSSL
-*** misc/openssl-0.9.8e/util/pl/Mingw32.pl	Fri May  5 22:19:35 2006
---- misc/build/openssl-0.9.8e/util/pl/Mingw32.pl	Fri Nov 23 17:19:37 2007
+*** misc/openssl-0.9.8g/util/pl/Mingw32.pl	Fri May  5 22:19:35 2006
+--- misc/build/openssl-0.9.8g/util/pl/Mingw32.pl	Mon Feb  4 21:11:50 2008
 ***************
 *** 6,16 ****
   $o='/';
