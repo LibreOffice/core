@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:23:22 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 16:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,17 @@ PackageState getPackageState(
 //==============================================================================
 struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
 {
+    //Keeps the parameters of the XModifyListener::modified call so they can be
+    //used later in the event handler asyncModified. It also keeps the NodeImpl
+    //instance alive so that the posted events (to ourself) can always be processed
+    struct ModifiedParams
+    {   ModifiedParams(Reference<XCommandEnvironment> const & _xCmdEnv, Reference<XInterface> const & _xNodeImpl);
+        //The argument supplied to XModifyListener::modified
+        Reference<XCommandEnvironment> xCmdEnv;
+        //This reference keeps the NodeImpl alive until the event has been processed
+        Reference<XInterface> xNodeImpl;
+    };
+
     DialogImpl::TreeListBoxImpl * m_treelb;
     SvLBoxEntry * m_lbEntry;
     DialogImpl::TreeListBoxImpl::t_nodeList::iterator m_it;
@@ -113,6 +124,7 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
     Reference<deployment::XPackageManager> m_xPackageManager;
     Reference<deployment::XPackage> m_xPackage;
     Reference<css::uno::XComponentContext> m_xComponentContext;
+    bool m_bDisposing;
 
     virtual ~NodeImpl();
 
@@ -128,8 +140,12 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
           m_factoryURL( factoryURL ),
           m_xPackageManager( xPackageManager ),
           m_xPackage( xPackage ),
-          m_xComponentContext(xComponentContext)
+          m_xComponentContext(xComponentContext),
+          m_bDisposing(false)
         {}
+
+    //Perfom asynchronous Modified call in main thread
+    DECL_LINK(asyncModified, ModifiedParams*);
 
     Image getIcon() const;
 
@@ -143,8 +159,15 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
     // XModifyListener
     virtual void SAL_CALL modified( lang::EventObject const & )
         throw (RuntimeException);
+
 };
 
+NodeImpl::ModifiedParams::ModifiedParams(
+    Reference<XCommandEnvironment> const & _xCmdEnv, Reference<XInterface> const & _xNodeImpl):
+    xCmdEnv(_xCmdEnv),
+    xNodeImpl(_xNodeImpl)
+{
+}
 //______________________________________________________________________________
 inline NodeImpl * NodeImpl::get( SvLBoxEntry * entry )
 {
@@ -233,11 +256,14 @@ Image NodeImpl::getIcon() const
 }
 
 // XEventListener
-//______________________________________________________________________________
+//Can be called from a separate thread, for example the thread which installes the
+//extension updates. Therefore we make sure to modifiy the gui only in the main thread.
+//We keep the NodeImpl alive by incresing the ref count (ModifiedParams).
 void NodeImpl::disposing( lang::EventObject const & evt )
     throw (RuntimeException)
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
+    m_bDisposing = true;
 
     OSL_ASSERT( m_lbEntry != 0 );
     if (m_lbEntry != 0)
@@ -271,6 +297,16 @@ void NodeImpl::disposing( lang::EventObject const & evt )
         m_treelb->m_dialog->updateButtonStates();
 }
 
+//void NodeImpl::asyncDisposing( Reference<XCommandEnvironment> const & xCmdEnv )
+//{
+//    Application::PostUserEvent(
+//        LINK( this, NodeImpl, asyncDisposing), 0)
+//}
+//
+//IMPL_LINK(NodeImpl, asyncDisposing, void*, EMPTYARG)
+//{
+//}
+
 struct iface_hash {
     ::std::size_t operator () (Reference<deployment::XPackage> const &x) const {
         return reinterpret_cast< ::std::size_t >(
@@ -279,57 +315,88 @@ struct iface_hash {
 };
 
 //______________________________________________________________________________
+//Can be called from a separate thread, for example the thread which installes the
+//extension updates. Therefore we make sure to modifiy the gui only in the main thread.
+//We keep the NodeImpl alive by incresing the ref count (ModifiedParams).
 void NodeImpl::modified( Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    Application::PostUserEvent(
+        LINK( this, NodeImpl, asyncModified ),
+        new ModifiedParams(
+            xCmdEnv,  Reference<XInterface>(static_cast<OWeakObject*>(this), UNO_QUERY_THROW)));
+}
 
-    if (m_xPackage.is())
+IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
+{
+    //m_bDisposing is guarded by the solar mutex
+    if (! m_bDisposing)
     {
-        switch (getPackageState( m_xPackage, xCmdEnv ))
-        {
-        case REGISTERED:
-            m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 2 );
-            break;
-        case NOT_REGISTERED:
-            m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 2 );
-            break;
-        case AMBIGUOUS:
-            m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 2 );
-            break;
-        case NOT_AVAILABLE:
-            m_treelb->SetEntryText( String(), m_lbEntry, 2 );
-            break;
-        }
+        const Reference<XCommandEnvironment> & xCmdEnv = pModifiedParams->xCmdEnv;
+        try {
+            if (m_xPackage.is())
+            {
+                switch (getPackageState( m_xPackage, xCmdEnv ))
+                {
+                case REGISTERED:
+                    m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 2 );
+                    break;
+                case NOT_REGISTERED:
+                    m_treelb->SetEntryText( m_treelb->m_strDisabled, m_lbEntry, 2 );
+                    break;
+                case AMBIGUOUS:
+                    m_treelb->SetEntryText( m_treelb->m_strUnknown, m_lbEntry, 2 );
+                    break;
+                case NOT_AVAILABLE:
+                    m_treelb->SetEntryText( String(), m_lbEntry, 2 );
+                    break;
+                }
 
-        if (m_treelb->m_dialog != 0)
-            m_treelb->m_dialog->updateButtonStates( xCmdEnv );
-    }
-    else
-    {
-        typedef ::std::hash_set<
-            Reference<deployment::XPackage>, iface_hash > t_set;
-        t_set tlboxPackages;
-        sal_Int32 count = m_treelb->GetLevelChildCount(m_lbEntry);
-        sal_Int32 pos = 0;
-        for ( ; pos < count; ++pos ) {
-            tlboxPackages.insert(
-                NodeImpl::get(
-                    m_treelb->GetEntry(m_lbEntry, pos) )->m_xPackage );
-        }
+                if (m_treelb->m_dialog != 0)
+                    m_treelb->m_dialog->updateButtonStates( xCmdEnv );
+            }
+            else
+            {
+                typedef ::std::hash_set<
+                    Reference<deployment::XPackage>, iface_hash > t_set;
+                t_set tlboxPackages;
+                sal_Int32 count = m_treelb->GetLevelChildCount(m_lbEntry);
+                sal_Int32 pos = 0;
+                for ( ; pos < count; ++pos ) {
+                    tlboxPackages.insert(
+                        NodeImpl::get(
+                            m_treelb->GetEntry(m_lbEntry, pos) )->m_xPackage );
+                }
 
-        const Sequence< Reference<deployment::XPackage> > packages(
-            m_xPackageManager->getDeployedPackages(
-                Reference<task::XAbortChannel>(), xCmdEnv ) );
-        t_set::const_iterator const iEnd( tlboxPackages.end() );
-        for ( pos = packages.getLength(); pos--; )
-        {
-            t_set::iterator iFind( tlboxPackages.find( packages[ pos ] ) );
-            if (iFind == iEnd) {
-                m_treelb->addPackageNode(
-                    m_lbEntry, packages[ pos ], xCmdEnv );
+                const Sequence< Reference<deployment::XPackage> > packages(
+                    m_xPackageManager->getDeployedPackages(
+                        Reference<task::XAbortChannel>(), xCmdEnv ) );
+                t_set::const_iterator const iEnd( tlboxPackages.end() );
+                for ( pos = packages.getLength(); pos--; )
+                {
+                    t_set::iterator iFind( tlboxPackages.find( packages[ pos ] ) );
+                    if (iFind == iEnd) {
+                        m_treelb->addPackageNode(
+                            m_lbEntry, packages[ pos ], xCmdEnv );
+                    }
+                }
             }
         }
-    }
+        catch (...)
+        {
+            //Make sure we release the reference to NodeImpl
+            pModifiedParams->xNodeImpl.clear();
+            pModifiedParams->xCmdEnv.clear();
+            delete pModifiedParams;
+            throw;
+        }
+    } // if (!m_bDisposing)
+
+    //Make sure we release the reference to NodeImpl
+    pModifiedParams->xNodeImpl.clear();
+    pModifiedParams->xCmdEnv.clear();
+    delete pModifiedParams;
+
+    return 0;
 }
 
 // XModifyListener
