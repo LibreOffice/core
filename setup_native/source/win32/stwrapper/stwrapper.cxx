@@ -96,7 +96,7 @@ static LPCTSTR GetOperatingSystemString()
     ZeroMemory( &aOsVersion, sizeof( OSVERSIONINFO ));
     aOsVersion.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
 
-    _tcscpy( g_szOperatingSystem, TEXT( "Windows" ));
+    _tcscpy( g_szOperatingSystem, TEXT( "Microsoft Windows" ));
 
     // Try to determine OS version
     if ( GetVersionEx( &aOsVersion ))
@@ -147,7 +147,6 @@ static LPCTSTR GetOperatingSystemString()
             }
             break;
         }
-        _tcscat( g_szOperatingSystem, aOsVersion.szCSDVersion );
     }
 
     return g_szOperatingSystem;
@@ -235,6 +234,9 @@ static void SafeCopy( LPTSTR lpTarget, LPCSTR lpSource, size_t nMaxLen )
 
 int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 {
+    const DWORD ERR_NO_RECORDS_FOUND = 225;
+    const DWORD ERR_DUP_RECORD       = 226;
+
     DWORD dwExitCode = (DWORD)1;
 
     int     nArgs  = 0;
@@ -247,20 +249,22 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
         return 0;
     }
 
-    if ( nArgs == 11 )
+    if ( nArgs >= 11 )
     {
         TCHAR szTargetURN[1024]         = {0};
         TCHAR szProductName[1024]       = {0};
         TCHAR szProductVersion[1024]    = {0};
         TCHAR szParentProductName[1024] = {0};
         TCHAR szProductSource[1024]     = {0};
+        TCHAR szInstanceURN[1024]       = {0};
 
+//      -i)  INSTANCE_URN="$2"; shift;;
 //      -t)  TARGET_URN="$2"; shift;;
 //      -p)  PRODUCT_NAME="$2"; shift;;
 //      -e)  PRODUCT_VERSION="$2"; shift;;
 //      -P)  PARENT_PRODUCT_NAME="$2"; shift;;
 //      -S)  PRODUCT_SOURCE="$2"; shift;;
-//      "usage: $0 -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name>"
+//      "usage: $0 [-i <instance urn>] -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name>"
 
         int i = 1;
         while ( i < nArgs )
@@ -272,6 +276,14 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                 {
                     switch ( lpArg[1] )
                     {
+                        case 'i':
+                        {
+                            if ( i < nArgs )
+                                ++i;
+                            SafeCopy( szInstanceURN, lpArgs[i], elementsof( szInstanceURN ));
+                            break;
+                        }
+
                         case 't':
                         {
                             if ( i < nArgs )
@@ -319,59 +331,79 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 
         if ( RetrieveExecutablePath( g_szSTInstallationPath ) == PATHRESULT_OK )
         {
+            BOOL bSuccess = TRUE;
+            BOOL bProcessStarted = FALSE;
+
             STARTUPINFO         aStartupInfo;
             PROCESS_INFORMATION aProcessInfo;
+            LPTSTR              lpCommandLine = 0;
 
             ZeroMemory( &aStartupInfo, sizeof( aStartupInfo ));
             aStartupInfo.cb = sizeof( aStartupInfo );
+            ZeroMemory( &aProcessInfo, sizeof( aProcessInfo ));
 
-            // TEST=`${STCLIENT} -f -t ${TARGET_URN}`
-            LPTSTR lpCommandLine = new TCHAR[MAXCMDLINELEN];
+            if ( _tcslen( szInstanceURN ) == 0 )
+            {
+                // TEST=`${STCLIENT} -f -t ${TARGET_URN}`
+                lpCommandLine = new TCHAR[MAXCMDLINELEN];
 
-            _tcscpy( lpCommandLine, TEXT( "\"" ));
-            _tcscat( lpCommandLine, g_szSTInstallationPath );
-            _tcscat( lpCommandLine, TEXT( "\"" ));
-            _tcscat( lpCommandLine, TEXT( " -f" ));
-            _tcscat( lpCommandLine, TEXT( " -t "));
-            _tcscat( lpCommandLine, TEXT( "\"" ));
-            _tcscat( lpCommandLine, szTargetURN );
-            _tcscat( lpCommandLine, TEXT( "\"" ));
+                _tcscpy( lpCommandLine, TEXT( "\"" ));
+                _tcscat( lpCommandLine, g_szSTInstallationPath );
+                _tcscat( lpCommandLine, TEXT( "\"" ));
+                _tcscat( lpCommandLine, TEXT( " -f" ));
+                _tcscat( lpCommandLine, TEXT( " -t "));
+                _tcscat( lpCommandLine, TEXT( "\"" ));
+                _tcscat( lpCommandLine, szTargetURN );
+                _tcscat( lpCommandLine, TEXT( "\"" ));
 
-            BOOL bSuccess = FALSE;
-            bSuccess = CreateProcess(
-                               NULL,
-                               lpCommandLine,
-                               NULL,
-                               NULL,
-                               TRUE,
-                               CREATE_NO_WINDOW,
-                               NULL,
-                               NULL,
-                               &aStartupInfo,
-                               &aProcessInfo );
+                bSuccess = CreateProcess(
+                                   NULL,
+                                   lpCommandLine,
+                                   NULL,
+                                   NULL,
+                                   TRUE,
+                                   CREATE_NO_WINDOW,
+                                   NULL,
+                                   NULL,
+                                   &aStartupInfo,
+                                   &aProcessInfo );
 
-            // wait until process ends to receive exit code
-            WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
+                bProcessStarted = TRUE;
 
-            delete []lpCommandLine;
+                // wait until process ends to receive exit code
+                WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
+
+                delete []lpCommandLine;
+            }
 
             if ( bSuccess )
             {
-                DWORD dwSTClientExitCode = 0;
-                GetExitCodeProcess( aProcessInfo.hProcess, &dwSTClientExitCode );
-
-                CloseHandle( aProcessInfo.hProcess );
-                CloseHandle( aProcessInfo.hThread );
-
-                if ( dwSTClientExitCode != 0 )
+                DWORD dwSTClientExitCode( ERR_NO_RECORDS_FOUND );
+                if ( bProcessStarted )
                 {
-                    // output=`${STCLIENT} -a -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A ${uname} -z global`
+                    GetExitCodeProcess( aProcessInfo.hProcess, &dwSTClientExitCode );
+                    dwSTClientExitCode &= 0x000000ff;
+
+                    CloseHandle( aProcessInfo.hProcess );
+                    CloseHandle( aProcessInfo.hThread );
+                }
+
+                if ( dwSTClientExitCode == ERR_NO_RECORDS_FOUND )
+                {
+                    // output=`${STCLIENT} -a [-i "${INSTANCE_URN}"] -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A ${uname} -z global`
                     lpCommandLine = new TCHAR[MAXCMDLINELEN];
 
                     _tcscpy( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, g_szSTInstallationPath );
                     _tcscat( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, TEXT( " -a" ));
+                    if ( _tcslen( szInstanceURN ) > 0 )
+                    {
+                        _tcscat( lpCommandLine, TEXT( " -i " ));
+                        _tcscat( lpCommandLine, TEXT( "\"" ));
+                        _tcscat( lpCommandLine, szInstanceURN );
+                        _tcscat( lpCommandLine, TEXT( "\"" ));
+                    }
                     _tcscat( lpCommandLine, TEXT( " -p " ));
                     _tcscat( lpCommandLine, TEXT( "\"" ));
                     _tcscat( lpCommandLine, szProductName );
@@ -422,14 +454,36 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 
                     dwSTClientExitCode = 0;
                     GetExitCodeProcess( aProcessInfo.hProcess, &dwSTClientExitCode );
+                    dwSTClientExitCode &= 0x000000ff;
 
                     CloseHandle( aProcessInfo.hProcess );
                     CloseHandle( aProcessInfo.hThread );
-                    return dwSTClientExitCode;
+
+                    if ( !bSuccess )
+                        dwExitCode = 1; // couldn't start stclient process
+                    else
+                    {
+                        if ( _tcslen( szInstanceURN ) > 0 )
+                        {
+                            // don't register again if we registered in a previous run
+                            // or we called stclient successfully.
+                            if (( dwSTClientExitCode == ERR_DUP_RECORD ) ||
+                                ( dwSTClientExitCode == 0 ))
+                                dwExitCode = 0;
+                            else
+                                dwExitCode = 1; // other errors
+                        }
+                        else
+                            dwExitCode = ( dwSTClientExitCode == 0 ) ? 0 : 1;
+                    }
                 }
+                else if ( dwSTClientExitCode == 0 )
+                    dwExitCode = 0; // already registered
                 else
-                    dwExitCode = 0; // we are already registered
+                    dwExitCode = 1; // other errors
             }
+            else
+                dwExitCode = 1; // couldn't start stclient
         }
         else
             dwExitCode = 1; // no executable found
