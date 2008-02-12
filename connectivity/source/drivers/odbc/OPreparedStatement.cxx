@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:31:01 $
+ *  last change: $Author: vg $ $Date: 2008-02-12 13:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +575,11 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             break;
         case DataType::DECIMAL:
         case DataType::NUMERIC:
-            setString(parameterIndex,::comphelper::getString(x));
+            {
+                ORowSetValue aValue;
+                aValue.fill(x);
+                setString(parameterIndex,aValue);
+            }
             break;
         default:
             ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
