@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mav $ $Date: 2008-02-12 16:00:36 $
+#   last change: $Author: mav $ $Date: 2008-02-13 12:07:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ COMMONS_HTTPCLIENT_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-httpcl
 COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/commons-logging-1.1.1.jar
 .ENDIF
 
-ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dxml-apis-jar=$(XML_APIS_JAR)
+ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR)
 
 ALLTAR: ANTBUILD
 
