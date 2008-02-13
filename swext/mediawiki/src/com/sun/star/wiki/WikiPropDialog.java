@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-13 12:05:55 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 13:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import java.util.Hashtable;
 
 public class WikiPropDialog extends WikiDialog{
 
@@ -308,6 +309,8 @@ public class WikiPropDialog extends WikiDialog{
             SetThrobberVisible( true );
             SetThrobberActive( true );
 
+            // the following method might show a dialog, should be used in main thread
+            final Hashtable aWikiSettings = m_aSettings.getSettingByUrl( m_sWikiEngineURL );
             if ( Helper.AllowThreadUsage( m_xContext ) )
             {
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
@@ -319,7 +322,7 @@ public class WikiPropDialog extends WikiDialog{
                             if ( m_aWikiEditor != null )
                             {
                                 Thread.yield();
-                                m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog );
+                                m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog, aWikiSettings );
                             }
                         }
                         finally
@@ -343,7 +346,7 @@ public class WikiPropDialog extends WikiDialog{
                 {
                     if ( m_aWikiEditor != null )
                     {
-                        m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog );
+                        m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog, aWikiSettings );
                     }
                 } catch( java.lang.Exception e )
                 {}

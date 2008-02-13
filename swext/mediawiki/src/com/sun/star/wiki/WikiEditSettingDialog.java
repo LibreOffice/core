@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-13 12:05:55 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 13:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,30 @@ public class WikiEditSettingDialog extends WikiDialog
     {
         SetThrobberVisible( false );
         EnableControls( true );
-        return super.show();
+        boolean bResult = super.show();
+
+        try
+        {
+            if ( bResult && Helper.PasswordStoringIsAllowed( m_xContext )
+              && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
+            {
+                String sURL = (String)setting.get( "Url" );
+                String sUserName = (String)setting.get( "Username" );
+                String sPassword = (String)setting.get( "Password" );
+
+                if ( sURL != null && sURL.length() > 0 && sUserName != null && sUserName.length() > 0 && sPassword != null && sPassword.length() > 0 )
+                {
+                    String[] pPasswords = { sPassword };
+                    Helper.GetPasswordContainer( m_xContext ).addPersistent( sURL, sUserName, pPasswords, Helper.GetInteractionHandler( m_xContext ) );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        return bResult;
     }
 
     public void EnableControls( boolean bEnable )
@@ -266,20 +289,6 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // no cleaning of the settings is necessary
                                     Settings.getSettings( m_xContext ).addWikiCon( setting );
                                     Settings.getSettings( m_xContext ).storeConfiguration();
-                                }
-
-                                if ( Helper.PasswordStoringIsAllowed( m_xContext )
-                                  && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
-                                {
-                                    String[] pPasswords = { sPassword };
-                                    try
-                                    {
-                                        Helper.GetPasswordContainer( m_xContext ).addPersistent( sMainURL, sUserName, pPasswords, Helper.GetInteractionHandler( m_xContext ) );
-                                    }
-                                    catch( Exception e )
-                                    {
-                                        e.printStackTrace();
-                                    }
                                 }
 
                                 m_bAction = true;

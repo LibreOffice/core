@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Settings.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 10:31:29 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 13:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,23 @@ public class Settings
             if ( u1.equals( sUrl ) )
             {
                 ht = h1;
+                try
+                {
+                    String sUserName = (String)ht.get( "Username" );
+                    String aPassword = (String)ht.get( "Password" );
+                    if ( sUserName != null && sUserName.length() > 0 && ( aPassword == null || aPassword.length() == 0 ) )
+                    {
+                        String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, sUrl, sUserName );
+                        if ( pPasswords != null && pPasswords.length > 0 )
+                            ht.put( "Password", pPasswords[0] );
+                    }
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+
+                break;
             }
         }
         return ht;
@@ -304,12 +321,7 @@ public class Settings
                         {
                             String aUsername = AnyConverter.toString( xProps.getPropertyValue( "UserName" ) );
                             if ( aUsername != null && aUsername.length() > 0 )
-                            {
                                 ht.put( "Username", aUsername );
-                                String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, allCons[i], aUsername );
-                                if ( pPasswords != null && pPasswords.length > 0 )
-                                    ht.put( "Password", pPasswords[0] );
-                            }
                         }
                     }
                     catch( Exception e )

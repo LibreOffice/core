@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-12 18:41:06 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 13:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ public final class WikiEditorImpl extends WeakBase
         }
     }
 
-    public boolean SendArticleImpl( WikiPropDialog aSendDialog )
+    public boolean SendArticleImpl( WikiPropDialog aSendDialog, Hashtable aWikiSetting )
     {
         boolean bResult = false;
 
@@ -370,10 +370,8 @@ public final class WikiEditorImpl extends WeakBase
 
             try
             {
-                Hashtable wikiSettings = m_aSettings.getSettingByUrl( aSendDialog.m_sWikiEngineURL );
-
                 // TODO: stop progress spinning
-                WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), wikiSettings, true, aSendDialog );
+                WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), aWikiSetting, true, aSendDialog );
 
                 boolean bAllowSending = true;
                 if ( aArticle.NotExist() )
