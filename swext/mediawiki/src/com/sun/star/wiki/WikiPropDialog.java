@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-12 18:41:06 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 12:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,19 @@ public class WikiPropDialog extends WikiDialog{
 
         InitStrings( xContext );
         InitShowBrowser( xContext );
+        InitControls( xContext );
+    }
+
+    private void InitControls( XComponentContext xContext )
+    {
+        try
+        {
+            GetPropSet( "CommentText" ).setPropertyValue( "AutoVScroll", Boolean.TRUE );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
     }
 
     private void InitStrings( XComponentContext xContext )

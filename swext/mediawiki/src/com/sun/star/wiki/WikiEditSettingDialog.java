@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-11 12:44:22 $
+ *  last change: $Author: mav $ $Date: 2008-02-13 12:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
         InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
-        InitSaveCheckbox( xContext );
+        InitSaveCheckbox( xContext, false );
     }
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht, boolean bAllowURLChange )
@@ -76,14 +76,24 @@ public class WikiEditSettingDialog extends WikiDialog
         super( xContext, DialogURL );
         super.setMethods( Methods );
         setting = ht;
+
+        boolean bInitSaveCheckBox = false;
+
         try
         {
             XPropertySet xUrlField = GetPropSet( "UrlField" );
 
             xUrlField.setPropertyValue( "Text", ht.get( "Url" ) );
 
-            GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
-            // the password should be entered or the Cancel should be pressed
+            GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ) );
+
+            if ( Helper.PasswordStoringIsAllowed( m_xContext ) )
+            {
+                String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, (String)ht.get( "Url" ), (String)ht.get( "Username" ) );
+                bInitSaveCheckBox = ( pPasswords != null && pPasswords.length > 0 && pPasswords[0].equals( (String)ht.get( "Password" ) ) );
+            }
+
+            // the password should be entered by the user or the Cancel should be pressed
             // GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
         catch ( Exception ex )
@@ -96,7 +106,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
         InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
-        InitSaveCheckbox( xContext );
+        InitSaveCheckbox( xContext, bInitSaveCheckBox );
     }
 
     public boolean show( )
@@ -158,12 +168,12 @@ public class WikiEditSettingDialog extends WikiDialog
         }
     }
 
-    private void InitSaveCheckbox( XComponentContext xContext )
+    private void InitSaveCheckbox( XComponentContext xContext, boolean bInitSaveCheckBox )
     {
         XPropertySet xSaveCheck = GetPropSet( "SaveBox" );
         try
         {
-            xSaveCheck.setPropertyValue( "State", new Short( (short)0 ) );
+            xSaveCheck.setPropertyValue( "State", new Short( bInitSaveCheckBox ? (short)1 : (short)0 ) );
             xSaveCheck.setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( xContext ) ) );
         }
         catch( Exception e )
