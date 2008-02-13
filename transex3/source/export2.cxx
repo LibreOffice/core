@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:10:06 $
+ *  last change: $Author: vg $ $Date: 2008-02-13 15:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,7 +489,7 @@ void Export::replaceEncoding( ByteString& rString )
 {
 // &#x2122; -> \u2122
 
-    for( int idx = 0; idx <= rString.Len()-8 ; idx++ )
+    for( xub_StrLen idx = 0; idx <= rString.Len()-8 ; idx++ )
     {
         if( rString.GetChar( idx )   == '&' &&
             rString.GetChar( idx+1 ) == '#' &&
