@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gh $ $Date: 2008-02-15 11:28:59 $
+ *  last change: $Author: gh $ $Date: 2008-02-15 12:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -678,15 +678,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
             if ( StatementList::bExecuting )
                 m_pDbgWin->AddText( "In Execute " );
             if ( StatementList::IsInReschedule() )
-            {
-                m_pDbgWin->AddText( "In Reschedule FocusWindow: 0x" );
-                m_pDbgWin->AddText(
-                        String::CreateFromInt64(
-                            sal::static_int_cast< sal_Int64 >(
-                                reinterpret_cast< sal_IntPtr >(GetpApp()->GetFocusWindow())),
-                            16 ));
-                                m_pDbgWin->AddText( " " );
-            }
+                m_pDbgWin->AddText( "In Reschedule " );
             m_pDbgWin->AddText( "Leaving CommandHdl\n" );
 #endif
             return 0;        // Garnicht erst irgendwelchen blödsinn machen
