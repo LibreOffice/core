@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 14:36:39 $
+ *  last change: $Author: gh $ $Date: 2008-02-15 11:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ TTProfiler *StatementList::pProfiler = NULL;
 StatementList *StatementList::pFirst = NULL;
 BOOL StatementList::bReadingCommands = FALSE;
 BOOL StatementList::bIsInReschedule = FALSE;
+USHORT StatementList::nModalCount = 0;
 Window *StatementList::pLastFocusWindow = NULL;
 BOOL StatementList::bWasDragManager = FALSE;
 BOOL StatementList::bWasPopupMenu = FALSE;
