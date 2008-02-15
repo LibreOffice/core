@@ -1,0 +1,4 @@
+scx	scext	:	offuh comphelper lpsolve tools transex3 rsc NULL
+scx	scext									usr1	-	all	scx_mkout NULL
+scx	scext\prj								get		-	all	scx_prj NULL
+scx	scext\source\solver						nmake	-	all	scx_solver NULL

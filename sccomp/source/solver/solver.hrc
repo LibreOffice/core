@@ -1,0 +1,53 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: solver.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: nn $ $Date: 2008-02-15 15:19:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef SOLVER_HRC
+#define SOLVER_HRC
+
+#define SOLVER_RESOURCE_START       1000
+
+#define RID_SOLVER_COMPONENT        (SOLVER_RESOURCE_START)
+#define RID_PROPERTY_NONNEGATIVE    (SOLVER_RESOURCE_START + 1)
+#define RID_PROPERTY_INTEGER        (SOLVER_RESOURCE_START + 2)
+#define RID_PROPERTY_TIMEOUT        (SOLVER_RESOURCE_START + 3)
+#define RID_PROPERTY_EPSILONLEVEL   (SOLVER_RESOURCE_START + 4)
+#define RID_PROPERTY_LIMITBBDEPTH   (SOLVER_RESOURCE_START + 5)
+#define RID_ERROR_NONLINEAR         (SOLVER_RESOURCE_START + 6)
+#define RID_ERROR_EPSILONLEVEL      (SOLVER_RESOURCE_START + 7)
+#define RID_ERROR_INFEASIBLE        (SOLVER_RESOURCE_START + 8)
+#define RID_ERROR_UNBOUNDED         (SOLVER_RESOURCE_START + 9)
+#define RID_ERROR_TIMEOUT           (SOLVER_RESOURCE_START + 10)
+
+#endif
+
