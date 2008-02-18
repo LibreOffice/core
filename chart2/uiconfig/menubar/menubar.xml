@@ -49,7 +49,9 @@
                 <menu:menuitem menu:id=".uno:InsertLegend" menu:helpid="30516" menu:label="" />
             <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:InsertDescription" menu:helpid="30517" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertStatistics" menu:helpid="30556" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertTrendlines" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMeanValues" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertYErrorbars" menu:label="" />
             <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
         </menu:menupopup>
@@ -73,6 +75,9 @@
                     <menu:menuitem menu:id=".uno:XTitle" menu:helpid="30559" menu:label="" />
                     <menu:menuitem menu:id=".uno:YTitle" menu:helpid="30560" menu:label="" />
                     <menu:menuitem menu:id=".uno:ZTitle" menu:helpid="30561" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SecondaryXTitle" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SecondaryYTitle" menu:label="" />
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:AllTitles" menu:helpid="30562" menu:label="" />
                 </menu:menupopup>
