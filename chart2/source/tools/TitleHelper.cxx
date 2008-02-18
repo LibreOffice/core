@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:52 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,16 @@ rtl::OUString lcl_getIdentifierForTitle( TitleHelper::eTitleType nTitleIndex )
             static rtl::OUString m_aIdentifier( C2U( "@zaxis-title" ) );
             return m_aIdentifier;
         }
+        case TitleHelper::SECONDARY_X_AXIS_TITLE:
+        {
+            static rtl::OUString m_aIdentifier( C2U( "@secondaryxaxis-title" ) );
+            return m_aIdentifier;
+        }
+        case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+        {
+            static rtl::OUString m_aIdentifier( C2U( "@secondaryyaxis-title" ) );
+            return m_aIdentifier;
+        }
         default:
             OSL_ENSURE( false, "Unsupported Title-Type requested" );
             return ::rtl::OUString();
@@ -131,6 +141,14 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
             if( xDiagram.is())
                 xResult.set( AxisHelper::getAxis( 2, true, xDiagram ), uno::UNO_QUERY );
             break;
+        case TitleHelper::SECONDARY_X_AXIS_TITLE:
+            if( xDiagram.is())
+                xResult.set( AxisHelper::getAxis( 0, false, xDiagram ), uno::UNO_QUERY );
+            break;
+        case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+            if( xDiagram.is())
+                xResult.set( AxisHelper::getAxis( 1, false, xDiagram ), uno::UNO_QUERY );
+            break;
 
         case TitleHelper::MAIN_TITLE:
         default:
@@ -161,6 +179,8 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
         case TitleHelper::Z_AXIS_TITLE:
         case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
         case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+        case TitleHelper::SECONDARY_X_AXIS_TITLE:
+        case TitleHelper::SECONDARY_Y_AXIS_TITLE:
             xResult.set( lcl_getTitleParentFromDiagram( nTitleIndex, xDiagram ));
             break;
         default:
@@ -190,6 +210,29 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     uno::Reference< XTitle > xTitle;
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( eTitleType, xModel ) );
 
+    if( !xTitled.is() )
+    {
+        uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        uno::Reference< chart2::XAxis > xAxis;
+        switch( eTitleType )
+        {
+            case TitleHelper::SECONDARY_X_AXIS_TITLE:
+                xAxis = AxisHelper::createAxis( 0, false, xDiagram, xContext );
+                break;
+            case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+                xAxis = AxisHelper::createAxis( 1, false, xDiagram, xContext );
+               break;
+            default:
+               break;
+        }
+        uno::Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
+        if( xProps.is() )
+        {
+            xProps->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
+            xTitled = lcl_getTitleParent( eTitleType, xModel );
+        }
+    }
+
     if(xTitled.is())
     {
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
@@ -214,6 +257,8 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                 case TitleHelper::Z_AXIS_TITLE:
                 case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
                 case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+                case TitleHelper::SECONDARY_X_AXIS_TITLE:
+                case TitleHelper::SECONDARY_Y_AXIS_TITLE:
                     chart::TitleHelper::setCompleteString(
                         rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
                     break;
@@ -230,7 +275,10 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
             //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
             if( eTitleType == TitleHelper::X_AXIS_TITLE ||
-                eTitleType == TitleHelper::Y_AXIS_TITLE )
+                eTitleType == TitleHelper::Y_AXIS_TITLE ||
+                eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
+                eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE )
+
             {
                 try
                 {
@@ -242,7 +290,9 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                     {
                         double fNewAngleDegree = 90.0;
                         if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
-                            || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE) )
+                            || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
+                            || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
+                            || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                             xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
                     }
                 }
