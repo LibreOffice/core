@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,9 @@ public:
     void setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis );
     sal_Bool getGroupBarsPerAxis() const;
 
+    void setStartingAngle( sal_Int32 nStartingAngle );
+    sal_Int32 getStartingAngle() const;
+
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;
@@ -238,6 +241,8 @@ private: //member
     sal_Bool                m_bConnectBars;
 
     sal_Bool                m_bGroupBarsPerAxis;
+
+    sal_Int32               m_nStartingAngle;
 
     rtl::OUString           m_aSeriesParticle;
     rtl::OUString           m_aCID;
