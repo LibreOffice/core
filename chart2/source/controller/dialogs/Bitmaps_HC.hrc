@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps_HC.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:26:01 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #endif
 
 // RID_SCH_START is 30512 (see svtools/solar.hrc)
+
+// next free: 100
 
 #ifndef SC_HC_MASKCOLOR
 #define SC_HC_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
@@ -188,10 +190,12 @@
 
 //-----------------------------------------------------------------------------
 //SchStatisticTabPage and SchDataStatisticsDlg part 1
-#define BMP_INDICATE_NONE_HC (RID_SCH_START + 88)
-#define BMP_INDICATE_BOTH_HC (RID_SCH_START + 89)
+#define BMP_INDICATE_BOTH_VERTI_HC (RID_SCH_START + 89)
 #define BMP_INDICATE_UP_HC (RID_SCH_START + 90)
 #define BMP_INDICATE_DOWN_HC (RID_SCH_START + 91)
+#define BMP_INDICATE_BOTH_HORI_HC (RID_SCH_START + 97)
+#define BMP_INDICATE_RIGHT_HC (RID_SCH_START + 98)
+#define BMP_INDICATE_LEFT_HC (RID_SCH_START + 99)
 
 //SchStatisticTabPage and SchDataStatisticsDlg part 2
 #define BMP_REGRESSION_NONE_HC (RID_SCH_START + 92)
