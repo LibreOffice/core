@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: res_ErrorBar_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:46:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _CHART2_RESOURCE_ERRORBARS_HXX
+#define _CHART2_RESOURCE_ERRORBARS_HXX
+
+#include "res_ErrorBar_IDs.hrc"
+
+#define RESOURCE_ERRORBARS(availablewidth) \
+FixedLine FL_ERROR \
+{ \
+    Pos = MAP_APPFONT ( 6 , 6  ) ; \
+    Size = MAP_APPFONT ( 140 , 8 ) ; \
+    Text [ en-US ] = "Error category" ; \
+}; \
+RadioButton RBT_NONE \
+{ \
+    HelpID = HID_SCH_STATISTIK_NO_ERROR; \
+    Pos = MAP_APPFONT ( 12 , 20  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~No function" ; \
+    TabStop = TRUE ; \
+}; \
+RadioButton RBT_VARIANT \
+{ \
+    HelpID = HID_SCH_STATISTIK_VARIANT; \
+    Pos = MAP_APPFONT ( 12 , 36  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~Variance" ; \
+    TabStop = TRUE ; \
+}; \
+RadioButton RBT_SIGMA \
+{ \
+    HelpID = HID_SCH_STATISTIK_SIGMA; \
+    Pos = MAP_APPFONT ( 12 , 52  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~Standard deviation" ; \
+    TabStop = TRUE ; \
+}; \
+RadioButton RBT_PERCENT \
+{ \
+    HelpID = HID_SCH_STATISTIK_PERCENT; \
+    Pos = MAP_APPFONT ( 12 , 68  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~Percentage" ; \
+    TabStop = TRUE ; \
+}; \
+RadioButton RBT_BIGERROR \
+{ \
+    HelpID = HID_SCH_STATISTIK_BIGERROR; \
+    Pos = MAP_APPFONT ( 12 , 84  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~Error margin" ; \
+    TabStop = TRUE ; \
+}; \
+RadioButton RBT_CONST \
+{ \
+    HelpID = HID_SCH_STATISTIK_CONSTERROR; \
+    Pos = MAP_APPFONT ( 12 , 100  ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Text [ en-US ] = "~Constant value" ; \
+    TabStop = TRUE ; \
+}; \
+MetricField MTR_FLD_PERCENT \
+{ \
+    HelpID = HID_SCH_STATISTIK_PERCENT_VALUE; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 100 , 67  ) ; \
+    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    TabStop = TRUE ; \
+    Repeat = TRUE ; \
+    Spin = TRUE ; \
+    Minimum = 0 ; \
+    Maximum = 10000 ; \
+    StrictFormat = TRUE ; \
+    Unit = FUNIT_CUSTOM ; \
+    CustomUnitText = " %" ; \
+    First = 100 ; \
+    Last = 10000 ; \
+    SpinSize = 100 ; \
+    DecimalDigits = 2 ; \
+}; \
+MetricField MTR_FLD_BIGERROR \
+{ \
+    HelpID = HID_SCH_STATISTIK_BIGERROR_VALUE; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 100 , 83  ) ; \
+    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    TabStop = TRUE ; \
+    Repeat = TRUE ; \
+    Spin = TRUE ; \
+    Minimum = 0 ; \
+    Maximum = 10000 ; \
+    StrictFormat = TRUE ; \
+    Unit = FUNIT_CUSTOM ; \
+    CustomUnitText  = " %" ; \
+    First = 100 ; \
+    Last = 10000 ; \
+    SpinSize = 100 ; \
+    DecimalDigits = 2 ; \
+}; \
+FixedText FT_PERCENT_PLUS \
+{ \
+    Pos = MAP_APPFONT ( 92 , 101  ) ; \
+    Size = MAP_APPFONT ( 8 , 8 ) ; \
+    Text [ en-US ] = "+" ; \
+}; \
+MetricField MTR_FLD_PLUS \
+{ \
+    HelpID = HID_SCH_STATISTIK_PLUS_VALUE; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 100 , 99  ) ; \
+    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    TabStop = TRUE ; \
+    Repeat = TRUE ; \
+    Spin = TRUE ; \
+    Minimum = 0 ; \
+    Maximum = 100000000 ; \
+    StrictFormat = TRUE ; \
+    Unit = FUNIT_CUSTOM ; \
+    First = 0 ; \
+    Last = 100000000 ; \
+    SpinSize = 1 ; \
+    DecimalDigits = 3 ; \
+}; \
+FixedText FT_PERCENT_MINUS \
+{ \
+    Pos = MAP_APPFONT ( 92 , 117  ) ; \
+    Size = MAP_APPFONT ( 8 , 8 ) ; \
+    Text [ en-US ] = "-"; \
+}; \
+MetricField MTR_FLD_MINUS \
+{ \
+    HelpID = HID_SCH_STATISTIK_MINUS_VALUE; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 100 , 115  ) ; \
+    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    TabStop = TRUE ; \
+    Repeat = TRUE ; \
+    Spin = TRUE ; \
+    Minimum = 0 ; \
+    Maximum = 100000000 ; \
+    StrictFormat = TRUE ; \
+    Unit = FUNIT_CUSTOM ; \
+    First = 0 ; \
+    Last = 100000000 ; \
+    SpinSize = 1 ; \
+    DecimalDigits = 3 ; \
+}; \
+FixedLine FL_INDICATE \
+{ \
+    Pos = MAP_APPFONT ( 150 , 6  ) ; \
+    Size = MAP_APPFONT ( availablewidth - 150 , 8 ) ; \
+    Text [ en-US ] = "Error ~indicator" ; \
+}; \
+Control CT_INDICATE \
+{ \
+    HelpId = HID_SCH_CT_INDICATE ; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 150 , 20  ) ; \
+    Size = MAP_APPFONT ( 76 , 36 ) ; \
+    TabStop = TRUE ; \
+};
+
+// RadioButton RBT_RANGE \
+// { \
+//  Pos = MAP_APPFONT ( 12 , 116  ) ; \
+//  Size = MAP_APPFONT ( 75 , 10 ) ; \
+//  Text [ en-US ] = "~Range" ; \
+//  TabStop = TRUE ; \
+// }; \
+
+#endif
