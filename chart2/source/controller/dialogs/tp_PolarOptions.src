@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tp_PolarOptions.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:50:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "TabPages.hrc"
+#include "tp_PolarOptions.hrc"
+#include "HelpIds.hrc"
+
+TabPage TP_POLAROPTIONS
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    CheckBox CB_CLOCKWISE
+    {
+        Pos = MAP_APPFONT ( 12 , 8  );
+        Size = MAP_APPFONT ( 248 , 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Clockwise direction";
+    };
+    FixedLine FL_STARTING_ANGLE
+    {
+        Pos = MAP_APPFONT ( 12 , 21  ) ;
+        Size = MAP_APPFONT ( 242 , 12 ) ;
+        Text [ en-US ] = "Starting angle" ;
+    };
+    Control CT_ANGLE_DIAL
+    {
+        HelpId  = HID_SCH_STARTING_ANGLE_DIAL ;
+        Pos     = MAP_APPFONT ( 12 , 38  ) ;
+        Size    = MAP_APPFONT ( 43 , 43 ) ;
+    };
+    FixedText FT_ROTATION_DEGREES
+    {
+        Pos = MAP_APPFONT ( 93 , 55  ) ;
+        Size = MAP_APPFONT ( 166 , 8 ) ;
+        Text [ en-US ] = "~Degrees" ;
+    };
+    NumericField NF_STARTING_ANGLE
+    {
+        Pos = MAP_APPFONT ( 61 , 53 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 359 ;
+        SpinSize = 5 ;
+    };
+};
