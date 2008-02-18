@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:02:22 $
+#   last change: $Author: rt $ $Date: 2008-02-18 09:12:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ use CvsModule; # to be removed ASAP
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.33 $ ';
+my $id_str = ' $Revision: 1.34 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -876,16 +876,17 @@ sub update_sources {
 
 sub register_cws_milestone {
     my ($cws, $new_master, $milestone) = @_;
-    my $push_return = '';
     if ( $cws->master() ne $new_master ) {
-        $push_return = $cws->master($new_master);
-        if ($push_return ne $new_master) {
-            print_error("Couldn't push new milestone to database", 1);
+        my @push_return = $cws->set_master_and_milestone($new_master, $milestone);
+        if ( ($push_return[0] ne $new_master) || ($push_return[1] ne $milestone) ) {
+            print_error("Couldn't push new master and milestone to database", 1);
         };
-    }
-    $push_return = $cws->milestone( $milestone );
-    if ( $push_return ne $milestone ) {
-        print_error("Couldn't push new milestone to database", 1);
+    } else {
+        my $push_return = '';
+        $push_return = $cws->milestone( $milestone );
+        if ( $push_return ne $milestone ) {
+            print_error("Couldn't push new milestone to database", 1);
+        }
     }
     print_message("Current milestone of CWS updated to '$milestone'.");
     print_message("Remove the old and most likely incompatible module output trees and solver with:");
@@ -1215,28 +1216,27 @@ sub relink_cws_action
     # rename src.* directory
     rename $dest_dir, "$sourceroot/".$cws_master."/src.$milestone";
 
-    # TODO: check if return equals $milestone
-    my $push_return = $cws->milestone( $milestone );
-    if ( $push_return ne $milestone ) {
-        print_error("Couldn't push new milestone to database");
-    } else {
-        print_message("Successfully pushed new milestone to database");
-    }
-
     # master changed?
     if ( $cws_master ne $new_master ) {
         # push new master if different
-        my $push_return = $cws->master( $new_master );
-        if ( $push_return ne $new_master ) {
-            print_error("Couldn't push new master to database");
+        my @push_return = $cws->set_master_and_milestone($new_master, $milestone);
+        if ( ($push_return[0] ne $new_master) || ($push_return[1] ne $milestone) ) {
+            print_error("Couldn't push new master and milestone to database");
         } else {
-            print_message("Successfully pushed new master to database");
+            print_message("Successfully pushed new master and milestone to database");
         }
 
         # rename WORKSPACE directory if different
         chdir ($sourceroot) if ( cwd() eq "$sourceroot/cws_master" );
         rename "$sourceroot/$cws_master", "$sourceroot/$new_master";
         chdir ("$sourceroot/$new_master") if ( cwd() eq "$sourceroot" );
+    } else {
+        my $push_return = $cws->milestone( $milestone );
+        if ( $push_return ne $milestone ) {
+            print_error("Couldn't push new milestone to database");
+        } else {
+            print_message("Successfully pushed new milestone to database");
+        }
     }
 
     # resync done. now remove all $platform_resynced_flag
