@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:53:59 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,25 +40,30 @@
 #include "dlg_InsertAxis_Grid.hxx"
 #include "dlg_InsertDataLabel.hxx"
 #include "dlg_InsertLegend.hxx"
-#include "dlg_InsertStatistic.hxx"
+#include "dlg_InsertTrendline.hxx"
+#include "dlg_InsertErrorBars.hxx"
 #include "dlg_InsertTitle.hxx"
+#include "dlg_ObjectProperties.hxx"
 
 #include "ChartWindow.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
+#include "DiagramHelper.hxx"
 #include "ContextHelper.hxx"
 #include "macros.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
+#include "ViewElementListProvider.hxx"
 #include "MultipleChartConverters.hxx"
 #include "ControllerLockGuard.hxx"
 #include "UndoGuard.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "ReferenceSizeProvider.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
 #include "ObjectIdentifier.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "RegressionCurveItemConverter.hxx"
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 
@@ -85,16 +90,42 @@
 #include <vos/mutex.hxx>
 #endif
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+//.............................................................................
+
+namespace
+{
+struct lcl_InsertMeanValueLine
+{
+public:
+    lcl_InsertMeanValueLine( const uno::Reference< uno::XComponentContext > & xContext ) :
+            m_xContext( xContext )
+    {}
+
+    void operator()( const uno::Reference< chart2::XDataSeries > & xSeries )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+            xSeries, uno::UNO_QUERY );
+        if( xRegCurveCnt.is())
+        {
+            ::chart::RegressionCurveHelper::addMeanValueLine(
+                xRegCurveCnt, m_xContext, uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
+        }
+    }
+
+private:
+    uno::Reference< uno::XComponentContext > m_xContext;
+};
+
+} // anonymous namespace
+
+//.............................................................................
+namespace chart
+{
+//.............................................................................
 
 void SAL_CALL ChartController::executeDispatch_InsertAxis()
 {
@@ -277,11 +308,11 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertStatistic()
+void SAL_CALL ChartController::executeDispatch_InsertYErrorbars()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_PAGE_STATISTICS )))),
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_PAGE_YERROR_BARS )))),
         m_xUndoManager, m_aModel->getModel() );
 
     try
@@ -293,11 +324,69 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
 
         //prepare and open dialog
         ::vos::OGuard aGuard( Application::GetSolarMutex());
-        SchDataStatisticsDlg aDlg( m_pChartWindow, aItemSet);
-//         aDlg.EnableTrendLine( ChartTypeHelper::isSupportingRegressionProperties( xChartType ));
-        aDlg.EnableTrendLine( true );
+        InsertErrorBarsDialog aDlg( m_pChartWindow, aItemSet);
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-            SchDataStatisticsDlg::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, rtl::OUString() ) );
+            InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, rtl::OUString() ) );
+
+        if( aDlg.Execute() == RET_OK )
+        {
+            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
+            aDlg.FillItemSet( aOutItemSet );
+
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            if( bChanged )
+                aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void SAL_CALL ChartController::executeDispatch_InsertMeanValue()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
+        m_xUndoManager, m_aModel->getModel());
+    lcl_InsertMeanValueLine( m_xCC ).operator()(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()));
+    aUndoGuard.commitAction();
+}
+
+void SAL_CALL ChartController::executeDispatch_InsertMeanValues()
+{
+    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
+        DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( m_aModel->getModel())));
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
+        m_xUndoManager, m_aModel->getModel() );
+    ::std::for_each( aSeries.begin(), aSeries.end(), lcl_InsertMeanValueLine( m_xCC ));
+    aUndoGuard.commitAction();
+}
+
+void SAL_CALL ChartController::executeDispatch_InsertTrendlines()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVES )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        wrapper::AllSeriesStatisticsConverter aItemConverter(
+            m_aModel->getModel(), m_pDrawModelWrapper->GetItemPool() );
+        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemConverter.FillItemSet( aItemSet );
+
+        //prepare and open dialog
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        InsertTrendlineDialog aDlg( m_pChartWindow, aItemSet );
+        aDlg.adjustSize();
 
         if( aDlg.Execute() == RET_OK )
         {
@@ -320,17 +409,54 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
 void SAL_CALL ChartController::executeDispatch_InsertTrendline()
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
     if( xRegCurveCnt.is())
     {
-        UndoGuard aUndoGuard(
+        UndoLiveUpdateGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
             m_xUndoManager, m_aModel->getModel() );
 
+        // add a linear curve
         RegressionCurveHelper::addRegressionCurve(
             RegressionCurveHelper::REGRESSION_TYPE_LINEAR, xRegCurveCnt, m_xCC );
-        aUndoGuard.commitAction();
+
+        // get an appropriate item converter
+        uno::Reference< chart2::XRegressionCurve > xCurve(
+            RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ));
+        uno::Reference< beans::XPropertySet > xCurveProp( xCurve, uno::UNO_QUERY );
+        if( !xCurveProp.is())
+            return;
+        wrapper::RegressionCurveItemConverter aItemConverter(
+            xCurveProp, xRegCurveCnt, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+            m_pDrawModelWrapper->getSdrModel(),
+            uno::Reference< lang::XMultiServiceFactory >( m_aModel->getModel(), uno::UNO_QUERY ));
+
+        // open dialog
+        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemConverter.FillItemSet( aItemSet );
+        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
+            ObjectIdentifier::createDataCurveCID(
+                ObjectIdentifier::getSeriesParticleFromCID( m_aSelection.getSelectedCID()),
+                RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt, xCurve ), false ));
+        aDialogParameter.init( m_aModel->getModel() );
+        ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+                              uno::Reference< util::XNumberFormatsSupplier >( m_aModel->getModel(), uno::UNO_QUERY ));
+
+        // note: when a user pressed "OK" but didn't change any settings in the
+        // dialog, the SfxTabDialog returns "Cancel"
+        if( aDlg.Execute() == RET_OK || aDlg.DialogWasClosedWithOK())
+        {
+            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            if( pOutItemSet )
+            {
+                ControllerLockGuard aCLGuard( m_aModel->getModel());
+                aItemConverter.ApplyItemSet( *pOutItemSet );
+            }
+            aUndoGuard.commitAction();
+        }
     }
 }
 
