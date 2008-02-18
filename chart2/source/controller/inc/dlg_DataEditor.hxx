@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_DataEditor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:58:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ public:
     virtual BOOL Close();
 
     void SetReadOnly( bool bReadOnly );
-    void ApplyChangesToModel();
+    bool ApplyChangesToModel();
 
 private:
     bool                            m_bReadOnly;
