@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:57:20 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,9 @@ public:
     static rtl::OUString getObjectID( const rtl::OUString& rCID );
     static rtl::OUString getParticleID( const rtl::OUString& rCID );
     static rtl::OUString getFullParentParticle( const rtl::OUString& rCID );
+
+    //returns the series particle of a CID when the CID is a child of the series
+    static rtl::OUString getSeriesParticleFromCID( const rtl::OUString& rCID );
 
     //return the model object that is indicated by rObjectCID
     static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
