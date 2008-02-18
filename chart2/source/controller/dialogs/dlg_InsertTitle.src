@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:05:46 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,8 @@ ModalDialog DLG_TITLE
     HelpID = SID_INSERT_TITLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 88 ) ;
+    Size = MAP_APPFONT ( 220 , 156 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
-    BUTTONS_OK_CANCEL_HELP_STACKED(184)
-    TITLES(6,6,100,30)
+    BUTTONS_OK_CANCEL_HELP_STACKED(164)
+    TITLES(6,6,152,6,10)
 };
