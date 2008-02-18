@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:47:11 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ hidspecial HID_SCH_CB_SECONDARY_YGRID {HelpId= HID_SCH_CB_SECONDARY_YGRID; };
 hidspecial HID_SCH_CB_SECONDARY_ZGRID {HelpId= HID_SCH_CB_SECONDARY_ZGRID; };
 
 hidspecial HID_SCH_CT_INDICATE {HelpId= HID_SCH_CT_INDICATE; };
-hidspecial HID_SCH_CT_REGRESS {HelpId= HID_SCH_CT_REGRESS; };
 
 hidspecial HID_SCH_STATISTIK_MEANVALUE {HelpId= HID_SCH_STATISTIK_MEANVALUE; };
 hidspecial HID_SCH_STATISTIK_NO_ERROR {HelpId= HID_SCH_STATISTIK_NO_ERROR; };
@@ -87,9 +86,21 @@ hidspecial HID_SCH_TITLE_SUB {HelpId= HID_SCH_TITLE_SUB; };
 hidspecial HID_SCH_TITLE_X {HelpId= HID_SCH_TITLE_X; };
 hidspecial HID_SCH_TITLE_Y {HelpId= HID_SCH_TITLE_Y; };
 hidspecial HID_SCH_TITLE_Z {HelpId= HID_SCH_TITLE_Z; };
+hidspecial HID_SCH_TITLE_SECONDARY_X {HelpId= HID_SCH_TITLE_SECONDARY_X; };
+hidspecial HID_SCH_TITLE_SECONDARY_Y {HelpId= HID_SCH_TITLE_SECONDARY_Y; };
 
 hidspecial HID_SCH_NUM_OF_LINES {HelpId= HID_SCH_NUM_OF_LINES; };
 
 hidspecial HID_SCH_WIZARD_ROADMAP {HelpId= HID_SCH_WIZARD_ROADMAP; };
 hidspecial HID_SCH_WIN_DOCUMENT {HelpId= HID_SCH_WIN_DOCUMENT; };
 hidspecial HID_SCH_DATA_SERIES_LABEL {HelpId= HID_SCH_DATA_SERIES_LABEL; };
+
+hidspecial HID_SCH_STARTING_ANGLE_DIAL {HelpId= HID_SCH_STARTING_ANGLE_DIAL; };
+
+hidspecial HID_SCH_TRENDLINE_RB_NONE {HelpId= HID_SCH_TRENDLINE_RB_NONE; };
+hidspecial HID_SCH_TRENDLINE_RB_LINEAR {HelpId= HID_SCH_TRENDLINE_RB_LINEAR; };
+hidspecial HID_SCH_TRENDLINE_RB_LOGARITHMIC {HelpId= HID_SCH_TRENDLINE_RB_LOGARITHMIC; };
+hidspecial HID_SCH_TRENDLINE_RB_EXPONENTIAL {HelpId= HID_SCH_TRENDLINE_RB_EXPONENTIAL; };
+hidspecial HID_SCH_TRENDLINE_RB_POWER {HelpId= HID_SCH_TRENDLINE_RB_POWER; };
+hidspecial HID_SCH_TRENDLINE_SHOW_EQUATION {HelpId= HID_SCH_TRENDLINE_SHOW_EQUATION; };
+hidspecial HID_SCH_TRENDLINE_SHOW_R_SQUARED {HelpId= HID_SCH_TRENDLINE_SHOW_R_SQUARED; };
