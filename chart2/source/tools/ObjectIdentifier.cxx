@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:06:27 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,8 @@ const tTitleMap& lcl_getTitleMap()
         ( TitleHelper::X_AXIS_TITLE, C2U("D=0:CS=0:Axis=0,0") )
         ( TitleHelper::Y_AXIS_TITLE, C2U("D=0:CS=0:Axis=1,0") )
         ( TitleHelper::Z_AXIS_TITLE, C2U("D=0:CS=0:Axis=2,0") )
+        ( TitleHelper::SECONDARY_X_AXIS_TITLE, C2U("D=0:CS=0:Axis=0,1") )
+        ( TitleHelper::SECONDARY_Y_AXIS_TITLE, C2U("D=0:CS=0:Axis=1,1") )
         ;
     return m_aTitleMap;
 }
@@ -1362,6 +1364,21 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rC
     }
 
     return eRet;
+}
+
+// static
+OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
+{
+    sal_Int32 nDiagramIndex = -1;
+    sal_Int32 nCooSysIndex = -1;
+    lcl_parseCooSysIndices( nDiagramIndex, nCooSysIndex, rCID );
+
+    sal_Int32 nChartTypeIndex = -1;
+    sal_Int32 nSeriesIndex = -1;
+    sal_Int32 nPointIndex = -1;
+    lcl_parseSeriesIndices( nChartTypeIndex, nSeriesIndex, nPointIndex, rCID );
+
+    return ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
 }
 
 //static
