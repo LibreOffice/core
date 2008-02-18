@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:57:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,6 +983,8 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("XTitle")
         || aCommand.equals("YTitle")
         || aCommand.equals("ZTitle")
+        || aCommand.equals("SecondaryXTitle")
+        || aCommand.equals("SecondaryYTitle")
         || aCommand.equals("AllTitles")
         || aCommand.equals("Legend")
         || aCommand.equals("DiagramAxisX")
@@ -1080,12 +1082,20 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertAxis();
     else if( aCommand.equals("InsertGrids"))
         this->executeDispatch_InsertGrid();
-    else if( aCommand.equals("InsertStatistics"))
-        this->executeDispatch_InsertStatistic();
+//     else if( aCommand.equals("InsertStatistics"))
+//         this->executeDispatch_InsertStatistic();
+    else if( aCommand.equals("InsertTrendlines"))
+        this->executeDispatch_InsertTrendlines();
+    else if( aCommand.equals("InsertMeanValues"))
+        this->executeDispatch_InsertMeanValues();
+    else if( aCommand.equals("InsertYErrorbars"))
+        this->executeDispatch_InsertYErrorbars();
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))
          this->executeDispatch_InsertTrendline();
+    else if( aCommand.equals("InsertMeanValue"))
+        this->executeDispatch_InsertMeanValue();
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
     //format objects
@@ -1398,6 +1408,8 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("InsertTitle") )        ( C2U("InsertLegend") )         ( C2U("InsertDescription") )
         ( C2U("InsertAxis") )         ( C2U("InsertGrids") )          ( C2U("InsertStatistics") )
         ( C2U("InsertSymbol") )       ( C2U("InsertTrendline") )      ( C2U("InsertTrendlineEquation") )
+        ( C2U("InsertTrendlines") )   ( C2U("InsertMeanValue") )      ( C2U("InsertMeanValues") )
+        ( C2U("InsertYErrorbars") )
         //format objects
 //MENUCHANGE            ( C2U("SelectSourceRanges") )
         ( C2U("DiagramObjects") )     ( C2U("TransformDialog") )
@@ -1405,6 +1417,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("Forward") )            ( C2U("Backward") )
         ( C2U("MainTitle") )          ( C2U("SubTitle") )
         ( C2U("XTitle") )             ( C2U("YTitle") )               ( C2U("ZTitle") )
+        ( C2U("SecondaryXTitle") )    ( C2U("SecondaryYTitle") )
         ( C2U("AllTitles") )          ( C2U("Legend") )
         ( C2U("DiagramAxisX") )       ( C2U("DiagramAxisY") )         ( C2U("DiagramAxisZ") )
         ( C2U("DiagramAxisA") )       ( C2U("DiagramAxisB") )         ( C2U("DiagramAxisAll") )
