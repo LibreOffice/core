@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_AxisLabel.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:38:45 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ TabPage TP_AXIS_LABEL
     CheckBox CB_AXIS_LABEL_SCHOW_DESCR
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
-        Size    = MAP_APPFONT ( 104 , 12 ) ;
+        Size    = MAP_APPFONT ( 248 , 12 ) ;
 
         Text [ en-US ] = "Sho~w labels";
     };
@@ -67,7 +67,7 @@ TabPage TP_AXIS_LABEL
         {
             HelpId  = HID_SCH_ALIGNMENT_STACKED ;
             Pos     = MAP_APPFONT ( 139 , 105  ) ;
-            Size    = MAP_APPFONT ( 109 , 10 ) ;
+            Size    = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
 // DR: TODO - after OOo 2.0 - enable localized strings
 //            Text [ de ] = "~Senkrecht gestapelt";
@@ -76,7 +76,7 @@ TabPage TP_AXIS_LABEL
         FixedText FT_AXIS_LABEL_DEGREES
         {
             Pos = MAP_APPFONT ( 93 , 122  ) ;
-            Size = MAP_APPFONT ( 35 , 8 ) ;
+            Size = MAP_APPFONT ( 60 , 8 ) ;
 
             Text [ en-US ] = "~Degrees" ;
     };
@@ -124,7 +124,7 @@ TabPage TP_AXIS_LABEL
         CheckBox CB_AXIS_LABEL_TEXTOVERLAP
         {
             Pos = MAP_APPFONT ( 139 , 33  ) ;
-            Size = MAP_APPFONT ( 76 , 10 ) ;
+            Size = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "O~verlap" ;
@@ -132,7 +132,7 @@ TabPage TP_AXIS_LABEL
         CheckBox CB_AXIS_LABEL_TEXTBREAK
         {
             Pos = MAP_APPFONT ( 139 , 47  ) ;
-            Size = MAP_APPFONT ( 76 , 10 ) ;
+            Size = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "~Break" ;
@@ -149,7 +149,7 @@ TabPage TP_AXIS_LABEL
         RadioButton RB_AXIS_LABEL_SIDEBYSIDE
         {
             Pos = MAP_APPFONT ( 12 , 33  ) ;
-            Size = MAP_APPFONT ( 98 , 10 ) ;
+            Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "~Tile" ;
@@ -157,7 +157,7 @@ TabPage TP_AXIS_LABEL
         RadioButton RB_AXIS_LABEL_UPDOWN
         {
             Pos = MAP_APPFONT ( 12 , 47  ) ;
-            Size = MAP_APPFONT ( 98 , 10 ) ;
+            Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "St~agger odd" ;
@@ -165,7 +165,7 @@ TabPage TP_AXIS_LABEL
         RadioButton RB_AXIS_LABEL_DOWNUP
         {
             Pos = MAP_APPFONT ( 12 , 61  ) ;
-            Size = MAP_APPFONT ( 98 , 10 ) ;
+            Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "Stagger ~even" ;
@@ -173,12 +173,14 @@ TabPage TP_AXIS_LABEL
         RadioButton RB_AXIS_LABEL_AUTOORDER
         {
             Pos = MAP_APPFONT ( 12 , 75  ) ;
-            Size = MAP_APPFONT ( 98 , 10 ) ;
+            Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
 
             Text [ en-US ] = "A~utomatic" ;
     };
 };
+
+
 
 
 
