@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 11:42:20 $
+#   last change: $Author: rt $ $Date: 2008-02-18 15:37:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ IDLFILES=\
     XStatisticDisplay.idl\
     XTwoAxisXSupplier.idl\
     XTwoAxisYSupplier.idl\
+    XSecondAxisTitleSupplier.idl\
     XYDiagram.idl\
 
 # ------------------------------------------------------------------
