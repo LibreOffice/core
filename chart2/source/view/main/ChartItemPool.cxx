@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartItemPool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:05 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,8 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DIAGRAM_STYLE        - SCHATTR_START] = new SvxChartStyleItem( CHSTYLE_2D_COLUMN, SCHATTR_DIAGRAM_STYLE );
     ppPoolDefaults[SCHATTR_TEXTBREAK            - SCHATTR_START] = new SfxBoolItem( SCHATTR_TEXTBREAK, FALSE );
     ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, FALSE);
+    ppPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SfxInt32Item( SCHATTR_STARTING_ANGLE, 90 );
+    ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, FALSE );
 
     ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_FOR_ALL_SERIES, 0);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_EQUATION, 0);
