@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:58:25 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include "DiagramHelper.hxx"
 #include "ChartController.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "DataSeriesHelper.hxx"
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -137,6 +138,7 @@ struct ControllerState
     // trendlines
     bool bMayAddTrendline;
     bool bMayAddTrendlineEquation;
+    bool bMayAddMeanValue;
 };
 
 
@@ -149,7 +151,8 @@ ControllerState::ControllerState() :
         bMayMoveSeriesForward( false ),
         bMayMoveSeriesBackward( false ),
         bMayAddTrendline( false ),
-        bMayAddTrendlineEquation( false )
+        bMayAddTrendlineEquation( false ),
+        bMayAddMeanValue( false )
 {}
 
 void ControllerState::update(
@@ -173,9 +176,10 @@ void ControllerState::update(
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
         bIsTextObject = OBJECTTYPE_TITLE == aObjectType;
 
+        uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
         bIsFormateableObjectSelected = bHasSelectedObject;
         if( OBJECTTYPE_DIAGRAM==aObjectType || OBJECTTYPE_DIAGRAM_WALL==aObjectType || OBJECTTYPE_DIAGRAM_FLOOR==aObjectType )
-            bIsFormateableObjectSelected = DiagramHelper::isSupportingFloorAndWall( ChartModelHelper::findDiagram( xModel ) );
+            bIsFormateableObjectSelected = DiagramHelper::isSupportingFloorAndWall( xDiagram );
 
         uno::Reference< chart2::XDataSeries > xGivenDataSeries(
             ObjectIdentifier::getDataSeriesForCID(
@@ -195,18 +199,27 @@ void ControllerState::update(
 
         bMayAddTrendline = false;
         bMayAddTrendlineEquation = false;
+        bMayAddMeanValue = false;
         if( bHasSelectedObject )
         {
-            if( aObjectType == OBJECTTYPE_DATA_SERIES )
+            if( xGivenDataSeries.is())
             {
-                // @todo: only if trendlines are supported for the current chart
-                // type
-                uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-                    ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
-                if( xRegCurveCnt.is())
-                    bMayAddTrendline = ! RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
+                sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+                if( ChartTypeHelper::isSupportingRegressionProperties(
+                    DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ),
+                    nDimensionCount ))
+                {
+                    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+                        xGivenDataSeries, uno::UNO_QUERY );
+                    if( xRegCurveCnt.is())
+                    {
+                        bMayAddTrendline = ! RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
+                        bMayAddMeanValue = ! RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
+                    }
+                }
             }
-            else if( aObjectType == OBJECTTYPE_DATA_CURVE )
+
+            if( aObjectType == OBJECTTYPE_DATA_CURVE )
             {
                 uno::Reference< chart2::XRegressionCurve > xRegCurve(
                     ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
@@ -259,6 +272,8 @@ struct ModelState
     bool bHasXAxisTitle;
     bool bHasYAxisTitle;
     bool bHasZAxisTitle;
+    bool bHasSecondaryXAxisTitle;
+    bool bHasSecondaryYAxisTitle;
 
     bool bHasXAxis;
     bool bHasYAxis;
@@ -291,6 +306,8 @@ ModelState::ModelState() :
         bHasXAxisTitle( false ),
         bHasYAxisTitle( false ),
         bHasZAxisTitle( false ),
+        bHasSecondaryXAxisTitle( false ),
+        bHasSecondaryYAxisTitle( false ),
         bHasXAxis( false ),
         bHasYAxis( false ),
         bHasZAxis( false ),
@@ -335,6 +352,8 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bHasXAxisTitle = TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, xModel ).is();
     bHasYAxisTitle = TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, xModel ).is();
     bHasZAxisTitle = TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, xModel ).is();
+    bHasSecondaryXAxisTitle = TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xModel ).is();
+    bHasSecondaryYAxisTitle = TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xModel ).is();
 
     bHasXAxis = bSupportsAxes && AxisHelper::getAxis( 0, true, xDiagram ).is();
     bHasYAxis = bSupportsAxes && AxisHelper::getAxis( 1, true, xDiagram ).is();
@@ -371,7 +390,7 @@ bool ModelState::HasAnyGrid() const
 
 bool ModelState::HasAnyTitle() const
 {
-    return bHasMainTitle || bHasSubTitle || bHasXAxisTitle || bHasYAxisTitle || bHasZAxisTitle;
+    return bHasMainTitle || bHasSubTitle || bHasXAxisTitle || bHasYAxisTitle || bHasZAxisTitle || bHasSecondaryXAxisTitle || bHasSecondaryYAxisTitle;
 }
 
 } // namespace impl
@@ -466,7 +485,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:InsertDescription")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:InsertAxis")] = bIsWritable && m_apModelState->bSupportsAxes;
     m_aCommandAvailability[ C2U(".uno:InsertGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ C2U(".uno:InsertStatistics")] = bIsWritable && m_apModelState->bSupportsStatistics;
+//     m_aCommandAvailability[ C2U(".uno:InsertStatistics")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertTrendlines")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertMeanValues")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertYErrorbars")] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ C2U(".uno:InsertSymbol")] = bIsWritable && m_apControllerState->bIsTextObject;
 
     // format objects
@@ -491,6 +513,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:XTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxisTitle;
     m_aCommandAvailability[ C2U(".uno:YTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxisTitle;
     m_aCommandAvailability[ C2U(".uno:ZTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxisTitle;
+    m_aCommandAvailability[ C2U(".uno:SecondaryXTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryXAxisTitle;
+    m_aCommandAvailability[ C2U(".uno:SecondaryYTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSecondaryYAxisTitle;
     m_aCommandAvailability[ C2U(".uno:AllTitles")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyTitle();
 
     // text
@@ -518,6 +542,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:Forward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward;
     m_aCommandAvailability[ C2U(".uno:Backward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward;
 
+    m_aCommandAvailability[ C2U(".uno:InsertMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
     m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
 }
