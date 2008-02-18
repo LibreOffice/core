@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_xmloff.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:19:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@
 #include "com/sun/star/chart/XChartDataArray.hpp"
 #include "com/sun/star/chart/XChartDocument.hpp"
 #include "com/sun/star/chart/XDiagram.hpp"
+#include "com/sun/star/chart/XSecondAxisTitleSupplier.hpp"
 #include "com/sun/star/chart/XStatisticDisplay.hpp"
 #include "com/sun/star/chart/XTwoAxisXSupplier.hpp"
 #include "com/sun/star/chart/XTwoAxisYSupplier.hpp"
