@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:25:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
 #endif
+
+// next free: 100
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
@@ -190,10 +192,12 @@
 
 //-----------------------------------------------------------------------------
 //SchStatisticTabPage and SchDataStatisticsDlg part 1
-#define BMP_INDICATE_NONE (RID_APP_START + 88)
-#define BMP_INDICATE_BOTH (RID_APP_START + 89)
+#define BMP_INDICATE_BOTH_VERTI (RID_APP_START + 89)
 #define BMP_INDICATE_UP (RID_APP_START + 90)
 #define BMP_INDICATE_DOWN (RID_APP_START + 91)
+#define BMP_INDICATE_BOTH_HORI (RID_APP_START + 97)
+#define BMP_INDICATE_RIGHT (RID_APP_START + 98)
+#define BMP_INDICATE_LEFT (RID_APP_START + 99)
 
 //SchStatisticTabPage and SchDataStatisticsDlg part 2
 #define BMP_REGRESSION_NONE (RID_APP_START + 92)
