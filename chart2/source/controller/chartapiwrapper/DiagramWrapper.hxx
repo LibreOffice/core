@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:04 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -96,6 +96,10 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CHART_XSECONDAXISTITLESUPPLIER_HPP_
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#endif
+
 #include <boost/shared_ptr.hpp>
 
 namespace chart
@@ -106,7 +110,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DiagramWrapper : public ::cppu::ImplInheritanceHelper9<
+class DiagramWrapper : public ::cppu::ImplInheritanceHelper10<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
                      , ::com::sun::star::chart::XAxisZSupplier
@@ -118,6 +122,7 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper9<
                         , ::com::sun::star::lang::XComponent
 //                      , ::com::sun::star::lang::XEventListener
                      , ::com::sun::star::chart2::XDiagramProvider
+                     , ::com::sun::star::chart::XSecondAxisTitleSupplier
                     >
 {
 public:
@@ -216,6 +221,14 @@ public:
         ::com::sun::star::beans::XPropertySet > SAL_CALL getYMainGrid()
         throw (::com::sun::star::uno::RuntimeException);
 
+   // ____ XSecondAxisTitleSupplier ____
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape > SAL_CALL getSecondXAxisTitle()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape > SAL_CALL getSecondYAxisTitle()
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ XStatisticDisplay ____
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getUpBar()
@@ -268,6 +281,12 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape >
                         m_xZAxisTitle;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape >
+                        m_xSecondXAxisTitle;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape >
+                        m_xSecondYAxisTitle;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >
