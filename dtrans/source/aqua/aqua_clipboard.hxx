@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aqua_clipboard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:12:04 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _AQUA_CLIPBOARD_HXX_
 #define _AQUA_CLIPBOARD_HXX_
 
+#ifndef INCLUDED_DATAFLAVORMAPPING_HXX_
+#include "DataFlavorMapping.hxx"
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -44,7 +48,7 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
 
@@ -80,120 +84,148 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#include "DataFlavorMapping.hxx"
+#ifndef _CPPUHELPER_BASEMUTEX_HXX_
+#include <cppuhelper/basemutex.hxx>
+#endif
 
-#include <premac.h>
-    #include <Carbon/Carbon.h>
-    #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
+#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
 
+#include <boost/utility.hpp>
 #include <list>
 
-// the service names
-#define AQUA_CLIPBOARD_SERVICE_NAME "com.sun.star.datatransfer.clipboard.SystemClipboard"
+#include <premac.h>
+#import <Cocoa/Cocoa.h>
+#include <postmac.h>
 
-// the implementation names
-#define AQUA_CLIPBOARD_IMPL_NAME "com.sun.star.datatransfer.clipboard.AquaClipboard"
+class AquaClipboard;
 
-// the registry key names
-#define AQUA_CLIPBOARD_REGKEY_NAME "/com.sun.star.datatransfer.clipboard.AquaClipboard/UNO/SERVICES/com.sun.star.datatransfer.clipboard.SystemClipboard"
+@interface EventListener : NSObject
+{
+     AquaClipboard* pAquaClipboard;
+}
 
-namespace aqua {
+// Init the pasteboard change listener with a reference to the OfficeClipboard
+// instance
+- (EventListener*)initWithAquaClipboard: (AquaClipboard*) pcb;
 
-class AquaClipboard :
-    public cppu::WeakComponentImplHelper4< ::com::sun::star::datatransfer::clipboard::XClipboardEx,
-                                           ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
-                                           ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
-                                           ::com::sun::star::lang::XServiceInfo >
+// Promiss resolver function
+- (void)pasteboard:(NSPasteboard*)sender provideDataForType:(NSString *)type;
+
+-(void)applicationDidBecomeActive:(NSNotification*)aNotification;
+
+@end
+
+
+class AquaClipboard : public ::cppu::BaseMutex,
+                      public ::cppu::WeakComponentImplHelper4< com::sun::star::datatransfer::clipboard::XClipboardEx,
+                                                               com::sun::star::datatransfer::clipboard::XClipboardNotifier,
+                                                               com::sun::star::datatransfer::clipboard::XFlushableClipboard,
+                                                               com::sun::star::lang::XServiceInfo >,
+                      private ::boost::noncopyable
 {
 public:
-    AquaClipboard(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ServiceManager);
+  /* Create a clipboard instance.
 
-   ~AquaClipboard();
+     @param pasteboard
+     If not equal NULL the instance will be instantiated with the provided
+     pasteboard reference and 'bUseSystemClipboard' will be ignored
 
-    //------------------------------------------------
-    // XClipboard
-    //------------------------------------------------
+     @param bUseSystemClipboard
+     If 'pasteboard' is NULL 'bUseSystemClipboard' determines whether the
+     system clipboard will be created (bUseSystemClipboard == true) or if
+     the DragPasteboard if bUseSystemClipboard == false
+   */
+  AquaClipboard(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context,
+                NSPasteboard* pasteboard = NULL,
+                bool bUseSystemClipboard = true);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-        throw( ::com::sun::star::uno::RuntimeException );
+  ~AquaClipboard();
 
-    virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw( ::com::sun::star::uno::RuntimeException );
+  //------------------------------------------------
+  // XClipboard
+  //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getName()
-        throw( ::com::sun::star::uno::RuntimeException );
+  virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
-    // XClipboardEx
-    //------------------------------------------------
+  virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-        throw( ::com::sun::star::uno::RuntimeException );
+  virtual ::rtl::OUString SAL_CALL getName()
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
-    // XClipboardNotifier
-    //------------------------------------------------
+  //------------------------------------------------
+  // XClipboardEx
+  //------------------------------------------------
 
-    virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw( ::com::sun::star::uno::RuntimeException );
+  virtual sal_Int8 SAL_CALL getRenderingCapabilities()
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw( ::com::sun::star::uno::RuntimeException );
+  //------------------------------------------------
+  // XClipboardNotifier
+  //------------------------------------------------
 
-    //------------------------------------------------
-    // XFlushableClipboard
-    //------------------------------------------------
+  virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
+  virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+    throw( ::com::sun::star::uno::RuntimeException );
 
-    //------------------------------------------------
-    // XServiceInfo
-    //------------------------------------------------
+  //------------------------------------------------
+  // XFlushableClipboard
+  //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException);
+  virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+  //------------------------------------------------
+  // XServiceInfo
+  //------------------------------------------------
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException);
+  virtual ::rtl::OUString SAL_CALL getImplementationName()
+    throw(::com::sun::star::uno::RuntimeException);
+
+  virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    throw(::com::sun::star::uno::RuntimeException);
+
+  virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    throw(::com::sun::star::uno::RuntimeException);
+
+  /* Get a reference to the used pastboard.
+   */
+  NSPasteboard* getPasteboard() const;
+
+  /* Notify the current clipboard owner that he is no longer the clipboard owner.
+   */
+  void fireLostClipboardOwnershipEvent(::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner> oldOwner,
+                                       ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > oldContent);
+
+  void pasteboardChangedOwner();
+
+  void provideDataForType(NSPasteboard* sender, NSString* type);
+
+  void applicationDidBecomeActive(NSNotification* aNotification);
 
 private:
+
   /* Notify all registered XClipboardListener that the clipboard content
      has changed.
   */
   void fireClipboardChangedEvent();
 
-  /* Notify the current clipboard owner that he is no longer the clipboard owner.
-   */
-  void fireLostClipboardOwnershipEvent();
-
-  /* Event handler for application activated events. We need to determine the state of the clipboard
-     in this event handler.
-  */
-  static OSStatus handleAppActivatedEvent(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void* inUserData);
-
-  /* A clipboard promise keeper handler.
-   */
-  static OSStatus clipboardPromiseKeeperCallback(PasteboardRef inPasteboard,
-                                                 PasteboardItemID itemID,
-                                                 CFStringRef inFlavaor,
-                                                 void* inContext);
 private:
-  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mrServiceMgr;
-  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mXComponentContext;
+  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
   ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > mXClipboardContent;
-  com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
+  com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner > mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;
-  ::osl::Mutex m_aMutex;
-  PasteboardRef mrClipboard;
-  EventHandlerRef mrAppActivatedHdl;
+  bool mIsSystemPasteboard;
+  NSPasteboard* mPasteboard;
+  int mPasteboardChangeCount;
+  EventListener* mEventListener;
 };
-
-} // namespace aqua
 
 #endif
