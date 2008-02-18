@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:14 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include "macros.hxx"
 #include "dlg_ObjectProperties.hxx"
 #include "dlg_View3D.hxx"
-#include "dlg_InsertStatistic.hxx"
+#include "dlg_InsertErrorBars.hxx"
 #include "ViewElementListProvider.hxx"
 #include "DataPointItemConverter.hxx"
 #include "AxisItemConverter.hxx"
@@ -282,11 +282,14 @@ namespace
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
                     break;
+
             case OBJECTTYPE_DATA_CURVE:
                 pItemConverter =  new wrapper::RegressionCurveItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
-                    break;
+                    xObjectProperties, uno::Reference< chart2::XRegressionCurveContainer >(
+                        ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel ), uno::UNO_QUERY ),
+                    rDrawModel.GetItemPool(), rDrawModel,
+                    uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
+                break;
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 ::std::auto_ptr< awt::Size > pRefSize;
@@ -364,6 +367,10 @@ rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand,
         nTitleType = TitleHelper::Y_AXIS_TITLE;
     else if( rDispatchCommand.equals("ZTitle") )
         nTitleType = TitleHelper::Z_AXIS_TITLE;
+    else if( rDispatchCommand.equals("SecondaryXTitle") )
+        nTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
+    else if( rDispatchCommand.equals("SecondaryYTitle") )
+        nTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel );
@@ -484,6 +491,8 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
         || rDispatchCommand.equals("XTitle")
         || rDispatchCommand.equals("YTitle")
         || rDispatchCommand.equals("ZTitle")
+        || rDispatchCommand.equals("SecondaryXTitle")
+        || rDispatchCommand.equals("SecondaryYTitle")
         || rDispatchCommand.equals("AllTitles")
         )
     {
@@ -636,7 +645,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
         if( aDialogParameter.HasRegressionProperties() )
         {
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-                SchDataStatisticsDlg::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, aObjectCID ) );
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, aObjectCID ) );
         }
 
         //-------------------------------------------------------------
