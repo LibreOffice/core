@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:53:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,7 +607,11 @@ private:
     void SAL_CALL       executeDispatch_InsertDataLabel();
     void SAL_CALL       executeDispatch_InsertAxis();
     void SAL_CALL       executeDispatch_InsertGrid();
-    void SAL_CALL       executeDispatch_InsertStatistic();
+//     void SAL_CALL       executeDispatch_InsertStatistic();
+    void SAL_CALL       executeDispatch_InsertYErrorbars();
+    void SAL_CALL       executeDispatch_InsertTrendlines();
+    void SAL_CALL       executeDispatch_InsertMeanValue();
+    void SAL_CALL       executeDispatch_InsertMeanValues();
     void SAL_CALL       executeDispatch_InsertTrendline();
     void SAL_CALL       executeDispatch_InsertTrendlineEquation();
 
