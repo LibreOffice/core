@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:41:59 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,14 @@ TabPage TP_ALIGNMENT
     {
         HelpId = HID_SCH_ALIGNMENT_STACKED ;
         Pos = MAP_APPFONT ( 139 , 14  ) ;
-        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ve~rtically stacked";
     };
     FixedText FT_DEGREES
     {
         Pos = MAP_APPFONT ( 93 , 32  ) ;
-        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Size = MAP_APPFONT ( 162 , 8 ) ;
         Text [ en-US ] = "~Degrees" ;
     };
     NumericField NF_ORIENT
@@ -83,3 +83,4 @@ TabPage TP_ALIGNMENT
         Text [ en-US ] = "Text direction" ;
     };
 };
+
