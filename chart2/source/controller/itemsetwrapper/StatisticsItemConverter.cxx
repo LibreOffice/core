@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:52:56 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,37 @@ void lcl_getErrorIndicatorValues(
     {
         ASSERT_EXCEPTION( ex );
     }
+}
+
+uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
+    const uno::Reference< beans::XPropertySet > & xSeriesPropSet, const SfxItemSet * pItemSet )
+{
+    bool bEquationExists = true;
+
+    // ensure that a trendline is on
+    if( pItemSet )
+    {
+        SvxChartRegress eRegress = CHREGRESS_NONE;
+        const SfxPoolItem *pPoolItem = NULL;
+        if( pItemSet->GetItemState( SCHATTR_STAT_REGRESSTYPE, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        {
+            eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
+            bEquationExists = ( eRegress != CHREGRESS_NONE );
+        }
+    }
+
+    if( bEquationExists )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
+        uno::Reference< chart2::XRegressionCurve > xCurve(
+            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
+        if( xCurve.is())
+        {
+            return xCurve->getEquationProperties();
+        }
+    }
+
+    return uno::Reference< beans::XPropertySet >();
 }
 
 } // anonymous namespace
@@ -388,6 +419,42 @@ bool StatisticsItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_SHOW_EQUATION:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), &rItemSet ));
+            if( xEqProp.is())
+            {
+                bool bShowEq = false;
+                xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
+                bool bNewShowEq =
+                    static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                if( bShowEq != bNewShowEq )
+                {
+                    xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( bNewShowEq ));
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_SHOW_COEFF:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), &rItemSet ));
+            if( xEqProp.is())
+            {
+                bool bShowCoeff = false;
+                xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff;
+                bool bNewShowCoeff =
+                    static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                if( bShowCoeff != bNewShowCoeff )
+                {
+                    xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( bNewShowCoeff ));
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
         case SCHATTR_STAT_INDICATE:
         {
             uno::Reference< beans::XPropertySet > xOldErrorBarProp(
@@ -530,6 +597,34 @@ void StatisticsItemConverter::FillSpecialItem(
                         uno::Reference< chart2::XRegressionCurveContainer >(
                             GetPropertySet(), uno::UNO_QUERY ) )));
             rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_STAT_REGRESSTYPE ));
+        }
+        break;
+
+        case SCHATTR_REGRESSION_SHOW_EQUATION:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
+            if( xEqProp.is())
+            {
+                bool bShowEq = false;
+                if( xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq )
+                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShowEq ));
+            }
+            else
+                rOutItemSet.InvalidateItem( nWhichId );
+        }
+        break;
+
+        case SCHATTR_REGRESSION_SHOW_COEFF:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
+            if( xEqProp.is())
+            {
+                bool bShowCoeff = false;
+                if( xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff )
+                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShowCoeff ));
+            }
+            else
+                rOutItemSet.InvalidateItem( nWhichId );
         }
         break;
 
