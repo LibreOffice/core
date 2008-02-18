@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_DataEditor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:32:56 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,14 +204,23 @@ IMPL_LINK( DataEditor, BrowserCursorMovedHdl, void *, EMPTYARG )
     if( m_bReadOnly )
         return 0;
 
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, m_apBrwData->MayInsertRow() );
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, m_apBrwData->MayInsertColumn() );
-    m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
-    m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
+    if( m_apBrwData->IsEnableItem() )
+    {
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, m_apBrwData->MayInsertRow() );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, m_apBrwData->MayInsertColumn() );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
+        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
 
-    m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   m_apBrwData->MaySwapColumns() );
-    m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   m_apBrwData->MaySwapRows() );
-
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   m_apBrwData->MaySwapColumns() );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   m_apBrwData->MaySwapRows() );
+    }
+    else
+    {
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
+    }
 //     m_aTbxData.EnableItem( TBI_DATA_SORT_COL,       m_apBrwData->MaySortColumn() );
 //     m_aTbxData.EnableItem( TBI_DATA_SORT_ROW,       m_apBrwData->MaySortRow() );
 //     m_aTbxData.EnableItem( TBI_DATA_SORT_TABLE_COL, m_apBrwData->MaySortColumn() );
@@ -353,13 +362,15 @@ void DataEditor::Resize()
 
 BOOL DataEditor::Close()
 {
-    ApplyChangesToModel();
-    return ModalDialog::Close();
+    if( ApplyChangesToModel() )
+        return ModalDialog::Close();
+    else
+        return TRUE;
 }
 
-void DataEditor::ApplyChangesToModel()
+bool DataEditor::ApplyChangesToModel()
 {
-    m_apBrwData->EndEditing();
+    return m_apBrwData->EndEditing();
 }
 
 // sets the correct toolbar icons depending on the current mode (e.g. high contrast)
