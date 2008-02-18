@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleDialogData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:31:30 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,15 +49,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 TitleDialogData::TitleDialogData( ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider )
-        : aPossibilityList(5)
-        , aExistenceList(5)
-        , aTextList(5)
+        : aPossibilityList(7)
+        , aExistenceList(7)
+        , aTextList(7)
         , apReferenceSizeProvider( apRefSizeProvider )
 {
     sal_Int32 nN = 0;
-    for(nN=5;nN--;)
+    for(nN=7;nN--;)
         aPossibilityList[nN]=sal_True;
-    for(nN=5;nN--;)
+    for(nN=7;nN--;)
         aExistenceList[nN]=sal_False;
 }
 
@@ -71,6 +71,8 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
     this->aPossibilityList[2]=aAxisPossibilityList[0];//x axis title
     this->aPossibilityList[3]=aAxisPossibilityList[1];//y axis title
     this->aPossibilityList[4]=aAxisPossibilityList[2];//z axis title
+    this->aPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
+    this->aPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
 
     //find out which title exsist and get their text
     //main title:
