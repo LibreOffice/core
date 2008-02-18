@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_LegendPosition_tmpl.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:40:19 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ RadioButton RBT_LEFT \
 { \
     HelpID = HID_SCH_LEGEND_POS_LEFT ; \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
-    Size = MAP_APPFONT ( 55 , 10 ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
     Text [ en-US ] = "~Left" ; \
     TabStop = TRUE ; \
 }; \
@@ -61,7 +61,7 @@ RadioButton RBT_RIGHT \
 { \
     HelpID = HID_SCH_LEGEND_POS_RIGHT ; \
     Pos = MAP_APPFONT ( xpos , ypos+14  ) ; \
-    Size = MAP_APPFONT ( 55 , 10 ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
     Text [ en-US ] = "~Right" ; \
     TabStop = TRUE ; \
 }; \
@@ -69,7 +69,7 @@ RadioButton RBT_TOP \
 { \
     HelpID = HID_SCH_LEGEND_POS_TOP ; \
     Pos = MAP_APPFONT ( xpos , ypos+28  ) ; \
-    Size = MAP_APPFONT ( 55 , 10 ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
     Text [ en-US ] = "~Top" ; \
     TabStop = TRUE ; \
 }; \
@@ -77,7 +77,7 @@ RadioButton RBT_BOTTOM \
 { \
     HelpID = HID_SCH_LEGEND_POS_BOTTOM ; \
     Pos = MAP_APPFONT ( xpos , ypos+42  ) ; \
-    Size = MAP_APPFONT ( 55 , 10 ) ; \
+    Size = MAP_APPFONT ( 75 , 10 ) ; \
     Text [ en-US ] = "~Bottom" ; \
     TabStop = TRUE ; \
 };
