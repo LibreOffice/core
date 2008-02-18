@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//free 87, 88, 89, 21
-//next is 269
+//free 21 267
+//next is 270
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -156,7 +156,6 @@
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src
 
-#define STR_INDICATE_NONE                   (RID_APP_START + 130)
 #define STR_INDICATE_BOTH                   (RID_APP_START + 131)
 #define STR_INDICATE_UP                     (RID_APP_START + 132)
 #define STR_INDICATE_DOWN                   (RID_APP_START + 133)
@@ -222,6 +221,8 @@
 #define STR_OBJECT_TITLE_X_AXIS             (RID_APP_START + 256)
 #define STR_OBJECT_TITLE_Y_AXIS             (RID_APP_START + 257)
 #define STR_OBJECT_TITLE_Z_AXIS             (RID_APP_START + 258)
+#define STR_OBJECT_TITLE_SECONDARY_X_AXIS   (RID_APP_START + 87)
+#define STR_OBJECT_TITLE_SECONDARY_Y_AXIS   (RID_APP_START + 88)
 
 #define STR_OBJECT_DATAPOINT                (RID_APP_START + 202)
 #define STR_OBJECT_DATAPOINTS               (RID_APP_START + 203)
@@ -231,7 +232,7 @@
 #define STR_OBJECT_AVERAGE_LINE             (RID_APP_START + 174)
 #define STR_OBJECT_ERROR_INDICATOR          (RID_APP_START + 175)
 #define STR_OBJECT_CURVE                    (RID_APP_START + 176)
-#define STR_PAGE_STATISTICS                 (RID_APP_START + 206)
+#define STR_OBJECT_CURVES                   (RID_APP_START + 130)
 
 #define STR_OBJECT_STOCK_LOSS               (RID_APP_START + 207)
 #define STR_OBJECT_STOCK_GAIN               (RID_APP_START + 208)
@@ -277,7 +278,9 @@
 #define STR_PAGE_PERSPECTIVE                 (RID_APP_START + 235)
 #define STR_PAGE_APPEARANCE                  (RID_APP_START + 236)
 #define STR_PAGE_ILLUMINATION                (RID_APP_START + 237)
-#define STR_PAGE_REGRESSION_OPTIONS          (RID_APP_START + 267)
+
+#define STR_PAGE_TRENDLINE_TYPE              (RID_APP_START + 89)
+#define STR_PAGE_YERROR_BARS                 (RID_APP_START + 206)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
@@ -318,6 +321,8 @@
 
 #define STR_COLUMN_LABEL                    (RID_APP_START + 262)
 #define STR_ROW_LABEL                       (RID_APP_START + 263)
+
+#define STR_DATA_EDITOR_INCORRECT_INPUT     (RID_APP_START + 269)
 
 //-----------------------------------------------------------------------------
 /*
