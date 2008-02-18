@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OSXTransferable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:10:07 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,126 +68,81 @@ namespace // private
       return ((len > 0) && ((dtype == CPPUTYPE_SEQINT8) || (dtype == CPPUTYPE_OUSTRING)));
     }
 
-} // end namespace private
+} // namespace private
 
 
-ClipboardItem::ClipboardItem(PasteboardItemID id,
-                         CFStringRef systemFlavor,
-                         const DataFlavor& oOOFlavor) :
-  mId(id),
-  mSystemDataFlavor(systemFlavor),
-  mOOoDataFlavor(oOOFlavor)
-{
-  CFRetain(mSystemDataFlavor);
-}
-
-ClipboardItem::~ClipboardItem()
-{
-  CFRelease(mSystemDataFlavor);
-}
-
-
-OSXTransferable::OSXTransferable(const Reference< XMultiServiceFactory > ServiceManager,
+OSXTransferable::OSXTransferable(const Reference< XComponentContext >& context,
                                  const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
-                                 DataFlavorMapperPtr_t pDataFlavorMapper) :
-  mrSrvMgr(ServiceManager),
+                                 DataFlavorMapperPtr_t pDataFlavorMapper,
+                                 NSPasteboard* pasteboard) :
+  mXComponentContext(context),
   mrXMimeCntFactory(rXMimeCntFactory),
-  mpDataFlavorMapper(pDataFlavorMapper)
+  mDataFlavorMapper(pDataFlavorMapper),
+  mPasteboard(pasteboard)
 {
-    if (PasteboardCreate(kPasteboardClipboard, &mrClipboard) != noErr)
-    {
-      throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create Mac OS X system cliboard")),
-                             static_cast<XTransferable*>(this));
-    }
+  [mPasteboard retain];
 
-    initClipboardItemList();
+  initClipboardItemList();
 }
 
 
 OSXTransferable::~OSXTransferable()
 {
-  CFRelease(mrClipboard);
+  [mPasteboard release];
 }
 
 
 Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
   throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
-    ClipboardItemPtr_t clipboardItem;
-    if (!isValidFlavor(aFlavor))
-      {
-        throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Unsupported data flavor")),
-                                         static_cast<XTransferable*>(this));
-      }
+  if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
+    {
+      throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Unsupported data flavor")),
+                                       static_cast<XTransferable*>(this));
+    }
 
-    clipboardItem = findMatchingClipboardItem(aFlavor);
-    if (!clipboardItem)
-      {
-        throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Unsupported data flavor")),
-                                         static_cast<XTransferable*>(this));
-      }
+  NSString* sysFormat = (NSString*)mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
+  DataProviderPtr_t dp;
 
-    return getClipboardItemData(clipboardItem);
-}
+  if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+    {
+      NSArray* sysData = [mPasteboard propertyListForType: sysFormat];
+      dp = mDataFlavorMapper->getDataProvider(sysFormat, sysData);
+    }
+  else
+    {
+      NSData* sysData = [mPasteboard dataForType: sysFormat];
+      dp = mDataFlavorMapper->getDataProvider(sysFormat, sysData);
+    }
 
-
-Any OSXTransferable::getClipboardItemData(ClipboardItemPtr_t clipboardItem)
-{
-  CFDataRef flavorData;
-  if (PasteboardCopyItemFlavorData(mrClipboard, clipboardItem->mId, clipboardItem->mSystemDataFlavor, &flavorData) != noErr)
-    throw IOException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot retrieve clipboard data")),
-                      static_cast<XTransferable*>(this));
-
-  DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(clipboardItem->mSystemDataFlavor, flavorData);
+  if (dp.get() == NULL)
+    {
+      throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Unsupported data flavor")),
+                                       static_cast<XTransferable*>(this));
+    }
 
   return dp->getOOoData();
 }
 
 
-bool OSXTransferable::isUnicodeText(ClipboardItemPtr_t clipboardItem)
+bool OSXTransferable::isUnicodeText(const DataFlavor& flavor)
 {
-  return (clipboardItem->mOOoDataFlavor.DataType == CPPUTYPE_OUSTRING);
-}
-
-
-ClipboardItemPtr_t OSXTransferable::findMatchingClipboardItem(const DataFlavor& aFlavor)
-{
-  ClipboardItemContainer_t::iterator iter = mClipboardItems.begin();
-  ClipboardItemContainer_t::iterator  iter_end = mClipboardItems.end();
-
-  for (/*nop*/; iter != iter_end; ++iter)
-    {
-      if (compareDataFlavors((*iter)->mOOoDataFlavor, aFlavor))
-        return *iter;
-    }
-
-  return ClipboardItemPtr_t();
+  return (flavor.DataType == CPPUTYPE_OUSTRING);
 }
 
 
 Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
     throw( RuntimeException )
 {
-  Sequence<DataFlavor> flavorList;
-  ClipboardItemContainer_t::const_iterator iter = mClipboardItems.begin();
-  ClipboardItemContainer_t::const_iterator  iter_end = mClipboardItems.end();
-
-  for ( /* nop */; iter != iter_end; ++iter)
-    {
-      DataFlavor df = (*iter)->mOOoDataFlavor;
-      flavorList.realloc(flavorList.getLength() + 1);
-      flavorList[flavorList.getLength() - 1] = (*iter)->mOOoDataFlavor;
-    }
-
-  return flavorList;
+  return mFlavorList;
 }
 
 
-sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
     throw( RuntimeException )
 {
-    for (sal_Int32 i = 0; i < m_FlavorList.getLength(); i++)
-      if (compareDataFlavors(aFlavor, m_FlavorList[i]))
+    for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
+      if (compareDataFlavors(aFlavor, mFlavorList[i]))
         return sal_True;
 
     return sal_False;
@@ -196,43 +151,15 @@ sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported( const DataFlavor& aFla
 
 void OSXTransferable::initClipboardItemList()
 {
-  ItemCount item_count;
-  if (PasteboardGetItemCount(mrClipboard, &item_count) != noErr)
-    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot get clipboard data")),
-                                    static_cast<XTransferable*>(this));
+  NSArray* pboardFormats = [mPasteboard types];
 
-  for (UInt32 item = 1; item <= item_count; item++)
+  if (pboardFormats == NULL)
     {
-      PasteboardItemID itemID;
-
-      if (PasteboardGetItemIdentifier(mrClipboard, item, &itemID) != noErr)
-        continue;
-
-      addClipboardItemFlavors(itemID);
+      throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot get clipboard data")),
+                             static_cast<XTransferable*>(this));
     }
-}
 
-
-void OSXTransferable::addClipboardItemFlavors(PasteboardItemID clipboardItemId)
-{
-  CFArrayRef flavorTypeArray;
-  if (PasteboardCopyItemFlavors(mrClipboard, clipboardItemId, &flavorTypeArray) != noErr)
-    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot get clipboard data")),
-                           static_cast<XTransferable*>(this));
-
-  CFIndex flavorCount = CFArrayGetCount(flavorTypeArray);
-  ClipboardItemPtr_t clipboardItem;
-
-  for (CFIndex flavorIndex = 0; flavorIndex < flavorCount; flavorIndex++)
-    {
-      CFStringRef systemFlavor = (CFStringRef)CFArrayGetValueAtIndex(flavorTypeArray, flavorIndex);
-      DataFlavor oOOFlavor = mpDataFlavorMapper->systemToOpenOfficeFlavor(systemFlavor);
-
-      if (isValidFlavor(oOOFlavor))
-        {
-          mClipboardItems.push_back(ClipboardItemPtr_t(new ClipboardItem(clipboardItemId, systemFlavor, oOOFlavor)));
-        }
-    }
+  mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
 
 
