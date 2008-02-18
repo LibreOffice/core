@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-10-30 12:29:49 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:10:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "srciter.hxx"
 #include <stdio.h>
+#include <tools/fsys.hxx>
 
 //
 // class SourceTreeIterator
@@ -94,6 +95,24 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD10 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+
+        rtl::OUString sDirNameTmp = aDirectory.getFullName();
+        ByteString sDirNameTmpB( OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+
+#ifdef WNT
+        sDirNameTmpB.Append( ByteString("\\no_localization") );
+#else
+        sDirNameTmpB.Append( ByteString("/no_localization") );
+#endif
+        //printf("**** %s \n", OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+
+        DirEntry aDE( sDirNameTmpB.GetBuffer() );
+        if( aDE.Exists() )
+        {
+            //printf("#### no_localization file found ... skipping");
+            return;
+        }
+
         aDirectory.setSkipLinks( bSkipLinks );
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
