@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:53:14 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ protected:
     virtual void CellModified();
     virtual void ColumnResized( USHORT nColId );
     virtual void EndScroll();
+    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt );
 
     void SetDirty();
 
@@ -149,6 +150,7 @@ public:
     void RemoveColumn();
 
     using BrowseBox::RemoveColumn;
+    using BrowseBox::MouseButtonDown;
 
     void SwapRow();
     void SwapColumn();
@@ -166,7 +168,7 @@ public:
     void SetCellModifiedHdl( const Link& rLink );
 
     /// confirms all pending changes to be ready to be closed
-    void EndEditing();
+    bool EndEditing();
 
     // calls the protected inline-function BrowseBox::GetFirstVisibleColNumber()
     sal_Int16 GetFirstVisibleColumNumber() const;
@@ -176,6 +178,11 @@ public:
     bool CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const;
 
     sal_uInt32 GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const;
+
+    bool IsEnableItem();
+    bool IsDataValid();
+    void ShowWarningBox();
+    bool ShowQueryBox();
 
 private:
     ::com::sun::star::uno::Reference<
@@ -192,6 +199,7 @@ private:
     bool                m_bIsReadOnly;
     bool                m_bIsDirty;
     bool                m_bLiveUpdate;
+    bool                m_bDataValid;
 
     FormattedField      m_aNumberEditField;
     Edit                m_aTextEditField;
