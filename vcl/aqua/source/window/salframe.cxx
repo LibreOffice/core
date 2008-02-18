@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:51 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
     initWindowAndView();
+
+//  maSysData.rWindow = mrWindow;
 
     SalData* pSalData = GetSalData();
     pSalData->maFrames.push_front( this );
