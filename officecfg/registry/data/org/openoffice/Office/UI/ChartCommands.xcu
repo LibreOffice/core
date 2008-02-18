@@ -215,9 +215,19 @@
                     <value xml:lang="en-US">~All Axes...</value>
                 </prop>
             </node>
-            <node oor:name=".uno:InsertStatistics" oor:op="replace">
+            <node oor:name=".uno:InsertTrendlines" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Statistics...</value>
+                    <value xml:lang="en-US">T~rend Lines...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertMeanValues" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mean ~Value Lines</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertYErrorbars" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Y Error Bars...</value>
                 </prop>
             </node>
             <node oor:name=".uno:MainTitle" oor:op="replace">
@@ -244,6 +254,16 @@
             <node oor:name=".uno:ZTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Z Axis Title...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SecondaryXTitle" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">S~econdary X Axis Title...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SecondaryYTitle" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Se~condary Y Axis Title...</value>
                 </prop>
             </node>
             <node oor:name=".uno:AllTitles" oor:op="replace">
@@ -391,13 +411,19 @@
             <node oor:name=".uno:InsertTrendline" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
-                    <value xml:lang="en-US">Insert ~Regression Curve</value>
+                    <value xml:lang="en-US">Insert Tre~nd Line...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertMeanValue" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+
+                    <value xml:lang="en-US">Insert Mean ~Value Line</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertTrendlineEquation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
-                    <value xml:lang="en-US">Insert Regresion Curve ~Equation</value>
+                    <value xml:lang="en-US">Insert Trend Line ~Equation</value>
                 </prop>
             </node>
         </node>
