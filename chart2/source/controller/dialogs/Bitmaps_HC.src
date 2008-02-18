@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps_HC.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:26:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,22 +446,31 @@ Bitmap BMP_STOCK_4_HC
 //---------------------
 //---------------------
 //error indicator
-Bitmap BMP_INDICATE_NONE_HC
+Bitmap BMP_INDICATE_BOTH_VERTI_HC
 {
-    File = "indinone_h.bmp" ;
-};
-Bitmap BMP_INDICATE_BOTH_HC
-{
-    File = "indiboth_h.bmp" ;
+    File = "errorbothverti_30_h.png" ;
 };
 Bitmap BMP_INDICATE_DOWN_HC
 {
-    File = "indidown_h.bmp" ;
+    File = "errordown_30_h.png" ;
 };
 Bitmap BMP_INDICATE_UP_HC
 {
-    File = "indiup_h.bmp" ;
+    File = "errorup_30_h.png" ;
 };
+Bitmap BMP_INDICATE_BOTH_HORI_HC
+{
+    File = "errorbothhori_30_h.png" ;
+};
+Bitmap BMP_INDICATE_RIGHT_HC
+{
+    File = "errorright_30_h.png" ;
+};
+Bitmap BMP_INDICATE_LEFT_HC
+{
+    File = "errorleft_30_h.png" ;
+};
+
 //---------------------
 //regression curves
 Bitmap BMP_REGRESSION_NONE_HC
