@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:07 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,9 @@ public:
         REGRESSION_TYPE_LINEAR,
         REGRESSION_TYPE_LOG,
         REGRESSION_TYPE_EXP,
-        REGRESSION_TYPE_POWER
+        REGRESSION_TYPE_POWER,
+        REGRESSION_TYPE_MEAN_VALUE,
+        REGRESSION_TYPE_UNKNOWN
     };
 
     /** Returns the first regression curve found that is not of type
@@ -124,6 +126,10 @@ public:
     static tRegressionType getFirstRegressTypeNotMeanValueLine(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
+    static tRegressionType getRegressionType(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
                not null
@@ -220,6 +226,13 @@ public:
 
     static void resetEquationPosition( const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+
+    /// @return the index of the given curve in the given container. -1 if not contained
+    static sal_Int32 getRegressionCurveIndex(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xContainer,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
 
 private:
     // not implemented
