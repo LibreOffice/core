@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:50:59 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 
 #include "ItemConverter.hxx"
 
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vector>
@@ -56,6 +57,8 @@ public:
     RegressionCurveItemConverter(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCurveCnt,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const ::com::sun::star::uno::Reference<
@@ -76,6 +79,8 @@ protected:
 
 private:
     ::boost::shared_ptr< ItemConverter >  m_spGraphicConverter;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer >  m_xCurveContainer;
 };
 
 } //  namespace wrapper
