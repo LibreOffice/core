@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rene $ $Date: 2008-01-04 20:32:41 $
+#   last change: $Author: rene $ $Date: 2008-02-18 09:42:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,12 @@ TARGET=hyphen
 
 TARFILE_NAME=hyphen-2.3
 
+ADDITIONAL_FILES += makefile.mk
+
 PATCH_FILE_NAME=hyphen-2.3.patch
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
+CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure
@@ -61,7 +63,7 @@ BUILD_ACTION=make
 
 
 .IF "$(GUI)"=="WNT"
-BUILD_ACTION=cd src/hunspell && dmake
+BUILD_ACTION=dmake
 .ENDIF # "$(GUI)"=="WNT"
 
 
