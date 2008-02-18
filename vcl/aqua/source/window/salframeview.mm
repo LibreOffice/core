@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframeview.mm,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:19:02 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ static const struct ExceptionalKey
 @implementation SalFrameWindow
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
+	mDraggingDestinationHandler = nil;
     mpFrame = pFrame;
     NSRect aRect = { { pFrame->maGeometry.nX, pFrame->maGeometry.nY },
                      { pFrame->maGeometry.nWidth, pFrame->maGeometry.nHeight } };
@@ -265,6 +266,46 @@ static const struct ExceptionalKey
         mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
 }
 
+-(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler draggingEntered: sender];
+}
+
+-(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler draggingUpdated: sender];
+}
+
+-(void)draggingExited:(id <NSDraggingInfo>)sender
+{
+  [mDraggingDestinationHandler draggingExited: sender];
+}
+
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler prepareForDragOperation: sender];
+}
+
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler performDragOperation: sender];
+}
+
+-(void)concludeDragOperation:(id <NSDraggingInfo>)sender
+{
+  [mDraggingDestinationHandler concludeDragOperation: sender];
+}
+
+-(void)registerDraggingDestinationHandler:(id)theHandler
+{
+  mDraggingDestinationHandler = theHandler;
+}
+
+-(void)unregisterDraggingDestinationHandler:(id)theHandler
+{
+    mDraggingDestinationHandler = nil;
+}
+
 @end
 
 @implementation SalFrameView
@@ -276,11 +317,13 @@ static const struct ExceptionalKey
 
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
+	mDraggingDestinationHandler = nil;
     mpFrame = pFrame;
     if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [mpFrame->getWindow() frame] styleMask: mpFrame->mnStyleMask]]) != nil)
     {
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
+		mpMouseEventListener = nil;
     }
 
     return self;
@@ -402,12 +445,23 @@ static const struct ExceptionalKey
 
 -(void)mouseDown: (NSEvent*)pEvent
 {
+    if ( mpMouseEventListener != nil && 
+	    [mpMouseEventListener respondsToSelector: @selector(mouseDown:)])
+	{
+	    [mpMouseEventListener mouseDown: [pEvent copyWithZone: NULL]];
+	}
+
     s_nLastButton = MOUSE_LEFT;
     [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEBUTTONDOWN];
 }
 
 -(void)mouseDragged: (NSEvent*)pEvent
 {
+    if ( mpMouseEventListener != nil && 
+	     [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
+	{
+	    [mpMouseEventListener mouseDragged: [pEvent copyWithZone: NULL]];
+	}
     s_nLastButton = MOUSE_LEFT;
     [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEMOVE];
 }
@@ -878,6 +932,56 @@ static const struct ExceptionalKey
 
     mpFrame->VCLToCocoa( rect );
     return rect;
+}
+
+-(void)registerMouseEventListener: (id)theListener
+{
+  mpMouseEventListener = theListener;
+}
+
+-(void)unregisterMouseEventListener: (id)theListener
+{
+  mpMouseEventListener = nil;
+}
+
+-(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler draggingEntered: sender];
+}
+
+-(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler draggingUpdated: sender];
+}
+
+-(void)draggingExited:(id <NSDraggingInfo>)sender
+{
+  [mDraggingDestinationHandler draggingExited: sender];
+}
+
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler prepareForDragOperation: sender];
+}
+
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+  return [mDraggingDestinationHandler performDragOperation: sender];
+}
+
+-(void)concludeDragOperation:(id <NSDraggingInfo>)sender
+{
+  [mDraggingDestinationHandler concludeDragOperation: sender];
+}
+
+-(void)registerDraggingDestinationHandler:(id)theHandler
+{
+  mDraggingDestinationHandler = theHandler;
+}
+
+-(void)unregisterDraggingDestinationHandler:(id)theHandler
+{
+  mDraggingDestinationHandler = nil;
 }
 
 @end
