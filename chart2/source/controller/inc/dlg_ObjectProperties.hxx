@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:50:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ public:
     bool HasScaleProperties() const;
     bool CanAxisLabelsBeStaggered() const;
     bool HasNumberProperties() const;
+    bool ProvidesStartingAngle() const;
 
 private:
     rtl::OUString   m_aObjectCID;
@@ -94,6 +95,7 @@ private:
     bool m_bHasScaleProperties;
     bool m_bCanAxisLabelsBeStaggered;
     bool m_bHasNumberProperties;
+    bool m_bProvidesStartingAngle;
 };
 
 /*************************************************************************
@@ -120,8 +122,12 @@ private:
     Graphic*        m_pAutoSymbolGraphic;
 
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
+    bool            m_bOKPressed;
 
     virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
+
+    Link m_aOriginalOKClickHdl;
+    DECL_LINK( OKPressed, void * );
 
 public:
     SchAttribTabDlg(Window* pParent, const SfxItemSet* pAttr,
@@ -137,6 +143,8 @@ public:
     void setSymbolInformation( SfxItemSet* pSymbolShapeProperties, Graphic* pAutoSymbolGraphic );
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
+
+    bool DialogWasClosedWithOK() const;
 };
 
 //.............................................................................
