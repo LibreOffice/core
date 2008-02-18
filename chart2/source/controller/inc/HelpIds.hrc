@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpIds.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:50:44 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define CHART_HELPIDS_HRC
 
 #include <svtools/solar.hrc>
-//next is 92
+//next is 102
 
 //see old chart: schhids.h
 
@@ -57,7 +57,7 @@
 #define HID_SCH_CTL_DATA            (HID_SCH_START + 10)
 
 #define HID_SCH_CT_INDICATE         (HID_SCH_START + 11)
-#define HID_SCH_CT_REGRESS          (HID_SCH_START + 12)
+// #define HID_SCH_CT_REGRESS          (HID_SCH_START + 12)
 
 //for chart type dialog:
 #define HID_SCH_CTL_TYPE            (HID_SCH_START + 13)
@@ -152,10 +152,22 @@
 #define HID_SCH_TITLE_X     (HID_SCH_START + 82)
 #define HID_SCH_TITLE_Y     (HID_SCH_START + 83)
 #define HID_SCH_TITLE_Z     (HID_SCH_START + 84)
+#define HID_SCH_TITLE_SECONDARY_X     (HID_SCH_START + 92)
+#define HID_SCH_TITLE_SECONDARY_Y     (HID_SCH_START + 93)
 
 #define HID_SCH_WIZARD_ROADMAP     (HID_SCH_START + 85)
 #define HID_SCH_LEGEND_SHOW        (HID_SCH_START + 86)
 #define HID_SCH_DATA_SERIES_LABEL  (HID_SCH_START + 87)
+
+#define HID_SCH_STARTING_ANGLE_DIAL (HID_SCH_START + 94)
+
+#define HID_SCH_TRENDLINE_RB_NONE         (HID_SCH_START +  95)
+#define HID_SCH_TRENDLINE_RB_LINEAR       (HID_SCH_START +  96)
+#define HID_SCH_TRENDLINE_RB_LOGARITHMIC  (HID_SCH_START +  97)
+#define HID_SCH_TRENDLINE_RB_EXPONENTIAL  (HID_SCH_START +  98)
+#define HID_SCH_TRENDLINE_RB_POWER        (HID_SCH_START +  99)
+#define HID_SCH_TRENDLINE_SHOW_EQUATION   (HID_SCH_START + 100)
+#define HID_SCH_TRENDLINE_SHOW_R_SQUARED  (HID_SCH_START + 101)
 
 // HID_SCH_START should be 63280 (checked 25.Nov 2002)
 
