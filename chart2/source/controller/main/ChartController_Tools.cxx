@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Tools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:29 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,56 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
-// namespace
-// {
+namespace
+{
+
+bool lcl_deleteDataSeries(
+    const OUString & rCID,
+    const Reference< frame::XModel > & xModel,
+    const Reference< chart2::XUndoManager > & xUndoManager )
+{
+    bool bResult = false;
+    uno::Reference< chart2::XDataSeries > xSeries( ::chart::ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
+    uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+    if( xSeries.is() && xChartDoc.is())
+    {
+        uno::Reference< chart2::XChartType > xChartType(
+            ::chart::DataSeriesHelper::getChartTypeOfSeries( xSeries, xChartDoc->getFirstDiagram()));
+        if( xChartType.is())
+        {
+            ::chart::UndoGuard aUndoGuard(
+                ActionDescriptionProvider::createDescription(
+                    ActionDescriptionProvider::DELETE, ::rtl::OUString( String( ::chart::SchResId( STR_OBJECT_DATASERIES )))),
+                xUndoManager, xModel );
+            ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
+            bResult = true;
+            aUndoGuard.commitAction();
+        }
+    }
+    return bResult;
+}
+
+bool lcl_deleteDataCurve(
+    const OUString & rCID,
+    const Reference< frame::XModel > & xModel,
+    const Reference< chart2::XUndoManager > & xUndoManager )
+{
+    bool bResult = false;
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        ::chart::ObjectIdentifier::getObjectPropertySet(
+            ::chart::ObjectIdentifier::getSeriesParticleFromCID( rCID ), xModel ), uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        ::chart::UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( ::chart::SchResId( STR_OBJECT_CURVE )))),
+            xUndoManager, xModel );
+        ::chart::RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCurveCnt );
+        bResult = true;
+        aUndoGuard.commitAction();
+    }
+    return bResult;
+}
 
 // void lcl_CopyPageContentToPage(
 //     const Reference< drawing::XDrawPage > & xSourcePage,
@@ -143,7 +191,7 @@ using ::rtl::OUString;
 //     }
 // }
 
-// } // anonymous namespace
+} // anonymous namespace
 
 namespace
 {
@@ -495,7 +543,8 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
             return true;
         if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
             return true;
-        if( (OBJECTTYPE_DATA_CURVE_EQUATION == aObjectType) || (OBJECTTYPE_DATA_CURVE == aObjectType) )
+        if( (OBJECTTYPE_DATA_CURVE_EQUATION == aObjectType) || (OBJECTTYPE_DATA_CURVE == aObjectType) ||
+            (OBJECTTYPE_DATA_AVERAGE_LINE == aObjectType))
             return true;
         if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
             return true;
@@ -559,28 +608,23 @@ bool ChartController::executeDispatch_Delete()
                 }
                 break;
             }
-            case OBJECTTYPE_DATA_SERIES: //fall through intended
+
+            case OBJECTTYPE_DATA_SERIES:
+                bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                break;
+
             case OBJECTTYPE_LEGEND_ENTRY:
             {
-                uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_aModel->getModel() ));
-                if( xSeries.is() )
-                {
-                    uno::Reference< chart2::XChartType > xChartType(
-                        DataSeriesHelper::getChartTypeOfSeries( xSeries, xChartDoc->getFirstDiagram()));
-                    if( xChartType.is())
-                    {
-                        UndoGuard aUndoGuard(
-                            ActionDescriptionProvider::createDescription(
-                                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_DATASERIES )))),
-                            m_xUndoManager, m_aModel->getModel() );
-                        DataSeriesHelper::deleteSeries( xSeries, xChartType );
-                        bReturn = true;
-                        aUndoGuard.commitAction();
-                    }
-                }
+                ObjectType eParentObjectType = ObjectIdentifier::getObjectType(
+                    ObjectIdentifier::getFullParentParticle( aCID ));
+                if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
+                    bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
+                    bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
                 break;
             }
-            case OBJECTTYPE_DATA_CURVE:
+
+            case OBJECTTYPE_DATA_AVERAGE_LINE:
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
@@ -590,14 +634,19 @@ bool ChartController::executeDispatch_Delete()
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
-                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
+                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
                         m_xUndoManager, m_aModel->getModel() );
-                    RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCurveCnt );
+                    RegressionCurveHelper::removeMeanValueLine( xRegCurveCnt );
                     bReturn = true;
                     aUndoGuard.commitAction();
                 }
                 break;
             }
+
+            case OBJECTTYPE_DATA_CURVE:
+                bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
+                break;
+
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
