@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SeriesOptionsItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:52:03 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bGroupBarsPerAxis(true)
         , m_bAllSeriesAttachedToSameAxis(true)
         , m_nAllSeriesAxisIndex(-1)
+        , m_bSupportingStartingAngle(false)
+        , m_nStartingAngle(90)
+        , m_bClockwise(false)
 {
     try
     {
@@ -104,6 +107,14 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
         uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
         uno::Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
+
+        m_xCooSys = DataSeriesHelper::getCoordinateSystemOfSeries( xDataSeries, xDiagram );
+        if( m_xCooSys.is() )
+        {
+            uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );
+            chart2::ScaleData aScale( xAxis->getScaleData() );
+            m_bClockwise = (aScale.Orientation == chart2::AxisOrientation_REVERSE);
+        }
 
         sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
         m_bSupportingOverlapAndGapWidthProperties = ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
@@ -141,6 +152,12 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         {
             xDiagramProperties->getPropertyValue( C2U("GroupBarsPerAxis")) >>= m_bGroupBarsPerAxis;
             m_bAllSeriesAttachedToSameAxis = ChartTypeHelper::allSeriesAttachedToSameAxis( xChartType, m_nAllSeriesAxisIndex );
+        }
+
+        m_bSupportingStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
+        if( m_bSupportingStartingAngle )
+        {
+            xDiagramProperties->getPropertyValue( C2U( "StartingAngle" ) ) >>= m_nStartingAngle;
         }
     }
     catch( uno::Exception ex )
@@ -221,6 +238,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
                                 m_aBarPositionSequence[nAxisIndex] = rBarPosition;
 
                             xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
+                            bChanged = true;
                         }
                     }
                 }
@@ -241,6 +259,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
                     bOldConnectBars != m_bConnectBars )
                 {
                     xDiagramProperties->setPropertyValue( C2U("ConnectBars"), uno::makeAny(m_bConnectBars) );
+                    bChanged = true;
                 }
             }
         }
@@ -259,10 +278,44 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
                     bOldGroupBarsPerAxis != m_bGroupBarsPerAxis )
                 {
                     xDiagramProperties->setPropertyValue( C2U("GroupBarsPerAxis"), uno::makeAny(m_bGroupBarsPerAxis) );
+                    bChanged = true;
                 }
             }
          }
          break;
+
+         case SCHATTR_STARTING_ANGLE:
+         {
+            if( m_bSupportingStartingAngle )
+            {
+                m_nStartingAngle = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                if( xDiagramProperties.is() )
+                {
+                    xDiagramProperties->setPropertyValue( C2U("StartingAngle"), uno::makeAny(m_nStartingAngle) );
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_CLOCKWISE:
+        {
+            bool bClockwise = (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() );
+            if( m_xCooSys.is() )
+            {
+                uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );
+                if( xAxis.is() )
+                {
+                    chart2::ScaleData aScaleData( xAxis->getScaleData() );
+                    aScaleData.Orientation = bClockwise ? chart2::AxisOrientation_REVERSE : chart2::AxisOrientation_MATHEMATICAL;
+                    xAxis->setScaleData( aScaleData );
+                    bChanged = true;
+                }
+            }
+        }
+        break;
     }
     return bChanged;
 }
@@ -307,6 +360,17 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         {
             if( m_nAllSeriesAxisIndex != - 1)
                 rOutItemSet.Put( SfxInt32Item(nWhichId, m_nAllSeriesAxisIndex));
+            break;
+        }
+        case SCHATTR_STARTING_ANGLE:
+        {
+            if( m_bSupportingStartingAngle )
+                rOutItemSet.Put( SfxInt32Item(nWhichId,m_nStartingAngle));
+            break;
+        }
+        case SCHATTR_CLOCKWISE:
+        {
+            rOutItemSet.Put( SfxBoolItem(nWhichId,m_bClockwise) );
             break;
         }
         default:
