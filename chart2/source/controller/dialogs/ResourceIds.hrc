@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceIds.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:45:55 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,21 +50,22 @@
 #define DLG_AXIS_OR_GRID    839
 #define DLG_DATA_DESCR      836
 #define DLG_LEGEND          835
-#define DLG_DATA_STAT       840
 #define DLG_TITLE           834
 #define DLG_3D_VIEW         752
 #define DLG_OBJECT_PROPERTIES 903
 #define DLG_SPLINE_PROPERTIES 904
+#define DLG_DATA_TRENDLINE  841
+#define DLG_DATA_YERRORBAR  842
 
 //-----------------------------------------------------------------------------
 //TabPage Ids:
 #define TP_LEGEND_POS   900
 #define TP_DATA_DESCR   901
 #define TP_ALIGNMENT    902
-#define TP_STAT         905
 //#define TP_SYMBOL     906
 #define TP_LAYOUT       907
 #define TP_OPTIONS      908
+#define TP_POLAROPTIONS 909
 #define TP_AXIS_LABEL   920
 #define TP_SCALE_Y      903
 #define TP_CHARTTYPE    910
@@ -77,7 +78,8 @@
 #define TP_3D_SCENEAPPEARANCE   916
 #define TP_3D_SCENEILLUMINATION 917
 
-#define TP_REGRESSION_OPTIONS 918
+#define TP_TRENDLINE    918
+#define TP_YERRORBAR    919
 
 //-----------------------------------------------------------------------------
 //listbox Ids:
