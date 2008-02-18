@@ -1,4 +1,5 @@
 ..\%__SRC%\lib\lib*.*        %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\hyphen.lib     %_DEST%\lib%_EXT%\hyphen.lib
 
 ..\%__SRC%\misc\build\hyphen-2.3\hyphen.h %_DEST%\inc\hyphen.h
 ..\%__SRC%\misc\build\hyphen-2.3\.libs\libhyphen.a %_DEST%\lib%_EXT%\libhyphen.a
