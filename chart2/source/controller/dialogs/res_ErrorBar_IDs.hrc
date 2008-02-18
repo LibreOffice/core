@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_ErrorBar_IDs.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:35:09 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-#define CBX_AVERAGE 1
 #define FL_ERROR 1
 #define RBT_NONE 1
 #define RBT_VARIANT 2
@@ -41,13 +40,12 @@
 #define RBT_PERCENT 4
 #define RBT_BIGERROR 5
 #define RBT_CONST 6
+#define RBT_RANGE 7
 #define MTR_FLD_PERCENT 1
 #define MTR_FLD_BIGERROR 2
 #define MTR_FLD_PLUS 3
 #define MTR_FLD_MINUS 4
 #define FT_PERCENT_PLUS 1
 #define FT_PERCENT_MINUS 2
-#define FT_INDICATE 3
-#define FT_REGRESS 4
+#define FL_INDICATE 3
 #define CT_INDICATE 1
-#define CT_REGRESS 2
