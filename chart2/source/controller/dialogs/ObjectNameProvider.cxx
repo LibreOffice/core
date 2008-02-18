@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:45:30 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,12 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
                     break;
                 case TitleHelper::Z_AXIS_TITLE:
                     aRet=String(SchResId(STR_OBJECT_TITLE_Z_AXIS));
+                    break;
+                case TitleHelper::SECONDARY_X_AXIS_TITLE:
+                    aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_X_AXIS));
+                    break;
+                case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+                    aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
                     break;
                 default:
                     DBG_ERROR("unknown title type");
