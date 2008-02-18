@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Wizard_TitlesAndObjects.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:38:49 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
         : OWizardPage( pParent, SchResId(TP_WIZARD_TITLEANDOBJECTS) )
         , m_aFT_TitleDescription( this, SchResId( FT_TITLEDESCRIPTION ) )
         , m_aFL_Vertical( this, SchResId( FL_VERTICAL ) )
-        , m_apTitleResources( new TitleResources(this) )
+        , m_apTitleResources( new TitleResources(this,false) )
         , m_apLegendPositionResources( new LegendPositionResources(this,xContext) )
         , m_aFL_Grids( this, SchResId( FL_GRIDS ) )
         , m_aCB_Grid_X( this, SchResId( CB_X_SECONDARY ) )
