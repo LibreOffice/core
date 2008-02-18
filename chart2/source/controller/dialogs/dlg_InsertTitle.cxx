@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:36:23 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace chart
 
 SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
     : ModalDialog(pWindow, SchResId(DLG_TITLE))
-    , m_apTitleResources( new TitleResources(this) )
+    , m_apTitleResources( new TitleResources(this,true) )
     , aBtnOK(this, SchResId(BTN_OK))
     , aBtnCancel(this, SchResId(BTN_CANCEL))
     , aBtnHelp(this, SchResId(BTN_HELP))
