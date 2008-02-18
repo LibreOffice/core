@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:54:02 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,15 @@ protected:
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource );
+
+protected:
+    /** sets a new property set, that you get with GetPropertySet().  It should
+        not be necessary to use this method.  It is introduced to allow changing
+        the regression type of a regression curve which changes the object
+        identity.
+     */
+    void resetPropertySet( const ::com::sun::star::uno::Reference<
+                           ::com::sun::star::beans::XPropertySet > & xPropSet );
 
 private:
     ::com::sun::star::uno::Reference<
