@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SeriesOptionsItemConverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:50:05 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #endif
 
 namespace chart
@@ -91,6 +94,13 @@ private:
     bool m_bGroupBarsPerAxis;
     bool m_bAllSeriesAttachedToSameAxis;
     sal_Int32 m_nAllSeriesAxisIndex;
+
+    bool m_bSupportingStartingAngle;
+    sal_Int32 m_nStartingAngle;
+
+    bool m_bClockwise;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem > m_xCooSys;
 };
 
 } //  namespace wrapper
