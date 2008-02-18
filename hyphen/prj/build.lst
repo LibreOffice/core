@@ -1,3 +1,3 @@
-hun	hunspell	:	solenv sal NULL
-hun     hunspell              usr1    -       all hun_mkout NULL
-hun     hunspell              nmake   -       all hun_hunspell NULL
+hyp	hyphen	:	solenv sal NULL
+hyp     hyphen              usr1    -       all hyp_mkout NULL
+hyp     hyphen              nmake   -       all hyp_hyphen NULL
