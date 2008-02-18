@@ -1,55 +1,75 @@
-Index: hyphen.c
-===================================================================
-RCS file: /cvs/whiteboard/lingucomponent/source/hyphenator/altlinuxhyph/libhnj/hyphen.c,v
-retrieving revision 1.8
-retrieving revision 1.8.32.1
-diff -u -u -r1.8 -r1.8.32.1
---- hyphen.c	3 Aug 2007 12:30:49 -0000	1.8
-+++ misc/build/hyphen-2.3/hyphen.c	2 Jan 2008 16:08:20 -0000	1.8.32.1
-@@ -300,7 +300,7 @@
-             } else {
-                 hnj_strchomp(repl + 1);
-                 replindex = 0;
--                replcut = strlen(buf);
-+                replcut = (signed char) strlen(buf);
-             }
-             repl = hnj_strdup(repl + 1);
-           }
-@@ -333,10 +333,10 @@
-                     if ((((unsigned char) word[pc]) >> 6) != 2) pu++;
-                     if ((ps < 0) && (replindex == pu)) {
-                         ps = replindex;
--                        replindex = pc;
-+                        replindex = (signed char) pc;
-                     }
-                     if ((ps >= 0) && ((pu - ps) == replcut)) {
--                        replcut = (pc - replindex);
-+                        replcut = (signed char) (pc - replindex);
-                         break;
-                     }
-                 }
-@@ -353,7 +353,7 @@
- 	  dict->states[state_num].repl = repl;
- 	  dict->states[state_num].replindex = replindex;
-           if (!replcut) {
--            dict->states[state_num].replcut = strlen(word);
-+            dict->states[state_num].replcut = (signed char) strlen(word);
-           } else {
-             dict->states[state_num].replcut = replcut;
-           }
-*** misc/build/hyphen-2.3/makefile.mk	2008-02-18 10:30:28.000000000 +0100
---- misc/build/hyphen-2.3/makefile.mk	2008-02-18 10:27:19.000000000 +0100
+*** misc/hyphen-2.3/hyphen.c	Thu Nov 22 09:51:20 2007
+--- misc/build/hyphen-2.3/hyphen.c	Mon Feb 18 10:46:20 2008
+***************
+*** 298,304 ****
+              } else {
+                  hnj_strchomp(repl + 1);
+                  replindex = 0;
+!                 replcut = strlen(buf);
+              }
+              repl = hnj_strdup(repl + 1);
+            }
+--- 298,304 ----
+              } else {
+                  hnj_strchomp(repl + 1);
+                  replindex = 0;
+!                 replcut = (signed char) strlen(buf);
+              }
+              repl = hnj_strdup(repl + 1);
+            }
+***************
+*** 331,340 ****
+                      if ((((unsigned char) word[pc]) >> 6) != 2) pu++;
+                      if ((ps < 0) && (replindex == pu)) {
+                          ps = replindex;
+!                         replindex = pc;
+                      }
+                      if ((ps >= 0) && ((pu - ps) == replcut)) {
+!                         replcut = (pc - replindex);
+                          break;
+                      }
+                  }
+--- 331,340 ----
+                      if ((((unsigned char) word[pc]) >> 6) != 2) pu++;
+                      if ((ps < 0) && (replindex == pu)) {
+                          ps = replindex;
+!                         replindex = (signed char) pc;
+                      }
+                      if ((ps >= 0) && ((pu - ps) == replcut)) {
+!                         replcut = (signed char) (pc - replindex);
+                          break;
+                      }
+                  }
+***************
+*** 351,357 ****
+  	  dict->states[state_num].repl = repl;
+  	  dict->states[state_num].replindex = replindex;
+            if (!replcut) {
+!             dict->states[state_num].replcut = strlen(word);
+            } else {
+              dict->states[state_num].replcut = replcut;
+            }
+--- 351,357 ----
+  	  dict->states[state_num].repl = repl;
+  	  dict->states[state_num].replindex = replindex;
+            if (!replcut) {
+!             dict->states[state_num].replcut = (signed char) strlen(word);
+            } else {
+              dict->states[state_num].replcut = replcut;
+            }
+*** misc/hyphen-2.3/makefile.mk	Mon Feb 18 11:06:40 2008
+--- misc/build/hyphen-2.3/makefile.mk	Mon Feb 18 11:05:49 2008
 ***************
 *** 1 ****
 ! dummy
---- 1,58 ----
+--- 1,65 ----
 ! #*************************************************************************
 ! #
 ! #   $RCSfile: hyphen-2.3.patch,v $
 ! #
-! #   $Revision: 1.2 $
+! #   $Revision: 1.3 $
 ! #
-! #   last change: $Author: rene $ $Date: 2008-02-18 09:42:59 $
+! #   last change: $Author: mh $ $Date: 2008-02-18 10:07:47 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,4 +120,11 @@ diff -u -u -r1.8 -r1.8.32.1
 ! 
 ! # --- Targets ------------------------------------------------------
 ! 
+! ALL: hyph_en_US.dic ALLTAR
+! 
 ! .INCLUDE : target.mk
+! 
+! hyph_en_US.dic : hyphen.tex
+! 	cp hyphen.tex hyphen.us
+! 	patch < hyphen.patch
+! 	perl substrings.pl hyphen.us hyph_en_US.dic ISO8859.-1 
