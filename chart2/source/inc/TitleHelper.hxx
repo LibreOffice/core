@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:23:19 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@ public:
         X_AXIS_TITLE,
         Y_AXIS_TITLE,
         Z_AXIS_TITLE,
-//         SECOND_X_AXIS_TITLE,
-//         SECOND_Y_AXIS_TITLE,
+        SECONDARY_X_AXIS_TITLE,
+        SECONDARY_Y_AXIS_TITLE,
         NORMAL_TITLE_END,
 
         //it is intended that this both types are after NORMAL_TITLE_END
