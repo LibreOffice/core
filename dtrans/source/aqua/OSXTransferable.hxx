@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OSXTransferable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:10:32 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,38 +60,24 @@
 #include "DataFlavorMapping.hxx"
 
 #include <premac.h>
-    #include <Carbon/Carbon.h>
-    #include <ApplicationServices/ApplicationServices.h>
+#import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
 #include <vector>
 
-struct ClipboardItem
-{
-  ClipboardItem(PasteboardItemID id,
-                CFStringRef systemFlavor,
-                const com::sun::star::datatransfer::DataFlavor& oOOFlavor);
 
-  ~ClipboardItem();
-
-  PasteboardItemID mId;
-  CFStringRef mSystemDataFlavor;
-  com::sun::star::datatransfer::DataFlavor mOOoDataFlavor;
-};
-
-typedef boost::shared_ptr<ClipboardItem> ClipboardItemPtr_t;
-typedef std::vector<ClipboardItemPtr_t> ClipboardItemContainer_t;
-
-
-class OSXTransferable : public ::cppu::WeakImplHelper1<com::sun::star::datatransfer::XTransferable>
+class OSXTransferable : public ::cppu::WeakImplHelper1<com::sun::star::datatransfer::XTransferable>,
+                        private ::boost::noncopyable
 {
 public:
   typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
 
-  explicit OSXTransferable(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ServiceManager,
+  explicit OSXTransferable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context,
                            ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
-                           DataFlavorMapperPtr_t pDataFlavorMapper);
+                           DataFlavorMapperPtr_t pDataFlavorMapper,
+                           NSPasteboard* pasteboard);
 
   virtual ~OSXTransferable();
 
@@ -108,37 +94,28 @@ public:
   virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
     throw( ::com::sun::star::uno::RuntimeException );
 
-  void addClipboardItemFlavors(PasteboardItemID clipboardItemId);
-
-  ClipboardItemPtr_t findMatchingClipboardItem(const com::sun::star::datatransfer::DataFlavor& aFlavor);
+  //------------------------------------------------------------------------
+  // Helper functions not part of the XTransferable interface
+  //------------------------------------------------------------------------
 
   void initClipboardItemList();
 
-  com::sun::star::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
+  //com::sun::star::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
 
-  bool isUnicodeText(ClipboardItemPtr_t clipboardItem);
+  bool isUnicodeText(const com::sun::star::datatransfer::DataFlavor& flavor);
 
   bool compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
-                                    const com::sun::star::datatransfer::DataFlavor& rhs );
-
+                           const com::sun::star::datatransfer::DataFlavor& rhs );
 
   bool cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xLhs,
                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xRhs ) const;
 
-
 private:
-  ClipboardItemContainer_t mClipboardItems;
-  com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > m_FlavorList;
-  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mrSrvMgr;
+  com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;
+  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mXComponentContext;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  DataFlavorMapperPtr_t mpDataFlavorMapper;
-  osl::Mutex m_aMutex;
-  PasteboardRef mrClipboard;
-
-  // prevent copy and assignment
-private:
-  OSXTransferable( const OSXTransferable& );
-  OSXTransferable& operator=( const OSXTransferable& );
+  DataFlavorMapperPtr_t mDataFlavorMapper;
+  NSPasteboard* mPasteboard;
 };
 
 #endif
