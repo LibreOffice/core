@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:46:53 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,11 @@
 #include "tp_LegendPosition.hxx"
 #include "tp_PointGeometry.hxx"
 #include "tp_Scale.hxx"
-#include "tp_SeriesStatistic.hxx"
+#include "tp_ErrorBars.hxx"
+#include "tp_Trendline.hxx"
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
-#include "tp_RegressionOptions.hxx"
+#include "tp_PolarOptions.hxx"
 #include "ResId.hxx"
 #include "ViewElementListProvider.hxx"
 #include "macros.hxx"
@@ -139,6 +140,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bHasScaleProperties(false)
         , m_bCanAxisLabelsBeStaggered(false)
         , m_bHasNumberProperties(false)
+        , m_bProvidesStartingAngle(false)
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
@@ -177,6 +179,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
             m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
             m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
+            m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
         }
     }
     m_bHasLineProperties     = true; //@todo ask object
@@ -266,6 +269,10 @@ bool ObjectPropertiesDialogParameter::HasNumberProperties() const
 {
     return m_bHasNumberProperties;
 }
+bool ObjectPropertiesDialogParameter::ProvidesStartingAngle() const
+{
+    return m_bProvidesStartingAngle;
+}
 
 //const USHORT nNoArrowDlg          = 1100;
 const USHORT nNoArrowNoShadowDlg    = 1101;
@@ -302,6 +309,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
     , m_pSymbolShapeProperties(NULL)
     , m_pAutoSymbolGraphic(NULL)
     , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
+    , m_bOKPressed(false)
 {
     FreeResource();
 
@@ -344,11 +352,13 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
             if( m_pParameter->HasStatisticProperties() )
-                AddTabPage(TP_STAT, String(SchResId(STR_PAGE_STATISTICS)), SchStatisticTabPage::Create, NULL);
+                AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
             if( m_pParameter->HasGeometryProperties() )
                 AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
             if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() )
                 AddTabPage(TP_OPTIONS, String(SchResId(STR_PAGE_OPTIONS)),SchOptionTabPage::Create, NULL);
+            if( m_pParameter->ProvidesStartingAngle())
+                AddTabPage(TP_POLAROPTIONS, String(SchResId(STR_PAGE_OPTIONS)),PolarOptionsTabPage::Create, NULL);
             break;
 
         case OBJECTTYPE_AXIS:
@@ -376,8 +386,9 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
 
         case OBJECTTYPE_DATA_CURVE:
+            OSL_ASSERT( m_pParameter->HasRegressionProperties());
+            AddTabPage(TP_TRENDLINE, String(SchResId(STR_PAGE_TRENDLINE_TYPE)), TrendlineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
-            AddTabPage(TP_REGRESSION_OPTIONS, String(SchResId(STR_PAGE_REGRESSION_OPTIONS)), RegressionOptionsTabPage::Create,  NULL);
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS:
@@ -405,6 +416,12 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
             break;
     }
+
+    // used to find out if user left the dialog with OK. When OK is pressed but
+    // no changes were done, Cancel is returned by the SfxTabDialog. See method
+    // DialogWasClosedWithOK.
+    m_aOriginalOKClickHdl = GetOKButton().GetClickHdl();
+    GetOKButton().SetClickHdl( LINK( this, SchAttribTabDlg, OKPressed ));
 }
 
 SchAttribTabDlg::~SchAttribTabDlg()
@@ -510,16 +527,29 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             rPage.PageCreated(aSet);
             break;
 
-        case TP_STAT:
-            static_cast< SchStatisticTabPage & >( rPage ).EnableTrendLine(
-                m_pParameter->HasRegressionProperties() );
-            static_cast< SchStatisticTabPage & >( rPage ).SetAxisMinorStepWidthForErrorBarDecimals(
-                m_fAxisMinorStepWidthForErrorBarDecimals );
+        case TP_YERRORBAR:
+        {
+            ErrorBarsTabPage * pTabPage = dynamic_cast< ErrorBarsTabPage * >( &rPage );
+            OSL_ASSERT( pTabPage );
+            if( pTabPage )
+            {
+                pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
+                pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_Y );
+            }
             break;
-
-        case TP_REGRESSION_OPTIONS:
-            break;
+        }
     }
+}
+
+IMPL_LINK( SchAttribTabDlg, OKPressed, void * , EMPTYARG )
+{
+    m_bOKPressed = true;
+    return m_aOriginalOKClickHdl.Call( this );
+}
+
+bool SchAttribTabDlg::DialogWasClosedWithOK() const
+{
+    return m_bOKPressed;
 }
 
 //.............................................................................
