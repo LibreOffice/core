@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_ErrorBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:34:49 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,23 +58,13 @@ namespace chart
 
 enum StatIndicator
 {
-    INDICATE_NONE,
     INDICATE_BOTH,
     INDICATE_UP,
     INDICATE_DOWN
 };
 
-enum StatTrendLine
-{
-    TRENDLINE_NONE,
-    TRENDLINE_LINE,
-    TRENDLINE_LOG,
-    TRENDLINE_EXP,
-    TRENDLINE_POW
-};
-
-ErrorBarResources::ErrorBarResources( Window* pWindow, const SfxItemSet& rInAttrs )
-    : m_aCbxAverage (pWindow, SchResId (CBX_AVERAGE)),
+ErrorBarResources::ErrorBarResources( Window* pWindow, const SfxItemSet& rInAttrs,
+                                      tErrorBarType eType /* = ERROR_BAR_Y */ ) :
     m_aFlErrorCategory (pWindow, SchResId (FL_ERROR)),
     m_aRbtNone (pWindow, SchResId (RBT_NONE)),
     m_aRbtVariant (pWindow, SchResId (RBT_VARIANT)),
@@ -82,25 +72,22 @@ ErrorBarResources::ErrorBarResources( Window* pWindow, const SfxItemSet& rInAttr
     m_aRbtPercent (pWindow, SchResId (RBT_PERCENT)),
     m_aRbtBigError (pWindow, SchResId (RBT_BIGERROR)),
     m_aRbtConst (pWindow, SchResId (RBT_CONST)),
+//     m_aRbtRange (pWindow, SchResId (RBT_RANGE)),
     m_aMtrFldPercent (pWindow, SchResId (MTR_FLD_PERCENT)),
     m_aMtrFldBigError (pWindow, SchResId (MTR_FLD_BIGERROR)),
     m_aFTConstPlus (pWindow, SchResId (FT_PERCENT_PLUS)),
     m_aMtrFldConstPlus (pWindow, SchResId (MTR_FLD_PLUS)),
     m_aFTConstMinus (pWindow, SchResId (FT_PERCENT_MINUS)),
     m_aMtrFldConstMinus (pWindow, SchResId (MTR_FLD_MINUS)),
-    m_aFTIndicate (pWindow, SchResId (FT_INDICATE)),
+    m_aFLIndicate (pWindow, SchResId (FL_INDICATE)),
     m_aIndicatorSet (pWindow, SchResId (CT_INDICATE)),
-    m_aFTTrendLine (pWindow, SchResId (FT_REGRESS)),
-    m_aTrendLineSet (pWindow, SchResId (CT_REGRESS)),
-    m_bEnableTrendLine( false ),
     m_eErrorKind( CHERROR_NONE ),
     m_eIndicate( CHINDICATE_BOTH ),
-    m_eTrendLineType( CHREGRESS_NONE ),
     m_bErrorKindUnique( true ),
     m_bIndicatorUnique( true ),
-    m_bTrendLineUnique( true ),
     m_bPlusUnique( true ),
-    m_bMinusUnique( true )
+    m_bMinusUnique( true ),
+    m_eErrorBarType( eType )
 {
     m_aRbtNone.SetClickHdl(LINK(this, ErrorBarResources, RBtnClick));
     m_aRbtVariant.SetClickHdl(LINK(this, ErrorBarResources, RBtnClick));
@@ -117,12 +104,6 @@ ErrorBarResources::ErrorBarResources( Window* pWindow, const SfxItemSet& rInAttr
     m_aIndicatorSet.SetExtraSpacing(2);
     m_aIndicatorSet.SetSelectHdl(LINK(this, ErrorBarResources, SelectIndicate));
 
-    m_aTrendLineSet.SetStyle (m_aIndicatorSet.GetStyle () /*| WB_ITEMBORDER | WB_DOUBLEBORDER*/ | WB_NAMEFIELD /*| WB_VSCROLL*/ );
-    m_aTrendLineSet.SetColCount(5);
-    m_aTrendLineSet.SetLineCount(1);
-    m_aTrendLineSet.SetExtraSpacing(2);
-    m_aTrendLineSet.SetSelectHdl(LINK(this, ErrorBarResources, SelectTrendLine));
-
     Reset( rInAttrs );
 }
 
@@ -130,9 +111,13 @@ ErrorBarResources::~ErrorBarResources()
 {
 }
 
-void ErrorBarResources::EnableTrendLine( bool bEnable )
+void ErrorBarResources::SetErrorBarType( tErrorBarType eNewType )
 {
-    m_bEnableTrendLine = bEnable;
+    if( m_eErrorBarType != eNewType )
+    {
+        m_eErrorBarType = eNewType;
+        FillValueSets();
+    }
 }
 
 void ErrorBarResources::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth )
@@ -158,8 +143,9 @@ IMPL_LINK( ErrorBarResources, RBtnClick, Button *, pBtn )
     m_aMtrFldConstMinus.Enable (pBtn == &m_aRbtConst);
     m_aFTConstPlus.Enable (pBtn == &m_aRbtConst);
     m_aFTConstMinus.Enable (pBtn == &m_aRbtConst);
+
     m_aIndicatorSet.Show (pBtn != &m_aRbtNone);
-    m_aFTIndicate.Show (pBtn != &m_aRbtNone);
+//     m_aFLIndicate.Show (pBtn != &m_aRbtNone);
 
     if (pBtn == &m_aRbtPercent) m_eErrorKind = CHERROR_PERCENT;
     else if (pBtn == &m_aRbtBigError) m_eErrorKind = CHERROR_BIGERROR;
@@ -167,8 +153,6 @@ IMPL_LINK( ErrorBarResources, RBtnClick, Button *, pBtn )
     else if (pBtn == &m_aRbtNone) m_eErrorKind = CHERROR_NONE;
     else if (pBtn == &m_aRbtVariant) m_eErrorKind = CHERROR_VARIANT;
     else if (pBtn == &m_aRbtSigma) m_eErrorKind = CHERROR_SIGMA;
-
-    m_bErrorKindUnique = true;
 
     if( pBtn != &m_aRbtNone )
     {
@@ -180,6 +164,8 @@ IMPL_LINK( ErrorBarResources, RBtnClick, Button *, pBtn )
         }
     }
 
+    m_bErrorKindUnique = true;
+
     return 0;
 }
 
@@ -189,9 +175,9 @@ IMPL_LINK( ErrorBarResources, SelectIndicate, void *, EMPTYARG )
 
     switch (eSelection - 1)
     {
-        case INDICATE_NONE :
-            m_eIndicate = CHINDICATE_NONE;
-            break;
+//      case INDICATE_NONE :
+//          m_eIndicate = CHINDICATE_NONE;
+//          break;
 
         case INDICATE_BOTH :
             m_eIndicate = CHINDICATE_BOTH;
@@ -207,45 +193,10 @@ IMPL_LINK( ErrorBarResources, SelectIndicate, void *, EMPTYARG )
     }
 
     m_aIndicatorSet.SelectItem( static_cast< sal_uInt16 >(eSelection));
-    m_aIndicatorSet.Show ();
-    m_aFTIndicate.Show();
+    m_aIndicatorSet.Show();
+//     m_aFLIndicate.Show();
 
     m_bIndicatorUnique = true;
-
-    return 0;
-}
-
-IMPL_LINK( ErrorBarResources, SelectTrendLine, void *, EMPTYARG )
-{
-    StatTrendLine eSelection = (StatTrendLine) m_aTrendLineSet.GetSelectItemId();
-
-    switch (eSelection - 1)
-    {
-        case TRENDLINE_NONE :
-            m_eTrendLineType = CHREGRESS_NONE;
-            break;
-
-        case TRENDLINE_LINE :
-            m_eTrendLineType = CHREGRESS_LINEAR;
-            break;
-
-        case TRENDLINE_LOG :
-            m_eTrendLineType = CHREGRESS_LOG;
-            break;
-
-        case TRENDLINE_EXP :
-            m_eTrendLineType = CHREGRESS_EXP;
-            break;
-
-        case TRENDLINE_POW :
-            m_eTrendLineType = CHREGRESS_POWER;
-            break;
-    }
-
-    m_aTrendLineSet.SelectItem( static_cast< sal_uInt16 >(eSelection));
-    m_aTrendLineSet.Show ();
-    m_aFTTrendLine.Show ();
-    m_bTrendLineUnique = true;
 
     return 0;
 }
@@ -255,22 +206,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     const SfxPoolItem *pPoolItem = NULL;
     SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_AVERAGE, TRUE, &pPoolItem );
-    if( aState == SFX_ITEM_DONTCARE )
-    {
-        m_aCbxAverage.EnableTriState( TRUE );
-        m_aCbxAverage.SetState( STATE_DONTKNOW );
-    }
-    else
-    {
-        m_aCbxAverage.EnableTriState( FALSE );
-        if( aState == SFX_ITEM_SET )
-            m_aCbxAverage.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
-    }
-
-    //-----
-
-    m_eErrorKind = CHERROR_NONE;
+     m_eErrorKind = CHERROR_NONE;
     aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, TRUE, &pPoolItem );
     m_bErrorKindUnique = ( aState != SFX_ITEM_DONTCARE );
 
@@ -297,7 +233,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
 
     m_aIndicatorSet.Show(m_eErrorKind != CHERROR_NONE);
-    m_aFTIndicate.Show(m_eErrorKind != CHERROR_NONE);
+//     m_aFLIndicate.Show(m_eErrorKind != CHERROR_NONE);
 
     //-----
 
@@ -347,7 +283,8 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         switch( m_eIndicate )
         {
             case CHINDICATE_NONE :
-                m_aIndicatorSet.SelectItem(INDICATE_NONE + 1);
+                // no longer used
+                OSL_ENSURE( false, "CHINDICATE_NONE no longer supported" );
                 break;
             case CHINDICATE_BOTH :
                 m_aIndicatorSet.SelectItem(INDICATE_BOTH + 1);
@@ -362,59 +299,14 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
     else
         m_aIndicatorSet.SetNoSelection();
-
-    //----- Trend Lines
-
-    if( m_bEnableTrendLine )
-    {
-        m_aFTTrendLine.Show ();
-        m_aTrendLineSet.Show ();
-    }
-    else
-    {
-        m_aTrendLineSet.Hide ();
-        m_aFTTrendLine.Hide ();
-    }
-
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_REGRESSTYPE, TRUE, &pPoolItem );
-    m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET )
-        m_eTrendLineType = ((const SvxChartRegressItem * ) pPoolItem)->GetValue();
-
-    if( m_bTrendLineUnique )
-    {
-        switch( m_eTrendLineType )
-        {
-            case CHREGRESS_NONE :
-                m_aTrendLineSet.SelectItem(TRENDLINE_NONE + 1);
-                break;
-            case CHREGRESS_LINEAR :
-                m_aTrendLineSet.SelectItem(TRENDLINE_LINE + 1);
-                break;
-            case CHREGRESS_LOG :
-                m_aTrendLineSet.SelectItem(TRENDLINE_LOG + 1);
-                break;
-            case CHREGRESS_EXP :
-                m_aTrendLineSet.SelectItem(TRENDLINE_EXP + 1);
-                break;
-            case CHREGRESS_POWER :
-                m_aTrendLineSet.SelectItem(TRENDLINE_POW + 1);
-                break;
-        }
-    }
 }
 
 BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
-    if( m_aCbxAverage.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_STAT_AVERAGE, m_aCbxAverage.IsChecked() ));
     if( m_bErrorKindUnique )
         rOutAttrs.Put( SvxChartKindErrorItem( m_eErrorKind, SCHATTR_STAT_KIND_ERROR ));
     if( m_bIndicatorUnique )
         rOutAttrs.Put( SvxChartIndicateItem( m_eIndicate, SCHATTR_STAT_INDICATE ));
-
-    if( m_bEnableTrendLine && m_bTrendLineUnique )
-        rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_STAT_REGRESSTYPE ));
 
     if( m_bErrorKindUnique )
     {
@@ -446,47 +338,51 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbtNone.GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && m_aRbtConst.GetDisplayBackground().GetColor().IsDark() );
 
     if( m_aIndicatorSet.GetItemCount() == 0 )
     {
-        m_aIndicatorSet.InsertItem( INDICATE_NONE + 1, SELECT_BITMAP( BMP_INDICATE_NONE ),
-                         String(SchResId(STR_INDICATE_NONE)));
-        m_aIndicatorSet.InsertItem( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH ),
-                         String(SchResId(STR_INDICATE_BOTH)));
-        m_aIndicatorSet.InsertItem( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_DOWN ),
-                         String(SchResId(STR_INDICATE_DOWN)));
-        m_aIndicatorSet.InsertItem( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_UP ),
-                         String(SchResId(STR_INDICATE_UP)));
+        if( m_eErrorBarType == ERROR_BAR_Y )
+        {
+            m_aIndicatorSet.InsertItem( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH_VERTI ),
+                                        String(SchResId(STR_INDICATE_BOTH)));
+            m_aIndicatorSet.InsertItem( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_DOWN ),
+                                        String(SchResId(STR_INDICATE_DOWN)));
+            m_aIndicatorSet.InsertItem( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_UP ),
+                                        String(SchResId(STR_INDICATE_UP)));
+        }
+        else if( m_eErrorBarType == ERROR_BAR_X )
+        {
+            m_aIndicatorSet.InsertItem( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH_HORI ),
+                                        String(SchResId(STR_INDICATE_BOTH)));
+            m_aIndicatorSet.InsertItem( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_LEFT ),
+                                        String(SchResId(STR_INDICATE_DOWN)));
+            m_aIndicatorSet.InsertItem( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_RIGHT ),
+                                        String(SchResId(STR_INDICATE_UP)));
+        }
+        else
+        {
+            OSL_ENSURE( false,  "error bar type not handled" );
+        }
     }
     else
     {
-        m_aIndicatorSet.SetItemImage( INDICATE_NONE + 1, SELECT_BITMAP( BMP_INDICATE_NONE ));
-        m_aIndicatorSet.SetItemImage( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH ));
-        m_aIndicatorSet.SetItemImage( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_DOWN ));
-        m_aIndicatorSet.SetItemImage( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_UP ));
-    }
-
-    if( m_aTrendLineSet.GetItemCount() == 0 )
-    {
-        m_aTrendLineSet.InsertItem( TRENDLINE_NONE + 1, SELECT_BITMAP( BMP_REGRESSION_NONE ),
-                                String(SchResId(STR_REGRESSION_NONE)));
-        m_aTrendLineSet.InsertItem( TRENDLINE_LINE + 1, SELECT_BITMAP( BMP_REGRESSION_LINEAR ),
-                                String(SchResId(STR_REGRESSION_LINEAR)));
-        m_aTrendLineSet.InsertItem( TRENDLINE_LOG + 1, SELECT_BITMAP( BMP_REGRESSION_LOG ),
-                                String(SchResId(STR_REGRESSION_LOG)));
-        m_aTrendLineSet.InsertItem( TRENDLINE_EXP + 1, SELECT_BITMAP( BMP_REGRESSION_EXP ),
-                                String(SchResId(STR_REGRESSION_EXP)));
-        m_aTrendLineSet.InsertItem( TRENDLINE_POW + 1, SELECT_BITMAP( BMP_REGRESSION_POWER ),
-                                String(SchResId(STR_REGRESSION_POWER)));
-    }
-    else
-    {
-        m_aTrendLineSet.SetItemImage( TRENDLINE_NONE + 1, SELECT_BITMAP( BMP_REGRESSION_NONE ));
-        m_aTrendLineSet.SetItemImage( TRENDLINE_LINE + 1, SELECT_BITMAP( BMP_REGRESSION_LINEAR ));
-        m_aTrendLineSet.SetItemImage( TRENDLINE_LOG + 1, SELECT_BITMAP( BMP_REGRESSION_LOG ));
-        m_aTrendLineSet.SetItemImage( TRENDLINE_EXP + 1, SELECT_BITMAP( BMP_REGRESSION_EXP ));
-        m_aTrendLineSet.SetItemImage( TRENDLINE_POW + 1, SELECT_BITMAP( BMP_REGRESSION_POWER ));
+        if( m_eErrorBarType == ERROR_BAR_Y )
+        {
+            m_aIndicatorSet.SetItemImage( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH_VERTI ));
+            m_aIndicatorSet.SetItemImage( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_DOWN ));
+            m_aIndicatorSet.SetItemImage( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_UP ));
+        }
+        else if( m_eErrorBarType == ERROR_BAR_X )
+        {
+            m_aIndicatorSet.SetItemImage( INDICATE_BOTH + 1, SELECT_BITMAP( BMP_INDICATE_BOTH_HORI ));
+            m_aIndicatorSet.SetItemImage( INDICATE_DOWN + 1, SELECT_BITMAP( BMP_INDICATE_LEFT ));
+            m_aIndicatorSet.SetItemImage( INDICATE_UP + 1, SELECT_BITMAP( BMP_INDICATE_RIGHT ));
+        }
+        else
+        {
+            OSL_ENSURE( false,  "error bar type not handled" );
+        }
     }
 }
 
