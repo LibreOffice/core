@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:36:54 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
@@ -432,6 +434,26 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
+
+                    //correct default starting angle for old 3D pies
+                    sal_Int32 nBuildId = 0;
+                    sal_Int32 nUPD;
+                    if( !GetImport().getBuildIds( nUPD, nBuildId ) || nBuildId < xmloff::chart::BUILD_ID_3_0 )
+                    {
+                        bool bIs3d = false;
+                        if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
+                            bIs3d )
+                        {
+                            if( maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.PieChartType" ))
+                                || maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" )) )
+                            {
+                                ::rtl::OUString aPropName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartingAngle")) );
+                                uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
+                                if( !aAStartingAngle.hasValue() )
+                                    xProp->setPropertyValue( aPropName, uno::makeAny(sal_Int32(0)) ) ;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -742,6 +764,16 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
                     xResult = uno::Reference< drawing::XShape >( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
                 }
             }
+            else
+            {
+                uno::Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() )
+                {
+                    if( xDiaProp.is() )
+                        xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSecondaryXAxisTitle" ), aTrueBool );
+                    xResult = uno::Reference< drawing::XShape >( xSuppl->getSecondXAxisTitle(), uno::UNO_QUERY );
+                }
+            }
             break;
         case SCH_XML_AXIS_Y:
             if( maCurrentAxis.nIndexInCategory == 0 )
@@ -752,6 +784,16 @@ uno::Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
                     if( xDiaProp.is())
                         xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasYAxisTitle" ), aTrueBool );
                     xResult = uno::Reference< drawing::XShape >( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
+                }
+            }
+            else
+            {
+                uno::Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() )
+                {
+                    if( xDiaProp.is() )
+                        xDiaProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSecondaryYAxisTitle" ), aTrueBool );
+                    xResult = uno::Reference< drawing::XShape >( xSuppl->getSecondYAxisTitle(), uno::UNO_QUERY );
                 }
             }
             break;
@@ -1200,6 +1242,28 @@ void SchXMLAxisContext::SetAxisTitle()
                     }
                 }
             }
+            else
+            {
+                uno::Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() &&
+                    bHasTitle )
+                {
+                    uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondXAxisTitle(), uno::UNO_QUERY );
+                    if( xTitleProp.is())
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            aAny <<= maCurrentAxis.aTitle;
+                            xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                            DBG_ERROR( "Property String for Title not available" );
+                        }
+                    }
+                }
+            }
             break;
 
         case SCH_XML_AXIS_Y:
@@ -1221,6 +1285,28 @@ void SchXMLAxisContext::SetAxisTitle()
                         catch( beans::UnknownPropertyException & )
                         {
                                 DBG_ERROR( "Property String for Title not available" );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                uno::Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() &&
+                    bHasTitle )
+                {
+                    uno::Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondYAxisTitle(), uno::UNO_QUERY );
+                    if( xTitleProp.is())
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            aAny <<= maCurrentAxis.aTitle;
+                            xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
+                        }
+                        catch( beans::UnknownPropertyException & )
+                        {
+                            DBG_ERROR( "Property String for Title not available" );
                         }
                     }
                 }
