@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_Statistic.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:30:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,17 @@
 #include "Strings.hrc"
 
 //SchStatisticTabPage and SchDataStatisticsDlg
-String STR_INDICATE_NONE
-{
-    Text [ en-US ] = "No Indicators" ;
-};
 String STR_INDICATE_BOTH
 {
-    Text [ en-US ] = "Indicators Top and Bottom" ;
+    Text [ en-US ] = "Negative and Positive" ;
 };
 String STR_INDICATE_DOWN
 {
-    Text [ en-US ] = "Lower Indicator" ;
+    Text [ en-US ] = "Negative" ;
 };
 String STR_INDICATE_UP
 {
-    Text [ en-US ] = "Upper Indicator" ;
+    Text [ en-US ] = "Positive" ;
 };
 
 //------------------------------------------------------------------------
@@ -61,11 +57,11 @@ String STR_REGRESSION_NONE
 };
 String STR_REGRESSION_LINEAR
 {
-    Text [ en-US ] = "Linear regression" ;
+    Text [ en-US ] = "Linear Regression" ;
 };
 String STR_REGRESSION_LOG
 {
-    Text [ en-US ] = "Logarithm regression" ;
+    Text [ en-US ] = "Logarithmic Regression" ;
 };
 String STR_REGRESSION_EXP
 {
@@ -73,7 +69,7 @@ String STR_REGRESSION_EXP
 };
 String STR_REGRESSION_POWER
 {
-    Text [ en-US ] = "Power regression" ;
+    Text [ en-US ] = "Power Regression" ;
 };
 
 String STR_STATISTICS_IN_LEGEND
