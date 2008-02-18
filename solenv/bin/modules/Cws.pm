@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:37:44 $
+#   last change: $Author: rt $ $Date: 2008-02-18 09:12:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,32 @@ for my $datum (qw(child)) {
 
 #### additional public methods ####
 
+# For resync: Sets master and milestone simultaneously
+# In case of a cross master resync it does not make sense to
+# change both items separately
+sub set_master_and_milestone
+{
+    my $self      = shift;
+    my $master    = shift or return undef;
+    my $milestone = shift or return undef;
+
+    # if we do not yet have a valid EIS registered CWS use the above more basic methods
+    if ( !$self->{'MASTER'}
+         || !$self->{'MILESTONE'}
+         || !$self->eis_id() )
+    {
+        $self->master($master);
+        $self->milestone($milestone);
+    } else {
+        if ( $self->set_master_and_milestone_in_eis($master, $milestone) ) {
+            $self->{'MASTER'} = $master;
+            $self->{'MILESTONE'} = $milestone;
+        }
+    }
+    my @retarray = ($self->{'MASTER'}, $self->{'MILESTONE'});
+    return wantarray ? @retarray : \@retarray;
+}
+
 # Query if CWS name is still available. Does not yet register
 # anything with EIS.
 sub is_cws_name_available
@@ -279,7 +305,7 @@ sub add_patch_file
 }
 
 #
-# Procedure retrieves the stand which
+# Procedure retrieves the workspace which
 # is based on cvs head (not branch)
 #
 sub get_cvs_head {
@@ -899,6 +925,38 @@ sub set_item_in_eis
 
     if ( $@ ) {
         carp("ERROR: set_item(): EIS database transaction failed. Reason:\n$@\n");
+        return undef;
+    }
+    return 1 if $result;
+    return 0;
+}
+
+sub set_master_and_milestone_in_eis
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    my $eis = Cws::eis();
+    my $id = $self->eis_id();
+
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    # make certain that the item is a string, otherwise
+    # autotyping will occasionally choose the wrong type
+    $master = Eis::to_string($master);
+    $milestone = Eis::to_string($milestone);
+
+    my $result;
+    # this operation invalidates the cached tags list
+    $self->{_CACHED_TAGS} = undef;
+    eval { $result = $eis->setMasterWorkspaceAndMilestone($id, $master, $milestone) };
+
+    if ( $@ ) {
+        carp("ERROR: set_master_and_milestone(): EIS database transaction failed. Reason:\n$@\n");
         return undef;
     }
     return 1 if $result;
