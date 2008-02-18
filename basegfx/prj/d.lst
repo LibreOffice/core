@@ -3,9 +3,8 @@
 ..\%__SRC%\bin\basegfx?????.dll %_DEST%\bin%_EXT%\basegfx?????.dll
 ..\%__SRC%\bin\bgfx*.dll %_DEST%\bin%_EXT%\bgfx*.dll
 
-..\%__SRC%\lib\libbasegfx?????.* %_DEST%\lib%_EXT%\libbasegfx?????.*
+..\%__SRC%\lib\libbasegfx*.* %_DEST%\lib%_EXT%\libbasegfx*.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 mkdir: %_DEST%\inc%_EXT%\basegfx
 

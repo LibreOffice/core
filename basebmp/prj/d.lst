@@ -2,9 +2,8 @@
 
 ..\%__SRC%\bin\basebmp?????.dll %_DEST%\bin%_EXT%\basebmp?????.dll
 
-..\%__SRC%\lib\libbasebmp?????.* %_DEST%\lib%_EXT%\libbasebmp?????.*
+..\%__SRC%\lib\libbasebmp*.* %_DEST%\lib%_EXT%\libbasebmp*.*
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 mkdir: %_DEST%\inc%_EXT%\basebmp
 ..\inc\basebmp\*.hxx %_DEST%\inc%_EXT%\basebmp\*.hxx
