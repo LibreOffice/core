@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:04:47 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,6 +363,17 @@ sal_Bool ChartTypeHelper::isSupportingRightAngledAxes( const uno::Reference< cha
             return sal_False;
     }
     return sal_True;
+}
+
+bool ChartTypeHelper::isSupportingStartingAngle( const uno::Reference< chart2::XChartType >& xChartType )
+{
+    if(xChartType.is())
+    {
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return true;
+    }
+    return false;
 }
 
 bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XChartType >& xChartType )
