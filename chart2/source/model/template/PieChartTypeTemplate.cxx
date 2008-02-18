@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:02:46 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -611,6 +611,14 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
             {
                 Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
                         , aCooSysSeq[nCooSysIdx] ) );
+                if( xAxis.is() )
+                {
+                    chart2::ScaleData aScaleData( xAxis->getScaleData() );
+                    aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+                    xAxis->setScaleData( aScaleData );
+                }
+
+                xAxis = AxisHelper::getAxis( 1, 0, aCooSysSeq[nCooSysIdx] );
                 if( xAxis.is() )
                 {
                     chart2::ScaleData aScaleData( xAxis->getScaleData() );
