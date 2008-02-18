@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchWhichPairs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:52:40 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,9 @@ const USHORT nDataPointWhichPairs[] =
 #define CHART_SERIES_OPTIONS_WHICHPAIRS \
     SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
     SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */  \
-    SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES \
-
+    SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES, \
+    SCHATTR_STARTING_ANGLE,SCHATTR_STARTING_ANGLE, \
+    SCHATTR_CLOCKWISE,SCHATTR_CLOCKWISE \
 
 const USHORT nSeriesOptionsWhichPairs[] =
 {
@@ -210,6 +211,7 @@ const USHORT nTextOrientWhichPairs[] =
 const USHORT nStatWhichPairs[]=
 {
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
+    SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END,
     0
 };
 
@@ -255,6 +257,7 @@ const USHORT nChartStyleWhichPairs[] =
 const USHORT nRegressionCurveWhichPairs[] =
 {
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
+    SCHATTR_STAT_REGRESSTYPE, SCHATTR_STAT_REGRESSTYPE,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     0
 };
