@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:51:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,21 @@ ItemConverter::ItemConverter(
         m_rItemPool( rItemPool ),
         m_bIsValid( true )
 {
-    if( m_xPropertySet.is())
+    resetPropertySet( m_xPropertySet );
+}
+
+ItemConverter::~ItemConverter()
+{
+    stopAllComponentListening();
+}
+
+void ItemConverter::resetPropertySet(
+    const uno::Reference< beans::XPropertySet > & xPropSet )
+{
+    if( xPropSet.is())
     {
+        stopAllComponentListening();
+        m_xPropertySet = xPropSet;
         m_xPropertySetInfo = m_xPropertySet->getPropertySetInfo();
 
         uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
@@ -77,11 +90,6 @@ ItemConverter::ItemConverter(
             startComponentListening( xComp );
         }
     }
-}
-
-ItemConverter::~ItemConverter()
-{
-    stopAllComponentListening();
 }
 
 SfxItemPool & ItemConverter::GetItemPool() const
