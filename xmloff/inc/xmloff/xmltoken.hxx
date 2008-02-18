@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:17:42 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2983,6 +2983,7 @@ namespace xmloff { namespace token {
         XML_CHARACTER_SET,
         XML_APPLICATION_CONNECTION_SETTINGS,
         XML_TABLE_INCLUDE_FILTER,
+        XML_ANGLE_OFFSET,
         XML_TOKEN_END
     };
 
