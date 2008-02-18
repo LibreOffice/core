@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:46:16 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,19 @@ String STR_PAGE_SCALE
     Text [ en-US ] = "Scale" ;
 };
 
-String STR_PAGE_STATISTICS
+// String STR_PAGE_STATISTICS
+// {
+//  Text [ en-US ] = "Statistics" ;
+// };
+
+String STR_PAGE_TRENDLINE_TYPE
 {
-    Text [ en-US ] = "Statistics" ;
+    Text[ en-US ] = "Type";
+};
+
+String STR_PAGE_YERROR_BARS
+{
+    Text[ en-US ] = "Y Error Bars";
 };
 
 String STR_PAGE_ALIGNMENT
@@ -148,11 +158,7 @@ String STR_PAGE_ILLUMINATION
 };
 String STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS
 {
-    Text [ en-US ] = "Average value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
-};
-String STR_PAGE_REGRESSION_OPTIONS
-{
-    Text [ en-US ] = "Equation";
+    Text [ en-US ] = "Mean value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
 };
 
 String STR_OBJECT_AXIS
@@ -242,6 +248,14 @@ String STR_OBJECT_TITLE_Z_AXIS
 {
     Text [ en-US ] = "Z Axis Title" ;
 };
+String STR_OBJECT_TITLE_SECONDARY_X_AXIS
+{
+    Text [ en-US ] = "Secondary X Axis Title" ;
+};
+String STR_OBJECT_TITLE_SECONDARY_Y_AXIS
+{
+    Text [ en-US ] = "Secondary Y Axis Title" ;
+};
 String STR_OBJECT_LABEL
 {
     Text [ en-US ] = "Label" ;
@@ -271,18 +285,21 @@ String STR_OBJECT_DATASERIES_PLURAL
 {
     Text [ en-US ] = "Data Series" ;
 };
-
 String STR_OBJECT_CURVE
 {
-    Text [ en-US ] = "Regression Curve";
+    Text [ en-US ] = "Trend Line";
+};
+String STR_OBJECT_CURVES
+{
+    Text [ en-US ] = "Trend Lines";
 };
 String STR_OBJECT_CURVE_WITH_PARAMETERS
 {
-    Text [ en-US ] = "Regression curve %FORMULA with accuracy R² = %RSQUARED";
+    Text [ en-US ] = "Trend line %FORMULA with accuracy R² = %RSQUARED";
 };
 String STR_OBJECT_AVERAGE_LINE
 {
-    Text [ en-US ] = "Average Value Line";
+    Text [ en-US ] = "Mean Value Line";
 };
 String STR_OBJECT_CURVE_EQUATION
 {
@@ -506,6 +523,11 @@ String STR_DATA_SELECT_RANGE_FOR_CATEGORIES
 String STR_DATA_SELECT_RANGE_FOR_DATALABELS
 {
     Text [ en-US ] = "Select Range for data labels" ;
+};
+
+String STR_DATA_EDITOR_INCORRECT_INPUT
+{
+    Text [ en-US ] = "Your last input is incorrect.\nIgnore this change and close the dialog?" ;
 };
 
 //-----------------------------------------------------------------------------
