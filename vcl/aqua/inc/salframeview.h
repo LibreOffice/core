@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframeview.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:15 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 @interface SalFrameWindow : NSWindow
 {
     AquaSalFrame*       mpFrame;
+    id mDraggingDestinationHandler;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(MacOSBOOL)canBecomeKeyWindow;
@@ -53,6 +54,18 @@
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(MacOSBOOL)containsMouse;
+
+/* NSDraggingDestination protocol methods
+ */
+-(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
+-(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
+-(void)draggingExited:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
+
+-(void)registerDraggingDestinationHandler:(id)theHandler;
+-(void)unregisterDraggingDestinationHandler:(id)theHandler;
 @end
 
 @interface SalFrameView : NSView <NSTextInput>
@@ -66,6 +79,8 @@
     BOOL mbKeyHandled;
     NSRange mMarkedRange;
     NSRange mSelectedRange;
+    id mpMouseEventListener;
+    id mDraggingDestinationHandler;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -108,6 +123,35 @@
 -(void)cancelOperation: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
+/*
+  Event hook for D&D service.
+
+  A drag operation will be invoked on a NSView using
+  the method 'dragImage'. This method requires the
+  actual mouse event initiating this drag operation.
+  Mouse events can only be received by subclassing
+  NSView and overriding methods like 'mouseDown' etc.
+  hence we implement a event hook here so that the
+  D&D service can register as listener for mouse
+  messages and use the last 'mouseDown' or
+  'mouseDragged' message to initiate the drag
+  operation.
+*/
+-(void)registerMouseEventListener: (id)theListener;
+-(void)unregisterMouseEventListener: (id)theListener;
+
+/* NSDraggingDestination protocol methods
+ */
+-(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
+-(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
+-(void)draggingExited:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
+
+-(void)registerDraggingDestinationHandler:(id)theHandler;
+-(void)unregisterDraggingDestinationHandler:(id)theHandler;
+
 @end
 
 #endif
