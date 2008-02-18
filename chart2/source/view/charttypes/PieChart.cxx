@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChart.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:45 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,8 @@ void PieChart::createShapes()
         if(!pSeries)
             continue;
 
+        m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();
+
         double fLogicYSum = 0.0;
         //iterate through all points to get the sum
         sal_Int32 nPointIndex=0;
@@ -759,7 +761,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
     PieLabelInfo* p2 = pCenter->pNext;
     //return true when successful
 
-    bool bLabelOrderIsAntiClockWise = true;//todo adapt this when pies can be oriented differently
+    bool bLabelOrderIsAntiClockWise = m_pPosHelper->isMathematicalOrientationAngle();
 
     PieLabelInfo* pCurrent = 0;
     for( pCurrent = p2 ;pCurrent->pPrevious != pSecondBorder; pCurrent = pCurrent->pNext )
