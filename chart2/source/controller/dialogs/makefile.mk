@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 11:47:27 $
+#   last change: $Author: rt $ $Date: 2008-02-18 15:45:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ SLOFILES=   	\
                 $(SLO)$/res_Titles.obj \
                 $(SLO)$/res_TextSeparator.obj \
                 $(SLO)$/res_ErrorBar.obj \
+                $(SLO)$/res_Trendline.obj \
                 $(SLO)$/res_BarGeometry.obj \
                 $(SLO)$/res_LegendPosition.obj \
                 $(SLO)$/res_DataLabel.obj \
@@ -80,12 +81,14 @@ SLOFILES=   	\
                 $(SLO)$/tp_LegendPosition.obj \
                 $(SLO)$/tp_PointGeometry.obj \
                 $(SLO)$/tp_Scale.obj \
-                $(SLO)$/tp_SeriesStatistic.obj \
+                $(SLO)$/tp_Trendline.obj \
+                $(SLO)$/tp_ErrorBars.obj \
                 $(SLO)$/tp_SeriesToAxis.obj \
                 $(SLO)$/tp_TitleRotation.obj \
                 $(SLO)$/tp_3D_SceneGeometry.obj \
                 $(SLO)$/tp_3D_SceneAppearance.obj \
                 $(SLO)$/tp_3D_SceneIllumination.obj \
+                $(SLO)$/tp_PolarOptions.obj \
                 $(SLO)$/dlg_ObjectProperties.obj \
                 $(SLO)$/dlg_DataEditor.obj \
                 $(SLO)$/dlg_DataSource.obj \
@@ -93,7 +96,8 @@ SLOFILES=   	\
                 $(SLO)$/dlg_InsertAxis_Grid.obj \
                 $(SLO)$/dlg_InsertDataLabel.obj \
                 $(SLO)$/dlg_InsertLegend.obj \
-                $(SLO)$/dlg_InsertStatistic.obj \
+                $(SLO)$/dlg_InsertTrendline.obj \
+                $(SLO)$/dlg_InsertErrorBars.obj \
                 $(SLO)$/dlg_InsertTitle.obj \
                 $(SLO)$/dlg_CreationWizard.obj \
                 $(SLO)$/dlg_CreationWizard_UNO.obj \
@@ -102,8 +106,7 @@ SLOFILES=   	\
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
-                $(SLO)$/RangeEdit.obj \
-                $(SLO)$/tp_RegressionOptions.obj
+                $(SLO)$/RangeEdit.obj
 
 # --- Resources ---------------------------------------------------------------
 
@@ -124,12 +127,14 @@ SRC1FILES=		\
                 tp_LegendPosition.src \
                 tp_PointGeometry.src \
                 tp_Scale.src \
-                tp_SeriesStatistic.src \
+                tp_Trendline.src \
+                tp_ErrorBars.src \
                 tp_SeriesToAxis.src \
                 tp_TitleRotation.src \
                 tp_3D_SceneGeometry.src \
                 tp_3D_SceneAppearance.src \
                 tp_3D_SceneIllumination.src \
+                tp_PolarOptions.src \
                 dlg_ObjectProperties.src \
                 Strings_Statistic.src \
                 Strings_Scale.src \
@@ -144,20 +149,21 @@ SRC1FILES=		\
                 dlg_InsertAxis_Grid.src \
                 dlg_InsertDataLabel.src \
                 dlg_InsertLegend.src \
-                dlg_InsertStatistic.src \
+                dlg_InsertTrendline.src \
+                dlg_InsertErrorBars.src \
                 dlg_InsertTitle.src \
                 dlg_ChartType.src \
-                dlg_CreationWizard.src \
-                tp_RegressionOptions.src
+                dlg_CreationWizard.src
 
 SRS1NAME=$(TARGET)
 
 # --- Targets -----------------------------------------------------------------
-LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Statistic_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc 
+LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Trendline_tmpl.hrc res_ErrorBar_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc 
 .INCLUDE: target.mk
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
-$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Statistic.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Trendline.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_ErrorBar.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Titlesx.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_SecondaryAxisCheckBoxes.hrc
 
@@ -175,19 +181,20 @@ $(SRS)$/chcdialogs.srs: \
         dlg_InsertAxis_Grid.hrc \
         dlg_InsertDataLabel.hrc \
         dlg_InsertLegend.hrc \
-        dlg_InsertStatistic.hrc \
+        dlg_InsertTrendline.hrc \
+        dlg_InsertErrorBars.hrc \
         dlg_InsertTitle.hrc \
         dlg_View3D.hrc \
         res_Titles.hrc \
         tp_3D_SceneAppearance.hrc \
         tp_3D_SceneGeometry.hrc \
         tp_3D_SceneIllumination.hrc \
+        tp_PolarOptions.hrc \
         tp_ChartType.hrc \
         tp_DataSource.hrc \
         tp_Location.hrc \
         tp_RangeChooser.hrc \
-        tp_Wizard_TitlesAndObjects.hrc \
-        tp_RegressionOptions.hrc
+        tp_Wizard_TitlesAndObjects.hrc
 
 #        res_DataLabel.hrc \
 #        res_LegendPosition.hrc \
