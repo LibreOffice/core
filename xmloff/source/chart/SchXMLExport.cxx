@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:42:17 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
@@ -1652,7 +1653,9 @@ void SchXMLExportHelper::exportAxes(
         bHasSecondaryYAxis = sal_False;
     sal_Bool bHasXAxisTitle = sal_False,
         bHasYAxisTitle = sal_False,
-        bHasZAxisTitle = sal_False;
+        bHasZAxisTitle = sal_False,
+        bHasSecondaryXAxisTitle = sal_False,
+        bHasSecondaryYAxisTitle = sal_False;
     sal_Bool bHasXAxisMajorGrid = sal_False,
         bHasXAxisMinorGrid = sal_False,
         bHasYAxisMajorGrid = sal_False,
@@ -1706,6 +1709,10 @@ void SchXMLExportHelper::exportAxes(
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisTitle")), bHasYAxisTitle);
     aDiagramProperties.Add (
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisTitle")), bHasZAxisTitle);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasSecondaryXAxisTitle")), bHasSecondaryXAxisTitle);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasSecondaryYAxisTitle")), bHasSecondaryYAxisTitle);
 
     aDiagramProperties.Add (
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisGrid")), bHasXAxisMajorGrid);
@@ -1874,7 +1881,7 @@ void SchXMLExportHelper::exportAxes(
     }
 
     // secondary x axis
-    if( bHasSecondaryXAxis )
+    if( bHasSecondaryXAxis || bHasSecondaryXAxisTitle )
     {
         Reference< chart::XTwoAxisXSupplier > xAxisTwoXSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisTwoXSupp.is())
@@ -1899,6 +1906,37 @@ void SchXMLExportHelper::exportAxes(
                 CollectAutoStyle( aPropertyStates );
             }
             aPropertyStates.clear();
+
+            if( bHasSecondaryXAxisTitle )
+            {
+                Reference< chart::XSecondAxisTitleSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getSecondXAxisTitle(), uno::UNO_QUERY );
+                if( xTitleProp.is())
+                {
+                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
+                    if( bExportContent )
+                    {
+                        OUString aText;
+                        Any aAny( xTitleProp->getPropertyValue(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                        aAny >>= aText;
+
+                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                        if( xShape.is())
+                            addPosition( xShape );
+
+                        AddAutoStyleAttribute( aPropertyStates );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
+
+                        exportText( aText );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                    aPropertyStates.clear();
+                }
+            }
 
             if( pAxis )
             {
@@ -2021,7 +2059,7 @@ void SchXMLExportHelper::exportAxes(
         }
     }
 
-    if( bHasSecondaryYAxis )
+    if( bHasSecondaryYAxis || bHasSecondaryYAxisTitle )
     {
         Reference< chart::XTwoAxisYSupplier > xAxisTwoYSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisTwoYSupp.is())
@@ -2046,6 +2084,37 @@ void SchXMLExportHelper::exportAxes(
                 CollectAutoStyle( aPropertyStates );
             }
             aPropertyStates.clear();
+            if( bHasSecondaryYAxisTitle )
+            {
+                Reference< chart::XSecondAxisTitleSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getSecondYAxisTitle(), uno::UNO_QUERY );
+                if( xTitleProp.is())
+                {
+                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
+                    if( bExportContent )
+                    {
+                        OUString aText;
+                        Any aAny( xTitleProp->getPropertyValue(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                        aAny >>= aText;
+
+                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                        if( xShape.is())
+                            addPosition( xShape );
+
+                        AddAutoStyleAttribute( aPropertyStates );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
+
+                        exportText( aText );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                    aPropertyStates.clear();
+                }
+            }
+
             if( pAxis )
             {
                 delete pAxis;
