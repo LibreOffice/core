@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:33:08 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1030,7 +1030,13 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
         const Point aPt( pWindow->GetPointerPosPixel() );
 
+        // On Mac OS X we are forced to execute 'startDrag' synchronously
+        // contrary to the XDragSource interface specification because
+        // we can receive drag events from the system only in the main
+        // thread
+#if !defined(QUARTZ)
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+#endif
 
         try
         {
@@ -1046,7 +1052,10 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
         {
         }
 
+        // See above for the reason of this define
+#if !defined(QUARTZ)
         Application::AcquireSolarMutex( nRef );
+#endif
     }
 }
 
