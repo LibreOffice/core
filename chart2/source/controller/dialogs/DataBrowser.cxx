@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:30:12 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,17 +161,21 @@ class SeriesHeaderEdit : public Edit
 public:
     SeriesHeaderEdit( Window * pParent );
     virtual ~SeriesHeaderEdit();
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const;
+    void SetShowWarningBox( bool bShowWarning = true );
 
 private:
     sal_Int32 m_nStartColumn;
+    bool m_bShowWarningBox;
 };
 
 SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
         Edit( pParent ),
-        m_nStartColumn( 0 )
+        m_nStartColumn( 0 ),
+        m_bShowWarningBox( false )
 {}
 SeriesHeaderEdit::~SeriesHeaderEdit()
 {}
@@ -184,6 +188,20 @@ void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
 sal_Int32 SeriesHeaderEdit::getStartColumn() const
 {
     return m_nStartColumn;
+}
+
+void SeriesHeaderEdit::SetShowWarningBox( bool bShowWarning )
+{
+    m_bShowWarningBox = bShowWarning;
+}
+
+void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    Edit::MouseButtonDown( rMEvt );
+
+    if( m_bShowWarningBox )
+        WarningBox( this, WinBits( WB_OK ),
+                    String( SchResId( STR_INVALID_NUMBER ))).Execute();
 }
 
 class SeriesHeader
@@ -524,6 +542,7 @@ DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) 
     m_bIsReadOnly( false ),
     m_bIsDirty( false ),
     m_bLiveUpdate( bLiveUpdate ),
+    m_bDataValid( true ),
     m_aNumberEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
     m_aTextEditField( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ),
     m_rNumberEditController( new ::svt::FormattedFieldCellController( & m_aNumberEditField )),
@@ -814,8 +833,60 @@ void DataBrowser::SetCellModifiedHdl( const Link& rLink )
     m_aCellModifiedLink = rLink;
 }
 
+void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
+{
+    if( !m_bDataValid )
+        ShowWarningBox();
+    else
+        EditBrowseBox::MouseButtonDown( rEvt );
+}
+
+void DataBrowser::ShowWarningBox()
+{
+    WarningBox( this, WinBits( WB_OK ),
+                String( SchResId( STR_INVALID_NUMBER ))).Execute();
+}
+
+bool DataBrowser::ShowQueryBox()
+{
+    QueryBox* pQueryBox = new QueryBox( this, WB_YES_NO, String( SchResId( STR_DATA_EDITOR_INCORRECT_INPUT )));
+
+    return ( pQueryBox->Execute() == RET_YES );
+}
+
+bool DataBrowser::IsDataValid()
+{
+    bool bValid = true;
+    const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
+    const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
+
+    if( m_apDataBrowserModel->getCellType( nCol, nRow ) == DataBrowserModel::NUMBER )
+    {
+        sal_uInt32 nDummy = 0;
+        double fDummy = 0.0;
+        String aText( m_aNumberEditField.GetText());
+
+        if( aText.Len() > 0 &&
+            m_spNumberFormatterWrapper.get() &&
+            m_spNumberFormatterWrapper->getSvNumberFormatter() &&
+            ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
+              aText, nDummy, fDummy ))
+        {
+            bValid = false;
+        }
+    }
+
+    return bValid;
+}
+
+bool DataBrowser::IsEnableItem()
+{
+    return m_bDataValid;
+}
+
 void DataBrowser::CellModified()
 {
+    m_bDataValid = IsDataValid();
     SetDirty();
     if( m_aCellModifiedLink.IsSet())
         m_aCursorMovedHdlLink.Call( this );
@@ -880,6 +951,7 @@ void DataBrowser::RemoveColumn()
         if( IsModified() )
             SaveModified();
 
+        m_bDataValid = true;
         m_apDataBrowserModel->removeDataSeries( nColIdx );
         RenewTable();
     }
@@ -912,6 +984,7 @@ void DataBrowser::RemoveRow()
         if( IsModified() )
             SaveModified();
 
+        m_bDataValid = true;
         m_apDataBrowserModel->removeDataPointForAllSeries( nRowIdx );
         RenewTable();
     }
@@ -1081,6 +1154,12 @@ sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
         ? GetRowCount() - 1
         : 0;
 
+    if( !m_bDataValid )
+    {
+        const_cast< DataBrowser* >( this )->ShowWarningBox();
+        return sal_False;
+    }
+
     return ( nRow != nBadRow ||
              nCol != nBadCol );
 }
@@ -1167,8 +1246,6 @@ sal_Bool DataBrowser::SaveModified()
                 ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
                     aText, nDummy, fDummy ))
             {
-                WarningBox( this, WinBits( WB_OK ),
-                            String( SchResId( STR_INVALID_NUMBER ))).Execute();
                 bChangeValid = sal_False;
             }
             else
@@ -1199,13 +1276,18 @@ sal_Bool DataBrowser::SaveModified()
     return bChangeValid;
 }
 
-void DataBrowser::EndEditing()
+bool DataBrowser::EndEditing()
 {
     if( IsModified())
         SaveModified();
 
     // apply changes made to series headers
     ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
+
+    if( m_bDataValid )
+        return true;
+    else
+        return ShowQueryBox();
 }
 
 sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
@@ -1276,10 +1358,17 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
 {
     if( pEdit )
     {
-        DeactivateCell();
-        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
-        ActivateCell();
-        m_aCursorMovedHdlLink.Call( this );
+        pEdit->SetShowWarningBox( !m_bDataValid );
+
+        if( !m_bDataValid )
+            GoToCell( 0, 0 );
+        else
+        {
+            //DeactivateCell();
+            MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
+            ActivateCell();
+            m_aCursorMovedHdlLink.Call( this );
+        }
     }
     return 0;
 }
