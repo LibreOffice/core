@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataFlavorMapping.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:08:57 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 14:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,13 @@
 #endif
 
 #include <rtl/ustring.hxx>
+#include <rtl/memory.h>
 #include <osl/endian.h>
 
 #include <vector>
-
 #include <stdio.h>
 
 #include <premac.h>
-#include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <postmac.h>
 
@@ -82,82 +81,94 @@ namespace // private
     return ((len > 0) && ((dtype == CPPUTYPE_SEQINT8) || (dtype == CPPUTYPE_OUSTRING)));
   }
 
- typedef vector<sal_Unicode> UnicodeBuffer;
+  typedef vector<sal_Unicode> UnicodeBuffer;
 
-  OUString CFStringToOUString(CFStringRef cfString)
+  OUString NSStringToOUString(NSString* cfString)
   {
     BOOST_ASSERT(cfString && "Invalid parameter");
 
-    CFIndex len = CFStringGetLength(cfString);
-    UnicodeBuffer buff(len);
-    CFRange range = { 0, len };
+    const char* utf8Str = [cfString UTF8String];
+    unsigned int len = rtl_str_getLength(utf8Str);
 
-    CFStringGetCharacters(cfString, range, &buff[0]);
-
-    return OUString(&buff[0], len);
+    return OUString(utf8Str, len, RTL_TEXTENCODING_UTF8);
   }
+
+  NSString* OUStringToNSString(const OUString& ustring)
+  {
+    OString utf8Str = OUStringToOString(ustring, RTL_TEXTENCODING_UTF8);
+    return [NSString stringWithCString: utf8Str.getStr() encoding: NSUTF8StringEncoding];
+  }
+
+
+  const NSString* PBTYPE_UT16 = @"CorePasteboardFlavorType 0x75743136";
+  const NSString* PBTYPE_OBJD = @"CorePasteboardFlavorType 0x4F424A44";
+  const NSString* PBTYPE_EMBS = @"CorePasteboardFlavorType 0x454D4253";
+  const NSString* PBTYPE_LKSD = @"CorePasteboardFlavorType 0x4C4B5344";
+  const NSString* PBTYPE_LNKS = @"CorePasteboardFlavorType 0x4C4E4B53";
+  const NSString* PBTYPE_PICT = @"CorePasteboardFlavorType 0x50494354";
+  const NSString* PBTYPE_HTML = @"CorePasteboardFlavorType 0x48544D4C";
+  const NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
+  const NSString* PBTYPE_SESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+  const NSString* PBTYPE_SLSDX = @"application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
+  const NSString* PBTYPE_ESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+  const NSString* PBTYPE_LSX = @"application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"";
+  const NSString* PBTYPE_EOX = @"application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"";
+  const NSString* PBTYPE_SVXB = @"application/x-openoffice-svbx;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"";
+  const NSString* PBTYPE_GDIMF = @"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
+  const NSString* PBTYPE_WMF = @"application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
+  const NSString* PBTYPE_EMF = @"application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
+
+  const char* FLAVOR_SODX = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
+  const char* FLAVOR_SESX = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+  const char* FLAVOR_SLSDX = "application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
+  const char* FLAVOR_ESX = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
+  const char* FLAVOR_LSX = "application/x-openoffice-link-source-xml;windows_formatname=\"Star Link Source (XML)\"";
+  const char* FLAVOR_EOX = "application/x-openoffice-embedded-obj-xml;windows_formatname=\"Star Embedded Object (XML)\"";
+  const char* FLAVOR_SVXB = "application/x-openoffice-svbx;windows_formatname=\"SVXB (StarView Bitmap/Animation)\"";
+  const char* FLAVOR_GDIMF = "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
+  const char* FLAVOR_WMF = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
+  const char* FLAVOR_EMF = "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
+
 
   struct FlavorMap
   {
-    CFStringRef SystemFlavor;
-    CFStringRef LegacyClipboardId;
-    char* OOoFlavor;
-    char* HumanPresentableName;
+    NSString* SystemFlavor;
+    const char* OOoFlavor;
+    const char* HumanPresentableName;
     Type DataType;
   };
-
-  const CFStringRef EMPTY_STRING = CFSTR("");
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */
   FlavorMap flavorMap[] =
     {
-      { kUTTypeUTF16PlainText, CFSTR("ut16"), "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING },
-      { kUTTypeUTF8PlainText, CFSTR("utf8"), "text/plain;charset=utf-8", "Unicode Text (UTF-8)", CPPUTYPE_SEQINT8 },
-      { kUTTypeRTF, CFSTR("RTF"), "text/richtext", "Rich Text Format", CPPUTYPE_SEQINT8 },
-      { kUTTypeHTML, CFSTR("HTML"), "text/html", "Plain Html", CPPUTYPE_SEQINT8 },
-      { EMPTY_STRING, CFSTR("OBJD"), "application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"", "Object Descriptor", CPPUTYPE_SEQINT8 },
-      { EMPTY_STRING, CFSTR("EMBS"), "application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"", "Embedded Object", CPPUTYPE_SEQINT8 },
-      { EMPTY_STRING, CFSTR("LKSD"), "application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"", "Link Source Descriptor", CPPUTYPE_SEQINT8 },
-      { EMPTY_STRING, CFSTR("LNKS"), "application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"", "Link Source", CPPUTYPE_SEQINT8 },
-      //      { kUTTypePICT, CFSTR("PICT"), "image/x-macpict;windows_formatname=\"Mac Pict\"", "Mac Pict", CPPUTYPE_SEQINT8 }
-      { kUTTypePICT, CFSTR("PICT"), "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 }
+      { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING },
+      { NSRTFPboardType, "text/richtext", "Rich Text Format", CPPUTYPE_SEQINT8 },
+      { NSPICTPboardType, "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 },
+      { NSHTMLPboardType, "text/html", "Plain Html", CPPUTYPE_SEQINT8 },
+      { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CPPUTYPE_SEQINT8 },
+      { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_ESX, FLAVOR_ESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_LSX, FLAVOR_LSX, "Star Link Source (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_EOX, FLAVOR_EOX, "Star Embedded Object (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_SVXB, FLAVOR_SVXB, "SVXB (StarView Bitmap/Animation", CPPUTYPE_SEQINT8 },
+      { PBTYPE_GDIMF, FLAVOR_GDIMF, "GDIMetaFile", CPPUTYPE_SEQINT8 },
+      { PBTYPE_WMF, FLAVOR_WMF, "Windows MetaFile", CPPUTYPE_SEQINT8 },
+      { PBTYPE_EMF, FLAVOR_EMF, "Windows Enhanced MetaFile", CPPUTYPE_SEQINT8 },
+      { PBTYPE_SODX, FLAVOR_SODX, "Star Object Descriptor (XML)", CPPUTYPE_SEQINT8 },
+      { PBTYPE_OBJD, "application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"", "Object Descriptor", CPPUTYPE_SEQINT8 },
+      { PBTYPE_EMBS, "application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"", "Embedded Object", CPPUTYPE_SEQINT8 },
+      { PBTYPE_LKSD, "application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"", "Link Source Descriptor", CPPUTYPE_SEQINT8 },
+      { PBTYPE_LNKS, "application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"", "Link Source", CPPUTYPE_SEQINT8 }
+      //      { PBTYPE_UT16, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING }
+      //      { kUTTypePICT, @"PICT", "image/x-macpict;windows_formatname=\"Mac Pict\"", "Mac Pict", CPPUTYPE_SEQINT8 }
+      //      { kUTTypeHTML, @"HTML", "text/html", "Plain Html", CPPUTYPE_SEQINT8 }
     };
 
-#define SIZE_FLAVOR_MAP (sizeof(flavorMap)/sizeof(FlavorMap))
 
-  /* Lookup a legacy clipboard id in the flavor table and return a
-     corresponding OOo DataFlavor if possible.
-  */
-  DataFlavor getOOoFlavor(CFStringRef legacyClipboardId)
-  {
-    DataFlavor oOOFlavor;
+  #define SIZE_FLAVOR_MAP (sizeof(flavorMap)/sizeof(FlavorMap))
 
-    for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
-      {
-        if (CFStringCompare(legacyClipboardId, flavorMap[i].LegacyClipboardId, 0) == 0)
-          {
-            oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
-            oOOFlavor.HumanPresentableName = OUString::createFromAscii(flavorMap[i].HumanPresentableName);
-            oOOFlavor.DataType = flavorMap[i].DataType;
-            break;
-          }
-      }
-
-    return oOOFlavor;
-  }
-
-  CFStringRef getLegacyCLipboardId(const DataFlavor& oOOFlavor)
-  {
-    for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
-      {
-        if (oOOFlavor.MimeType.compareToAscii(flavorMap[i].OOoFlavor) == 0)
-          {
-            return flavorMap[i].LegacyClipboardId;
-          }
-      }
-    return NULL;
-  }
 
   inline bool isByteSequenceType(const Type& theType)
   {
@@ -180,31 +191,33 @@ class DataProviderBaseImpl : public DataProvider
 {
 public:
   DataProviderBaseImpl(const Any& data);
-  DataProviderBaseImpl(CFDataRef data);
+  DataProviderBaseImpl(id data);
   virtual ~DataProviderBaseImpl();
 
 protected:
   Any mData;
-  CFDataRef mSystemData;
+  //NSData* mSystemData;
+  id mSystemData;
 };
 
 DataProviderBaseImpl::DataProviderBaseImpl(const Any& data) :
   mData(data),
-  mSystemData(NULL)
+  mSystemData(nil)
 {
 }
 
-DataProviderBaseImpl::DataProviderBaseImpl(CFDataRef data) :
+DataProviderBaseImpl::DataProviderBaseImpl(id data) :
   mSystemData(data)
 {
-  CFRetain(mSystemData);
+  [mSystemData retain];
 }
+
 
 DataProviderBaseImpl::~DataProviderBaseImpl()
 {
   if (mSystemData)
     {
-      CFRelease(mSystemData);
+      [mSystemData release];
     }
 }
 
@@ -215,9 +228,9 @@ class UniDataProvider : public DataProviderBaseImpl
 public:
   UniDataProvider(const Any& data);
 
-  UniDataProvider(CFDataRef data);
+  UniDataProvider(NSData* data);
 
-  virtual CFDataRef getSystemData();
+  virtual NSData* getSystemData();
 
   virtual Any getOOoData();
 };
@@ -227,21 +240,20 @@ UniDataProvider::UniDataProvider(const Any& data) :
 {
 }
 
-UniDataProvider::UniDataProvider(CFDataRef data) :
+UniDataProvider::UniDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
 
-CFDataRef UniDataProvider::getSystemData()
+NSData* UniDataProvider::getSystemData()
 {
   OUString ustr;
   mData >>= ustr;
 
-  CFDataRef sysData = CFDataCreate(kCFAllocatorDefault,
-                                   reinterpret_cast<const UInt8*>(ustr.getStr()),
-                                   ustr.getLength() * sizeof(sal_Unicode));
+  OString strUtf8;
+  ustr.convertToString(&strUtf8, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 
-  return sysData;
+  return [NSData dataWithBytes: strUtf8.getStr() length: strUtf8.getLength()];
 }
 
 Any UniDataProvider::getOOoData()
@@ -250,9 +262,9 @@ Any UniDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      CFIndex flavorDataLength = CFDataGetLength(mSystemData);
-      const sal_Unicode* pUtf16 = reinterpret_cast<const sal_Unicode*>(CFDataGetBytePtr(mSystemData));
-      oOOData = makeAny(OUString(pUtf16, flavorDataLength / sizeof(sal_Unicode)));
+      oOOData = makeAny(OUString(reinterpret_cast<const sal_Char*>([mSystemData bytes]),
+                                 [mSystemData length],
+                                 RTL_TEXTENCODING_UTF8));
     }
   else
     {
@@ -269,9 +281,9 @@ class ByteSequenceDataProvider : public DataProviderBaseImpl
 public:
   ByteSequenceDataProvider(const Any& data);
 
-  ByteSequenceDataProvider(CFDataRef data);
+  ByteSequenceDataProvider(NSData* data);
 
-  virtual CFDataRef getSystemData();
+  virtual NSData* getSystemData();
 
   virtual Any getOOoData();
 };
@@ -281,21 +293,18 @@ ByteSequenceDataProvider::ByteSequenceDataProvider(const Any& data) :
 {
 }
 
-ByteSequenceDataProvider::ByteSequenceDataProvider(CFDataRef data) :
+ByteSequenceDataProvider::ByteSequenceDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
 
-CFDataRef ByteSequenceDataProvider::getSystemData()
+
+NSData* ByteSequenceDataProvider::getSystemData()
 {
    Sequence<sal_Int8> rawData;
    mData >>= rawData;
 
-   CFDataRef sysData = CFDataCreate(kCFAllocatorDefault,
-                                    reinterpret_cast<const UInt8*>(rawData.getArray()),
-                                    rawData.getLength());
-
-   return sysData;
+   return [NSData dataWithBytes: rawData.getArray() length: rawData.getLength()];
 }
 
 Any ByteSequenceDataProvider::getOOoData()
@@ -304,10 +313,10 @@ Any ByteSequenceDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      CFIndex flavorDataLength = CFDataGetLength(mSystemData);
+      unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> byteSequence;
       byteSequence.realloc(flavorDataLength);
-      memcpy(byteSequence.getArray(), CFDataGetBytePtr(mSystemData), flavorDataLength);
+      memcpy(byteSequence.getArray(), [mSystemData bytes], flavorDataLength);
       oOOData = makeAny(byteSequence);
     }
   else
@@ -326,9 +335,9 @@ class ObjDescDataProvider : public DataProviderBaseImpl
 public:
   ObjDescDataProvider(const Any& data);
 
-  ObjDescDataProvider(CFDataRef data);
+  ObjDescDataProvider(NSData* data);
 
-  virtual CFDataRef getSystemData();
+  virtual NSData* getSystemData();
 
   virtual Any getOOoData();
 };
@@ -338,21 +347,17 @@ ObjDescDataProvider::ObjDescDataProvider(const Any& data) :
 {
 }
 
-ObjDescDataProvider::ObjDescDataProvider(CFDataRef data) :
+ObjDescDataProvider::ObjDescDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
 
-CFDataRef ObjDescDataProvider::getSystemData()
+NSData* ObjDescDataProvider::getSystemData()
 {
    Sequence<sal_Int8> rawData;
    mData >>= rawData;
 
-   CFDataRef sysData = CFDataCreate(kCFAllocatorDefault,
-                                    reinterpret_cast<const UInt8*>(rawData.getArray()),
-                                    rawData.getLength());
-
-   return sysData;
+   return [NSData dataWithBytes: rawData.getArray() length: rawData.getLength()];
 }
 
 /* On Mac OS X the OBJECTDESCRIPTOR struct is different
@@ -418,7 +423,7 @@ Any ObjDescDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      const OSXOleObjectDescriptor* pOSXObjDesc = reinterpret_cast<const OSXOleObjectDescriptor*>(CFDataGetBytePtr(mSystemData));
+      const OSXOleObjectDescriptor* pOSXObjDesc = reinterpret_cast<const OSXOleObjectDescriptor*>([mSystemData bytes]);
       size_t sz = OSL_SWAPDWORD(pOSXObjDesc->cbSize) - sizeof(pOSXObjDesc->dummy);
       Sequence<sal_Int8> byteSequence(sz);
       OleObjectDescriptor* pObjDesc = reinterpret_cast<OleObjectDescriptor*>(byteSequence.getArray());
@@ -476,9 +481,9 @@ class HTMLFormatDataProvider : public DataProviderBaseImpl
 public:
   HTMLFormatDataProvider(const Any& data);
 
-  HTMLFormatDataProvider(CFDataRef data);
+  HTMLFormatDataProvider(NSData* data);
 
-  virtual CFDataRef getSystemData();
+  virtual NSData* getSystemData();
 
   virtual Any getOOoData();
 };
@@ -488,23 +493,19 @@ HTMLFormatDataProvider::HTMLFormatDataProvider(const Any& data) :
 {
 }
 
-HTMLFormatDataProvider::HTMLFormatDataProvider(CFDataRef data) :
+HTMLFormatDataProvider::HTMLFormatDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
 
-CFDataRef HTMLFormatDataProvider::getSystemData()
+NSData* HTMLFormatDataProvider::getSystemData()
 {
   Sequence<sal_Int8> textHtmlData;
   mData >>= textHtmlData;
 
   Sequence<sal_Int8> htmlFormatData = TextHtmlToHTMLFormat(textHtmlData);
 
-  CFDataRef sysData = CFDataCreate(kCFAllocatorDefault,
-                                   reinterpret_cast<const UInt8*>(htmlFormatData.getArray()),
-                                   htmlFormatData.getLength());
-
-  return sysData;
+  return [NSData dataWithBytes: htmlFormatData.getArray() length: htmlFormatData.getLength()];
 }
 
 Any HTMLFormatDataProvider::getOOoData()
@@ -513,11 +514,11 @@ Any HTMLFormatDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      CFIndex flavorDataLength = CFDataGetLength(mSystemData);
+      unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> unkHtmlData;
 
       unkHtmlData.realloc(flavorDataLength);
-      memcpy(unkHtmlData.getArray(), CFDataGetBytePtr(mSystemData), flavorDataLength);
+      memcpy(unkHtmlData.getArray(), [mSystemData bytes], flavorDataLength);
 
       Sequence<sal_Int8>* pPlainHtml = &unkHtmlData;
       Sequence<sal_Int8> plainHtml;
@@ -545,9 +546,9 @@ class BMPDataProvider : public DataProviderBaseImpl
 public:
   BMPDataProvider(const Any& data);
 
-  BMPDataProvider(CFDataRef data);
+  BMPDataProvider(NSData* data);
 
-  virtual CFDataRef getSystemData();
+  virtual NSData* getSystemData();
 
   virtual Any getOOoData();
 };
@@ -557,24 +558,22 @@ BMPDataProvider::BMPDataProvider(const Any& data) :
 {
 }
 
-BMPDataProvider::BMPDataProvider(CFDataRef data) :
+BMPDataProvider::BMPDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
 
-CFDataRef BMPDataProvider::getSystemData()
+NSData* BMPDataProvider::getSystemData()
 {
   Sequence<sal_Int8> bmpData;
   mData >>= bmpData;
 
   Sequence<sal_Int8> pictData;
-  CFDataRef sysData = NULL;
+  NSData* sysData = NULL;
 
   if (BMPtoPICT(bmpData, pictData))
     {
-      sysData = CFDataCreate(kCFAllocatorDefault,
-                             reinterpret_cast<const UInt8*>(pictData.getArray()),
-                             pictData.getLength());
+      sysData = [NSData dataWithBytes: pictData.getArray() length: pictData.getLength()];
     }
 
   return sysData;
@@ -591,10 +590,10 @@ Any BMPDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      CFIndex flavorDataLength = CFDataGetLength(mSystemData);
+      unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> pictData(flavorDataLength);
 
-      memcpy(pictData.getArray(), CFDataGetBytePtr(mSystemData), flavorDataLength);
+      memcpy(pictData.getArray(), [mSystemData bytes], flavorDataLength);
 
       Sequence<sal_Int8> bmpData;
 
@@ -611,57 +610,117 @@ Any BMPDataProvider::getOOoData()
   return oOOData;
 }
 
+//######################
+
+class FileListDataProvider : public DataProviderBaseImpl
+{
+public:
+  FileListDataProvider(const Any& data);
+  FileListDataProvider(NSArray* data);
+
+  virtual NSData* getSystemData();
+  virtual Any getOOoData();
+};
+
+FileListDataProvider::FileListDataProvider(const Any& data) :
+  DataProviderBaseImpl(data)
+{
+}
+
+FileListDataProvider::FileListDataProvider(NSArray* data) :
+  DataProviderBaseImpl(data)
+{
+}
+
+NSData* FileListDataProvider::getSystemData()
+{
+  return [NSData data];
+}
+
+Any FileListDataProvider::getOOoData()
+{
+  Any oOOData;
+
+  if (mSystemData)
+    {
+      size_t length = [mSystemData count];
+      size_t lenSeqRequired = 0;
+
+      for (size_t i = 0; i < length; i++)
+        {
+          NSString* fname = [mSystemData objectAtIndex: i];
+          lenSeqRequired += [fname maximumLengthOfBytesUsingEncoding: NSUnicodeStringEncoding] + sizeof(unichar);
+        }
+
+      Sequence<sal_Int8> oOOFileList(lenSeqRequired);
+      unichar* pBuffer = reinterpret_cast<unichar*>(oOOFileList.getArray());
+      rtl_zeroMemory(pBuffer, lenSeqRequired);
+
+      for (size_t i = 0; i < length; i++)
+        {
+          NSString* fname = [mSystemData objectAtIndex: i];
+          [fname getCharacters: pBuffer];
+          size_t l = [fname length];
+          pBuffer += l + 1;
+        }
+
+      oOOData = makeAny(oOOFileList);
+    }
+  else
+    {
+      oOOData = mData;
+    }
+
+  return oOOData;
+}
 
 //###########################
 
-DataFlavorMapper::DataFlavorMapper(const Reference< XMultiServiceFactory > rServiceManager) :
-  mrServiceManager(rServiceManager)
+DataFlavorMapper::DataFlavorMapper(const Reference<XComponentContext>& context) :
+  mXComponentContext(context)
 {
-    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstance(
-      OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
+  Reference<XMultiComponentFactory> mrServiceManager = mXComponentContext->getServiceManager();
+    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstanceWithContext(
+       OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")), mXComponentContext), UNO_QUERY);
 
   if (!mrXMimeCntFactory.is())
     throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")), NULL);
 }
 
-DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(CFStringRef systemDataFlavor) const
+DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor) const
 {
-  if (isDynamicSystemFlavor(systemDataFlavor))
-    {
-      return resolveDynamicSystemFlavor(systemDataFlavor);
-    }
-
   DataFlavor oOOFlavor;
 
   for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
-      if (UTTypeEqual(systemDataFlavor, flavorMap[i].SystemFlavor))
+      if ([systemDataFlavor caseInsensitiveCompare: flavorMap[i].SystemFlavor] == NSOrderedSame)
         {
           oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
           oOOFlavor.HumanPresentableName = OUString(RTL_CONSTASCII_USTRINGPARAM(flavorMap[i].HumanPresentableName));
           oOOFlavor.DataType = flavorMap[i].DataType;
-          break;
+          return oOOFlavor;
         }
     } // for
 
   return oOOFlavor;
 }
 
-CFStringRef DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor) const
+NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor) const
 {
+  NSString* sysFlavor = NULL;
+
   for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
       if (oOOFlavor.MimeType.compareToAscii(flavorMap[i].OOoFlavor, strlen(flavorMap[i].OOoFlavor)) == 0)
         {
-          return flavorMap[i].SystemFlavor;
+          sysFlavor = flavorMap[i].SystemFlavor;
         }
     }
 
-  // no equivalent system type found, then register a dynamic type
-  return registerDynamicSystemFlavor(oOOFlavor);
+  return sysFlavor;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(CFStringRef systemFlavor, Reference<XTransferable> rTransferable) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Reference<XTransferable> rTransferable) const
 {
   DataProviderPtr_t dp;
 
@@ -673,57 +732,67 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(CFStringRef systemFlavor, Re
 
       if (isByteSequenceType(data.getValueType()))
         {
-          if (UTTypeEqual(systemFlavor, kUTTypeHTML))
+          if ([systemFlavor caseInsensitiveCompare: NSHTMLPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t(new HTMLFormatDataProvider(data));
             }
-          else if (UTTypeEqual(systemFlavor, kUTTypePICT))
+          else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t(new BMPDataProvider(data));
+            }
+          else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+            {
+              dp = DataProviderPtr_t(new FileListDataProvider(data));
             }
           else
             {
               dp = DataProviderPtr_t(new ByteSequenceDataProvider(data));
             }
         }
-      else if (isOUStringType(data.getValueType()))
+      else // Must be OUString type
         {
+          BOOST_ASSERT(isOUStringType(data.getValueType()));
           dp = DataProviderPtr_t(new UniDataProvider(data));
-        }
-      else
-        {
-          BOOST_ASSERT(false && "AquaClipboard: Invalid data type provided!");
         }
     }
   catch(UnsupportedFlavorException&)
     {
-      // Something is wrong the transferable doesn't have
-      // the data it claimed to deliver
+      // Somebody violates the contract of the clipboard
+      // interface @see XTransferable
     }
 
   return dp;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(const CFStringRef systemFlavor, CFDataRef systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor, NSArray* systemData) const
+{
+  return DataProviderPtr_t(new FileListDataProvider(systemData));
+}
+
+DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor, NSData* systemData) const
 {
   DataProviderPtr_t dp;
 
-  if (UTTypeEqual(kUTTypeUTF16PlainText, systemFlavor))
+  if ([systemFlavor caseInsensitiveCompare: NSStringPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new UniDataProvider(systemData));
     }
-  else if (UTTypeEqual(kUTTypeHTML, systemFlavor))
+  else if ([systemFlavor caseInsensitiveCompare: NSHTMLPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
     }
-  else if (UTTypeEqual(CFSTR("dyn.agk8y8uwnku"), systemFlavor)) // OBJD
+  else if ([systemFlavor caseInsensitiveCompare: PBTYPE_OBJD] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new ObjDescDataProvider(systemData));
     }
-  else if (UTTypeEqual(kUTTypePICT, systemFlavor))
+  else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new BMPDataProvider(systemData));
-      }
+    }
+  else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+    {
+      //dp = DataProviderPtr_t(new FileListDataProvider(systemData));
+    }
   else
     {
       dp = DataProviderPtr_t(new ByteSequenceDataProvider(systemData));
@@ -731,114 +800,6 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const CFStringRef systemFlav
 
   return dp;
 }
-
-
-inline bool DataFlavorMapper::isDynamicSystemFlavor(const CFStringRef flavor) const
-{
-  return CFStringHasPrefix(flavor, CFSTR("dyn."));
-}
-
-
-const CFStringRef tagClasses[] = {
-  kUTTagClassOSType,
-  kUTTagClassMIMEType,
-  kUTTagClassFilenameExtension,
-  kUTTagClassNSPboardType
-};
-
-#define SIZE_TAG_CLASSES (sizeof(tagClasses)/sizeof(tagClasses[0]))
-
-
-DataFlavor DataFlavorMapper::resolveDynamicSystemFlavor(CFStringRef dynFlavor) const
-{
-  CFStringRef resolvedType = NULL;
-
-  for (size_t i = 0; i < SIZE_TAG_CLASSES; i++)
-    {
-      if ((resolvedType = UTTypeCopyPreferredTagWithClass(dynFlavor, tagClasses[i])) != NULL)
-        break;
-    }
-
-  DataFlavor dflv;
-
-  if (resolvedType)
-    {
-      dflv = getOOoFlavor(resolvedType);
-
-      if (!isValidFlavor(dflv))
-        {
-          OUString cntType = CFStringToOUString(resolvedType);
-
-          if (isValidMimeContentType(cntType))
-            {
-              // Not able to map the resolved type to a valid flavor
-              // seraching the legacy clipboard id namespace so we
-              // register a flavor dynamically if the content type
-              // a well formed
-              dflv.MimeType = cntType;
-              dflv.DataType = CPPUTYPE_SEQINT8;
-            }
-        }
-
-      CFRelease(resolvedType);
-    }
-
-  return dflv;
-}
-
-CFStringRef DataFlavorMapper::registerDynamicSystemFlavor(const DataFlavor& flavor) const
-{
-  CFStringRef dynFlavor = NULL;
-
-  if (flavor.MimeType.compareToAscii("application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"") == 0)
-    {
-      dynFlavor = UTTypeCreatePreferredIdentifierForTag(kUTTagClassOSType,
-                                                        CFSTR("OBJD"),
-                                                        NULL);
-    }
-  else if (flavor.MimeType.compareToAscii("application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"") == 0)
-    {
-      dynFlavor = UTTypeCreatePreferredIdentifierForTag(kUTTagClassOSType,
-                                                        CFSTR("EMBS"),
-                                                        NULL);
-    }
-  else if (flavor.MimeType.compareToAscii("application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"") == 0)
-    {
-      dynFlavor = UTTypeCreatePreferredIdentifierForTag(kUTTagClassOSType,
-                                                        CFSTR("LKSD"),
-                                                        NULL);
-    }
-  else if (flavor.MimeType.compareToAscii("application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"") == 0)
-    {
-      dynFlavor = UTTypeCreatePreferredIdentifierForTag(kUTTagClassOSType,
-                                                        CFSTR("LNKS"),
-                                                        NULL);
-    }
-  else
-    {
-      CFStringRef cntType = CFStringCreateWithCharactersNoCopy(NULL,
-                                                               flavor.MimeType.getStr(),
-                                                               flavor.MimeType.getLength(),
-                                                               kCFAllocatorNull);
-
-      if (cntType)
-        {
-          /* We have to register dynamic types using tag class 'kUTTagClassNSPboardType'.
-             Using 'kUTTagClassMIMEType' for instance will be handled case-insensitive
-             internally. The backward converted string differs from the one we register
-             here with regards to case sensitivity. Because the upper layers only do
-             a simple case-sensitive string comparision of the data flavor mime types,
-             we'll miss to get the requested information. :(
-           */
-          dynFlavor = UTTypeCreatePreferredIdentifierForTag(kUTTagClassNSPboardType,
-                                                            cntType,
-                                                            NULL);
-        }
-    }
-
-  return dynFlavor;
-}
-
 
 bool DataFlavorMapper::isValidMimeContentType(const rtl::OUString& contentType) const
 {
@@ -854,4 +815,55 @@ bool DataFlavorMapper::isValidMimeContentType(const rtl::OUString& contentType) 
     }
 
   return result;
+}
+
+NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor>& flavors) const
+{
+  sal_uInt32 nFlavors = flavors.getLength();
+  NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
+
+  for (sal_uInt32 i = 0; i < nFlavors; i++)
+    {
+      NSString* str = openOfficeToSystemFlavor(flavors[i]);
+
+      if (str != NULL)
+        {
+          [array addObject: str];
+        }
+    }
+
+  return [array autorelease];
+}
+
+com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
+{
+  int nFormats = [types count];
+  Sequence<DataFlavor> flavors;
+
+  for (int i = 0; i < nFormats; i++)
+    {
+      NSString* sysFormat = [types objectAtIndex: i];
+      DataFlavor oOOFlavor = systemToOpenOfficeFlavor(sysFormat);
+
+      if (isValidFlavor(oOOFlavor))
+        {
+          flavors.realloc(flavors.getLength() + 1);
+          flavors[flavors.getLength() - 1] = oOOFlavor;
+        }
+    }
+
+  return flavors;
+}
+
+
+NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const
+{
+  NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: SIZE_FLAVOR_MAP];
+
+  for (sal_uInt32 i = 0; i < SIZE_FLAVOR_MAP; i++)
+    {
+      [array addObject: flavorMap[i].SystemFlavor];
+    }
+
+  return [array autorelease];
 }
