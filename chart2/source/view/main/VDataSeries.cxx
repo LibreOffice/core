@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:13:18 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_nAxisIndex(0)
     , m_bConnectBars(sal_False)
     , m_bGroupBarsPerAxis(sal_True)
+    , m_nStartingAngle(90)
 
     , m_aSeriesParticle()
     , m_aCID()
@@ -425,6 +426,15 @@ void VDataSeries::setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis )
 sal_Bool VDataSeries::getGroupBarsPerAxis() const
 {
     return m_bGroupBarsPerAxis;
+}
+
+void VDataSeries::setStartingAngle( sal_Int32 nStartingAngle )
+{
+    m_nStartingAngle = nStartingAngle;
+}
+sal_Int32 VDataSeries::getStartingAngle() const
+{
+    return m_nStartingAngle;
 }
 
 void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
