@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:56:02 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ enum
 
     PROP_DIAGRMA_RIGHT_ANGLED_AXES,
 
+    PROP_DIAGRAM_STARTING_ANGLE,
+
     PROP_DIAGRAM_HAS_X_AXIS,
     PROP_DIAGRAM_HAS_X_AXIS_DESCR,
     PROP_DIAGRAM_HAS_X_AXIS_TITLE,
@@ -158,7 +160,10 @@ enum
     PROP_DIAGRAM_HAS_SECOND_X_AXIS_DESCR,
 
     PROP_DIAGRAM_HAS_SECOND_Y_AXIS,
-    PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR
+    PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR,
+
+    PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
+    PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE
 };
 
 void lcl_AddPropertiesToVector(
@@ -253,6 +258,14 @@ void lcl_AddPropertiesToVector(
         Property( C2U("RightAngledAxes"),
                   PROP_DIAGRMA_RIGHT_ANGLED_AXES,
                   ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //for pie and donut charts
+    rOutProperties.push_back(
+        Property( C2U( "StartingAngle" ),
+                  PROP_DIAGRAM_STARTING_ANGLE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0) ),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -376,6 +389,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "HasSecondaryYAxisDescription" ),
                   PROP_DIAGRAM_HAS_SECOND_Y_AXIS_DESCR,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // XSecondAxisTitleSupplier
+    rOutProperties.push_back(
+        Property( C2U( "HasSecondaryXAxisTitle" ),
+                  PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "HasSecondaryYAxisTitle" ),
+                  PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -954,6 +981,28 @@ Reference<
     return m_xYMainGrid;
 }
 
+// ____ XSecondAxisTitleSupplier ____
+Reference<
+    drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
+    throw (uno::RuntimeException)
+{
+    if( !m_xSecondXAxisTitle.is() )
+    {
+        m_xSecondXAxisTitle = new TitleWrapper( TitleHelper::SECONDARY_X_AXIS_TITLE, m_spChart2ModelContact );
+    }
+    return m_xSecondXAxisTitle;
+}
+
+Reference<
+    drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
+    throw (uno::RuntimeException)
+{
+    if( !m_xSecondYAxisTitle.is() )
+    {
+        m_xSecondYAxisTitle = new TitleWrapper( TitleHelper::SECONDARY_Y_AXIS_TITLE, m_spChart2ModelContact );
+    }
+    return m_xSecondYAxisTitle;
+}
 
 // ____ XStatisticDisplay ____
 Reference<
@@ -1023,6 +1072,8 @@ void SAL_CALL DiagramWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xXAxisTitle );
     DisposeHelper::DisposeAndClear( m_xYAxisTitle );
     DisposeHelper::DisposeAndClear( m_xZAxisTitle );
+    DisposeHelper::DisposeAndClear( m_xSecondXAxisTitle );
+    DisposeHelper::DisposeAndClear( m_xSecondYAxisTitle );
     DisposeHelper::DisposeAndClear( m_xXAxis );
     DisposeHelper::DisposeAndClear( m_xYAxis );
     DisposeHelper::DisposeAndClear( m_xZAxis );
