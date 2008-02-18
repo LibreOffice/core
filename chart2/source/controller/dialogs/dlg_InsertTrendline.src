@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dlg_InsertTrendline.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:44:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "dlg_InsertTrendline.hrc"
+#include "SchSlotIds.hxx"
+#include "HelpIds.hrc"
+#include "CommonResources.hrc"
+#include "res_Trendline.hrc"
+
+// is only an initial size, will be calculated to contain all controls
+#define DLG_DATA_TRENDLINE_RES_WIDTH   130
+#define DLG_DATA_TRENDLINE_ADD_TO_RES   62
+
+ModalDialog DLG_DATA_TRENDLINE
+{
+    HelpID = SID_INSERT_STATISTICS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( DLG_DATA_TRENDLINE_RES_WIDTH + DLG_DATA_TRENDLINE_ADD_TO_RES, 172 );
+    Moveable = TRUE ;
+    BUTTONS_OK_CANCEL_HELP_STACKED( DLG_DATA_TRENDLINE_RES_WIDTH + DLG_DATA_TRENDLINE_ADD_TO_RES )
+    RESOURCE_TRENDLINE( DLG_DATA_TRENDLINE_RES_WIDTH, 22 )
+};
+
