@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:07:29 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,54 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
 }
 
 // static
+RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
+    const Reference< XRegressionCurve > & xCurve )
+{
+    tRegressionType eResult = REGRESSION_TYPE_UNKNOWN;
+
+    try
+    {
+        Reference< lang::XServiceName > xServName( xCurve, uno::UNO_QUERY );
+        if( xServName.is())
+        {
+            ::rtl::OUString aServiceName( xServName->getServiceName() );
+
+            if( aServiceName.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))
+            {
+                eResult = REGRESSION_TYPE_LINEAR;
+            }
+            else if( aServiceName.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+            {
+                eResult = REGRESSION_TYPE_LOG;
+            }
+            else if( aServiceName.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ExponentialRegressionCurve" )))
+            {
+                eResult = REGRESSION_TYPE_EXP;
+            }
+            else if( aServiceName.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.PotentialRegressionCurve" )))
+            {
+                eResult = REGRESSION_TYPE_POWER;
+            }
+            else if( aServiceName.equalsAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+            {
+                eResult = REGRESSION_TYPE_MEAN_VALUE;
+            }
+        }
+    }
+    catch( Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return eResult;
+}
+
+// static
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -530,49 +578,17 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getFirstRegressTyp
 
     if( xRegCnt.is())
     {
-        try
+        Sequence< Reference< XRegressionCurve > > aCurves(
+            xRegCnt->getRegressionCurves());
+        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
         {
-            Sequence< Reference< XRegressionCurve > > aCurves(
-                xRegCnt->getRegressionCurves());
-            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+            tRegressionType eType = getRegressionType( aCurves[i] );
+            if( eType != REGRESSION_TYPE_MEAN_VALUE &&
+                eType != REGRESSION_TYPE_UNKNOWN )
             {
-                Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
-                if( xServName.is())
-                {
-                    ::rtl::OUString aServiceName( xServName->getServiceName() );
-
-                    // note: take first regression curve that matches any known
-                    // type (except mean-value line)
-                    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.LinearRegressionCurve" )))
-                    {
-                        eResult = REGRESSION_TYPE_LINEAR;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.LogarithmicRegressionCurve" )))
-                    {
-                        eResult = REGRESSION_TYPE_LOG;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.ExponentialRegressionCurve" )))
-                    {
-                        eResult = REGRESSION_TYPE_EXP;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.PotentialRegressionCurve" )))
-                    {
-                        eResult = REGRESSION_TYPE_POWER;
-                        break;
-                    }
-                }
+                eResult = eType;
+                break;
             }
-        }
-        catch( Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
         }
     }
 
@@ -664,6 +680,22 @@ void RegressionCurveHelper::resetEquationPosition(
     }
 }
 
+sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
+    const Reference< chart2::XRegressionCurveContainer > & xContainer,
+    const Reference< chart2::XRegressionCurve > & xCurve )
+{
+    if( xContainer.is())
+    {
+        uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
+            xContainer->getRegressionCurves());
+        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+        {
+            if( xCurve == aCurves[i] )
+                return i;
+        }
+    }
+    return -1;
+}
 
 //.............................................................................
 } //namespace chart
