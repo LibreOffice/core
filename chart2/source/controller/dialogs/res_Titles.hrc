@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_Titles.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:41:03 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,16 @@
 #define ED_X_AXIS       3
 #define ED_Y_AXIS       4
 #define ED_Z_AXIS       5
+#define ED_SECONDARY_X_AXIS       6
+#define ED_SECONDARY_Y_AXIS       7
 #define FT_MAINTITLE    1
 #define FT_SUBTITLE     2
 #define FT_TITLE_X_AXIS 3
 #define FT_TITLE_Y_AXIS 4
 #define FT_TITLE_Z_AXIS 5
+#define FT_TITLE_SECONDARY_X_AXIS 6
+#define FT_TITLE_SECONDARY_Y_AXIS 7
+#define FL_AXES 1
+#define FL_SECONDARY_AXES 2
 
 #endif
