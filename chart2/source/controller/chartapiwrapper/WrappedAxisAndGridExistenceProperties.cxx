@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedAxisAndGridExistenceProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 10:45:37 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< be
 class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
 public:
-    WrappedAxisTitleExistenceProperty( sal_Int32 nDimensionIndex
+    WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisTitleExistenceProperty();
 
@@ -254,15 +254,17 @@ void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< Wra
     rList.push_back( new WrappedAxisTitleExistenceProperty( 0, spChart2ModelContact ) );//x axis title
     rList.push_back( new WrappedAxisTitleExistenceProperty( 1, spChart2ModelContact ) );//y axis title
     rList.push_back( new WrappedAxisTitleExistenceProperty( 2, spChart2ModelContact ) );//z axis title
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 3, spChart2ModelContact ) );//secondary x axis title
+    rList.push_back( new WrappedAxisTitleExistenceProperty( 4, spChart2ModelContact ) );//secondary y axis title
 }
 
-WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 nDimensionIndex
+WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
                 , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_eTitleType( TitleHelper::Y_AXIS_TITLE )
 {
-    switch( nDimensionIndex )
+    switch( nTitleIndex )
     {
         case 0:
             m_aOuterName = C2U( "HasXAxisTitle" );
@@ -271,6 +273,14 @@ WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 
         case 2:
             m_aOuterName = C2U( "HasZAxisTitle" );
             m_eTitleType = TitleHelper::Z_AXIS_TITLE;
+            break;
+        case 3:
+            m_aOuterName = C2U( "HasSecondaryXAxisTitle" );
+            m_eTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
+            break;
+        case 4:
+            m_aOuterName = C2U( "HasSecondaryYAxisTitle" );
+            m_eTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
             break;
         default:
             m_aOuterName = C2U( "HasYAxisTitle" );
