@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:06:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -680,12 +680,14 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     sal_Bool bSortByXValues = sal_False;
     sal_Bool bConnectBars = sal_False;
     sal_Bool bGroupBarsPerAxis = sal_True;
+    sal_Int32 nStartingAngle = 90;
     try
     {
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
         xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bSortByXValues;
         xDiaProp->getPropertyValue( C2U( "ConnectBars" ) ) >>= bConnectBars;
         xDiaProp->getPropertyValue( C2U( "GroupBarsPerAxis" ) ) >>= bGroupBarsPerAxis;
+        xDiaProp->getPropertyValue( C2U( "StartingAngle" ) ) >>= nStartingAngle;
     }
     catch( const uno::Exception & ex )
     {
@@ -755,8 +757,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                     pSeries->doSortByXValues();
 
                 pSeries->setConnectBars( bConnectBars );
-
                 pSeries->setGroupBarsPerAxis( bGroupBarsPerAxis );
+                pSeries->setStartingAngle( nStartingAngle );
 
                 rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
@@ -1638,17 +1640,24 @@ awt::Rectangle ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTi
     //add axis title sizes to the diagram size
     uno::Reference< chart2::XTitle > xTitle_Height( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xChartModel ) );
     uno::Reference< chart2::XTitle > xTitle_Width( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, xChartModel ) );
-    if( xTitle_Height.is() || xTitle_Width.is() )
+    uno::Reference< chart2::XTitle > xSecondTitle_Height( TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xChartModel ) );
+    uno::Reference< chart2::XTitle > xSecondTitle_Width( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xChartModel ) );
+    if( xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is() || xSecondTitle_Width.is() )
     {
         ExplicitValueProvider* pExplicitValueProvider = ExplicitValueProvider::getExplicitValueProvider(xChartView);
         if( pExplicitValueProvider )
         {
             //detect wether x axis points into x direction or not
             if( lcl_getPropertySwapXAndYAxis( ChartModelHelper::findDiagram( xChartModel ) ) )
+            {
                 std::swap( xTitle_Height, xTitle_Width );
+                std::swap( xSecondTitle_Height, xSecondTitle_Width );
+            }
 
             sal_Int32 nTitleSpaceWidth = 0;
             sal_Int32 nTitleSpaceHeight = 0;
+            sal_Int32 nSecondTitleSpaceWidth = 0;
+            sal_Int32 nSecondTitleSpaceHeight = 0;
 
             if( xTitle_Height.is() )
             {
@@ -1664,10 +1673,25 @@ awt::Rectangle ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTi
                 if(nTitleSpaceWidth)
                     nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
+            if( xSecondTitle_Height.is() )
+            {
+                rtl::OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, xChartModel ) );
+                nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
+                if( nSecondTitleSpaceHeight )
+                    nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
+            }
+            if( xSecondTitle_Width.is() )
+            {
+                rtl::OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, xChartModel ) );
+                nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
+                if( nSecondTitleSpaceWidth )
+                    nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
+            }
 
             aRet.X -= nTitleSpaceWidth;
-            aRet.Width += nTitleSpaceWidth;
-            aRet.Height += nTitleSpaceHeight;
+            aRet.Y -= nSecondTitleSpaceHeight;
+            aRet.Width += nTitleSpaceWidth + nSecondTitleSpaceWidth;
+            aRet.Height += nTitleSpaceHeight + nSecondTitleSpaceHeight;
         }
     }
     return aRet;
@@ -1683,7 +1707,8 @@ bool getAvailablePosAndSizeForDiagram(
     , const awt::Rectangle& rSpaceLeft
     , const awt::Size & rPageSize
     , const uno::Reference< XDiagram > & xDiagram
-    , VTitle* pXTitle, VTitle* pYTitle )
+    , VTitle* pXTitle, VTitle* pYTitle
+    , VTitle* pSecondXTitle, VTitle* pSecondYTitle )
 {
     //@todo: we need a size dependent on the axis labels
     awt::Rectangle aRemainingSpace(rSpaceLeft);
@@ -1743,11 +1768,16 @@ bool getAvailablePosAndSizeForDiagram(
     {
         sal_Int32 nTitleSpaceWidth = 0;
         sal_Int32 nTitleSpaceHeight = 0;
+        sal_Int32 nSecondTitleSpaceWidth = 0;
+        sal_Int32 nSecondTitleSpaceHeight = 0;
         {
             //todo detect wether x axis points into x direction or not
             //detect wether x axis points into x direction or not
             if( lcl_getPropertySwapXAndYAxis( xDiagram ) )
+            {
                 std::swap( pXTitle, pYTitle );
+                std::swap( pSecondXTitle, pSecondYTitle );
+            }
 
             if( pXTitle )
             {
@@ -1761,10 +1791,23 @@ bool getAvailablePosAndSizeForDiagram(
                 if(nTitleSpaceWidth)
                     nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
+            if( pSecondXTitle)
+            {
+                nSecondTitleSpaceHeight += pSecondXTitle->getFinalSize().Height;
+                if(nSecondTitleSpaceHeight)
+                    nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
+            }
+            if( pSecondYTitle)
+            {
+                nSecondTitleSpaceWidth += pSecondYTitle->getFinalSize().Width;
+                if(nSecondTitleSpaceWidth)
+                    nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
+            }
         }
-        rOutAvailableDiagramSize.Height -= nTitleSpaceHeight;
-        rOutAvailableDiagramSize.Width -= nTitleSpaceWidth;
+        rOutAvailableDiagramSize.Height -= nTitleSpaceHeight + nSecondTitleSpaceHeight;
+        rOutAvailableDiagramSize.Width -= nTitleSpaceWidth + nSecondTitleSpaceWidth;
         rOutPos.X += nTitleSpaceWidth;
+        rOutPos.Y += nSecondTitleSpaceHeight;
     }
 
     return true;
@@ -1784,12 +1827,20 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
     switch( eAlignment )
     {
+    case ALIGN_TOP:
+        aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width/2
+                                    , rDiagramPlusAxesRect.Y - aTitleSize.Height/2  - nYDistance );
+        break;
     case ALIGN_BOTTOM:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width/2
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height + aTitleSize.Height/2  + nYDistance );
         break;
     case ALIGN_LEFT:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X - aTitleSize.Width/2 - nXDistance
+                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
+        break;
+    case ALIGN_RIGHT:
+        aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
         break;
     case ALIGN_Z:
@@ -2140,24 +2191,54 @@ void ChartView::createShapes()
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
+        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
+
         //------------ create x axis title
         bool bAutoPosition_XTitle = true;
-        std::auto_ptr<VTitle> apVTitle_X( lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle) );
+        std::auto_ptr<VTitle> apVTitle_X;
+        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
+            apVTitle_X = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+                    , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
         //------------ create y axis title
         bool bAutoPosition_YTitle = true;
-        std::auto_ptr<VTitle> apVTitle_Y( lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle) );
+        std::auto_ptr<VTitle> apVTitle_Y;
+        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
+            apVTitle_Y = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+                    , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
         //------------ create z axis title
         bool bAutoPosition_ZTitle = true;
-        std::auto_ptr<VTitle> apVTitle_Z( lcl_createTitle( TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle) );
+        std::auto_ptr<VTitle> apVTitle_Z;
+        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
+            apVTitle_Z = lcl_createTitle( TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+                    , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
+        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+            return;
+
+        bool bDummy = false;
+        bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+        //------------ create secondary x axis title
+        bool bAutoPosition_SecondXTitle = true;
+        std::auto_ptr<VTitle> apVTitle_SecondX;
+        if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
+            apVTitle_SecondX = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+                    , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
+        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+            return;
+
+        //------------ create secondary y axis title
+        bool bAutoPosition_SecondYTitle = true;
+        std::auto_ptr<VTitle> apVTitle_SecondY;
+        if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
+            apVTitle_SecondY = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+                    , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
@@ -2165,7 +2246,7 @@ void ChartView::createShapes()
         awt::Point aAvailablePosDia;
         awt::Size  aAvailableSizeForDiagram;
         if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, aPageSize, ChartModelHelper::findDiagram( m_xChartModel )
-                , apVTitle_X.get(), apVTitle_Y.get() ) )
+                , apVTitle_X.get(), apVTitle_Y.get(), apVTitle_SecondX.get(), apVTitle_SecondY.get() ) )
         {
             impl_createDiagramAndContent( aSeriesPlotterContainer
                         , xDiagramPlusAxes_Shapes
@@ -2185,6 +2266,10 @@ void ChartView::createShapes()
                 changePositionOfAxisTitle( apVTitle_Y.get(), ALIGN_LEFT, aDiagramPlusAxesRect, aPageSize );
             if(bAutoPosition_ZTitle)
                 changePositionOfAxisTitle( apVTitle_Z.get(), ALIGN_Z, aDiagramPlusAxesRect, aPageSize );
+            if(bAutoPosition_SecondXTitle)
+                changePositionOfAxisTitle( apVTitle_SecondX.get(), bIsVertical? ALIGN_RIGHT : ALIGN_TOP, aDiagramPlusAxesRect, aPageSize );
+            if(bAutoPosition_SecondYTitle)
+                changePositionOfAxisTitle( apVTitle_SecondY.get(), bIsVertical? ALIGN_TOP : ALIGN_RIGHT, aDiagramPlusAxesRect, aPageSize );
         }
 
         //cleanup: remove all empty group shapes to avoid grey border lines:
