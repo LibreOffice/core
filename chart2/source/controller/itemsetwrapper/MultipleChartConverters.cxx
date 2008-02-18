@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:51:54 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ AllTitleItemConverter::AllTitleItemConverter(
     {
         uno::Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
         if(!xTitle.is())
-            return;
+            continue;
         uno::Reference< beans::XPropertySet > xObjectProperties( xTitle, uno::UNO_QUERY);
         ::std::auto_ptr< awt::Size > pSingleRefSize(0);
         if( pRefSize.get())
