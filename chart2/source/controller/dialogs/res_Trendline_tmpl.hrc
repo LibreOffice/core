@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: res_Trendline_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:48:43 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _CHART2_RESOURCE_TRENDLINE_HXX
+#define _CHART2_RESOURCE_TRENDLINE_HXX
+
+#include "res_Trendline_IDs.hrc"
+#include "HelpIds.hrc"
+
+#define RESOURCE_TRENDLINE(availablewidth, yoffset) \
+FixedLine FL_TYPE \
+{ \
+    Pos = MAP_APPFONT( 6 ,6  ); \
+    Size = MAP_APPFONT( availablewidth - 12 ,8 ); \
+    Text[ en-US ] = "Regression Type"; \
+}; \
+RadioButton RB_NONE \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_NONE; \
+    Pos = MAP_APPFONT( 29, 22  ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~None"; \
+}; \
+RadioButton RB_LINEAR \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_LINEAR; \
+    Pos = MAP_APPFONT( 29, 22 + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~Linear"; \
+}; \
+RadioButton RB_LOGARITHMIC \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_LOGARITHMIC; \
+    Pos = MAP_APPFONT( 29, 44  + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "L~ogarithmic"; \
+}; \
+RadioButton RB_EXPONENTIAL \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_EXPONENTIAL; \
+    Pos = MAP_APPFONT( 29, 66 + yoffset  ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "E~xponential"; \
+}; \
+RadioButton RB_POWER \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_POWER; \
+    Pos = MAP_APPFONT( 29, 88 + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~Power"; \
+}; \
+FixedBitmap FB_NONE \
+{ \
+    OutputSize = TRUE ; \
+    Scale = TRUE; \
+    Border = FALSE; \
+    Pos = MAP_APPFONT( 10, 18 ); \
+    Size = MAP_APPFONT( 16, 17 ); \
+    Fixed = Bitmap { File = "regno.png" ; }; \
+}; \
+FixedBitmap FB_LINEAR \
+{ \
+    OutputSize = TRUE ; \
+    Scale = TRUE; \
+    Border = FALSE; \
+    Pos = MAP_APPFONT( 10, 18 + yoffset ); \
+    Size = MAP_APPFONT( 16, 17 ); \
+    Fixed = Bitmap { File = "reglin.png" ; }; \
+}; \
+FixedBitmap FB_LOGARITHMIC \
+{ \
+    OutputSize = TRUE ; \
+    Scale = TRUE; \
+    Border = FALSE; \
+    Pos = MAP_APPFONT( 10, 40 + yoffset ); \
+    Size = MAP_APPFONT( 16, 17 ); \
+    Fixed = Bitmap { File = "reglog.png" ; }; \
+}; \
+FixedBitmap FB_EXPONENTIAL \
+{ \
+    OutputSize = TRUE ; \
+    Scale = TRUE; \
+    Border = FALSE; \
+    Pos = MAP_APPFONT( 10, 62 + yoffset ); \
+    Size = MAP_APPFONT( 16, 17 ); \
+    Fixed = Bitmap { File = "regexp.png" ; }; \
+}; \
+FixedBitmap FB_POWER \
+{ \
+    OutputSize = TRUE ; \
+    Scale = TRUE; \
+    Border = FALSE; \
+    Pos = MAP_APPFONT( 10, 84 + yoffset ); \
+    Size = MAP_APPFONT( 16, 17 ); \
+    Fixed = Bitmap { File = "regpow.png" ; }; \
+}; \
+FixedLine FL_EQUATION \
+{ \
+    Pos = MAP_APPFONT( 6, 108 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 12, 8 ); \
+    Text[ en-US ] = "Equation"; \
+}; \
+CheckBox CB_SHOW_EQUATION \
+{ \
+    HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION; \
+    Pos = MAP_APPFONT( 10, 120 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 20, 10 ); \
+    TabStop = TRUE; \
+    Text[ en-US ] = "Show ~equation"; \
+}; \
+CheckBox CB_SHOW_CORRELATION_COEFF \
+{ \
+    HelpId = HID_SCH_TRENDLINE_SHOW_R_SQUARED; \
+    Pos = MAP_APPFONT( 10, 134 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 20, 10 ); \
+    TabStop = TRUE; \
+    Text[ en-US ] = "Show ~correlation coefficient (R²)"; \
+};
+
+#endif
