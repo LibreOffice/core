@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartSfxItemIds.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 16:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,10 @@
 #define SCHATTR_DIAGRAM_STYLE           (SCHATTR_CHARTTYPE_START + 6)
 #define SCHATTR_TEXTBREAK               (SCHATTR_CHARTTYPE_START + 7)
 #define SCHATTR_GROUP_BARS_PER_AXIS     (SCHATTR_CHARTTYPE_START + 8)
+#define SCHATTR_STARTING_ANGLE          (SCHATTR_CHARTTYPE_START + 9)
+#define SCHATTR_CLOCKWISE               (SCHATTR_CHARTTYPE_START + 10)
 
-#define SCHATTR_CHARTTYPE_END           SCHATTR_GROUP_BARS_PER_AXIS
+#define SCHATTR_CHARTTYPE_END           SCHATTR_CLOCKWISE
 
 // items for transporting information to dialogs
 #define SCHATTR_MISC_START              (SCHATTR_CHARTTYPE_END + 1)
