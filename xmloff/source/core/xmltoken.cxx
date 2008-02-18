@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:18:23 $
+ *  last change: $Author: rt $ $Date: 2008-02-18 15:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2961,6 +2961,7 @@ namespace xmloff { namespace token {
         TOKEN( "dependency",             XML_DEPENDENCY ),
 
         TOKEN( "nav-order",             XML_NAV_ORDER ),
+
         TOKEN( "automatic-content",     XML_AUTOMATIC_CONTENT ),
         TOKEN( "display-r-square",      XML_DISPLAY_R_SQUARE ),
         TOKEN( "display-equation",      XML_DISPLAY_EQUATION ),
@@ -2983,7 +2984,9 @@ namespace xmloff { namespace token {
         TOKEN( "character-set",         XML_CHARACTER_SET ),
         TOKEN( "application-connection-settings",         XML_APPLICATION_CONNECTION_SETTINGS ),
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
-#if OSL_DEBUG_LEVEL > 0
+        TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
+
+    #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
         { 0, NULL, NULL                       /* XML_TOKEN_END */ }
