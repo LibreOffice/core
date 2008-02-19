@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:29:12 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,7 +529,8 @@ public:
     //aendern (bBrowseChgd == sal_False)
     void CheckBrowseView( BOOL bBrowseChgd );
 
-    const Size& GetBrowseBorder() const{ return aBrowseBorder; }
+    const Size& GetBrowseBorder() const;
+    sal_Int32 GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
