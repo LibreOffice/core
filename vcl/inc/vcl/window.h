@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:11:34 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,8 @@ struct ImplFrameData
 // - WindowImpl -
 // ---------------
 
+enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputDisabled =2 };
+
 class WindowImpl
 {
 public:
@@ -308,6 +310,7 @@ public:
     USHORT              mnActivateMode;
     USHORT              mnDlgCtrlFlags;
     USHORT              mnLockCount;
+    AlwaysInputMode     meAlwaysInputMode;
     BOOL                mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
@@ -319,7 +322,6 @@ public:
                         mbVisible:1,
                         mbDisabled:1,
                         mbInputDisabled:1,
-                        mbAlwaysEnableInput:1,
                         mbDropDisabled:1,
                         mbNoUpdate:1,
                         mbNoParentUpdate:1,
