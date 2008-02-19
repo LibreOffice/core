@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:26 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ void ScTabView::StopRefMode()
         aViewData.SetRefMode( FALSE, SC_REFTYPE_NONE );
 
         HideTip();
+        UpdateShrinkOverlay();
 
         if ( aViewData.GetTabNo() >= aViewData.GetRefStartZ() &&
                 aViewData.GetTabNo() <= aViewData.GetRefEndZ() )
@@ -187,6 +188,7 @@ void ScTabView::DoneRefMode( BOOL bContinue )
     aViewData.SetRefMode( FALSE, SC_REFTYPE_NONE );
 
     HideTip();
+    UpdateShrinkOverlay();
 
     //  Paint:
     if ( bWasRef && aViewData.GetTabNo() >= aViewData.GetRefStartZ() &&
