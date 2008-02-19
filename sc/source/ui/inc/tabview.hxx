@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:36 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@ private:
     BOOL                bInZoomUpdate;
     BOOL                bMoveIsShift;
     BOOL                bNewStartIfMarking;
+
+    BOOL                bOldSelection;          // old style (inverting) of selection
 
 
     void            Init();
@@ -501,6 +503,9 @@ public:
     void            PaintMarks( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            PaintBlock( BOOL bReset = FALSE );
 
+    void            SetMarkData( const ScMarkData& rNew );
+    void            MarkDataChanged();
+
     void            LockModifiers( USHORT nModifiers );
     USHORT          GetLockedModifiers() const;
     void            ViewOptionsHasChanged( BOOL bHScrollChanged,
@@ -529,6 +534,9 @@ public:
     void            SetBrushDocument( ScDocument* pNew, BOOL bLock );
     void            SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock );
     void            ResetBrushDocument();
+
+    void            UpdateSelectionType();
+    BOOL            IsOldSelection() const          { return bOldSelection; }
 };
 
 
