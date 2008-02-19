@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:49:12 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5145,12 +5145,11 @@ void ScGridWindow::UpdateCursorOverlay()
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+            BOOL bOld = pViewData->GetView()->IsOldSelection();
 
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
+            Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aCursorColor, aRanges );
 
             pOverlayManager->add(*pOverlay);
             mpOOCursors = new ::sdr::overlay::OverlayObjectList;
@@ -5181,13 +5180,27 @@ void ScGridWindow::UpdateSelectionOverlay()
 
     if ( aPixelRects.size() && pViewData->IsActive() )
     {
+        SCTAB nTab = pViewData->GetTabNo();
+        BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( nTab );
+        BOOL bOld = pViewData->GetView()->IsOldSelection();
+
         sdr::overlay::OverlayObjectCell::RangeVector aRanges;
 
         std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
         for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
               aPixelIter != aPixelEnd; ++aPixelIter )
         {
-            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
+            Rectangle aPixel( *aPixelIter );
+            if ( !bOld )
+            {
+                // for transparent selection, add a pixel so the border is on the grid on all edges
+                if ( bLayoutRTL )
+                    aPixel.Right() += 1;
+                else
+                    aPixel.Left() -= 1;
+                aPixel.Top() -= 1;
+            }
+            Rectangle aLogic( PixelToLogic( aPixel, aDrawMode ) );
 
             const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
             const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
@@ -5201,11 +5214,8 @@ void ScGridWindow::UpdateSelectionOverlay()
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_LIGHT_TRANSPARENT;
-
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_BORDER_TRANSPARENT;
+            Color aHighlight( GetSettings().GetStyleSettings().GetHighlightColor() );
             sdr::overlay::OverlayObjectCell* pOverlay =
                 new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
 
@@ -5278,13 +5288,12 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-//                ScOverlayType eType = SC_OVERLAY_HATCH;
-//                ScOverlayType eType = SC_OVERLAY_TRANSPARENT;
+            BOOL bOld = pViewData->GetView()->IsOldSelection();
 
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
+            Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+                new sdr::overlay::OverlayObjectCell( eType, aHandleColor, aRanges );
 
             pOverlayManager->add(*pOverlay);
             mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
@@ -5621,51 +5630,92 @@ namespace sdr
             rOutputDevice.SetLineColor();
             rOutputDevice.SetFillColor(getBaseColor());
 
-            if ( mePaintType == SC_OVERLAY_INVERT )
+            if ( mePaintType == SC_OVERLAY_BORDER_TRANSPARENT )
             {
-                rOutputDevice.Push();
-                rOutputDevice.SetRasterOp( ROP_XOR );
-                rOutputDevice.SetFillColor( COL_WHITE );
-            }
+                // to draw the border, all rectangles have to be collected into a PolyPolygon
 
-            for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
-            {
-                const basegfx::B2DRange& rRange(maRectangles[a]);
-                const Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
-
-                switch(mePaintType)
+                PolyPolygon aPolyPoly;
+                sal_uInt32 nRectCount = maRectangles.size();
+                for(sal_uInt32 nRect=0; nRect < nRectCount; ++nRect)
                 {
-                    case SC_OVERLAY_INVERT :
+                    const basegfx::B2DRange& rRange(maRectangles[nRect]);
+                    Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
+                    if ( nRectCount == 1 || nRect+1 < nRectCount )
                     {
-                        rOutputDevice.DrawRect( aRectangle );
-
-                        // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
-                        // {
-                        //  ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
-                        // }
-
-                        break;
+                        // simply add for all except the last rect
+                        aPolyPoly.Insert( Polygon( aRectangle ) );
                     }
-                    case SC_OVERLAY_HATCH :
+                    else
                     {
-                        rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
-                        break;
-                    }
-                    case SC_OVERLAY_TRANSPARENT :
-                    {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
-                        break;
-                    }
-                    case SC_OVERLAY_LIGHT_TRANSPARENT :
-                    {
-                        rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 80);
-                        break;
+                        PolyPolygon aTemp( aPolyPoly );
+                        aTemp.GetUnion( PolyPolygon( Polygon( aRectangle ) ), aPolyPoly );
                     }
                 }
-            }
 
-            if ( mePaintType == SC_OVERLAY_INVERT )
-                rOutputDevice.Pop();
+                rOutputDevice.DrawTransparent(aPolyPoly, 75);
+
+                rOutputDevice.SetLineColor(getBaseColor());
+                rOutputDevice.SetFillColor();
+
+                rOutputDevice.DrawPolyPolygon(aPolyPoly);
+            }
+            else
+            {
+                if ( mePaintType == SC_OVERLAY_INVERT )
+                {
+                    rOutputDevice.Push();
+                    rOutputDevice.SetRasterOp( ROP_XOR );
+                    rOutputDevice.SetFillColor( COL_WHITE );
+                }
+
+                for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
+                {
+                    const basegfx::B2DRange& rRange(maRectangles[a]);
+                    const Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
+
+                    switch(mePaintType)
+                    {
+                        case SC_OVERLAY_INVERT :
+                        {
+                            rOutputDevice.DrawRect( aRectangle );
+
+                            // if(OUTDEV_WINDOW == rOutputDevice.GetOutDevType())
+                            // {
+                            //     ((Window&)rOutputDevice).Invert(aRectangle, INVERT_HIGHLIGHT);
+                            // }
+
+                            break;
+                        }
+                        case SC_OVERLAY_HATCH :
+                        {
+                            rOutputDevice.DrawHatch(PolyPolygon(Polygon(aRectangle)), Hatch(HATCH_SINGLE, getBaseColor(), 2, 450));
+                            break;
+                        }
+                        case SC_OVERLAY_SOLID :
+                        {
+                            rOutputDevice.DrawRect(aRectangle);
+                            break;
+                        }
+                        case SC_OVERLAY_TRANSPARENT :
+                        {
+                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 50);
+                            break;
+                        }
+                        case SC_OVERLAY_LIGHT_TRANSPARENT :
+                        {
+                            rOutputDevice.DrawTransparent(PolyPolygon(Polygon(aRectangle)), 75);
+                            break;
+                        }
+                        default:
+                        {
+                            // SC_OVERLAY_BORDER_TRANSPARENT is handled separately
+                        }
+                    }
+                }
+
+                if ( mePaintType == SC_OVERLAY_INVERT )
+                    rOutputDevice.Pop();
+            }
         }
 
         void OverlayObjectCell::createBaseRange(OutputDevice& /* rOutputDevice */)
