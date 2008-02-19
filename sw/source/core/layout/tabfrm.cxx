@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:21:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3325,8 +3325,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
             //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"
             //geben kann (RootFrm::ImplCalcBrowseWidth())
-            const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-            long nWidth = pSh->VisArea().Width() - 2 * aBorder.Width();
+            long nWidth = pSh->GetBrowseWidth();
             nWidth -= Prt().Left();
             nWidth -= pAttrs->CalcRightLine();
             Prt().Width( Min( nWidth, Prt().Width() ) );
