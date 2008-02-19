@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:28:26 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <dbfld.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -114,6 +115,10 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
         pDoc->DoUndo(FALSE);
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
+        SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
+
+        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
+            pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
         pDoc->DoUndo(bUndo);
     }
 }
