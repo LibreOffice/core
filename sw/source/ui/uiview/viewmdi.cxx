@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:38:16 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
@@ -123,6 +126,9 @@
 #include <globals.hrc>
 #endif
 
+#include <IDocumentSettingAccess.hxx>
+#include <PostItMgr.hxx>
+
 USHORT  SwView::nMoveType = NID_PGE;
 USHORT  SwView::nActMark = 0;
 
@@ -160,6 +166,11 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     {
         const long nOf = DOCUMENTBORDER * 2L;
         Size aPageSize( pWrtShell->GetAnyCurRect(RECT_PAGE_CALC).SSize() );
+
+        //mod #i6193# added sidebar width
+        SwPostItMgr* pPostItMgr = GetPostItMgr();
+        if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
+            aPageSize.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
 
         if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
         {
@@ -256,6 +267,14 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     pWrtShell->UnlockPaint();
     if( bUnLockView )
         pWrtShell->LockView( FALSE );
+    if ( mpPostItMgr )
+    {
+        mpPostItMgr->Rescale();
+        if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+            mpPostItMgr->CalcRects();
+        mpPostItMgr->LayoutPostIts();
+    }
+
 //  eZoom = eZoomType;
 }
 
