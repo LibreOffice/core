@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:38:29 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+
+#include <PostItMgr.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -222,7 +224,8 @@ void SwView::DocSzChgd(const Size &rSz)
 
 extern int bDocSzUpdated;
 
-    aDocSz = rSz;
+
+aDocSz = rSz;
 
     if( !pWrtShell || aVisArea.IsEmpty() )      // keine Shell -> keine Aenderung
     {
@@ -233,17 +236,17 @@ extern int bDocSzUpdated;
     //Wenn Text geloescht worden ist, kann es sein, dass die VisArea hinter
     //den sichtbaren Bereich verweist
     Rectangle aNewVisArea( aVisArea );
-    BOOL bModified = FALSE;
-    const SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
+    BOOL bModified = false;
+    SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
     Size aEditSz( GetEditWin().PixelToLogic(GetEditWin().GetOutputSizePixel()) );
-
 
     if( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
         lTmp < aEditSz.Width())
     {
         aNewVisArea.Left() = - (aEditSz.Width() - lTmp) / 2;
         aNewVisArea.Right() = aEditSz.Width() + aNewVisArea.Left();
+        bModified = true;
     }
     else
     {
@@ -252,7 +255,7 @@ extern int bDocSzUpdated;
             lTmp = aNewVisArea.Right() - lTmp;
             aNewVisArea.Right() -= lTmp;
             aNewVisArea.Left() -= lTmp;
-            bModified = TRUE;
+            bModified = true;
         }
     }
     lTmp = aDocSz.Height() + lGreenOffset;
@@ -365,7 +368,7 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 
     if ( bOuterResize && !bInOuterResizePixel && !bInInnerResizePixel)
             OuterResizePixel( Point(),
-                          GetViewFrame()->GetWindow().GetOutputSizePixel() );
+                GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
 
 /*--------------------------------------------------------------------
@@ -861,8 +864,10 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
 
 void SwView::CalcVisArea( const Size &rOutPixel )
 {
+    Size hi = rOutPixel;
+
     Point aTopLeft;
-    Rectangle aRect( aTopLeft, rOutPixel );
+    Rectangle aRect( aTopLeft, hi );
     aTopLeft = GetEditWin().PixelToLogic( aTopLeft );
     Point aBottomRight( GetEditWin().PixelToLogic( aRect.BottomRight() ) );
 
@@ -1318,6 +1323,12 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     bInOuterResizePixel = FALSE;
 
+    if ( mpPostItMgr )
+    {
+        if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            mpPostItMgr->CalcRects();
+        mpPostItMgr->LayoutPostIts();
+    }
 }
 
 
