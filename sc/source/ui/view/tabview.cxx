@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,32 @@ void __EXPORT ScCornerButton::Paint( const Rectangle& rRect )
     BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;
 
+    if ( !bAdd && !rStyleSettings.GetHighContrastMode() )
+    {
+        // match the shaded look of column/row headers
+
+        Color aFace( rStyleSettings.GetFaceColor() );
+        Color aWhite( COL_WHITE );
+        Color aCenter( aFace );
+        aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
+        Color aOuter( aFace );
+        aOuter.Merge( aWhite, 0xa0 );           // lighten up more
+
+        long nCenterX = (aSize.Width() / 2) - 1;
+        long nCenterY = (aSize.Height() / 2) - 1;
+
+        SetLineColor();
+        SetFillColor(aCenter);
+        DrawRect( Rectangle( nCenterX, nCenterY, nCenterX, nPosY ) );
+        DrawRect( Rectangle( nCenterX, nCenterY, nDarkX, nCenterY ) );
+        SetFillColor(aOuter);
+        DrawRect( Rectangle( 0, 0, nPosX, nCenterY-1 ) );
+        if ( bLayoutRTL )
+            DrawRect( Rectangle( nCenterX+1, nCenterY, nPosX, nPosY ) );
+        else
+            DrawRect( Rectangle( 0, nCenterY, nCenterX-1, nPosY ) );
+    }
+
     //  both buttons have the same look now - only dark right/bottom lines
     SetLineColor( rStyleSettings.GetDarkShadowColor() );
     DrawLine( Point(0,nPosY), Point(nPosX,nPosY) );
@@ -372,7 +398,8 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
             bMoveIsShift( FALSE ),                                          \
-            bNewStartIfMarking( FALSE )
+            bNewStartIfMarking( FALSE ),                                    \
+            bOldSelection( FALSE )
 
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
