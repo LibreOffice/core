@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:41:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -641,7 +641,7 @@ namespace sw
 
             using namespace ::com::sun::star::i18n;
 
-            sal_uInt16 nScript = ScriptType::LATIN;
+            sal_uInt16 nScript = i18n::ScriptType::LATIN;
             if (rTxt.Len() && pBreakIt && pBreakIt->xBreak.is())
                 nScript = pBreakIt->xBreak->getScriptType(rTxt, 0);
 
