@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:24 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#include <svtools/smplhint.hxx>
+
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -46,11 +48,13 @@
 #include <calbck.hxx>
 #endif
 
+#include <svtools/brdcst.hxx>
+
 class SwField;
 class SwTxtFld;
 // ATT_FLD ***********************************
 
-class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
     friend void _InitCore();
@@ -102,6 +106,26 @@ public:
     BOOL IsProtect() const;
 };
 
+class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
+{
+#define SWFMTFLD_INSERTED   1
+#define SWFMTFLD_REMOVED    2
+#define SWFMTFLD_FOCUS      3
+#define SWFMTFLD_CHANGED    4
+
+    const SwFmtFld* pFld;
+    sal_Int16 nWhich;
+
+public:
+    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n )
+        : pFld(p)
+        , nWhich(n)
+    {}
+
+    TYPEINFO();
+    const SwFmtFld* GetField() const { return pFld; }
+    sal_Int16 Which() const { return nWhich; }
+};
 
 #endif
 
