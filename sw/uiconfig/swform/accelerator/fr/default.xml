@@ -115,4 +115,5 @@
   <accel:item accel:code="KEY_V" accel:shift="true" accel:mod1="true" xlink:href=".uno:PasteSpecial"/>
   <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
   <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
+  <accel:item accel:code="KEY_N" accel:mod1="true" accel:mod2="true" xlink:href=".uno:InsertAnnotation"/>
 </accel:acceleratorlist>
