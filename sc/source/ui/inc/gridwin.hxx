@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:23:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,8 @@ public:
 // predefines
 class ScGridWindow;
 
-enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_HATCH, SC_OVERLAY_TRANSPARENT, SC_OVERLAY_LIGHT_TRANSPARENT };
+enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_HATCH, SC_OVERLAY_SOLID,
+                     SC_OVERLAY_TRANSPARENT, SC_OVERLAY_LIGHT_TRANSPARENT, SC_OVERLAY_BORDER_TRANSPARENT };
 
 // #114409#
 namespace sdr
