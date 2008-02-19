@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvw.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:23:53 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@
 #define STR_TABLE_SELECT_COL            (RC_DOCVW_BEGIN + 20)
 
 #define STR_SMARTTAG_CLICK              (RC_DOCVW_BEGIN + 21)
+
+#define STR_POSTIT_TODAY                (RC_DOCVW_BEGIN + 22)
+#define STR_POSTIT_YESTERDAY            (RC_DOCVW_BEGIN + 23)
 
 
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
