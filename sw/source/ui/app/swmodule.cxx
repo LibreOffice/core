@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:16:41 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,8 @@
 #include <avmedia/mediatoolbox.hxx>
 #endif
 
+#include <annotsh.hxx>
+
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
@@ -521,6 +523,7 @@ void SwDLL::RegisterInterfaces()
     SwWebDrawFormShell::RegisterInterface(pMod);
     SwWebOleShell::RegisterInterface(pMod);
     SwMediaShell::RegisterInterface(pMod);
+    SwAnnotationShell::RegisterInterface(pMod);
 }
 
 //************************************************************************
