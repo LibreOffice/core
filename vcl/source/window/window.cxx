@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.273 $
+ *  $Revision: 1.274 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:18:41 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -701,6 +701,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnActivateMode      = 0;            // Wird bei System/Overlap-Windows umgesetzt
     mpWindowImpl->mnDlgCtrlFlags      = 0;            // DialogControl-Flags
     mpWindowImpl->mnLockCount         = 0;            // LockCount
+    mpWindowImpl->meAlwaysInputMode   = AlwaysInputNone; // neither AlwaysEnableInput nor AlwaysDisableInput called
     mpWindowImpl->mbFrame             = FALSE;        // TRUE: Window is a frame window
     mpWindowImpl->mbBorderWin         = FALSE;        // TRUE: Window is a border window
     mpWindowImpl->mbOverlapWin        = FALSE;        // TRUE: Window is a overlap window
@@ -717,7 +718,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
     mpWindowImpl->mbDisabled          = FALSE;        // TRUE: Enable( FALSE ) called
     mpWindowImpl->mbInputDisabled     = FALSE;        // TRUE: EnableInput( FALSE ) called
-    mpWindowImpl->mbAlwaysEnableInput = FALSE;        // TRUE: AlwaysEnableInput( TRUE ) called
     mpWindowImpl->mbDropDisabled      = FALSE;        // TRUE: Drop is enabled
     mpWindowImpl->mbNoUpdate          = FALSE;        // TRUE: SetUpdateMode( FALSE ) called
     mpWindowImpl->mbNoParentUpdate    = FALSE;        // TRUE: SetParentUpdateMode( FALSE ) called
@@ -1012,7 +1012,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             {
                 mpWindowImpl->mbDisabled          = pParent->mpWindowImpl->mbDisabled;
                 mpWindowImpl->mbInputDisabled     = pParent->mpWindowImpl->mbInputDisabled;
-                mpWindowImpl->mbAlwaysEnableInput = pParent->mpWindowImpl->mbAlwaysEnableInput;
+                mpWindowImpl->meAlwaysInputMode   = pParent->mpWindowImpl->meAlwaysInputMode;
             }
 
             OutputDevice::SetSettings( pParent->GetSettings() );
@@ -6736,6 +6736,13 @@ void Window::Enable( bool bEnable, bool bChild )
 void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
     mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? TRUE : FALSE;
+
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        pChild->SetCallHandlersOnInputDisabled( bCall );
+        pChild = pChild->mpWindowImpl->mpNext;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -6760,7 +6767,8 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, TRUE );
     }
 
-    if ( !mpWindowImpl->mbAlwaysEnableInput || bEnable )
+    if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
+         (  bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled) )
     {
         // Wenn ein Fenster disablte wird, wird automatisch der
         // Tracking-Modus beendet oder der Capture geklaut
@@ -6888,12 +6896,16 @@ void Window::AlwaysEnableInput( BOOL bAlways, BOOL bChild )
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->AlwaysEnableInput( bAlways, FALSE );
 
-    if ( mpWindowImpl->mbAlwaysEnableInput != bAlways )
+    if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled )
     {
-        mpWindowImpl->mbAlwaysEnableInput = bAlways;
+        mpWindowImpl->meAlwaysInputMode = AlwaysInputEnabled;
 
         if ( bAlways )
             EnableInput( TRUE, FALSE );
+    }
+    else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled )
+    {
+        mpWindowImpl->meAlwaysInputMode = AlwaysInputNone;
     }
 
     if ( bChild || mpWindowImpl->mbChildNotify )
@@ -6902,6 +6914,38 @@ void Window::AlwaysEnableInput( BOOL bAlways, BOOL bChild )
         while ( pChild )
         {
             pChild->AlwaysEnableInput( bAlways, bChild );
+            pChild = pChild->mpWindowImpl->mpNext;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::AlwaysDisableInput( BOOL bAlways, BOOL bChild )
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if ( mpWindowImpl->mpBorderWindow )
+        mpWindowImpl->mpBorderWindow->AlwaysDisableInput( bAlways, FALSE );
+
+    if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled )
+    {
+        mpWindowImpl->meAlwaysInputMode = AlwaysInputDisabled;
+
+        if ( bAlways )
+            EnableInput( FALSE, FALSE );
+    }
+    else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled )
+    {
+        mpWindowImpl->meAlwaysInputMode = AlwaysInputNone;
+    }
+
+    if ( bChild || mpWindowImpl->mbChildNotify )
+    {
+        Window* pChild = mpWindowImpl->mpFirstChild;
+        while ( pChild )
+        {
+            pChild->AlwaysDisableInput( bAlways, bChild );
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
