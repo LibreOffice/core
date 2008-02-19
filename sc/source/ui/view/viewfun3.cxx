@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:46:56 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
             DoneBlockMode();
             InitOwnBlockMode();
             rMark.SetMarkArea( aRange );
+            MarkDataChanged();
         }
 
         CopyToClip( pClipDoc, TRUE, FALSE, bIncludeObjects );           // Ab ins Clipboard
@@ -1039,6 +1040,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         InitOwnBlockMode();
     }
     rMark.SetMarkArea( aUserRange );
+    MarkDataChanged();
 
     HideCursor();                           // Cursor aendert sich !
 
