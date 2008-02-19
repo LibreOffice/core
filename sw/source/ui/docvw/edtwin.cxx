@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:40:52 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,6 +324,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+
+#include "PostItMgr.hxx"
+#include "postit.hxx"
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
@@ -2607,8 +2610,6 @@ void SwEditWin::RstMBDownFlags()
 
 
 
-
-
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -2627,6 +2628,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         return;
 
     MouseEvent rMEvt(_rMEvt);
+
+    if (rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
+        return;
+
+    rView.GetPostItMgr()->SetActivePostIt(0);
 
     GrabFocus();
 
@@ -4673,9 +4679,14 @@ BOOL SwEditWin::IsDrawSelMode()
 
 void SwEditWin::GetFocus()
 {
-    rView.GotFocus();
-    Window::GetFocus();
-    rView.GetWrtShell().InvalidateAccessibleFocus();
+    if (rView.GetPostItMgr()->GetActivePostIt())
+        rView.GetPostItMgr()->GetActivePostIt()->GrabFocus();
+    else
+    {
+        rView.GotFocus();
+        Window::GetFocus();
+        rView.GetWrtShell().InvalidateAccessibleFocus();
+    }
 }
 
 /******************************************************************************
@@ -4732,6 +4743,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const USHORT nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = (SwInputChild*)GetView().GetViewFrame()->
                                                 GetChildWindow( nId );
+
+            if (rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
+                return;
 
             if((!pChildWin || pChildWin->GetView() != &rView) &&
                 !rSh.IsDrawCreate() && !IsDrawAction())
