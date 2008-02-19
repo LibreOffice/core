@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:21:28 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,12 +769,15 @@ void SwPageFrm::MakeAll()
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
                     const long nBottom = pAttrs->CalcBottomLine()+ aBorder.Height();
 
-                    long nWidth = GetUpper() ? ((SwRootFrm*)GetUpper())->
-                        GetBrowseWidth() + 2 * aBorder.Width() : 0;
-//                  if ( !pSh->VisArea().Width() )
-//                      nWidth = Max( nWidth, 5000L );
+                    long nWidth = GetUpper() ? ((SwRootFrm*)GetUpper())->GetBrowseWidth() : 0;
+                    if ( nWidth < pSh->GetBrowseWidth() )
+                        nWidth = pSh->GetBrowseWidth();
+                    nWidth += + 2 * aBorder.Width();
+/*
+                    long nWidth = GetUpper() ? ((SwRootFrm*)GetUpper())->GetBrowseWidth() + 2 * aBorder.Width() : 0;
                     if ( nWidth < pSh->VisArea().Width() )
-                        nWidth = pSh->VisArea().Width();
+                        nWidth = pSh->VisArea().Width(); */
+
                     nWidth = Max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
                     Frm().Width( nWidth );
 
@@ -1042,8 +1045,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                long nWidth = nWidthArea - 2 * ( IsVertical() ?
-                                           aBorder.Height() : aBorder.Width() );
+                long nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
                 nWidth -= (Prt().*fnRect->fnGetLeft)();
                 nWidth -= rAttrs.CalcRightLine();
                 nWidth = Max( nMinWidth, nWidth );
