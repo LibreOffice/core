@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:54:11 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
     sal_Bool bSaveDoesUndo = DoesUndo();
 
     StartAllAction();
-    switch( eDoType )
+     switch( eDoType )
     {
         case UNDO:
             DoUndo(sal_False); // #i21739#
