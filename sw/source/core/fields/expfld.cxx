@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:23:43 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,7 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         }
         return nSet;
 }
+
 //-----------------------------------------------------------------------------
 
 void ReplacePoint( String& rTmpName, BOOL bWithCommandType )
