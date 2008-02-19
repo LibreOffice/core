@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:46:04 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1477,6 +1477,19 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             Any aAny = xTextFieldsEnum->nextElement();
             Reference< XTextField > xTextField = *(Reference<XTextField>*)aAny.getValue();
             exportTextField( xTextField->getAnchor(), bAutoStyles );
+            try
+            {
+                Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
+                Reference < XText > xText;
+                Any a = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("TextRange") );
+                a >>= xText;
+                if ( xText.is() )
+                    exportText( xText, sal_True, bIsProgress, bExportContent );
+                GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
+            }
+            catch (Exception&)
+            {
+            }
         }
     }
 
