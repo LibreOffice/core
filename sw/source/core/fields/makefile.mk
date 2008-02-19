@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 15:29:18 $
+#   last change: $Author: rt $ $Date: 2008-02-19 13:43:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ CXXFILES = \
 
 
 SLOFILES =	\
+        $(SLO)$/textapi.obj \
         $(SLO)$/authfld.obj \
         $(SLO)$/cellfml.obj \
         $(SLO)$/chpfld.obj \
