@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:52:20 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@
 #include <beziersh.hxx>
 #include <drawsh.hxx>
 #include <drwtxtsh.hxx>
+#include <annotsh.hxx>
 
 #include <wview.hxx>
 #include <wdocsh.hxx>
@@ -209,8 +210,8 @@ void SwWebView::SelectShell()
             for ( i = 0; TRUE; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
-                if ( !(pSfxShell->ISA( SwBaseShell ) ||
-                    pSfxShell->ISA( SwDrawTextShell )) )
+                if ( !( pSfxShell->ISA( SwBaseShell ) ||
+                    pSfxShell->ISA( SwDrawTextShell ) || pSfxShell->ISA( SwAnnotationShell ) ) )
                     break;
             }
             pSfxShell = rDispatcher.GetShell( --i );
@@ -288,6 +289,12 @@ void SwWebView::SelectShell()
             eShellMode = SHELL_MODE_DRAWTEXT;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             SetShell( new SwDrawTextShell( *this ));
+            rDispatcher.Push( *GetCurShell() );
+        }
+        else if ( _nSelectionType & nsSelectionType::SEL_POSTIT )
+        {
+            eShellMode = SHELL_MODE_POSTIT;
+            SetShell( new SwAnnotationShell( *this ) );
             rDispatcher.Push( *GetCurShell() );
         }
         else
