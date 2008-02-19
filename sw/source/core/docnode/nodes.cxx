@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:18:04 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 // --> OD 2006-11-14 #b6492987#
 #include <txtnodenumattr.hxx>
 // <--
+
+#include <docsh.hxx>
+#include <svtools/smplhint.hxx>
 
 extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, BOOL bChkSection );
@@ -367,10 +370,14 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                             case RES_TXTATR_FIELD:
                                 {
                                     SwTxtFld* pTxtFld = (SwTxtFld*)pAttr;
-                                    rNds.GetDoc()->InsDelFldInFldLst( !bToUndo,
-                                                                *pTxtFld );
-                                    const SwFieldType* pTyp = pTxtFld->GetFld().
-                                                            GetFld()->GetTyp();
+                                    rNds.GetDoc()->InsDelFldInFldLst( !bToUndo, *pTxtFld );
+
+                                    const SwFieldType* pTyp = pTxtFld->GetFld().GetFld()->GetTyp();
+                                    if ( RES_POSTITFLD == pTyp->Which() )
+                                    {
+                                        rNds.GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( &pTxtFld->GetFld(), pTxtFld->GetFld().IsFldInDoc() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
+                                    }
+                                    else
                                     if( RES_DDEFLD == pTyp->Which() )
                                     {
                                         if( bToUndo )
@@ -1903,6 +1910,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
             // wird aufgehoben !
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
+            GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0, rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
             return;
         }
 
@@ -2020,6 +2028,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
     // wird aufgehoben !
     *pEnd = *pStt;
     rPam.DeleteMark();
+    GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0, rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
 }
 
 
