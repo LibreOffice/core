@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:31:42 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <hintids.hxx>
 #endif
 
+#include <doc.hxx>
 #ifndef PRODUCT
 #include <stdio.h>
 #endif
@@ -156,6 +157,10 @@
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
 #endif
+
+#include <postit.hxx>
+#include <PostItMgr.hxx>
+#include <fmtfld.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
@@ -334,6 +339,31 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         break;
 
                         case RES_POSTITFLD:
+                            /*
+                            {
+                                SwFmtFld* pSwFmtFld = 0;
+                                SwFieldType* pType = rView.GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
+                                SwClientIter aIter( *pType );
+                                SwClient * pFirst = aIter.GoStart();
+                                while(pFirst)
+                                {
+                                    pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
+                                    if ( pSwFmtFld->GetFld()==pFld )
+                                        break;
+                                    pFirst = aIter++;
+                                }
+
+                                SwPostItMgr* pMgr = rView.GetPostItMgr();
+                                SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr);
+                                pPostIt->SetReadonly(true);
+                                pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
+                                pPostIt->SetPosSizePixel(rEvt.GetMousePosPixel(),Size(180,70));
+                                pPostIt->Show();
+                                SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
+                                return;
+                            }
+                            */
+                            /* no break */
                         case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
                             bBalloon = TRUE;
                             /* no break */
