@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:44:25 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,11 +156,7 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     if (pViewShell)
-    {
-        pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-    }
+        pViewShell->SetMarkData( aMarkData );
 
     USHORT nExtFlags = 0;
 
@@ -333,11 +329,7 @@ void ScUndoFillTable::DoChange( const BOOL bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     if (pViewShell)
-    {
-        pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-    }
+        pViewShell->SetMarkData( aMarkData );
 
     if (bUndo)  // nur Undo
     {
@@ -481,11 +473,7 @@ void ScUndoSelectionAttr::DoChange( const BOOL bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     if (pViewShell)
-    {
-        pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-    }
+        pViewShell->SetMarkData( aMarkData );
 
     ScRange aEffRange( aRange );
     if ( pDoc->HasAttrib( aEffRange, HASATTR_MERGED ) )         // zusammengefasste Zellen?
@@ -1157,11 +1145,7 @@ void __EXPORT ScUndoReplace::Undo()
                    "ScUndoReplace:: Falscher Modus");
 
         if (pViewShell)
-        {
-            pViewShell->DoneBlockMode();
-            pViewShell->InitOwnBlockMode();
-            pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-        }
+            pViewShell->SetMarkData( aMarkData );
 
 //! markierte Tabellen
 //! Bereich merken ?
@@ -1246,9 +1230,7 @@ void __EXPORT ScUndoReplace::Redo()
     {
         if (pViewShell)
         {
-            pViewShell->DoneBlockMode();
-            pViewShell->InitOwnBlockMode();
-            pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
+            pViewShell->SetMarkData( aMarkData );
 
             pViewShell->SearchAndReplace( pSearchItem, FALSE, TRUE );
         }
@@ -1473,11 +1455,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
 
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
-        {
-            pViewShell->DoneBlockMode();
-            pViewShell->InitOwnBlockMode();
-            pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-        }
+            pViewShell->SetMarkData( aMarkData );
 
         SCTAB nTabCount = pDoc->GetTableCount();
         //  Undo/Redo-doc has only selected tables
