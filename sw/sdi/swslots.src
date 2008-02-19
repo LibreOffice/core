@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:16:20 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1319,6 +1319,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
 {
     Slotname [ en-US ] = "Graphics On/Off";
 };
+
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
 {
     Slotname [ en-US ] = "Hidden Paragraphs";
@@ -1487,5 +1488,9 @@ SfxSlotInfo FN_INSERT_ZWSP
 SfxSlotInfo FN_INSERT_ZWNBSP
 {
     SlotName[ en-US ] = "No-width optional break";
+};
+SfxSlotInfo FN_VIEW_NOTES
+{
+    Slotname [ en-US ] = "Notes";
 };
 
