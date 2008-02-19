@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:24:42 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1378,10 +1378,19 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyAuthor;
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyDate;
+    const ::rtl::OUString sPropertyTextRange;
 
     ::rtl::OUStringBuffer aAuthorBuffer;
     ::rtl::OUStringBuffer aTextBuffer;
     ::rtl::OUStringBuffer aDateBuffer;
+
+    com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxField;
+    com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxCursor;
+    com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxOldCursor;
+
+    /// old list item and block (#91964#)
+    SvXMLImportContextRef       mxOldListBlock;
+    SvXMLImportContextRef       mxOldListItem;
 
 public:
 
@@ -1408,6 +1417,7 @@ protected:
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
 };
 
 
