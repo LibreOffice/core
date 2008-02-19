@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:27:27 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,19 @@
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
 #endif
+
+bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
+{
+    bool bRet = false;
+    switch( eType )
+    {
+    case OutDevSupport_TransparentRect:
+        bRet = mbVirDev || mbWindow;
+        break;
+    default: break;
+    }
+    return bRet;
+}
 
 // =======================================================================
 
