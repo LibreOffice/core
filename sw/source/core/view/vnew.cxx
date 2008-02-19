@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:26:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
-    aBrowseBorder( rShell.GetBrowseBorder() ),
+    aBrowseBorder( rShell.aBrowseBorder ),
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
     pWin( pWindow ),
