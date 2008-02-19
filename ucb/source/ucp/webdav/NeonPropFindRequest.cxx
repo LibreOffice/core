@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:58:15 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 12:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
-#if NEON_VERSION >= 0260
+#if NEON_VERSION >= 0x0260
                                        const ne_uri* uri,
 #else
                                        const char* href,
@@ -185,7 +185,7 @@ extern "C" void NPFR_propfind_results( void* userdata,
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
-#if NEON_VERSION >= 0260
+#if NEON_VERSION >= 0x0260
     DAVResource theResource(
                         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 #else
@@ -218,7 +218,7 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
-#if NEON_VERSION >= 0260
+#if NEON_VERSION >= 0x0260
                                         const ne_uri* uri,
 #else
                                         const char* href,
@@ -227,7 +227,7 @@ extern "C" void NPFR_propnames_results( void* userdata,
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
     // Create entry for the resource.
-#if NEON_VERSION >= 0260
+#if NEON_VERSION >= 0x0260
     DAVResourceInfo theResource(
                         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 #else
