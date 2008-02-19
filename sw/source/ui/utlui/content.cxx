@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:24:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,11 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+
+#ifndef _POSTITMGR_HXX
+#include <PostItMgr.hxx>
+#endif
+
 
 #include "swabstdlg.hxx"
 #include "globals.hrc"
@@ -507,29 +512,25 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 pMember = new SwContentArr;
             else if(pMember->Count())
                 pMember->DeleteAndDestroy(0, pMember->Count());
-            SwFieldType* pType = pWrtShell->GetFldType(
-                                    RES_POSTITFLD, aEmptyStr);
-            SwClientIter aIter( *pType );
-            SwClient * pFirst = aIter.GoStart();
-            while(pFirst)
-            {
-                SwFmtFld* pFldFmtFirst = dynamic_cast<SwFmtFld*>(pFirst);
-                if( pFldFmtFirst && pFldFmtFirst->GetTxtFld() &&
-                      pFldFmtFirst->IsFldInDoc())
-                {
-                    SwField* pField = pFldFmtFirst->GetFld();
 
-                    String sEntry = pField->GetPar2();
-                    RemoveNewline(sEntry);
-                    SwPostItContent* pCnt = new SwPostItContent(
-                                        this,
-                                        sEntry, // hier steht der Text
-                                        pFldFmtFirst,
-                                        nMemberCount);
-                    pMember->Insert(pCnt);//, nMemberCount);
-                    nMemberCount++;
+            SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
+            if (aMgr)
+            {
+                for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
+                {
+                    if ( (*i)->pFmtFld->GetTxtFld() && (*i)->pFmtFld->IsFldInDoc() )
+                    {
+                        String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
+                        RemoveNewline(sEntry);
+                        SwPostItContent* pCnt = new SwPostItContent(
+                                            this,
+                                            sEntry, // hier steht der Text
+                                            (const SwFmtFld*)(*i)->pFmtFld,
+                                            nMemberCount);
+                        pMember->Insert(pCnt);
+                        nMemberCount++;
+                    }
                 }
-                pFirst = aIter++;
             }
             sTypeToken = aEmptyStr;
             bEdit = sal_True;
@@ -849,28 +850,20 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 pMember = new SwContentArr;
             else if(pMember->Count())
                 pMember->DeleteAndDestroy(0, pMember->Count());
-            SwFieldType* pType = pWrtShell->GetFldType(
-                                    RES_POSTITFLD, aEmptyStr);
-            SwClientIter aIter( *pType );
-            SwClient * pFirst = aIter.GoStart();
-            while(pFirst)
+            SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
+            if (aMgr)
             {
-                SwFmtFld* pFldFmtFirst = dynamic_cast<SwFmtFld*>(pFirst);
-                if(pFldFmtFirst && pFldFmtFirst->GetTxtFld() &&
-                        pFldFmtFirst->IsFldInDoc())
+                for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    SwField* pField = (SwField*)pFldFmtFirst->GetFld();
-                    String sEntry = pField->GetPar2();
-                    RemoveNewline(sEntry);
-                    SwPostItContent* pCnt = new SwPostItContent(
-                                        this,
-                                        sEntry, // hier steht der Text
-                                        pFldFmtFirst,
-                                        nMemberCount);
-                    pMember->Insert(pCnt);//, nMemberCount);
-                    nMemberCount++;
+                    if ( (*i)->pFmtFld->GetTxtFld() && (*i)->pFmtFld->IsFldInDoc() )
+                    {
+                        String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
+                        RemoveNewline(sEntry);
+                        SwPostItContent* pCnt = new SwPostItContent(this,sEntry, (*i)->pFmtFld,nMemberCount);
+                        pMember->Insert(pCnt);
+                        nMemberCount++;
+                    }
                 }
-                pFirst = aIter++;
             }
         }
         break;
@@ -940,6 +933,9 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         sRename(SW_RES(ST_RENAME)),
         sReadonlyIdx(SW_RES(ST_READONLY_IDX)),
         sInvisible(SW_RES(ST_INVISIBLE)),
+        sPostItShow(SW_RES(ST_POSTIT_SHOW)),
+        sPostItHide(SW_RES(ST_POSTIT_HIDE)),
+        sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
 
         pHiddenShell(0),
         pActiveShell(0),
@@ -1117,12 +1113,11 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     else if(bIsHidden)
         pSubPop3->CheckItem( nId );
 
-    pPop->InsertItem( 1, aContextStrings[
-                                ST_OUTLINE_LEVEL - ST_CONTEXT_FIRST]);
+    pPop->InsertItem( 1, aContextStrings[ST_OUTLINE_LEVEL - ST_CONTEXT_FIRST]);
     pPop->InsertItem(2, aContextStrings[ST_DRAGMODE - ST_CONTEXT_FIRST]);
     pPop->InsertItem(3, aContextStrings[ST_DISPLAY - ST_CONTEXT_FIRST]);
     //jetzt noch bearbeiten
-    SvLBoxEntry* pEntry;
+    SvLBoxEntry* pEntry = 0;
     //Bearbeiten nur, wenn die angezeigten Inhalte aus der aktiven View kommen
     if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
             && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
@@ -1176,6 +1171,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
             }
             else if(bEditable || bDeletable)
             {
+
                 if(bEditable && bDeletable)
                 {
                     pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
@@ -1185,7 +1181,9 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 else if(bEditable)
                     pPop->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 else if(bDeletable)
-                    pPop->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+                {
+                    pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+                }
             }
             //Rename object
             if(bRenamable)
@@ -1203,7 +1201,26 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
             }
         }
     }
-
+    else
+    {
+        SwContentType* pType = (SwContentType*)pEntry->GetUserData();
+        if ( (pType->GetType() == CONTENT_TYPE_POSTIT) &&  (!pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
+        {
+                pSubPop4->InsertItem(600, sPostItShow );
+                pSubPop4->InsertItem(601, sPostItHide );
+                pSubPop4->InsertItem(602, sPostItDelete );
+                /*
+                pSubPop4->InsertItem(603,rtl::OUString::createFromAscii("Sort"));
+                PopupMenu* pMenuSort = new PopupMenu;
+                pMenuSort->InsertItem(604,rtl::OUString::createFromAscii("By Position"));
+                pMenuSort->InsertItem(605,rtl::OUString::createFromAscii("By Author"));
+                pMenuSort->InsertItem(606,rtl::OUString::createFromAscii("By Date"));
+                pSubPop4->SetPopupMenu(603, pMenuSort);
+                */
+                pPop->InsertItem(4, pType->GetSingleName());
+                pPop->SetPopupMenu(4, pSubPop4);
+        }
+    }
 
     pPop->SetPopupMenu( 1, pSubPop1 );
     pPop->SetPopupMenu( 2, pSubPop2 );
@@ -2670,6 +2687,18 @@ void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         case 502 :
             EditEntry(pFirst, EDIT_MODE_RENAME);
         break;
+        case 600:
+            pActiveShell->GetView().GetPostItMgr()->Show();
+            break;
+        case 601:
+            pActiveShell->GetView().GetPostItMgr()->Hide();
+            break;
+        case 602:
+            {
+                pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                pActiveShell->GetView().GetPostItMgr()->Delete();
+                break;
+            }
         //Anzeige
         default: // nSelectedPopupEntry > 300
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
@@ -2924,6 +2953,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         case CONTENT_TYPE_POSTIT:
             if(nMode == EDIT_MODE_DELETE)
             {
+                pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
                 pActiveShell->DelRight();
             }
             else
@@ -3110,6 +3140,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     }
     SwView& rView = pActiveShell->GetView();
     rView.StopShellTimer();
+    rView.GetPostItMgr()->SetActivePostIt(0);
     rView.GetEditWin().GrabFocus();
 }
 /*-----------------06.02.97 19.14-------------------
