@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swevent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:13:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #define     SW_EVENT_MAIL_MERGE_END       ( EVENT_APP_START + 9 )
 #define     SW_EVENT_FIELD_MERGE          ( EVENT_APP_START + 10 )
 #define     SW_EVENT_FIELD_MERGE_FINISHED ( EVENT_APP_START + 11 )
+#define     SW_EVENT_LAYOUT_FINISHED      ( EVENT_APP_START + 12 )
 
 class SwFrmFmt;
 class SwFmtINetFmt;
