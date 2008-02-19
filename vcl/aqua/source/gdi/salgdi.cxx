@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,19 @@ AquaSalGraphics::~AquaSalGraphics()
         mrContext = 0;
         // memory is freed automatically by maOwnContextMemory
     }
+}
+
+bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
+{
+    bool bRet = false;
+    switch( eType )
+    {
+    case OutDevSupport_TransparentRect:
+        bRet = true;
+        break;
+    default: break;
+    }
+    return bRet;
 }
 
 // =======================================================================
