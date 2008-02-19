@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1938,7 +1938,12 @@ BOOL Window::IsInputEnabled() const
 
 BOOL Window::IsAlwaysEnableInput() const
 {
-    return mpWindowImpl->mbAlwaysEnableInput;
+    return mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled;
+}
+
+BOOL Window::IsAlwaysDisableInput() const
+{
+    return mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled;
 }
 
 USHORT Window::GetActivateMode() const
