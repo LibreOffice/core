@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:22:19 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1766,6 +1766,9 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
         delete [] pOldSelectedTables;
     }
+
+    MarkDataChanged();
+
     if ( bFound )
     {
         if ( nTab != GetViewData()->GetTabNo() )
