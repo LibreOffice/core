@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:17:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,6 +433,47 @@
         ITEM_REPLACE_CONTROL\
     };\
 
+
+#define MN_ANNOTATIONS \
+    MenuItem\
+    {\
+        Identifier = FN_DELETE_NOTE ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Delete ~Note" ;\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_DELETE_NOTE_AUTHOR ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Delete Author's N~otes" ;\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_DELETE_ALL_NOTES ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Delete All No~tes" ;\
+    };\
+    /*
+    MenuItem\
+    {\
+        Identifier = FN_HIDE_NOTE ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "~Hide note" ;\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_HIDE_NOTE_AUTHOR ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Hide ~author" ;\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_HIDE_ALL_NOTES ;\
+        HelpID = FN_DELETE_NOTE ;\
+        Text [ en-US ] = "Hide all ~notes" ;\
+    };
+    */
+
 /*--Popups---------------------------------------------------------------*/
 
 String MN_TEXT_POPUPMENU
@@ -768,6 +809,48 @@ Menu MN_DRWTXT_POPUPMENU
         MN_FRM_CAPTION_ITEM
     };
 };
+
+Menu MN_ANNOTATION_POPUPMENU
+{
+    ItemList =
+    {
+        //MN_RESET
+        //SEPARATOR ;
+        //MN_TEXT_ATTR
+        MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+        SEPARATOR ;
+        //ITEM_TRANSLITERATE_MENU
+        //SEPARATOR ;
+        //MN_DRWTXT
+        //MN_FRM_CAPTION_ITEM
+        SEPARATOR ;
+        MN_ANNOTATIONS
+    };
+};
+
+Menu MN_ANNOTATION_BUTTON
+{
+    ItemList =
+    {
+        MN_ANNOTATIONS
+    };
+};
+
 
 String MN_GRF_POPUPMENU
 {
