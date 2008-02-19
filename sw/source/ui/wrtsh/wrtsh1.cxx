@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:48:48 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,8 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/acorrcfg.hxx>
+
+#include "PostItMgr.hxx"
 
 using namespace com::sun::star;
 
@@ -1489,7 +1491,9 @@ SelectionType SwWrtShell::GetSelectionType() const
 //      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
-    int nCnt;
+    if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->GetActivePostIt() )
+        return nsSelectionType::SEL_POSTIT;
+     int nCnt;
 
     // Rahmen einfuegen ist kein DrawMode
     if ( !_rView.GetEditWin().IsFrmAction() &&
@@ -1809,17 +1813,12 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-
 BOOL SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL)));
+    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActivePostIt()!= NULL)));
 }
 
-
-
-    // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
+// die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
 void SwWrtShell::NewCoreSelection()
 {
     SttSelect();
