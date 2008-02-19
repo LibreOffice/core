@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:38:37 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1513,11 +1513,7 @@ void ScUndoSelectionStyle::DoChange( const BOOL bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     if (pViewShell)
-    {
-        pViewShell->DoneBlockMode();
-        pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
-    }
+        pViewShell->SetMarkData( aMarkData );
 
     ScRange aWorkRange( aRange );
     if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )        // zusammengefasste Zellen?
