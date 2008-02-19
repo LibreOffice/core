@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclenum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:50 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,5 +305,11 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN, KEYFUNC_SAVE,
 
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 
+#ifndef ENUM_OUTDEVSUPPORT_DECLARED
+#define ENUM_OUTDEVSUPPORT_DECLARED
+
+enum OutDevSupportType { OutDevSupport_TransparentRect };
+
+#endif
 
 #endif  // _VCL_VCLENUM_HXX
