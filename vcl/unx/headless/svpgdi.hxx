@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpgdi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:27:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ public:
     virtual BOOL            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
+    virtual bool            supportsOperation( OutDevSupportType ) const;
     virtual void            drawPixel( long nX, long nY );
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
