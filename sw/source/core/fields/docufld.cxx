@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-12-03 14:25:25 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <textapi.hxx>
 
 #include <tools/pstm.hxx>
 
@@ -43,6 +44,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
@@ -201,6 +205,9 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+
+#include <svx/outliner.hxx>
+#include <svx/outlobj.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
@@ -1800,26 +1807,38 @@ const String& SwHiddenParaField::GetPar1() const
     Beschreibung: PostIt
  --------------------------------------------------------------------*/
 
-SwPostItFieldType::SwPostItFieldType()
-    : SwFieldType( RES_POSTITFLD )
+SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
+    : SwFieldType( RES_POSTITFLD ),mpDoc(pDoc)
 {}
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 SwFieldType* SwPostItFieldType::Copy() const
 {
-    return new SwPostItFieldType;
+    return new SwPostItFieldType(mpDoc);
 }
+
 
 /*--------------------------------------------------------------------
     Beschreibung: SwPostItFieldType
  --------------------------------------------------------------------*/
 
-SwPostItField::SwPostItField( SwPostItFieldType* pTyp,
-        const String& rAuthor, const String& rTxt, const Date& rDate )
-    : SwField( pTyp ), sTxt( rTxt ), sAuthor( rAuthor ), aDate( rDate )
+SwPostItField::SwPostItField( SwPostItFieldType* pT,
+        const String& rAuthor, const String& rTxt, const DateTime& rDateTime )
+    : SwField( pT ), sTxt( rTxt ), sAuthor( rAuthor ), aDateTime( rDateTime ), mpText(0), m_pTextObject(0)
 {
 }
+
+
+SwPostItField::~SwPostItField()
+{
+    if ( m_pTextObject )
+    {
+        m_pTextObject->DisposeEditSource();
+        m_pTextObject->release();
+    }
+}
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1839,8 +1858,11 @@ String SwPostItField::GetDescription() const
  ---------------------------------------------------------------------------*/
 SwField* SwPostItField::Copy() const
 {
-    return new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
-                                sTxt, aDate );
+    SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
+                                sTxt, aDateTime);
+    if (mpText)
+        pRet->SetTextObject( mpText->Clone() );
+    return pRet;
 }
 /*--------------------------------------------------------------------
     Beschreibung: Author setzen
@@ -1872,6 +1894,17 @@ String SwPostItField::GetPar2() const
     return sTxt;
 }
 
+const OutlinerParaObject* SwPostItField::GetTextObject() const
+{
+    return mpText;
+}
+
+void SwPostItField::SetTextObject( OutlinerParaObject* pText )
+{
+    delete mpText;
+    mpText = pText;
+}
+
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
@@ -1883,15 +1916,48 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString(sAuthor);
         break;
     case FIELD_PROP_PAR2:
+        {
         rAny <<= OUString(sTxt);
         break;
+        }
+    case FIELD_PROP_TEXT:
+        {
+            if ( !m_pTextObject )
+            {
+                SwPostItFieldType* pGetType = (SwPostItFieldType*)GetTyp();
+                SwDoc* pDoc = pGetType->GetDoc();
+                SwTextAPIEditSource* pObj = new SwTextAPIEditSource( &pDoc->GetDocShell()->GetPool() );
+                const_cast <SwPostItField*> (this)->m_pTextObject = new SwTextAPIObject( pObj );
+                m_pTextObject->acquire();
+            }
+
+            if ( mpText )
+                m_pTextObject->SetText( *mpText );
+
+            uno::Reference < text::XText > xText( m_pTextObject );
+            rAny <<= xText;
+            break;
+        }
     case FIELD_PROP_DATE:
         {
             util::Date aSetDate;
-            aSetDate.Day = aDate.GetDay();
-            aSetDate.Month = aDate.GetMonth();
-            aSetDate.Year = aDate.GetYear();
+            aSetDate.Day = aDateTime.GetDay();
+            aSetDate.Month = aDateTime.GetMonth();
+            aSetDate.Year = aDateTime.GetYear();
             rAny.setValue(&aSetDate, ::getCppuType((util::Date*)0));
+        }
+        break;
+    case FIELD_PROP_DATE_TIME:
+        {
+                util::DateTime DateTimeValue;
+                DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
+                DateTimeValue.Seconds = aDateTime.GetSec();
+                DateTimeValue.Minutes = aDateTime.GetMin();
+                DateTimeValue.Hours = aDateTime.GetHour();
+                DateTimeValue.Day = aDateTime.GetDay();
+                DateTimeValue.Month = aDateTime.GetMonth();
+                DateTimeValue.Year = aDateTime.GetYear();
+                rAny <<= DateTimeValue;
         }
         break;
     default:
@@ -1899,6 +1965,8 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return sal_True;
 }
+
+
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
@@ -1912,13 +1980,31 @@ BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_PAR2:
         ::GetString( rAny, sTxt );
         break;
+    case FIELD_PROP_TEXT:
+        DBG_ERROR("Not implemented!");
+        // ::GetString( rAny, sTxt );
+        break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
         {
             util::Date aSetDate = *(util::Date*)rAny.getValue();
-            aDate = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
+            aDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
         }
         break;
+    case FIELD_PROP_DATE_TIME:
+    {
+        util::DateTime aDateTimeValue;
+        if(!(rAny >>= aDateTimeValue))
+            return FALSE;
+        aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+        aDateTime.SetSec(aDateTimeValue.Seconds);
+        aDateTime.SetMin(aDateTimeValue.Minutes);
+        aDateTime.SetHour(aDateTimeValue.Hours);
+        aDateTime.SetDay(aDateTimeValue.Day);
+        aDateTime.SetMonth(aDateTimeValue.Month);
+        aDateTime.SetYear(aDateTimeValue.Year);
+    }
+    break;
     default:
         DBG_ERROR("illegal property");
     }
