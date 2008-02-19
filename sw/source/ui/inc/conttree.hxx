@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:17:23 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@ class SwContentTree : public SvTreeListBox
     String              sRename;
     String              sReadonlyIdx;
     String              sInvisible;
+    String              sPostItShow;
+    String              sPostItHide;
+    String              sPostItDelete;
 
     SwWrtShell*         pHiddenShell;   // gedropptes Doc
     SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
