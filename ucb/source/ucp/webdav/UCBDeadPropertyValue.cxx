@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:34:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 12:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
 
         ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );
 
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
 #else
         success = !!ne_xml_valid( parser );
