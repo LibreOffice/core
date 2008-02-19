@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:06:25 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,35 +36,15 @@
 #ifndef _SV_SALGDI_HXX
 #define _SV_SALGDI_HXX
 
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-#ifndef _VCL_DLLAPI_H
-#include <vcl/dllapi.h>
-#endif
-
-#ifndef _SV_SALGTYPE_HXX
-#include <vcl/salgtype.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _SV_NATIVEWIDGETS_HXX
-#include <vcl/salnativewidgets.hxx>
-#endif
-#ifndef _SV_SALCTRLHANDLE_HXX
-#include <vcl/salctrlhandle.hxx>
-#endif
+#include "tools/string.hxx"
+#include "rtl/ustring.hxx"
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "vcl/salgtype.hxx"
+#include "vos/thread.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/salnativewidgets.hxx"
+#include "vcl/salctrlhandle.hxx"
 
 #include <map>
 
@@ -342,6 +322,8 @@ public:
         false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
      */
     virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+
+    virtual bool            supportsOperation( OutDevSupportType ) const = 0;
 
     // mirroring specifica
     int                     GetLayout() { return m_nLayout; }
