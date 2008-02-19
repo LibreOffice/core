@@ -89,6 +89,7 @@
             <menu:menuitem menu:id=".uno:Marks"/>
             <menu:menuitem menu:id=".uno:Fieldnames"/>
             <menu:menuitem menu:id=".uno:ControlCodes"/>
+            <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
