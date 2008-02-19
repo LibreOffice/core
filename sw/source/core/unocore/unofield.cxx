@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:29:51 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#include <textapi.hxx>
+#include <svx/outliner.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -1279,10 +1282,11 @@ sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& 
 
   -----------------------------------------------------------------------*/
 
-SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
+SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc) :
     aLstnrCntnr( (XTextContent*)this),
     pFmtFld(0),
-    m_pDoc(0),
+    m_pDoc(pDoc),
+    m_pTextObject(0),
     m_bIsDescriptor(nServiceId != USHRT_MAX),
     m_bCallUpdate(sal_False),
     m_nServiceId(nServiceId),
@@ -1307,6 +1311,7 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     aLstnrCntnr( (XTextContent*)this),
     pFmtFld(&rFmt),
     m_pDoc(pDc),
+    m_pTextObject(0),
     m_bIsDescriptor(sal_False),
     m_bCallUpdate(sal_False),
     m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetFld() ) ),
@@ -1319,6 +1324,12 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
   -----------------------------------------------------------------------*/
 SwXTextField::~SwXTextField()
 {
+    if ( m_pTextObject )
+    {
+        m_pTextObject->DisposeEditSource();
+        m_pTextObject->release();
+    }
+
     delete m_pProps;
 }
 /*-- 14.12.98 11:37:16---------------------------------------------------
@@ -1418,9 +1429,22 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_ANNOTATION:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
+
+                DateTime aDateTime;
+                aDateTime.SetYear(m_pProps->pDateTime->Year);
+                aDateTime.SetMonth(m_pProps->pDateTime->Month);
+                aDateTime.SetDay(m_pProps->pDateTime->Day);
+                aDateTime.SetHour(m_pProps->pDateTime->Hours);
+                aDateTime.SetMin(m_pProps->pDateTime->Minutes);
+                aDateTime.SetSec(m_pProps->pDateTime->Seconds);
+
                 pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2,
-                        m_pProps->aDate);
+                        m_pProps->sPar1, m_pProps->sPar2,aDateTime);
+                if ( m_pTextObject )
+                {
+                    ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );
+                      ((SwPostItField*)pFld)->SetPar2(m_pTextObject->GetText());
+                }
             }
             break;
             case SW_SERVICE_FIELDTYPE_SCRIPT:
@@ -1764,7 +1788,7 @@ void SwXTextField::attachToRange(
                 {
                     case text::SetVariableType::STRING: nSubType = nsSwGetSetExpType::GSE_STRING;   break;
                     case text::SetVariableType::VAR:        nSubType = nsSwGetSetExpType::GSE_EXPR;  break;
-                    case text::SetVariableType::SEQUENCE: nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
+                    //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
                     case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
                     default:
                         DBG_ERROR("wrong value");
@@ -1906,7 +1930,7 @@ void SwXTextField::attachToRange(
             SwTxtAttr* pTxtAttr = 0;
             if(aPam.HasMark())
                 pDoc->DeleteAndJoin(aPam);
-            pDoc->Insert(aPam, aFmt, 0);
+            pDoc->Insert(aPam, aFmt, 10000);
             pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
 
@@ -1979,6 +2003,13 @@ void SwXTextField::dispose(void) throw( uno::RuntimeException )
         aPam.SetMark();
         aPam.Move();
         GetDoc()->DeleteAndJoin(aPam);
+    }
+
+    if ( m_pTextObject )
+    {
+        m_pTextObject->DisposeEditSource();
+        m_pTextObject->release();
+        m_pTextObject = 0;
     }
 }
 /*-- 14.12.98 11:37:18---------------------------------------------------
@@ -2279,6 +2310,19 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
         {
             switch(pMap->nWID)
             {
+            case FIELD_PROP_TEXT:
+                {
+                    if (!m_pTextObject)
+                    {
+                        SwTextAPIEditSource* pObj = new SwTextAPIEditSource( &m_pDoc->GetDocShell()->GetPool() );
+                        m_pTextObject = new SwTextAPIObject( pObj );
+                        m_pTextObject->acquire();
+                    }
+
+                    uno::Reference < text::XText > xText( m_pTextObject  );
+                    aRet <<= xText;
+                    break;
+                }
             case FIELD_PROP_PAR1:
                 aRet <<= OUString(m_pProps->sPar1);
                 break;
