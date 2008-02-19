@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invmerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:39 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,19 +158,19 @@ void ScInvertMerger::FlushLine()
 
 void ScInvertMerger::AddRect( const Rectangle& rRect )
 {
+    Rectangle aJustified = rRect;
+    if ( rRect.Left() > rRect.Right() )     // switch for RTL layout
+    {
+        aJustified.Left() = rRect.Right();
+        aJustified.Right() = rRect.Left();
+    }
+
     if ( aLineRect.IsEmpty() )
     {
-        aLineRect = rRect;          // start new line rect
+        aLineRect = aJustified;             // start new line rect
     }
     else
     {
-        Rectangle aJustified = rRect;
-        if ( rRect.Left() > rRect.Right() )     // switch for RTL layout
-        {
-            aJustified.Left() = rRect.Right();
-            aJustified.Right() = rRect.Left();
-        }
-
         BOOL bDone = FALSE;
         if ( aJustified.Top()    == aLineRect.Top()    &&
              aJustified.Bottom() == aLineRect.Bottom() )
