@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.228 $
+ *  $Revision: 1.229 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:07:44 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 11:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,16 +345,14 @@ File gid_File_Bin_Soffice_Bin
 End
 
 // use this for high detail file open dialog >= 5.1 windows
-// #ifdef WNT
-//
-// File gid_File_Soffice_Bin_Manifest
-//     TXT_FILE_BODY;
-// 	Styles = (PACKED, PATCH);
-// 	Dir = gid_Dir_Program;
-// 	Name = "soffice.bin.manifest";
-// End
-//
-// #endif
+#ifdef WNT
+File gid_File_Soffice_Bin_Manifest
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+    Name = "soffice.bin.manifest";
+End
+#endif
 
 #ifdef UNX
 
