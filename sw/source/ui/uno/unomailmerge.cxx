@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:42:59 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -870,8 +870,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         {
             pMgr->SetEMailColumn( sAddressFromColumn );
             if(!sAddressFromColumn.getLength())
-                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM (
-                        "Mail address column not set." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Mail address column not set." ) ), static_cast < cppu::OWeakObject * > ( this ) );
             aMergeDesc.sSaveToFilter     = sAttachmentFilter;
             aMergeDesc.sSubject          = sSubject;
             aMergeDesc.sMailBody         = sMailBody;
@@ -889,8 +888,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                     xInService,
                     sInServerPassword, sOutServerPassword );
             if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
-                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM (
-                        "Failed to connect to mail server." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to connect to mail server." ) ), static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
 
