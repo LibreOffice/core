@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:28:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_QUERY2               (SID_SW_START + 2000)
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
+#define FN_NOTES                (SID_SW_START + 2500)
 
  /* More accurately, this range should be from FN_EXTRA2 to FN_PARAM2-1, but
  * FN_NUMBER_NEWSTART comes from FN_FORMAT2, and FN_PARAM_LINK_DISPLAY_NAME
@@ -332,6 +333,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */
 #define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
 #define FN_VSCROLL_METRIC        (FN_VIEW + 54) /* Metric vertical scrollbar */
+#define FN_VIEW_NOTES            (FN_VIEW + 55)
 
 /*--------------------------------------------------------------------
     Bereich: Einfuegen
@@ -1050,6 +1052,13 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_ENVELOP                  (FN_ENVELP    )
 
+#define FN_DELETE_NOTE              (FN_NOTES+0)
+#define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
+#define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
+#define FN_HIDE_NOTE                (FN_NOTES+3)
+#define FN_HIDE_NOTE_AUTHOR         (FN_NOTES+4)
+#define FN_HIDE_ALL_NOTES           (FN_NOTES+5)
+
 /*--------------------------------------------------------------------
     Bereich: Parameter
  --------------------------------------------------------------------*/
@@ -1173,6 +1182,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 // --> OD 2004-10-28 #i36248#
 #define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
 #define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
+
 // <--
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
