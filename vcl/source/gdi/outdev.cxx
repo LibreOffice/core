@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:17:09 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,6 +570,11 @@ OutputDevice::~OutputDevice()
     }
 
     delete mpAlphaVDev;
+}
+
+bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
+{
+    return ImplGetGraphics() && mpGraphics->supportsOperation( eType );
 }
 
 // -----------------------------------------------------------------------
