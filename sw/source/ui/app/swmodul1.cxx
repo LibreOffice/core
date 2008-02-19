@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:18:10 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@
 #include "helpid.h"
 
 #include <unomid.h>
+#include <tools/color.hxx>
+#include "PostItMgr.hxx"
 
 using namespace ::rtl;
 using namespace ::svx;
@@ -190,6 +192,8 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
         pView->CreateTab();
     else
         pView->KillTab();
+
+    pView->GetPostItMgr()->PrepareView(true);
 }
 
 /*--------------------------------------------------------------------
@@ -300,10 +304,10 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         pSh->SetReadonlyOption(bReadonly);
 
     lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
+
     // zum Schluss wird das Idle-Flag wieder gesetzt
     // #42510#
     pPref->SetIdle(sal_True);
-
 }
 /* -----------------------------28.09.00 12:36--------------------------------
 
@@ -424,7 +428,8 @@ sal_uInt16 SwModule::GetRedlineAuthor()
     {
         const SvtUserOptions& rOpt = GetUserOptions();
         if( !(sActAuthor = rOpt.GetFullName()).Len() )
-            sActAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+            if( !(sActAuthor = rOpt.GetID()).Len() )
+                sActAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
         bAuthorInitialised = sal_True;
     }
     return InsertRedlineAuthor( sActAuthor );
@@ -472,11 +477,11 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
 
     if( COL_TRANSPARENT == rAttr.nColor )
     {
-        // dynamische Vergabe der Attribute
         static const ColorData aColArr[] = {
-                COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
-                COL_GREEN,          COL_RED,            COL_BLUE,
-                COL_BROWN,          COL_MAGENTA,        COL_CYAN };
+         COL_AUTHOR1_DARK,      COL_AUTHOR2_DARK,   COL_AUTHOR3_DARK,
+         COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
+         COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
+
         aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
                                            sizeof( aColArr[0] )) ] );
     }
