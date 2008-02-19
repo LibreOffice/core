@@ -555,7 +555,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             Application::CallEventHooks( aNEvt );
 
             if( pChild->IsCallHandlersOnInputDisabled() )
+            {
+                pWinFrameData->mpMouseMoveWin = pChild;
                 pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
+            }
 
             if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
             {
