@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:24:03 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2015,7 +2015,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATE),   FIELD_PROP_DATE,    CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   CPPU_E2T(CPPUTYPE_DATETIME),    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
