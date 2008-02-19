@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 12:43:52 $
+#   last change: $Author: rt $ $Date: 2008-02-19 12:36:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ NEONINCDIR=external$/neon
 .INCLUDE: $(SOLARINCDIR)$/$(NEONINCDIR)$/version.mk
 .ENDIF
 
-CFLAGS+= -DNEON_VERSION=$(NEON_VERSION)
+CFLAGS+= -DNEON_VERSION=0x$(NEON_VERSION)
 
 .IF "$(SYSTEM_NEON)" == "YES"
 CFLAGS+= $(NEON_CFLAGS)
