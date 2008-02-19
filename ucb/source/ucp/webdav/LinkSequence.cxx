@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LinkSequence.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:32:27 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 12:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
                       rInData.getStr() + nStart,
                       nEnd - nStart + TOKEN_LENGTH );
 
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
 #else
         success = !!ne_xml_valid( parser );
