@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:24:56 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;
 class GraphicFilter;
+class SwPostItMgr;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -151,7 +152,8 @@ enum ShellModes
     SHELL_MODE_TABLE_LIST_TEXT,
     SHELL_MODE_MEDIA,
     SHELL_MODE_EXTRUDED_CUSTOMSHAPE,
-    SHELL_MODE_FONTWORK
+    SHELL_MODE_FONTWORK,
+    SHELL_MODE_POSTIT
 };
 
 /*--------------------------------------------------------------------
@@ -265,6 +267,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     const SwFrmFmt      *pLastTableFormat;
 
     SwFormatClipboard   *pFormatClipboard; //holds data for format paintbrush
+
+    SwPostItMgr         *mpPostItMgr;
 
     int                 nSelectionType;
 
@@ -676,6 +680,8 @@ public:
                             BOOL bLink = TRUE, GraphicFilter *pFlt = 0,
                             Graphic* pPreviewGrf = 0,
                             BOOL bRule = FALSE );
+
+    SwPostItMgr* GetPostItMgr() { return mpPostItMgr;}
 };
 
 // ----------------- inline Methoden ----------------------
