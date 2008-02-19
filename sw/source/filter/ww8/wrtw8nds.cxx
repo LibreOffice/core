@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:41:34 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,7 +525,7 @@ void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
     }
 
     // #i46087# patch from james_clark; complex texts needs the undocumented SPRM 0x0882 with param 0x81.
-    if (rWrt.bWrtWW8 && GetScript() == ScriptType::COMPLEX && !IsCharRTL())
+    if (rWrt.bWrtWW8 && GetScript() == i18n::ScriptType::COMPLEX && !IsCharRTL())
     {
         rWrt.InsUInt16(0x882);
         rWrt.pO->Insert((BYTE)0x81, rWrt.pO->Count());
@@ -818,7 +818,7 @@ void WW8_SwAttrIter::OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart)
         if( pBreakIt->xBreak.is() )
             nRubyScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
         else
-            nRubyScript = ScriptType::ASIAN;
+            nRubyScript = i18n::ScriptType::ASIAN;
 
         const SwTxtRuby* pRubyTxt = rRuby.GetTxtRuby();
         const SwCharFmt* pFmt = pRubyTxt ? pRubyTxt->GetCharFmt() : 0;
@@ -869,7 +869,7 @@ void WW8_SwAttrIter::OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart)
             nRubyScript = pBreakIt->xBreak->getScriptType( rNd.GetTxt(),
                 *(pRubyTxt->GetStart()));
         else
-            nRubyScript = ScriptType::ASIAN;
+            nRubyScript = i18n::ScriptType::ASIAN;
 
         const SwAttrSet& rSet = rNd.GetSwAttrSet();
         const SvxFontHeightItem &rHeightItem  =
@@ -1465,20 +1465,20 @@ String WW8_SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
 
     if (SVX_CASEMAP_TITEL == ((const SvxCaseMapItem&)rItem).GetValue())
     {
-        sal_uInt16 nScriptType = ScriptType::LATIN;
+        sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
         if (pBreakIt->xBreak.is())
             nScriptType = pBreakIt->xBreak->getScriptType(aSnippet, 0);
 
         LanguageType nLanguage;
         switch (nScriptType)
         {
-            case ScriptType::ASIAN:
+        case i18n::ScriptType::ASIAN:
                 nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_CJK_LANGUAGE)).GetLanguage();
                 break;
-            case ScriptType::COMPLEX:
+        case i18n::ScriptType::COMPLEX:
                 nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_CTL_LANGUAGE)).GetLanguage();
                 break;
-            case ScriptType::LATIN:
+        case i18n::ScriptType::LATIN:
             default:
                 nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_LANGUAGE)).GetLanguage();
                 break;
