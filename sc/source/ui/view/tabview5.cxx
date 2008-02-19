@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:57 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,16 @@ void __EXPORT ScTabView::Init()
             //  Das gilt auch fuer ViewOptionsHasChanged()
 
     TestHintWindow();
+
+    UpdateSelectionType();
+}
+
+void ScTabView::UpdateSelectionType()
+{
+    // old selection in high contrast mode, or if transparent drawing isn't supported
+
+    bOldSelection = pFrameWin->GetSettings().GetStyleSettings().GetHighContrastMode() ||
+                    !pFrameWin->supportsOperation( OutDevSupport_TransparentRect );
 }
 
 __EXPORT ScTabView::~ScTabView()
