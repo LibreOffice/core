@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:43:13 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,6 +758,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 pViewSh->DoneBlockMode();
                 pViewSh->InitOwnBlockMode();
                 pViewData->GetMarkData().MarkFromRangeList( rRanges, TRUE );
+                pViewSh->MarkDataChanged();
                 pViewData->GetDocShell()->PostPaintGridAll();   // Markierung (alt&neu)
                 if ( pFirst )
                 {
