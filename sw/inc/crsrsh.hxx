@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:43:28 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -914,6 +914,8 @@ public:
        @return the textual description of the current selection
      */
     String GetCrsrDescr() const;
+
+    SwRect GetRectOfCurrentChar();
 };
 
 
