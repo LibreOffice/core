@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:21:00 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,6 +537,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
         InitOwnBlockMode();
         rMark.SetMarkArea( ScRange( aNewParam.nCol1,aNewParam.nRow1,nTab,
                                     aNewParam.nCol2,aNewParam.nRow2,nTab ) );
+        MarkDataChanged();
 
         pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                                 PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
