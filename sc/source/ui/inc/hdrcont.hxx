@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdrcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:31:21 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ private:
     void            ShowDragHelp();
 
     void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
+
+    void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
 
 protected:
                     //  von Window ueberladen
