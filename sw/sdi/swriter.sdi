@@ -7567,6 +7567,31 @@ SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
+SfxBoolItem ShowAnnotations FN_VIEW_NOTES
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
 
 //--------------------------------------------------------------------------
 SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
@@ -9932,6 +9957,31 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
 
     Readonly = FALSE,
 
+   /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DeleteNote FN_DELETE_NOTE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9939,6 +9989,132 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DeleteAllNotes FN_DELETE_ALL_NOTES
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem HideNote FN_HIDE_NOTE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem HideAllNotes FN_HIDE_ALL_NOTES
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+       HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 //--------------------------------------------------------------------------
 SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
 [
