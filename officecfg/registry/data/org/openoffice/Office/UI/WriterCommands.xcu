@@ -34,6 +34,11 @@
                     <value xml:lang="en-US">Run AutoText Entry</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ShowAnnotations" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Notes</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ShowHiddenParagraphs" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Hidden Paragraphs</value>
