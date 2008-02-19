@@ -1,12 +1,12 @@
-/*************************************************************************
+/************ *************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:30:01 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <crsskip.hxx>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>  //_immer_ vor den solar-Items
 #endif
 
 #include <sfx2/lnkbase.hxx>
-
+#include <fmtfld.hxx>
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -85,7 +86,7 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
+#include <sfx2/dispatch.hxx>
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
@@ -148,6 +149,12 @@
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include <fldui.hrc>
+#include <doc.hxx>
+
+#ifndef _APP_HRC
+#include <app.hrc>
+#endif
+
 
 using namespace nsSwDocInfoSubType;
 
@@ -385,108 +392,46 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
 
-
             case FN_POSTIT:
             {
-                pPostItFldMgr = new SwFldMgr;
-                SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
-                BOOL bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
-                BOOL bTravel = FALSE;
-                BOOL bNext = FALSE, bPrev = FALSE;
-
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
-                ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
-                SfxItemSet aSet(GetPool(), fnGetRange());
-
-                if(!bNew)
+                SwPostItField* pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
+                  BOOL bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
+                if (bNew)
                 {
-                    aSet.Put(SvxPostItTextItem(pPostIt->GetPar2().ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
-                    aSet.Put(SvxPostItAuthorItem(pPostIt->GetPar1(), SID_ATTR_POSTIT_AUTHOR));
-
-                    aSet.Put( SvxPostItDateItem(
-                            GetAppLocaleData().getDate( pPostIt->GetDate() ),
-                            SID_ATTR_POSTIT_DATE ));
-
-                    // Traveling nur bei mehr als einem Feld
-                    rSh.StartAction();
-
-                    bNext = pPostItFldMgr->GoNext();
-                    if( bNext )
-                        pPostItFldMgr->GoPrev();
-
-                    if( 0 != ( bPrev = pPostItFldMgr->GoPrev() ) )
-                        pPostItFldMgr->GoNext();
-                    bTravel |= bNext|bPrev;
-
-                    rSh.EndAction();
+                    SvtUserOptions aUserOpt;
+                    String sAuthor;
+                    if( !(sAuthor = aUserOpt.GetFullName()).Len())
+                        if( !(sAuthor = aUserOpt.GetID()).Len() )
+                            sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
+                    aFldMgr.InsertFld(aData);
+                    rSh.Push();
+                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, FALSE);
+                    pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
+                    rSh.Pop(FALSE); // Cursorpos restaurieren
                 }
                 else
                 {
-                    SvtUserOptions aUserOpt;
-                    aSet.Put(SvxPostItTextItem( aEmptyStr,
-                                                    SID_ATTR_POSTIT_TEXT));
-                    aSet.Put(SvxPostItAuthorItem( aUserOpt.GetID(),
-                                                    SID_ATTR_POSTIT_AUTHOR));
-                    aSet.Put(SvxPostItDateItem(
-                            GetAppLocaleData().getDate( Date() ),
-                            SID_ATTR_POSTIT_DATE));
                 }
 
-                const SfxItemSet* pSet = pArgs;
-                AbstractSvxPostItDialog *pDlg = NULL;
-                if ( !pArgs )
+                if (pPostIt)
                 {
-                    SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact2, "Dialogdiet fail!");
-                    pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
-                    pDlg->SetReadonlyPostIt(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel());
-
-                    if (bTravel)
+                    SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
+                    SwClientIter aIter( *pType );
+                    SwClient* pFirst = aIter.GoStart();
+                    while( pFirst )
                     {
-                        pDlg->EnableTravel(bNext, bPrev);
-                        pDlg->SetPrevHdl(LINK(this, SwTextShell, PostItPrevHdl));
-                        pDlg->SetNextHdl(LINK(this, SwTextShell, PostItNextHdl));
+                        SwFmtFld* pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
+                        if ( pSwFmtFld->GetFld() == pPostIt )
+                        {
+                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS ) );
+                            break;
+                        }
+                        pFirst = aIter++;
                     }
-
-                    if (bNew)
-                        pDlg->SetText(SW_RESSTR(STR_NOTIZ_INSERT));
-
-                    bNoInterrupt = TRUE;
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        pSet = pDlg->GetOutputItemSet();
-                        rReq.Done( *pSet );
-                    }
-                    else
-                        rReq.Ignore();
                 }
-
-                if ( pSet )
-                {
-                    String sMsg(((const SvxPostItTextItem&)pSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
-                    String sAuthor(((const SvxPostItAuthorItem&)pSet->Get(SID_ATTR_POSTIT_AUTHOR)).GetValue());
-
-                    if(bNew)
-                    {
-                        // neues PostIt anlegen
-                        SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, sMsg, 0);
-                        pPostItFldMgr->InsertFld(aData);
-                    }
-                    else
-                        // altes PostIt updaten
-                        pPostItFldMgr->UpdateCurFld(0, sAuthor, sMsg);
-                }
-
-                delete pDlg;
-                delete pPostItFldMgr;
-                bNoInterrupt = FALSE;
-                GetView().AttrChangedNotify(GetShellPtr());
             }
             break;
-
             case FN_REDLINE_COMMENT:
             {
                 String sComment;
@@ -850,84 +795,6 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         }
         rSh.EndAction();
     }
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Traveling zwishen PostIts
- --------------------------------------------------------------------*/
-
-
-IMPL_LINK( SwTextShell, PostItNextHdl, AbstractSvxPostItDialog *, pBtn )
-{
-    AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
-    if( pDlg->IsOkEnabled() )
-    {
-        //SvtUserOptions aUserOpt;
-        //pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
-        SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
-        pPostItFldMgr->UpdateCurFld( 0, pPostIt->GetPar1(), pDlg->GetNote() );
-    }
-    pPostItFldMgr->GoNext();
-    SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
-    pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
-    pDlg->ShowLastAuthor( pPostIt->GetPar1(),
-                          GetAppLocaleData().getDate(pPostIt->GetDate()));
-
-    // Traveling nur bei mehr als einem Feld
-    SwWrtShell* pSh = GetShellPtr();
-    pDlg->SetReadonlyPostIt(pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel());
-    pSh->StartAction();
-
-    BOOL bEnable = FALSE;
-    if( pPostItFldMgr->GoNext() )
-    {
-        bEnable = TRUE;
-        pPostItFldMgr->GoPrev();
-    }
-    pDlg->EnableTravel(bEnable, TRUE);
-
-    pSh->EndAction();
-
-    return 0;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-IMPL_LINK( SwTextShell, PostItPrevHdl, AbstractSvxPostItDialog *, pBtn )
-{
-    AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
-
-    if( pDlg->IsOkEnabled() )
-    {
-        //SvtUserOptions aUserOpt;
-        //pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
-        SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
-        pPostItFldMgr->UpdateCurFld( 0, pPostIt->GetPar1(), pDlg->GetNote() );
-    }
-    pPostItFldMgr->GoPrev();
-    SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
-    pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
-    pDlg->ShowLastAuthor( pPostIt->GetPar1(),
-                          GetAppLocaleData().getDate(pPostIt->GetDate()));
-
-    // Traveling nur bei mehr als einem Feld
-    SwWrtShell* pSh = GetShellPtr();
-    pDlg->SetReadonlyPostIt(pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel());
-    pSh->StartAction();
-
-    BOOL bEnable = FALSE;
-    if( pPostItFldMgr->GoPrev() )
-    {
-        bEnable = TRUE;
-        pPostItFldMgr->GoNext();
-    }
-    pDlg->EnableTravel(TRUE, bEnable);
-
-    pSh->EndAction();
-
-    return 0;
 }
 
 /*--------------------------------------------------------------------
