@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:41:23 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,23 +41,11 @@
 class   SalFontCacheItem;
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef _SALSTD_HXX
-#include <salstd.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_SALGTYPE_HXX
-#include <vcl/salgtype.hxx>
-#endif
-#ifndef _FRACT_HXX
-#include <tools/fract.hxx>
-#endif
-
-#ifndef _VCL_DLLAPI_H
-#include <vcl/dllapi.h>
-#endif
-
+#include "salstd.hxx"
+#include "vcl/salgdi.hxx"
+#include "vcl/salgtype.hxx"
+#include "tools/fract.hxx"
+#include "vcl/dllapi.h"
 #include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -276,6 +264,7 @@ public:
     virtual BOOL            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
+    virtual bool            supportsOperation( OutDevSupportType ) const;
     virtual void            drawPixel( long nX, long nY );
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
