@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:07:36 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3417,9 +3417,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, BOOL ) const
              GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              pSh && pSh->VisArea().Width())
         {
-            nRel = pSh->VisArea().Width();
-            const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-            nRel -= 2*aBorder.Width();
+            nRel = pSh->GetBrowseWidth();
             long nDiff = nRel - pRel->Prt().Width();
             if ( nDiff > 0 )
                 nRel -= nDiff;
