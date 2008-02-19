@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmn_tmpl.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:25:09 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,14 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     MenuItem                                                                \
     {                                                                       \
         ITEM_OPEN_SMARTTAGMENU                                              \
+    };
+
+#define _MN_EDIT__HYPERLINK \
+    MenuItem\
+    {\
+        Identifier = FN_EDIT_HYPERLINK ; \
+        HelpID = FN_EDIT_HYPERLINK ; \
+        Text [ en-US ] = "~Edit Hyperlink" ; \
     };
 
 #define _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
