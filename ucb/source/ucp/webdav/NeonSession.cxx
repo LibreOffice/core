@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:34:02 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 12:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ struct NeonRequestContext
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
 
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
 extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
 #else
 extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
@@ -272,7 +272,7 @@ extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
         if ( xInputStream.is() )
             xInputStream->AddToStream( inBuf, inLen );
     }
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
     return 0;
 #endif
 }
@@ -282,7 +282,7 @@ extern "C" void NeonSession_ResponseBlockReader(void * inUserData,
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
 
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
 extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
 #else
 extern "C" void NeonSession_ResponseBlockWriter( void * inUserData,
@@ -304,7 +304,7 @@ extern "C" void NeonSession_ResponseBlockWriter( void * inUserData,
             xOutputStream->writeBytes( aSeq );
         }
     }
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
     return 0;
 #endif
 }
@@ -1667,7 +1667,7 @@ int NeonSession::GET( ne_session * sess,
     void *cursor = NULL;
     const char *name, *value;
 
-#if NEON_VERSION < 0250
+#if NEON_VERSION < 0x0250
     if ( getheaders )
     ne_add_response_header_catcher( req, runResponseHeaderHandler, userdata );
 #endif
@@ -1675,7 +1675,7 @@ int NeonSession::GET( ne_session * sess,
 
     ret = ne_request_dispatch( req );
 
-#if NEON_VERSION >= 0250
+#if NEON_VERSION >= 0x0250
     if ( getheaders )
     {
         while ((cursor = ne_response_header_iterate(req, cursor, &name, &value))
