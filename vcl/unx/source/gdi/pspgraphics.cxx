@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:32:10 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1483,6 +1483,11 @@ bool PspGraphics::drawAlphaBitmap( const SalTwoRect&,
 }
 
 bool PspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
+{
+    return false;
+}
+
+bool PspGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
