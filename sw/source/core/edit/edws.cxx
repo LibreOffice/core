@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:01 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,7 @@ sal_uInt16 SwEditShell::GetCntType() const
 
 
 sal_Bool SwEditShell::HasOtherCnt() const
+
 {
     const SwNodes &rNds = GetDoc()->GetNodes();
     const SwNode *pNd;
