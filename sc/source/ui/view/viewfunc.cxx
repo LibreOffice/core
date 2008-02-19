@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:21:43 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1192,6 +1192,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
             DoneBlockMode();
             InitOwnBlockMode();
             rMark.SetMarkArea( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
+            MarkDataChanged();
         }
 
         if (bRecord)
@@ -2233,6 +2234,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( BOOL bWidth, ScSizeMode eMode, USHORT n
         DoneBlockMode();
         InitOwnBlockMode();
         rMark.SetMultiMarkArea( ScRange( nCol,nRow,nTab ), TRUE );
+        MarkDataChanged();
     }
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOLROWCOUNT];
