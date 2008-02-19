@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:29:35 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,7 +548,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_CHAPTER:
         case SW_SERVICE_FIELDTYPE_GET_REFERENCE:
         case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT:
-        case SW_SERVICE_FIELDTYPE_ANNOTATION:
         case SW_SERVICE_FIELDTYPE_INPUT:
         case SW_SERVICE_FIELDTYPE_MACRO:
         case SW_SERVICE_FIELDTYPE_DDE:
@@ -593,10 +592,13 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_INPUT_USER                :
         case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT               :
         case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS       :
-    case SW_SERVICE_FIELDTYPE_DROPDOWN                  :
+        case SW_SERVICE_FIELDTYPE_DROPDOWN                  :
         case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
-            xRet =  (cppu::OWeakObject*)new SwXTextField(nObjectType);
-        break;
+            xRet = (cppu::OWeakObject*)new SwXTextField(nObjectType);
+            break;
+        case SW_SERVICE_FIELDTYPE_ANNOTATION:
+            xRet = (cppu::OWeakObject*)new SwXTextField(nObjectType, pDoc);
+            break;
         case SW_SERVICE_FIELDMASTER_USER:
         case SW_SERVICE_FIELDMASTER_DDE:
         case SW_SERVICE_FIELDMASTER_SET_EXP :
