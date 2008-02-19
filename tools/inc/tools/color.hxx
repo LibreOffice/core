@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:08:56 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,33 @@ typedef UINT32 ColorData;
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 #define COL_TRANSPARENT             TRGB_COLORDATA( 0xFF, 0xFF, 0xFF, 0xFF )
 #define COL_AUTO                    (UINT32)0xFFFFFFFF
+#define COL_AUTHOR1_DARK            RGB_COLORDATA(198, 146, 0)
+#define COL_AUTHOR1_NORMAL          RGB_COLORDATA(255, 255, 158)
+#define COL_AUTHOR1_LIGHT           RGB_COLORDATA(255, 255, 195)
+#define COL_AUTHOR2_DARK            RGB_COLORDATA(6,  70, 162)
+#define COL_AUTHOR2_NORMAL          RGB_COLORDATA(216, 232, 255)
+#define COL_AUTHOR2_LIGHT           RGB_COLORDATA(233, 242, 255)
+#define COL_AUTHOR3_DARK            RGB_COLORDATA(87, 157,  28)
+#define COL_AUTHOR3_NORMAL          RGB_COLORDATA(218, 248, 193)
+#define COL_AUTHOR3_LIGHT           RGB_COLORDATA(226, 250, 207)
+#define COL_AUTHOR4_DARK            RGB_COLORDATA(105,  43, 157)
+#define COL_AUTHOR4_NORMAL          RGB_COLORDATA(228, 210, 245)
+#define COL_AUTHOR4_LIGHT           RGB_COLORDATA(239, 228, 248)
+#define COL_AUTHOR5_DARK            RGB_COLORDATA(197,   0,  11)
+#define COL_AUTHOR5_NORMAL          RGB_COLORDATA(254, 205, 208)
+#define COL_AUTHOR5_LIGHT           RGB_COLORDATA(255, 227, 229)
+#define COL_AUTHOR6_DARK            RGB_COLORDATA(0, 128, 128)
+#define COL_AUTHOR6_NORMAL          RGB_COLORDATA(210, 246, 246)
+#define COL_AUTHOR6_LIGHT           RGB_COLORDATA(230, 250, 250)
+#define COL_AUTHOR7_DARK            RGB_COLORDATA(140, 132,  0)
+#define COL_AUTHOR7_NORMAL          RGB_COLORDATA(237, 252, 163)
+#define COL_AUTHOR7_LIGHT           RGB_COLORDATA(242, 254, 181)
+#define COL_AUTHOR8_DARK            RGB_COLORDATA(53,  85, 107)
+#define COL_AUTHOR8_NORMAL          RGB_COLORDATA(211, 222, 232)
+#define COL_AUTHOR8_LIGHT           RGB_COLORDATA(226, 234, 241)
+#define COL_AUTHOR9_DARK            RGB_COLORDATA(209, 118,   0)
+#define COL_AUTHOR9_NORMAL          RGB_COLORDATA(255, 226, 185)
+#define COL_AUTHOR9_LIGHT           RGB_COLORDATA(255, 231, 199)
 
 #define COLOR_CHANNEL_MERGE( _def_cDst, _def_cSrc, _def_cSrcTrans ) \
     ((BYTE)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
