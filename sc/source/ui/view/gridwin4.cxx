@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:49:43 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2095,6 +2095,9 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
                 //  RepeatResize in case scroll bar sizes have changed
                 pView->RepeatResize();
+
+                pView->UpdateSelectionType();
+                pView->UpdateAllOverlays();
 
                 //  invalidate cell attribs in input handler, in case the
                 //  EditEngine BackgroundColor has to be changed
