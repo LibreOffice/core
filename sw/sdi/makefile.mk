@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:18:33 $
+#   last change: $Author: rt $ $Date: 2008-02-19 13:37:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ SVSDI1DEPEND= \
         wviewsh.sdi\
         _mediash.sdi\
         mediash.sdi\
+        _annotsh.sdi\
+        annotsh.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
         $(INC)$/cmdid.h
