@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:01:37 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2528,10 +2528,9 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
              GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              pSh && pSh->VisArea().HasArea() )
         {
-            nRelWidth  = pSh->VisArea().Width();
+            nRelWidth  = pSh->GetBrowseWidth();
             nRelHeight = pSh->VisArea().Height();
-            const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-            nRelWidth -= 2*aBorder.Width();
+            Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
             long nDiff = nRelWidth - pRel->Prt().Width();
             if ( nDiff > 0 )
                 nRelWidth -= nDiff;
