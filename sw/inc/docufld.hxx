@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:27:32 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,15 @@
 #define _DOCUFLD_HXX
 
 #ifndef _DATE_HXX //autogen
-#include <tools/date.hxx>
+    #include <tools/date.hxx>
 #endif
+
+#ifndef _DATETIME_HXX //autogen
+#include <tools/datetime.hxx>
+#endif
+
+
+
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
@@ -48,6 +55,8 @@
 class _SetGetExpFlds;
 class SwTxtFld;
 class SwFrm;
+class OutlinerParaObject;
+class SwTextAPIObject;
 
 enum SwAuthorFormat
 {
@@ -505,10 +514,13 @@ public:
 
 class SwPostItFieldType : public SwFieldType
 {
+private:
+    SwDoc*  mpDoc;
 public:
-    SwPostItFieldType();
+    SwPostItFieldType(SwDoc* pDoc);
 
     virtual SwFieldType*    Copy() const;
+    SwDoc* GetDoc()         {return mpDoc;};
 };
 
 /*--------------------------------------------------------------------
@@ -517,18 +529,22 @@ public:
 
 class SwPostItField : public SwField
 {
-    String  sTxt;       // die Anmerkung
-    String  sAuthor;    // der Author
-    Date    aDate;      // Datum ??/Zeit?? der Anmerkung
+    String      sTxt;       // die Anmerkung
+    String      sAuthor;    // der Author
+    DateTime    aDateTime;  // Datum und Zeit der Anmerkung
+    OutlinerParaObject* mpText;
+    SwTextAPIObject* m_pTextObject;
 
 public:
     SwPostItField( SwPostItFieldType*,
-                   const String& rAuthor, const String& rTxt, const Date& rDate);
+                   const String& rAuthor, const String& rTxt, const DateTime& rDate);
+    ~SwPostItField();
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
-    inline const Date&      GetDate() const                 { return aDate; }
+    inline const Date       GetDate() const                 { return aDateTime.GetDate(); }
+    inline const Time       GetTime() const                 { return aDateTime.GetTime(); }
 
     // Author
     virtual const String&   GetPar1() const;
@@ -538,6 +554,9 @@ public:
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
     const String&           GetTxt() const { return sTxt; }
+
+    const OutlinerParaObject*   GetTextObject() const;
+    void SetTextObject( OutlinerParaObject* pText );
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
