@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:38:50 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,9 +129,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     {
         if (pViewShell)
         {
-            pViewShell->DoneBlockMode();
-            pViewShell->InitOwnBlockMode();
-            pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
+            pViewShell->SetMarkData( aMarkData );
 
             nPaintStart = 0;        // paint all, because of changed selection
         }
@@ -188,9 +186,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     {
         if (pViewShell)
         {
-            pViewShell->DoneBlockMode();
-            pViewShell->InitOwnBlockMode();
-            pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
+            pViewShell->SetMarkData( aMarkData );
 
             bPaintAll = TRUE;       // paint all, because of changed selection
         }
