@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:32:11 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1831,7 +1831,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     }
 
     // erzeuge das PostIt
-    Date aDate;
+    DateTime aDate;
     String sTxt;
 
     {   // Text aus den Nodes in den String uebertragen
