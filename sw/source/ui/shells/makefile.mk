@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:51:48 $
+#   last change: $Author: rt $ $Date: 2008-02-19 13:58:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ SRC1FILES =  \
         shells.src
 
 SLOFILES =  \
+        $(SLO)$/annotsh.obj \
         $(SLO)$/basesh.obj \
         $(SLO)$/beziersh.obj \
         $(SLO)$/drawdlg.obj \
@@ -79,6 +80,7 @@ SLOFILES =  \
         $(SLO)$/txtnum.obj
 
 EXCEPTIONSFILES =  \
+        $(SLO)$/annotsh.obj \
         $(SLO)$/drwtxtsh.obj \
         $(SLO)$/textsh.obj \
         $(SLO)$/textsh2.obj \
