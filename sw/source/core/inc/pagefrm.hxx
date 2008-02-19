@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:35:52 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,24 @@ class SwPageFrm: public SwFtnBossFrm
     void GetBottomShadowRect( const SwRect& _rPageRect,
                               ViewShell*    _pViewShell,
                               SwRect&       _orBottomShadowRect ) const;
+
+    /** adds the sidebar used for notes to right and left border
+        mod 20.10.2007 for #i6193#
+
+        @author mod
+
+        @param aRect
+        input parameter - current rect, we change borders if we want a sidebar
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param bPx
+        input parameter - if set to true, we add in pixel
+    */
+    void AddSidebarBorders( Rectangle& aRect, ViewShell* _pViewShell, bool bPx = false) const;
+    void AddSidebarBorders(    SwRect& aRect, ViewShell* _pViewShell, bool bPx = false) const;
 
 protected:
     virtual void MakeAll();
@@ -376,6 +394,16 @@ public:
                                       ViewShell*    _pViewShell,
                                       SwRect& _orBorderAndShadowBoundRect ) const;
 
+    void PaintNotesSidebar(ViewShell* _pViewShell) const;
+    void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown) const;
+    /**
+        mod #6i193#
+
+        asks the page on which side a margin should be shown, e.g for notes
+        returns true for left side, false for right side
+    */
+    bool MarginSide() const;
+
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     // OD 12.02.2003 #i9719#, #105645#
@@ -400,7 +428,6 @@ public:
     {
         mbLayoutInProgress = _bLayoutInProgress;
     }
-
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
