@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:24:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,6 +471,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
     sPropertyVariableSubType(RTL_CONSTASCII_USTRINGPARAM("VariableSubtype")),
       sPropertyHelp(RTL_CONSTASCII_USTRINGPARAM("Help")),
       sPropertyTooltip(RTL_CONSTASCII_USTRINGPARAM("Tooltip")),
+      sPropertyTextRange(RTL_CONSTASCII_USTRINGPARAM("TextRange")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1868,19 +1869,11 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
 
         // date time
-        Date aDate( GetDateProperty(sPropertyDate, rPropSet) );
+        DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
         {
-            DateTime aDateTime;
-            aDateTime.Day = aDate.Day;
-            aDateTime.Month = aDate.Month;
-            aDateTime.Year = aDate.Year;
-            aDateTime.HundredthSeconds = 0;
-            aDateTime.Seconds = 0;
-            aDateTime.Minutes = 0;
-            aDateTime.Hours = 0;
             OUStringBuffer aBuffer;
             GetExport().GetMM100UnitConverter().convertDateTime(aBuffer,
-                                                                aDateTime,
+                                                                aDate,
                                                                 sal_True);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_DATE, sal_True,
@@ -1888,7 +1881,19 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
-        ProcessParagraphSequence(GetStringProperty(sPropertyContent,rPropSet));
+        com::sun::star::uno::Reference < com::sun::star::text::XText > xText;
+        try
+        {
+            com::sun::star::uno::Any aRet = rPropSet->getPropertyValue(sPropertyTextRange);
+            aRet >>= xText;
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {}
+
+        if ( xText.is() )
+            GetExport().GetTextParagraphExport()->exportText( xText );
+        else
+            ProcessParagraphSequence(GetStringProperty(sPropertyContent,rPropSet));
         break;
     }
 
