@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:55:08 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,8 @@ class SwFmtFld;
 class SwField;
 class SwSetExpField;
 class String;
+class SwTextAPIObject;
+
 /* -----------------04.12.98 12:49-------------------
  *
  * --------------------------------------------------*/
@@ -156,6 +158,7 @@ class SwXTextField : public cppu::WeakImplHelper5
     SwEventListenerContainer    aLstnrCntnr;
     const SwFmtFld*             pFmtFld;
     SwDoc*                      m_pDoc;
+    SwTextAPIObject*            m_pTextObject;
 
     sal_Bool                        m_bIsDescriptor;
     SwClient                        m_aFieldTypeClient; // required to access field master of not yet inserted fields
@@ -170,7 +173,7 @@ class SwXTextField : public cppu::WeakImplHelper5
 protected:
     virtual ~SwXTextField();
 public:
-    SwXTextField(sal_uInt16 nServiceId);
+    SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
     SwXTextField(const SwFmtFld& rFmt, SwDoc* pDoc);
 
 
