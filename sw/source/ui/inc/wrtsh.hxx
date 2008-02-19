@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:57 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ namespace nsSelectionType
     const SelectionType SEL_MEDIA           = 0x004000; // Media object
     const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
     const SelectionType SEL_FONTWORK        = 0x010000; // fontwork
+    const SelectionType SEL_POSTIT          = 0x020000; //annotation
 }
 
 
@@ -136,7 +137,6 @@ public:
     //setzt den Cursorstack nach dem Bewegen mit PageUp/-Down
     //zurueck, falls ein Stack aufgebaut ist
     inline void ResetCursorStack();
-
     SelectionType   GetSelectionType() const;
 
     BOOL    IsModePushed() const { return 0 != pModeStack; }
