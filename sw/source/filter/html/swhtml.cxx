@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:25:02 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5516,7 +5516,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText, Date() );
+        aEmptyStr, sText, DateTime() );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }
