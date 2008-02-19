@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:36:31 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,11 @@
 #include "formatclipboard.hxx"
 #endif
 
+#ifndef _POSTITMGR_HXX
+#include <PostItMgr.hxx>
+#endif
+#include <annotsh.hxx>
+
 #include <unomid.h>
 
 using namespace ::com::sun::star;
@@ -362,6 +367,15 @@ void SwView::GotFocus() const
         pAsFormShell->ForgetActiveControl();
         const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
     }
+    else if ( mpPostItMgr )
+    {
+        SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
+        if ( pAsAnnotationShell )
+        {
+            mpPostItMgr->SetActivePostIt(0);
+            const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
+        }
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -399,7 +413,7 @@ void SwView::SelectShell()
 //
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    if(bInDtor)
+          if(bInDtor)
         return;
     // Entscheidung, ob UpdateTable gerufen werden muss
     sal_Bool bUpdateTable = sal_False;
@@ -449,6 +463,7 @@ void SwView::SelectShell()
                     || pSfxShell->ISA( SwDrawTextShell )
                     || pSfxShell->ISA( svx::ExtrusionBar )
                     || pSfxShell->ISA( svx::FontworkBar )
+                    || pSfxShell->ISA( SwAnnotationShell )
                     )
                 {
                     rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
@@ -542,6 +557,12 @@ void SwView::SelectShell()
             eShellMode = SHELL_MODE_DRAWTEXT;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             pShell = new SwDrawTextShell( *this );
+            rDispatcher.Push( *pShell );
+        }
+        else if ( nSelectionType & nsSelectionType::SEL_POSTIT )
+        {
+            eShellMode = SHELL_MODE_POSTIT;
+            pShell = new SwAnnotationShell( *this );
             rDispatcher.Push( *pShell );
         }
         else
@@ -886,6 +907,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pDrawActual(0),
     pLastTableFormat(0),
     pFormatClipboard(new SwFormatClipboard()),
+    mpPostItMgr(0),
     nSelectionType( INT_MAX ),
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
@@ -1070,6 +1092,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pDocSh->SetView( this );
     SW_MOD()->SetView( this );
 
+    mpPostItMgr = new SwPostItMgr(this);
+
     // Die DocSize erfragen und verarbeiten. Ueber die Handler konnte
     // die Shell nicht gefunden werden, weil die Shell innerhalb CTOR-Phase
     // nicht in der SFX-Verwaltung bekannt ist.
@@ -1185,6 +1209,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
+
 }
 
 /*--------------------------------------------------------------------
@@ -1194,6 +1219,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 SwView::~SwView()
 {
+    delete mpPostItMgr;
+
     bInDtor = TRUE;
     pEditWin->Hide(); // damit kein Paint Aerger machen kann!
     // An der SwDocShell den Pointer auf die View ruecksetzen
