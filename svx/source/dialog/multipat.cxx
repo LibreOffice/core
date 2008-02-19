@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:22:03 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 12:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
         if ( pImpl->bIsRadioButtonMode )
         {
             ULONG nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
-            if ( (ULONG)-1 == nPos )
+            if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
             {
                 String sNewEntry( '\t' );
                 sNewEntry += sInsPath;
