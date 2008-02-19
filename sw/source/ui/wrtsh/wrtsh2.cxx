@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:53:28 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,11 +173,8 @@ void SwWrtShell::Insert(SwField &rFld)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
-//JP 09.06.97: Wozu die Abpruefung des FeldTypen??
-//          Wobei das SETREFFLD kein Feld ist und hier garnicht durchkommt!
-//  USHORT nType = rFld.GetTyp()->Which();
-//  if(HasSelection() && nType != RES_HIDDENTXTFLD && nType != RES_SETREFFLD)
-    if( HasSelection() )
+    USHORT nType = rFld.GetTyp()->Which();
+    if( HasSelection() && nType != RES_POSTITFLD)
         DelRight();
 
     SwEditShell::Insert(rFld);
