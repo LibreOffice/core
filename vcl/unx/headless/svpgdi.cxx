@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpgdi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:48:32 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,4 +547,9 @@ void SvpSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert /*
 BOOL SvpSalGraphics::drawEPS( long, long, long, long, void*, ULONG )
 {
     return FALSE;
+}
+
+bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
+{
+    return false;
 }
