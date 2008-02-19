@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:10:20 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1518,6 +1520,17 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
     return pPage;
+}
+
+bool SwPageFrm::MarginSide() const
+{
+    if (GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+        return false;
+    else
+    {
+        //return Application::GetSettings().GetLayoutRTL();
+        return false;
+    }
 }
 
 /*************************************************************************
