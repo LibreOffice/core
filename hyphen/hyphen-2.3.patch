@@ -1,5 +1,5 @@
-*** misc/hyphen-2.3/hyphen.c	Thu Nov 22 09:51:20 2007
---- misc/build/hyphen-2.3/hyphen.c	Mon Feb 18 10:46:20 2008
+*** misc/hyphen-2.3.1/hyphen.c	Thu Nov 22 09:51:20 2007
+--- misc/build/hyphen-2.3.1/hyphen.c	Mon Feb 18 10:46:20 2008
 ***************
 *** 298,304 ****
               } else {
@@ -57,8 +57,8 @@
             } else {
               dict->states[state_num].replcut = replcut;
             }
-*** misc/hyphen-2.3/makefile.mk	Mon Feb 18 11:06:40 2008
---- misc/build/hyphen-2.3/makefile.mk	Mon Feb 18 11:05:49 2008
+*** misc/hyphen-2.3.1/makefile.mk	Mon Feb 18 11:06:40 2008
+--- misc/build/hyphen-2.3.1/makefile.mk	Mon Feb 18 11:05:49 2008
 ***************
 *** 1 ****
 ! dummy
@@ -67,9 +67,9 @@
 ! #
 ! #   $RCSfile: hyphen-2.3.patch,v $
 ! #
-! #   $Revision: 1.3 $
+! #   $Revision: 1.4 $
 ! #
-! #   last change: $Author: mh $ $Date: 2008-02-18 10:07:47 $
+! #   last change: $Author: rene $ $Date: 2008-02-19 11:33:31 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-18 09:42:59 $
+#   last change: $Author: rene $ $Date: 2008-02-19 11:33:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ TARGET=hyphen
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hyphen-2.3
+TARFILE_NAME=hyphen-2.3.1
 
 ADDITIONAL_FILES += makefile.mk
 
