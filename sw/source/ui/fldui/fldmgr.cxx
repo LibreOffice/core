@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:42 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:55:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -999,9 +999,8 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     {   // ACHTUNG dieses Feld wird ueber einen gesonderten Dialog eingefuegt
         case TYP_POSTITFLD:
         {
-            SwPostItFieldType* pType =
-                (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
-            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, Date());
+            SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
+            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, DateTime());
             break;
         }
         case TYP_SCRIPTFLD:
