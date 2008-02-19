@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:23:45 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:44:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #include "dbg_lay.hxx"
 #include "layouter.hxx" // LoopControlling
 #include "docstat.hxx"
+#include "swevent.hxx"
+
+#include <sfx2/event.hxx>
 
 #include <ftnidx.hxx>
 
@@ -125,6 +128,12 @@
 #ifndef _OBJECTFORMATTER_HXX
 #include <objectformatter.hxx>
 #endif
+
+#include "../../../inc/PostItMgr.hxx"
+#include "../../../inc/docsh.hxx"
+#include "../../ui/inc/view.hxx"
+
+
 // <--
 //#pragma optimize("ity",on)
 
@@ -487,6 +496,18 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
     bool bScroll = mbScrollingAllowed;
     SwRect aPaintRect( pCntnt->PaintArea() );
     SWRECTFN( pCntnt )
+
+    // --> OD 2007-11-27 #notes2#
+    // if sidebar for notes is present, no scrolling is allowed
+    if ( bScroll )
+    {
+        SwPostItMgr* pPostItMgr = pImp->GetShell()->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+        if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
+        {
+            bScroll = false;
+        }
+    }
+    // <--
 
     //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
     //Cntnt nicht selbst steht, so ist nichts mit Scrollen.
@@ -1653,10 +1674,22 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->BorderPxWidth(), 0 ) ).Width();
                 const int nShadowWidth =
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
-                aPaint.Left( aPaint.Left() - nBorderWidth );
+
+                //mod #i6193# added sidebar width
+                SwPostItMgr* pPostItMgr = pImp->GetShell()->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+                const int nSidebarWidth = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
+                if (pPageFrm->MarginSide())
+                {
+                    aPaint.Left( aPaint.Left() - nBorderWidth - nSidebarWidth);
+                    aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth);
+                }
+                else
+                {
+                    aPaint.Left( aPaint.Left() - nBorderWidth );
+                    aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth + nSidebarWidth);
+                }
                 aPaint.Top( aPaint.Top() - nBorderWidth );
-                aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth );
-                aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth );
+                aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
             }
 
             if ( pLay->IsPageFrm() &&
@@ -2003,9 +2036,22 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
                                const SwRect &rRect,
                                const SwTwips nOfst)
 {
+    // --> OD 2007-11-27 #notes2#
+    // if sidebar for notes is present, no scrolling is allowed
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+    ASSERT( pPage, "<lcl_AddScrollRectTab(..)> - no page frame found at table frame -> crash" );
+    ViewShell* pSh = pPage->GetShell();
+    if ( pSh )
+    {
+        SwPostItMgr* pPostItMgr = pSh->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+        if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
+        {
+            return;
+        }
+    }
+    // <--
     //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
     //Frm nicht selbst steht, so ist nichts mit Scrollen.
-    const SwPageFrm *pPage = pTab->FindPageFrm();
     SwRect aRect( rRect );
     // OD 04.11.2002 #104100# - <SWRECTFN( pTab )> not needed.
     if( pTab->IsVertical() )
@@ -2020,7 +2066,6 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
     if ( pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
         return;
 
-    ViewShell *pSh = pPage->GetShell();
     if ( pSh )
         pSh->AddScrollRect( pTab, aRect, nOfst );
     ::lcl_ValidateLowers( pTab, nOfst, pRow, pTab->FindPageFrm(),
@@ -3002,7 +3047,10 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         } while ( pPg && !bInValid );
 
         if ( !bInValid )
+        {
             pRoot->ResetIdleFormat();
+            pImp->GetShell()->GetDoc()->GetDocShell()->Broadcast( SfxEventHint( SW_EVENT_LAYOUT_FINISHED ) );
+        }
     }
 
     pImp->GetShell()->EnableSmooth( TRUE );
