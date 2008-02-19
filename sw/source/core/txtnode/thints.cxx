@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:39:26 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,8 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-
+#include <docsh.hxx>
+#include <svtools/smplhint.hxx>
 #include <algorithm>
 #include <map>
 
@@ -830,6 +831,11 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                         ((SwTxtFld*)pAttr)->GetpTxtNode() )
                         ((SwDDEFieldType*)pFld->GetTyp())->DecRefCnt();
                     break;
+                case RES_POSTITFLD:
+                    {
+                        const_cast<SwFmtFld&>(pAttr->GetFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pAttr)->GetFld(), SWFMTFLD_REMOVED ) );
+                        break;
+                    }
                 }
             }
             nDelMsg = RES_FIELD_DELETED;
@@ -2098,6 +2104,11 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
                         ((SwDDEFieldType*)pFld->GetTyp())->IncRefCnt();
                     bInsFldType = ((SwDDEFieldType*)pFld->GetTyp())->IsDeleted();
                     break;
+
+                case RES_POSTITFLD:
+                    if ( pDoc->GetDocShell() )
+                        pDoc->GetDocShell()->Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFld(), SWFMTFLD_INSERTED ) );
+                    break;
                 }
                 if( bInsFldType )
                     pDoc->InsDeletedFldType( *pFld->GetTyp() );
@@ -2301,6 +2312,10 @@ void SwpHints::DeleteAtPos( const USHORT nPos )
             if( pNd && pNd->GetNodes().IsDocNodes() )
                 ((SwDDEFieldType*)pFldTyp)->DecRefCnt();
             ((SwTxtFld*)pHint)->ChgTxtNode( 0 );
+        }
+        else if( RES_POSTITFLD == pFldTyp->Which() )
+        {
+            const_cast<SwFmtFld&>(((SwTxtFld*)pHint)->GetFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFld(), SWFMTFLD_REMOVED ) );
         }
         else if( bHasHiddenParaField && RES_HIDDENPARAFLD == pFldTyp->Which() )
             bCalcHiddenParaField = TRUE;
