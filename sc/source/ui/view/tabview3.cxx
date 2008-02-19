@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:51:20 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1566,6 +1566,22 @@ void ScTabView::Unmark()
 
         SelectionChanged();
     }
+}
+
+void ScTabView::SetMarkData( const ScMarkData& rNew )
+{
+    DoneBlockMode();
+    InitOwnBlockMode();
+    aViewData.GetMarkData() = rNew;
+
+    MarkDataChanged();
+}
+
+void ScTabView::MarkDataChanged()
+{
+    // has to be called after making direct changes to mark data (not via MarkCursor etc)
+
+    UpdateSelectionOverlay();
 }
 
 void ScTabView::SelectNextTab( short nDir, BOOL bExtendSelection )
