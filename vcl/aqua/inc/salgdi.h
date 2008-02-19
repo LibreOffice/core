@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:32 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,7 @@ public:
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
+    virtual bool                    supportsOperation( OutDevSupportType ) const;
 
     // Query the platform layer for control support
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
