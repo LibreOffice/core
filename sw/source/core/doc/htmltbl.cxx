@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:38:17 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,8 +381,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
     rDoc.GetEditShell( &pVSh );
     if( pVSh )
     {
-        return (USHORT)( pVSh->VisArea().Width() -
-           2*pVSh->GetOut()->PixelToLogic( pVSh->GetBrowseBorder() ).Width() );
+        return (USHORT)pVSh->GetBrowseWidth();
     }
 
     return 0;
