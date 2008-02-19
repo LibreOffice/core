@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:31:18 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1170,5 +1170,30 @@ void X11SalGraphics::invert( long       nX,
             XFillRectangle( GetXDisplay(), GetDrawable(),  pGC, nX, nY, nDX, nDY );
         }
     }
+}
+
+bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
+{
+    bool bRet = false;
+    switch( eType )
+    {
+    case OutDevSupport_TransparentRect:
+        {
+            XRenderPeer& rPeer = XRenderPeer::GetInstance();
+            if( rPeer.GetVersion() >= 0x02 )
+            {
+                const SalDisplay* pSalDisp = GetDisplay();
+                const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
+
+                Visual* pDstXVisual = rSalVis.GetVisual();
+                XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
+                if( pDstVisFmt )
+                    bRet = true;
+            }
+        }
+        break;
+    default: break;
+    }
+    return bRet;
 }
 
