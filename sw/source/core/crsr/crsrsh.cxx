@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:19:29 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1289,7 +1289,7 @@ void SwCrsrShell::UpdateCrsrPos()
     SET_CURR_SHELL( this );
     ++nStartAction;
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
-    Size aOldSz( GetLayout()->Frm().SSize() );
+    Size aOldSz( GetDocSize() );
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
     SwCntntFrm  *pFrm = pCNode ?
         pCNode->GetFrm( &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint() ) :0;
@@ -1303,7 +1303,7 @@ void SwCrsrShell::UpdateCrsrPos()
             pShellCrsr->DeleteMark();
     }
     --nStartAction;
-    if( aOldSz != GetLayout()->Frm().SSize() )
+    if( aOldSz != GetDocSize() )
         SizeChgNotify();
 }
 
@@ -2172,10 +2172,10 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const BOOL bCalcFrm ) const
         {
             const USHORT* pST = &nStartAction;
             ++(*((USHORT*)pST));
-            const Size aOldSz( GetLayout()->Frm().SSize() );
+            const Size aOldSz( GetDocSize() );
             pRet = pNd->GetFrm( &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
             --(*((USHORT*)pST));
-            if( aOldSz != GetLayout()->Frm().SSize() )
+            if( aOldSz != GetDocSize() )
                 ((SwCrsrShell*)this)->SizeChgNotify();
         }
         else
@@ -3349,6 +3349,19 @@ String SwCrsrShell::GetCrsrDescr() const
         aResult = GetDoc()->GetPaMDescr(*GetCrsr());
 
     return aResult;
+}
+
+SwRect SwCrsrShell::GetRectOfCurrentChar()
+{
+    SwCntntFrm* pFrm = pCurCrsr->GetCntntNode()->GetFrm( 0, pCurCrsr->GetPoint(), FALSE );
+    SwRect aRet;
+    SwCrsrMoveState aTmpState( MV_NONE );
+    aTmpState.bRealHeight = TRUE;
+    pFrm->GetCharRect( aRet, *pCurCrsr->GetPoint(), &aTmpState );
+    //const SwTwips nRealHeight = aTmpState.aRealHeight.Y();
+    if (aTmpState.aRealHeight.X() != 0)
+        aRet.Top(aRet.Top() + aTmpState.aRealHeight.X());
+    return aRet;
 }
 
 // SMARTTAGS
