@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:52:52 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,12 +140,12 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
     {
-        aRect.Top() = GetScrPos( nStart );
+        aRect.Top() = GetScrPos( nStart )-nLayoutSign;      // extra pixel for line at top of selection
         aRect.Bottom() = GetScrPos( nEnd+1 )-nLayoutSign;
     }
     else
     {
-        aRect.Left() = GetScrPos( nStart );
+        aRect.Left() = GetScrPos( nStart )-nLayoutSign;     // extra pixel for line left of selection
         aRect.Right() = GetScrPos( nEnd+1 )-nLayoutSign;
     }
     Invalidate(aRect);
@@ -229,6 +229,43 @@ long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo )
     return nScrPos;
 }
 
+// draw a rectangle across the window's width/height, with the outer part in a lighter color
+
+void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor )
+{
+    Color aWhite( COL_WHITE );
+
+    Color aInner( rBaseColor );             // highlight color, unchanged
+    Color aCenter( rBaseColor );
+    aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
+    Color aOuter( rBaseColor );
+    aOuter.Merge( aWhite, 0xa0 );           // lighten up more
+
+    if ( IsMirrored() )
+        std::swap( aInner, aOuter );        // just swap colors instead of positions
+
+    Size aWinSize = GetSizePixel();
+    long nBarSize = bVertical ? aWinSize.Width() : aWinSize.Height();
+    long nCenterPos = (nBarSize / 2) - 1;
+
+    SetLineColor();
+    SetFillColor( aOuter );
+    if (bVertical)
+        DrawRect( Rectangle( 0, nStart, nCenterPos-1, nEnd ) );
+    else
+        DrawRect( Rectangle( nStart, 0, nEnd, nCenterPos-1 ) );
+    SetFillColor( aCenter );
+    if (bVertical)
+        DrawRect( Rectangle( nCenterPos, nStart, nCenterPos, nEnd ) );
+    else
+        DrawRect( Rectangle( nStart, nCenterPos, nEnd, nCenterPos ) );
+    SetFillColor( aInner );
+    if (bVertical)
+        DrawRect( Rectangle( nCenterPos+1, nStart, nBarSize-1, nEnd ) );
+    else
+        DrawRect( Rectangle( nStart, nCenterPos+1, nEnd, nBarSize-1 ) );
+}
+
 //
 //      Paint
 //
@@ -239,13 +276,22 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     //  Linien zusammengefasst
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    BOOL bHighContrast = rStyleSettings.GetHighContrastMode();
     BOOL bDark = rStyleSettings.GetFaceColor().IsDark();
     // Use the same distinction for bDark as in Window::DrawSelectionBackground
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
-    SetTextColor( aTextColor );
+    Color aSelTextColor = rStyleSettings.GetHighlightTextColor();
     aNormFont.SetColor( aTextColor );
-    aBoldFont.SetColor( aTextColor );
+    if ( bHighContrast )
+        aBoldFont.SetColor( aTextColor );
+    else
+        aBoldFont.SetColor( aSelTextColor );
+    SetTextColor( ( bBoldSet && !bHighContrast ) ? aSelTextColor : aTextColor );
+
+    Color aBlack( COL_BLACK );
+    Color aSelLineColor = rStyleSettings.GetHighlightColor();
+    aSelLineColor.Merge( aBlack, 0xe0 );        // darken just a little bit
 
     BOOL bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -329,12 +375,21 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
-        SetFillColor( rStyleSettings.GetFaceColor() );
-        if ( bVertical )
-            aFillRect = Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
+        if ( bHighContrast )
+        {
+            // high contrast: single-color background
+            SetFillColor( rStyleSettings.GetFaceColor() );
+            if ( bVertical )
+                aFillRect = Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
+            else
+                aFillRect = Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
+            DrawRect( aFillRect );
+        }
         else
-            aFillRect = Rectangle( nInitScrPos, 0, nLineEnd, nBarSize-1 );
-        DrawRect( aFillRect );
+        {
+            // normal: 3-part background
+            DrawShadedRect( nInitScrPos, nLineEnd, rStyleSettings.GetFaceColor() );
+        }
     }
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
@@ -349,16 +404,28 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     if ( nLineEnd * nLayoutSign >= nPStart * nLayoutSign )
     {
-        if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bDark )
+        if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign )
         {
-            //  solid grey background for dark face color is drawn before lines
+            if ( bHighContrast )
+            {
+                if ( bDark )
+                {
+                    //  solid grey background for dark face color is drawn before lines
 
-            SetLineColor();
-            SetFillColor( COL_LIGHTGRAY );
-            if (bVertical)
-                DrawRect( Rectangle( 0, nTransStart, nBarSize-1, nTransEnd ) );
+                    SetLineColor();
+                    SetFillColor( COL_LIGHTGRAY );
+                    if (bVertical)
+                        DrawRect( Rectangle( 0, nTransStart, nBarSize-1, nTransEnd ) );
+                    else
+                        DrawRect( Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 ) );
+                }
+            }
             else
-                DrawRect( Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 ) );
+            {
+                // background for selection
+
+                DrawShadedRect( nTransStart, nTransEnd, rStyleSettings.GetHighlightColor() );
+            }
         }
 
 #if 0
@@ -378,6 +445,19 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
         }
         else
             DrawLine( Point( nPStart, nBarSize-1 ), Point( nLineEnd, nBarSize-1 ) );
+
+        // line in different color for selection
+        if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bHighContrast )
+        {
+            SetLineColor( aSelLineColor );
+            if (bVertical)
+            {
+                long nDarkPos = bMirrored ? 0 : nBarSize-1;
+                DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
+            }
+            else
+                DrawLine( Point( nTransStart, nBarSize-1 ), Point( nTransEnd, nBarSize-1 ) );
+        }
     }
 
     //
@@ -389,17 +469,23 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     //  start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
     //  borders, light border at top isn't used anymore
+    //  use SC_HDRPAINT_SEL_BOTTOM for different color
 
-    for (USHORT nPass = SC_HDRPAINT_BOTTOM; nPass < SC_HDRPAINT_COUNT; nPass++)
+    for (USHORT nPass = SC_HDRPAINT_SEL_BOTTOM; nPass < SC_HDRPAINT_COUNT; nPass++)
     {
         //  set line color etc. before entry loop
         switch ( nPass )
         {
+            case SC_HDRPAINT_SEL_BOTTOM:
+                // same as non-selected for high contrast
+                SetLineColor( bHighContrast ? rStyleSettings.GetDarkShadowColor() : aSelLineColor );
+                break;
             case SC_HDRPAINT_BOTTOM:
                 SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 break;
             case SC_HDRPAINT_TEXT:
-                if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && !bDark )
+                // DrawSelectionBackground is used only for high contrast on light background
+                if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bHighContrast && !bDark )
                 {
                     //  Transparent selection background is drawn after lines, before text.
                     //  #109814# Use DrawSelectionBackground to make sure there is a visible
@@ -452,27 +538,32 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                         aEndPos = Point( aScrPos.X()+(nSizePix-1)*nLayoutSign, aScrPos.Y()+nBarSize-1 );
 
                     BOOL bMark = bMarkRange && nEntryNo >= nMarkStart && nEntryNo <= nMarkEnd;
+                    BOOL bNextToMark = bMarkRange && nEntryNo + 1 >= nMarkStart && nEntryNo <= nMarkEnd;
 
                     switch ( nPass )
                     {
+                        case SC_HDRPAINT_SEL_BOTTOM:
                         case SC_HDRPAINT_BOTTOM:
-                            if (bVertical)
-                                aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aEndPos.Y() );
-                            else
-                                aGrid.AddVerLine( aEndPos.X(), aScrPos.Y(), aEndPos.Y() );
+                            if ( nPass == ( bNextToMark ? SC_HDRPAINT_SEL_BOTTOM : SC_HDRPAINT_BOTTOM ) )
+                            {
+                                if (bVertical)
+                                    aGrid.AddHorLine( aScrPos.X(), aEndPos.X(), aEndPos.Y() );
+                                else
+                                    aGrid.AddVerLine( aEndPos.X(), aScrPos.Y(), aEndPos.Y() );
 
-                            //  thick bottom for hidden rows
-                            //  (drawn directly, without aGrid)
-                            if ( nEntryNo+1 < nSize )
-                                if ( GetEntrySize(nEntryNo+1)==0 )
-                                {
-                                    if (bVertical)
-                                        DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
-                                                  Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
-                                    else
-                                        DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
-                                                  Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
-                                }
+                                //  thick bottom for hidden rows
+                                //  (drawn directly, without aGrid)
+                                if ( nEntryNo+1 < nSize )
+                                    if ( GetEntrySize(nEntryNo+1)==0 )
+                                    {
+                                        if (bVertical)
+                                            DrawLine( Point(aScrPos.X(),aEndPos.Y()-nLayoutSign),
+                                                      Point(aEndPos.X(),aEndPos.Y()-nLayoutSign) );
+                                        else
+                                            DrawLine( Point(aEndPos.X()-nLayoutSign,aScrPos.Y()),
+                                                      Point(aEndPos.X()-nLayoutSign,aEndPos.Y()) );
+                                    }
+                            }
                             break;
 
                         case SC_HDRPAINT_TEXT:
@@ -501,7 +592,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                                 else
                                 {
                                     aTxtPos.X() += (nSizePix*nLayoutSign-aTextSize.Width()+1)/2;
-                                    aTxtPos.Y() += (nBarSize-aTextSize.Height()+1)/2;
+                                    aTxtPos.Y() += (nBarSize-aTextSize.Height())/2;
                                 }
                                 DrawText( aTxtPos, aString );
                             }
