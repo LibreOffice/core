@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:28:22 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ public:
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
 
     inline BOOL IsPostIts() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_POSTITS) ? TRUE : FALSE; }
+        { return (nCoreOptions & VIEWOPT_1_POSTITS) ? TRUE : FALSE; }
     inline void SetPostIts( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_POSTITS ) : ( nCoreOptions &= ~VIEWOPT_1_POSTITS); }
            void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
