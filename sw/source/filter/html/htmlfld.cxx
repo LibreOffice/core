@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:40 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -664,7 +664,7 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
 
     SwPostItField aPostItFld(
                     (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-                    aEmptyStr, aComment, Date() );
+                    aEmptyStr, aComment, DateTime() );
     InsertAttr( SwFmtFld( aPostItFld ) );
 
     if( bMoveFwd )
