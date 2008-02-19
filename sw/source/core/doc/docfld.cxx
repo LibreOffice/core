@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:28:46 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,6 @@
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
 #endif
-
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif
@@ -1684,7 +1683,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwGetExpFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwGetRefFieldType( this ), nFldType++ );
     pFldTypes->Insert( new SwHiddenTxtFieldType, nFldType++ );
-    pFldTypes->Insert( new SwPostItFieldType, nFldType++ );
+    pFldTypes->Insert( new SwPostItFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwDocStatFieldType(this), nFldType++);
     pFldTypes->Insert( new SwDocInfoFieldType(this), nFldType++);
     pFldTypes->Insert( new SwInputFieldType( this ), nFldType++ );
