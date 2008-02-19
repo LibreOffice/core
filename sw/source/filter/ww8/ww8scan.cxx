@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:06:31 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4348,16 +4348,15 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
         pBkm = &aD[1];
         pEdn = &aD[2];
         pFtn = &aD[3];
-        pAnd = &aD[4];
 
-        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
+
+        pPcd = ( pBase->pPLCFx_PCD ) ? &aD[4] : 0;
         //pPcdA index == pPcd index + 1
-        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[6] : 0;
-
-        pChp = &aD[7];
+        pPcdA = ( pBase->pPLCFx_PCDAttrs ) ? &aD[5] : 0;
+        pChp = &aD[6];
+        pAnd = &aD[7];
         pPap = &aD[8];
         pSep = &aD[9];
-
         pSep->pPLCFx = pBase->pSepPLCF;
         pFtn->pPLCFx = pBase->pFtnPLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
