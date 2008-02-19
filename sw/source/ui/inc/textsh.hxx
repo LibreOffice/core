@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:12:45 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,10 @@ public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO();
 
-    DECL_LINK( PostItNextHdl, AbstractSvxPostItDialog * );
-    DECL_LINK( PostItPrevHdl, AbstractSvxPostItDialog * );
+//CHINA001  DECL_LINK( PostItNextHdl, Button * );
+//CHINA001  DECL_LINK( PostItPrevHdl, Button * );
+//CHINA001  DECL_LINK( RedlineNextHdl, Button * );
+//CHINA001  DECL_LINK( RedlinePrevHdl, Button * );
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 
