@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:36:44 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,11 @@
 #include "itemdef.hxx"
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
+
+#ifndef _POSTITMGR_HXX
+#include <PostItMgr.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -316,6 +321,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsViewMetaChars() ); break;
             case FN_VIEW_TABLEGRID:
                 aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
+            case FN_VIEW_NOTES:
+                aBool.SetValue( pOpt->IsPostIts()); break;
             case FN_VIEW_HIDDEN_PARA:
                 aBool.SetValue( pOpt->IsShowHiddenPara()); break;
             case SID_GRID_VISIBLE:
@@ -431,6 +438,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 pOpt->SetCrossHair( bFlag );
                 break;
 
+         case FN_VIEW_NOTES:
+                if ( STATE_TOGGLE == eState )
+                    bFlag = !pOpt->IsPostIts();
+
+                pOpt->SetPostIts( bFlag );
+                break;
+
         case FN_VIEW_HIDDEN_PARA:
                 if ( STATE_TOGGLE == eState )
                     bFlag = !pOpt->IsShowHiddenPara();
@@ -502,6 +516,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             if( STATE_TOGGLE == eState )
                 bFlag = bSet = !pOpt->IsOnlineSpell();
 
+            GetPostItMgr()->SetSpellChecking(bSet);
             pOpt->SetOnlineSpell(bSet);
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
