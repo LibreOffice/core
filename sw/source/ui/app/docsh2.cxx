@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:25:09 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,11 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+/*
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
+*/
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
@@ -1623,12 +1625,11 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 void SwDocShell::SetModified( BOOL bSet )
 {
     SfxObjectShell::SetModified( bSet );
-    if( IsEnableSetModified() )
+    if( IsEnableSetModified())
     {
-        if ( !pDoc->IsInCallModified() )
-        {
+         if (!pDoc->IsInCallModified() )
+         {
             EnableSetModified( FALSE );
-
             if( bSet )
             {
                 BOOL bOld = pDoc->IsModified();
@@ -1640,7 +1641,7 @@ void SwDocShell::SetModified( BOOL bSet )
                 pDoc->ResetModified();
 
             EnableSetModified( TRUE );
-        }
+         }
 
         UpdateChildWindows();
         Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
