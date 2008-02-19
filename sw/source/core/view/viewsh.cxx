@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:40:07 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@
 #include <anchoredobject.hxx>
 #endif
 // <--
+
+#include "../../../inc/PostItMgr.hxx"
+#include "../../ui/inc/view.hxx"
 
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
@@ -1179,7 +1182,7 @@ void ViewShell::SizeChgNotify()
     else
     {
         bDocSizeChgd = FALSE;
-        ::SizeNotify( this, GetLayout()->Frm().SSize() );
+        ::SizeNotify( this, GetDocSize() );
     }
 }
 
@@ -1227,6 +1230,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
     //SwSaveHdl aSaveHdl( Imp() );
 
+    bool bScrolled = false;
+    SwPostItMgr* pPostItMgr = pDoc->GetDocShell()->GetView()->GetPostItMgr();
+
     if ( bFull )
         GetWin()->Invalidate();
     else
@@ -1262,12 +1268,23 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                             GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
                     const SwTwips nShadowWidth =
                             GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
-                    // OD 03.03.2003 #107927# - use correct datatype
-                    const SwTwips nPageLeft = pPage->Frm().Left() - nBorderWidth;
+                    //mod #i6193# added sidebar width
+                    const SwTwips nSidebarWidth = pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
+                    SwTwips nPageLeft = 0;
+                    SwTwips nPageRight = 0;
+                    if (pPage->MarginSide())
+                    {
+                        nPageLeft = pPage->Frm().Left() - nBorderWidth - nSidebarWidth;
+                        nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
+                    }
+                    else
+                    {
+                        // OD 03.03.2003 #107927# - use correct datatype
+                        nPageLeft = pPage->Frm().Left() - nBorderWidth;
+                        nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                    }
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
-                    // OD 03.03.2003 #107927# - use correct datatype
-                    const SwTwips nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
                     if( nPageRight > nMaxRight )
                         nMaxRight = nPageRight;
                     //Zus. auf die Zeichenobjekte abgleichen.
@@ -1298,6 +1315,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             aRect.Right() = nMaxRight;
             if( VisArea().IsOver( aPrevArea ) && !nLockPaint )
             {
+                bScrolled = true;
                 aVisArea.Pos() = aPrevArea.Pos();
                 if ( SmoothScroll( nXDiff, nYDiff, &aRect ) )
                     return;
@@ -1310,6 +1328,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         {
             if( VisArea().IsOver( aPrevArea ) )
             {
+                bScrolled = true;
                 aVisArea.Pos() = aPrevArea.Pos();
                 if ( SmoothScroll( nXDiff, nYDiff, 0 ) )
                     return;
@@ -1333,6 +1352,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     Imp()->bPaintInScroll = TRUE;
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
+
+    if ( !bScrolled && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
+        pPostItMgr->CorrectPositions();
 
     if( Imp()->IsAccessible() )
         Imp()->UpdateAccessible();
@@ -1676,6 +1698,15 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 
     SwRegionRects aRegion( rRect );
 
+    //mod #i6193: remove sidebar area to avoid flickering
+    bool bPostItSidebar = false;
+    SwPostItMgr* pPostItMgr = 0;
+    SwView* pView = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetView() : 0;
+    if (pView)
+    {
+        pPostItMgr = pView->GetPostItMgr();
+        bPostItSidebar = pPostItMgr->HasNotes() && pPostItMgr->ShowNotes();
+    }
     if ( bBorderOnly )
     {
         const SwFrm *pPage = pRoot->Lower();
@@ -1687,7 +1718,12 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
                 aLeft.Right( nTmp );
             nTmp = pPage->Frm().Right();
             if ( nTmp > aRight.Left() )
-                aRight.Left( nTmp );
+            {
+                if (bPostItSidebar)
+                    aRight.Left( nTmp + pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() );
+                else
+                    aRight.Left( nTmp );
+            }
             pPage = pPage->GetNext();
         }
         aRegion.Remove( 0, aRegion.Count() );
@@ -1705,7 +1741,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
                 !((pPage->Frm().Top() > nBottom) || (pPage->Frm().Left() > nRight)))
         {
             if ( pPage->Frm().IsOver( rRect ) )
-                aRegion -= pPage->Frm();
+                aRegion -= bPostItSidebar ? SwRect(pPage->Frm().Pos(),Size(pPage->Frm().SSize().Width()+pPostItMgr->GetSidebarWidth()+pPostItMgr->GetSidebarBorderWidth(),pPage->Frm().SSize().Height())) : pPage->Frm();
             pPage = pPage->GetNext();
         }
     }
@@ -2017,12 +2053,31 @@ void ViewShell::Paint(const Rectangle &rRect)
 
 void ViewShell::SetBrowseBorder( const Size& rNew )
 {
-    if( rNew != GetBrowseBorder() )
+    if( rNew != aBrowseBorder )
     {
         aBrowseBorder = rNew;
         if ( aVisArea.HasArea() )
             CheckBrowseView( FALSE );
     }
+}
+
+const Size& ViewShell::GetBrowseBorder() const
+{
+    return aBrowseBorder;
+}
+
+sal_Int32 ViewShell::GetBrowseWidth() const
+{
+    SwPostItMgr* pPostItMgr = pDoc->GetDocShell()->GetView() ? pDoc->GetDocShell()->GetView()->GetPostItMgr() : 0;
+    if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
+    {
+        Size aBorder( aBrowseBorder );
+        aBorder.Width() += aBrowseBorder.Width();
+        aBorder.Width() += pPostItMgr->GetSidebarWidth(true) + pPostItMgr->GetSidebarBorderWidth(true);
+        return aVisArea.Width() - GetOut()->PixelToLogic(aBorder).Width();
+    }
+    else
+        return aVisArea.Width() - 2 * GetOut()->PixelToLogic(aBrowseBorder).Width();
 }
 
 /******************************************************************************
@@ -2140,6 +2195,18 @@ Size ViewShell::GetDocSize() const
     const SwRootFrm* pRoot = GetLayout();
     if( pRoot )
         aSz = pRoot->Frm().SSize();
+
+    //mod #i6193# added sidebar width
+    SwView* pView = pDoc->GetDocShell()->GetView() ;
+    if (pView)
+    {
+        SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+        if (pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
+        {
+            aSz.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
+        }
+    }
+
     return aSz;
 }
 
@@ -2431,7 +2498,7 @@ void ViewShell::UISizeNotify()
         bDocSizeChgd = FALSE;
         BOOL bOld = bInSizeNotify;
         bInSizeNotify = TRUE;
-        ::SizeNotify( this, GetLayout()->Frm().SSize() );
+        ::SizeNotify( this, GetDocSize() );
         bInSizeNotify = bOld;
     }
 }
