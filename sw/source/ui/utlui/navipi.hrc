@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:28:52 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,19 +40,14 @@
 #define BT_DOWN             6
 #define IL_CONTENT          7
 #define ILH_CONTENT         8
-
 #define FT_PAGE             10
 #define ED_PAGE             11
-
 #define LB_SELECT           22
 #define TL_SELECT           23
-
 #define TB_PAGE_TEXT                    41
 #define TB_PAGE_COUNT                   42
-
 #define TB_CONTENT          50
 #define TL_CONTENT          51
-
 #define LB_DOCS             53
 #define NF_PAGE             54
 #define TL_GLOBAL           55
@@ -68,7 +63,6 @@
 #define ST_COPY_REGION                  (ST_CONTEXT_FIRST + 4)
 #define ST_DISPLAY                      (ST_CONTEXT_FIRST + 5)
 #define ST_ACTIVE_VIEW                  (ST_CONTEXT_FIRST + 6)
-
 #define ST_STATUS_FIRST         67
 #define ST_HIDDEN                       (ST_STATUS_FIRST    )
 #define ST_ACTIVE                       (ST_STATUS_FIRST + 1)
@@ -99,4 +93,7 @@
 #define ST_READONLY_IDX                 (ST_GLOBAL_CONTEXT_FIRST +33)
 #define ST_INVISIBLE                    (ST_GLOBAL_CONTEXT_FIRST +34)
 
+#define ST_POSTIT_SHOW              (ST_GLOBAL_CONTEXT_FIRST +35)
+#define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
+#define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
 
