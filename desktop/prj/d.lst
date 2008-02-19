@@ -32,7 +32,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\so\sbase.exe %_DEST%\bin%_EXT%\so\sbase.exe
 
 ..\%__SRC%\misc\soffice.exe.manifest %_DEST%\bin%_EXT%\soffice.exe.manifest
-..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin%_EXT%\so\soffice.bin.manifest
+..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin%_EXT%\soffice.bin.manifest
 ..\%__SRC%\bin\wrp*.dll %_DEST%\bin%_EXT%\wrp*.dll
 ..\%__SRC%\bin\spl*.dll %_DEST%\bin%_EXT%\spl*.dll
 ..\%__SRC%\bin\socomp.dll %_DEST%\bin%_EXT%\socomp.dll
