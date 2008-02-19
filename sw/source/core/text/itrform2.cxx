@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:52:01 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@
 #endif
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
@@ -2024,7 +2024,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         // this is required e.g., for Khmer (thank you, Javier!)
         const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
         xub_StrLen nMaxContext = 0;
-        if( ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+        if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
             nMaxContext = 6;
 #else
         // some fonts like Quartz's Zapfino need more context
