@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:42:05 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,7 @@ long SwWrtShell::DelRight()
 
     switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
     {
+    case nsSelectionType::SEL_POSTIT:
     case nsSelectionType::SEL_TXT:
     case nsSelectionType::SEL_TBL:
     case nsSelectionType::SEL_NUM:
