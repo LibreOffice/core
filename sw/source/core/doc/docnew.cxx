@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:29:38 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,9 @@
 #ifndef _SFXFRAME_HXX
 #include <sfx2/frame.hxx>
 #endif
+
 #ifndef _SFXMACITEM_HXX //autogen
-#include <svtools/macitem.hxx>
+    #include <svtools/macitem.hxx>
 #endif
 #include <svtools/stylepool.hxx>
 #ifndef _SVX_SVXIDS_HRC
@@ -211,6 +212,7 @@
 #ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #endif
+
 
 // --> OD 2006-04-19 #b6375613#
 #ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
