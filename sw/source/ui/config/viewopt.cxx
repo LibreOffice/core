@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:33:44 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,10 +205,9 @@ USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
  *                    SwViewOption::PaintPostIts()
  *************************************************************************/
 
-void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                                 sal_Bool bIsScript ) const
+void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
 {
-    if( pOut )
+    if( pOut && bIsScript)
     {
         Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
@@ -219,8 +218,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
-        sal_Int32 nColor = bIsScript ? aScriptIndicatorColor.GetColor() : aNotesIndicatorColor.GetColor();
-        DrawRect( pOut, aRect, nColor );
+        DrawRect( pOut, aRect, aScriptIndicatorColor.GetColor() );
         pOut->SetLineColor( aOldLineColor );
     }
 }
