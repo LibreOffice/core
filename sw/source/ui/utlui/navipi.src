@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:32:25 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:00:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "utlui.hrc"
 #include "navipi.hrc"
 #include "helpid.h"
+
 Window DLG_NAVIGATION_PI
 {
     HelpID = HID_NAVIGATION_PI ;
@@ -495,6 +496,18 @@ Window DLG_NAVIGATION_PI
     {
         Text [ en-US ] = "Read-~only";
     };
+    String ST_POSTIT_SHOW
+    {
+        Text [ en-US ] = "Show All";
+    };
+    String ST_POSTIT_HIDE
+    {
+        Text [ en-US ] = "Hide All";
+    };
+    String ST_POSTIT_DELETE
+    {
+        Text [ en-US ] = "Delete All";
+    };
 };
 #define NAVI_ENTRY_IDS \
     IdList =           \
@@ -529,4 +542,3 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
-
