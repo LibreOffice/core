@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:23:16 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "fldbas.hxx"          // fuer FieldType
 
 #ifndef _FMTFLD_HXX //autogen
@@ -49,6 +47,13 @@
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
 #endif
+
+#include "doc.hxx"
+#include "docsh.hxx"
+#include "../../../inc/PostItMgr.hxx"
+#include "../../ui/inc/view.hxx"
+
+
 #include "reffld.hxx"
 #include "ddefld.hxx"
 #include "usrfld.hxx"
@@ -59,7 +64,10 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 
+#include <svtools/smplhint.hxx>
+
 TYPEINIT2( SwFmtFld, SfxPoolItem, SwClient )
+TYPEINIT1(SwFmtFldHint, SfxHint);
 
 /****************************************************************************
  *
@@ -89,7 +97,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
 // full pool range, all items need to be clonable. Thus, this one needed to be
 // corrected
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
-    : SfxPoolItem( RES_TXTATR_FIELD ), SwClient(),
+    : SfxPoolItem( RES_TXTATR_FIELD ), SwClient(), SfxBroadcaster(),
     pField( 0 ),
     pTxtAttr( 0 )
 {
@@ -107,6 +115,7 @@ SwFmtFld::~SwFmtFld()
     if (pType && pType->Which() == RES_DBFLD)
         pType = 0;  // DB-Feldtypen zerstoeren sich selbst
 
+    Broadcast( SwFmtFldHint( this, SWFMTFLD_REMOVED ) );
     delete pField;
 
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
@@ -144,6 +153,7 @@ void SwFmtFld::SetFld(SwField * _pField)
         delete pField;
 
     pField = _pField;
+    Broadcast( SwFmtFldHint( this, SWFMTFLD_CHANGED ) );
 }
 
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
