@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:01:57 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@
 #include <fstream>
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
 
@@ -386,7 +386,7 @@ void SwWW8Writer::OutListTab()
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
 
-                Out_SfxItemSet(*pOutSet, false, true, ScriptType::LATIN);
+                Out_SfxItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN);
 
                 pO = pOldpO;
             }
