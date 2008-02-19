@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:43:01 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,10 +645,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                  pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                  pSh->VisArea().HasArea() )
             {
-                nRelWidth  = pSh->VisArea().Width();
+                nRelWidth  = pSh->GetBrowseWidth();
                 nRelHeight = pSh->VisArea().Height();
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                nRelWidth  -= 2*aBorder.Width();
                 nRelHeight -= 2*aBorder.Height();
             }
             else
