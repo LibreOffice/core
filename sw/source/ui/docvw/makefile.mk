@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:22:54 $
+#   last change: $Author: rt $ $Date: 2008-02-19 13:55:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=docvw
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -57,7 +58,9 @@ SLOFILES =  \
         $(SLO)$/edtwin2.obj \
         $(SLO)$/edtwin3.obj \
         $(SLO)$/romenu.obj \
-        $(SLO)$/srcedtw.obj
+        $(SLO)$/srcedtw.obj \
+        $(SLO)$/postit.obj \
+        $(SLO)$/PostItMgr.obj 
 
 # --- Tagets -------------------------------------------------------
 
