@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:40:09 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* /* pDocShell */,
         pViewShell->InitOwnBlockMode();
         pViewShell->GetViewData()->GetMarkData().
                 SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
+        pViewShell->MarkDataChanged();
     }
 }
 
