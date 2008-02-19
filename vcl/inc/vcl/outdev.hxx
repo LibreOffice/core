@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:34:57 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,6 +579,13 @@ public:
     virtual             ~OutputDevice();
 
     OutDevType          GetOutDevType() const { return meOutDevType; }
+
+    /** query an <code>OutputDevice</code> whether it spports a specific operation
+
+    @return
+    true if operation supported, else false
+    */
+    bool                supportsOperation( OutDevSupportType ) const;
 
     void                Set3DContext( OutDev3D* p3DContext ) { mp3DContext = p3DContext; }
 
