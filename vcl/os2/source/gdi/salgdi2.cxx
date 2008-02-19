@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:50:18 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 15:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,12 @@ BOOL bFastTransparent = FALSE;
 // ---------------
 // - SalGraphics -
 // ---------------
+
+bool Os2SalGraphics::supportsOperation( OutDevSupportType ) const
+{
+    return false;
+}
+
 
 void Os2SalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
 {
