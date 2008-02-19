@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:44:30 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,6 @@
 #include <charfmt.hxx>  // #i27615#
 #endif
 
-using namespace ::com::sun::star::i18n;
 
 /*************************************
  * harte Formatierung (Attribute)
@@ -466,9 +465,9 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     USHORT nRet;
        switch( nType )
     {
-    case ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
-    case ScriptType::ASIAN:     nRet = SCRIPTTYPE_ASIAN;    break;
-    case ScriptType::COMPLEX:   nRet = SCRIPTTYPE_COMPLEX;  break;
+    case ::com::sun::star::i18n::ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
+    case ::com::sun::star::i18n::ScriptType::ASIAN:     nRet = SCRIPTTYPE_ASIAN;    break;
+    case ::com::sun::star::i18n::ScriptType::COMPLEX:   nRet = SCRIPTTYPE_COMPLEX;  break;
     default: nRet = 0;
     }
     return nRet;
