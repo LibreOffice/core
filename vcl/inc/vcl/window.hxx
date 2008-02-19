@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:14 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,8 +792,45 @@ public:
     void                EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
                                      const Window* pExcludeWindow = NULL );
     BOOL                IsInputEnabled() const;
+
+    /** Override <code>EnableInput</code>. This can be necessary due to other people
+        using EnableInput for whole window hierarchies.
+
+
+        <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
+        mutually exclusive; the last setter wins.
+        @param bAlways
+        sets always enabled flag
+
+        @param bChild
+        if true children are recursively set to AlwaysEnableInput
+    */
     void                AlwaysEnableInput( BOOL bAlways, BOOL bChild = TRUE );
+    /** returns the current AlwaysEnableInput state
+    @return
+    true if window is in AlwaysEnableInput state
+    */
     BOOL                IsAlwaysEnableInput() const;
+    /** Override <code>EnableInput</code>, counterpart to AlwaysEnableInput.
+        Windows with AlwaysDisableInput will not get key events even if enabled
+        and input enabled.This can be necessary due to other people using EnableInput
+        for whole window hierarchies.
+
+        <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
+        mutually exclusive; the last setter wins.
+
+        @param bAlways
+        sets always disable flag
+
+        @param bChild
+        if true children are recursively set to AlwaysDisableInput
+    */
+    void                AlwaysDisableInput( BOOL bAlways, BOOL bChild = TRUE );
+    /** returns the current AlwaysDisableInput state
+    @return
+    true if window is in AlwaysEnableInput state
+    */
+    BOOL                IsAlwaysDisableInput() const;
     /** usually event handlers (see AddEventListener and AddChildEventListener)
     are not called on disabled, modal or input disabled windows. There are however rare cases
     in which one wants a Window or rather one of its Control subclasses to
@@ -807,7 +844,8 @@ public:
     the real problem.
 
     @param bCall
-    Enable/Disable calling event handlers for this disabled, modal or input disabled window
+    Enable/Disable calling event handlers for this disabled, modal or input disabled window.
+    This call is implicity done recursively for possible child windows.
     */
     void                SetCallHandlersOnInputDisabled( bool bCall );
     /** get state of SetCallHandlersOnInputDisabled
