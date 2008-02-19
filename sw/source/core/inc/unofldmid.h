@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofldmid.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:00:14 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 #define FIELD_PROP_IS_FIELD_USED        32
 #define FIELD_PROP_IS_FIELD_DISPLAYED   33
+
+#define FIELD_PROP_TEXT             34
 
 String& GetString( const com::sun::star::uno::Any&, String& rStr );
 
