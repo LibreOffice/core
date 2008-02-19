@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:20:07 $
+ *  last change: $Author: rt $ $Date: 2008-02-19 13:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1511,7 +1511,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         // Link PageNum
                         const sal_Int32 nNotePageNum = CalcOutputPageNum( rNoteRect );
                         if ( -1 != nNotePageNum )
-                        {
+                            {
                             // Link Note
                             vcl::PDFNote aNote;
 
