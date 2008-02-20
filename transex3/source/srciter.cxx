@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:10:58 $
+ *  last change: $Author: rt $ $Date: 2008-02-20 08:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
         rtl::OUString sDirNameTmp = aDirectory.getFullName();
-        ByteString sDirNameTmpB( OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
+        ByteString sDirNameTmpB( rtl::OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
 #ifdef WNT
         sDirNameTmpB.Append( ByteString("\\no_localization") );
