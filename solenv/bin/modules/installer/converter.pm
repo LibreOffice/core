@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:23:09 $
+#   last change: $Author: rt $ $Date: 2008-02-20 08:14:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ sub convert_stringlist_into_array
         $first = $1;
         $last = $2;
         if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
+        # Problem with two directly following listseparators. For example a path with two ";;" directly behind each other
+        $first =~ s/^$listseparator//;
         push(@newarray, "$first\n");
     }
 
