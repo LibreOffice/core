@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-18 09:12:51 $
+#   last change: $Author: rt $ $Date: 2008-02-21 15:02:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -679,8 +679,11 @@ sub get_integrated_cws
     my $master    = shift;
     my $milestone = shift;
 
-    return wantarray ? @{$self->get_childworkspaces_for_milestone($master, $milestone)}
-                     :   $self->get_childworkspaces_for_milestone($master, $milestone);
+    my $childworkspaces_arrref = $self->get_childworkspaces_for_milestone($master, $milestone);
+    if ( !$childworkspaces_arrref ) {
+        $childworkspaces_arrref = [];
+    }
+    return wantarray ? @$childworkspaces_arrref : $childworkspaces_arrref;
 }
 
 
