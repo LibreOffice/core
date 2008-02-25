@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:55:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ void ensureClassInfos()
 
     // - FormattedField
     REGISTER_CLASS1(OFormattedFieldWrapper, FRM_COMPONENT_EDIT);
-        // since SUPD568 both OFormattedModel and OEditModel use FRM_COMPONENT_EDIT for persistence,
+        // since SRC568 both OFormattedModel and OEditModel use FRM_COMPONENT_EDIT for persistence,
         // and while reading a wrapper determines which kind of model it is
     // register the wrapper for the FormattedField, as it handles the XPersistObject::write
     // so that version <= 5.1 are able to read it
