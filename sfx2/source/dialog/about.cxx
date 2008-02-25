@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:37:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,14 +295,12 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         sCopyright.SearchAndReplaceAll(sSO, sProduct);
     }
 
-#if SUPD == 680
     String sNewYear( DEFINE_CONST_UNICODE("2005") );
     xub_StrLen nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2002"), sNewYear );
     if ( STRING_NOTFOUND == nIdx )
         nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2003"), sNewYear );
     if ( STRING_NOTFOUND == nIdx )
         nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2004"), sNewYear );
-#endif
     aCopyrightText.SetText( sCopyright );
 }
 
@@ -380,72 +378,6 @@ BOOL AboutDialog::Close()
 }
 
 // -----------------------------------------------------------------------
-
-#if SUPD == 645
-struct ExtraDeveloper_Impl
-{
-    char*   _pName;
-    long    _nValue;
-};
-static ExtraDeveloper_Impl Developer_Impl[] =
-{
-    { "", 0 },
-    { "S t a r O f f i c e  C h i n a  T e a m", 8 },
-    { "", 0 },
-    { "William Wan", 0 },
-    { "", 0 },
-    { "Binary Filter Stripping Project", 8 },
-    { "", 0 },
-    { "Gary Yang", 0 },
-    { "James Meng", 0 },
-    { "Minna Wu", 0 },
-    { "", 0 },
-    { "XML Security Project", 8 },
-    { "", 0 },
-    { "Michael Mi", 0 },
-    { "Andrew Fan", 0 },
-    { "Keanu Duan", 0 },
-    { "Stone Xiang", 0 },
-    { "", 0 },
-    { "XSLT Transformation", 8 },
-    { "", 0 },
-    { "Gavin Lu", 0 },
-    { "Tom Chen", 0 },
-    { "", 0 },
-    { "Evolution Address Book Intergration", 8 },
-    { "", 0 },
-    { "Berry Jia", 0 },
-    { "Gilbert Fang", 0 },
-    { "Wind Li", 0 },
-    { "", 0 },
-    { "SI - OSL", 8 },
-    { "", 0 },
-    { "Gorden Lin", 0 },
-    { "", 0 },
-    { "SDK", 8 },
-    { "", 0 },
-    { "Robert Chen", 0 },
-    { "", 0 },
-    { "QADEV", 8 },
-    { "", 0 },
-    { "Mia Xia", 0 },
-    { "Mindy Liu", 0 },
-    { "", 0 },
-    { "QA", 8 },
-    { "", 0 },
-    { "Hercule Li", 0 },
-    { "", 0 },
-    { "Release Engineering", 8 },
-    { "", 0 },
-    { "Tin Tian", 0 },
-    { "", 0 },
-    { "StarOffice BD", 8 },
-    { "", 0 },
-    { "Sophia Zhang", 0 },
-    { "Xiaoyan Tian", 0 },
-    { "", 0 }
-};
-#endif
 
 void AboutDialog::Paint( const Rectangle& rRect )
 {
@@ -539,11 +471,6 @@ void AboutDialog::Paint( const Rectangle& rRect )
     USHORT nDevCnt = static_cast< USHORT >( aDeveloperAry.Count() );
     USHORT nCount = nDevCnt;
 
-#if SUPD == 645
-    int nExtra = sizeof(Developer_Impl) / sizeof(ExtraDeveloper_Impl);
-    nCount += nExtra;
-#endif
-
     if ( nCount )
     {
         for ( USHORT i = 0; i < nCount; ++i )
@@ -556,14 +483,6 @@ void AboutDialog::Paint( const Rectangle& rRect )
                 aStr = aDeveloperAry.GetString(i);
                 nVal = aDeveloperAry.GetValue(i);
             }
-#if SUPD == 645
-            else
-            {
-                USHORT nDev = i - nDevCnt;
-                aStr = String::CreateFromAscii( Developer_Impl[nDev]._pName );
-                nVal = Developer_Impl[nDev]._nValue;
-            }
-#endif
 
             aSize = Size( GetTextWidth( aStr ), GetTextHeight() );
             aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
