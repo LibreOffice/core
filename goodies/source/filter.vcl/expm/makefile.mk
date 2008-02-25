@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:57:21 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:21:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ SLOFILES =	$(SLO)$/expm.obj
 
 # ==========================================================================
 
-SHL1TARGET= 	exp$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	exp$(DLLPOSTFIX)
 SHL1IMPLIB= 	expm
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB) $(SVTOOLLIB)
 SHL1LIBS=		$(SLB)$/expm.lib
