@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:13:27 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:35:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/smres.srs \
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
-SHL1TARGET= sm$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= sm$(DLLPOSTFIX)
 SHL1IMPLIB= smimp
 
 SHL1VERSIONMAP= sm.map
@@ -76,7 +76,7 @@ SHL1STDLIBS= \
             $(CPPULIB) \
             $(SALLIB)
 
-SHL2TARGET= smd$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= smd$(DLLPOSTFIX)
 SHL2IMPLIB= smdimp
 SHL2VERSIONMAP= sm.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
