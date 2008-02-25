@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 22:14:57 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:33:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SLOFILES=	$(SLO)$/typedetectionimport.obj						\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
     
 SHL1STDLIBS=\
     $(SFX2LIB)			\
