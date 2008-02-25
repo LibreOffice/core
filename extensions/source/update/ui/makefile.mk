@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 15:58:24 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:35:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ RESLIB1SRSFILES= $(SRS)$/updchkui.srs
 RESLIB1DEPN= updatecheckui.src updatecheckui.hrc
 
 SHL1NOCHECK=TRUE
-SHL1TARGET=updchk$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=updchk$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
