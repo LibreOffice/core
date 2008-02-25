@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentresmodule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:26:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,6 @@ namespace utl
         {
             // create a manager with a fixed prefix
             ByteString aMgrName = m_sResFilePrefix;
-            aMgrName += ByteString::CreateFromInt32(SUPD);
 
             m_pRessources = ResMgr::CreateResMgr( aMgrName.GetBuffer() );
             OSL_ENSURE( m_pRessources,
