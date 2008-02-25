@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-27 15:28:28 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:14:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 PRJ=..$/..
 PRJNAME=svx
 TARGET=dialogs
-VERSION=$(UPD)
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
@@ -476,9 +475,9 @@ LIB2OBJFILES+=$(SLO)$/winpluginlib.obj
 $(INCCOM)$/cuilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    echo \#define DLL_NAME \"libcui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
+    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/svxdlg.obj : $(INCCOM)$/cuilib.hxx
