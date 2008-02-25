@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:25:53 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:27:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ SLOFILES= \
         $(SLO)$/basmodnode.obj \
         $(SLO)$/basmethnode.obj
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX).uno
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
 SHL1IMPLIB=	i$(TARGET)
 
 SHL1VERSIONMAP=$(TARGET).map
