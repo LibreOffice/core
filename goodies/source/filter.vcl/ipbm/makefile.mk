@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:58:20 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:22:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ SLOFILES =	$(SLO)$/ipbm.obj
 
 # ==========================================================================
 
-SHL1TARGET= 	ipb$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	ipb$(DLLPOSTFIX)
 SHL1IMPLIB= 	ipbm
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=		$(SLB)$/ipbm.lib
