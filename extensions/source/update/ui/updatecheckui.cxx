@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:31:41 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,8 +245,8 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     , mbBubbleChanged( false )
     , mnIconID( 0 )
 {
-    mpUpdResMgr = ResMgr::CreateResMgr( "updchk" MAKE_NUMSTR(SUPD) );
-    mpSfxResMgr = ResMgr::CreateResMgr( "sfx" MAKE_NUMSTR(SUPD) );
+    mpUpdResMgr = ResMgr::CreateResMgr( "updchk" );
+    mpSfxResMgr = ResMgr::CreateResMgr( "sfx" );
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
