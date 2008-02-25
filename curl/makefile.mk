@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-21 09:26:36 $
+#   last change: $Author: obo $ $Date: 2008-02-25 14:03:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.a
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
-.IF "$(COMEX)"=="11"
+.IF "$(CCNUMVER)" > "001399999999"
 EXCFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
 .ELSE
 EXCFLAGS="/EHsc /YX"
