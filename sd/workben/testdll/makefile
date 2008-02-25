@@ -26,7 +26,7 @@ SLOFILES=	\
 #                $(SRS)\
 #                $(SOLARRESDIR)\
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 #SHL1LIBS=$(SLB)\$(TARGET).lib
 
 !IF "$(COM)"!="WTC"
