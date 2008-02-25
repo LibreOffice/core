@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:40:32 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:52:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
 SHL1OBJS = \
     $(SLO)$/ChartOASISTContext.obj \
     $(SLO)$/ChartOOoTContext.obj \
@@ -91,7 +91,7 @@ SHL1STDLIBS = \
     $(SALLIB) \
     $(TOOLSLIB)
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
-    SHL1STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
+    SHL1STDLIBS += -lxo$(DLLPOSTFIX)
 .ELSE
     SHL1STDLIBS += ixo.lib
 .ENDIF
