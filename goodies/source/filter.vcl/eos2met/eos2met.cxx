@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:10:44 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2634,7 +2634,6 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
         ByteString aResMgrName( "eme" );
         ResMgr* pResMgr;
 
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
