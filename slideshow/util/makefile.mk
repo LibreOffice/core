@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 15:22:33 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:44:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ TARGET2=slideshowtest
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=$(LIB1FILES)
 
-SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 SHL2IMPLIB=i$(TARGET2)
 SHL2STDLIBS= $(SHL1STDLIBS)
 
