@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.172 $
-# Date:        $Date: 2008-02-04 12:56:11 $
+# Version:     $Revision: 1.173 $
+# Date:        $Date: 2008-02-25 17:07:02 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
-     $UPD, $SOLARUPD, $WORK_STAMP, 
+     $UPD, $WORK_STAMP, 
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -1011,8 +1011,6 @@ if ( $platform =~ m/darwin/ )
    }
 }
 
-# Same as UPD, used in the buildproces.
-$SOLARUPD             = $UPD;
 # The project's workstamp.
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
@@ -1833,7 +1831,6 @@ ToFile( "DPKG",              "@DPKG@",           "e" );
 ToFile( "PKGMK",             "@PKGMK@",          "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "UPD",               $UPD,               "e" );
-ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
