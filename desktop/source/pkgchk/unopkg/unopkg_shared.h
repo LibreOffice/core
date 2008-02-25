@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_shared.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:25:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:50:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace unopkg {
 struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
 {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD() );
+        return ResMgr::CreateResMgr( "deployment" );
     }
 };
 // There is another gobal DeploymentGuiResMgr in the gui part of the Extension Manager.
@@ -58,7 +58,7 @@ struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMg
 struct DeploymentGuiResMgr :
     public ::rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
         ResMgr * operator () () {
-            return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
+            return ResMgr::CreateResMgr( "deploymentgui" );
     }
 };
 
