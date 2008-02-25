@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:28:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,12 @@
 #endif
 
 
-#define LLCF_DOSTRING( x )      #x
-#define LLCF_STRING( x )        LLCF_DOSTRING( x )
 #ifdef UNX
-// "libNAME603xy.so" (__DLLEXTENSION == "xy.so")
-#define LLCF_LIBNAME( name )    "lib" name LLCF_STRING( SUPD ) __DLLEXTENSION
+// "libNAMExy.so" (__DLLEXTENSION == "xy.so")
+#define LLCF_LIBNAME( name )    "lib" name __DLLEXTENSION
 #else
-// "NAME603xy.dll" (__DLLEXTENSION == "xy")
-#define LLCF_LIBNAME( name )    name LLCF_STRING( SUPD ) __DLLEXTENSION ".dll"
+// "NAMExy.dll" (__DLLEXTENSION == "xy")
+#define LLCF_LIBNAME( name )    name __DLLEXTENSION ".dll"
 #endif
 
 
