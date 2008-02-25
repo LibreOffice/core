@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 14:03:26 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:43:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -222,8 +222,6 @@ _VC_MANIFEST_BASENAME=__VC80
 CDEFS+=-DWINVER=0x0500 -D_WIN32_IE=0x0500
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
-
-# COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 
 LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
 LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
