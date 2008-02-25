@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 08:29:17 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:50:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ SLOFILES =	$(SLO)$/eppt.obj				\
             $(SLO)$/pptexanimations.obj		\
             $(SLO)$/pptexsoundcollection.obj
 
-SHL1TARGET	=	emp$(UPD)$(DLLPOSTFIX)
+SHL1TARGET	=	emp$(DLLPOSTFIX)
 SHL1IMPLIB	=	eppt
 SHL1VERSIONMAP=exports.map
 SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
