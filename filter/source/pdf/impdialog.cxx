@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:08:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -626,7 +626,6 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
                                            const SfxItemSet& rAttrSet)
 {
     ByteString aResMgrName( "pdffilter" );
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     return ( new  ImpPDFTabGeneralPage( pParent, rAttrSet, paResMgr ) );
 }
@@ -773,7 +772,6 @@ SfxTabPage*  ImpPDFTabOpnFtrPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
     ByteString aResMgrName( "pdffilter" );
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     return ( new  ImpPDFTabOpnFtrPage( pParent, rAttrSet, paResMgr ) );
 }
@@ -948,7 +946,6 @@ SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
     ByteString aResMgrName( "pdffilter" );
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     return ( new  ImpPDFTabViewerPage( pParent, rAttrSet, paResMgr ) );
 }
@@ -1051,7 +1048,6 @@ SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
     ByteString aResMgrName( "pdffilter" );
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     return ( new  ImpPDFTabSecurityPage( pParent, rAttrSet, paResMgr ) );
 }
@@ -1256,7 +1252,6 @@ SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
     ByteString aResMgrName( "pdffilter" );
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     ResMgr * paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     return ( new  ImpPDFTabLinksPage( pParent, rAttrSet, *paResMgr ) );
 }
