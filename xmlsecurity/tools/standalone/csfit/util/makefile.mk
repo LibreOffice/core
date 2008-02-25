@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:48:03 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:41:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJNAME=xmlsecurity
 TARGET=xmlsecurity-secfit-boot
 TARGETTYPE=GUI
 
-VERSION=$(UPD)
 GEN_HID=TRUE
 APP2NOSAL=TRUE
 
@@ -59,12 +58,12 @@ ALLTAR : $(BIN)$/boot_services.rdb
 
 REGISTERLIBS= \
     i18npool.uno$(DLLPOST) \
-    $(DLLPRE)tk$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+    $(DLLPRE)tk$(DLLPOSTFIX)$(DLLPOST) \
     $(DLLPRE)mcnttype$(DLLPOST)
     
-#	$(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-#	$(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-#	$(DLLPRE)tk$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+#	$(DLLPRE)i18n$(DLLPOSTFIX)$(DLLPOST) \
+#	$(DLLPRE)i18npool$(DLLPOSTFIX)$(DLLPOST) \
+#	$(DLLPRE)tk$(DLLPOSTFIX)$(DLLPOST) \
 #	$(DLLPRE)mcnttype$(DLLPOST)
 
 # Additional libraries
@@ -79,7 +78,7 @@ REGISTERLIBS+= \
 .IF "$(GUI)" == "UNX"
 MY_DLLDIR=$(SOLARLIBDIR)
 REGISTERLIBS+= \
-    $(DLLPRE)dtransX11$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+    $(DLLPRE)dtransX11$(DLLPOSTFIX)$(DLLPOST)
 
 .ELSE			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="WNT"
