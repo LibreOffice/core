@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:59:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2292,7 +2292,6 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
         ByteString  aResMgrName( "ept" );
         ResMgr* pResMgr;
 
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
