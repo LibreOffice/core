@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 19:08:31 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:58:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ LIB1FILES=		\
 #--------
 
 #Indicates the filename of the shared library.
-SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=		$(TARGET)$(DLLPOSTFIX)
 
 #indicates dependencies:
 .IF "$(COM)" == "MSC"
