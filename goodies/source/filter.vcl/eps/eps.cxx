@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:01:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,6 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         ByteString  aResMgrName( "eps" );
         ResMgr*     pResMgr;
 
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
@@ -455,7 +454,6 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     {
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         if( pResMgr )
         {
@@ -2762,7 +2760,6 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
 
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
         if( pResMgr )
