@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlmenucontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:16:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,6 @@ ControlMenuController::~ControlMenuController()
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
     rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
-    aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
 
     ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
     ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
@@ -497,7 +496,6 @@ void SAL_CALL ControlMenuController::setPopupMenu( const Reference< css::awt::XP
         {
             rtl::OStringBuffer aBuf( 32 );
             aBuf.append( "svx" );
-            aBuf.append( sal_Int32( SUPD ) );
 
             ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
             if ( pResMgr )
