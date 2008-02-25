@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 
 ResId SaneResId( sal_uInt32 nID )
 {
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" MAKE_NUMSTR(SUPD) );
+    static ResMgr* pResMgr = ResMgr::CreateResMgr( "san" );
     return ResId( nID, *pResMgr );
 }
 
