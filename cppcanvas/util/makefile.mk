@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:37:44 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:56:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ LIB1FILES=\
     $(SLB)$/metafilerenderer.lib	\
     $(SLB)$/cppcanvastools.lib
 
-SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
 SHL1STDLIBS=	$(TOOLSLIB) $(CPPULIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CANVASTOOLSLIB) $(CPPUHELPERLIB) $(BASEGFXLIB)
 
