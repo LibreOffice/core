@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:16:28 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:42:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-# CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
 APPSTDLIBS=\
             $(SALLIB) \
