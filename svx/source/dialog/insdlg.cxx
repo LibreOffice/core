@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:43:04 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ static String impl_getSvtResString( sal_uInt32 nId )
 {
     String aRet;
     com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    ResMgr* pMgr = ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME(svt), aLocale );
+    ResMgr* pMgr = ResMgr::CreateResMgr( "svt", aLocale );
     if( pMgr )
     {
         aRet = String( ResId( nId, *pMgr ) );
