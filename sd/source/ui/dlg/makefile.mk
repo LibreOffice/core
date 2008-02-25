@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 13:39:20 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:50:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -196,9 +196,9 @@ LIB2OBJFILES= \
 $(INCCOM)$/sduilib.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     $(RM) $@
-    echo \#define DLL_NAME \"libsdui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+    echo \#define DLL_NAME \"libsdui$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"sdui$(UPD)$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
+    echo $(EMQ)#define DLL_NAME $(EMQ)"sdui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
 .ENDIF
 
 $(SLO)$/sdabstdlg.obj : $(INCCOM)$/sduilib.hxx
