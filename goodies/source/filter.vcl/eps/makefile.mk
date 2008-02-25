@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:56:32 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:20:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SLOFILES =	$(SLO)$/eps.obj \
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
-SHL1TARGET= 	eps$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	eps$(DLLPOSTFIX)
 SHL1IMPLIB= 	eps
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
