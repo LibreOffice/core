@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:24:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,6 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 ::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, BOOL bSUPD )
 {
     // create variable library name suffixes
-    OUString aSUPDString( OUString::valueOf( (sal_Int32)SUPD, 10 ));
     OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLPOSTFIX) );
 
     OUString aLibName;
@@ -231,7 +230,6 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     aLibName = OUString::createFromAscii( pModName );
     if ( bSUPD )
     {
-        aLibName += aSUPDString;
         aLibName += aDLLSuffix;
     }
     aLibName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".dll" ));
@@ -240,7 +238,6 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     aLibName += OUString::createFromAscii( pModName );
     if ( bSUPD )
     {
-        aLibName += aSUPDString;
         aLibName += aDLLSuffix;
     }
 #ifdef MACOSX
