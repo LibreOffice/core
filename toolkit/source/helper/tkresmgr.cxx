@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkresmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:20:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@ void TkResMgr::ensureImplExists()
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
     ByteString sResMgrName( "tk" );
-    sResMgrName += ByteString::CreateFromInt32( (sal_Int32)SUPD );
 
     m_pSimpleResMgr = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
     m_pResMgr = ResMgr::CreateResMgr( sResMgrName.GetBuffer() );
