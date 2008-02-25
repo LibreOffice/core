@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-30 15:40:03 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:24:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 .ELSE
 
-SHL1TARGET= tfu$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= tfu$(DLLPOSTFIX)
 SHL1IMPLIB= itfu
 SHL1STDLIBS=\
             $(VCLLIB)     \
