@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:14:15 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:33:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Targets ------------------------------------------------------
 
-SHL1TARGET=		xmlfd$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=		xmlfd$(DLLPOSTFIX)
 SHL1IMPLIB=		i$(SHL1TARGET)
 
 SHL1VERSIONMAP= xmlfd.map
