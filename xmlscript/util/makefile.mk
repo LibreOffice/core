@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:37:19 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:53:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ LIB1FILES= \
         $(SLB)$/xmlflat_imexp.lib	\
         $(SLB)$/misc.lib
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1LIBS= \
         $(LIB1TARGET)
