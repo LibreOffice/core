@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:01:23 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1196,8 +1196,7 @@ void MyApp::Main()
     // Create/init/show app window.
     //////////////////////////////////////////////////////////////////////
 
-    ResMgr* pMgr = ResMgr::CreateResMgr(
-                                CREATEVERSIONRESMGR_NAME( ucbexplorer ) );
+    ResMgr* pMgr = ResMgr::CreateResMgr( CREATEVERSIONRESMGR( ucbexplorer ) );
     Resource::SetResManager( pMgr );
 
     UcbExplorerWindow aAppWin( 0, WB_APP | WB_STDWORK );
