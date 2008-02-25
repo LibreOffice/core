@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 14:49:50 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:05:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ LIB1FILES=\
 
 # --- dynamic library ---------------------------
 
-SHL1TARGET=	$(DBTOOLS_TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=	$(DBTOOLS_TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
