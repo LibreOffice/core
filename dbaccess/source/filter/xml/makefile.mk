@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-09 08:12:37 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:24:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ LIB1FILES=\
         $(SLB)$/fltshared.lib	\
         $(SLB)$/$(TARGET).lib
         
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
     $(XMLOFFLIB)		\
