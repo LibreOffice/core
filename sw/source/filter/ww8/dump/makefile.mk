@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:26:20 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:54:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=.
 
 PRJNAME=DUMP8
 TARGET=dump8
-VERSION=$(UPD)
 
 # --- Settings ---------------------------------------------------
 
@@ -94,30 +93,7 @@ APP1OBJS=	$(OBJ)$/dump8.obj $(OBJ)$/dump8a.obj $(OBJ)$/ww8dout.obj \
                $(OBJ)$/ww8darr.obj $(OBJ)$/ww8scan.obj $(OBJ)/msvbasic.obj
 
 APP1DEF=	$(MISC)$/$(PRJNAME).def
-#APP1RES=	 $(RES)$/$(PRJNAME).res
-#SRSFILES=	 $(SRS)$/main.srs
 
-#-------------------------------------------------------------------------
-#								Windows 3.x
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-ALL: \
-    ALLTAR
-
-$(MISC)$/$(PRJNAME).def: makefile
-    echo NAME		 VIEWER 										 >$@
-    echo  DESCRIPTION	'StarView - Testprogramm'                    >>$@
-    echo EXETYPE	 WINDOWS										 >>$@
-    echo PROTMODE													 >>$@
-    echo STUB		 'winSTUB.EXE'                                   >>$@
-    echo CODE		 PRELOAD MOVEABLE DISCARDABLE					 >>$@
-    echo DATA		 PRELOAD MULTIPLE MOVEABLE						 >>$@
-    echo HEAPSIZE	 4096											 >>$@
-    echo STACKSIZE	 30000											 >>$@
-
-.ENDIF # GUI == WIN
 
 #-------------------------------------------------------------------------
 #										OS/2
