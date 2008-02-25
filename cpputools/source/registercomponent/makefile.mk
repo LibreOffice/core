@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 13:12:25 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:26:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ UNOTYPES=\
             com.sun.star.registry.XImplementationRegistration2
 
 # --- Files --------------------------------------------------------
-CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
 
 DEPOBJFILES=   $(OBJ)$/registercomponent.obj 
 
