@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:05:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ BibResId::BibResId( sal_uInt16 nId ) :
 BibConfig* BibModul::pBibConfig = 0;
 BibModul::BibModul()
 {
-    pResMgr = ResMgr::CreateResMgr( "bib" MAKE_NUMSTR(SUPD) );
+    pResMgr = ResMgr::CreateResMgr( "bib" );
 }
 
 BibModul::~BibModul()
