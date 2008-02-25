@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:00:50 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:42:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ $(RSC_MULTI$(TNR)) : \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)$/$(RSCDEFIMG)$/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}$/$i \
     -lip={$j} ) \
     -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res$/$i -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res ) \
@@ -80,7 +80,7 @@ $(RSC_MULTI$(TNR)) : \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs={$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
+    -fs={$(BIN)$/$(RESLIB$(TNR)NAME)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)$/$(RSCDEFIMG)$/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}$/$i \
     -lip={$j} ) \
     -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res$/$i -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res ) \
