@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:29:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:40:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         // determine the filename of the license to show
         OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
-        OString aMgrName = OString("fwe") + OString::valueOf((sal_Int32)SUPD, 10);
+        OString aMgrName = OString("fwe");
         AllSettings aSettings(Application::GetSettings());
         aLocale = aSettings.GetUILocale();
         ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
