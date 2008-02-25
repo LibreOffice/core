@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: hjs $ $Date: 2007-12-07 17:06:25 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:42:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,12 @@ SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
+SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/$(SHL$(TNR)VERSIONOBJ:b).h
 .IF "$(GUI)" == "UNX"
-SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
+SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
+SHL$(TNR)VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL$(TNR)VERSIONOBJ:b).h
 #    $(COPY) $(SOLARENV)$/src$/version.c $@
