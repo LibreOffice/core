@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:33:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,6 @@ void BasicIDEDLL::Init()
     (void)pFact;
 
     ByteString aResMgrName( "basctl" );
-    aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     ResMgr* pMgr = ResMgr::CreateResMgr(
         aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
