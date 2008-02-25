@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:57:07 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:21:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ SLOFILES =	$(SLO)$/etiff.obj
 
 # ==========================================================================
 
-SHL1TARGET= 	eti$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	eti$(DLLPOSTFIX)
 SHL1IMPLIB= 	etiff
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB) $(SVTOOLLIB)
 SHL1LIBS=		$(SLB)$/etiff.lib

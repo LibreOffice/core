@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:58:32 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:22:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ SLOFILES =  $(SLO)$/ipcd.obj
 
 # ==========================================================================
 
-SHL1TARGET=     icd$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=     icd$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
 SHL1STDLIBS=    $(SVTOOLLIB) $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
