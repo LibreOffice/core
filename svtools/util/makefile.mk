@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:47:25 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:04:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TARGET=svtool
 RESTARGET=svt
 RESTARGETPATCH=svp
 RESTARGETSIMPLE=svs
-VERSION=$(UPD)
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
@@ -129,7 +128,7 @@ RESLIB3SRSFILES= \
 
 # build the shared library  --------------------------------------------------
 
-SHL1TARGET= svt$(VERSION)$(DLLPOSTFIX)
+SHL1TARGET= svt$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
 SHL1USE_EXPORTS=ordinal
 
@@ -189,7 +188,7 @@ DEF1DES 	=SvTools
 
 # --- svtools lite --------------------------------------------------
 
-SHL2TARGET= svl$(VERSION)$(DLLPOSTFIX)
+SHL2TARGET= svl$(DLLPOSTFIX)
 SHL2IMPLIB= _isvl
 SHL2USE_EXPORTS=ordinal
 #Do not link with VCL or any other library that links with VCL
@@ -232,8 +231,8 @@ APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
 .IF "$(GUI)"!="UNX"
 APP1STDLIBS+= $(SVTOOLLIB)
 .ELSE
-APP1STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
-APP1STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
+APP1STDLIBS+= -lsvt$(DLLPOSTFIX)
+APP1STDLIBS+= -lsvl$(DLLPOSTFIX)
 .ENDIF # UNX
 
 APP1STDLIBS+=	\
@@ -253,8 +252,8 @@ APP2OBJS	=   $(OBJ)$/g2g.obj
 .IF "$(GUI)"!="UNX"
 APP2STDLIBS+= $(SVTOOLLIB)
 .ELSE
-APP2STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
-APP2STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
+APP2STDLIBS+= -lsvt$(DLLPOSTFIX)
+APP2STDLIBS+= -lsvl$(DLLPOSTFIX)
 .ENDIF
 
 APP2STDLIBS+=	$(VCLLIB)		\
