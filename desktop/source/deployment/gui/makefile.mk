@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-27 15:35:34 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:48:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ SLOFILES = \
         $(SLO)$/dp_gui_addextensionqueue.obj \
         $(SLO)$/descedit.obj
 
-SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
 
 SHL1STDLIBS = \
