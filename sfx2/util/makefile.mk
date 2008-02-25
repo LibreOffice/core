@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 16:04:38 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ LIB2TARGET= $(LB)$/$(TARGET).lib
 LIB2FILES=  $(LB)$/isfx.lib
 .ENDIF
 
-SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= sfx$(DLLPOSTFIX)
 SHL1IMPLIB= isfx
 SHL1USE_EXPORTS=ordinal
 
@@ -145,7 +145,7 @@ PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
 CFLAGS+=$(PKGCONFIG_CFLAGS)
 
-SHL3TARGET=qstart_gtk$(UPD)$(DLLPOSTFIX)
+SHL3TARGET=qstart_gtk$(DLLPOSTFIX)
 SHL3LIBS=$(SLB)$/quickstart.lib
 SHL3DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for gtk plugin
