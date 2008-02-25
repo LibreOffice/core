@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 15:21:19 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:44:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ SHL1STDLIBS= 	$(SALLIB)		 \
 .IF "$(OS)"=="WNT"
     SHL1STDLIBS+=$(LIBPRE) islideshowtest.lib
 .ELSE
-    SHL1STDLIBS+=-lslideshowtest$(UPD)$(DLLPOSTFIX)
+    SHL1STDLIBS+=-lslideshowtest$(DLLPOSTFIX)
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
