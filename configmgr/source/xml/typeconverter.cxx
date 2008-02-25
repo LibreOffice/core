@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:41:55 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,10 +321,6 @@ namespace configmgr
 
         if ( pSequenceTD && pSequenceTD->pType )
         {
-            // SUPD expects a decimal constant, hence,
-            // build version comparison is made using
-            // a decimal number
-
             return uno::Type(pSequenceTD->pType);
         } //if
 
