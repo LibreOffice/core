@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.213 $
+ *  $Revision: 1.214 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 17:27:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,6 @@ ResMgr* Desktop::GetDesktopResManager()
     if ( !Desktop::pResMgr )
     {
         String aMgrName = String::CreateFromAscii( "dkt" );
-        aMgrName += String::CreateFromInt32(SUPD); // current version number
 
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
@@ -1631,13 +1630,11 @@ void Desktop::Main()
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
         String aMgrName = String::CreateFromAscii( "iso" );
-        aMgrName += String::CreateFromInt32(SUPD); // current build version
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
         if ( !pLabelResMgr )
         {
             // no "iso" resource -> search for "ooo" resource
             aMgrName = String::CreateFromAscii( "ooo" );
-            aMgrName += String::CreateFromInt32(SUPD); // current build version
             pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
