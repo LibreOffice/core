@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:05:20 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:54:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ Window* ImplGetDefaultWindow()
 
 // -----------------------------------------------------------------------
 
-#define VCL_CREATERESMGR_NAME( Name )   #Name MAKE_NUMSTR( SUPD )
+#define VCL_CREATERESMGR_NAME( Name )   #Name
 
 ResMgr* ImplGetResMgr()
 {
