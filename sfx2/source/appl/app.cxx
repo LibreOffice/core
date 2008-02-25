@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:17:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,7 +620,6 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
     String aMgrName = String::CreateFromAscii( pPrefix );
-    aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
     return ResMgr::CreateResMgr(U2S(aMgrName));
 }
 
