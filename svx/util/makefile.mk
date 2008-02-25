@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:20:40 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:21:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ LIB4FILES=\
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
 # svx
-SHL1TARGET= svx$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= svx$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 SHL1USE_EXPORTS=ordinal
 
@@ -145,7 +145,7 @@ DEFLIB1NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
 
 
 # cui
-SHL2TARGET= cui$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= cui$(DLLPOSTFIX)
 SHL2VERSIONMAP= cui.map
 SHL2IMPLIB=icui
 SHL2DEPN=$(SHL1TARGETN)
