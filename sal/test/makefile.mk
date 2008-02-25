@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:04:45 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:45:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ $(BIN)$/bootstraptest.ini : bootstraptest.ini
 
 
 # --- SO2-Filter-Datei ---
-$(MISC)$/tsl$(UPD)$(DLLPOSTFIX).flt:
+$(MISC)$/tsl$(DLLPOSTFIX).flt:
     @echo ------------------------------
     @echo Making: $@
     @echo WEP>$@
