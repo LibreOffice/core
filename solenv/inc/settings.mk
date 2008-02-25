@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.225 $
+#   $Revision: 1.226 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 13:09:22 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:42:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -677,9 +677,6 @@ PROCESSOUT*=$(MISC)
 
 # Makros fuer die Librarynamen des Solar
 .INCLUDE .IGNORE : office.mk
-.IF "$(OFFICEUPD)"==""
-OFFICEUPD*:=$(UPD)
-.ENDIF			# "$(OFFICEUPD)"==""
 .INCLUDE : libs.mk
 
 .IF "$(GUI)"=="WNT"
@@ -830,10 +827,6 @@ SCPCDEFS+=-D_STLP_DEBUG
 SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 .ENDIF			# "$(UDK_MAJOR)"!=""
 
-.IF "$(OFFICEUPD)"!=""
-SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
-.ENDIF			# "$(OFFICEUPD)"!=""
-
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
@@ -938,7 +931,7 @@ RSCUPDVER=$(RSCREVISION)
 RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
-RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) $(JAVADEF)
+RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) $(JAVADEF)
 
 .IF "$(BUILD_SPECIAL)"!=""
 RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
