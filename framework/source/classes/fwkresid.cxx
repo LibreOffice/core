@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkresid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:15:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ ResMgr* FwkResId::GetResManager()
     {
         rtl::OStringBuffer aBuf( 32 );
         aBuf.append( "fwe" );
-        aBuf.append( sal_Int32( SUPD ) );  // current version number
 
         vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
