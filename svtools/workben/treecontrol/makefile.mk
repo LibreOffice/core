@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-13 14:16:34 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:04:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,4 +96,4 @@ $(BIN)$/treetest.rdb : makefile.mk $(UNOUCRRDB)
             -c remotebridge.uno$(DLLPOST) \
             -c bridgefac.uno$(DLLPOST) \
             -c uuresolver.uno$(DLLPOST) \
-            -c $(DLLPRE)tk$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+            -c $(DLLPRE)tk$(DLLPOSTFIX)$(DLLPOST)
