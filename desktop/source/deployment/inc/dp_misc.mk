@@ -4,9 +4,9 @@
 #
 #   $RCSfile: dp_misc.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:38:48 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:48:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@
 # some C++ functionality:
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "GCC"
-DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
+DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
 .ELSE
-DEPLOYMENTMISCLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX).lib
+DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
 .ENDIF
 .ELIF "$(OS)" == "OS2"
-DEPLOYMENTMISCLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX).lib
+DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
 .ELSE
-DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
+DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
 .ENDIF
