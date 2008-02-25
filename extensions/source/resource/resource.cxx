@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:02:30 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,7 +397,6 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
         OGuard aGuard( Application::GetSolarMutex() );
         OStringBuffer aBuf( aName.getLength()+8 );
         aBuf.append( OUStringToOString( aName, osl_getThreadTextEncoding() ) );
-        aBuf.append( sal_Int32(SUPD) );
         ResMgr * pRM = ResMgr::CreateResMgr( aBuf.getStr() );
         if( !pRM )
             throw InvocationTargetException();
