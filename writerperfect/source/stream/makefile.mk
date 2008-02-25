@@ -8,8 +8,6 @@ ENABLE_EXCEPTIONS=true
 
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 INCPRE+=$(LIBWPD_CFLAGS)
-.ELSE
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
 .ENDIF
 
 # broken but ... necessary, internal include shafted ...

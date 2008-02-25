@@ -10,7 +10,7 @@ ENABLE_EXCEPTIONS=true
 INCPRE+=$(LIBWPD_CFLAGS) -I..
 .ELSE
 # broken but ... necessary, internal include shafted ...
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd -I..
+INCPRE+=-I..
 .ENDIF
 
 SLOFILES= \
