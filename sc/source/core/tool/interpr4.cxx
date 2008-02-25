@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:13:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3036,7 +3036,7 @@ int main()
 
                         StartInvader_Type *StartInvader = (StartInvader_Type *) osl_getFunctionSymbol( m_tfu, rtl::OUString::createFromAscii("StartInvader").pData );
                         if ( StartInvader )
-                            StartInvader( Application::GetDefDialogParent(), ResMgr::CreateResMgr( "tfu" MAKE_NUMSTR(SUPD) ));
+                            StartInvader( Application::GetDefDialogParent(), ResMgr::CreateResMgr( "tfu" ));
                     }
                     break;
                     case SC_GAME_FROGGER :
