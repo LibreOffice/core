@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:37:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@ ResMgr* GetGalleryResMgr()
     if( !pGalleryResMgr )
     {
         ByteString aResMgrName( "gal" );
-        aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
         pGalleryResMgr = ResMgr::CreateResMgr(
             aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     }
