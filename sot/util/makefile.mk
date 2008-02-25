@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-11 20:53:53 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:26:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,15 @@ TARGET=sot
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 .IF "$(GUI)$(COM)"=="WNTGCC"
-LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX)_static.a
+LIB1ARCHIV= $(LB)$/lib$(TARGET)$(DLLPOSTFIX)_static.a
 .ELSE
-LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX).a
+LIB1ARCHIV= $(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 .ENDIF
 LIB1FILES=	$(SLB)$/base.lib \
             $(SLB)$/sdstor.lib \
             $(SLB)$/unoolestorage.lib
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= $(TARGET)
 SHL1USE_EXPORTS=ordinal
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
