@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-29 14:46:32 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:29:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SLOFILES=	$(SLO)$/swffilter.obj								\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 # static libraries must come at the end for MACOSX
 .IF "$(OS)" != "MACOSX"
