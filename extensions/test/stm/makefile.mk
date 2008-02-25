@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:42:22 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:36:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 OBJFILES=	 $(SLO)$/pipetest.obj  $(SLO)$/testfactreg.obj $(SLO)$/datatest.obj \
                     $(SLO)$/marktest.obj
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 LIB1TARGET= $(SLB)$/$(TARGET).lib	
 
 SHL1STDLIBS= \
