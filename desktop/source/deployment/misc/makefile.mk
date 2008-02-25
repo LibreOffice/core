@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:39:06 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:48:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ SRC1FILES = \
 .IF "$(GUI)"=="OS2"
 SHL1TARGET = $(TARGET)
 .ELSE
-SHL1TARGET = deploymentmisc$(UPD)$(DLLPOSTFIX)
+SHL1TARGET = deploymentmisc$(DLLPOSTFIX)
 .ENDIF
 SHL1OBJS = \
         $(SLO)$/dp_misc.obj \
@@ -87,7 +87,7 @@ SHL1STDLIBS = \
     $(UNOTOOLSLIB) \
     $(XMLSCRIPTLIB)
 .IF "$(GUI)"=="OS2"
-SHL1IMPLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB = ideploymentmisc$(DLLPOSTFIX)
 LIB1TARGET = $(SLB)$/_deplmisc.lib
 LIB1OBJFILES = $(SHL1OBJS)
 DEFLIB1NAME = _deplmisc
