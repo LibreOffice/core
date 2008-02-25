@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.273 $
+ *  $Revision: 1.274 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:55:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 14:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2117,12 +2117,8 @@ File gid_File_Lib_Stlport
   #endif
   #endif
   #else
-  #ifdef M1310
+  #if defined(M1310) || defined(M1400) || defined(M1500)
     Name = STRING(CONCAT3(stlport_,vc71_stldebug45,.dll));
-  #elif defined(M1400) || defined(M1500)
-    Name = STRING(CONCAT3(stlport_,vc8_stldebug45,.dll));
-  #else
-    Name = STRING(CONCAT3(stlport_,vc7_stldebug,.dll));
   #endif
   #endif
   #else
@@ -2141,15 +2137,11 @@ File gid_File_Lib_Stlport
   #endif
   #endif
   #else
-  #ifdef M1310
+  #if defined(M1310) || defined(M1400) || defined(M1500)
     Name = STRING(CONCAT3(stlport_,vc7145,.dll));
-  #elif defined(M1400) || defined(M1500)
-    Name = STRING(CONCAT3(stlport_,vc845,.dll));
   #else
    #if defined(_gcc3)
     Name = STRING(CONCAT3(libstlport_,gcc,.dll));
-   #else
-    Name = STRING(CONCAT3(stlport_,vc745,.dll));
    #endif
   #endif
   #endif
