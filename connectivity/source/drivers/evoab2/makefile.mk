@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:58:18 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:06:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ SHL1VERSIONMAP=$(TARGET).map
 
 
 # --- Library -----------------------------------
-#SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+#SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1TARGET=	$(EVOAB_TARGET)2
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -99,7 +99,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)
 
 .IF "$(DBFILELIB)" == ""
-SHL1STDLIBS+= ifile$(UPD).lib
+SHL1STDLIBS+= ifile.lib
 .ENDIF
 SHL1STDLIBS+=$(GOBJECT_LIBS)
 
