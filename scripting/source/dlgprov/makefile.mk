@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-14 07:10:30 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:27:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ SLOFILES= \
         $(SLO)$/dlgprov.obj \
         $(SLO)$/dlgevtatt.obj
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX).uno
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
 SHL1IMPLIB=	i$(TARGET)
 
 SHL1VERSIONMAP=$(TARGET).map
