@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:24:27 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:24:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ LIB1FILES=\
     $(SLB)$/graphic.lib \
     $(SLB)$/unographic.lib	
 
-SHL1TARGET= go$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= go$(DLLPOSTFIX)
 SHL1IMPLIB= igo
 
 SHL1STDLIBS=\
