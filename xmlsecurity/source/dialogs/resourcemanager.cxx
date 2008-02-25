@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:16:35 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ namespace XmlSec
         if( !pResMgr )
         {
             ByteString  aName( "xmlsec" );
-            aName += ByteString::CreateFromInt32( SOLARUPD );
 //          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 //          LanguageType    aLang( LANGUAGE_ENGLISH_US );
 //          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
