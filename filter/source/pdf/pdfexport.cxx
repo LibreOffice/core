@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:16:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if ( mxStatusIndicator.is() )
                 {
                     ByteString aResMgrName( "pdffilter" );
-                    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
                     ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
                     if ( pResMgr )
                     {
