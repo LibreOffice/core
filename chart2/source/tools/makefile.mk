@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 12:09:03 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:58:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ DISABLED_SLOFILES=	\
 #--------
 
 #Indicates the filename of the shared library.
-SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=		$(TARGET)$(DLLPOSTFIX)
 
 #indicates dependencies:
 SHL1DEPN=
