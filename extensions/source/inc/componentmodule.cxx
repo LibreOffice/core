@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,6 @@ namespace COMPMOD_NAMESPACE
             DBG_ASSERT(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
             ByteString aMgrName = m_sFilePrefix;
-            aMgrName += ByteString::CreateFromInt32(SOLARUPD); // current build number
 
             m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
             DBG_ASSERT(m_pRessources,
