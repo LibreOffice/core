@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:26:46 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:28:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ COMP1TYPELIST=$(TARGET)
 SLOFILES=\
         $(SLO)$/scripthandler.obj\
 
-SHL1TARGET=	$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SFXLIB)    \
