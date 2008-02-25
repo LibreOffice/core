@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 15:03:22 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:23:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ EXCEPTIONSNOOPTFILES=	$(SLO)$/itiff.obj
 
 # ==========================================================================
 
-SHL1TARGET=     iti$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=     iti$(DLLPOSTFIX)
 SHL1IMPLIB=     itiff
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
