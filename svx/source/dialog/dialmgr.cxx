@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:00:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,6 @@ ResMgr* DialogsResMgr::GetResMgr()
     if ( !pResMgr )
     {
         ByteString aName( "svx" );
-        INT32 nSolarUpd(SOLARUPD);
-        aName += ByteString::CreateFromInt32( nSolarUpd );
         pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
     }
 
