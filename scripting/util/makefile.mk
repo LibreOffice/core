@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:40:18 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:28:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,6 @@ TARGET=scriptframe
 USE_DEFFILE=    TRUE
 NO_BSYMBOLIC=   TRUE
 
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -52,9 +50,7 @@ LIB1TARGET=	 $(SLB)$/$(TARGET).lib
 LIB1FILES=   $(SLB)/provider.lib
 
 
-#SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
 SHL1TARGET= $(TARGET)
-#SHL1IMPLIB= isfx
 SHL1IMPLIB= $(TARGET)
 
 SHL1STDLIBS+=\
@@ -66,7 +62,6 @@ SHL1STDLIBS+=\
     $(SALLIB)
 
 
-#SHL1LIBS=   $(LIB1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
