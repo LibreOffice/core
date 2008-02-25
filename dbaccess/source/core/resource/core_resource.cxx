@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:43:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ namespace dbaccess
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
         ByteString sFileName("dba");
-        sFileName += ByteString::CreateFromInt32( (sal_Int32)SOLARUPD );
 
         m_pImpl = SimpleResMgr::Create(sFileName.GetBuffer(), aLocale);
 
