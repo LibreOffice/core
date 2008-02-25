@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:55:11 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:14:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SLOFILES= 	$(SLO)$/egif.obj		\
 RESLIB1NAME=$(TARGET2)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
-SHL1TARGET=     egi$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=     egi$(DLLPOSTFIX)
 SHL1IMPLIB=     egif
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
 
