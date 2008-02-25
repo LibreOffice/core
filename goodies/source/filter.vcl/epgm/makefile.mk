@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:55:56 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:17:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ SLOFILES =	$(SLO)$/epgm.obj \
 RESLIB1NAME=$(TARGET2)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
-SHL1TARGET= 	epg$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	epg$(DLLPOSTFIX)
 SHL1IMPLIB= 	epgm
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
 
