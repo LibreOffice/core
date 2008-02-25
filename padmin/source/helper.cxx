@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:20:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,8 +129,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
                 aLocale.Variant = aLoc.getToken( 0, '-', nIndex );
             }
         }
-//      pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), nLang );
-        pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), aLocale );
+        pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
         AllSettings aSettings = Application::GetSettings();
 //        aSettings.SetUILanguage( nLang );
         aSettings.SetUILocale( aLocale );
