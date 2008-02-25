@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-04 15:48:00 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:50:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SHL1OBJS=   $(SLOFILES) \
             $(SLO)$/cfgfilter.obj
 
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(TARGET)
 
 SHL1VERSIONMAP=exports.map
