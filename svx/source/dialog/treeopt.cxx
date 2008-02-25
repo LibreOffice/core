@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:27:30 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -993,13 +993,11 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aTreeLB.SetNodeDefaultImages();
 
     String sResName = String::CreateFromAscii( "iso" );
-    sResName += String::CreateFromInt32(SOLARUPD); // current version
     ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
     if ( !pIsoRes )
     {
         // Fallback: Use ooo resource file
         String sOOoName = String::CreateFromAscii( "ooo" );
-        sOOoName += String::CreateFromInt32(SOLARUPD); // current version
         pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sOOoName, RTL_TEXTENCODING_UTF8 ) );
     }
 
