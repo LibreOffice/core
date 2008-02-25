@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-04 09:06:44 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:31:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ SLOFILES=	$(SLO)$/pdfuno.obj			\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
     $(SVTOOLLIB)		\
