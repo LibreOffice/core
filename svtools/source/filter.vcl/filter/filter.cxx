@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:17:17 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,7 +788,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     ByteString  aResMgrName( "svt", 3 );
     ResMgr*     pResMgr;
 
-    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ), 0 );
