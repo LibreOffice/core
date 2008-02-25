@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:25:01 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:29:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ LIB1FILES=	$(SLB)$/fontman.lib			\
             $(SLB)$/fontsubset.lib 		\
             $(SLB)$/gfx.lib
 
-SHL1TARGET= psp$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= psp$(DLLPOSTFIX)
 SHL1IMPLIB= ipsp
 SHL1LIBS=$(LIB1FILES)
 
