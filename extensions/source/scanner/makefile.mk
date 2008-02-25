@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:27:45 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:34:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ RESLIB1IMAGES=$(PRJ)$/source$/scanner
 RESLIB1SRSFILES= $(SRS)$/scn.srs
 RESLIB1DEPN= sanedlg.src sanedlg.hrc grid.src grid.hrc
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
