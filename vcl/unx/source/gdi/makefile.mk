@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2008-02-12 14:07:02 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:55:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ CFLAGS+=-DXRENDER_LINK
 
 ALLTAR : $(MACOSXRC)
 
-XSALSETLIBNAME=$(DLLPRE)spa$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+XSALSETLIBNAME=$(DLLPRE)spa$(DLLPOSTFIX)$(DLLPOST)
 
 $(INCCOM)$/rtsname.hxx:
     rm -f $(INCCOM)$/rtsname.hxx ; \
