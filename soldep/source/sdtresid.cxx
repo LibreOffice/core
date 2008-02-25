@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtresid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:39:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ SolDevDll::SolDevDll()
     *(SolDevDll**)GetAppData( SHL_SCH ) = this;
 
     ByteString aResMgrName( "dep" );
-    aResMgrName += ByteString::CreateFromInt64( SUPD );
 
     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(),
             Application::GetSettings().GetUILocale() );
