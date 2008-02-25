@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.274 $
+ *  $Revision: 1.275 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 14:04:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,9 @@ File gid_File_Lib_Basprov
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(basprov,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(basprov,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT4(basprov,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -569,7 +569,7 @@ File gid_File_Lib_Egg_Tray
  TXT_FILE_BODY;
  Styles = (PACKED,PATCH);
  Dir = gid_Dir_Program;
- Name = STRING(CONCAT4(libeggtray,OFFICEUPD,DLLPOSTFIX,UNXSUFFIX));
+ Name = STRING(CONCAT3(libeggtray,DLLPOSTFIX,UNXSUFFIX));
 End
 
 File gid_File_Lib_QStart_Gtk
@@ -680,9 +680,9 @@ File gid_File_Lib_Dlgprov
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(dlgprov,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(dlgprov,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT4(dlgprov,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -692,9 +692,9 @@ File gid_File_Lib_Stringresource
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(stringresource,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(stringresource,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(stringresource,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT4(stringresource,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -707,9 +707,9 @@ File gid_File_Lib_Vbaobj
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT5(libvbaobj,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(libvbaobj,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(vbaobj,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT4(vbaobj,DLLPOSTFIX,.uno,.dll));
   #endif
 End
 
@@ -1189,9 +1189,9 @@ End
 File gid_File_Lib_J
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT6(lib,j,SUPD,DLLPOSTFIX,_g,UNXSUFFIX));
+    Name = STRING(CONCAT5(lib,j,DLLPOSTFIX,_g,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT5(j,SUPD,DLLPOSTFIX,_g,.dll));
+    Name = STRING(CONCAT4(j,DLLPOSTFIX,_g,.dll));
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1732,18 +1732,18 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pdffilter, pdffilter)
 
 File gid_File_Lib_Deployment
 #if defined UNX
-    Name = STRING(CONCAT5(deployment,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(deployment,DLLPOSTFIX,.uno,UNXSUFFIX));
 #else
-    Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLPOSTFIX,.uno.dll));
+    Name = STRING(CONCAT3(deployment,DLLPOSTFIX,.uno.dll));
 #endif
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 File gid_File_Lib_DeploymentGui
 #if defined UNX
-    Name = STRING(CONCAT5(deploymentgui,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT4(deploymentgui,DLLPOSTFIX,.uno,UNXSUFFIX));
 #else
-    Name = STRING(CONCAT4(deploymentgui,OFFICEUPD,DLLPOSTFIX,.uno.dll));
+    Name = STRING(CONCAT3(deploymentgui,DLLPOSTFIX,.uno.dll));
 #endif
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
@@ -2214,9 +2214,9 @@ File gid_File_Lib_Sysdtrans
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef QUARTZ
-      Name = STRING(CONCAT4(libdtransaqua,SUPD,DLLPOSTFIX,UNXSUFFIX));
+      Name = STRING(CONCAT3(libdtransaqua,DLLPOSTFIX,UNXSUFFIX));
     #else
-      Name = STRING(CONCAT4(libdtransX11,SUPD,DLLPOSTFIX,UNXSUFFIX));
+      Name = STRING(CONCAT3(libdtransX11,DLLPOSTFIX,UNXSUFFIX));
     #endif
   #else
     Name = "sysdtrans.dll";
