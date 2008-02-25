@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:34:59 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:30:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ SLOFILES        = \
     $(SLO)$/sdtresid.obj		\
     $(SLO)$/objwin.obj
 
-SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET	=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB	=$(TARGET)
 SHL1LIBS	=$(SLB)$/$(TARGET).lib \
             $(SLB)$/bootstrpdt.lib
