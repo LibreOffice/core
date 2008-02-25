@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:29:00 $
+#   last change: $Author: obo $ $Date: 2008-02-25 14:03:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -299,11 +299,11 @@ STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBSTLPORT=stlport_vc8_stldebug.lib
-LIBSTLPORTST=stlport_vc8_stldebug_static.lib
+LIBSTLPORT=stlport_vc71_stldebug.lib
+LIBSTLPORTST=stlport_vc71_stldebug_static.lib
 .ELSE
-LIBSTLPORT=stlport_vc8.lib
-LIBSTLPORTST=stlport_vc8_static.lib
+LIBSTLPORT=stlport_vc71.lib
+LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
 .IF "$(PROF_EDITION)" == ""
