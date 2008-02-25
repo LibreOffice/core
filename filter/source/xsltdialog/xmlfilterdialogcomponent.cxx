@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterdialogcomponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:34:12 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:34:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,6 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
     {
         ByteString aResMgrName( "xsltdlg" );
 
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     }
 
