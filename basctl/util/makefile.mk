@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 08:46:54 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:57:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ GEN_HID_OTHER=TRUE
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
-SHL1TARGET= basctl$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= basctl$(DLLPOSTFIX)
 SHL1IMPLIB= basctl
 SHL1BASE  = 0x1d800000
 SHL1STDLIBS= \
