@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:43:19 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:49:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ SLOFILES =	$(SLO)$/acceptor.obj
 SHL1DEPN=	makefile.mk
 SHL1OBJS=	$(SLOFILES)
 
-SHL1TARGET=	$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)
 
 SHL1VERSIONMAP=exports.map
