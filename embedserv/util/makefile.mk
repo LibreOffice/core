@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:59:21 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:05:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ USE_DEFFILE=TRUE
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
-SHL1TARGET= emser$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= emser$(DLLPOSTFIX)
 
 SHL1IMPLIB= emserimp
 SHL1OBJS= \
