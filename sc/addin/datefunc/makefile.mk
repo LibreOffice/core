@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:32:39 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:10:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SLOFILES= \
 
 # ==========================================================================
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 SHL1OBJS=   $(SLO)$/x$(TARGET).obj
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
