@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 13:00:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 #define LIBRARY_STR(s)      # s
 #define LIBRARY_STRING(s)   LIBRARY_STR(s)
-#define LIBRARY_SOLARUPD()  LIBRARY_STRING(SUPD)
 
 #define GETFUNCTION( s ) GetFunction( s )
 #define LIBRARY_CONCAT3( s1, s2, s3 ) \
@@ -434,30 +433,30 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 #if defined WIN || defined WNT || defined OS2
 #define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT4( Base, LIBRARY_SOLARUPD(), __DLLEXTENSION, ".DLL" )
+    LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
 #define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT4( Base, LIBRARY_SOLARUPD(), Lang, ".DLL" )
+    LIBRARY_CONCAT3( Base, Lang, ".DLL" )
 #elif defined UNX
 #define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT4( "lib", Base, LIBRARY_SOLARUPD(), __DLLEXTENSION )
+    LIBRARY_CONCAT3( "lib", Base, __DLLEXTENSION )
 #define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT4( "lib", Base, LIBRARY_SOLARUPD(), Lang )
+    LIBRARY_CONCAT3( "lib", Base, Lang )
 #else
 #define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT3( Base, LIBRARY_SOLARUPD(), __DLLEXTENSION )
+    LIBRARY_CONCAT2( Base, __DLLEXTENSION )
 #define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT3( Base, LIBRARY_SOLARUPD(), Lang )
+    LIBRARY_CONCAT2( Base, Lang )
 #endif
 
 #if defined MACOSX
 #define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT3( str, LIBRARY_SOLARUPD(), __DLLEXTENSION )
+    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
 #elif defined UNX
 #define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT3( str, LIBRARY_SOLARUPD(), __DLLEXTENSION )
+    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
 #else
 #define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT4( str, LIBRARY_SOLARUPD(), __DLLEXTENSION, ".dll" )
+    LIBRARYFILENAME_CONCAT3( str, __DLLEXTENSION, ".dll" )
 #endif
 
 #endif  /* _SOLAR_H */
