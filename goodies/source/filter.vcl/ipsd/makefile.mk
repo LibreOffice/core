@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:59:05 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:23:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ SLOFILES =	$(SLO)$/ipsd.obj
 
 # ==========================================================================
 
-SHL1TARGET= 	ipd$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	ipd$(DLLPOSTFIX)
 SHL1IMPLIB= 	ipsd
 SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=		$(SLB)$/ipsd.lib
