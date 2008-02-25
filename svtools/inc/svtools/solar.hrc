@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:46:48 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 17:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,8 @@
 
 // defines ------------------------------------------------------------------
 
-#define CREATERESMGR_NAME( Name )   #Name MAKE_NUMSTR( SUPD )
+#define CREATERESMGR_NAME( Name )   #Name
 #define CREATERESMGR( Name )        ResMgr::CreateResMgr( CREATERESMGR_NAME( Name ) )
-
-#define SOLARUPD                    SUPD
 
 #define RID_SFX_START               260
 #define RID_SFX_END                 9999
