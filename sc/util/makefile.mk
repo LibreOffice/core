@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:29:10 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:12:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ RESLIB1SRSFILES=\
 
 # --- StarClac DLL
 
-SHL1TARGET= sc$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= sc$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= sci
 
@@ -159,7 +159,7 @@ LIB4FILES=	\
     $(SLB)$/ftools.lib \
     $(SLB)$/scflt.lib
 
-SHL2TARGET= scd$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= scd$(DLLPOSTFIX)
 SHL2IMPLIB= scdimp
 SHL2VERSIONMAP= scd.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
@@ -183,7 +183,7 @@ SHL2DEPN+=	makefile.mk
 
 
 # add for scui
-SHL8TARGET= scui$(UPD)$(DLLPOSTFIX)
+SHL8TARGET= scui$(DLLPOSTFIX)
 SHL8IMPLIB= scuiimp
 SHL8VERSIONMAP= scui.map
 SHL8DEF=$(MISC)$/$(SHL8TARGET).def
@@ -257,7 +257,7 @@ LIB8OBJFILES = \
 .IF "$(ENABLE_VBA)"=="YES"
 
 TARGET_VBA=vbaobj
-SHL9TARGET=$(TARGET_VBA)$(UPD)$(DLLPOSTFIX).uno
+SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
 
 SHL9VERSIONMAP=$(TARGET_VBA).map
