@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:28:02 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:24:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..
 
 PRJNAME=goodies
 TARGET=graphic
-VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
