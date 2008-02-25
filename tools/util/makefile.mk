@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 09:48:44 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:58:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..
 
 PRJNAME=TOOLS
 TARGET=tools
-VERSION=$(UPD)
 ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
@@ -101,7 +100,7 @@ LIB1FILES+=  $(SLB)$/dll.lib
 
 .IF "$(BIG_TOOLS)"!=""
 .IF "$(GUI)"=="WNT"
-#SOLARLIBDIR=$(SOLARVER)\$(UPD)\$(INPATH)\lib
+#SOLARLIBDIR=$(SOLARVER)\$((INPATH)\lib
 #SOLARLIBDIR=..\$(INPATH)\lib
 # bei lokalen osl rtl oder vos das SOLARLIBDIR bitte patchen !
 LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
@@ -113,7 +112,7 @@ SHL1STDLIBS+=   $(WSOCK32LIB)
 
 # --- TOOLS.DLL ---
 
-SHL1TARGET=     tl$(VERSION)$(DLLPOSTFIX)
+SHL1TARGET=     tl$(DLLPOSTFIX)
 SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
