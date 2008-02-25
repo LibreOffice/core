@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 16:48:30 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:40:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
 
 # --- import classes library ---------------------------------------------------
 
-SHL1TARGET=     fwi$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=     fwi$(DLLPOSTFIX)
 
 SHL1IMPLIB=     ifwi
 
@@ -142,7 +142,7 @@ DEF1DEPN=       $(MISC)$/$(SHL1TARGET).flt
 
 # --- export classes library ---------------------------------------------------
 
-SHL2TARGET=     fwe$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=     fwe$(DLLPOSTFIX)
 
 SHL2IMPLIB=     ifwe
 
@@ -171,7 +171,7 @@ DEF2DEPN=       $(MISC)$/$(SHL2TARGET).flt
 
 # --- light services library ----------------------------------------------------
 
-SHL3TARGET=		fwl$(UPD)$(DLLPOSTFIX)
+SHL3TARGET=		fwl$(DLLPOSTFIX)
 
 SHL3IMPLIB=		ifwl
 
@@ -202,7 +202,7 @@ SHL3VERSIONMAP= exports.map
 
 # --- services library ----------------------------------------------------
 
-SHL4TARGET=		fwk$(UPD)$(DLLPOSTFIX)
+SHL4TARGET=		fwk$(DLLPOSTFIX)
 
 SHL4IMPLIB=		ifwk
 
@@ -361,7 +361,7 @@ SHL4VERSIONMAP= exports.map
 
 # --- services library ----------------------------------------------------
 
-SHL5TARGET=		fwm$(UPD)$(DLLPOSTFIX)
+SHL5TARGET=		fwm$(DLLPOSTFIX)
 
 SHL5IMPLIB=		ifwm
 
