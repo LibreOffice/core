@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-18 14:50:30 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:29:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SLOFILES= \
         $(SLO)$/DragSourceContext.obj \
         $(SLO)$/DragActionConversion.obj
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SALLIB)	\
