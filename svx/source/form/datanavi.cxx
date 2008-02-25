@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:10:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,7 +873,6 @@ namespace svxform
             // create a resource manager, for the svx resource file
             // and the UI locale
             ByteString aResourceFile( "svx" );
-            aResourceFile += ByteString::CreateFromInt32( INT32( SOLARUPD ) );
             ResMgr* pResMgr = ResMgr::CreateResMgr(
                 aResourceFile.GetBuffer(),
                 Application::GetSettings().GetUILocale() );
@@ -3702,7 +3701,6 @@ namespace svxform
 
         // load the filter name from svtools resource
         ByteString aResMgrName( "svt" );
-        aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
         ResMgr* pSvtResMgr = ResMgr::CreateResMgr(
             aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *pSvtResMgr ) );
