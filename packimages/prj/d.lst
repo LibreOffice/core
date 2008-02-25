@@ -1,0 +1,8 @@
+mkdir: %COMMON_DEST%\bin%_EXT%
+..\%__SRC%\bin\*.zip %COMMON_DEST%\bin%_EXT%
+mkdir: %COMMON_DEST%\bin%_EXT%\so
+..\%__SRC%\bin\so\*.zip %COMMON_DEST%\bin%_EXT%\so
+mkdir: %COMMON_DEST%\bin%_EXT%\c01
+..\%__SRC%\bin\c01\*.zip %COMMON_DEST%\bin%_EXT%\c01
+mkdir: %COMMON_DEST%\bin%_EXT%\c08
+..\%__SRC%\bin\c08\*.zip %COMMON_DEST%\bin%_EXT%\c08
