@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-18 16:36:03 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:47:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,11 @@ SLOFILES=\
 OBJFILES=\
     $(OBJ)/pamain.obj
 
-SHL1TARGET= spa$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= spa$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(VCLLIB)						\
-    -lpsp$(UPD)$(DLLPOSTFIX)		\
+    -lpsp$(DLLPOSTFIX)		\
     $(UNOTOOLSLIB)					\
     $(TOOLSLIB)						\
     $(COMPHELPERLIB)				\
