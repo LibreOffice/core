@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 14:16:16 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:26:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ LIB1FILES=\
         $(SLB)$/core_sdr.lib        \
         $(SLB)$/core_misc.lib
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SVXLIB)				\
@@ -76,7 +76,7 @@ SHL1STDLIBS= \
         $(SALLIB)
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL1STDLIBS+= \
-        -ldbu$(UPD)$(DLLPOSTFIX)
+        -ldbu$(DLLPOSTFIX)
 .ELSE
 SHL1STDLIBS+= \
         idbu.lib
@@ -109,7 +109,7 @@ LIB2FILES=\
         $(SLB)$/ui_inspection.lib	\
         $(SLB)$/report.lib
 
-SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
         $(SVXLIB)				\
@@ -130,8 +130,8 @@ SHL2STDLIBS= \
         $(SALLIB)
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
-        -ldbu$(UPD)$(DLLPOSTFIX) \
-        -l$(TARGET)$(UPD)$(DLLPOSTFIX)
+        -ldbu$(DLLPOSTFIX) \
+        -l$(TARGET)$(DLLPOSTFIX)
 .ELSE
 SHL2STDLIBS+= \
         idbu.lib				\
@@ -164,7 +164,7 @@ LIB3FILES=\
         $(SLB)$/xmlshared.lib	\
         $(SLB)$/$(TARGET3).lib
 
-SHL3TARGET=$(TARGET3)$(UPD)$(DLLPOSTFIX)
+SHL3TARGET=$(TARGET3)$(DLLPOSTFIX)
 
 SHL3STDLIBS=\
     $(SVXLIB)			\
@@ -184,7 +184,7 @@ SHL3STDLIBS=\
     $(SALLIB)
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL3STDLIBS+= \
-        -l$(TARGET)$(UPD)$(DLLPOSTFIX)
+        -l$(TARGET)$(DLLPOSTFIX)
 .ELSE
 SHL3STDLIBS+= \
     irpt.lib
