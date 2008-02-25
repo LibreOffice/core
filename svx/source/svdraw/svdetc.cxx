@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:36 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,8 +703,6 @@ ResMgr* ImpGetResMgr()
     if(!rGlobalData.pResMgr)
     {
         ByteString aName("svx");
-        INT32 nSolarUpd(SOLARUPD);
-        aName += ByteString::CreateFromInt32( nSolarUpd );
         rGlobalData.pResMgr =
             ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
     }
