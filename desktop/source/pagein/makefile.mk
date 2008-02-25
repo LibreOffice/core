@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:47:06 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:49:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,27 +77,27 @@ ALL: \
 ICUDLLPOST=$(DLLPOST).26
 UDKDLLPOST=$(DLLPOST).$(UDK_MAJOR)
 UNODLLPOST=.uno$(DLLPOST)
-UPDDLLPOST=$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+DFTDLLPOST=$(DLLPOSTFIX)$(DLLPOST) # Default 
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
-    @-echo $(DLLPRE)sc$(UPDDLLPOST)  >  $@
-    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @-echo $(DLLPRE)sc$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
     @echo Making: $@
-    @-echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
-    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
     @echo Making: $@
-    @-echo $(DLLPRE)sd$(UPDDLLPOST)  >  $@
-    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
     @echo Making: $@
-    @-echo $(DLLPRE)sw$(UPDDLLPOST)  >  $@
-    @-echo $(DLLPRE)svx$(UPDDLLPOST) >> $@
+    @-echo $(DLLPRE)sw$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
 
 # sorted in reverse load order (ld.so.1)
 $(MISC)$/$(TARGET)-common : makefile.mk
@@ -105,23 +105,23 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)icui18n$(ICUDLLPOST)  >  $@
     @-echo i18npool$(UNODLLPOST)       >> $@
 #
-    @-echo $(DLLPRE)xcr$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)xo$(UPDDLLPOST)    >> $@
-    @-echo $(DLLPRE)go$(UPDDLLPOST)    >> $@
-    @-echo $(DLLPRE)sb$(UPDDLLPOST)    >> $@
-    @-echo $(DLLPRE)sfx$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)so$(UPDDLLPOST)    >> $@
+    @-echo $(DLLPRE)xcr$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)xo$(DFTDLLPOST)    >> $@
+    @-echo $(DLLPRE)go$(DFTDLLPOST)    >> $@
+    @-echo $(DLLPRE)sb$(DFTDLLPOST)    >> $@
+    @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)so$(DFTDLLPOST)    >> $@
 #
-    @-echo $(DLLPRE)fwe$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)fwk$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwe$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwk$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
-    @-echo $(DLLPRE)fwi$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)fwl$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwi$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)fwl$(DFTDLLPOST)   >> $@
     @-echo configmgr2$(UNODLLPOST)     >> $@
 #
     @-echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
-    @-echo $(DLLPRE)sot$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)psp$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)sot$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)psp$(DFTDLLPOST)   >> $@
 .IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
     @-echo $(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
 .ENDIF # gcc
@@ -133,10 +133,10 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
     @-echo $(DLLPRE)ucbhelper$(UCBHELPER_MAJOR)$(COMID)$(DLLPOST) >> $@
     @-echo $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST)    >> $@
-    @-echo $(DLLPRE)tl$(UPDDLLPOST)    >> $@
-    @-echo $(DLLPRE)utl$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)svl$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)vcl$(UPDDLLPOST)   >> $@
-    @-echo $(DLLPRE)tk$(UPDDLLPOST)    >> $@
-    @-echo $(DLLPRE)svt$(UPDDLLPOST)   >> $@
+    @-echo $(DLLPRE)tl$(DFTDLLPOST)    >> $@
+    @-echo $(DLLPRE)utl$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)svl$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)vcl$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)tk$(DFTDLLPOST)    >> $@
+    @-echo $(DLLPRE)svt$(DFTDLLPOST)   >> $@
     @-echo soffice.bin                 >> $@
