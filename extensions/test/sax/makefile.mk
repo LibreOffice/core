@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:42:10 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:36:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=	$(OBJFILES)
 
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(VOSLIB) 	 \
