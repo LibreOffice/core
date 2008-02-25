@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-19 13:00:23 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:00:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ APP1OBJS=\
 
 APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
 
-SHL1TARGET	=$(LIBBASENAME)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET	=$(LIBBASENAME)$(DLLPOSTFIX)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1IMPLIB	=i$(LIBBASENAME)
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
