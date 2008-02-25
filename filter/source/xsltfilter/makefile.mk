@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-11 09:23:36 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:34:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
-SHL1TARGET=$(LIBNAME)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(LIBNAME)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(LIBNAME)
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
