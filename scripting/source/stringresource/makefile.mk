@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:36:43 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:28:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ DLLPRE =
 SLOFILES= \
         $(SLO)$/stringresource.obj \
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX).uno
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
 SHL1IMPLIB=	i$(TARGET)
 
 SHL1VERSIONMAP=$(TARGET).map
