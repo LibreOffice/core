@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,7 @@ struct OfficeLocale :
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD(),
-                                     getOfficeLocale() );
+        return ResMgr::CreateResMgr( "deployment", getOfficeLocale() );
     }
 };
 
