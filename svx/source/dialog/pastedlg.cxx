@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pastedlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:34:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         if( !aTypeName.Len() && !aSourceName.Len() )
         {
             com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-            ResMgr* pMgr = ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME(svt), aLocale );
+            ResMgr* pMgr = ResMgr::CreateResMgr( "svt", aLocale );
             // global resource from svtools (former so3 resource)
             if( pMgr )
                 aSourceName = String( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
