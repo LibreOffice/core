@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 10:27:11 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:47:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ INCPRE += inc
 
 DLLPRE =
 
-SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = deployment.map
 
 SHL1LIBS = \
