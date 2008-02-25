@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:40:54 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:52:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ LIB4OBJFILES=\
 .ENDIF
 .ENDIF
 
-SHL1TARGET= xo$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= xo$(DLLPOSTFIX)
 SHL1IMPLIB= _ixo
 SHL1USE_EXPORTS=ordinal
 
@@ -107,7 +107,7 @@ SHL5STDLIBS= \
         $(COMPHELPERLIB)
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
-    SHL5STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
+    SHL5STDLIBS += -lxo$(DLLPOSTFIX)
 .ELSE
     SHL5STDLIBS += ixo.lib
 .ENDIF
