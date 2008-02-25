@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:31:56 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:30:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ SLOFILES=\
           $(SLO)$/XmlBuildList.obj
 
 
-SHL1TARGET	=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET	=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB	=$(TARGET)
 SHL1LIBS	=$(SLB)$/$(TARGET).lib
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
