@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:24:08 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:55:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,13 @@ LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
 # headless plugin
 LIB1TARGET=$(SLB)$/isvpplug
 LIB1FILES= $(SLB)$/svpplug.lib
-SHL1TARGET=vclplug_svp$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=vclplug_svp$(DLLPOSTFIX)
 SHL1IMPLIB=isvpplug
 SHL1LIBS=$(LIB1TARGET)
-SHL1DEPN=$(LB)$/libvcl$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+SHL1DEPN=$(LB)$/libvcl$(DLLPOSTFIX)$(DLLPOST)
 SHL1STDLIBS=\
             $(VCLLIB)\
-            -lpsp$(UPD)$(DLLPOSTFIX)\
+            -lpsp$(DLLPOSTFIX)\
             $(BASEBMPLIB)\
             $(BASEGFXLIB)\
             $(SOTLIB)           \
