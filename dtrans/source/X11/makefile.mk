@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:32:37 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:29:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ SLOFILES=\
     $(SLO)$/bmp.obj					\
     $(SLO)$/config.obj
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS= $(LIBSTLPORT) $(CPPUHELPERLIB)
