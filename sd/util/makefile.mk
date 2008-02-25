@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:14:06 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:51:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ RESLIB1SRSFILES=\
 
 # --- StarDraw DLL
 
-SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= sd$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= sdi
 
@@ -158,7 +158,7 @@ LIB6FILES=      \
             $(SLB)$/framework_command.lib
 
 # sdd
-SHL2TARGET= sdd$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= sdd$(DLLPOSTFIX)
 SHL2IMPLIB= sddimp
 SHL2VERSIONMAP= sdd.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
@@ -183,7 +183,7 @@ SHL2OBJS=   $(SLO)$/sddetect.obj \
 SHL2DEPN+=	makefile.mk
 
 # sdui
-SHL4TARGET= sdui$(UPD)$(DLLPOSTFIX)
+SHL4TARGET= sdui$(DLLPOSTFIX)
 SHL4IMPLIB= sduiimp
 SHL4VERSIONMAP= sdui.map
 SHL4DEF=$(MISC)$/$(SHL4TARGET).def
