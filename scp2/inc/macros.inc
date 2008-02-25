@@ -66,16 +66,14 @@
 #endif
 
 #ifdef UNX
-    #define LIBNAME(name)                     STRING(CONCAT5(lib,name,OFFICEUPD,DLLPOSTFIX,UNXSUFFIX))
-    #define LIBSHORTNAME(name)                STRING(CONCAT4(lib,name,DLLPOSTFIX,UNXSUFFIX))
+    #define LIBNAME(name)                     STRING(CONCAT4(lib,name,DLLPOSTFIX,UNXSUFFIX))
     #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(name)
     #define PROFILENAME(name)                 STRING(CONCAT2(name,rc))
     #define SPECIAL_NAME(name)                STRING(CONCAT3(lib,name,UNXSUFFIX))
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,UNXSUFFIX))
 #else
-    #define LIBNAME(name)                     STRING(CONCAT4(name,OFFICEUPD,DLLPOSTFIX,.dll))
-    #define LIBSHORTNAME(name)                STRING(CONCAT3(name,DLLPOSTFIX,.dll))
+    #define LIBNAME(name)                     STRING(CONCAT3(name,DLLPOSTFIX,.dll))
     #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
@@ -83,7 +81,7 @@
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,.dll))
 #endif
 
-#define RESFILENAME(name,lang)                STRING(CONCAT4(name,OFFICEUPD,lang,.res))
+#define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
 #define SHORTRESFILENAME(name,lang)           STRING(CONCAT3(name,lang,.res))
 #define READMETXTFILENAME(name,lang,ext)      STRING(CONCAT4(name,lang,.,ext))
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
@@ -371,7 +369,7 @@
 #define SPECIAL_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
-        Name = LIBSHORTNAME(name); \
+        Name = LIBNAME(name); \
         Dir = gid_Dir_Program; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS); \
     End
@@ -379,7 +377,7 @@
 #define SPECIAL_UNO_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
-        Name = LIBSHORTNAME(name); \
+        Name = LIBNAME(name); \
         Dir = gid_Dir_Program; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS, UNO_COMPONENT); \
         RegistryID = gid_Starregistry_Services_Rdb; \
