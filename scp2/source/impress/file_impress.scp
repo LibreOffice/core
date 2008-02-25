@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:19:45 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:45:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #include "macros.inc"
 
 File gid_File_Lib_Placeware
-    Name = LIBSHORTNAME(placeware);
+    Name = LIBNAME(placeware);
     PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
