@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:23:55 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:55:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..
 PRJNAME=vcl
 TARGET=vcl
 TARGETTYPE=GUI
-VERSION=$(UPD)
 USE_DEFFILE=TRUE
 
 .IF "$(SNDFILE_LIBS)"!=""
@@ -165,7 +164,7 @@ LIB1FILES+= \
             $(SLB)$/salapp.lib
 .ENDIF
 
-SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
+SHL1TARGET= vcl$(DLLPOSTFIX)
 SHL1IMPLIB= ivcl
 SHL1STDLIBS+=\
             $(SOTLIB)           \
@@ -261,7 +260,7 @@ LIB2FILES= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
-SHL2TARGET=vclplug_gen$(UPD)$(DLLPOSTFIX)
+SHL2TARGET=vclplug_gen$(DLLPOSTFIX)
 SHL2IMPLIB=ipure_x
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
@@ -346,7 +345,7 @@ LIB4FILES=\
             $(SLB)$/gtkgdi.lib\
             $(SLB)$/gtkwin.lib
 
-SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
+SHL4TARGET=vclplug_gtk$(DLLPOSTFIX)
 SHL4IMPLIB=igtk_plug_
 SHL4LIBS=$(LIB4TARGET)
 SHL4DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
@@ -382,7 +381,7 @@ EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
 .ENDIF
 LIB5TARGET=$(SLB)$/ikde_plug_
 LIB5FILES=$(SLB)$/kdeplug.lib
-SHL5TARGET=vclplug_kde$(UPD)$(DLLPOSTFIX)
+SHL5TARGET=vclplug_kde$(DLLPOSTFIX)
 SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
 SHL5DEPN=$(SHL2TARGETN)
