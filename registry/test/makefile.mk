@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 13:16:26 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:02:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ USE_LDUMP2=TRUE
 
 
 # ------------------------------------------------------------------
-CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
+CDEFS += -DDLL_VERSION=$(EMQ)"$(DLLPOSTFIX)$(EMQ)"
 
 CXXFILES= \
                testregcpp.cxx	\
@@ -61,7 +61,7 @@ LIB1OBJFILES= \
                 $(SLO)$/testmerge.obj
 
 
-SHL1TARGET= rgt$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= rgt$(DLLPOSTFIX)
 SHL1IMPLIB= rgt
 SHL1STDLIBS=	\
                 $(SALLIB) \
@@ -73,7 +73,7 @@ SHL1DEPN=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
              
-DEF1DEPN	=$(MISC)$/rgt$(UPD)$(DLLPOSTFIX).flt $(SLOFILES)
+DEF1DEPN	=$(MISC)$/rgt$(DLLPOSTFIX).flt $(SLOFILES)
 DEFLIB1NAME =$(TARGET)
 DEF1DES 	=Registry Runtime - TestDll
 
@@ -87,7 +87,7 @@ DEF1DES 	=Registry Runtime - TestDll
 # --- SO2-Filter-Datei ---
 
 
-$(MISC)$/rgt$(UPD)$(DLLPOSTFIX).flt:
+$(MISC)$/rgt$(DLLPOSTFIX).flt:
     @echo ------------------------------
     @echo Making: $@
     @echo WEP>$@
