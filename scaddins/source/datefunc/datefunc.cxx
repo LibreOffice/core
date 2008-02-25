@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:10:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,6 @@ void ScaDateAddIn::InitData()
         delete pResMgr;
 
     OString aModName( "date" );
-    aModName += OString::valueOf( sal_Int32( SUPD ) );
     pResMgr = ResMgr::CreateResMgr( (const sal_Char*) aModName,
                                         aFuncLoc );
 
