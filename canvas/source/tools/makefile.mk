@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:02:45 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:07:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ SLOFILES =	\
     $(SLO)$/page.obj \
     $(SLO)$/verifyinput.obj
 
-SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= 	$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
 SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TKLIB) $(TOOLSLIB)
 
