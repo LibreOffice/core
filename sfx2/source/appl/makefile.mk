@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-21 09:28:29 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:28:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,16 +54,16 @@ CFLAGS+=-DENABLE_QUICKSTART_APPLET
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-        CDEFS+=-DDLL_NAME=libsfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+        CDEFS+=-DDLL_NAME=libsfx$(DLLPOSTFIX)$(DLLPOST)
 .IF "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
         PKGCONFIG_MODULES=gtk+-2.0
         .INCLUDE: pkg_config.mk
         CFLAGS+=$(PKGCONFIG_CFLAGS)
         CFLAGS+=-DENABLE_QUICKSTART_APPLET
-        CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+        CDEFS+=-DPLUGIN_NAME=libqstart_gtk$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF # "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 .ELSE
-        CDEFS+=-DDLL_NAME=sfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+        CDEFS+=-DDLL_NAME=sfx$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF
 
 # --- Files --------------------------------------------------------
