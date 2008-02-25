@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 10:49:01 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:33:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
