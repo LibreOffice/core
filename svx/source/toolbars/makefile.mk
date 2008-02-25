@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:47:31 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:20:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=toolbars
-VERSION=$(UPD)
 ENABLE_EXCEPTIONS=TRUE;
 
 # --- Settings -----------------------------------------------------
