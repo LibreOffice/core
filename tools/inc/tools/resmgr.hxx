@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:14:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#define CREATEVERSIONRESMGR_NAME( Name )   #Name MAKE_NUMSTR( SUPD )
-#define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( Name ) )
+#define CREATEVERSIONRESMGR_NAME( Name )   #Name
+#define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( #Name )
 
 #define LOCALE_MAX_FALLBACK 6
 
