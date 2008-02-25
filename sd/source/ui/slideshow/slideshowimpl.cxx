@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:59:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1544,7 +1544,6 @@ void SlideshowImpl::gotoNextSlide()
                                 //use default logo from iso resource:
 
                                 String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
-                                aMgrName += String::CreateFromInt32(SUPD);
                                 boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
                                 DBG_ASSERT(pResMgr,"No ResMgr found");
                                 if(pResMgr.get())
