@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oooresourceloader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:26:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 15:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,6 @@ namespace res
         ,m_pResourceManager( NULL )
     {
         ::rtl::OUString sBaseName( _rBaseName );
-        sBaseName += ::rtl::OUString::createFromAscii( MAKE_NUMSTR( SUPD ) );
         m_pResourceManager = new SimpleResMgr( sBaseName, m_aLocale );
 
         if ( !m_pResourceManager->IsValid() )
