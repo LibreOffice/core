@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:42:44 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:57:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ LIB1FILES=                 \
 
 # --- sts library ---------------------------------------------------
 
-SHL1TARGET= sts$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= sts$(DLLPOSTFIX)
 SHL1IMPLIB= ists
 
 SHL1STDLIBS= \
@@ -89,7 +89,7 @@ DEF1DES         =TestToolServer
 
 # --- simple communication library (no vcl) ---------------------------------------------------
 
-SHL2TARGET= simplecm$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= simplecm$(DLLPOSTFIX)
 SHL2IMPLIB= isimplecm
 
 SHL2STDLIBS= \
@@ -110,7 +110,7 @@ DEF2DES         =SimpleCommunication
 
 # --- communication library ---------------------------------------------------
 
-SHL3TARGET= communi$(UPD)$(DLLPOSTFIX)
+SHL3TARGET= communi$(DLLPOSTFIX)
 SHL3IMPLIB= icommuni
 
 SHL3STDLIBS= \
