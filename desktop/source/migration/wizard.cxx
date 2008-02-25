@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:31:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ ResMgr *FirstStartWizard::GetResManager()
     if ( !FirstStartWizard::pResMgr )
     {
         String aMgrName = String::CreateFromAscii( "dkt" );
-        aMgrName += String::CreateFromInt32(SUPD); // current version number
         FirstStartWizard::pResMgr = ResMgr::CreateResMgr( OUStringToOString( aMgrName, RTL_TEXTENCODING_UTF8 ));
     }
     return FirstStartWizard::pResMgr;
