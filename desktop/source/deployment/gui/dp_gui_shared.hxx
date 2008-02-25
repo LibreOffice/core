@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_shared.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:23:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace dp_gui {
 struct DeploymentGuiResMgr :
     public ::rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
         ResMgr * operator () () {
-            return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
+            return ResMgr::CreateResMgr( "deploymentgui" );
     }
 };
 
