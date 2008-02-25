@@ -1,7 +1,6 @@
 PRJ=..
 PRJNAME=writerperfect
 TARGET=writerperfect
-VERSION=$(UPD)
 
 .INCLUDE :  settings.mk
 
@@ -40,7 +39,7 @@ SHL1STDLIBS+= \
     $(XMLOFFLIB) \
     $(LIBWPD)
 
-SHL1TARGET = wpft$(UPD)$(DLLPOSTFIX)
+SHL1TARGET = wpft$(DLLPOSTFIX)
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1LIBS = $(LIB1TARGET)
 SHL1VERSIONMAP=wpft.map
