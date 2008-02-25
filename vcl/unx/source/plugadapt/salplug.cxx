@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:07:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
-    aModName.append( (sal_Int32)SUPD );
     aModName.appendAscii( SAL_DLLPOSTFIX );
     aModName.appendAscii( SAL_DLLEXTENSION );
     OUString aModule = aModName.makeStringAndClear();
