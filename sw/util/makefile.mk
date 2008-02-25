@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:15:54 $
+#   last change: $Author: obo $ $Date: 2008-02-25 15:54:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ SWLIBFILES       = \
         $(SLB)$/ui1.lib	\
         $(SLB)$/ui2.lib
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= _$(TARGET)
 SHL1LIBS= $(SLB)$/swall.lib $(SWLIBFILES)
@@ -141,7 +141,7 @@ SHL1BASE=	0x1e000000
 DEF1NAME	=$(SHL1TARGET)
 DEFLIB1NAME=swall $(SWLIBFILES:b)
 
-SHL2TARGET= swd$(UPD)$(DLLPOSTFIX)
+SHL2TARGET= swd$(DLLPOSTFIX)
 SHL2IMPLIB= swdimp
 SHL2VERSIONMAP= swd.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
@@ -173,7 +173,7 @@ SHL2OBJS+=  \
 SHL2DEPN+=  makefile.mk
 
 # add for swui
-SHL3TARGET= swui$(UPD)$(DLLPOSTFIX)
+SHL3TARGET= swui$(DLLPOSTFIX)
 SHL3IMPLIB= swuiimp
 SHL3VERSIONMAP= swui.map
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
