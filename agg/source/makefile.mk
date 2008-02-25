@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:45:05 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:50:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ SLOFILES= \
         $(SLO)$/agg_vpgen_clip_polyline.obj		\
         $(SLO)$/agg_vpgen_segmentator.obj
 
-SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB = i$(TARGET)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
