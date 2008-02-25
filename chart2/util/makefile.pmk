@@ -5,9 +5,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:27:02 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:58:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,12 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(COM)" == "MSC" || "$(GUI)" == "OS2"
     CHARTTOOLS= icharttools.lib
 .ELSE
-    CHARTTOOLS= -lcharttools$(UPD)$(DLLPOSTFIX)
+    CHARTTOOLS= -lcharttools$(DLLPOSTFIX)
 .ENDIF
 
 .IF "$(COM)" == "MSC" || "$(GUI)" == "OS2"
     CHARTVIEW= ichartview.lib
 .ELSE
-    CHARTVIEW= -lchartview$(UPD)$(DLLPOSTFIX)
+    CHARTVIEW= -lchartview$(DLLPOSTFIX)
 .ENDIF
 
