@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduledbu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:17:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ ResMgr* OModuleImpl::getResManager()
     {
         // create a manager with a fixed prefix
         ByteString aMgrName = ByteString( "dbu" );
-        aMgrName += ByteString::CreateFromInt32(SOLARUPD); // current build number
         m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
     }
     return m_pRessources;
