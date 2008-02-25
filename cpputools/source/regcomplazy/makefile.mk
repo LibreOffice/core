@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 13:12:11 $
+#   last change: $Author: obo $ $Date: 2008-02-25 17:25:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
 
 DEPOBJFILES= \
     $(OBJ)$/regcomplazy.obj 
