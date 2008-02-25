@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accresmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-04 16:24:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-25 16:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ void TkResMgr::ensureImplExists()
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
     ByteString sResMgrName( "tk" );
-    sResMgrName += ByteString::CreateFromInt32( (sal_Int32)SUPD );
 
     m_pImpl = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
 
