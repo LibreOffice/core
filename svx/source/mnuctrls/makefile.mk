@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:45:22 $
+#   last change: $Author: obo $ $Date: 2008-02-25 16:19:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 PRJNAME=svx
 TARGET=mnuctrls
-VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
