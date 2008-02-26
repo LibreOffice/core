@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:58:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #endif
 #include <svx/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/stritem.hxx>
@@ -117,6 +116,11 @@
 // ?!???
 #include "sc.hrc"
 #include "globstr.hrc"
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 //========================================================================
 
@@ -184,10 +188,17 @@ FltError ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc
 }
 
 
-void lcl_AddStamp( String& rStr, const String& rName, const DateTime& rDateTime, const LocaleDataWrapper& rLoc )
+void lcl_AddStamp( String& rStr, const String& rName,
+    const ::com::sun::star::util::DateTime& rDateTime,
+    const LocaleDataWrapper& rLoc )
 {
-    String          aStrDate    = rLoc.getDate( rDateTime );
-    String          aStrTime    = rLoc.getTime( rDateTime );
+    Date aD(rDateTime.Day, rDateTime.Month, rDateTime.Year);
+    Time aT(rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds,
+            rDateTime.HundredthSeconds);
+    DateTime aDateTime(aD,aT);
+
+    String          aStrDate    = rLoc.getDate( aDateTime );
+    String          aStrTime    = rLoc.getTime( aDateTime );
 
     rStr += GLOBSTR( STR_BY );
     APPEND_SPACE( rStr );
@@ -404,17 +415,23 @@ void ScHTMLExport::WriteHeader()
     }
     else
     {
-        SfxDocumentInfo& rInfo      = pDoc->GetDocumentShell()->GetDocInfo();
-        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
+        using namespace ::com::sun::star;
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps
+            = xDPS->getDocumentProperties();
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, xDocProps,
+            sIndent, eDestEnc, &aNonConvertibleChars );
         OUT_LF();
 
         //----------------------------------------------------------
-        if ( rInfo.GetPrintedBy().Len() )
+        if (!xDocProps->getPrintedBy().equalsAscii(""))
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
             String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );
             aStrOut.AppendAscii( ": " );
-            lcl_AddStamp( aStrOut, rInfo.GetPrintedBy(), rInfo.GetPrintDate(), *ScGlobal::pLocaleData );
+            lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
+                xDocProps->getPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );
         }
         //----------------------------------------------------------
