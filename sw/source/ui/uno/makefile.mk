@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:18:38 $
+#   last change: $Author: obo $ $Date: 2008-02-26 09:48:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ SLO1FILES =  \
         $(SLO)$/RefreshListenerContainer.obj \
         $(SLO)$/unomodule.obj \
         $(SLO)$/unodoc.obj \
-        $(SLO)$/warnpassword.obj
+                $(SLO)$/warnpassword.obj
 
 SLO2FILES = \
     $(SLO)$/swdetect.obj		\
