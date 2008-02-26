@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:41:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 #include "scitems.hxx"
 #include "rangelst.hxx"
 #include <svx/flstitem.hxx>
@@ -52,7 +55,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
 #include <svtools/misccfg.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
@@ -728,7 +730,14 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             //  who last saved the document
             //  (only if comparing different documents)
 
-            String aDocUser = GetDocInfo().GetModificationAuthor();
+            using namespace ::com::sun::star;
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps(
+                xDPS->getDocumentProperties());
+            DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+            String aDocUser = xDocProps->getModifiedBy();
+
             if ( aDocUser.Len() )
                 pTrack->SetUser( aDocUser );
         }
