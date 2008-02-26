@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:42:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:07:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,7 @@
 
 #include <memory>
 
-#ifndef GCC
-#endif
+#include <comphelper/string.hxx>
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -88,6 +87,9 @@
 #endif
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentInfo.hpp>
+
 #include <sfx2/dinfdlg.hxx>
 #include "sfxresid.hxx"
 #include "dinfedt.hxx"
@@ -104,10 +106,28 @@
 #include "dinfdlg.hrc"
 #include "sfxlocal.hrc"
 
+#include <algorithm>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+
+// The number of user defined fields handled by the dialog
+// There are exactly 4. No more, no less.
+#define FOUR 4
+
+static
+bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
+{
+    return i_rLeft.Year             == i_rRight.Year
+        && i_rLeft.Month            == i_rRight.Month
+        && i_rLeft.Day              == i_rRight.Day
+        && i_rLeft.Hours            == i_rRight.Hours
+        && i_rLeft.Minutes          == i_rRight.Minutes
+        && i_rLeft.Seconds          == i_rRight.Seconds
+        && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+}
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -179,12 +199,15 @@ String CreateSizeText( ULONG nSize, BOOL bExtraBytes, BOOL bSmartExtraBytes )
     return aSizeStr;
 }
 
-String ConvertDateTime_Impl( const String& rName, const DateTime& rStamp, const LocaleDataWrapper& rWrapper )
+String ConvertDateTime_Impl( const String& rName,
+    const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
+    Date aD(uDT.Day, uDT.Month, uDT.Year);
+    Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
      const String pDelim ( DEFINE_CONST_UNICODE( ", "));
-     String aStr( rWrapper.getDate( rStamp ) );
+     String aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
-     aStr += rWrapper.getTime( rStamp, TRUE, FALSE );
+     aStr += rWrapper.getTime( aT, TRUE, FALSE );
      String aAuthor = rName;
      aAuthor.EraseLeadingChars();
      if ( aAuthor.Len() )
@@ -199,6 +222,23 @@ String ConvertDateTime_Impl( const String& rName, const DateTime& rStamp, const 
 
 SfxDocumentInfoItem::SfxDocumentInfoItem()
     : SfxStringItem()
+    , m_AutoloadDelay(0)
+    , m_AutoloadURL()
+    , m_isAutoloadEnabled(sal_False)
+    , m_DefaultTarget()
+    , m_TemplateName()
+    , m_Author()
+    , m_CreationDate()
+    , m_ModifiedBy()
+    , m_ModificationDate()
+    , m_PrintedBy()
+    , m_PrintDate()
+    , m_EditingCycles(0)
+    , m_EditingDuration(0)
+    , m_Description()
+    , m_Keywords()
+    , m_Subject()
+    , m_Title()
     , bHasTemplate( sal_True )
     , bDeleteUserData( sal_False )
     , bIsUseUserData( sal_True )
@@ -207,24 +247,68 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 //------------------------------------------------------------------------
 
-SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile, const SfxDocumentInfo& rInfo, sal_Bool bIs )
+SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<document::XDocumentInfo>& i_xDocInfo,
+        sal_Bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
-    , aDocInfo( rInfo )
+    , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
+    , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
+    , m_isAutoloadEnabled( (m_AutoloadDelay > 0) || m_AutoloadURL.getLength() )
+    , m_DefaultTarget( i_xDocProps->getDefaultTarget() )
+    , m_TemplateName( i_xDocProps->getTemplateName() )
+    , m_Author( i_xDocProps->getAuthor() )
+    , m_CreationDate( i_xDocProps->getCreationDate() )
+    , m_ModifiedBy( i_xDocProps->getModifiedBy() )
+    , m_ModificationDate( i_xDocProps->getModificationDate() )
+    , m_PrintedBy( i_xDocProps->getPrintedBy() )
+    , m_PrintDate( i_xDocProps->getPrintDate() )
+    , m_EditingCycles( i_xDocProps->getEditingCycles() )
+    , m_EditingDuration( i_xDocProps->getEditingDuration() )
+    , m_Description( i_xDocProps->getDescription() )
+    , m_Keywords( ::comphelper::string::convertCommaSeparated(
+                    i_xDocProps->getKeywords()) )
+    , m_Subject( i_xDocProps->getSubject() )
+    , m_Title( i_xDocProps->getTitle() )
     , bHasTemplate( TRUE )
     , bDeleteUserData( sal_False )
     , bIsUseUserData( bIs )
 {
+    for (sal_Int16 i = 0; i < FOUR; ++i) {
+        m_UserDefinedFieldTitles[i] = i_xDocInfo->getUserFieldName(i);
+        m_UserDefinedFieldValues[i] = i_xDocInfo->getUserFieldValue(i);
+    }
 }
 
 //------------------------------------------------------------------------
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     : SfxStringItem( rItem )
-    , aDocInfo( rItem.aDocInfo )
+    , m_AutoloadDelay( rItem.getAutoloadDelay() )
+    , m_AutoloadURL( rItem.getAutoloadURL() )
+    , m_isAutoloadEnabled( rItem.isAutoloadEnabled() )
+    , m_DefaultTarget( rItem.getDefaultTarget() )
+    , m_TemplateName( rItem.getTemplateName() )
+    , m_Author( rItem.getAuthor() )
+    , m_CreationDate( rItem.getCreationDate() )
+    , m_ModifiedBy( rItem.getModifiedBy() )
+    , m_ModificationDate( rItem.getModificationDate() )
+    , m_PrintedBy( rItem.getPrintedBy() )
+    , m_PrintDate( rItem.getPrintDate() )
+    , m_EditingCycles( rItem.getEditingCycles() )
+    , m_EditingDuration( rItem.getEditingDuration() )
+    , m_Description( rItem.getDescription() )
+    , m_Keywords( rItem.getKeywords() )
+    , m_Subject( rItem.getSubject() )
+    , m_Title( rItem.getTitle() )
     , bHasTemplate( rItem.bHasTemplate )
     , bDeleteUserData( rItem.bDeleteUserData )
     , bIsUseUserData( rItem.bIsUseUserData )
 {
+    for (size_t i = 0; i < FOUR; ++i) {
+        m_UserDefinedFieldTitles[i] = rItem.getUserDefinedFieldTitle(i);
+        m_UserDefinedFieldValues[i] = rItem.getUserDefinedFieldValue(i);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -244,9 +328,84 @@ SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 
 int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
-     return rItem.Type() == Type() &&
-         SfxStringItem::operator==(rItem) &&
-         aDocInfo == ((const SfxDocumentInfoItem &)rItem).aDocInfo;
+    if (!(rItem.Type() == Type() && SfxStringItem::operator==(rItem))) {
+        return false;
+    }
+    const SfxDocumentInfoItem& rInfoItem(
+        static_cast<const SfxDocumentInfoItem&>(rItem));
+    return
+         m_AutoloadDelay        == rInfoItem.m_AutoloadDelay     &&
+         m_AutoloadURL          == rInfoItem.m_AutoloadURL       &&
+         m_isAutoloadEnabled    == rInfoItem.m_isAutoloadEnabled &&
+         m_DefaultTarget        == rInfoItem.m_DefaultTarget     &&
+         m_Author               == rInfoItem.m_Author            &&
+         m_CreationDate         == rInfoItem.m_CreationDate      &&
+         m_ModifiedBy           == rInfoItem.m_ModifiedBy        &&
+         m_ModificationDate     == rInfoItem.m_ModificationDate  &&
+         m_PrintedBy            == rInfoItem.m_PrintedBy         &&
+         m_PrintDate            == rInfoItem.m_PrintDate         &&
+         m_EditingCycles        == rInfoItem.m_EditingCycles     &&
+         m_EditingDuration      == rInfoItem.m_EditingDuration   &&
+         m_Description          == rInfoItem.m_Description       &&
+         m_Keywords             == rInfoItem.m_Keywords          &&
+         m_Subject              == rInfoItem.m_Subject           &&
+         m_Title                == rInfoItem.m_Title             &&
+         std::equal(m_UserDefinedFieldTitles, m_UserDefinedFieldTitles+FOUR,
+            rInfoItem.m_UserDefinedFieldTitles) &&
+         std::equal(m_UserDefinedFieldValues, m_UserDefinedFieldValues+FOUR,
+            rInfoItem.m_UserDefinedFieldValues);
+}
+
+//------------------------------------------------------------------------
+
+void SfxDocumentInfoItem::resetUserData(const ::rtl::OUString & i_rAuthor)
+{
+    setAuthor(i_rAuthor);
+    DateTime now;
+    setCreationDate( util::DateTime(
+        now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+        now.GetDay(), now.GetMonth(), now.GetYear() ) );
+    setModifiedBy(::rtl::OUString());
+    setPrintedBy(::rtl::OUString());
+    setModificationDate(util::DateTime());
+    setPrintDate(util::DateTime());
+    setEditingDuration(0);
+    setEditingCycles(1);
+}
+
+//------------------------------------------------------------------------
+
+void SfxDocumentInfoItem::updateDocumentInfo(
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<document::XDocumentInfo>& i_xDocInfo) const
+{
+    if (isAutoloadEnabled()) {
+        i_xDocProps->setAutoloadSecs(getAutoloadDelay());
+        i_xDocProps->setAutoloadURL(getAutoloadURL());
+    } else {
+        i_xDocProps->setAutoloadSecs(0);
+        i_xDocProps->setAutoloadURL(::rtl::OUString());
+    }
+    i_xDocProps->setDefaultTarget(getDefaultTarget());
+//    i_xDocProps->setTemplateName(getTemplateName());
+    i_xDocProps->setAuthor(getAuthor());
+    i_xDocProps->setCreationDate(getCreationDate());
+    i_xDocProps->setModifiedBy(getModifiedBy());
+    i_xDocProps->setModificationDate(getModificationDate());
+    i_xDocProps->setPrintedBy(getPrintedBy());
+    i_xDocProps->setPrintDate(getPrintDate());
+    i_xDocProps->setEditingCycles(getEditingCycles());
+    i_xDocProps->setEditingDuration(getEditingDuration());
+    i_xDocProps->setDescription(getDescription());
+    i_xDocProps->setKeywords(
+        ::comphelper::string::convertCommaSeparated(getKeywords()));
+    i_xDocProps->setSubject(getSubject());
+    i_xDocProps->setTitle(getTitle());
+    for (sal_Int16 i = 0; i < FOUR; ++i) {
+        i_xDocInfo->setUserFieldName(i, getUserDefinedFieldTitle(i));
+        i_xDocInfo->setUserFieldValue(i, getUserDefinedFieldValue(i));
+    }
+
 }
 
 //------------------------------------------------------------------------
@@ -271,6 +430,33 @@ void SfxDocumentInfoItem::SetUseUserData( BOOL bSet )
     bIsUseUserData = bSet;
 }
 
+
+::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldTitle(size_t i_ix) const
+{
+    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    return m_UserDefinedFieldTitles[i_ix];
+}
+
+::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldValue(size_t i_ix) const
+{
+    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    return m_UserDefinedFieldValues[i_ix];
+}
+
+void SfxDocumentInfoItem::setUserDefinedFieldTitle(size_t i_ix,
+        ::rtl::OUString i_val)
+{
+    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    m_UserDefinedFieldTitles[i_ix] = i_val;
+}
+
+void SfxDocumentInfoItem::setUserDefinedFieldValue(size_t i_ix,
+        ::rtl::OUString i_val)
+{
+    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    m_UserDefinedFieldValues[i_ix] = i_val;
+}
+
 sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     String aValue;
@@ -289,42 +475,42 @@ sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE n
             bValue = IsDeleteUserData();
             break;
         case MID_DOCINFO_AUTOLOADENABLED:
-            bValue = aDocInfo.IsReloadEnabled();
+            bValue = isAutoloadEnabled();
             break;
         case MID_DOCINFO_AUTOLOADSECS:
             bIsInt = TRUE;
-            nValue = aDocInfo.GetReloadDelay();
+            nValue = getAutoloadDelay();
             break;
         case MID_DOCINFO_AUTOLOADURL:
             bIsString = TRUE;
-            aValue = aDocInfo.GetReloadURL();
+            aValue = getAutoloadURL();
             break;
         case MID_DOCINFO_DEFAULTTARGET:
             bIsString = TRUE;
-            aValue = aDocInfo.GetDefaultTarget();
+            aValue = getDefaultTarget();
             break;
         case MID_DOCINFO_DESCRIPTION:
             bIsString = TRUE;
-            aValue = aDocInfo.GetComment();
+            aValue = getDescription();
             break;
         case MID_DOCINFO_KEYWORDS:
             bIsString = TRUE;
-            aValue = aDocInfo.GetKeywords();
+            aValue = getKeywords();
             break;
         case MID_DOCINFO_SUBJECT:
             bIsString = TRUE;
-            aValue = aDocInfo.GetTheme();
+            aValue = getSubject();
             break;
         case MID_DOCINFO_TITLE:
             bIsString = TRUE;
-            aValue = aDocInfo.GetTitle();
+            aValue = getTitle();
             break;
         case MID_DOCINFO_FIELD1:
         case MID_DOCINFO_FIELD2:
         case MID_DOCINFO_FIELD3:
         case MID_DOCINFO_FIELD4:
             bField = TRUE;
-            // fehlendes break beabsichtigt
+            // no break here
         case MID_DOCINFO_FIELD1TITLE:
         case MID_DOCINFO_FIELD2TITLE:
         case MID_DOCINFO_FIELD3TITLE:
@@ -343,7 +529,7 @@ sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE n
                             nMemberId == MID_DOCINFO_FIELD3 ||
                             nMemberId == MID_DOCINFO_FIELD4,
                             "SfxDocumentInfoItem:Anpassungsfehler" );
-                aValue = aDocInfo.GetUserKeyWord( nMemberId - nSub );
+                aValue = getUserDefinedFieldValue( nMemberId - nSub );
             }
             else
             {
@@ -352,13 +538,13 @@ sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE n
                             nMemberId == MID_DOCINFO_FIELD3TITLE ||
                             nMemberId == MID_DOCINFO_FIELD4TITLE,
                             "SfxDocumentInfoItem:Anpassungsfehler" );
-                aValue = aDocInfo.GetUserKeyTitle( nMemberId - nSub );
+                aValue = getUserDefinedFieldTitle( nMemberId - nSub );
             }
             break;
         }
         default:
             DBG_ERROR("Wrong MemberId!");
-               return sal_False;
+            return sal_False;
      }
 
     if ( bIsString )
@@ -393,42 +579,42 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
         case MID_DOCINFO_AUTOLOADENABLED:
             bRet = (rVal >>= bValue);
             if ( bRet )
-                aDocInfo.EnableReload( bValue );
+                setAutoloadEnabled(bValue);
             break;
         case MID_DOCINFO_AUTOLOADSECS:
             bRet = (rVal >>= nValue);
             if ( bRet )
-                aDocInfo.SetReloadDelay( nValue );
+                setAutoloadDelay(nValue);
             break;
         case MID_DOCINFO_AUTOLOADURL:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetReloadURL( aValue );
+                setAutoloadURL(aValue);
             break;
         case MID_DOCINFO_DEFAULTTARGET:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetDefaultTarget( aValue );
+                setDefaultTarget(aValue);
             break;
         case MID_DOCINFO_DESCRIPTION:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetComment(aValue);
+                setDescription(aValue);
             break;
         case MID_DOCINFO_KEYWORDS:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetKeywords(aValue);
+                setKeywords(aValue);
             break;
         case MID_DOCINFO_SUBJECT:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetTheme(aValue);
+                setSubject(aValue);
             break;
         case MID_DOCINFO_TITLE:
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetTitle(aValue);
+                setTitle(aValue);
             break;
         case MID_DOCINFO_FIELD1TITLE:
         case MID_DOCINFO_FIELD2TITLE:
@@ -437,7 +623,8 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
         {
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetUserKeyTitle( String(aValue), nMemberId-MID_DOCINFO_FIELD1TITLE );
+                setUserDefinedFieldTitle(
+                    nMemberId - MID_DOCINFO_FIELD1TITLE, String(aValue));
             break;
         }
         case MID_DOCINFO_FIELD1:
@@ -447,7 +634,8 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
         {
             bRet = (rVal >>= aValue);
             if ( bRet )
-                aDocInfo.SetUserKeyWord( String(aValue), nMemberId-MID_DOCINFO_FIELD1 );
+                setUserDefinedFieldValue(
+                    nMemberId - MID_DOCINFO_FIELD1, String(aValue));
             break;
         }
         default:
@@ -517,24 +705,23 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     {
         pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem *) pItem );
     }
-    SfxDocumentInfo aInfo( (*pInfo)() );
     if( bTitleMod )
     {
-        aInfo.SetTitle( aTitleEd.GetText() );
+        pInfo->setTitle( aTitleEd.GetText() );
     }
     if( bThemeMod )
     {
-        aInfo.SetTheme( aThemaEd.GetText() );
+        pInfo->setSubject( aThemaEd.GetText() );
     }
     if( bKeywordsMod )
     {
-        aInfo.SetKeywords( aKeywordsEd.GetText() );
+        pInfo->setKeywords( aKeywordsEd.GetText() );
     }
     if( bCommentMod )
     {
-        aInfo.SetComment( aCommentEd.GetText() );
+        pInfo->setDescription( aCommentEd.GetText() );
     }
-    rSet.Put( SfxDocumentInfoItem( pInfo->GetValue(), aInfo, pInfo->IsUseUserData() ) );
+    rSet.Put( SfxDocumentInfoItem( *pInfo ) );
     if( pInfo != pInfoItem )
     {
         delete pInfo;
@@ -548,12 +735,11 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 {
      pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
-     const SfxDocumentInfo& rInfo = ( *pInfoItem )();
 
-     aTitleEd.SetText( rInfo.GetTitle() );
-     aThemaEd.SetText( rInfo.GetTheme() );
-     aKeywordsEd.SetText( rInfo.GetKeywords() );
-     aCommentEd.SetText( rInfo.GetComment() );
+     aTitleEd.SetText( pInfoItem->getTitle() );
+     aThemaEd.SetText( pInfoItem->getSubject() );
+     aKeywordsEd.SetText( pInfoItem->getKeywords() );
+     aCommentEd.SetText( pInfoItem->getDescription() );
 
      SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
      if ( pROItem && pROItem->GetValue() )
@@ -691,7 +877,11 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
         aName = SvtUserOptions().GetFullName();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( aName, DateTime(), aLocaleWrapper ) );
+    DateTime now;
+    util::DateTime uDT(
+        now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+        now.GetDay(), now.GetMonth(), now.GetYear() );
+    aCreateValFt.SetText( ConvertDateTime_Impl( aName, uDT, aLocaleWrapper ) );
     XubString aEmpty;
     aChangeValFt.SetText( aEmpty );
     aPrintValFt.SetText( aEmpty );
@@ -782,7 +972,6 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
         {
             SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
-            SfxDocumentInfo aInfo( (*pInfoItem)() );
             BOOL bUseData = ( STATE_CHECK == aUseUserDataCB.GetState() );
             pInfoItem->SetUseUserData( bUseData );
 /*
@@ -799,7 +988,7 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
                     SfxStamp( aEmptyUser, aInfo.GetPrinted().GetTime() ) );
             }
 */
-            rSet.Put( SfxDocumentInfoItem( pInfoItem->GetValue(), aInfo, pInfoItem->IsUseUserData() ) );
+            rSet.Put( SfxDocumentInfoItem( *pInfoItem ) );
             bRet = TRUE;
         }
     }
@@ -811,15 +1000,16 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
         {
             SfxDocumentInfoItem* pInfoItem = (SfxDocumentInfoItem*)pItem;
-            SfxDocumentInfo aInfo( pInfoItem->GetDocInfo() );
             BOOL bUseAuthor = bEnableUseUserData && aUseUserDataCB.IsChecked();
-            aInfo.ResetUserData( bUseAuthor ? SvtUserOptions().GetFullName() : String() );
+            SfxDocumentInfoItem newItem( *pInfoItem );
+            newItem.resetUserData( bUseAuthor
+                ? SvtUserOptions().GetFullName()
+                : String() );
             pInfoItem->SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
-            SfxDocumentInfoItem aItem( pInfoItem->GetValue(), aInfo, pInfoItem->IsUseUserData() );
-            bRet = TRUE;
+            newItem.SetUseUserData( STATE_CHECK == aUseUserDataCB.GetState() );
 
-            aItem.SetDeleteUserData( TRUE );
-            rSet.Put( aItem );
+            newItem.SetDeleteUserData( TRUE );
+            rSet.Put( newItem );
             bRet = TRUE;
         }
     }
@@ -846,12 +1036,11 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     // Bestimmung der Dokumentinformationen
     const SfxDocumentInfoItem *pInfoItem =
         &(const SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
-    const SfxDocumentInfo& rInfo = ( *pInfoItem )();
 
-    // Vorlagendaten
+    // template data
     if ( pInfoItem->HasTemplate() )
     {
-        aTemplValFt.SetText( rInfo.GetTemplateName() );
+        aTemplValFt.SetText( pInfoItem->getTemplateName() );
     }
     else
     {
@@ -859,7 +1048,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aTemplValFt.Hide();
     }
 
-    // Bestimmung des Dateinamens
+    // determine file name
     String aFile( pInfoItem->GetValue() );
     String aFactory( aFile );
     if ( aFile.Len() > 2 && aFile.GetChar(0) == '[' )
@@ -869,7 +1058,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aFile = aFile.Copy( nPos+1 );
     }
 
-    // Bestimmung des Namens
+    // determine name
     String aName;
     const SfxPoolItem* pItem = 0;
     if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, FALSE, &pItem ) )
@@ -888,21 +1077,21 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aNameED.SetText( aName );
     aNameED.ClearModifyFlag();
 
-    // Bestimmung des R/O-Flags
+    // determine RO-Flag
     if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, FALSE, &pItem )
          || !pItem )
         aReadOnlyCB.Hide();
     else
         aReadOnlyCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
 
-    // Bestimmung des Kontextsymbols
+    // determine context symbol
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const String& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     aBmp1.SetImage( SvFileInformationManager::GetImage( aURL, TRUE ) );
 
-    // Bestimmung von Groesse und Typ
+    // determine size and type
     String aSizeText( aUnknownSize );
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
@@ -913,7 +1102,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aDescription = String( SfxResId( STR_SFX_NEWOFFICEDOC ) );
     aShowTypeFT.SetText( aDescription );
 
-    // Bestimmung des Ortes
+    // determine location
     aURL.SetSmartURL( aFile);
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
@@ -928,22 +1117,28 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
         aFileValFt.SetText( aURL.GetPartBeforeLastName() );
 
-    // Zugriffsdaten
+    // handle access data
     BOOL bIsUseUserData = pInfoItem->IsUseUserData();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( rInfo.GetAuthor(), rInfo.GetCreationDate(), aLocaleWrapper ) );
-    DateTime aTime( rInfo.GetModificationDate() );
-    if ( aTime.IsValid() )
-        aChangeValFt.SetText( ConvertDateTime_Impl( rInfo.GetModificationAuthor(), aTime, aLocaleWrapper ) );
-    aTime = rInfo.GetPrintDate();
-    if ( aTime.IsValid())
-        aPrintValFt.SetText( ConvertDateTime_Impl( rInfo.GetPrintedBy(), aTime, aLocaleWrapper ) );
-    const long nTime = rInfo.GetTime();
+    aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
+        pInfoItem->getCreationDate(), aLocaleWrapper ) );
+    util::DateTime aTime( pInfoItem->getModificationDate() );
+//  if ( aTime.IsValid() )
+    if ( aTime.Month > 0 )
+        aChangeValFt.SetText( ConvertDateTime_Impl(
+            pInfoItem->getModifiedBy(), aTime, aLocaleWrapper ) );
+    aTime = pInfoItem->getPrintDate();
+//  if ( aTime.IsValid())
+    if ( aTime.Month > 0 )
+        aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
+            aTime, aLocaleWrapper ) );
+    const long nTime = pInfoItem->getEditingDuration();
     if( bIsUseUserData )
     {
-        const Time aT( nTime );
+        const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aT ) );
-        aDocNoValFt.SetText( String::CreateFromInt32( rInfo.GetDocumentNumber() ) );
+        aDocNoValFt.SetText( String::CreateFromInt32(
+            pInfoItem->getEditingCycles() ) );
     }
 
     TriState eState = (TriState)bIsUseUserData;
@@ -989,7 +1184,6 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 {
     FreeResource();
     pInfoItem = &( SfxDocumentInfoItem& ) rItemSet.Get( SID_DOCINFO );
-//  SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
     TargetList          aList;
     SfxViewFrame*       pFrame = SfxViewFrame::Current();
     if( pFrame )
@@ -1175,8 +1369,6 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
     else
         pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem* ) pItem );
 
-    SfxDocumentInfo&            rInfo = pInfo->GetDocInfo();
-
     DBG_ASSERT( eState != S_Init, "*SfxInternetPage::FillItemSet(): state init is not acceptable at this point!" );
 
     BOOL                        bEnableReload = FALSE;
@@ -1206,13 +1398,13 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
                   break;
     }
 
-    rInfo.EnableReload( bEnableReload );
+    pInfo->setAutoloadEnabled( bEnableReload );
 
     if( bEnableReload )
     {
-        rInfo.SetReloadURL( *aURL.get() );
-        rInfo.SetDefaultTarget( *aFrame.get() );
-        rInfo.SetReloadDelay( nDelay );
+        pInfo->setAutoloadURL( *aURL.get() );
+        pInfo->setDefaultTarget( *aFrame.get() );
+        pInfo->setAutoloadDelay( nDelay );
     }
 
     rSet.Put( *pInfo );
@@ -1238,23 +1430,22 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
     if ( pURLItem )
         aBaseURL = pURLItem->GetValue();
 
-    SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
     STATE               eNewState = S_NoUpdate;
 
-    if( rInfo.IsReloadEnabled() )
+    if( pInfoItem->isAutoloadEnabled() )
     {
-        const String&   rURL = rInfo.GetReloadURL();
+        const String&   rURL = pInfoItem->getAutoloadURL();
 
         if( rURL.Len() )
         {
-            aNFAfter.SetValue( rInfo.GetReloadDelay() );
-            aEDForwardURL.SetText( rInfo.GetReloadURL() );
-            aCBFrame.SetText( rInfo.GetDefaultTarget() );
+            aNFAfter.SetValue( pInfoItem->getAutoloadDelay() );
+            aEDForwardURL.SetText( rURL );
+            aCBFrame.SetText( pInfoItem->getDefaultTarget() );
             eNewState = S_Forward;
         }
         else
         {
-            aNFReload.SetValue( rInfo.GetReloadDelay() );
+            aNFReload.SetValue( pInfoItem->getAutoloadDelay() );
             eNewState = S_Reload;
         }
     }
@@ -1422,27 +1613,30 @@ BOOL SfxDocumentUserPage::FillItemSet( SfxItemSet& rSet )
         pInfo = pInfoItem;
     else
         pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem*)pItem );
-    SfxDocumentInfo& rInfo = pInfo->GetDocInfo();
 
     if ( bLabelModified || aInfo1Ed.IsModified() )
     {
         XubString aTitle = GetLabelText_Impl( &aInfo1Ft );
-        rInfo.SetUserKey( aTitle, aInfo1Ed.GetText(), 0 );
+        pInfo->setUserDefinedFieldTitle( 0, aTitle );
+        pInfo->setUserDefinedFieldValue( 0, aInfo1Ed.GetText() );
     }
     if ( bLabelModified || aInfo2Ed.IsModified() )
     {
         XubString aTitle = GetLabelText_Impl( &aInfo2Ft );
-        rInfo.SetUserKey( aTitle, aInfo2Ed.GetText(), 1 );
+        pInfo->setUserDefinedFieldTitle( 1, aTitle );
+        pInfo->setUserDefinedFieldValue( 1, aInfo2Ed.GetText() );
     }
     if ( bLabelModified || aInfo3Ed.IsModified() )
     {
         XubString aTitle = GetLabelText_Impl( &aInfo3Ft );
-        rInfo.SetUserKey( aTitle, aInfo3Ed.GetText(), 2 );
+        pInfo->setUserDefinedFieldTitle( 2, aTitle );
+        pInfo->setUserDefinedFieldValue( 2, aInfo3Ed.GetText() );
     }
     if ( bLabelModified || aInfo4Ed.IsModified() )
     {
         XubString aTitle = GetLabelText_Impl( &aInfo4Ft );
-        rInfo.SetUserKey( aTitle, aInfo4Ed.GetText(), 3 );
+        pInfo->setUserDefinedFieldTitle( 3, aTitle );
+        pInfo->setUserDefinedFieldValue( 3, aInfo4Ed.GetText() );
     }
     rSet.Put( *pInfo );
     if ( pInfo != pInfoItem )
@@ -1455,15 +1649,15 @@ BOOL SfxDocumentUserPage::FillItemSet( SfxItemSet& rSet )
 void SfxDocumentUserPage::Reset(const SfxItemSet &rSet)
 {
     pInfoItem = &(SfxDocumentInfoItem&)rSet.Get( SID_DOCINFO );
-    const SfxDocumentInfo& rInfo = pInfoItem->GetDocInfo();
-    SetLabelText_Impl( &aInfo1Ft, rInfo.GetUserKeyTitle(0) );
-    aInfo1Ed.SetText( rInfo.GetUserKeyWord(0) );
-    SetLabelText_Impl( &aInfo2Ft, rInfo.GetUserKeyTitle(1) );
-    aInfo2Ed.SetText( rInfo.GetUserKeyWord(1) );
-    SetLabelText_Impl( &aInfo3Ft, rInfo.GetUserKeyTitle(2) );
-    aInfo3Ed.SetText( rInfo.GetUserKeyWord(2) );
-    SetLabelText_Impl( &aInfo4Ft, rInfo.GetUserKeyTitle(3) );
-    aInfo4Ed.SetText( rInfo.GetUserKeyWord(3) );
+
+    SetLabelText_Impl( &aInfo1Ft, pInfoItem->getUserDefinedFieldTitle(0) );
+    aInfo1Ed.SetText( pInfoItem->getUserDefinedFieldValue(0) );
+    SetLabelText_Impl( &aInfo2Ft, pInfoItem->getUserDefinedFieldTitle(1) );
+    aInfo2Ed.SetText( pInfoItem->getUserDefinedFieldValue(1) );
+    SetLabelText_Impl( &aInfo3Ft, pInfoItem->getUserDefinedFieldTitle(2) );
+    aInfo3Ed.SetText( pInfoItem->getUserDefinedFieldValue(2) );
+    SetLabelText_Impl( &aInfo4Ft, pInfoItem->getUserDefinedFieldTitle(3) );
+    aInfo4Ed.SetText( pInfoItem->getUserDefinedFieldValue(3) );
     bLabelModified = FALSE;
 
     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
