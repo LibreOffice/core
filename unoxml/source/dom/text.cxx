@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:48:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@ namespace DOM
         init_characterdata(aNodePtr);
     }
 
+    void SAL_CALL CText::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        if (!i_xHandler.is()) throw RuntimeException();
+        i_xHandler->characters(getData());
+    }
 
     void CText::init_text(const xmlNodePtr aNodePtr)
     {
