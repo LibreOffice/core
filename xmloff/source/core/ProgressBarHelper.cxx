@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:54:44 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 
+#include <stdlib.h>
+
 using namespace ::com::sun::star;
 
 const sal_Int32 nDefaultProgressBarRange = 1000000;
@@ -86,7 +88,12 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
         {
             double fPercent(nNewReference / nReference);
             double fValue(nValue * fPercent);
-            nValue = sal_Int32(fValue);
+#if OSL_DEBUG_LEVEL > 0
+            // workaround for toolchain bug on solaris/x86 Sun C++ 5.5
+            // just call some function here
+            (void) abs(nValue);
+#endif
+            nValue = static_cast< sal_Int32 >(fValue);
             nReference = nNewReference;
         }
         else
