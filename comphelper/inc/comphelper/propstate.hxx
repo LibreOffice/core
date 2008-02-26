@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propstate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:44:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:13:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,8 @@ namespace comphelper
     {
     public:
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp):OPropertySetHelper(rBHlp) { }
+        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
+                             ::cppu::IEventNotificationHook *i_pFireEvents);
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
 
