@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:24:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,9 +100,6 @@
 #endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
-#endif
-#ifndef _SWGPAR_HXX
-#include <swgpar.hxx>           // fuer den SW/G Parser
 #endif
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
