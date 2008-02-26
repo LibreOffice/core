@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentInfo.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:15:45 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@
     DocumengInfo service is available on an open document via the interface
     <type>XDocumentInfoSupplier</type> only.
     </p>
+
+    @deprecated     Use <type>DocumentProperties</type> instead.
 
     @see StandaloneDocumentInfo
     @see XDocumentInfoSupplier
