@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:14:10 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3240,6 +3240,17 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
             // XML_TEMPLATE is default
             eElement = XML_TEMPLATE;
             break;
+        // --> OD 2007-09-14 #i81002#
+        case ReferenceFieldPart::NUMBER:
+            eElement = XML_NUMBER;
+            break;
+        case ReferenceFieldPart::NUMBER_NO_CONTEXT:
+            eElement = XML_NUMBER_NO_SUPERIOR;
+            break;
+        case ReferenceFieldPart::NUMBER_FULL_CONTEXT:
+            eElement = XML_NUMBER_ALL_SUPERIOR;
+            break;
+        // <--
         default:
             DBG_ERROR("unknown reference type");
             eElement = XML_TEMPLATE;
