@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AdabasNewDb.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:54:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef ADABASUI_ADABASNEWDB_HRC
+#define ADABASUI_ADABASNEWDB_HRC
+
+
+#define PB_SYSDEVSPACE          1
+#define PB_TRANSACTIONLOG       2
+#define PB_DATADEVSPACE         3
+#define PB_DOMAINPWD            4
+#define PB_CONPWD               5
+#define PB_SYSPWD               6
+#define PB_OK                   7
+#define PB_CANCEL               8
+#define PB_RESTORE              9
+
+#define NF_TRANSACTIONLOG_SIZE  1
+#define NF_DATADEVSPACE_SIZE    2
+#define NF_CACHE_SIZE           3
+
+#define ET_SYSUSR               1
+#define ET_DOMAIN_USR           2
+#define ET_CONUSR               3
+#define ET_SYSDEVSPACE          4
+#define ET_TRANSACTIONLOG       5
+#define ET_DATADEVSPACE         6
+#define ET_RESTORE              7
+#define ET_DATABASENAME         8
+
+#define FT_SYSUSR               1
+#define FT_DOMAIN_USR           2
+#define FT_TRANSACTIONLOG_SIZE  3
+#define FT_DATADEVSPACE_SIZE    4
+#define FT_CONUSR               6
+#define FT_SYSDEVSPACE          7
+#define FT_TRANSACTIONLOG       8
+#define FT_DATADEVSPACE         9
+#define FT_CACHE_SIZE          10
+#define FT_RESTORE             11
+#define FT_DATABASENAME        12
+
+#define FL_USER                 1
+#define FL_DBSETTINGS           2
+#define FL_END                  3
+
+#define BMP_CON                 1
+#define BMP_SYS                 2
+#define BMP_DOMAIN              3
+
+#define STR_BACKUPFILE_LOAD     1
+
+#endif // ADABASUI_ADABASNEWDB_HRC
+
