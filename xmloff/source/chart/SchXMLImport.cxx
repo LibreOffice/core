@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:36:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,9 @@
 #ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #endif
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <typeinfo>
 
@@ -790,7 +793,7 @@ SchXMLImport::SchXMLImport(
     sal_uInt16 nImportFlags ) :
         SvXMLImport( xServiceFactory, nImportFlags )
 {
-    mbIsGraphicLoadOnDemmandSupported = false;
+    mbIsGraphicLoadOnDemandSupported = false;
 }
 
 // #110680#
@@ -850,15 +853,39 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString&
 
     // accept <office:document>
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_META) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES) ||
+        ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT) ))
     {
         pContext = new SchXMLDocContext( maImportHelper, *this, nPrefix, rLocalName );
-    }
-    else
+    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+                ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
+                  (IsXMLToken(rLocalName, XML_DOCUMENT_META)
+                   && (getImportFlags() & IMPORT_META) )) )
     {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY);
+        // mst@: right now, this seems to be not supported, so it is untested
+        if (xDPS.is()) {
+            uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+                mxServiceFactory->createInstance(
+                    ::rtl::OUString::createFromAscii(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                    uno::UNO_QUERY_THROW);
+            pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
+                ? new SvXMLMetaDocumentContext(*this,
+                            XML_NAMESPACE_OFFICE, rLocalName,
+                            xDPS->getDocumentProperties(), xDocBuilder)
+                // flat OpenDocument file format
+                : new SchXMLFlatDocContext_Impl(
+                            maImportHelper, *this, nPrefix, rLocalName,
+                            xDPS->getDocumentProperties(), xDocBuilder);
+        } else {
+            pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
+                ? SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList )
+                : new SchXMLDocContext( maImportHelper, *this,
+                                        nPrefix, rLocalName );
+        }
+    } else {
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
     }
 
