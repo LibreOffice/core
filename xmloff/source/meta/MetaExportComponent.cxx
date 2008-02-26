@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:39:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@
 #include <tools/debug.hxx>
 #endif
 
+#include <unotools/docinfohelper.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -129,10 +131,11 @@ void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star:
     }
     catch( lang::IllegalArgumentException& )
     {
-        // allow to use document info service without model access
-        // this is required for standalone document info exporter
-        xDocInfo = uno::Reference< document::XDocumentInfo >::query( xDoc );
-        if( !xDocInfo.is() )
+        // allow to use document properties service without model access
+        // this is required for document properties exporter
+        mxDocProps =
+            uno::Reference< document::XDocumentProperties >::query( xDoc );
+        if( !mxDocProps.is() )
             throw lang::IllegalArgumentException();
     }
 }
@@ -152,7 +155,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 {
                     { "Class", sizeof("Class")-1, 0,
                         &::getCppuType((::rtl::OUString*)0),
-                          beans::PropertyAttribute::MAYBEVOID, 0},
+                        beans::PropertyAttribute::MAYBEVOID, 0},
                     { NULL, 0, 0, NULL, 0, 0 }
                 };
                 uno::Reference< beans::XPropertySet > xConvPropSet(
@@ -186,7 +189,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             }
             catch( com::sun::star::uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Can not intantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
+                OSL_ENSURE( sal_False, "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
             }
         }
     }
@@ -218,25 +221,25 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                         sal_True, sal_True );
 
-        {
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
-                            sal_True, sal_True );
-
-            if ( xDocInfo.is() )
-            {
-                // standalone document exporter case
-                SfxXMLMetaExport aMeta( *this, xDocInfo );
-                aMeta.Export();
-            }
-            else
-            {
-                SfxXMLMetaExport aMeta( *this, GetModel() );
-                aMeta.Export();
-            }
-        }
+        // NB: office:meta is now written by _ExportMeta
+        _ExportMeta();
     }
     xDocHandler->endDocument();
     return 0;
+}
+
+void XMLMetaExportComponent::_ExportMeta()
+{
+    if (mxDocProps.is()) {
+        ::rtl::OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
+        // update generator here
+        mxDocProps->setGenerator(generator);
+        SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, mxDocProps);
+        uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
+        pMeta->Export();
+    } else {
+        SvXMLExport::_ExportMeta();
+    }
 }
 
 // methods without content:
