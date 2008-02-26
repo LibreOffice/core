@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:34:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,11 +157,31 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
         {
             if(!m_aName.Len())
                  m_aName =  C2S("Bookmark");
+            // --> OD 2007-10-23 #i81002#
+            // determine bookmark type due to its proposed name
+            IDocumentBookmarkAccess::BookmarkType eBkmkType =
+                                    pDoc->isCrossRefBookmarkName( m_aName )
+                                    ? IDocumentBookmarkAccess::CROSSREF_BOOKMARK
+                                    : IDocumentBookmarkAccess::BOOKMARK;
+            // <--
             if( USHRT_MAX != pDoc->findBookmark(m_aName) )
                 pDoc->makeUniqueBookmarkName( m_aName );
             KeyCode aCode;
-            pBkm = pDoc->makeBookmark( aPam, aCode, m_aName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
-            pBkm->Add(this);
+            pBkm = pDoc->makeBookmark( aPam, aCode, m_aName, aEmptyStr, eBkmkType);
+            // --> OD 2007-10-23 #i81002#
+            // Check, if bookmark has been created.
+            // E.g., the creation of a cross-reference bookmark is suppress,
+            // if the PaM isn't a valid one for cross-reference bookmarks.
+            if ( pBkm )
+            {
+                pBkm->Add(this);
+            }
+            else
+            {
+                ASSERT( false,
+                        "<SwXBookmark::attachToRange(..)> - could not create <SwBookmark> instance." );
+            }
+            // <--
             bIsDescriptor = sal_False;
         }
     }
@@ -188,8 +208,8 @@ uno::Reference< text::XTextRange >  SwXBookmark::getAnchor(void) throw( uno::Run
 
     if(pBkm)
     {
-        const SwPosition& rPos = pBkm->GetPos();
-        const SwPosition* pMarkPos = pBkm->GetOtherPos();
+        const SwPosition& rPos = pBkm->GetBookmarkPos();
+        const SwPosition* pMarkPos = pBkm->GetOtherBookmarkPos();
 
         aRet = SwXTextRange::CreateTextRangeFromPosition(pDoc, rPos, pMarkPos);
     }
@@ -259,11 +279,11 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
     {
         KeyCode aCode;
         String sShortName;
-        SwPaM aPam(pBkm->GetPos());
-        if(pBkm->GetOtherPos())
+        SwPaM aPam(pBkm->GetBookmarkPos());
+        if(pBkm->GetOtherBookmarkPos())
         {
             aPam.SetMark();
-            *aPam.GetMark() = *pBkm->GetOtherPos();
+            *aPam.GetMark() = *pBkm->GetOtherBookmarkPos();
         }
 
         SwRewriter aRewriter;
@@ -289,7 +309,11 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
 
         pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
 
-        SwBookmark* pMark = pDoc->makeBookmark(aPam, aCode, sBkName, sShortName, IDocumentBookmarkAccess::BOOKMARK);
+        // --> OD 2007-10-23 #i81002#
+        SwBookmark* pMark = pDoc->makeBookmark( aPam, aCode,
+                                                sBkName, sShortName,
+                                                pBkm->GetType() );
+        // <--
         pMark->Add(this);
         GetDoc()->deleteBookmark( sOldName );
 
