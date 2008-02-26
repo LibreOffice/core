@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:26:30 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,14 +158,6 @@
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -243,10 +235,6 @@ const sal_Char sAPI_docinfo_edit_time[]         = "DocInfo.EditTime";
 const sal_Char sAPI_docinfo_description[]       = "DocInfo.Description";
 const sal_Char sAPI_docinfo_create_author[]     = "DocInfo.CreateAuthor";
 const sal_Char sAPI_docinfo_create_date_time[]  = "DocInfo.CreateDateTime";
-const sal_Char sAPI_docinfo_info0[]             = "DocInfo.Info0";
-const sal_Char sAPI_docinfo_info1[]             = "DocInfo.Info1";
-const sal_Char sAPI_docinfo_info2[]             = "DocInfo.Info2";
-const sal_Char sAPI_docinfo_info3[]             = "DocInfo.Info3";
 const sal_Char sAPI_docinfo_custom[]            = "DocInfo.Custom";
 const sal_Char sAPI_docinfo_print_author[]      = "DocInfo.PrintAuthor";
 const sal_Char sAPI_docinfo_print_date_time[]   = "DocInfo.PrintDateTime";
@@ -668,11 +656,6 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             pContext = new XMLHiddenParagraphImportContext( rImport, rHlp,
                                                             nPrefix, rName );
             break;
-
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_0:   // info fields only for
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_1:   // compatibilty with older
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_2:   // versions
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_3:
         case XML_TOK_TEXT_DOCUMENT_DESCRIPTION:
         case XML_TOK_TEXT_DOCUMENT_TITLE:
         case XML_TOK_TEXT_DOCUMENT_SUBJECT:
@@ -1971,18 +1954,6 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
         case XML_TOK_TEXT_DOCUMENT_EDIT_DURATION:
             pServiceName = sAPI_docinfo_edit_time;
             break;
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_0:
-            pServiceName = sAPI_docinfo_info0;
-            break;
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_1:
-            pServiceName = sAPI_docinfo_info1;
-            break;
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_2:
-            pServiceName = sAPI_docinfo_info2;
-            break;
-        case XML_TOK_TEXT_DOCUMENT_INFORMATION_3:
-            pServiceName = sAPI_docinfo_info3;
-            break;
         case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
             pServiceName = sAPI_docinfo_custom;
             break;
@@ -2016,10 +1987,6 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
         case XML_TOK_TEXT_DOCUMENT_TITLE:
             pServiceName = sAPI_docinfo_title;
             break;
-/*      case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
-            // hack: service name not used in XMLUserDocInfoImportContext
-            pServiceName = sAPI_docinfo_info0;
-            break;*/
 
         default:
             DBG_ERROR("no docinfo field token");
@@ -2204,37 +2171,10 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
 {
-    static const sal_Char* aUserDocInfoServiceNames[] =
-    {
-        sAPI_docinfo_info0,
-        sAPI_docinfo_info1,
-        sAPI_docinfo_info2,
-        sAPI_docinfo_info3
-    };
-
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_NAME:
         {
-            // iterate over user field names, until match is found
-            Reference<XDocumentInfoSupplier> xDocInfoSupp(
-                GetImport().GetModel(), UNO_QUERY);
-            Reference<XDocumentInfo> xDocInfo =
-                xDocInfoSupp->getDocumentInfo();
-            sal_Int16 nCount = xDocInfo->getUserFieldCount();
-            DBG_ASSERT((nCount*sizeof(sal_Char*) <=
-                        sizeof(aUserDocInfoServiceNames)), "unknown service");
-            for(sal_Int16 i = 0; i<nCount; i++)
-            {
-                if (0 == sAttrValue.compareTo(xDocInfo->getUserFieldName(i)))
-                {
-                    SetServiceName(OUString::createFromAscii(
-                        aUserDocInfoServiceNames[i]));
-                    bValid = sal_True;
-                    break; // for loop; no need to check remainder
-                }
-            }
-
             if (!bValid)
             {
                 SetServiceName(OUString::createFromAscii( sAPI_docinfo_custom ) );
@@ -2261,6 +2201,9 @@ void XMLUserDocInfoImportContext::PrepareField(
         aAny <<= aName;
         xPropertySet->setPropertyValue(sPropertyName, aAny);
     }
+
+    // call superclass to handle "fixed"
+    XMLSimpleDocInfoImportContext::PrepareField(xPropertySet);
 }
 
 
