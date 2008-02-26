@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellres.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:09:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@ struct ShellResource : public Resource
     // fuers GetRefFeld - oben/unten
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
+    // --> OD 2007-09-13 #i81002#
+    // for GetRefField - referenced item not found
+    String          aGetRefFld_RefItemNotFound;
+    // <--
     // fuer dynamisches Menu - String "alle"
     String          aStrAllPageHeadFoot;
     // fuer einige Listboxen - String "keine"
