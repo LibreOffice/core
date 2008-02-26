@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceFieldPart.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:21:45 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,52 @@ published constants ReferenceFieldPart
      <p>This option is only valid if the source of the reference is a sequence field.</p>
     */
     const short ONLY_SEQUENCE_NUMBER = 7;
+        //-------------------------------------------------------------------------
+        /** The numbering label and depending of the reference field context numbering lables of
+            superior list levels of the reference are displayed.
+
+            @since OOo 3.0
+
+            <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
+            <p>The contents of the list label of the paragraph, at which the bookmark respectively the
+            set reference starts - named "referenced item" in the following - is displayed. To unambiguous
+            identify the referenced item at the document position of the reference text field, the content
+            of all needed superior levels are added in front. The needed superior levels of the referenced
+            item are the ones, which differ from the superior levels of the document position of the reference
+            text field.
+            Additional condition, which suppresses the addition of a superior level's list label content:
+            The list label of the referenced item can already contain numbers of a superior levels. Assume X
+            be the level of the most superior level, then no list label content of superior levels greater or
+            equal than X are added.
+            If the referenced item isn't numbered, nothing is displayed.</p>
+        */
+        const short NUMBER = 8;
+        //-------------------------------------------------------------------------
+        /** The numbering label of the reference is displayed.
+
+            @since OOo 3.0
+
+            <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
+            <p>The contents of the list label of the paragraph, at which the bookmark respectively the
+            set reference starts, is displayed. If this paragraph isn't numbered, nothing is displayed.</p>
+        */
+        const short NUMBER_NO_CONTEXT = 9;
+        //-------------------------------------------------------------------------
+        /** The numbering label and numbering lables of superior list levels of the reference are displayed.
+
+            @since OOo 3.0
+
+            <p>This option is only valid, if the source of the reference is a bookmark or a set reference.</p>
+            <p>The contents of the list label of the paragraph, at which the bookmark respectively the
+            set reference starts - named "referenced item" in the following - is displayed and the contents
+            of all list labels of superior levels are added in front of it.
+            Additional condition, which suppresses the addition of a superior level's list label content:
+            The list label of the referenced item can already contain numbers of a superior levels. Assume X
+            be the level of the most superior level, then no list label content of superior levels greater or
+            equal than X are added.
+            If the referenced item is numbered nothing is displayed.</p>
+        */
+        const short NUMBER_FULL_CONTEXT = 10;
 };
 
 //=============================================================================
