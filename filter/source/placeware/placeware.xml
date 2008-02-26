@@ -25,7 +25,8 @@
         <type> com.sun.star.presentation.XPresentationPage </type>
         <type> com.sun.star.container.XIndexAccess </type>
         <type> com.sun.star.text.XText </type>
-        <type> com.sun.star.document.XDocumentInfoSupplier </type>
+        <type> com.sun.star.document.XDocumentPropertiesSupplier </type>
+        <type> com.sun.star.document.XDocumentProperties </type>
         <type> com.sun.star.lang.XComponent </type>
         <type> com.sun.star.drawing.XDrawPage </type>
         <type> com.sun.star.task.XInteractionHandler </type>
