@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:37:09 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
 extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
-extern "C" void SAL_CALL createRegistryInfo_OPropertyBag();
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 
 //***************************************************************************************
@@ -74,7 +73,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
         createRegistryInfo_ORowSet();
         createRegistryInfo_ODatabaseDocument();
         createRegistryInfo_ODatabaseSource();
-        createRegistryInfo_OPropertyBag();
         createRegistryInfo_DataAccessDescriptorFactory();
         bInit = sal_True;
     }
