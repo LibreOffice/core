@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:47:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
+#include <com/sun/star/util/XCloneable.hpp>
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -144,7 +145,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objuno.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfxtypes.hxx>
@@ -1478,8 +1478,12 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         // so the document info can be updated
 
         // on export document info must be preserved
-        SfxDocumentInfo aPreservDocInfo;
-        FillCopy( aModelData.GetModel(), aPreservDocInfo );
+        uno::Reference<document::XDocumentInfoSupplier> xDIS(
+            aModelData.GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<util::XCloneable> xCloneable(
+            xDIS->getDocumentInfo(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentInfo> xOldDocInfo(
+            xCloneable->createClone(), uno::UNO_QUERY_THROW);
 
         // use dispatch API to show document info dialog
         if ( aModelData.ShowDocumentInfoDialog() )
@@ -1500,13 +1504,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         catch( uno::Exception& )
         {
             if ( ( nStoreMode & EXPORT_REQUESTED ) )
-                SetDocInfoState( aModelData.GetModel(), aPreservDocInfo, sal_True );
+                SetDocInfoState( aModelData.GetModel(), xOldDocInfo, sal_True );
 
             throw;
         }
 
         if ( ( nStoreMode & EXPORT_REQUESTED ) )
-            SetDocInfoState( aModelData.GetModel(), aPreservDocInfo, sal_True );
+            SetDocInfoState( aModelData.GetModel(), xOldDocInfo, sal_True );
     }
     else
     {
@@ -1591,93 +1595,18 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
 
 //-------------------------------------------------------------------------
 // static
-void SfxStoringHelper::FillCopy( const uno::Reference< frame::XModel >& xModel,
-                                 SfxDocumentInfo& aDocInfoToFill )
-{
-    uno::Reference< document::XDocumentInfoSupplier > xModelDocInfoSupplier( xModel, uno::UNO_QUERY );
-    if ( !xModelDocInfoSupplier.is() )
-        throw uno::RuntimeException(); // TODO
-
-    uno::Reference< document::XDocumentInfo > xDocInfoToFill = aDocInfoToFill.GetInfo();
-    uno::Reference< document::XDocumentInfo > xDocInfo = xModelDocInfoSupplier->getDocumentInfo();
-    uno::Reference< beans::XPropertySet > xPropSet( xDocInfo, uno::UNO_QUERY );
-    DBG_ASSERT( xPropSet.is(), "No access to the document info!\n" )
-    if ( !xPropSet.is() )
-        throw uno::RuntimeException();
-
-    try
-    {
-        uno::Reference< beans::XPropertySet > xSet( xDocInfoToFill, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
-        const beans::Property* pProps = lProps.getConstArray();
-        sal_Int32 c = lProps.getLength();
-        sal_Int32 i = 0;
-        for (i=0; i<c; ++i)
-        {
-            uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
-            if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
-                // QUESTION: DefaultValue?!
-                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
-            try
-            {
-                // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
-                xSet->setPropertyValue( pProps[i].Name, aValue );
-            }
-            catch ( uno::Exception& ) {}
-        }
-
-        sal_Int16 nCount = xDocInfo->getUserFieldCount();
-        sal_Int16 nSupportedCount = xDocInfoToFill->getUserFieldCount();
-        for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
-        {
-            ::rtl::OUString aPropName = xDocInfo->getUserFieldName( nInd );
-            xDocInfoToFill->setUserFieldName( nInd, aPropName );
-            ::rtl::OUString aPropVal = xDocInfo->getUserFieldValue( nInd );
-            xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
-        }
-    }
-    catch ( uno::Exception& ) {}
-}
-
-//-------------------------------------------------------------------------
-// static
-void SfxStoringHelper::PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear, sal_Bool bUseUserData )
-{
-    ::rtl::OUString aUserName = SvtUserOptions().GetFullName();
-    if ( !bUseUserData )
-       {
-           if ( aUserName.equals( aDocInfoToClear.GetAuthor() ) )
-            aDocInfoToClear.SetAuthor( String() );
-
-           if ( aUserName.equals( aDocInfoToClear.GetPrintedBy() ) )
-            aDocInfoToClear.SetPrintedBy( String() );
-
-        aUserName = ::rtl::OUString();
-       }
-
-    aDocInfoToClear.SetChanged( aUserName );
-    // TODO/LATER: the editing duration can't be updated anyway
-    // TODO/LATER: the message can not be broadcasted but it looks like nobody needs it
-}
-
-//-------------------------------------------------------------------------
-// static
-void SfxStoringHelper::SetDocInfoState( const uno::Reference< frame::XModel >& xModel,
-                                        const SfxDocumentInfo& aDocInfoState,
-                                        sal_Bool bNoModify )
+void SfxStoringHelper::SetDocInfoState(
+        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< document::XDocumentInfo >& i_xOldDocInfo,
+        sal_Bool bNoModify )
 {
     uno::Reference< document::XDocumentInfoSupplier > xModelDocInfoSupplier( xModel, uno::UNO_QUERY );
     if ( !xModelDocInfoSupplier.is() )
         throw uno::RuntimeException(); // TODO:
 
-    uno::Reference< document::XDocumentInfo > xDocInfo = aDocInfoState.GetInfo();
     uno::Reference< document::XDocumentInfo > xDocInfoToFill = xModelDocInfoSupplier->getDocumentInfo();
-    uno::Reference< beans::XPropertySet > xPropSet( xDocInfo, uno::UNO_QUERY );
-    DBG_ASSERT( xPropSet.is(), "No access to the document info!\n" )
-    if ( !xPropSet.is() )
-        throw uno::RuntimeException();
+    uno::Reference< beans::XPropertySet > xPropSet( i_xOldDocInfo,
+        uno::UNO_QUERY_THROW );
 
     uno::Reference< util::XModifiable > xModifiable( xModel, uno::UNO_QUERY );
     if ( bNoModify && !xModifiable.is() )
@@ -1708,13 +1637,13 @@ void SfxStoringHelper::SetDocInfoState( const uno::Reference< frame::XModel >& x
             catch ( uno::Exception& ) {}
         }
 
-        sal_Int16 nCount = xDocInfo->getUserFieldCount();
+        sal_Int16 nCount = i_xOldDocInfo->getUserFieldCount();
         sal_Int16 nSupportedCount = xDocInfoToFill->getUserFieldCount();
         for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
         {
-            ::rtl::OUString aPropName = xDocInfo->getUserFieldName( nInd );
+            ::rtl::OUString aPropName = i_xOldDocInfo->getUserFieldName( nInd );
             xDocInfoToFill->setUserFieldName( nInd, aPropName );
-            ::rtl::OUString aPropVal = xDocInfo->getUserFieldValue( nInd );
+            ::rtl::OUString aPropVal = i_xOldDocInfo->getUserFieldValue( nInd );
             xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
         }
     }
