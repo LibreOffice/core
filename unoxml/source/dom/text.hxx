@@ -4,9 +4,9 @@
  *
  *  $RCSfile: text.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:02:21 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,12 @@ namespace DOM
         CText(){}
         CText(const xmlNodePtr aNodePtr);
         void init_text(const xmlNodePtr aNodePtr);
+
     public:
+
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
+
          // Breaks this node into two nodes at the specified offset, keeping
          // both in the tree as siblings.
          virtual Reference< XText > SAL_CALL splitText(sal_Int32 offset)
