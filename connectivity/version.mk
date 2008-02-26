@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2007-09-13 17:49:49 $
+#   last change: $Author: obo $ $Date: 2008-02-26 15:25:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,18 +79,6 @@ JDBC_MAJOR=2
 JDBC_MINOR=0
 # the micro 
 JDBC_MICRO=0
-
-
-# ----------------------------ADABAS settings-----------------------------------#
-# target
-ADABAS_TARGET=adabas
-
-# the major 
-ADABAS_MAJOR=2
-# the minor 
-ADABAS_MINOR=0
-# the micro 
-ADABAS_MICRO=0
 
 
 # ----------------------------dbtools settings-----------------------------------#
