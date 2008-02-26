@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:17:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,6 +508,22 @@ public:
     // (wenn Handles uebereinander liegen).
     SdrHdl* IsHdlListHit(const Point& rPnt, BOOL bBack=FALSE, BOOL bNext=FALSE, SdrHdl* pHdl0=NULL) const;
     SdrHdl* GetHdl(SdrHdlKind eKind1) const;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
+{
+public:
+    SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind);
+
+protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject();
+
+    BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
+
+    static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
 };
 
 #endif //_SVDHDL_HXX
