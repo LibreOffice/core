@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:37:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,6 +809,8 @@ public:
     ~ScXMLImport() throw();
 
     // namespace office
+    // NB: in contrast to other CreateFooContexts, this particular one handles
+    //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext(
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
@@ -823,8 +825,8 @@ public:
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void SetStatisticAttributes( const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual void SetStatistics(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
 
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
