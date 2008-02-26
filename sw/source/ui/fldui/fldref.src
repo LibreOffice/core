@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:08:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,29 +68,38 @@ TabPage TP_FLD_REF
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 76 , 165 ) ;
+        Size = MAP_APPFONT ( 166 , 73 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
     };
+    /* TreeListBox in order to have tool tips - shares window position and size with LB_REFSELECTION */
+    Control LB_REFSELECTION_TOOLTIP
+    {
+        HelpID = HID_REFSELECTION_TOOLTIP ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 166 , 73 ) ;
+        TabStop = TRUE ;
+    };
     FixedText FT_REFFORMAT
     {
-        Pos = MAP_APPFONT ( 170 , 3 ) ;
-        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Pos = MAP_APPFONT ( 88 , 93 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "F~ormat" ;
+        Text [ en-US ] = "Insert ~reference to" ;
     };
     ListBox LB_REFFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 14 ) ;
-        Size = MAP_APPFONT ( 84 , 110 ) ;
+        Pos = MAP_APPFONT ( 88 , 104 ) ;
+        Size = MAP_APPFONT ( 76 , 75 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
          // Sort = TRUE;
     };
     FixedText FT_REFNAME
     {
-        Pos = MAP_APPFONT ( 170 , 128 ) ;
+        Pos = MAP_APPFONT ( 170 , 93 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Na~me" ;
@@ -98,14 +107,14 @@ TabPage TP_FLD_REF
     Edit ED_REFNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 140 ) ;
+        Pos = MAP_APPFONT ( 170 , 104 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_REFVALUE
     {
-        Pos = MAP_APPFONT ( 170 , 156 ) ;
+        Pos = MAP_APPFONT ( 170 , 122 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Text [ en-US ] = "~Value" ;
         Disable = TRUE ;
@@ -114,7 +123,7 @@ TabPage TP_FLD_REF
     Edit ED_REFVALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 167 ) ;
+        Pos = MAP_APPFONT ( 170 , 136 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
         TabStop = TRUE ;
         Disable = TRUE ;
@@ -132,5 +141,13 @@ TabPage TP_FLD_REF
     {
         Text [ en-US ] = "Endnotes" ;
     };
-    Text [ en-US ] = "References" ;
+    String STR_REFHEADING
+    {
+        Text [ en-US ] = "Headings" ;
+    };
+    String STR_REFNUMITEM
+    {
+        Text [ en-US ] = "Numbered Paragraphs" ;
+    };
+    Text [ en-US ] = "Cross-references" ;
 };
