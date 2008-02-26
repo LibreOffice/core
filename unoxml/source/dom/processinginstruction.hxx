@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processinginstruction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:01:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,15 @@ namespace DOM
     class CProcessingInstruction : public cppu::ImplInheritanceHelper1< CNode, XProcessingInstruction >
     {
         friend class CNode;
+
     protected:
         CProcessingInstruction(const xmlNodePtr aNodePtr);
 
     public:
+
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
+
         /**
         The content of this processing instruction.
         */
