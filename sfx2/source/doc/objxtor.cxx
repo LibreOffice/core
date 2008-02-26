@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:28:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,13 @@
 
 #include "arrdecl.hxx"
 
+#include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef _VOS_MUTEX_HXX_
@@ -78,8 +81,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef GCC
 #endif
 
 #ifndef _SBXCLASS_HXX //autogen
@@ -133,7 +134,6 @@
 #include <sfx2/request.hxx>
 #include "doc.hrc"
 #include "sfxlocal.hrc"
-#include <sfx2/docinf.hxx>
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -169,6 +169,50 @@ extern svtools::AsynchronLink* pPendingCloser;
 static WeakReference< XModel > xWorkingDoc;
 
 //=========================================================================
+
+/** This Listener is used to get notified when the XDocumentProperties of the
+    XModel change.
+    If several changes are done the "bQuiet" member can be used to
+    temporarily suppress notifications.
+ */
+class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
+    ::com::sun::star::util::XModifyListener >
+{
+
+public:
+    SfxObjectShell& m_rShell;
+    bool bQuiet;
+    bool bGotModified;
+
+    SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
+        : m_rShell(i_rDoc)
+        , bQuiet(false)
+    { };
+
+    virtual void SAL_CALL disposing( const lang::EventObject& )
+        throw ( uno::RuntimeException );
+    virtual void SAL_CALL modified( const lang::EventObject& )
+        throw (uno::RuntimeException );
+};
+
+void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
+        throw ( uno::RuntimeException )
+{
+    bGotModified = true;
+
+    // notify changes to the SfxObjectShell
+    if ( !bQuiet ) {
+        m_rShell.FlushDocInfo();
+    }
+}
+
+void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
+    throw ( uno::RuntimeException )
+{
+}
+
+//=========================================================================
+
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
@@ -225,7 +269,6 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 :mpObjectContainer(0)
     ,pAccMgr(0)
-    ,pDocInfo ( 0)
     ,pCfgMgr( 0)
     ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )
@@ -298,6 +341,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bIsModified( sal_False )
     ,m_nMapUnit( MAP_100TH_MM )
     ,m_bCreateTempStor( sal_False )
+    ,m_xDocInfoListener()
     ,m_bIsInit( sal_False )
 {
 }
@@ -398,7 +442,6 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
-    DELETEZ( pImp->pDocInfo );
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
 
@@ -473,6 +516,15 @@ sal_Bool SfxObjectShell::Close()
 
         pImp->bClosing = sal_True;
         Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
+
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<util::XModifyBroadcaster> xMB(
+            xDPS->getDocumentProperties(), uno::UNO_QUERY);
+        if (xMB.is()) {
+            xMB->removeModifyListener(pImp->m_xDocInfoListener);
+        }
+        pImp->m_xDocInfoListener.clear();
 
         if ( xCloseable.is() )
         {
@@ -645,7 +697,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
             {
                 //initiate help agent to inform about "print modifies the document"
                 SvtPrintWarningOptions aPrintOptions;
-                if(aPrintOptions.IsModifyDocumentOnPrintingAllowed() && HasName() && GetDocInfo().GetPrintDate().IsValid())
+                if (aPrintOptions.IsModifyDocumentOnPrintingAllowed() &&
+                    HasName() && getDocProperties()->getPrintDate().Month > 0)
                 {
                     SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
                 }
@@ -963,8 +1016,13 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 {
     OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
     pImp->xModel = pModel;
-    if ( pModel )
+    if ( pModel ) {
         pModel->addCloseListener( new SfxModelListener_Impl(this) );
+        pImp->m_xDocInfoListener = new SfxDocInfoListener_Impl(*this);
+        uno::Reference<util::XModifyBroadcaster> xMB(
+            pModel->getDocumentProperties(), uno::UNO_QUERY_THROW);
+        xMB->addModifyListener(pImp->m_xDocInfoListener);
+    }
 }
 
 //--------------------------------------------------------------------
