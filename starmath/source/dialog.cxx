@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:52:52 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,7 +851,7 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
 void SmDistanceDialog::SetCategory(USHORT nCategory)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(0 <= nCategory  &&  nCategory < NOCATEGORIES,
+    DBG_ASSERT(/*0 <= nCategory  &&*/  nCategory < NOCATEGORIES,
         "Sm: falsche Kategorienummer in SmDistanceDialog");
 #endif
 
