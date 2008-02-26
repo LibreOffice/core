@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:12:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:37:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,73 +44,28 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#include <unotools/configmgr.hxx>
+#include <tools/time.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <xmloff/xmlmetae.hxx>
-#include <xmloff/attrlist.hxx>
-#include <xmloff/nmspmap.hxx>
-
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmloff/xmluconv.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _TOOLS_TIME_HXX
-#include <tools/time.hxx>
-#endif
-
-#ifndef _UTL_BOOTSTRAP_HXX
-#include <unotools/bootstrap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
+#include <xmloff/nmspmap.hxx>
+#include "xmlnmspe.hxx"
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
+#include <comphelper/sequenceasvector.hxx>
 #include <unotools/docinfohelper.hxx>
+
+#include <string.h>
+
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-
-//-------------------------------------------------------------------------
-
-#define PROP_TITLE          "Title"
-#define PROP_DESCRIPTION    "Description"
-#define PROP_SUBJECT          "Subject"
-#define PROP_KEYWORDS       "Keywords"
-#define PROP_AUTHOR         "Author"
-#define PROP_CREATIONDATE   "CreationDate"
-#define PROP_MODIFIEDBY     "ModifiedBy"
-#define PROP_MODIFYDATE     "ModifyDate"
-#define PROP_PRINTEDBY      "PrintedBy"
-#define PROP_PRINTDATE      "PrintDate"
-#define PROP_TEMPLATEURL    "TemplateFileName"
-#define PROP_TEMPLATENAME   "Template"
-#define PROP_TEMPLATEDATE   "TemplateDate"
-#define PROP_RELOADENABLED  "AutoloadEnabled"
-#define PROP_RELOADURL      "AutoloadURL"
-#define PROP_RELOADSECS     "AutoloadSecs"
-#define PROP_DEFAULTTARGET  "DefaultTarget"
-#define PROP_EDITINGCYCLES  "EditingCycles"
-#define PROP_EDITINGDURATION "EditingDuration"
-
-#define PROP_CHARLOCALE     "Language"
-#define PROP_DOCSTATISTIC   "DocumentStatistic"
 
 
 //-------------------------------------------------------------------------
@@ -122,8 +77,8 @@ void lcl_AddTwoDigits( rtl::OUStringBuffer& rStr, sal_Int32 nVal )
     rStr.append( nVal );
 }
 
-// static
-rtl::OUString SfxXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
+rtl::OUString
+SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 {
     //  return ISO date string "YYYY-MM-DDThh:mm:ss"
 
@@ -145,376 +100,192 @@ rtl::OUString SfxXMLMetaExport::GetISODateTimeString( const util::DateTime& rDat
 
 //-------------------------------------------------------------------------
 
-SfxXMLMetaExport::SfxXMLMetaExport(
-        SvXMLExport& rExp,
-        const uno::Reference<frame::XModel>& rDocModel ) :
-    rExport( rExp )
+void SvXMLMetaExport::SimpleStringElement( const rtl::OUString& rText,
+        sal_uInt16 nNamespace, enum XMLTokenEnum eElementName )
 {
-    uno::Reference<document::XDocumentInfoSupplier> xSupp( rDocModel, uno::UNO_QUERY );
-    if ( xSupp.is() )
-    {
-        xDocInfo = xSupp->getDocumentInfo();
-        xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
-    }
-
-    if ( xInfoProp.is() )
-    {
-        //  get document language from document properties
-        //  (not available for all document types)
-        try
-        {
-            uno::Any aLocAny = xInfoProp->getPropertyValue(
-                        rtl::OUString::createFromAscii( PROP_CHARLOCALE ) );
-            aLocAny >>= aLocale;
-        }
-        catch (beans::UnknownPropertyException&)
-        {
-            // no error
-        }
-    }
-
-    // for Image etc. there is no XModel and no document info
-//  DBG_ASSERT( xInfoProp.is(), "no document info properties" );
-}
-
-SfxXMLMetaExport::SfxXMLMetaExport(
-        SvXMLExport& rExp,
-        const uno::Reference<document::XDocumentInfo>& rDocInfo ) :
-    rExport( rExp ),
-    xDocInfo( rDocInfo )
-{
-    xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
-
-    if ( xInfoProp.is() )
-    {
-        //  get document language from document info
-        //  (not available for all document types)
-
-        try
-        {
-            xInfoProp->getPropertyValue( rtl::OUString::createFromAscii( PROP_CHARLOCALE ) ) >>= aLocale;
-        }
-        catch (beans::UnknownPropertyException&)
-        {
-            // no error
-        }
-
-        try
-        {
-            // the document statistic is requested in this way only if the exporter is not based on model
-            // but on document info directly
-            xInfoProp->getPropertyValue( rtl::OUString::createFromAscii( PROP_DOCSTATISTIC ) ) >>= aDocStatistic;
-        }
-        catch (beans::UnknownPropertyException&)
-        {
-            // no error
-        }
-    }
-}
-
-
-SfxXMLMetaExport::~SfxXMLMetaExport()
-{
-}
-
-void SfxXMLMetaExport::SimpleStringElement( const rtl::OUString& rPropertyName,
-                                            sal_uInt16 nNamespace,
-                                            enum XMLTokenEnum eElementName )
-{
-    uno::Any aAny = xInfoProp->getPropertyValue( rPropertyName );
-    rtl::OUString sValue;
-    if ( aAny >>= sValue )
-    {
-        if ( sValue.getLength() )
-        {
-            SvXMLElementExport aElem( rExport, nNamespace, eElementName,
-                                      sal_True, sal_False );
-            rExport.Characters( sValue );
-
-        }
-    }
-}
-
-void SfxXMLMetaExport::SimpleDateTimeElement(
-        const rtl::OUString& rPropertyName, sal_uInt16 nNamespace,
-        enum XMLTokenEnum eElementName )
-{
-    uno::Any aAny = xInfoProp->getPropertyValue( rPropertyName );
-    util::DateTime aDateTime;
-    if ( aAny >>= aDateTime )
-    {
-        rtl::OUString sValue = GetISODateTimeString( aDateTime );
-
-        SvXMLElementExport aElem( rExport, nNamespace, eElementName,
+    if ( rText.getLength() ) {
+        SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
                                   sal_True, sal_False );
-        rExport.Characters( sValue );
+        mrExport.Characters( rText );
     }
 }
 
-void SfxXMLMetaExport::Export()
+void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
+        sal_uInt16 nNamespace, enum XMLTokenEnum eElementName )
 {
-    // BM: #i60323# export generator even if xInfoProp is empty (which is the
-    // case for charts). The generator does not depend on xInfoProp
-    rtl::OUString sElem, sSubElem, sAttrName, sValue;
-    uno::Any aPropVal;
-
-    //  generator
-    // first token: real product name + version
-    sValue = ::utl::DocInfoHelper::GetGeneratorString();
-    {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_GENERATOR,
-                                  sal_True, sal_True );
-        rExport.Characters( sValue );
+    if (rDate.Month != 0) { // invalid dates are 0-0-0
+        rtl::OUString sValue = GetISODateTimeString( rDate );
+        if ( sValue.getLength() ) {
+            SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
+                                      sal_True, sal_False );
+            mrExport.Characters( sValue );
+        }
     }
+}
 
-    if ( !xInfoProp.is() ) return;
+void SvXMLMetaExport::_Export()
+{
+    //  generator
+    {
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_GENERATOR,
+                                  sal_True, sal_True );
+        mrExport.Characters( ::utl::DocInfoHelper::GetGeneratorString() );
+    }
 
     //  document title
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_TITLE),
-                         XML_NAMESPACE_DC, XML_TITLE );
+    SimpleStringElement  ( mxDocProps->getTitle(),
+                           XML_NAMESPACE_DC, XML_TITLE );
 
     //  description
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_DESCRIPTION),
-                         XML_NAMESPACE_DC, XML_DESCRIPTION );
+    SimpleStringElement  ( mxDocProps->getDescription(),
+                           XML_NAMESPACE_DC, XML_DESCRIPTION );
 
     //  subject
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_SUBJECT),
-                         XML_NAMESPACE_DC, XML_SUBJECT );
+    SimpleStringElement  ( mxDocProps->getSubject(),
+                           XML_NAMESPACE_DC, XML_SUBJECT );
 
     //  created...
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_AUTHOR),
-                         XML_NAMESPACE_META, XML_INITIAL_CREATOR );
-    SimpleDateTimeElement( ::rtl::OUString::createFromAscii(PROP_CREATIONDATE),
+    SimpleStringElement  ( mxDocProps->getAuthor(),
+                           XML_NAMESPACE_META, XML_INITIAL_CREATOR );
+    SimpleDateTimeElement( mxDocProps->getCreationDate(),
                            XML_NAMESPACE_META, XML_CREATION_DATE );
 
     //  modified...
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_MODIFIEDBY),
-                         XML_NAMESPACE_DC, XML_CREATOR );
-    SimpleDateTimeElement( ::rtl::OUString::createFromAscii(PROP_MODIFYDATE),
+    SimpleStringElement  ( mxDocProps->getModifiedBy(),
+                           XML_NAMESPACE_DC, XML_CREATOR );
+    SimpleDateTimeElement( mxDocProps->getModificationDate(),
                            XML_NAMESPACE_DC, XML_DATE );
 
     //  printed...
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_PRINTEDBY),
-                         XML_NAMESPACE_META, XML_PRINTED_BY );
-    SimpleDateTimeElement( ::rtl::OUString::createFromAscii(PROP_PRINTDATE),
+    SimpleStringElement  ( mxDocProps->getPrintedBy(),
+                           XML_NAMESPACE_META, XML_PRINTED_BY );
+    SimpleDateTimeElement( mxDocProps->getPrintDate(),
                            XML_NAMESPACE_META, XML_PRINT_DATE );
 
     //  keywords
-    // service DocumentInfo contains keywords in a single string, comma separated.
-    aPropVal = xInfoProp->getPropertyValue(
-                    ::rtl::OUString::createFromAscii(PROP_KEYWORDS) );
-    rtl::OUString sKeywords;
-    aPropVal >>= sKeywords;
-    if ( sKeywords.getLength() )
-    {
-        sal_Int32 nTokenIndex = 0;
-        do
-        {
-            rtl::OUString sKeyword = sKeywords.getToken( 0, ',', nTokenIndex ).trim();
-
-            SvXMLElementExport aKeywElem( rExport,
-                                          XML_NAMESPACE_META, XML_KEYWORD,
-                                          sal_True, sal_False );
-            rExport.Characters( sKeyword );
-        }
-        while ( nTokenIndex >= 0 );
+    const uno::Sequence< ::rtl::OUString > keywords = mxDocProps->getKeywords();
+    for (sal_Int32 i = 0; i < keywords.getLength(); ++i) {
+        SvXMLElementExport aKwElem( mrExport, XML_NAMESPACE_META, XML_KEYWORD,
+                                    sal_True, sal_False );
+        mrExport.Characters( keywords[i] );
     }
 
     //  document language
-#if 0
-    if ( eLanguage != LANGUAGE_SYSTEM )
     {
-        sValue = MsLangId::convertLanguageToIsoString( eLanguage, '-' );
-        if ( sValue.getLength() )
-        {
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DC, XML_LANGUAGE,
+        const lang::Locale aLocale = mxDocProps->getLanguage();
+        ::rtl::OUString sValue = aLocale.Language;
+        if (sValue.getLength()) {
+            if ( aLocale.Country.getLength() )
+            {
+                sValue += rtl::OUString::valueOf((sal_Unicode)'-');
+                sValue += aLocale.Country;
+            }
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DC, XML_LANGUAGE,
                                       sal_True, sal_False );
-            aElem->Characters( sValue );
+            mrExport.Characters( sValue );
         }
-    }
-#endif
-    if ( aLocale.Language.getLength() )
-    {
-        sValue = aLocale.Language;
-        if ( aLocale.Country.getLength() )
-        {
-            sValue += rtl::OUString::valueOf((sal_Unicode)'-');
-            sValue += aLocale.Country;
-        }
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DC, XML_LANGUAGE,
-                                  sal_True, sal_False );
-        rExport.Characters( sValue );
     }
 
     //  editing cycles
-    aPropVal = xInfoProp->getPropertyValue(
-                    ::rtl::OUString::createFromAscii(PROP_EDITINGCYCLES) );
-    sal_Int32 nCycles = 0;
-    if ( aPropVal >>= nCycles )
     {
-        sValue = rtl::OUString::valueOf( nCycles );
-
-        SvXMLElementExport aElem( rExport,
+        SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_CYCLES,
                                   sal_True, sal_False );
-        rExport.Characters( sValue );
+        mrExport.Characters( ::rtl::OUString::valueOf(
+            static_cast<sal_Int32>(mxDocProps->getEditingCycles()) ) );
     }
 
     //  editing duration
-    //  property is a int32 with the Time::GetTime value
-    aPropVal = xInfoProp->getPropertyValue(
-                    ::rtl::OUString::createFromAscii(PROP_EDITINGDURATION) );
-    sal_Int32 nDurVal = 0;
-    if ( aPropVal >>= nDurVal )
+    //  property is a int32 (seconds)
     {
-        Time aDurTime( nDurVal );
-        sValue = SvXMLUnitConverter::convertTimeDuration( aDurTime );
-
-        SvXMLElementExport aElem( rExport,
+        sal_Int32 secs = mxDocProps->getEditingDuration();
+        SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_DURATION,
                                   sal_True, sal_False );
-        rExport.Characters( sValue );
+        mrExport.Characters( SvXMLUnitConverter::convertTimeDuration(
+            Time(secs/3600, (secs%3600)/60, secs%60)) );
     }
 
     //  default target
-    aPropVal = xInfoProp->getPropertyValue(
-                        ::rtl::OUString::createFromAscii(PROP_DEFAULTTARGET) );
-    rtl::OUString sDefTarget;
-    aPropVal >>= sDefTarget;
+    const ::rtl::OUString sDefTarget = mxDocProps->getDefaultTarget();
     if ( sDefTarget.getLength() )
     {
-        rExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
-                              sDefTarget );
+        mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
+                               sDefTarget );
 
         //! define strings for xlink:show values
-        XMLTokenEnum eShow =
+        const XMLTokenEnum eShow =
             sDefTarget.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_blank"))
                 ? XML_NEW : XML_REPLACE;
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eShow );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eShow );
 
-        SvXMLElementExport aElem( rExport,
+        SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META,XML_HYPERLINK_BEHAVIOUR,
                                   sal_True, sal_False );
     }
 
     //  auto-reload
-    aPropVal = xInfoProp->getPropertyValue(
-                        ::rtl::OUString::createFromAscii(PROP_RELOADENABLED) );
-    BOOL bAutoReload = FALSE;
-    if ( aPropVal.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-        bAutoReload = *(sal_Bool*)aPropVal.getValue();
-    if ( bAutoReload )
+    const ::rtl::OUString sReloadURL = mxDocProps->getAutoloadURL();
+    const sal_Int32 sReloadDelay = mxDocProps->getAutoloadSecs();
+    if (sReloadDelay != 0 || sReloadURL.getLength() != 0)
     {
-        aPropVal = xInfoProp->getPropertyValue(
-                            ::rtl::OUString::createFromAscii(PROP_RELOADURL) );
-        rtl::OUString sReloadURL;
-        aPropVal >>= sReloadURL;
-        if ( sReloadURL.getLength() )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                                  rExport.GetRelativeReference( sReloadURL) );
-        }
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
+                              mrExport.GetRelativeReference( sReloadURL ) );
 
-        aPropVal = xInfoProp->getPropertyValue(
-                            ::rtl::OUString::createFromAscii(PROP_RELOADSECS) );
-        sal_Int32 nSecs = 0;
-        if ( aPropVal >>= nSecs )
-        {
-            Time aTime;
-            aTime.MakeTimeFromMS( nSecs * 1000 );
-            rtl::OUString sReloadTime = SvXMLUnitConverter::convertTimeDuration( aTime );
+        mrExport.AddAttribute( XML_NAMESPACE_META, XML_DELAY,
+            SvXMLUnitConverter::convertTimeDuration(
+                Time(sReloadDelay/3600, (sReloadDelay%3600)/60,
+                    sReloadDelay%60 )) );
 
-            rExport.AddAttribute( XML_NAMESPACE_META, XML_DELAY, sReloadTime );
-        }
-
-
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_AUTO_RELOAD,
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_AUTO_RELOAD,
                                   sal_True, sal_False );
     }
 
     //  template
-    aPropVal = xInfoProp->getPropertyValue(
-                        ::rtl::OUString::createFromAscii(PROP_TEMPLATEURL) );
-    rtl::OUString sTplPath;
-    aPropVal >>= sTplPath;
+    const rtl::OUString sTplPath = mxDocProps->getTemplateURL();
     if ( sTplPath.getLength() )
     {
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
 
         //  template URL
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                              rExport.GetRelativeReference(sTplPath) );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
+                              mrExport.GetRelativeReference(sTplPath) );
 
         //  template name
-        aPropVal = xInfoProp->getPropertyValue(
-                        ::rtl::OUString::createFromAscii(PROP_TEMPLATENAME) );
-        rtl::OUString sTplName;
-        aPropVal >>= sTplName;
-        if ( sTplName.getLength() )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TITLE, sTplName );
-        }
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TITLE,
+                              mxDocProps->getTemplateName() );
 
         //  template date
-        aPropVal = xInfoProp->getPropertyValue(
-                        ::rtl::OUString::createFromAscii(PROP_TEMPLATEDATE) );
-        util::DateTime aDateTime;
-        if ( aPropVal >>= aDateTime )
-        {
-            rtl::OUString sTplDate = GetISODateTimeString( aDateTime );
+        mrExport.AddAttribute( XML_NAMESPACE_META, XML_DATE,
+                GetISODateTimeString( mxDocProps->getTemplateDate() ) );
 
-            rExport.AddAttribute( XML_NAMESPACE_META, XML_DATE, sTplDate );
-        }
-
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_TEMPLATE,
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_TEMPLATE,
                                   sal_True, sal_False );
     }
 
     //  user defined fields
-    sal_Int16 nUFCount = xDocInfo->getUserFieldCount();
-    if ( nUFCount )
-    {
-        for (sal_Int16 nUF=0; nUF<nUFCount; nUF++)
-        {
-            rtl::OUString aUFName = xDocInfo->getUserFieldName( nUF );
-            rtl::OUString aUFValue = xDocInfo->getUserFieldValue( nUF );
-
-            rExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, aUFName );
-
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
-                                      XML_USER_DEFINED, sal_True, sal_False );
-            rExport.Characters( aUFValue );
-        }
-    }
-
-    // extended user fields (type safe)
-          uno::Reference< beans::XPropertySetInfo > xSetInfo = xInfoProp->getPropertySetInfo();
-    const uno::Sequence< beans::Property >          lProps   = xSetInfo->getProperties();
-    const beans::Property*                          pProps   = lProps.getConstArray();
-          sal_Int32                                 c        = lProps.getLength();
-          sal_Int32                                 i        = 0;
-    for (i=0; i<c; ++i)
-    {
-        // "fix" property ? => ignore it !
-        if (pProps[i].Handle >= 0)
-            continue;
-
-        // "dynamic" prop => export it
-        uno::Any              aValue = xInfoProp->getPropertyValue(pProps[i].Name);
+    uno::Reference< beans::XPropertyAccess > xUserDefined(
+        mxDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+    const uno::Sequence< beans::PropertyValue > props =
+        xUserDefined->getPropertyValues();
+    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
         ::rtl::OUStringBuffer sValueBuffer;
-        ::rtl::OUStringBuffer sType ;
-
-        if (!SvXMLUnitConverter::convertAny(sValueBuffer, sType, aValue))
+        ::rtl::OUStringBuffer sType;
+        if (!SvXMLUnitConverter::convertAny(
+                sValueBuffer, sType, props[i].Value)) {
             continue;
-
-        rExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, pProps[i].Name );
-        rExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE, sType.makeStringAndClear() );
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, props[i].Name );
+        mrExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE,
+                              sType.makeStringAndClear() );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META,
                                   XML_USER_DEFINED, sal_True, sal_False );
-        rExport.Characters( sValueBuffer.makeStringAndClear() );
+        mrExport.Characters( sValueBuffer.makeStringAndClear() );
     }
 
+    const uno::Sequence< beans::NamedValue > aDocStatistic =
+            mxDocProps->getDocumentStatistics();
     // write document statistic if there is any provided
     if ( aDocStatistic.getLength() )
     {
@@ -524,32 +295,240 @@ void SfxXMLMetaExport::Export()
             if ( aDocStatistic[nInd].Value >>= nValue )
             {
                 ::rtl::OUString aValue = rtl::OUString::valueOf( nValue );
-
-                if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellCount" ) ) ) )
-                    rExport.AddAttribute( XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
+                if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "TableCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "ImageCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
+                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "CellCount" ) ) ) )
+                    mrExport.AddAttribute(
+                        XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
                 else
                 {
                     DBG_ASSERT( sal_False, "Unknown statistic value!\n" );
                 }
             }
         }
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True );
+        SvXMLElementExport aElem( mrExport,
+            XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True );
     }
 }
 
+//-------------------------------------------------------------------------
+
+static const char *s_xmlns  = "xmlns";
+static const char *s_xmlns2 = "xmlns:";
+static const char *s_meta   = "meta:";
+static const char *s_href   = "xlink:href";
+
+SvXMLMetaExport::SvXMLMetaExport(
+        SvXMLExport& i_rExp,
+        const uno::Reference<document::XDocumentProperties>& i_rDocProps ) :
+    mrExport( i_rExp ),
+    mxDocProps( i_rDocProps ),
+    m_level( 0 ),
+    m_preservedNSs()
+{
+    DBG_ASSERT( mxDocProps.is(), "no document properties" );
+}
+
+SvXMLMetaExport::~SvXMLMetaExport()
+{
+}
+
+void SvXMLMetaExport::Export()
+{
+//    exportDom(xDOM, mrExport); // this would not work (root node, namespaces)
+    uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
+        uno::UNO_QUERY);
+    if (xSAXable.is()) {
+        ::comphelper::SequenceAsVector< beans::StringPair > namespaces;
+        const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
+        for (sal_uInt16 key = rNsMap.GetFirstKey();
+             key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {
+            beans::StringPair ns;
+            const ::rtl::OUString attrname = rNsMap.GetAttrNameByKey(key);
+            if (attrname.matchAsciiL(s_xmlns2, strlen(s_xmlns2))) {
+                ns.First  = attrname.copy(strlen(s_xmlns2));
+            } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
+                // default initialized empty string
+            } else {
+            DBG_ERROR("namespace attribute not starting with xmlns unexpected");
+            }
+            ns.Second = rNsMap.GetNameByKey(key);
+            namespaces.push_back(ns);
+        }
+        xSAXable->serialize(this, namespaces.getAsConstList());
+    } else {
+        // office:meta
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_OFFICE, XML_META,
+                                  sal_True, sal_True );
+        // fall back to using public interface of XDocumentProperties
+        _Export();
+    }
+}
+
+// ::com::sun::star::xml::sax::XDocumentHandler:
+void SAL_CALL
+SvXMLMetaExport::startDocument()
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    // ignore: has already been done by SvXMLExport::exportDoc
+    DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
+}
+
+void SAL_CALL
+SvXMLMetaExport::endDocument()
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    // ignore: will be done by SvXMLExport::exportDoc
+    DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
+}
+
+// unfortunately, this method contains far too much ugly namespace mangling.
+void SAL_CALL
+SvXMLMetaExport::startElement(const ::rtl::OUString & i_rName,
+    const uno::Reference< xml::sax::XAttributeList > & i_xAttribs)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+
+    if (m_level == 0) {
+        // namepace decls: default ones have been written at the root element
+        // non-default ones must be preserved here
+        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+            const ::rtl::OUString name(i_xAttribs->getNameByIndex(i));
+            if (name.matchAsciiL(s_xmlns, strlen(s_xmlns))) {
+                bool found(false);
+                const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
+                for (sal_uInt16 key = rNsMap.GetFirstKey();
+                     key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {
+                    if (name.equals(rNsMap.GetAttrNameByKey(key))) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    m_preservedNSs.push_back(beans::StringPair(name,
+                        i_xAttribs->getValueByIndex(i)));
+                }
+            }
+        }
+        // ignore the root: it has been written already
+        ++m_level;
+        return;
+    }
+
+    if (m_level == 1) {
+        // attach preserved namespace decls from root node here
+        for (std::vector<beans::StringPair>::const_iterator iter =
+                m_preservedNSs.begin(); iter != m_preservedNSs.end(); ++iter) {
+            const ::rtl::OUString ns(iter->First);
+            bool found(false);
+            // but only if it is not already there
+            for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+                const ::rtl::OUString name(i_xAttribs->getNameByIndex(i));
+                if (ns.equals(name)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                mrExport.AddAttribute(ns, iter->Second);
+            }
+        }
+    }
+
+    // attach the attributes
+    if (i_rName.matchAsciiL(s_meta, strlen(s_meta))) {
+        // special handling for all elements that may have
+        // xlink:href attributes; these must be made relative
+        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+            const ::rtl::OUString name (i_xAttribs->getNameByIndex (i));
+            ::rtl::OUString value(i_xAttribs->getValueByIndex(i));
+            if (name.matchAsciiL(s_href, strlen(s_href))) {
+                value = mrExport.GetRelativeReference(value);
+            }
+            mrExport.AddAttribute(name, value);
+        }
+    } else {
+        for (sal_Int16 i = 0; i < i_xAttribs->getLength(); ++i) {
+            const ::rtl::OUString name  (i_xAttribs->getNameByIndex(i));
+            const ::rtl::OUString value (i_xAttribs->getValueByIndex(i));
+            mrExport.AddAttribute(name, value);
+        }
+    }
+
+    // finally, start the element
+    mrExport.StartElement(i_rName, sal_True); //FIXME:whitespace?
+    ++m_level;
+}
+
+void SAL_CALL
+SvXMLMetaExport::endElement(const ::rtl::OUString & i_rName)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    --m_level;
+    if (m_level == 0) {
+        // ignore the root; see startElement
+        return;
+    }
+    DBG_ASSERT( m_level >= 0, "SvXMLMetaExport: level error" );
+    mrExport.EndElement(i_rName, sal_False);
+}
+
+void SAL_CALL
+SvXMLMetaExport::characters(const ::rtl::OUString & i_rChars)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    mrExport.Characters(i_rChars);
+}
+
+void SAL_CALL
+SvXMLMetaExport::ignorableWhitespace(const ::rtl::OUString & /*i_rWhitespaces*/)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    mrExport.IgnorableWhitespace(/*i_rWhitespaces*/);
+}
+
+void SAL_CALL
+SvXMLMetaExport::processingInstruction(const ::rtl::OUString & i_rTarget,
+    const ::rtl::OUString & i_rData)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    // ignore; the exporter cannot handle these
+    (void) i_rTarget;
+    (void) i_rData;
+}
+
+void SAL_CALL
+SvXMLMetaExport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>&)
+    throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    // nothing to do here, move along...
+}
 
 
