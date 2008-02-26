@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tvread.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:50:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,13 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 
 namespace treeview {
 
@@ -201,6 +208,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
+using namespace com::sun::star::deployment;
 
 
 ConfigData::ConfigData()
@@ -534,20 +542,16 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
         return;
 
     sal_uInt64  ret,len = 0;
-    int j = 0;
-
-    // Count number of items
-    while( configData.fileurl[j].getLength() )
-        ++j;
+    int j = configData.vFileURL.size();
 
     TVDom tvDom;
     TVDom* pTVDom = &tvDom;
 
     while( j )
     {
-        len = configData.filelen[--j];
+        len = configData.vFileLen[--j];
         char* s = new char[ int(len) ];  // the buffer to hold the installed files
-        osl::File aFile( configData.fileurl[j] );
+        osl::File aFile( configData.vFileURL[j] );
         aFile.open( OpenFlag_Read );
         aFile.read( s,len,ret );
         aFile.close();
@@ -562,6 +566,7 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 
         int parsed = XML_Parse( parser,s,int( len ),j==0 );
         (void)parsed;
+        OSL_ENSURE( parsed, "TVChildTarget::TVChildTarget(): Tree file parsing failed" );
 
         XML_ParserFree( parser );
         delete[] s;
@@ -757,11 +762,21 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
     // first of all, try do determine whether there are any *.tree files present
 
+    // Start with extensions to set them at the end of the list
+    TreeFileIterator aTreeIt( locale );
+    rtl::OUString aTreeFile;
+    sal_Int32 nFileSize;
+    while( (aTreeFile = aTreeIt.nextTreeFile( nFileSize ) ).getLength() > 0 )
+    {
+        configData.vFileLen.push_back( nFileSize );
+        configData.vFileURL.push_back( aTreeFile );
+    }
+
     osl::Directory aDirectory( url );
     osl::FileStatus aFileStatus( FileStatusMask_FileName | FileStatusMask_FileSize | FileStatusMask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
-        int idx_ = 0,j = 0;
+        int idx_ = 0;
         rtl::OUString aFileUrl, aFileName;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
@@ -782,7 +797,6 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 ( str[idx_ + 3] == 'e' || str[idx_ + 3] == 'E' )    &&
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
-                OSL_ENSURE( j < MAX_MODULE_COUNT,"too many modules installed" );
                 OSL_ENSURE( aFileStatus.isValid( FileStatusMask_FileSize ),
                             "invalid file size" );
 
@@ -790,8 +804,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
                   continue;
 
-                configData.filelen[j] = aFileStatus.getFileSize();
-                configData.fileurl[j++] = aFileUrl ;
+                configData.vFileLen.push_back( aFileStatus.getFileSize() );
+                configData.vFileURL.push_back( aFileUrl );
               }
           }
         aDirectory.close();
@@ -965,3 +979,288 @@ void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
     if( xCfgMgr.is() )
         instpath = xCfgMgr->substituteVariables( instpath );
 }
+
+
+//===================================================================
+// class ExtensionIteratorBase
+
+static rtl::OUString aSlash( rtl::OUString::createFromAscii( "/" ) );
+static rtl::OUString aHelpFilesBaseName( rtl::OUString::createFromAscii( "help" ) );
+static rtl::OUString aEnglishFallbackLang( rtl::OUString::createFromAscii( "en" ) );
+static rtl::OUString aHelpMediaType( rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
+
+ExtensionIteratorBase::ExtensionIteratorBase( const rtl::OUString& aLanguage )
+        : m_eState( USER_EXTENSIONS )
+        , m_aLanguage( aLanguage )
+        , m_aCorrectedLanguage( aLanguage )
+{
+    init();
+}
+
+void ExtensionIteratorBase::init()
+{
+    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    if (xProps.is())
+    {
+        xProps->getPropertyValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= m_xContext;
+        OSL_ASSERT( m_xContext.is() );
+    }
+    if( !m_xContext.is() )
+    {
+        throw RuntimeException(
+            ::rtl::OUString::createFromAscii( "ExtensionIteratorBase::init(), no XComponentContext" ),
+            Reference< XInterface >() );
+    }
+
+    Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
+    m_xSFA = Reference< ucb::XSimpleFileAccess >(
+        xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
+        m_xContext ), UNO_QUERY_THROW );
+
+    m_bUserPackagesLoaded = false;
+    m_bSharedPackagesLoaded = false;
+    m_iUserPackage = 0;
+    m_iSharedPackage = 0;
+}
+
+Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
+    ( Reference< deployment::XPackage > xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
+{
+    o_xParentPackageBundle.clear();
+
+    Reference< deployment::XPackage > xHelpPackage;
+    if( !xPackage.is() )
+        return xHelpPackage;
+
+    // Check if parent package is registered
+    beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
+        ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
+    bool bRegistered = false;
+    if( option.IsPresent )
+    {
+        beans::Ambiguous<sal_Bool> const & reg = option.Value;
+        if( !reg.IsAmbiguous && reg.Value )
+            bRegistered = true;
+    }
+    if( !bRegistered )
+        return xHelpPackage;
+
+    if( xPackage->isBundle() )
+    {
+        Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
+            ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
+        sal_Int32 nPkgCount = aPkgSeq.getLength();
+        const Reference< deployment::XPackage >* pSeq = aPkgSeq.getConstArray();
+        for( sal_Int32 iPkg = 0 ; iPkg < nPkgCount ; ++iPkg )
+        {
+            const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
+            const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
+            rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
+            if( aMediaType.equals( aHelpMediaType ) )
+            {
+                xHelpPackage = xSubPkg;
+                o_xParentPackageBundle = xPackage;
+                break;
+            }
+        }
+    }
+    else
+    {
+        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
+        rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
+        if( aMediaType.equals( aHelpMediaType ) )
+            xHelpPackage = xPackage;
+    }
+
+    return xHelpPackage;
+}
+
+Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPackage
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
+{
+    Reference< deployment::XPackage > xHelpPackage;
+
+    if( !m_bUserPackagesLoaded )
+    {
+        Reference< XPackageManager > xUserManager =
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("user") );
+        m_aUserPackagesSeq = xUserManager->getDeployedPackages
+            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+
+        m_bUserPackagesLoaded = true;
+    }
+
+    if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
+    {
+        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+    }
+    else
+    {
+        const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
+        Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
+        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
+        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
+    }
+
+    return xHelpPackage;
+}
+
+Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPackage
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
+{
+    Reference< deployment::XPackage > xHelpPackage;
+
+    if( !m_bSharedPackagesLoaded )
+    {
+        Reference< XPackageManager > xSharedManager =
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("shared") );
+        m_aSharedPackagesSeq = xSharedManager->getDeployedPackages
+            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+
+        m_bSharedPackagesLoaded = true;
+    }
+
+    if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
+    {
+        m_eState = END_REACHED;
+    }
+    else
+    {
+        const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
+        Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
+        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
+    }
+
+    return xHelpPackage;
+}
+
+
+//===================================================================
+// class TreeFileIterator
+
+rtl::OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
+{
+    rtl::OUString aRetFile;
+
+    while( !aRetFile.getLength() && m_eState != END_REACHED )
+    {
+        switch( m_eState )
+        {
+            case USER_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aRetFile = implGetTreeFileFromPackage( rnFileSize, xHelpPackage );
+                break;
+            }
+
+            case SHARED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aRetFile = implGetTreeFileFromPackage( rnFileSize, xHelpPackage );
+                break;
+            }
+            case END_REACHED:
+                VOS_ENSURE( false, "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
+                break;
+        }
+    }
+
+    return aRetFile;
+}
+
+rtl::OUString TreeFileIterator::expandURL( const rtl::OUString& aURL )
+{
+    static Reference< util::XMacroExpander > xMacroExpander;
+    static Reference< uri::XUriReferenceFactory > xFac;
+
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if( !xMacroExpander.is() || !xFac.is() )
+    {
+        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
+
+        xFac = Reference< uri::XUriReferenceFactory >(
+            xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+        if( !xFac.is() )
+        {
+            throw RuntimeException(
+                ::rtl::OUString::createFromAscii( "Databases::expand(), could not instatiate UriReferenceFactory." ),
+                Reference< XInterface >() );
+        }
+
+        xMacroExpander = Reference< util::XMacroExpander >(
+            m_xContext->getValueByName(
+            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+            UNO_QUERY_THROW );
+     }
+
+    rtl::OUString aRetURL = aURL;
+    if( xMacroExpander.is() )
+    {
+        Reference< uri::XUriReference > uriRef;
+        for (;;)
+        {
+            uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
+            if ( uriRef.is() )
+            {
+                Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
+                if( !sxUri.is() )
+                    break;
+
+                aRetURL = sxUri->expand( xMacroExpander );
+            }
+        }
+     }
+    return aRetURL;
+}
+
+rtl::OUString TreeFileIterator::implGetTreeFileFromPackage
+    ( sal_Int32& rnFileSize, Reference< deployment::XPackage > xPackage )
+{
+    rtl::OUString aRetFile;
+    rtl::OUString aLanguage = m_aCorrectedLanguage;
+    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
+    {
+        rtl::OUStringBuffer aStrBuf;
+        aStrBuf.append( xPackage->getURL() );
+        aStrBuf.append( aSlash );
+        aStrBuf.append( aLanguage );
+        aStrBuf.append( aSlash );
+        aStrBuf.append( aHelpFilesBaseName );
+        aStrBuf.appendAscii( ".tree" );
+
+        aRetFile = expandURL( aStrBuf.makeStringAndClear() );
+        if( iPass == 0 )
+        {
+            if( m_xSFA->exists( aRetFile ) )
+                break;
+            if( m_aCorrectedLanguage.equals( aEnglishFallbackLang ) )
+                break;
+            aLanguage = aEnglishFallbackLang;
+        }
+    }
+
+    rnFileSize = 0;
+    if( m_xSFA->exists( aRetFile ) )
+        rnFileSize = m_xSFA->getSize( aRetFile );
+    else
+        aRetFile = rtl::OUString();
+
+    return aRetFile;
+}
+
+
+
