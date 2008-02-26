@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:04:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _COM_SUN_STAR_VIEW_PRINTABLESTATE_HPP_
 #include <com/sun/star/view/PrintableState.hpp>
@@ -69,8 +71,7 @@
 #endif
 #include <svtools/useroptions.hxx>
 #include <svtools/printwarningoptions.hxx>
-#ifndef GCC
-#endif
+#include <tools/datetime.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
@@ -80,7 +81,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/docinf.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -729,26 +729,28 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             pPrinter->SetPageQueueSize( 1 );
 
             // refresh document info
+            using namespace ::com::sun::star;
             SfxObjectShell *pObjSh = GetObjectShell();
-            SfxDocumentInfo *pInfo = &pObjSh->GetDocInfo();
-            String aLastPrintedBy = pInfo->GetPrintedBy();
-            DateTime aLastPrinted = pInfo->GetPrintDate();
-            String aUserName = SvtUserOptions().GetFullName();
-            if ( !GetObjectShell()->IsUseUserData() )
-                aUserName.Erase();
+            uno::Reference<document::XDocumentProperties> xDocProps(
+                pObjSh->getDocProperties());
+            ::rtl::OUString aLastPrintedBy = xDocProps->getPrintedBy();
+            util::DateTime aLastPrinted = xDocProps->getPrintDate();
 
             // Let the document stay nonmodified during the printing if the configuration says to do so
             SfxPrintGuard_Impl aGuard( pObjSh );
 
-            pInfo->SetPrinted( aUserName );
-            pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
+            xDocProps->setPrintedBy( GetObjectShell()->IsUseUserData()
+                ? ::rtl::OUString( SvtUserOptions().GetFullName() )
+                : ::rtl::OUString() );
+            ::DateTime now;
+            xDocProps->setPrintDate( util::DateTime(
+                now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+                now.GetDay(), now.GetMonth(), now.GetYear() ) );
 
             GetObjectShell()->Broadcast( SfxPrintingHint( -1, pPrintDlg, pPrinter ) );
             ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent, bIsAPI );
             if ( nError == PRINTER_OK )
             {
-                pObjSh->FlushDocInfo();
-
                 Invalidate( SID_PRINTDOC );
                 Invalidate( SID_PRINTDOCDIRECT );
                 Invalidate( SID_SETUPPRINTER );
@@ -767,9 +769,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             else
             {
                 // printing not succesful, reset DocInfo
-                pInfo->SetPrintedBy(aLastPrintedBy);
-                pInfo->SetPrintDate(aLastPrinted);
-                pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
+                xDocProps->setPrintedBy(aLastPrintedBy);
+                xDocProps->setPrintDate(aLastPrinted);
 
                 if ( nError != PRINTER_ABORT )
                 {
