@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:24:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,6 @@
 #endif
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 
 #ifndef _SFX_OBJSH_HXX
