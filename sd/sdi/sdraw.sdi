@@ -6537,6 +6537,33 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
     GroupId = GID_DOCUMENT ;
 ]
 
+SfxVoidItem Crop SID_OBJECT_CROP
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT ;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
 ()
