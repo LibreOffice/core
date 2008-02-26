@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 09:57:23 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:20:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/w1filter.obj \
         $(SLO)$/fltshell.obj
 
 SLOFILES =  \
