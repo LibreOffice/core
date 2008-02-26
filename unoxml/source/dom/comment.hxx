@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comment.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 10:59:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@ namespace DOM
         CComment(const xmlNodePtr aNodePtr);
 
     public:
+
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
          // --- delegations for XCharacterData
         virtual void SAL_CALL appendData(const OUString& arg)
