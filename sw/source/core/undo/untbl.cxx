@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:39:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,7 +642,7 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
             SwIndex aCntPos( pTxtNd, pSave->nCntnt - 1 );
 
             pTxtNd->Erase( aCntPos, 1 );
-            SwCntntNode* pNewNd = pTxtNd->SplitNode(
+            SwCntntNode* pNewNd = pTxtNd->SplitCntntNode(
                                         SwPosition( aSttIdx, aCntPos ));
             if( aBkmkArr.Count() )
                 _RestoreCntntIdx( aBkmkArr, *pNewNd, pSave->nCntnt,
