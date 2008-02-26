@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:05:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,6 +286,8 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
     // namespace office
+    // NB: in contrast to other CreateFooContexts, this particular one handles
+    //     the root element (i.e. office:document-meta)
     SvXMLImportContext* CreateMetaContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
@@ -340,7 +342,8 @@ public:
     void ImportPoolDefaults(const XMLPropStyleContext* pPool);
 
     // #80365#
-    virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+    virtual void SetStatistics(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
 
     sal_Bool IsPreview() const { return mbPreview; }
 
