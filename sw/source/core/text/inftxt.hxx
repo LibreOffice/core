@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:29:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,7 @@ public:
 class SwTxtPaintInfo : public SwTxtSizeInfo
 {
     const SwWrongList *pWrongList;
+    const SwWrongList *pGrammarCheckList;
     const SwWrongList *pSmartTags;    // SMARTTAGS
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // Fuer den Hintergrund
@@ -401,7 +402,8 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _DrawText( const XubString &rText, const SwLinePortion &rPor,
                    const xub_StrLen nIdx, const xub_StrLen nLen,
                    const sal_Bool bKern, const sal_Bool bWrong = sal_False,
-                   const sal_Bool bSmartTag = sal_False );  // SMARTTAGS
+                   const sal_Bool bSmartTag = sal_False,
+                   const sal_Bool bGrammarCheck = sal_False );  // SMARTTAGS
 
     SwTxtPaintInfo &operator=(const SwTxtPaintInfo&);
     void _NotifyURL( const SwLinePortion &rPor ) const;
@@ -409,9 +411,9 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 
 protected:
 #ifdef PRODUCT
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #else
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0;
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = ((SvxBrushItem*)-1);}
 #endif
 public:
@@ -444,7 +446,8 @@ public:
     inline void DrawMarkedText( const SwLinePortion &rPor, const xub_StrLen nLen,
                                 const sal_Bool bKern,
                                 const sal_Bool bWrong,
-                                const sal_Bool bSmartTags ) const;
+                                const sal_Bool bSmartTags,
+                                const sal_Bool bGrammarCheck ) const;
 
     void DrawRect( const SwRect &rRect, sal_Bool bNoGraphic = sal_False,
                    sal_Bool bRetouche = sal_True ) const;
@@ -490,6 +493,9 @@ public:
 
     inline void SetWrongList( const SwWrongList *pNew ){ pWrongList = pNew; }
     inline const SwWrongList* GetpWrongList() const { return pWrongList; }
+
+    inline void SetGrammarCheckList( const SwWrongList *pNew ){ pGrammarCheckList = pNew; }
+    inline const SwWrongList* GetGrammarCheckList() const { return pGrammarCheckList; }
 
     // SMARTTAGS
     inline void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
@@ -859,9 +865,10 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
                                             const xub_StrLen nLength,
                                             const sal_Bool bKern,
                                             const sal_Bool bWrong,
-                                            const sal_Bool bSmartTags ) const
+                                            const sal_Bool bSmartTags,
+                                            const sal_Bool bGrammarCheck ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern, bWrong, bSmartTags );
+    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
 }
 
 /*************************************************************************
