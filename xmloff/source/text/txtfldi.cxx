@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:16:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3111,6 +3111,11 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
     { XML_CATEGORY_AND_VALUE, ReferenceFieldPart::CATEGORY_AND_NUMBER },
     { XML_CAPTION,      ReferenceFieldPart::ONLY_CAPTION },
     { XML_VALUE,        ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
+    // --> OD 2007-09-14 #i81002#
+    { XML_NUMBER,               ReferenceFieldPart::NUMBER },
+    { XML_NUMBER_NO_SUPERIOR,   ReferenceFieldPart::NUMBER_NO_CONTEXT },
+    { XML_NUMBER_ALL_SUPERIOR,  ReferenceFieldPart::NUMBER_FULL_CONTEXT },
+    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 
