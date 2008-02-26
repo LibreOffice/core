@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:23:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1437,13 +1437,13 @@ void SwWW8Writer::AppendBookmarks( const SwTxtNode& rNd,
         for( USHORT n = 0; n < aArr.Count(); ++n )
         {
             const SwBookmark& rBkmk = *(SwBookmark*)aArr[ n ];
-            const SwPosition* pPos = &rBkmk.GetPos(),
-                            * pOPos = rBkmk.GetOtherPos();
+            const SwPosition* pPos = &rBkmk.GetBookmarkPos(),
+                            * pOPos = rBkmk.GetOtherBookmarkPos();
             if( pOPos && pOPos->nNode == pPos->nNode &&
                 pOPos->nContent < pPos->nContent )
             {
                 pOPos = pPos;
-                pPos = rBkmk.GetOtherPos();
+                pPos = rBkmk.GetOtherBookmarkPos();
             }
 
             if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
