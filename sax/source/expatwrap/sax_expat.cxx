@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:40:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ public: // module scope
 
 
     Reference < XAttributeList >    rAttrList;
-    AttributeListImpl   *pAttrList;
+    AttributeList   *pAttrList;
 
     // External entity stack
     vector<struct Entity>   vecEntity;
@@ -423,7 +423,7 @@ SaxExpatParser::SaxExpatParser(  )
 
     // performance-Improvment. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
-    m_pImpl->pAttrList = new AttributeListImpl;
+    m_pImpl->pAttrList = new AttributeList;
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
 
     m_pImpl->bExceptionWasThrown = sal_False;
