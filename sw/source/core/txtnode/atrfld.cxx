@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:48:10 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,12 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_REFMARKFLD_UPDATE:
                 // GetReferenz-Felder aktualisieren
                 if( RES_GETREFFLD == GetFld()->GetTyp()->Which() )
-                    ((SwGetRefField*)GetFld())->UpdateField();
+                {
+                    // --> OD 2007-09-06 #i81002#
+//                    ((SwGetRefField*)GetFld())->UpdateField();
+                    dynamic_cast<SwGetRefField*>(GetFld())->UpdateField( pTxtAttr );
+                    // <--
+                }
                 break;
         case RES_DOCPOS_UPDATE:
                 // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
