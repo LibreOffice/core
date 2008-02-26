@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:07:49 $
+#   last change: $Author: obo $ $Date: 2008-02-26 09:50:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,9 @@ SLOFILES = \
         $(SLO)$/spelldta.obj\
         $(SLO)$/supplang.obj\
         $(SLO)$/thesdsp.obj\
-        $(SLO)$/thesdta.obj
+        $(SLO)$/thesdta.obj\
+        $(SLO)$/gciterator.obj\
+        $(SLO)$/grammarchecker.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
