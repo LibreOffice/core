@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:52:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1774,10 +1774,6 @@ XML_CONSTASCII_ACTION( sXML_user_index_mark, "user-index-mark" );
 XML_CONSTASCII_ACTION( sXML_user_index_mark_end, "user-index-mark-end" );
 XML_CONSTASCII_ACTION( sXML_user_index_mark_start, "user-index-mark-start" );
 XML_CONSTASCII_ACTION( sXML_user_index_source, "user-index-source" );
-XML_CONSTASCII_ACTION( sXML_user_info_0, "user-info-0" );
-XML_CONSTASCII_ACTION( sXML_user_info_1, "user-info-1" );
-XML_CONSTASCII_ACTION( sXML_user_info_2, "user-info-2" );
-XML_CONSTASCII_ACTION( sXML_user_info_3, "user-info-3" );
 XML_CONSTASCII_ACTION( sXML_user_transformed, "user-transformed" );
 XML_CONSTASCII_ACTION( sXML_username, "username");
 XML_CONSTASCII_ACTION( sXML_value, "value");
