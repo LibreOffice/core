@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:27:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ using namespace ::com::sun::star::io;
 #include "plugin.hxx"
 #include "iframe.hxx"
 #include <ownsubfilterservice.hxx>
+#include "SfxDocumentMetaData.hxx"
 
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
@@ -2199,7 +2200,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )   ;
 
-    // Eigentliche Implementierung und ihre Services registrieren
+    // register actual implementations and their services
     ::rtl::OUString aImpl;
     ::rtl::OUString aTempStr;
     ::rtl::OUString aKeyStr;
@@ -2339,6 +2340,14 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
         xNewKey->createKey( rServices.getConstArray()[ind] );
 
+    // document meta data
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += comp_SfxDocumentMetaData::_getImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
 
     return sal_True;
 }
@@ -2389,6 +2398,14 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
+        if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
+                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = ::cppu::createSingleComponentFactory(
+            ::comp_SfxDocumentMetaData::_create,
+            ::comp_SfxDocumentMetaData::_getImplementationName(),
+            ::comp_SfxDocumentMetaData::_getSupportedServiceNames());
+        }
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
