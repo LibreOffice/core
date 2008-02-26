@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:34:21 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,136 +50,50 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#include <com/sun/star/uno/Any.hxx>
 
-#include <com/sun/star/document/XDocumentInfo.hpp>
-
-#ifndef _ERRCODE_HXX //autogen wg. ErrCode
-#include <tools/errcode.hxx>
-#endif
-#ifndef _DATETIME_HXX //autogen
-#include <tools/datetime.hxx>
-#endif
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
-#endif
-#ifndef _SFXHINT_HXX //autogen
-#include <svtools/hint.hxx>
-#endif
-
-#include <hash_map>
-#include <svtools/itemprop.hxx>
-
-class SfxObjectShell;
 class GDIMetaFile;
 class SotStorage;
-class SfxDocumentInfo_Impl;
 
-const BYTE MAXDOCUSERKEYS  = 4;
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
+} } }
 
-class SFX2_DLLPUBLIC SfxDocumentInfo
-{
-    SfxDocumentInfo_Impl* pImp;
 
-    SAL_DLLPRIVATE DateTime DATETIME_PROP(sal_Int32 nHandle) const;
-    SAL_DLLPRIVATE BOOL BOOL_PROP(sal_Int32 nHandle) const;
-    SAL_DLLPRIVATE sal_Int32 INT_PROP(sal_Int32 nHandle) const;
-    SAL_DLLPRIVATE String STRING_PROP(sal_Int32 nHandle) const;
-    SAL_DLLPRIVATE void SET_PROP(sal_Int32 nHandle, const com::sun::star::uno::Any& aValue );
+namespace sfx2 {
 
-public:
+/** load document meta-data from OLE stream
 
-    SfxDocumentInfo( SfxObjectShell* pDoc=0);
+    @param  i_xDocProps     Document meta-data
+    @param  i_pStorage      OLE Storage
+ */
+sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties> i_xDocProps,
+    SotStorage* i_pStorage );
 
-    // deep copy
-    SfxDocumentInfo( const SfxDocumentInfo& );
+/** save document meta-data to OLE stream
 
-    // shallow copy
-    SfxDocumentInfo( const com::sun::star::uno::Reference < com::sun::star::document::XDocumentInfo >& );
+    @param  i_xDocProps     Document meta-data
+    @param  i_pStorage      OLE Storage
+    @param  i_pThumb        Thumbnail: preview bitmap
+    @param  i_pGuid         Blob: Guid blob ("_PID_GUID")
+    @param  i_pHyperlinks   Blob: Hyperlink blob ("_PID_HLINKS")
+ */
+bool SFX2_DLLPUBLIC SaveOlePropertySet(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties> i_xDocProps,
+    SotStorage* i_pStorage,
+    const ::com::sun::star::uno::Sequence<sal_uInt8> * i_pThumb = 0,
+    const ::com::sun::star::uno::Sequence<sal_uInt8> * i_pGuid = 0,
+    const ::com::sun::star::uno::Sequence<sal_uInt8> * i_pHyperlinks = 0);
 
-    ~SfxDocumentInfo();
 
-    const SfxDocumentInfo& operator=( const SfxDocumentInfo& );
-    int operator==( const SfxDocumentInfo& ) const;
+::com::sun::star::uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(
+    GDIMetaFile* i_pThumb);
 
-    com::sun::star::uno::Reference < com::sun::star::document::XDocumentInfo > GetInfo() const;
-
-    sal_uInt32 LoadPropertySet( SotStorage* pStor );
-    sal_Bool SavePropertySet( SotStorage* pStor, GDIMetaFile* pThumb ) const;
-
-    BOOL IsReloadEnabled() const;
-    sal_Int16 GetDocumentNumber() const;
-    sal_Int32 GetReloadDelay() const;
-    sal_Int32 GetTime() const;
-    String GetDefaultTarget() const;
-    String GetReloadURL() const;
-    String GetTemplateName() const;
-    String GetTemplateFileName() const;
-    String GetTitle()   const;
-    String GetTheme()   const;
-    String GetComment() const;
-    String GetKeywords()const;
-    String GetMimeType() const;
-    String GetAuthor() const;
-    DateTime GetCreationDate() const;
-    String GetModificationAuthor() const;
-    DateTime GetModificationDate() const;
-    String GetPrintedBy() const;
-    DateTime GetPrintDate() const;
-    DateTime GetTemplateDate() const;
-
-    void EnableReload( BOOL bEnable );
-    void SetDocumentNumber(sal_Int16 nNo);
-    void SetReloadDelay( sal_Int32 nDelay );
-    void SetTime(sal_Int32 l);
-    void SetDefaultTarget( const String& rString );
-    void SetReloadURL( const String& rString );
-    void SetTemplateName( const String& rName );
-    void SetTemplateFileName( const String& rFileName );
-    void SetTitle( const String& rVal );
-    void SetTheme( const String& rVal );
-    void SetComment( const String& rVal );
-    void SetKeywords( const String& rVal );
-    void SetMimeType( const String& rVal );
-    void SetAuthor( const String& rAuthor );
-    void SetModificationAuthor( const String& rChangedBy );
-    void SetPrintedBy( const String& rPrintedBy );
-    void SetCreationDate(const DateTime& rDate);
-    void SetModificationDate(const DateTime& rDate);
-    void SetPrintDate(const DateTime& rDate);
-    void SetTemplateDate(const DateTime& rDate);
-    void IncDocumentNumber();
-    void SetCreated( const String& rAuthor );
-    void SetChanged( const String& rName );
-    void SetPrinted( const String& rName );
-
-    USHORT GetUserKeyCount() const;
-    String GetUserKeyTitle(USHORT n) const;
-    String GetUserKeyWord(USHORT n) const;
-    void   SetUserKey( const String& rName, const String& rValue, USHORT n );
-    void   SetUserKeyWord( const String& rValue, USHORT n );
-    void   SetUserKeyTitle( const String& rValue, USHORT n );
-
-    void ClearTemplateInformation();
-    void DeleteUserData( const String* pAuthor=0 );
-    void ResetUserData( const String& rAuthor );
-    void Clear();
-    void ResetFromTemplate( const String& rTemplateName, const String& rFileName );
-
-    // --> PB 2004-08-23 #i33095#
-    sal_Bool        IsLoadReadonly() const;
-    void            SetLoadReadonly( sal_Bool _bReadonly );
-
-    BOOL LoadFromBinaryFormat( SvStream& rStream );
-    BOOL SaveToBinaryFormat( SvStream& rStream ) const;
-    BOOL LoadFromBinaryFormat( SotStorage* rStream );
-    BOOL SaveToBinaryFormat( SotStorage* rStream ) const;
-
-    BOOL InsertCustomProperty(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue);
-    com::sun::star::uno::Sequence < ::rtl::OUString > GetCustomPropertyNames() const;
-};
-
-DECL_PTRHINT(SFX2_DLLPUBLIC, SfxDocumentInfoHint, SfxDocumentInfo);
+} // namespace sfx2
 
 #endif
 
