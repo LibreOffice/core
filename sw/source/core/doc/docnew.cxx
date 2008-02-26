@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:37:15 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,6 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -234,6 +231,8 @@ using namespace ::com::sun::star;
 #endif
 // <--
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 using namespace ::com::sun::star::document;
 
 const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
@@ -304,7 +303,6 @@ SwDoc::SwDoc() :
     pLineNumberInfo( new SwLineNumberInfo ),
     pFtnIdxs( new SwFtnIdxs ),
     pDocStat( new SwDocStat ),
-    pSwgInfo( 0 ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
     pLinkMgr( new SvxLinkManager( 0 ) ),
@@ -676,7 +674,6 @@ SwDoc::~SwDoc()
 
     // Delete fuer pPrt
     DELETEZ( pPrt );
-    DELETEZ( pSwgInfo );
     DELETEZ( pNewDBMgr );
 
     // Alle Flys muessen vor dem Drawing Model zerstoert werden,
@@ -778,6 +775,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     if( pDocShell != pDSh )
     {
         pDocShell = pDSh;
+
         pLinkMgr->SetPersist( pDocShell );
         //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
         if( pDrawModel )
@@ -812,19 +810,6 @@ SfxObjectShell* SwDoc::GetPersist() const
     return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
 
-
-
-const SfxDocumentInfo* SwDoc::GetpInfo() const
-{
-    return pSwgInfo;
-}
-
-SfxDocumentInfo* SwDoc::GetDocumentInfo()
-{
-    if( !pSwgInfo )
-        pSwgInfo = new SfxDocumentInfo;
-    return pSwgInfo;
-}
 
 void SwDoc::ClearDoc()
 {
