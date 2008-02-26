@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:45:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@
 #endif
 // <--
 #include <istyleaccess.hxx>
+// --> OD 2007-10-31 #i83479#
+#include <IDocumentListItems.hxx>
+// <--
 
 using namespace ::com::sun::star::i18n;
 
@@ -2325,6 +2328,12 @@ const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return G
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
+// --> OD 2007-10-31 #i83479#
+IDocumentListItems& SwNode::getIDocumentListItems()
+{
+    return *GetDoc();
+}
+// <--
 
 BOOL SwNode::IsInRedlines() const
 {
