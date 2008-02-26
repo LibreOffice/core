@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:49:20 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ struct  ProvNamesId_Type
     sal_uInt16      nType;
 };
 
+// note: this thing is indexed as an array, so do not insert/remove entries!
 const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
 {
     { "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE },
@@ -226,10 +227,10 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.TextField.DocInfo.Description",      SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION },
     { "com.sun.star.text.TextField.DocInfo.CreateAuthor",     SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR },
     { "com.sun.star.text.TextField.DocInfo.CreateDateTime",   SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME },
-    { "com.sun.star.text.TextField.DocInfo.Info0",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0 },
-    { "com.sun.star.text.TextField.DocInfo.Info1",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1 },
-    { "com.sun.star.text.TextField.DocInfo.Info2",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2 },
-    { "com.sun.star.text.TextField.DocInfo.Info3",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_0 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_1 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_2 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_3 },
     { "com.sun.star.text.TextField.DocInfo.Custom",           SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
     { "com.sun.star.text.TextField.DocInfo.PrintAuthor",      SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR },
     { "com.sun.star.text.TextField.DocInfo.PrintDateTime",    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
@@ -313,10 +314,6 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DOCINFO_DESCRIPTION,         SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION },
     { CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_AUTHOR,       SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR },
     { CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_DATE_TIME,    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO0,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0 },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO1,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1 },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO2,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2 },
-    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO3,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3 },
     { CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_AUTHOR,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR },
     { CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_DATE_TIME,     SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
     { CSS_TEXT_TEXTFIELD_DOCINFO_KEY_WORDS,           SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS },
@@ -577,10 +574,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION       :
         case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR     :
         case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME  :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0            :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1            :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2            :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3            :
         case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM            :
         case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR      :
         case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME   :
