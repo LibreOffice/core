@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSAXSerializable.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:32:40 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_sax_XSAXSerializable_idl__
+#define __com_sun_star_xml_sax_XSAXSerializable_idl__
+
+#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#endif
+
+#ifndef __com_sun_star_beans_StringPair_idl__
+#include <com/sun/star/beans/StringPair.idl>
+#endif
+
+module com { module sun { module star { module xml { module sax {
+
+//=============================================================================
+/** serializes a DOM tree by generating SAX events.
+
+    <p>
+    </p>
+
+    @since OOo 3.0
+
+*/
+interface XSAXSerializable
+{
+
+    //-------------------------------------------------------------------------
+    /** serializes an object (e.g. a DOM tree) that represents an XML document
+        by generating SAX events.
+
+        @param  handler
+            the SAX event handler that should receive the generated events
+        @param  namespaces
+            a list of namespace declarations that will be added to the root
+            element node of the XML document
+            <p>
+            This is necessary mostly because the DOM implementation does
+            not permit attaching namespaces declarations directly to nodes,
+            which may lead to duplicate namespace declarations on export,
+            and thus larger documents.
+            Note that the first part of each tuple is the prefix,
+            e.g. "office", and the second is the full namespace URI.
+            </p>
+
+        @throws com::sun::star::xml::sax::SAXException
+                 if serializing the XML document fails
+     */
+    void serialize([in] sax::XDocumentHandler handler,
+            [in] sequence< beans::StringPair > namespaces)
+        raises( com::sun::star::xml::sax::SAXException );
+
+};
+
+}; }; }; }; };
+
+#endif
