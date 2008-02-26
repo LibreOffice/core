@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:42:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,6 +1057,15 @@ void FuSelection::Activate()
         case SID_OBJECT_MIRROR:
         {
             eMode = SDRDRAG_MIRROR;
+
+            if ( mpView->GetDragMode() != eMode )
+                mpView->SetDragMode(eMode);
+        }
+        break;
+
+        case SID_OBJECT_CROP:
+        {
+            eMode = SDRDRAG_CROP;
 
             if ( mpView->GetDragMode() != eMode )
                 mpView->SetDragMode(eMode);
