@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-22 15:30:47 $
+#   last change: $Author: obo $ $Date: 2008-02-26 10:34:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ SLOFILES =	\
     $(SLO)$/trvlreg.obj \
     $(SLO)$/trvltbl.obj \
     $(SLO)$/unocrsr.obj \
-    $(SLO)$/viscrs.obj
+    $(SLO)$/viscrs.obj \
+    $(SLO)$/crossrefbookmark.obj
 
 .IF "$(mydebug)" != ""
 SLOFILES +=  \
