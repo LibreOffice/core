@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:41:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,6 +323,9 @@ SwDoc::SwDoc() :
     pUnoCallBack(new SwUnoCallBack(0)),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
+    // --> OD 2007-10-31 #i83479#
+    mpListItemsList( new tImplSortedNodeNumList() ),
+    // <--
     nUndoPos( 0 ),
     nUndoSavePos( 0 ),
     nUndoCnt( 0 ),
@@ -512,6 +515,11 @@ SwDoc::~SwDoc()
 {
     // --> OD 2007-03-16 #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
+    // <--
+
+    // --> OD 2007-11-01 #i83479#
+    delete mpListItemsList;
+    mpListItemsList = 0;
     // <--
 
     // clean up chart related structures...
