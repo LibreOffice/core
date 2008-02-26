@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-19 15:54:29 $
+#   last change: $Author: obo $ $Date: 2008-02-26 09:53:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,15 @@ IDLFILES=\
     XSpellChecker1.idl\
     XSupportedLanguages.idl\
     XSupportedLocales.idl\
-    XThesaurus.idl
+    XThesaurus.idl\
+    SingleGrammarError.idl\
+    GrammarCheckingResult.idl\
+    XGrammarChecker.idl\
+    XGrammarCheckerListener.idl\
+    XGrammarCheckingIterator.idl\
+    XGrammarCheckingResultBroadcaster.idl\
+    XGrammarCheckingResultListener.idl\
+    GrammarCheckingIterator.idl
 
 
 # ------------------------------------------------------------------
