@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:19:09 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,87 +36,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_METAIMPORTCOMPONENT_HXX
 #include "MetaImportComponent.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
 
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlmetai.hxx>
-#endif
+#include <xmloff/nmspmap.hxx>
+#include <tools/string.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-class SvXMLMetaDocumentContext : public SvXMLImportContext
-{
-private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentInfo>  xDocInfo;
-
-public:
-    SvXMLMetaDocumentContext(SvXMLImport& rImport, USHORT nPrfx,
-                            const rtl::OUString& rLName,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::document::XDocumentInfo>& rDocInfo);
-    virtual ~SvXMLMetaDocumentContext();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                                    const rtl::OUString& rLocalName,
-                                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void EndElement();
-};
-
-SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-                        USHORT nPrfx, const rtl::OUString& rLName,
-                        const uno::Reference<xml::sax::XAttributeList>&,
-                        const uno::Reference<document::XDocumentInfo>& rDocInfo) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    xDocInfo(rDocInfo)
-{
-    // here are no attributes
-}
-
-SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
-{
-}
-
-SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext( USHORT nPrefix,
-                                     const rtl::OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& )
-{
-    if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken(rLocalName, XML_META) )
-    {
-        return new SfxXMLMetaContext(GetImport(), nPrefix, rLocalName, xDocInfo);
-    }
-    else
-    {
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
-}
-
-void SvXMLMetaDocumentContext::EndElement()
-{
-}
 
 //===========================================================================
 
 // #110680#
 XMLMetaImportComponent::XMLMetaImportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw()
-:   SvXMLImport(xServiceFactory)
+    const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory) throw()
+    :   SvXMLImport(xServiceFactory), mxDocProps()
 {
 }
 
@@ -133,7 +71,17 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
-        return new SvXMLMetaDocumentContext(*this, nPrefix, rLocalName, xAttrList, xDocInfo);
+        if (!mxDocProps.is()) {
+            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+                "XMLMetaImportComponent::CreateContext: setTargetDocument "
+                "has not been called"), *this);
+        }
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                    "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                 uno::UNO_QUERY_THROW);
+        return new SvXMLMetaDocumentContext(
+                        *this, nPrefix, rLocalName, mxDocProps, xDocBuilder);
     }
     else
     {
@@ -141,12 +89,15 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     }
 }
 
-void SAL_CALL XMLMetaImportComponent::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+void SAL_CALL XMLMetaImportComponent::setTargetDocument(
+    const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    xDocInfo = uno::Reference< document::XDocumentInfo >::query( xDoc );
-    if( !xDocInfo.is() )
-        throw lang::IllegalArgumentException();
+    mxDocProps = uno::Reference< document::XDocumentProperties >::query( xDoc );
+    if( !mxDocProps.is() )
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "XMLMetaImportComponent::setTargetDocument: argument is no "
+            "XDocumentProperties"), uno::Reference<uno::XInterface>(*this), 0);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL
@@ -172,5 +123,4 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
     // return (cppu::OWeakObject*)new XMLMetaImportComponent;
     return (cppu::OWeakObject*)new XMLMetaImportComponent(rSMgr);
 }
-
 
