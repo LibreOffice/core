@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:38:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 #define PROPERTY_ID_ISSIGNED                        52
 #define PROPERTY_ID_AGGREGATEFUNCTION               53
 #define PROPERTY_ID_ISSEARCHABLE                    54
+
 
 #endif // _CONNECTIVITY_PROPERTYIDS_HXX_
 
