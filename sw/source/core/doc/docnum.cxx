@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:37:24 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2551,3 +2551,126 @@ BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
 
     return bResult;
 }
+
+// --> OD 2007-10-26 #i83479#
+// implementation for interface <IDocumentListItems>
+bool SwDoc::lessThanNodeNum::operator()( const SwNodeNum* pNodeNumOne,
+                                         const SwNodeNum* pNodeNumTwo ) const
+{
+    return pNodeNumOne->LessThan( *pNodeNumTwo );
+}
+
+void SwDoc::addListItem( const SwNodeNum& rNodeNum )
+{
+    if ( mpListItemsList == 0 )
+    {
+        return;
+    }
+
+    const bool bAlreadyInserted(
+            mpListItemsList->find( &rNodeNum ) != mpListItemsList->end() );
+    ASSERT( !bAlreadyInserted,
+            "<SwDoc::InsertListItem(..)> - <SwNodeNum> instance already registered as numbered item!" );
+    if ( !bAlreadyInserted )
+    {
+        mpListItemsList->insert( &rNodeNum );
+    }
+}
+
+void SwDoc::removeListItem( const SwNodeNum& rNodeNum )
+{
+    if ( mpListItemsList == 0 )
+    {
+        return;
+    }
+
+    const tImplSortedNodeNumList::size_type nDeleted = mpListItemsList->erase( &rNodeNum );
+    if ( nDeleted > 1 )
+    {
+        ASSERT( false,
+                "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
+    }
+}
+
+String SwDoc::getListItemText( const SwNodeNum& rNodeNum,
+                               const bool bWithNumber,
+                               const bool bWithSpacesForLevel ) const
+{
+    return rNodeNum.GetTxtNode()
+           ? rNodeNum.GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
+                                                  bWithNumber, bWithSpacesForLevel )
+           : String();
+}
+
+void SwDoc::getListItems( tSortedNodeNumList& orNodeNumList ) const
+{
+    orNodeNumList.clear();
+    orNodeNumList.reserve( mpListItemsList->size() );
+
+    tImplSortedNodeNumList::iterator aIter;
+    tImplSortedNodeNumList::iterator aEndIter = mpListItemsList->end();
+    for ( aIter = mpListItemsList->begin(); aIter != aEndIter; ++aIter )
+    {
+        orNodeNumList.push_back( (*aIter) );
+    }
+}
+
+void SwDoc::getNumItems( tSortedNodeNumList& orNodeNumList ) const
+{
+    orNodeNumList.clear();
+    orNodeNumList.reserve( mpListItemsList->size() );
+
+    tImplSortedNodeNumList::iterator aIter;
+    tImplSortedNodeNumList::iterator aEndIter = mpListItemsList->end();
+    for ( aIter = mpListItemsList->begin(); aIter != aEndIter; ++aIter )
+    {
+        const SwNodeNum* pNodeNum = (*aIter);
+        if ( pNodeNum->IsCounted() &&
+             pNodeNum->GetTxtNode() && pNodeNum->GetTxtNode()->HasNumber() )
+        {
+            orNodeNumList.push_back( pNodeNum );
+        }
+    }
+}
+// <--
+
+// --> OD 2007-11-15 #i83479#
+// implementation for interface <IDocumentOutlineNodes>
+sal_Int32 SwDoc::getOutlineNodesCount() const
+{
+    return GetNodes().GetOutLineNds().Count();
+}
+
+int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
+{
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->
+                                            GetTxtNode()->GetOutlineLevel();
+}
+
+String SwDoc::getOutlineText( const sal_Int32 nIdx,
+                              const bool bWithNumber,
+                              const bool bWithSpacesForLevel ) const
+{
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->
+                GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
+                                            bWithNumber, bWithSpacesForLevel );
+}
+
+SwTxtNode* SwDoc::getOutlineNode( const sal_Int32 nIdx ) const
+{
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->GetTxtNode();
+}
+
+void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const
+{
+    orOutlineNodeList.clear();
+    orOutlineNodeList.reserve( getOutlineNodesCount() );
+
+    const USHORT nOutlCount( static_cast<USHORT>(getOutlineNodesCount()) );
+    for ( USHORT i = 0; i < nOutlCount; ++i )
+    {
+        orOutlineNodeList.push_back(
+            GetNodes().GetOutLineNds()[i]->GetTxtNode() );
+    }
+}
+// <--
