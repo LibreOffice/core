@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:33:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1519,7 +1519,7 @@ void SwXTextViewCursor::gotoRange(
         else if(pRange && pRange->GetBookmark())
         {
             SwBookmark* pBkm = pRange->GetBookmark();
-            pSrcNode = &pBkm->GetPos().nNode.GetNode();
+            pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
         }
         else if (pPara && pPara->GetCrsr())
         {
