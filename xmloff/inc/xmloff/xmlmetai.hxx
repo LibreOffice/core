@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:33:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,70 +48,47 @@
 #include <xmloff/xmlictxt.hxx>
 #endif
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-class SvXMLTokenMap;
-
-namespace com { namespace sun { namespace star { namespace lang {
-    struct Locale;
-}}}}
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-}}}}
-
-class XMLOFF_DLLPUBLIC SfxXMLMetaContext : public SvXMLImportContext
+/// handles the top-level office:document-meta element of meta.xml documents
+// NB: virtual inheritance is needed so that the context that handles the
+//     flat xml file format can multiply inherit properly
+class XMLOFF_DLLPUBLIC SvXMLMetaDocumentContext
+    : public virtual SvXMLImportContext
 {
 private:
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentInfo>  xDocInfo;
+        ::com::sun::star::document::XDocumentProperties> mxDocProps;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>      xInfoProp;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>      xDocProp;
-    SvXMLTokenMap*                                  pTokenMap;
-    sal_Int16                                       nUserKeys;
-    ::rtl::OUStringBuffer                           sKeywords;
+        ::com::sun::star::xml::sax::XDocumentHandler> mxDocBuilder;
 
 public:
-    SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XModel>& rDocModel );
-    SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::document::XDocumentInfo>& rDocInfo );
-    virtual ~SfxXMLMetaContext();
+    SvXMLMetaDocumentContext(SvXMLImport& rImport, USHORT nPrfx,
+        const rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentProperties>& xDocProps,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XDocumentHandler>& xDocBuilder);
 
-    // Create child element.
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual ~SvXMLMetaDocumentContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+        const rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference<
+             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>& GetInfoProp() const
-            { return xInfoProp; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>& GetDocProp() const
-            { return xDocProp; }
-
-    void    AddKeyword( const ::rtl::OUString& rKW );
-    void    AddUserField( const ::rtl::OUString& rName,
-                            const ::rtl::OUString& rContent );
-    void    AddUserField( const ::rtl::OUString& rName,
-                            const ::com::sun::star::uno::Any& rContent);
+protected:
+    /// initialize DocumentProperties object with DOM and base URL
+    void initDocumentProperties();
+    // set the BuildId property at the importer
+    void setBuildId(const ::rtl::OUString & i_rBuildId);
 };
 
 #endif // _XMLOFF_XMLMETAI_HXX
