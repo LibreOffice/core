@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 10:58:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@ namespace DOM
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
             throw (RuntimeException);
+        virtual OUString SAL_CALL getLocalName()
+            throw (RuntimeException);
 
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
@@ -126,11 +128,6 @@ namespace DOM
         throw (RuntimeException)
     {
         return CNode::getLastChild();
-    }
-    virtual OUString SAL_CALL getLocalName()
-        throw (RuntimeException)
-    {
-        return CNode::getLocalName();
     }
     virtual OUString SAL_CALL getNamespaceURI()
         throw (RuntimeException)
