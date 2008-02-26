@@ -266,3 +266,8 @@ UDK_3.4 { # OOo 2.4
     global:
         ?bootstrap_expandUri@cppu@@YA?AVOUString@rtl@@ABV23@@Z; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
 } UDK_3.3;
+
+UDK_3.5 { # OOo 3.0
+    global:
+        ??0OPropertySetHelper@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@PAVIEventNotificationHook@1@_N@Z;
+} UDK_3.4;
