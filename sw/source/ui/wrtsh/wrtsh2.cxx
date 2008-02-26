@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:01:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #endif
 #ifndef _SFXFRAME_HXX //autogen
 #include <sfx2/frame.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -156,6 +153,10 @@
 #include "fldui.hrc"
 
 #include <undobj.hxx>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 /*------------------------------------------------------------------------
         Beschreibung:
@@ -480,8 +481,14 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
         sTargetFrame = *pTargetFrameName;
-    else if( pDShell )
-        sTargetFrame = pDShell->GetDocInfo().GetDefaultTarget();
+    else if( pDShell ) {
+        using namespace ::com::sun::star;
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps
+            = xDPS->getDocumentProperties();
+        sTargetFrame = xDocProps->getDefaultTarget();
+    }
 
     String sReferer;
     if( pDShell && pDShell->GetMedium() )
