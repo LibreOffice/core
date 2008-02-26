@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:12:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2248,8 +2248,8 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
     }
 
     delete pTableWrt;
-    delete pBoxArr;
-    delete pRowSpans;
+    delete[] pBoxArr;
+    delete[] pRowSpans;
 
     // Pam hinter die Tabelle verschieben
     rRTFWrt.pCurPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
