@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlistimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:03:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,40 +32,66 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef _SAX_ATTRLISTIMPL_HXX
+#define _SAX_ATTRLISTIMPL_HXX
+
+#include "sal/config.h"
+//#include "sax/saxdllapi.h"
+
 #include <cppuhelper/implbase2.hxx>
+
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 namespace sax_expatwrap
 {
 
-struct AttributeListImpl_impl;
+struct AttributeList_impl;
 
-class AttributeListImpl :
-    public WeakImplHelper2< XAttributeList, XCloneable >
+//FIXME
+class /*SAX_DLLPUBLIC*/ AttributeList :
+    public ::cppu::WeakImplHelper2<
+                ::com::sun::star::xml::sax::XAttributeList,
+                ::com::sun::star::util::XCloneable >
 {
 public:
-    AttributeListImpl();
-    AttributeListImpl( const AttributeListImpl & );
-    ~AttributeListImpl();
+    AttributeList();
+    AttributeList( const AttributeList & );
+    virtual ~AttributeList();
 
-public:
-    virtual sal_Int16 SAL_CALL getLength(void) throw(RuntimeException);
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw(RuntimeException);
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw(RuntimeException);
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw(RuntimeException);
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw(RuntimeException);
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( RuntimeException);
-
-public:
-    virtual Reference< XCloneable >  SAL_CALL createClone() throw(RuntimeException);
-
-public:
-    void addAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
+    void addAttribute( const ::rtl::OUString &sName ,
+        const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
     void clear();
-    void removeAttribute( const OUString &sName );
-    void setAttributeList( const Reference<  XAttributeList > & );
+    void removeAttribute( const ::rtl::OUString &sName );
+    void setAttributeList( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & );
+
+public:
+    // XAttributeList
+    virtual sal_Int16 SAL_CALL getLength(void)
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i)
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i)
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName)
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i)
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName)
+        throw( ::com::sun::star::uno::RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< XCloneable > SAL_CALL
+        createClone()   throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    struct AttributeListImpl_impl *m_pImpl;
+    struct AttributeList_impl *m_pImpl;
 };
 
 }
+
+#endif
+
