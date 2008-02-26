@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:22:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,6 +834,61 @@ String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
     return aStr;
 }
 
+// --> OD 2007-09-07 #i81002#
+String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
+                                    const bool bInclSuperiorNumLabels,
+                                    const sal_uInt8 nRestrictInclToThisLevel ) const
+{
+    String aRefNumStr;
+
+    if ( rNodeNum.GetLevel() >= 0 )
+    {
+        const SwNodeNum* pWorkingNodeNum( &rNodeNum );
+        do
+        {
+            bool bMakeNumStringForPhantom( false );
+            if ( pWorkingNodeNum->IsPhantom() )
+            {
+                SwNumFmt aFmt( Get( static_cast<USHORT>(pWorkingNodeNum->GetLevel()) ) );
+                bMakeNumStringForPhantom = aFmt.IsEnumeration() &&
+                                           SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
+
+            }
+            if ( bMakeNumStringForPhantom ||
+                 ( !pWorkingNodeNum->IsPhantom() &&
+                   pWorkingNodeNum->GetTxtNode() &&
+                   pWorkingNodeNum->GetTxtNode()->HasNumber() ) )
+            {
+                aRefNumStr.Insert( MakeNumString( pWorkingNodeNum->GetNumberVector() ), 0 );
+            }
+            else if ( aRefNumStr.Len() > 0 )
+            {
+                aRefNumStr.Insert( String::CreateFromAscii(" "), 0 );
+            }
+
+            if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevel() > 0 )
+            {
+                BYTE n = Get( static_cast<USHORT>(pWorkingNodeNum->GetLevel()) ).GetIncludeUpperLevels();
+                pWorkingNodeNum = dynamic_cast<SwNodeNum*>(pWorkingNodeNum->GetParent());
+                // skip parents, whose list label is already contained in the actual list label.
+                while ( pWorkingNodeNum && n > 1 )
+                {
+                    pWorkingNodeNum = dynamic_cast<SwNodeNum*>(pWorkingNodeNum->GetParent());
+                    --n;
+                }
+            }
+            else
+            {
+                break;
+            }
+        } while ( pWorkingNodeNum &&
+                  pWorkingNodeNum->GetLevel() >= 0 &&
+                  static_cast<sal_uInt8>(pWorkingNodeNum->GetLevel()) >= nRestrictInclToThisLevel );
+    }
+
+    return aRefNumStr;
+}
+
 //  ----- Copy-Methode vom SwNumRule ------
 
     // eine Art Copy-Constructor, damit die Num-Formate auch an den
@@ -1017,10 +1072,8 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
 
 void SwNumRule::NewNumberRange(const SwPaM & rPam)
 {
-    SwNodeNum * pNum = new SwNodeNum();
-    // --> OD 2005-10-21 - apply numbering rule to number tree root node for
-    // correct creation of phantoms.
-    pNum->SetNumRule( this );
+    // --> OD 2007-10-26 #i83479#
+    SwNodeNum * pNum = new SwNodeNum( this );
     // <--
 
     SwPaM * pPam = new SwPaM(*rPam.Start(), *rPam.End());
