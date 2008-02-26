@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:22:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
 #endif
+// --> OD 2007-10-23 #i81002#
+#include <crossrefbookmark.hxx>
+// <--
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
@@ -691,11 +694,28 @@ void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_I
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
             SwBookmark* pMark = rMarks.GetObject( n );
-            if( !pMark->IsBookMark() )
+            // --> OD 2007-10-23 #i81002#
+            if ( !pMark->IsBookMark() &&
+                 !dynamic_cast<SwCrossRefBookmark*>(pMark) )
                 continue;
 
-            const SwPosition& rPos1 = pMark->GetPos();
-            const SwPosition* pPos2 = pMark->GetOtherPos();
+            const SwPosition& rPos1 = pMark->GetBookmarkPos();
+            // --> OD 2007-10-23 #i81002#
+//            const SwPosition* pPos2 = pMark->GetOtherBookmarkPos();
+            const SwPosition* pPos2( 0 );
+            SwPosition* pCrossRefBkmkPos2( 0 );
+            if ( dynamic_cast<SwCrossRefBookmark*>(pMark) )
+            {
+                pCrossRefBkmkPos2 = new SwPosition( pMark->GetBookmarkPos() );
+                pCrossRefBkmkPos2->nContent =
+                        pCrossRefBkmkPos2->nNode.GetNode().GetTxtNode()->Len();
+                pPos2 = pCrossRefBkmkPos2;
+            }
+            else
+            {
+                pPos2 = pMark->GetOtherBookmarkPos();
+            }
+            // <--
             BOOL bBackward = pPos2 ? rPos1 > *pPos2: FALSE;
             if(rPos1.nNode == nOwnNode)
             {
@@ -715,6 +735,9 @@ void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_I
                 rBkmArr.insert( SwXBookmarkPortion_ImplSharedPtr (
                     new SwXBookmarkPortion_Impl( SwXBookmarks::GetObject( *pMark, &rDoc ), nType, *pPos2 ) ) );
             }
+            // --> OD 2007-10-23 #i81002#
+            delete pCrossRefBkmkPos2;
+            // <--
         }
     }
 }
