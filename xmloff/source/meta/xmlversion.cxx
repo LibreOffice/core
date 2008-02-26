@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlversion.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 12:59:27 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,8 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
                           xmloff::token::XML_CREATOR,
                           OUString( rInfo.Author ) );
 
-            OUString aDateStr = SfxXMLMetaExport::GetISODateTimeString( rInfo.TimeStamp );
+            OUString aDateStr =
+                SvXMLMetaExport::GetISODateTimeString( rInfo.TimeStamp );
 
             AddAttribute( XML_NAMESPACE_DC, xmloff::token::XML_DATE_TIME, aDateStr );
 
