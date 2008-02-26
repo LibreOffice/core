@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:52:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,6 @@ public:
     const sal_Bool writeOutlineStyleAsNormalListStyle() const;
     // <--
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
-
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
