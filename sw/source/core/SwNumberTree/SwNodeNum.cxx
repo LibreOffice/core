@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:18:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,35 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <stdio.h>
+// --> OD 2007-10-31 #i83479#
+#include <IDocumentListItems.hxx>
+// <--
 
 SwNodeNum::SwNodeNum()
     : SwNumberTreeNode(), mpTxtNode(NULL), mpNumRule(NULL), mnStart(1),
       mbRestart(false)
 {
 }
+
+// --> OD 2007-10-26 #i83479#
+SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
+    : SwNumberTreeNode(),
+      mpTxtNode( pTxtNode ),
+      mpNumRule( NULL ),
+      mnStart( 1 ),
+      mbRestart( false )
+{
+}
+
+SwNodeNum::SwNodeNum( SwNumRule* pRule )
+    : SwNumberTreeNode(),
+      mpTxtNode( NULL ),
+      mpNumRule( pRule ),
+      mnStart( 1 ),
+      mbRestart( false )
+{
+}
+// <--
 
 SwNodeNum::SwNodeNum(const SwNodeNum & rNodeNum)
     : SwNumberTreeNode(rNodeNum), mpTxtNode(NULL),
@@ -59,10 +82,10 @@ SwNodeNum::~SwNodeNum()
 {
 }
 
-void SwNodeNum::SetTxtNode(SwTxtNode * pTxtNode)
-{
-    mpTxtNode = pTxtNode;
-}
+//void SwNodeNum::SetTxtNode(SwTxtNode * pTxtNode)
+//{
+//    mpTxtNode = pTxtNode;
+//}
 
 SwTxtNode * SwNodeNum::GetTxtNode() const
 {
@@ -98,16 +121,48 @@ SwNumberTreeNode * SwNodeNum::Copy() const
     return new SwNodeNum(*this);
 }
 
-void SwNodeNum::RemoveChild(SwNumberTreeNode * _pChild)
+// --> OD 2007-10-25 #i83479#
+void SwNodeNum::AddChild(SwNumberTreeNode * pChild, unsigned int nDepth )
 {
+    SwNumberTreeNode::AddChild( pChild, nDepth );
+
+    if ( nDepth == 0 )
+    {
+        SwNodeNum* pChildNodeNum( dynamic_cast<SwNodeNum*>(pChild) );
+        ASSERT( pChildNodeNum,
+                "<SwNodeNum::AddChild(..)> - added isn't of type <SwNodeNum>" );
+        ASSERT( !pChildNodeNum || pChildNodeNum->GetTxtNode(),
+                "<SwNodeNum::AddChild(..)> - added <SwNodeNum> has no text node" );
+        if ( pChildNodeNum && pChildNodeNum->GetTxtNode() &&
+             pChildNodeNum->GetTxtNode()->GetNodes().IsDocNodes() )
+        {
+            pChildNodeNum->GetTxtNode()->getIDocumentListItems().
+                                        addListItem( *pChildNodeNum );
+        }
+    }
+}
+// <--
+
+void SwNodeNum::RemoveChild(SwNumberTreeNode * pChild)
+{
+    // --> OD 2007-11-01 #i83479#
+    SwNodeNum* pChildNodeNum( dynamic_cast<SwNodeNum*>(pChild) );
+    ASSERT( pChildNodeNum,
+            "<SwNodeNum::RemoveChild(..)> - removed child isn't of type <SwNodeNum> -> crash" );
+    ASSERT( !pChildNodeNum || pChildNodeNum->GetTxtNode(),
+            "<SwNodeNum::RemoveChild(..)> - removed <SwNodeNum> has no text node" );
+    if ( pChildNodeNum && pChildNodeNum->GetTxtNode() )
+    {
+        pChildNodeNum->GetTxtNode()->getIDocumentListItems().
+                                    removeListItem( *pChildNodeNum );
+    }
+    // <--
     // --> OD 2006-04-21 #i64311#
     // remove child before resetting numbering rule of child.
-    SwNumberTreeNode::RemoveChild(_pChild);
+    SwNumberTreeNode::RemoveChild(pChild);
 
-    SwNodeNum * pChild = static_cast<SwNodeNum*>(_pChild);
-    pChild->SetNumRule(NULL);
+    pChildNodeNum->SetNumRule(NULL);
     // <--
-
 }
 
 bool SwNodeNum::IsNotifiable() const
@@ -232,10 +287,13 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
         bResult = true;
     else if (mpTxtNode != NULL && rTmpNode.mpTxtNode != NULL)
     {
-        SwPosition aMyPos(*mpTxtNode);
-        SwPosition aHisPos(*rTmpNode.mpTxtNode);
-
-        bResult = (aMyPos < aHisPos) ? true : false;
+        // --> OD 2007-10-31 #i83479# - refactoring
+        // simplify comparison by comparing the indexes of the text nodes
+//        SwPosition aMyPos(*mpTxtNode);
+//        SwPosition aHisPos(*rTmpNode.mpTxtNode);
+//        bResult = (aMyPos < aHisPos) ? true : false;
+        bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
+        // <--
     }
 
     return bResult;
@@ -462,5 +520,25 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
             pTxtNode->UnregisterNumber();
         }
     }
+}
+// <--
+
+// --> OD 2007-09-06 #i81002#
+const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const
+{
+    const SwNodeNum* pPrecedingNodeNum( 0 );
+
+    // --> OD 2007-10-31 #i83479#
+//    SwNodeNum aNodeNumForTxtNode;
+//    aNodeNumForTxtNode.SetTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
+    SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
+    // <--
+
+    pPrecedingNodeNum = dynamic_cast<const SwNodeNum*>(
+                            GetRoot()
+                            ? GetRoot()->GetPrecedingNodeOf( aNodeNumForTxtNode )
+                            : GetPrecedingNodeOf( aNodeNumForTxtNode ) );
+
+    return pPrecedingNodeNum;
 }
 // <--
