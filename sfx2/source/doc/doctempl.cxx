@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:20:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
@@ -1326,7 +1326,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
-        uno::Reference< XDocumentInfoSupplier > xDocInfoSupplier;
+        uno::Reference< XDocumentPropertiesSupplier > xDocPropsSupplier;
         uno::Reference< XStorable > xStorable;
         try
         {
@@ -1337,7 +1337,8 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                                                 aArgs ),
                 UNO_QUERY );
 
-            xDocInfoSupplier = uno::Reference< XDocumentInfoSupplier >( xStorable, UNO_QUERY );
+            xDocPropsSupplier = uno::Reference< XDocumentPropertiesSupplier >(
+                xStorable, UNO_QUERY );
         }
         catch( Exception& )
         {
@@ -1345,25 +1346,13 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
         if( xStorable.is() )
         {
-            // get a Titel from XDocumentInfoSupplier
-            if( xDocInfoSupplier.is() )
+            // get Title from XDocumentPropertiesSupplier
+            if( xDocPropsSupplier.is() )
             {
-                uno::Reference< XDocumentInfo > xDocInfo = xDocInfoSupplier->getDocumentInfo();
-                if( xDocInfo.is() )
-                {
-                    try
-                    {
-                        sal_Int16 nCount = xDocInfo->getUserFieldCount();
-                        for( sal_Int16 ind = 0; aTitle.getLength() == 0  && ind < nCount; ind++ )
-                        {
-                            OUString aFieldName = xDocInfo->getUserFieldName( ind );
-                            if( aFieldName.equals( OUString::createFromAscii( "Title" ) ) )
-                                aTitle = xDocInfo->getUserFieldValue( ind );
-                        }
-                    }
-                    catch( ArrayIndexOutOfBoundsException& )
-                    {
-                    }
+                uno::Reference< XDocumentProperties > xDocProps
+                    = xDocPropsSupplier->getDocumentProperties();
+                if (xDocProps.is() ) {
+                    aTitle = xDocProps->getTitle();
                 }
             }
 
