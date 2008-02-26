@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:47:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1894,7 +1894,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             std::stack< StackEntry > aOutlineStack;
             aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
 
-            const sal_uInt16 nOutlineCount = mrSh.GetOutlineCnt();
+            const sal_uInt16 nOutlineCount =
+                static_cast<sal_uInt16>(mrSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
             for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
             {
                 // Check if outline is hidden
@@ -1908,7 +1909,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     continue;
 
                 // Get parent id from stack:
-                const sal_Int8 nLevel = (sal_Int8)mrSh.GetOutlineLevel( i );
+                const sal_Int8 nLevel = (sal_Int8)mrSh.getIDocumentOutlineNodesAccess()->getOutlineLevel( i );
                 sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
                 while ( nLevelOnTopOfStack >= nLevel &&
                         nLevelOnTopOfStack != -1 )
@@ -1932,7 +1933,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
                     // Outline entry text
-                    const String& rEntry = mrSh.GetOutlineText( i );
+                    const String& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i );
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =
