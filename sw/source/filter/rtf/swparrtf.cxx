@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:41:09 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,8 @@
 #include <tblsel.hxx>           // SwSelBoxes
 #endif
 
+#include <docsh.hxx>
+
 #ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx> // SwLayoutSplit
 #endif
@@ -283,6 +285,9 @@
 #include <vcl/salbtype.hxx>     // FRound
 #endif
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+
 using namespace ::com::sun::star;
 
 
@@ -316,7 +321,17 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
     }
 
     ULONG nRet = 0;
-    SvParserRef xParser = new SwRTFParser( &rDoc, rPam, *pStrm, rBaseURL, !bInsertMode );
+    SwDocShell *pDocShell(rDoc.GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        xDocProps.set(xDPS->getDocumentProperties());
+    }
+
+    SvParserRef xParser = new SwRTFParser( &rDoc, xDocProps,
+                                rPam, *pStrm, rBaseURL, !bInsertMode );
     SvParserState eState = xParser->CallParser();
     if( SVPAR_PENDING != eState && SVPAR_ACCEPTED != eState )
     {
@@ -332,9 +347,11 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
     return nRet;
 }
 
-SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,
-    int bReadNewDoc) :
-    SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
+SwRTFParser::SwRTFParser(SwDoc* pD,
+        uno::Reference<document::XDocumentProperties> i_xDocProps,
+        const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,
+        int bReadNewDoc) :
+    SvxRTFParser(pD->GetAttrPool(), rIn, i_xDocProps, bReadNewDoc),
     maParaStyleMapper(*pD),
     maCharStyleMapper(*pD),
     maSegments(*this),
@@ -675,9 +692,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 pTxtNode->JoinPrev();
             }
         }
-        else if( GetDocInfo() )
-            // evt. eingelesen DocInfo setzen
-            pDoc->SetDocumentInfo( *GetDocInfo() );
     }
     delete pSttNdIdx, pSttNdIdx = 0;
     delete pRegionEndIdx, pRegionEndIdx = 0;
