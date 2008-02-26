@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:22:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,10 @@
 #ifndef _SD_PPT_97_ANIMATIONS_HXX
 #include <ppt/ppt97animations.hxx>
 #endif
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 using namespace ::com::sun::star;
 
@@ -1511,13 +1515,15 @@ sal_Bool ImplSdPPTImport::Import()
     }
 
     delete pStbMgr;
-    // DocInfo lesen und an der ObjectShell setzen
-    SfxDocumentInfo* pNewDocInfo = new SfxDocumentInfo();
-    pNewDocInfo->LoadPropertySet( &mrStorage );
-    pNewDocInfo->SetTemplateName( String() );
-    SfxDocumentInfo& rOldInfo = mpDoc->GetObjectShell()->GetDocInfo();
-    rOldInfo = *pNewDocInfo;
-    delete( pNewDocInfo );
+
+    // read DocumentInfo
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        mpDoc->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps
+        = xDPS->getDocumentProperties();
+    sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
+    xDocProps->setTemplateName(::rtl::OUString());
+
     pSdrModel->setLock( sal_False );
     return bOk;
 }
