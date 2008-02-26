@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
+// --> OD 2007-10-16 #i81002#
+#include <crossrefbookmark.hxx>
+// <--
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
@@ -97,10 +100,9 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
-#ifndef _NDTXT_HXX
-#include "ndtxt.hxx" // for lcl_FixPosition
-#endif
-
+// --> OD 2007-10-23 #i81002#
+#include <ndtxt.hxx>
+// <--
 
 SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
@@ -127,23 +129,6 @@ SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
     }
 
 
-void lcl_FixPosition( SwPosition& rPos )
-{
-    // make sure the position has 1) the proper node, and 2) a proper index
-    SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-
-    if( rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
-    {
-        DBG_ERROR( "illegal position" );
-        xub_StrLen nLen = rPos.nContent.GetIndex();
-        if( pTxtNode == NULL )
-            nLen = 0;
-        else if( nLen >= pTxtNode->Len() )
-            nLen = pTxtNode->Len();
-        rPos.nContent.Assign( pTxtNode, nLen );
-    }
-}
-
 /** IDocumentBookmarkAccess ssc
 */
 const SwBookmarks& SwDoc::getBookmarks() const
@@ -155,43 +140,92 @@ SwBookmark* SwDoc::makeBookmark( /*[in]*/const SwPaM& rPaM, /*[in]*/const KeyCod
                                  /*[in]*/ const String& rName, /*[in]*/const String& rShortName,
                                  /*[in]*/IDocumentBookmarkAccess::BookmarkType eMark )
 {
-    SwBookmark *pBM;
+    SwBookmark *pBM( 0 );
     if( MARK == eMark )
+    {
         pBM = new SwMark( *rPaM.GetPoint(), rCode, rName, rShortName );
-    else if( BOOKMARK == eMark || HIDDEN_BOOKMARK == eMark)
-    {
-        pBM = new SwBookmark(*rPaM.GetPoint(), rCode, rName, rShortName);
-        if( rPaM.HasMark() )
-            pBM->pPos2 = new SwPosition( *rPaM.GetMark() );
     }
-    else
+//    // --> OD 2007-10-16 #TESTING#
+//    else if ( BOOKMARK == eMark )
+//    {
+//        if ( ( !rPaM.HasMark() &&
+//               rPaM.GetPoint()->nNode.GetNode().GetTxtNode() &&
+//               rPaM.GetPoint()->nContent.GetIndex() == 0 ) ||
+//             ( rPaM.HasMark() &&
+//               rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+//               rPaM.GetPoint()->nNode.GetNode().GetTxtNode() &&
+//               rPaM.Start()->nContent.GetIndex() == 0 &&
+//               rPaM.End()->nContent.GetIndex() ==
+//                    rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len() ) )
+//        {
+//            pBM = new SwCrossRefBookmark( *(rPaM.Start()), rCode, rName, rShortName);
+//        }
+//        else
+//        {
+//            ASSERT( false,
+//                    "<SwDoc::makeBookmark(..)> - creation of cross-reference bookmark with invalid PaM" );
+//        }
+//    }
+//    // <--
+    else if( BOOKMARK == eMark || DDE_BOOKMARK == eMark)
     {
-        pBM = new SwUNOMark(*rPaM.GetPoint(), rCode, rName, rShortName);
-        if( rPaM.HasMark() )
-            pBM->pPos2 = new SwPosition( *rPaM.GetMark() );
-    }
-
-    // fix bookmark positions if they are invalid
-    lcl_FixPosition( *pBM->pPos1 );
-    if( pBM->pPos2 != NULL )
-        lcl_FixPosition( *pBM->pPos2 );
-
-    if( !pBookmarkTbl->Insert( pBM ) )
-        delete pBM, pBM = 0;
-    else
-    {
-        if( BOOKMARK == eMark && DoesUndo() )
+        // --> OD 2007-09-26 #i81002#
+        pBM = new SwBookmark( rPaM, rCode, rName, rShortName);
+        if ( eMark == DDE_BOOKMARK )
         {
-            ClearRedo();
-            AppendUndo( new SwUndoInsBookmark( *pBM ));
+            pBM->SetType( eMark );
         }
-        switch( eMark )
+        // <--
+    }
+    // --> OD 2007-10-17 #i81002#
+    else if ( eMark == CROSSREF_BOOKMARK )
+    {
+        if ( ( !rPaM.HasMark() &&
+               rPaM.GetPoint()->nNode.GetNode().GetTxtNode() &&
+               rPaM.GetPoint()->nContent.GetIndex() == 0 ) ||
+             ( rPaM.HasMark() &&
+               rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+               rPaM.GetPoint()->nNode.GetNode().GetTxtNode() &&
+               rPaM.Start()->nContent.GetIndex() == 0 &&
+               rPaM.End()->nContent.GetIndex() ==
+                rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len() ) )
         {
-            case UNO_BOOKMARK:
-            case HIDDEN_BOOKMARK:
-            break;
-            default:
-                SetModified();
+            pBM = new SwCrossRefBookmark( *(rPaM.Start()), rCode, rName, rShortName);
+        }
+        else
+        {
+            ASSERT( false,
+                    "<SwDoc::makeBookmark(..)> - creation of cross-reference bookmark with invalid PaM" );
+        }
+    }
+    // <--
+    else
+    {
+        // --> OD 2007-09-26 #i81002#
+        pBM = new SwUNOMark( rPaM, rCode, rName, rShortName);
+        // <--
+    }
+
+    // --> OD 2007-10-18 #i81002#
+    if ( pBM )
+    {
+        if ( !pBookmarkTbl->Insert( pBM ) )
+            delete pBM, pBM = 0;
+        else
+        {
+            if( BOOKMARK == eMark && DoesUndo() )
+            {
+                ClearRedo();
+                AppendUndo( new SwUndoInsBookmark( *pBM ));
+            }
+            switch( eMark )
+            {
+                case UNO_BOOKMARK:
+                case DDE_BOOKMARK:
+                break;
+                default:
+                    SetModified();
+            }
         }
     }
     return pBM;
@@ -226,6 +260,14 @@ void SwDoc::deleteBookmark( /*[in]*/const String& rName )
     if( USHRT_MAX != nFnd )
         deleteBookmark( nFnd );
 }
+
+// --> OD 2007-10-24 #i81002#
+bool SwDoc::isCrossRefBookmarkName( /*[in]*/const String& rName )
+{
+    return bookmarkfunc::isHeadingCrossRefBookmarkName( rName ) ||
+           bookmarkfunc::isNumItemCrossRefBookmarkName( rName );
+}
+// <--
 
 sal_uInt16 SwDoc::findBookmark( /*[in]*/const String& rName )
 {
@@ -288,7 +330,59 @@ void SwDoc::makeUniqueBookmarkName( String& rNm )
             if( (*pBookmarkTbl)[ n ]->GetName().Equals( sTmp ))
                 break;
     } while( n < nBookCnt );
+
+    // --> OD 2007-10-24 #i81002#
+    // a cross-reference bookmark name still have to be a cross-reference
+    // bookmark name after renaming due to duplicate names and vice versa.
+    // Thus, consider this, when changing the renaming algorithm
+    ASSERT( isCrossRefBookmarkName( rNm ) == isCrossRefBookmarkName( sTmp ),
+            "<SwDoc::makeUniqueBookmarkName(..)> - change of the bookmark name causes change of bookmark name type" );
+    // <--
+
     rNm = sTmp;
+}
+
+// --> OD 2007-11-16 #i83479#
+String SwDoc::getCrossRefBookmarkName(
+                /*[in]*/const SwTxtNode& rTxtNode,
+                /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) const
+{
+    for( USHORT n = pBookmarkTbl->Count(); n ; )
+    {
+        const SwCrossRefBookmark* pCrossRefBkmk(
+                    dynamic_cast<SwCrossRefBookmark*>((*pBookmarkTbl)[ --n ]) );
+        if ( pCrossRefBkmk &&
+             pCrossRefBkmk->GetBookmarkPos().nNode.GetNode().GetTxtNode() ==
+                &rTxtNode &&
+             pCrossRefBkmk->GetSubType() == nCrossRefType )
+        {
+            return pCrossRefBkmk->GetName();
+        }
+    }
+
+    return String();
+}
+
+String SwDoc::makeCrossRefBookmark(
+                    /*[in]*/const SwTxtNode& rTxtNode,
+                    /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType )
+{
+    SwPosition aPos( rTxtNode );
+    aPos.nContent.Assign( &(const_cast<SwTxtNode&>(rTxtNode)), 0 );
+    SwPaM aPaM( aPos );
+    KeyCode rKeyCodeDummy;
+    String sBkmkName( bookmarkfunc::generateNewCrossRefBookmarkName( nCrossRefType ) );
+    makeUniqueBookmarkName( sBkmkName );
+    SwBookmark* pCrossRefBk =
+            makeBookmark( aPaM, rKeyCodeDummy, sBkmkName, sBkmkName, CROSSREF_BOOKMARK );
+    if ( pCrossRefBk )
+    {
+        return pCrossRefBk->GetName();
+    }
+    else
+    {
+        return String();
+    }
 }
 
 /*  */
@@ -296,12 +390,14 @@ void SwDoc::makeUniqueBookmarkName( String& rNm )
 SaveBookmark::SaveBookmark( int eType, const SwBookmark& rBkmk,
                             const SwNodeIndex & rMvPos,
                             const SwIndex* pIdx )
-    : aName( rBkmk.GetName() ), aShortName( rBkmk.GetShortName() ),
-    aCode( rBkmk.GetKeyCode() ), eBkmkType( (SaveBookmarkType)eType ),
-    eOrigBkmType(rBkmk.GetType())
+    : aName( rBkmk.GetName() ),
+      aShortName( rBkmk.GetShortName() ),
+      aCode( rBkmk.GetKeyCode() ),
+      eBkmkType( (SaveBookmarkType)eType ),
+      eOrigBkmType(rBkmk.GetType())
 {
-    nNode1 = rBkmk.GetPos().nNode.GetIndex();
-    nCntnt1 = rBkmk.GetPos().nContent.GetIndex();
+    nNode1 = rBkmk.GetBookmarkPos().nNode.GetIndex();
+    nCntnt1 = rBkmk.GetBookmarkPos().nContent.GetIndex();
 
     if( nsSaveBookmarkType::BKMK_POS & eBkmkType )
     {
@@ -310,10 +406,10 @@ SaveBookmark::SaveBookmark( int eType, const SwBookmark& rBkmk,
             nCntnt1 = nCntnt1 - pIdx->GetIndex();
     }
 
-    if( rBkmk.GetOtherPos() )
+    if( rBkmk.GetOtherBookmarkPos() )
     {
-        nNode2 = rBkmk.GetOtherPos()->nNode.GetIndex();
-        nCntnt2 = rBkmk.GetOtherPos()->nContent.GetIndex();
+        nNode2 = rBkmk.GetOtherBookmarkPos()->nNode.GetIndex();
+        nCntnt2 = rBkmk.GetOtherBookmarkPos()->nContent.GetIndex();
 
         if( nsSaveBookmarkType::BKMK_POS_OTHER & eBkmkType )
         {
@@ -419,12 +515,12 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
         //simple marks should not be moved
         if(pBkmk->IsMark())
             continue;
-        if( GreaterThan( pBkmk->GetPos(), rStt, pSttIdx ) &&
-            Lower( pBkmk->GetPos(), rEnd, pEndIdx ))
+        if( GreaterThan( pBkmk->GetBookmarkPos(), rStt, pSttIdx ) &&
+            Lower( pBkmk->GetBookmarkPos(), rEnd, pEndIdx ))
             eType = nsSaveBookmarkType::BKMK_POS;
-        if( pBkmk->GetOtherPos() &&
-            GreaterThan( *pBkmk->GetOtherPos(), rStt, pSttIdx ) &&
-            Lower( *pBkmk->GetOtherPos(), rEnd, pEndIdx ))
+        if( pBkmk->GetOtherBookmarkPos() &&
+            GreaterThan( *pBkmk->GetOtherBookmarkPos(), rStt, pSttIdx ) &&
+            Lower( *pBkmk->GetOtherBookmarkPos(), rEnd, pEndIdx ))
             eType |= nsSaveBookmarkType::BKMK_POS_OTHER;
 
         if( nsSaveBookmarkType::BKMK_POS_NONE == eType )        // auf zum naechsten
@@ -435,11 +531,11 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                 // Besonderheit: komplett eingeschlossen? dann mitnehmen
             if( pEndIdx && (nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS) != eType &&
                 ( ( nsSaveBookmarkType::BKMK_POS_OTHER & eType &&
-                    pBkmk->GetPos().nNode == rEnd &&
-                    pBkmk->GetPos().nContent == *pEndIdx ) ||
-                ( nsSaveBookmarkType::BKMK_POS & eType && pBkmk->GetOtherPos() &&
-                    pBkmk->GetOtherPos()->nNode == rEnd &&
-                    pBkmk->GetOtherPos()->nContent == *pEndIdx ) ) )
+                    pBkmk->GetBookmarkPos().nNode == rEnd &&
+                    pBkmk->GetBookmarkPos().nContent == *pEndIdx ) ||
+                ( nsSaveBookmarkType::BKMK_POS & eType && pBkmk->GetOtherBookmarkPos() &&
+                    pBkmk->GetOtherBookmarkPos()->nNode == rEnd &&
+                    pBkmk->GetOtherBookmarkPos()->nContent == *pEndIdx ) ) )
                     eType = nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS;
 
             SaveBookmark * pSBkmk = new SaveBookmark( eType, *pBkmk, rStt, pSttIdx );
@@ -447,51 +543,71 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
             pDoc->deleteBookmark( nCnt-- );
         }
         else if( (nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS ) == eType ||
-                ( nsSaveBookmarkType::BKMK_POS == eType && !pBkmk->GetOtherPos() ) )
+                ( nsSaveBookmarkType::BKMK_POS == eType && !pBkmk->GetOtherBookmarkPos() ) )
             pDoc->deleteBookmark( nCnt-- );
         else
         {
-            SwPosition* pPos = (SwPosition*)(nsSaveBookmarkType::BKMK_POS & eType
-                                    ? &pBkmk->GetPos()
-                                    : pBkmk->GetOtherPos());
-            pPos->nNode = rEnd;
+            // --> OD 2007-10-17 #i81002# - refactoring:
+            // no direct manipulation of <SwBookmark> member.
+//            SwPosition* pPos = (SwPosition*)(nsSaveBookmarkType::BKMK_POS & eType
+//                               ? &pBkmk->GetBookmarkPos()
+//                               : pBkmk->GetOtherBookmarkPos());
+            SwPosition aNewPos( nsSaveBookmarkType::BKMK_POS & eType
+                                ? pBkmk->GetBookmarkPos()
+                                : *pBkmk->GetOtherBookmarkPos() );
+            aNewPos.nNode = rEnd;
             if( pEndIdx )
-                pPos->nContent = *pEndIdx;
+                aNewPos.nContent = *pEndIdx;
             else
             {
-                SwCntntNode* pCNd = pPos->nNode.GetNode().GetCntntNode();
+                SwCntntNode* pCNd = aNewPos.nNode.GetNode().GetCntntNode();
                 BOOL bStt = TRUE;
-                if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &pPos->nNode )) )
+                if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &(aNewPos.nNode) )) )
                 {
                     bStt = FALSE;
-                    pPos->nNode = rStt;
-                    if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pPos->nNode )) )
+                    aNewPos.nNode = rStt;
+                    if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &(aNewPos.nNode) )) )
                     {
-                        pPos->nNode = nsSaveBookmarkType::BKMK_POS == eType
-                                        ? pBkmk->GetOtherPos()->nNode
-                                        : pBkmk->GetPos().nNode;
-                        pCNd = pPos->nNode.GetNode().GetCntntNode();
+                        aNewPos.nNode = nsSaveBookmarkType::BKMK_POS == eType
+                                        ? pBkmk->GetOtherBookmarkPos()->nNode
+                                        : pBkmk->GetBookmarkPos().nNode;
+                        pCNd = aNewPos.nNode.GetNode().GetCntntNode();
                     }
                 }
                 xub_StrLen nTmp = bStt ? 0 : pCNd->Len();
-                pPos->nContent.Assign( pCNd, nTmp );
+                aNewPos.nContent.Assign( pCNd, nTmp );
+            }
+            if ( nsSaveBookmarkType::BKMK_POS & eType )
+            {
+                pBkmk->SetBookmarkPos( &aNewPos );
+            }
+            else
+            {
+                pBkmk->SetOtherBookmarkPos( &aNewPos );
             }
 
             // keine ungueltigen Selektionen zulassen!
-            if( pBkmk->GetOtherPos() &&
-                pBkmk->GetOtherPos()->nNode.GetNode().FindTableBoxStartNode() !=
-                pBkmk->GetPos().nNode.GetNode().FindTableBoxStartNode() )
+            if( pBkmk->GetOtherBookmarkPos() &&
+                pBkmk->GetOtherBookmarkPos()->nNode.GetNode().FindTableBoxStartNode() !=
+                pBkmk->GetBookmarkPos().nNode.GetNode().FindTableBoxStartNode() )
             {
-                SwPaM aPam( pPos == pBkmk->GetOtherPos()
-                                ? pBkmk->GetPos() : *pBkmk->GetOtherPos()  );
-                String sNm( pBkmk->GetName() ), sShortNm( pBkmk->GetShortName() );
-                KeyCode aKCode( pBkmk->GetKeyCode() );
+//                SwPaM aPam( pPos == pBkmk->GetOtherBookmarkPos()
+//                            ? pBkmk->GetBookmarkPos()
+//                            : *pBkmk->GetOtherBookmarkPos()  );
+                const SwPaM aPam( nsSaveBookmarkType::BKMK_POS & eType
+                                  ? *pBkmk->GetOtherBookmarkPos()
+                                  : pBkmk->GetBookmarkPos() );
+                const String sNm( pBkmk->GetName() );
+                const String sShortNm( pBkmk->GetShortName() );
+                const KeyCode aKCode( pBkmk->GetKeyCode() );
+                const IDocumentBookmarkAccess::BookmarkType eBkmkType( pBkmk->GetType() );
 
                 bool bMake = !pBkmk->IsUNOMark();
                 pDoc->deleteBookmark( nCnt-- );
                 if( bMake )
-                    pDoc->makeBookmark( aPam, aKCode, sNm, sShortNm, IDocumentBookmarkAccess::BOOKMARK );
+                    pDoc->makeBookmark( aPam, aKCode, sNm, sShortNm, eBkmkType );
             }
+            // <--
         }
     }
 
@@ -695,17 +811,17 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     for( ; aSave.GetCount() < rBkmks.Count(); aSave.IncCount() )
     {
         const SwBookmark* pBkmk = rBkmks[ aSave.GetCount() ];
-        if( pBkmk->GetPos().nNode.GetIndex() == nNode &&
-            pBkmk->GetPos().nContent.GetIndex() < nCntnt )
+        if( pBkmk->GetBookmarkPos().nNode.GetIndex() == nNode &&
+            pBkmk->GetBookmarkPos().nContent.GetIndex() < nCntnt )
         {
-            aSave.SetContent( pBkmk->GetPos().nContent.GetIndex() );
+            aSave.SetContent( pBkmk->GetBookmarkPos().nContent.GetIndex() );
             aSave.Add( rSaveArr );
         }
 
-        if( pBkmk->GetOtherPos() && pBkmk->GetOtherPos()->nNode.GetIndex() ==
-            nNode && pBkmk->GetOtherPos()->nContent.GetIndex() < nCntnt )
+        if( pBkmk->GetOtherBookmarkPos() && pBkmk->GetOtherBookmarkPos()->nNode.GetIndex() ==
+            nNode && pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() < nCntnt )
         {
-            aSave.SetContent( pBkmk->GetOtherPos()->nContent.GetIndex() );
+            aSave.SetContent( pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() );
             aSave.IncType();
             aSave.Add( rSaveArr );
             aSave.DecType();
@@ -894,11 +1010,29 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
         switch( aSave.GetType() )
         {
         case 0x8000:
-            pPos = (SwPosition*)&rBkmks[ aSave.GetCount() ]->GetPos();
-            break;
+        {
+            // --> OD 2007-09-27 #i81002# - refactoring
+            // Do not directly manipulate members of <SwBookmark>
+//            pPos = (SwPosition*)&rBkmks[ aSave.GetCount() ]->GetBookmarkPos();
+            SwPosition aNewPos( rBkmks[ aSave.GetCount() ]->GetBookmarkPos() );
+            aNewPos.nNode = *pCNd;
+            aNewPos.nContent.Assign( pCNd, aSave.GetContent() + nOffset );
+            rBkmks[ aSave.GetCount() ]->SetBookmarkPos( &aNewPos );
+            // <--
+        }
+        break;
         case 0x8001:
-            pPos = (SwPosition*)rBkmks[ aSave.GetCount() ]->GetOtherPos();
-            break;
+        {
+            // --> OD 2007-09-27 #i81002# - refactoring
+            // Do not directly manipulate members of <SwBookmark>
+//            pPos = (SwPosition*)rBkmks[ aSave.GetCount() ]->GetOtherBookmarkPos();
+            SwPosition aNewPos( *(rBkmks[ aSave.GetCount() ]->GetOtherBookmarkPos()) );
+            aNewPos.nNode = *pCNd;
+            aNewPos.nContent.Assign( pCNd, aSave.GetContent() + nOffset );
+            rBkmks[ aSave.GetCount() ]->SetOtherBookmarkPos( &aNewPos );
+            // <--
+        }
+        break;
         case 0x1001:
             pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
             break;
@@ -1042,11 +1176,29 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
             switch( aSave.GetType() )
             {
             case 0x8000:
-                pPos = (SwPosition*)&rBkmks[ aSave.GetCount() ]->GetPos();
-                break;
+            {
+                // --> OD 2007-09-27 #i81002# - refactoring
+                // Do not directly manipulate members of <SwBookmark>
+//                pPos = (SwPosition*)&rBkmks[ aSave.GetCount() ]->GetBookmarkPos();
+                SwPosition aNewPos( rBkmks[ aSave.GetCount() ]->GetBookmarkPos() );
+                aNewPos.nNode = rNd;
+                aNewPos.nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
+                rBkmks[ aSave.GetCount() ]->SetBookmarkPos( &aNewPos );
+                // <--
+            }
+            break;
             case 0x8001:
-                pPos = (SwPosition*)rBkmks[ aSave.GetCount() ]->GetOtherPos();
-                break;
+            {
+                // --> OD 2007-09-27 #i81002# - refactoring
+                // Do not directly manipulate members of <SwBookmark>
+//                pPos = (SwPosition*)rBkmks[ aSave.GetCount() ]->GetOtherBookmarkPos();
+                SwPosition aNewPos( *(rBkmks[ aSave.GetCount() ]->GetOtherBookmarkPos()) );
+                aNewPos.nNode = rNd;
+                aNewPos.nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
+                rBkmks[ aSave.GetCount() ]->SetOtherBookmarkPos( &aNewPos );
+                // <--
+            }
+            break;
             case 0x1001:
                 pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
                 break;
@@ -1165,4 +1317,84 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
     }
 }
 
+// --> OD 2007-11-09 #i81002#
+namespace bookmarkfunc
+{
+    const String getHeadingCrossRefBookmarkNamePrefix()
+    {
+        static const String sPrefix( String::CreateFromAscii( "__RefHeading__" ) );
 
+        return sPrefix;
+    }
+
+    const String getNumItemCrossRefBookmarkNamePrefix()
+    {
+        static String sPrefix( String::CreateFromAscii( "__RefNumPara__" ) );
+
+        return sPrefix;
+    }
+
+    bool isHeadingCrossRefBookmarkName( /*[in]*/const String& rName )
+    {
+        bool bRet( false );
+
+        const xub_StrLen cLenOfFixedFirstPart =
+                                    getHeadingCrossRefBookmarkNamePrefix().Len();
+        if ( rName.Len() > cLenOfFixedFirstPart )
+        {
+            const String aFirstPartOfName = rName.Copy( 0, cLenOfFixedFirstPart );
+            const String aRestOfName = rName.Copy( cLenOfFixedFirstPart );
+            if ( aRestOfName.ToInt64() > 0 &&
+                 aFirstPartOfName.Equals( getHeadingCrossRefBookmarkNamePrefix() ) )
+            {
+                bRet = true;
+            }
+        }
+
+        return bRet;
+
+    }
+
+    bool isNumItemCrossRefBookmarkName( /*[in]*/const String& rName )
+    {
+        bool bRet( false );
+
+        const xub_StrLen cLenOfFixedFirstPart =
+                                    getNumItemCrossRefBookmarkNamePrefix().Len();
+        if ( rName.Len() > cLenOfFixedFirstPart )
+        {
+            const String aFirstPartOfName = rName.Copy( 0, cLenOfFixedFirstPart );
+            const String aRestOfName = rName.Copy( cLenOfFixedFirstPart );
+            if ( aRestOfName.ToInt64() > 0 &&
+                 aFirstPartOfName.Equals( getNumItemCrossRefBookmarkNamePrefix() ) )
+            {
+                bRet = true;
+            }
+        }
+
+        return bRet;
+
+    }
+
+    // --> OD 2007-11-16 #i83479#
+    String generateNewCrossRefBookmarkName(
+            /*[in]*/const IDocumentBookmarkAccess::CrossReferenceBookmarkSubType nSubType )
+    {
+        String sNewName;
+        if ( nSubType == IDocumentBookmarkAccess::HEADING )
+        {
+            sNewName = getHeadingCrossRefBookmarkNamePrefix();
+        }
+        else if ( nSubType == IDocumentBookmarkAccess::NUMITEM )
+        {
+            sNewName = getNumItemCrossRefBookmarkNamePrefix();
+        }
+
+        long n = Time().GetTime();
+        n += Date().GetDate();
+        sNewName.Append( String::CreateFromInt32( n ) );
+
+        return sNewName;
+    }
+}
+// <--
