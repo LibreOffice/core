@@ -4,9 +4,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:52:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,53 +962,55 @@ bool Converter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
 
 /** convert util::DateTime to ISO Date String */
 void Converter::convertDateTime(
-                ::rtl::OUStringBuffer& rBuffer,
-                const com::sun::star::util::DateTime& rDateTime,
-                bool bAddTimeIf0AM )
+        ::rtl::OUStringBuffer& i_rBuffer,
+        const com::sun::star::util::DateTime& i_rDateTime,
+        bool i_bAddTimeIf0AM )
 {
-    OSL_ENSURE( false, "Converter::convertDateTime - not implemented, tools/String needs replacement" );
-    (void)rBuffer;
-    (void)rDateTime;
-    (void)bAddTimeIf0AM;
-#if 0
-    String aString( String::CreateFromInt32( rDateTime.Year ) );
-    aString += '-';
-    if( rDateTime.Month < 10 )
-        aString += '0';
-    aString += String::CreateFromInt32( rDateTime.Month );
-    aString += '-';
-    if( rDateTime.Day < 10 )
-        aString += '0';
-    aString += String::CreateFromInt32( rDateTime.Day );
+    const sal_Unicode dash('-');
+    const sal_Unicode col (':');
+    const sal_Unicode dot ('.');
+    const sal_Unicode zero('0');
+    const sal_Unicode tee ('T');
 
-    if( rDateTime.Seconds != 0 ||
-        rDateTime.Minutes != 0 ||
-        rDateTime.Hours   != 0 ||
-        bAddTimeIf0AM )
+    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Year)  ).append(dash);
+    if( i_rDateTime.Month < 10 ) {
+        i_rBuffer.append(zero);
+    }
+    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Month) ).append(dash);
+    if( i_rDateTime.Day   < 10 ) {
+        i_rBuffer.append(zero);
+    }
+    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Day)   );
+
+    if( i_rDateTime.Seconds != 0 ||
+        i_rDateTime.Minutes != 0 ||
+        i_rDateTime.Hours   != 0 ||
+        i_bAddTimeIf0AM )
     {
-        aString += 'T';
-        if( rDateTime.Hours < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Hours );
-        aString += ':';
-        if( rDateTime.Minutes < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Minutes );
-        aString += ':';
-        if( rDateTime.Seconds < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Seconds );
-        if ( rDateTime.HundredthSeconds > 0)
-        {
-            aString += '.';
-            if (rDateTime.HundredthSeconds < 10)
-                aString += '0';
-            aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
+        i_rBuffer.append(tee);
+        if( i_rDateTime.Hours   < 10 ) {
+            i_rBuffer.append(zero);
+        }
+        i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Hours)   )
+                 .append(col);
+        if( i_rDateTime.Minutes < 10 ) {
+            i_rBuffer.append(zero);
+        }
+        i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Minutes) )
+                 .append(col);
+        if( i_rDateTime.Seconds < 10 ) {
+            i_rBuffer.append(zero);
+        }
+        i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Seconds) );
+        if( i_rDateTime.HundredthSeconds > 0 ) {
+            i_rBuffer.append(dot);
+            if( i_rDateTime.HundredthSeconds < 10 ) {
+                i_rBuffer.append(zero);
+            }
+            i_rBuffer.append(
+                static_cast<sal_Int32>(i_rDateTime.HundredthSeconds) );
         }
     }
-
-    rBuffer.append( aString );
-#endif
 }
 
 /** convert ISO Date String to util::DateTime */
