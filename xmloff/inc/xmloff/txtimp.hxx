@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:46:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,10 +207,6 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_DOCUMENT_CREATION_DATE,
     XML_TOK_TEXT_DOCUMENT_CREATION_TIME,
     XML_TOK_TEXT_DOCUMENT_DESCRIPTION,
-    XML_TOK_TEXT_DOCUMENT_INFORMATION_0,
-    XML_TOK_TEXT_DOCUMENT_INFORMATION_1,
-    XML_TOK_TEXT_DOCUMENT_INFORMATION_2,
-    XML_TOK_TEXT_DOCUMENT_INFORMATION_3,
     XML_TOK_TEXT_DOCUMENT_PRINT_AUTHOR,
     XML_TOK_TEXT_DOCUMENT_PRINT_DATE,
     XML_TOK_TEXT_DOCUMENT_PRINT_TIME,
