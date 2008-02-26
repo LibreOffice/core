@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:56:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #include "../events/mouseevent.hxx"
 
 #include <string.h>
+
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+
 
 namespace DOM
 {
@@ -110,6 +113,18 @@ namespace DOM
         // init node base
         m_aNodeType = NodeType_DOCUMENT_NODE;
         init_node((xmlNodePtr)m_aDocPtr);
+    }
+
+    void SAL_CALL CDocument::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        i_xHandler->startDocument();
+        for (xmlNodePtr pChild = m_aNodePtr->children;
+                        pChild != 0; pChild = pChild->next) {
+            CNode * pNode = CNode::get(pChild);
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            pNode->saxify(i_xHandler);
+        }
+        i_xHandler->endDocument();
     }
 
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
@@ -188,7 +203,7 @@ namespace DOM
         // not supported
     }
 
-    void SAL_CALL CDocument::setOutputStream(   const Reference< XOutputStream >& aStream )
+    void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
         throw (RuntimeException)
     {
         m_rOutputStream = aStream;
@@ -365,19 +380,25 @@ namespace DOM
         return Reference< XDocumentType >(static_cast< CDocumentType* >(CNode::get(cur)));
     }
 
-    // This is a convenience attribute that allows direct access to the child
-    // node that is the root element of the document.
-    Reference< XElement > SAL_CALL CDocument::getDocumentElement()
-        throw (RuntimeException)
-    {
+    /// get the pointer to the root element node of the document
+    static xmlNodePtr SAL_CALL _getDocumentRootPtr(xmlDocPtr i_pDocument) {
         // find the document element
-        xmlNodePtr cur = m_aDocPtr->children;
+        xmlNodePtr cur = i_pDocument->children;
         while (cur != NULL)
         {
             if (cur->type == XML_ELEMENT_NODE)
                 break;
             cur = cur->next;
         }
+        return cur;
+    }
+
+    // This is a convenience attribute that allows direct access to the child
+    // node that is the root element of the document.
+    Reference< XElement > SAL_CALL CDocument::getDocumentElement()
+        throw (RuntimeException)
+    {
+        xmlNodePtr cur = _getDocumentRootPtr(m_aDocPtr);
         return Reference< XElement >(static_cast< CElement* >(CNode::get(cur)));
     }
 
@@ -660,4 +681,30 @@ namespace DOM
         return Reference< XEvent >(pEvent);
     }
 
+    // ::com::sun::star::xml::sax::XSAXSerializable
+    void SAL_CALL CDocument::serialize(
+            const Reference< XDocumentHandler >& i_xHandler,
+            const Sequence< beans::StringPair >& i_rNamespaces)
+        throw (RuntimeException, SAXException)
+    {
+        // add new namespaces to root node
+        xmlNodePtr pRoot = _getDocumentRootPtr(m_aDocPtr);
+        if (0 != pRoot) {
+            const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
+            for (const beans::StringPair *pNsDef = pSeq;
+                 pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
+                OString prefix = OUStringToOString(pNsDef->First,
+                                    RTL_TEXTENCODING_UTF8);
+                OString href   = OUStringToOString(pNsDef->Second,
+                                    RTL_TEXTENCODING_UTF8);
+                // this will only add the ns if it does not exist already
+                xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
+                         reinterpret_cast<const xmlChar*>(prefix.getStr()));
+            }
+            // eliminate duplicate namespace declarations
+            _nscleanup(pRoot->children, pRoot);
+        }
+        // serialize via SAX handler
+        saxify(i_xHandler);
+    }
 }
