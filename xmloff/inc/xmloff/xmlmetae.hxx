@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:33:27 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,74 +47,96 @@
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
+
+#include <cppuhelper/implbase1.hxx>
 #include <xmloff/xmltoken.hxx>
-#endif
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-} } } }
+#include <vector>
 
-class Time;
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
+
 class SvXMLExport;
 
-class XMLOFF_DLLPUBLIC SfxXMLMetaExport
+/** export meta data from an <type>XDocumentProperties</type> instance.
+
+    <p>
+    This class will start the export at the office:meta element,
+    not at the root element. This means that when <method>Export</method>
+    is called here, the document root element must already be written, but
+    office:meta must <em>not</em> be written.
+    </p>
+ */
+class XMLOFF_DLLPUBLIC SvXMLMetaExport : public ::cppu::WeakImplHelper1<
+                ::com::sun::star::xml::sax::XDocumentHandler >
 {
 private:
-    SvXMLExport&                                        rExport;
+    SvXMLExport& mrExport;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentInfo>      xDocInfo;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>          xInfoProp;
-    ::com::sun::star::lang::Locale                      aLocale;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::NamedValue>            aDocStatistic;
+        ::com::sun::star::document::XDocumentProperties> mxDocProps;
+    /// counts levels of the xml document. necessary for special handling.
+    int m_level;
+    /// preserved namespaces. necessary because we do not write the root node.
+    std::vector< ::com::sun::star::beans::StringPair > m_preservedNSs;
 
     SAL_DLLPRIVATE void SimpleStringElement(
-        const ::rtl::OUString& rPropertyName, sal_uInt16 nNamespace,
+        const ::rtl::OUString& rText, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
     SAL_DLLPRIVATE void SimpleDateTimeElement(
-        const ::rtl::OUString& rPropertyName, sal_uInt16 nNamespace,
+        const ::com::sun::star::util::DateTime & rDate, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
 
+    /// currently unused; for exporting via the XDocumentProperties interface
+    SAL_DLLPRIVATE void _Export();
+
 public:
-    SfxXMLMetaExport( SvXMLExport& rExport,
-                      const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel>& rDocModel );
-    SfxXMLMetaExport( SvXMLExport& rExport,
-                      const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::document::XDocumentInfo>& rDocInfo );
+    SvXMLMetaExport( SvXMLExport& i_rExport,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>& i_rDocProps);
 
-    virtual ~SfxXMLMetaExport();
+    virtual ~SvXMLMetaExport();
 
-    // core API
+    /// export via XSAXWriter interface, with fallback to _Export
     void Export();
 
     static ::rtl::OUString GetISODateTimeString(
                         const ::com::sun::star::util::DateTime& rDateTime );
+
+    // ::com::sun::star::xml::sax::XDocumentHandler:
+    virtual void SAL_CALL startDocument()
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL endDocument()
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL startElement(const ::rtl::OUString & i_rName,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & i_xAttribs)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL endElement(const ::rtl::OUString & i_rName)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL characters(const ::rtl::OUString & i_rChars)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL ignorableWhitespace(
+        const ::rtl::OUString & i_rWhitespaces)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL processingInstruction(
+        const ::rtl::OUString & i_rTarget, const ::rtl::OUString & i_rData)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+    virtual void SAL_CALL setDocumentLocator(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XLocator > & i_xLocator)
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::xml::sax::SAXException);
+
 };
 
 #endif // _XMLOFF_XMLMETAE_HXX
