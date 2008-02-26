@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:47:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,14 +141,12 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#include <comphelper/string.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/saveopt.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -160,7 +158,6 @@
 #include <sfx2/doctdlg.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/objitem.hxx>
@@ -182,6 +179,10 @@
 #include "../appl/app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/document/XDocumentInfo.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
@@ -387,9 +388,6 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
 
     if ( GetMedium() )
     {
-        SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-        sal_Bool bSaveTo = pSaveToItem && pSaveToItem->GetValue();
-
         String aFilterName;
         SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
@@ -423,30 +421,17 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         {
             SfxObjectShellRef xLock( this ); // ???
 
-            // since saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
-            // it must be restored after saving
-            SfxDocumentInfo aSavedInfo;
-            sal_Bool bCopyTo =  bSaveTo || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
-            if ( bCopyTo )
-                aSavedInfo = GetDocInfo();
-
             // use the title that is provided in the media descriptor
             SFX_ITEMSET_ARG( aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
             if ( pDocTitleItem )
-                GetDocInfo().SetTitle( pDocTitleItem->GetValue() );
+                getDocProperties()->setTitle( pDocTitleItem->GetValue() );
 
             bOk = CommonSaveAs_Impl( INetURLObject(aFileName), aFilterName,
                 aParams );
 
-            if ( bCopyTo )
-            {
-                // restore DocumentInfo if only a copy was created
-                SfxDocumentInfo &rDocInfo = GetDocInfo();
-                rDocInfo = aSavedInfo;
-            }
         }
 
-        // Picklisten-Eintrag verhindern
+        // prevent picklist-entry
         GetMedium()->SetUpdatePickList( FALSE );
     }
 
@@ -512,7 +497,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
-                GetDocInfo() = (*pDocInfItem)();
+                uno::Reference<document::XDocumentInfoSupplier> xDIS(
+                    GetModel(), uno::UNO_QUERY_THROW);
+                pDocInfItem->updateDocumentInfo(getDocProperties(),
+                    xDIS->getDocumentInfo());
                 SetUseUserData( pDocInfItem->IsUseUserData() );
             }
             else
@@ -553,7 +541,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aTitle = GetTitle();
                 }
 
-                SfxDocumentInfoItem aDocInfoItem( aURL, GetDocInfo(), IsUseUserData() );
+                uno::Reference<document::XDocumentInfoSupplier> xDIS(
+                    GetModel(), uno::UNO_QUERY_THROW);
+                SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(),
+                    xDIS->getDocumentInfo(), IsUseUserData() );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
                     aDocInfoItem.SetTemplate(FALSE);
@@ -574,11 +565,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
-                        GetDocInfo() = (*(const SfxDocumentInfoItem *)pDocInfoItem)();
+                        pDocInfoItem->updateDocumentInfo(getDocProperties(),
+                            xDIS->getDocumentInfo());
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
 
                         // add data from dialog for possible recording purposes
-                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(), GetDocInfo(), IsUseUserData() ) );
+                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
+                            getDocProperties(), xDIS->getDocumentInfo(),
+                            IsUseUserData() ) );
                     }
 
                     rReq.Done();
@@ -1153,7 +1147,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_DOCINFO_TITLE:
             {
                 rSet.Put( SfxStringItem(
-                    SID_DOCINFO_TITLE, GetDocInfo().GetTitle() ) );
+                    SID_DOCINFO_TITLE, getDocProperties()->getTitle() ) );
                 break;
             }
             case SID_FILE_NAME:
@@ -1204,22 +1198,23 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 
         case SID_DOCINFO_AUTHOR :
         {
-            String aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            GetDocInfo().SetAuthor( aStr );
+            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            getDocProperties()->setAuthor( aStr );
             break;
         }
 
         case SID_DOCINFO_COMMENTS :
         {
-            String aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            GetDocInfo().SetComment( aStr );
+            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            getDocProperties()->setDescription( aStr );
             break;
         }
 
         case SID_DOCINFO_KEYWORDS :
         {
-            String aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            GetDocInfo().SetKeywords( aStr );
+            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            getDocProperties()->setKeywords(
+                ::comphelper::string::convertCommaSeparated(aStr) );
             break;
         }
     }
@@ -1236,21 +1231,22 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
         {
             case SID_DOCINFO_AUTHOR :
             {
-                rSet.Put( SfxStringItem( nSID, GetDocInfo().GetAuthor() ) );
+                rSet.Put( SfxStringItem( nSID,
+                            getDocProperties()->getAuthor() ) );
                 break;
             }
 
             case SID_DOCINFO_COMMENTS :
             {
-                String aStr = GetDocInfo().GetComment();
-                rSet.Put( SfxStringItem( nSID, aStr ) );
+                rSet.Put( SfxStringItem( nSID,
+                            getDocProperties()->getDescription()) );
                 break;
             }
 
             case SID_DOCINFO_KEYWORDS :
             {
-                String aStr = GetDocInfo().GetKeywords();
-                rSet.Put( SfxStringItem( nSID, aStr ) );
+                rSet.Put( SfxStringItem( nSID, ::comphelper::string::
+                    convertCommaSeparated(getDocProperties()->getKeywords())) );
                 break;
             }
 
