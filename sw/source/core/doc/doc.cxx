@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:35:13 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -66,9 +68,6 @@
 #endif
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -1176,11 +1175,12 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
-        if( pSwgInfo )
-        {
-            com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xSet( pSwgInfo->GetInfo(), com::sun::star::uno::UNO_QUERY );
-            if ( xSet.is() )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("DocumentStatistic"), com::sun::star::uno::makeAny( aStat ) );
+        if (GetDocShell()) {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps(
+                xDPS->getDocumentProperties());
+            xDocProps->setDocumentStatistics(aStat);
         }
 
         // event. Stat. Felder Updaten
@@ -1192,11 +1192,8 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
 
 // Dokument - Info
 
-void SwDoc::DocInfoChgd( const SfxDocumentInfo& rInfo )
+void SwDoc::DocInfoChgd( )
 {
-    DBG_ASSERT( pSwgInfo && rInfo.GetInfo() == pSwgInfo->GetInfo(), "DocInfo chaos!" );
-    (void) rInfo;
-
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
     GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
     SetModified();
@@ -2064,17 +2061,6 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, BOOL bTblCrsr )
 
     pUnoCrsrTbl->Insert( pNew, pUnoCrsrTbl->Count() );
     return pNew;
-}
-
-/* @@@MAINTAINABILITY-HORROR@@@
-   Probably unwanted dependency on SwDocShell and SfxDocumentInfo
-*/
-void SwDoc::SetDocumentInfo( const SfxDocumentInfo& rInfo )
-{
-    if ( !pSwgInfo )
-        pSwgInfo = new SfxDocumentInfo( rInfo );
-    else
-        (*pSwgInfo) = rInfo;
 }
 
 void SwDoc::ChkCondColls()
