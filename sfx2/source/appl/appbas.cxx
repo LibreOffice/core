@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:39:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,6 @@
 #include <svtools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/appuno.hxx>
 #include <sfx2/module.hxx>
 #include "arrdecl.hxx"
@@ -134,7 +131,6 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/macrconf.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
 #include "appbas.hxx"
