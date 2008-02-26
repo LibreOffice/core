@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:14:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,13 +385,11 @@ SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     sal_uInt16 nImportFlags ) throw ()
 :   mpImpl( new SvXMLImport_Impl() ),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     // #110680#
     // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -400,8 +398,11 @@ SvXMLImport::SvXMLImport(
     mpXMLErrors( NULL ),
     mpStyleMap(0),
     mnImportFlags( nImportFlags ),
+    mnErrorFlags(0),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
     mbIsFormsSupported( sal_True ),
-    mbIsGraphicLoadOnDemmandSupported( true )
+    mbIsGraphicLoadOnDemandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -414,12 +415,10 @@ SvXMLImport::SvXMLImport(
 :   mxModel( rModel ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mpImpl( new SvXMLImport_Impl() ),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
     // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
     mpProgressBarHelper( NULL ),
@@ -428,7 +427,10 @@ SvXMLImport::SvXMLImport(
     mpStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
     mnErrorFlags(0),
-    mbIsFormsSupported( sal_True )
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    mbIsFormsSupported( sal_True ),
+    mbIsGraphicLoadOnDemandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -443,12 +445,10 @@ SvXMLImport::SvXMLImport(
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mxGraphicResolver( rGraphicObjects ),
     mpImpl( new SvXMLImport_Impl() ),
-    // #110680#
-    mxServiceFactory(xServiceFactory),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
     // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
     mpProgressBarHelper( NULL ),
@@ -457,7 +457,10 @@ SvXMLImport::SvXMLImport(
     mpStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
     mnErrorFlags(0),
-    mbIsFormsSupported( sal_True )
+    // #110680#
+    mxServiceFactory(xServiceFactory),
+    mbIsFormsSupported( sal_True ),
+    mbIsGraphicLoadOnDemandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -874,7 +877,7 @@ void SAL_CALL SvXMLImport::unknown( const OUString& )
 {
 }
 
-void SvXMLImport::SetStatisticAttributes(const uno::Reference< xml::sax::XAttributeList > &)
+void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
 {
     GetProgressBarHelper()->SetRepeat(sal_False);
     GetProgressBarHelper()->SetReference(0);
@@ -1865,9 +1868,9 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
     return bRet;
 }
 
-bool SvXMLImport::isGraphicLoadOnDemmandSupported() const
+bool SvXMLImport::isGraphicLoadOnDemandSupported() const
 {
-    return mbIsGraphicLoadOnDemmandSupported;
+    return mbIsGraphicLoadOnDemandSupported;
 }
 
 ::rtl::OUString SvXMLImport::GetODFVersion() const
