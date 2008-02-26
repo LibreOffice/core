@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:19:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1337,3 +1337,36 @@ void SwNumberTreeNode::NotifyInvalidSiblings()
     if (mpParent != NULL)
         mpParent->NotifyInvalidChildren();
 }
+
+// --> OD 2007-09-07 #i81002#
+const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
+                                        const SwNumberTreeNode& rNode ) const
+{
+    const SwNumberTreeNode* pPrecedingNode( 0 );
+
+    if ( GetChildCount() > 0 )
+    {
+        tSwNumberTreeChildren::const_iterator aUpperBoundIt =
+                mChildren.upper_bound( const_cast<SwNumberTreeNode*>(&rNode) );
+        if ( aUpperBoundIt != mChildren.begin() )
+        {
+            --aUpperBoundIt;
+            pPrecedingNode = (*aUpperBoundIt)->GetPrecedingNodeOf( rNode );
+        }
+    }
+
+    if ( pPrecedingNode == 0 && GetRoot() )
+    {
+        // <this> node has no children or the given node precedes all its children
+        // and the <this> node isn't the root node.
+        // Thus, compare the given node with the <this> node in order to check,
+        // if the <this> node precedes the given node.
+        if ( !(rNode.LessThan( *this )) )
+        {
+            pPrecedingNode = this;
+        }
+    }
+
+    return pPrecedingNode;
+}
+// <--
