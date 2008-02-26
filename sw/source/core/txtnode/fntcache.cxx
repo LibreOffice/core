@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ OutputDevice* SwFntObj::pPixOut = NULL;
 
 extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
 
+
 #ifdef _RVP_MARK_HXX
 
 void SwRVPMarker::Mark( const OutputDevice* pOut )
@@ -263,75 +264,95 @@ bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
              OUTDEV_PRINTER != rOutDev.GetOutDevType() );
 }
 
+struct CalcLinePosData
+{
+    SwDrawTextInfo& rInf;
+    Font& rFont;
+    xub_StrLen nCnt;
+    const BOOL bSwitchH2V;
+    const BOOL bSwitchL2R;
+    long nHalfSpace;
+    sal_Int32* pKernArray;
+    const BOOL bBidiPor;
+
+    CalcLinePosData( SwDrawTextInfo& _rInf, Font& _rFont,
+                      xub_StrLen _nCnt, const BOOL _bSwitchH2V, const BOOL _bSwitchL2R,
+                      long _nHalfSpace, sal_Int32* _pKernArray, const BOOL _bBidiPor) :
+        rInf( _rInf ),
+        rFont( _rFont ),
+        nCnt( _nCnt ),
+        bSwitchH2V( _bSwitchH2V ),
+        bSwitchL2R( _bSwitchL2R ),
+        nHalfSpace( _nHalfSpace ),
+        pKernArray( _pKernArray ),
+        bBidiPor( _bBidiPor )
+    {
+    }
+};
+
 /** Function: lcl_calcLinePos
 
    Computes the start and end position of an underline. This function is called
    from the DrawText-method (for underlining misspelled words or smarttag terms).
-
-   @param Point& aStart
-       Start-coordinate for line
-   @param Point& aEnd
-       End-coordinate for line
 */
 
-void lcl_calcLinePos( SwDrawTextInfo& rInf, Font& rFont, Point& rStart, Point& rEnd, xub_StrLen nStart,
-                      xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
-                      long nHalfSpace, sal_Int32* pKernArray, const BOOL bBidiPor)
+void lcl_calcLinePos( const CalcLinePosData &rData,
+    Point &rStart, Point &rEnd, xub_StrLen nStart, xub_StrLen nWrLen )
 {
    long nBlank = 0;
    const xub_StrLen nEnd = nStart + nWrLen;
-   const long nTmpSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+   const long nTmpSpaceAdd = rData.rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
-   if( nEnd < nCnt
-       && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
+   if ( nEnd < rData.nCnt
+       && CH_BLANK == rData.rInf.GetText().GetChar( rData.rInf.GetIdx() + nEnd ) )
    {
-       if( nEnd + 1 == nCnt )
+       if( nEnd + 1 == rData.nCnt )
            nBlank -= nTmpSpaceAdd;
        else
-           nBlank -= nHalfSpace;
+           nBlank -= rData.nHalfSpace;
    }
 
    // determine start, end and length of wave line
-   sal_Int32 nKernStart = nStart ? pKernArray[ USHORT( nStart - 1 ) ] : 0;
-   sal_Int32 nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
+   sal_Int32 nKernStart = nStart ? rData.pKernArray[ USHORT( nStart - 1 ) ] : 0;
+   sal_Int32 nKernEnd = rData.pKernArray[ USHORT( nEnd - 1 ) ];
 
-   USHORT nDir = bBidiPor ? 1800 :
-       UnMapDirection( rFont.GetOrientation(), bSwitchH2V );
+   USHORT nDir = rData.bBidiPor ? 1800 :
+       UnMapDirection( rData.rFont.GetOrientation(), rData.bSwitchH2V );
 
    switch ( nDir )
    {
    case 0 :
        rStart.X() += nKernStart;
-       rEnd.X() = nBlank + rInf.GetPos().X() + nKernEnd;
-       rEnd.Y() = rInf.GetPos().Y();
+       rEnd.X() = nBlank + rData.rInf.GetPos().X() + nKernEnd;
+       rEnd.Y() = rData.rInf.GetPos().Y();
        break;
    case 900 :
        rStart.Y() -= nKernStart;
-       rEnd.X() = rInf.GetPos().X();
-       rEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
+       rEnd.X() = rData.rInf.GetPos().X();
+       rEnd.Y() = nBlank + rData.rInf.GetPos().Y() - nKernEnd;
        break;
    case 1800 :
        rStart.X() -= nKernStart;
-       rEnd.X() = rInf.GetPos().X() - nKernEnd - nBlank;
-       rEnd.Y() = rInf.GetPos().Y();
+       rEnd.X() = rData.rInf.GetPos().X() - nKernEnd - nBlank;
+       rEnd.Y() = rData.rInf.GetPos().Y();
        break;
    case 2700 :
        rStart.Y() += nKernStart;
-       rEnd.X() = rInf.GetPos().X();
-       rEnd.Y() = nBlank + rInf.GetPos().Y() + nKernEnd;
+       rEnd.X() = rData.rInf.GetPos().X();
+       rEnd.Y() = nBlank + rData.rInf.GetPos().Y() + nKernEnd;
        break;
    }
 
-   if ( bSwitchL2R )
+   if ( rData.bSwitchL2R )
    {
-       rInf.GetFrm()->SwitchLTRtoRTL( rStart );
-       rInf.GetFrm()->SwitchLTRtoRTL( rEnd );
+       rData.rInf.GetFrm()->SwitchLTRtoRTL( rStart );
+       rData.rInf.GetFrm()->SwitchLTRtoRTL( rEnd );
    }
 
-   if ( bSwitchH2V )
+   if ( rData.bSwitchH2V )
    {
-       rInf.GetFrm()->SwitchHorizontalToVertical( rStart );
-       rInf.GetFrm()->SwitchHorizontalToVertical( rEnd );
+       rData.rInf.GetFrm()->SwitchHorizontalToVertical( rStart );
+       rData.rInf.GetFrm()->SwitchHorizontalToVertical( rEnd );
    }
 }
 
@@ -895,6 +916,95 @@ static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 #pragma optimize("g",off)
 #endif
 
+
+static void lcl_DrawLineForWrongListData(
+    const SwDrawTextInfo    &rInf,
+    const SwWrongList       *pWList,
+    const CalcLinePosData   &rCalcLinePosData,
+    const Size              &rPrtFontSize )
+{
+    if (!pWList)
+        return;
+
+    xub_StrLen nStart = rInf.GetIdx();
+    xub_StrLen nWrLen = rInf.GetLen();
+
+    // check if respective data is available in the current text range
+    if (pWList->Check( nStart, nWrLen ))
+    {
+        // get line color to use...
+        Color aLineColor;
+        if (pWList == rInf.GetWrong())  // ... for spell checking
+            aLineColor = SwViewOption::GetSpellColor();
+        else if (pWList == rInf.GetGrammarCheck())  // ... for grammar checking
+            // currently there is no specific color for grammar check errors available in the configuration
+            aLineColor = Color( 0, 255, 0 );
+        else if (pWList == rInf.GetSmartTags())  // ... for smart tags
+            aLineColor = SwViewOption::GetSmarttagColor();
+
+        long nHght = rInf.GetOut().LogicToPixel( rPrtFontSize ).Height();
+
+        // Draw wavy lines for spell and grammar errors only if font is large enough.
+        // Lines for smart tags will always be drawn.
+        if (pWList == rInf.GetSmartTags() || WRONG_SHOW_MIN < nHght)
+        {
+            if (rInf.GetOut().GetConnectMetaFile())
+                rInf.GetOut().Push();
+
+            const Color aCol( rInf.GetOut().GetLineColor() );
+            const BOOL bColSave = aCol != aLineColor;
+            if (bColSave)
+                rInf.GetOut().SetLineColor( aLineColor );
+
+            // iterate over all ranges stored in the respective SwWrongList
+            do
+            {
+                nStart = nStart - rInf.GetIdx();
+
+                // determine line pos
+                Point aStart( rInf.GetPos() );
+                Point aEnd;
+                const xub_StrLen nEnd = nStart + nWrLen;
+                lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nStart, nWrLen );
+
+                // draw line for smart tags?
+                if (pWList == rInf.GetSmartTags())
+                {
+                    aStart.Y() +=30;
+                    aEnd.Y() +=30;
+
+                    LineInfo aLineInfo( LINE_DASH );
+                    aLineInfo.SetDistance( 40 );
+                    aLineInfo.SetDashLen( 1 );
+                    aLineInfo.SetDashCount(1);
+
+                    rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
+                }
+                else    // draw wavy lines for spell or grammar errors
+                {
+                    // get wavy line type to use
+                    USHORT nWave =
+                        WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                        ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+                }
+
+                nStart = nEnd + rInf.GetIdx();
+                nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
+            }
+            while (nWrLen && pWList->Check( nStart, nWrLen ));
+
+            if (bColSave)
+                rInf.GetOut().SetLineColor( aCol );
+
+            if (rInf.GetOut().GetConnectMetaFile())
+                rInf.GetOut().Pop();
+        }
+    }
+}
+
+
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     ASSERT( rInf.GetShell(), "SwFntObj::DrawText without shell" )
@@ -912,6 +1022,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                           !rInf.GetBullet() &&
                            ( rInf.GetSpace() || !rInf.GetKern() ) &&
                           !rInf.GetWrong() &&
+                          !rInf.GetGrammarCheck() &&
                           !rInf.GetSmartTags() &&
                           !rInf.GetGreyWave() );
 
@@ -1710,110 +1821,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
             else if( !bSymbol && rInf.GetLen() )
             {
-                // draw wave line for misspelled words
-                if (rInf.GetWrong())
+                // anything to do?
+                if (rInf.GetWrong() || rInf.GetGrammarCheck() || rInf.GetSmartTags())
                 {
-                    xub_StrLen nStart = rInf.GetIdx();
-                    xub_StrLen nWrLen = rInf.GetLen();
-                    if( rInf.GetWrong()->Check( nStart, nWrLen ) )
-                    {
-                        long nHght = rInf.GetOut().LogicToPixel( pPrtFont->GetSize() ).Height();
-                        if( WRONG_SHOW_MIN < nHght )
-                        {
-                            if ( rInf.GetOut().GetConnectMetaFile() )
-                                rInf.GetOut().Push();
+                    CalcLinePosData aCalcLinePosData(rInf, *GetFont(),
+                            nCnt, bSwitchH2V, bSwitchL2R,
+                            nHalfSpace, pKernArray, bBidiPor);
 
-                            USHORT nWave =
-                                WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                                ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
-                                WAVE_FLAT );
-
-                            const Color aCol( rInf.GetOut().GetLineColor() );
-                            const Color lineColor = SwViewOption::GetSpellColor();
-                            const BOOL bColSave = aCol != lineColor;
-                            if ( bColSave )
-                                rInf.GetOut().SetLineColor( lineColor );
-
-                            // --> SMARTTAGS NEW
-                            do
-                            {
-                                nStart = nStart - rInf.GetIdx();
-
-                                //determine line pos
-                                Point aStart( rInf.GetPos() );
-                                Point aEnd;
-
-                                const xub_StrLen nEnd = nStart + nWrLen;
-                                lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
-                                                nCnt, bSwitchH2V, bSwitchL2R,
-                                                nHalfSpace, pKernArray, bBidiPor);
-
-                                rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
-                                nStart = nEnd + rInf.GetIdx();
-                                nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
-                            }
-                            while( nWrLen && rInf.GetWrong()->Check( nStart, nWrLen ) );
-                            // <--
-
-                            if ( bColSave )
-                                rInf.GetOut().SetLineColor( aCol );
-
-                            if ( rInf.GetOut().GetConnectMetaFile() )
-                                rInf.GetOut().Pop();
-                        }
-                    }
-                }
-
-                if (rInf.GetSmartTags())
-                {
-                    const Color lineColor = SwViewOption::GetSmarttagColor();
-                    xub_StrLen nStart = rInf.GetIdx();
-                    xub_StrLen nWrLen = rInf.GetLen();
-                    // check if a smarttag word is available in the current text range
-                    if( rInf.GetSmartTags()->Check( nStart, nWrLen ) )
-                    {
-                        if ( rInf.GetOut().GetConnectMetaFile() )
-                            rInf.GetOut().Push();
-
-                        const Color aCol( rInf.GetOut().GetLineColor() );
-                        const BOOL bColSave = aCol != lineColor;
-                        if ( bColSave )
-                            rInf.GetOut().SetLineColor( lineColor );
-
-                        // iterate over all ranges stored in the smarttag list
-                        do
-                        {
-                            nStart = nStart - rInf.GetIdx();
-
-                            //determine line pos
-                            Point aStart( aPos );
-                            Point aEnd;
-                            const xub_StrLen nEnd = nStart + nWrLen;
-                            lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
-                                            nCnt, bSwitchH2V, bSwitchL2R,
-                                            nHalfSpace, pKernArray, bBidiPor);
-
-                            aStart.Y() +=30;
-                            aEnd.Y() +=30;
-
-                            LineInfo aLineInfo( LINE_DASH );
-                            aLineInfo.SetDistance( 40 );
-                            aLineInfo.SetDashLen( 1 );
-                            aLineInfo.SetDashCount(1);
-
-                            // draw line
-                            rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
-                            nStart = nEnd + rInf.GetIdx();
-                            nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
-                        }
-                        while( nWrLen && rInf.GetSmartTags()->Check( nStart, nWrLen ) );
-
-                        if ( bColSave )
-                            rInf.GetOut().SetLineColor( aCol );
-
-                        if ( rInf.GetOut().GetConnectMetaFile() )
-                            rInf.GetOut().Pop();
-                    }
+                    // draw wave line for spell check errors
+                    lcl_DrawLineForWrongListData( rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetSize() );
+                    // draw wave line for grammar check errors
+                    lcl_DrawLineForWrongListData( rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetSize() );
+                    // draw line for smart tag data
+                    lcl_DrawLineForWrongListData( rInf, rInf.GetSmartTags(), aCalcLinePosData, Size() );
                 }
             }
 
