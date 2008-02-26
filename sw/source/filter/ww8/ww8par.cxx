@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:51:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1301,7 +1301,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 {
                     SwBookmark& rBkMrk = pDoc->getBookmark( nBkmNo, false );
 
-                    const SwPosition& rBkMrkPos = rBkMrk.GetPos();
+                    const SwPosition& rBkMrkPos = rBkMrk.GetBookmarkPos();
 
                     SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
                     if( pTxt && rBkMrkPos.nContent.GetIndex() )
