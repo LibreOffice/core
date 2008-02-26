@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:19:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,15 +260,6 @@ protected:
     void SetLastValid(bool bValidating) const;
 
     /**
-       Invalidate this node and all its descendants.
-
-       All iterators holding the last valid node in the according list
-       of childs are set to the end of this list, thereby stating all
-       children in the list are invalid.
-     */
-    void InvalidateTree() const;
-
-    /**
        Notifies the node.
 
        Called when the number of the node got invalid.
@@ -279,11 +270,6 @@ protected:
        Notifies this node (NotifyNode) and all descendants.
      */
     void Notify();
-
-    /**
-       Notifies all invalid children of this node.
-     */
-    void NotifyInvalidChildren();
 
     /**
        Notifies all invalid siblings of this node.
@@ -416,6 +402,8 @@ public:
     /**
        Returns the root node of the tree this node is part of.
 
+       Important note: method call <GetRoot()->GetRoot()> returns NULL.
+
        @return the root
      */
     SwNumberTreeNode * GetRoot() const;
@@ -423,10 +411,12 @@ public:
     /**
        Add a child.
 
+       OD 2007-10-25 #i83479# - made virtual
+
        @param pChild   child to add
        @param nDepth   depth in whuch to add the child
      */
-    void AddChild(SwNumberTreeNode * pChild, unsigned int nDepth = 0);
+    virtual void AddChild(SwNumberTreeNode * pChild, unsigned int nDepth = 0);
 
     /**
        Remove a child.
@@ -475,6 +465,22 @@ public:
        @retval false else
      */
     virtual bool IsCountPhantoms() const;
+
+    /**
+       Invalidate this node and all its descendants.
+
+       All iterators holding the last valid node in the according list
+       of childs are set to the end of this list, thereby stating all
+       children in the list are invalid.
+       OD 2007-10-26 #i83479# - made public
+     */
+    void InvalidateTree() const;
+
+    /**
+       Notifies all invalid children of this node.
+       OD 2007-10-26 #i83479# - made public
+     */
+    void NotifyInvalidChildren();
 
     /**
        Returns if a child A this node is valid.
@@ -708,6 +714,18 @@ public:
             GetRoot()->Notify();
         }
     }
+
+    /** determines the node, which is preceding the node
+
+        OD 2007-09-06 #i81002#
+        The search for the preceding node is performed for the tree below the
+        <this> node. To search the complete tree, the method has been called for
+        the root of the tree.
+
+        @author OD
+    */
+    const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
+
     /**
        Print this subtree.
 
