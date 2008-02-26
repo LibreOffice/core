@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:41:52 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,9 +473,9 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
         else
         {
             SwBookmark* pBkm = pxRange->GetBookmark();
-            if(pBkm->GetOtherPos())
+            if(pBkm->GetOtherBookmarkPos())
             {
-                SwPaM aTmp(*pBkm->GetOtherPos(), pBkm->GetPos());
+                SwPaM aTmp(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
                 bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos));
             }
         }
@@ -1186,10 +1186,10 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     if(pRange)
     {
         SwBookmark* pBkm = pRange->GetBookmark();
-        if(pBkm->GetOtherPos())
-            pInsertPaM = new SwPaM(*pBkm->GetOtherPos(), pBkm->GetPos());
+        if(pBkm->GetOtherBookmarkPos())
+            pInsertPaM = new SwPaM(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
         else
-            pInsertPaM = new SwPaM(pBkm->GetPos());
+            pInsertPaM = new SwPaM(pBkm->GetBookmarkPos());
     }
     else
     {
