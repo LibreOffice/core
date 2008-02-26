@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotextmarkup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:21:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,13 @@ uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfo
     return xProp;
 }
 
-void SAL_CALL SwXTextMarkup::commitTextMarkup( ::sal_Int32 nType, const ::rtl::OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer) throw (uno::RuntimeException)
+void SAL_CALL SwXTextMarkup::commitTextMarkup(
+    ::sal_Int32 nType,
+    const ::rtl::OUString & rIdentifier,
+    ::sal_Int32 nStart,
+    ::sal_Int32 nLength,
+    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -80,51 +86,76 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup( ::sal_Int32 nType, const ::rtl::O
     if ( !mpTxtNode )
         return;
 
-    if ( !SwSmartTagMgr::Get().IsSmartTagTypeEnabled( aIdentifier ) )
+    if ( nType == text::TextMarkupType::SMARTTAG &&
+        !SwSmartTagMgr::Get().IsSmartTagTypeEnabled( rIdentifier ) )
         return;
 
-    if ( nType == text::TextMarkupType::SMARTTAG && nLength > 0 )
+    // get appropriate list to use...
+    SwWrongList* pWList = 0;
+    if ( nType == text::TextMarkupType::SPELLCHECK && nLength > 0 )
     {
-        SwWrongList* pSmartTagList = mpTxtNode->GetSmartTags();
-        if ( !pSmartTagList )
+        pWList = mpTxtNode->GetWrong();
+        if ( !pWList )
         {
-            pSmartTagList = new SwWrongList;
-            mpTxtNode->SetSmartTags( pSmartTagList );
+            pWList = new SwWrongList;
+            mpTxtNode->SetWrong( pWList );
+        }
+    }
+    else if ( nType == text::TextMarkupType::GRAMMAR && nLength > 0 )
+    {
+        pWList = mpTxtNode->GetGrammarCheck();
+        if ( !pWList )
+        {
+            pWList = new SwWrongList;
+            mpTxtNode->SetGrammarCheck( pWList );
+        }
+    }
+    else if ( nType == text::TextMarkupType::SMARTTAG && nLength > 0 )
+    {
+        pWList = mpTxtNode->GetSmartTags();
+        if ( !pWList )
+        {
+            pWList = new SwWrongList;
+            mpTxtNode->SetSmartTags( pWList );
+        }
+    }
+
+
+    const ModelToViewHelper::ModelPosition aStartPos =
+            ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart );
+    const ModelToViewHelper::ModelPosition aEndPos   =
+            ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart + nLength - 1);
+
+    const bool bStartInField = aStartPos.mbIsField;
+    const bool bEndInField   = aEndPos.mbIsField;
+    bool bCommit = false;
+
+    if ( bStartInField && bEndInField && aStartPos.mnPos == aEndPos.mnPos )
+    {
+        const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+
+        SwWrongList* pSubList = pWList->SubList( nInsertPos );
+        if ( !pSubList )
+        {
+            pSubList = new SwWrongList;
+            pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
         }
 
-        const ModelToViewHelper::ModelPosition aStartPos =
-                ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart );
-        const ModelToViewHelper::ModelPosition aEndPos   =
-                ModelToViewHelper::ConvertToModelPosition( mpConversionMap, nStart + nLength - 1);
+        pWList = pSubList;
+        nStart = aStartPos.mnSubPos;
+        bCommit = true;
+    }
+    else if ( !bStartInField && !bEndInField )
+    {
+        nStart = aStartPos.mnPos;
+        bCommit = true;
+    }
 
-        const bool bStartInField = aStartPos.mbIsField;
-        const bool bEndInField   = aEndPos.mbIsField;
-        bool bCommit = false;
-
-        if ( bStartInField && bEndInField && aStartPos.mnPos == aEndPos.mnPos )
-        {
-            const xub_StrLen nFieldPosModel = static_cast<xub_StrLen>(aStartPos.mnPos);
-            const USHORT nInsertPos = pSmartTagList->GetWrongPos( nFieldPosModel );
-
-            SwWrongList* pSubList = pSmartTagList->SubList( nInsertPos );
-            if ( !pSubList )
-            {
-                pSubList = new SwWrongList;
-                pSmartTagList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
-            }
-
-            pSmartTagList = pSubList;
-            nStart = aStartPos.mnSubPos;
-            bCommit = true;
-        }
-        else if ( !bStartInField && !bEndInField )
-        {
-            nStart = aStartPos.mnPos;
-            bCommit = true;
-        }
-
-        if ( bCommit )
-            pSmartTagList->Insert( aIdentifier, xMarkupInfoContainer, (USHORT)nStart, (USHORT)nLength );
+    if ( bCommit )
+    {
+        pWList->Insert( rIdentifier, xMarkupInfoContainer,
+                static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
     }
 }
 
