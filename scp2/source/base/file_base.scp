@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:28:45 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 16:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@ STD_RES_FILE_PATCH( gid_File_Res_Dbp, dbp)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
 STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
+
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Adabasui, adabasui )
+STD_RES_FILE_PATCH( gid_File_Res_Adabasui, adabasui)
 
 STD_RES_FILE_PATCH( gid_File_Res_Cnr, cnr)
 STD_RES_FILE_PATCH( gid_File_Res_Sdbcl, sdbcl)
