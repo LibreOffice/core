@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:38:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:45:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1715,7 +1715,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     for( USHORT i = 0; i < nCnt; ++i )
     {
         SwBookmark& rBm = m_pWrtSh->GetBookmark( i );
-        if( rBm.GetOtherPos() )
+        if( rBm.GetOtherBookmarkPos() )
             aSubRegionED.InsertEntry( rBm.GetName() );
     }
 
