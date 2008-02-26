@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:47:23 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info1, "INFO1" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info2, "INFO2" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info3, "INFO3" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_info4, "INFO4" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_custom, "CUSTOM" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_create, "CREATE" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_FS_change, "CHANGE" );
 
@@ -212,6 +213,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     BOOL bNumValue=FALSE;       // SDVAL (Number-Formatter-Value)
     double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
     BOOL bFixed=FALSE;          // SDFIXED
+    String aName;               // NAME (CUSTOM)
 
     switch( nField )
     {
@@ -305,14 +307,16 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     case DI_THEMA:      pSubStr = sHTML_FS_theme;   break;
                     case DI_KEYS:       pSubStr = sHTML_FS_keys;    break;
                     case DI_COMMENT:    pSubStr = sHTML_FS_comment; break;
-                    case DI_INFO1:      pSubStr = sHTML_FS_info1;   break;
-                    case DI_INFO2:      pSubStr = sHTML_FS_info2;   break;
-                    case DI_INFO3:      pSubStr = sHTML_FS_info3;   break;
-                    case DI_INFO4:      pSubStr = sHTML_FS_info4;   break;
                     case DI_CREATE:     pSubStr = sHTML_FS_create;  break;
                     case DI_CHANGE:     pSubStr = sHTML_FS_change;  break;
+                    case DI_CUSTOM:     pSubStr = sHTML_FS_custom;  break;
                     default:            pTypeStr = 0;               break;
                 }
+
+                if( DI_CUSTOM == nSubType ) {
+                    aName = static_cast<const SwDocInfoField*>(pFld)->GetName();
+                }
+
                 if( DI_CREATE == nSubType || DI_CHANGE == nSubType )
                 {
                     switch( nExtSubType )
@@ -396,6 +400,13 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             (((sOut += ' ') += sHTML_O_subtype) += '=') += pSubStr;
         if( pFmtStr )
             (((sOut += ' ') += sHTML_O_format) += '=') += pFmtStr;
+        if( aName.Len() )
+        {
+            (((sOut += ' ') += sHTML_O_name) += "=\"");
+            rWrt.Strm() << sOut.GetBuffer();
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            sOut = '\"';
+        }
         if( aValue.Len() )
         {
             ((sOut += ' ') += sHTML_O_value) += "=\"";
