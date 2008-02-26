@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:53:27 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,6 @@
 #endif
 #ifndef _SFX_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _PASSWD_HXX
 #include <sfx2/passwd.hxx>
@@ -283,6 +280,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <unomid.h>
 
@@ -606,7 +606,13 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         {
             // when saving it in our own fileformat, then remove the template
             // name from the docinfo.
-            GetDocInfo().ClearTemplateInformation();
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps
+                = xDPS->getDocumentProperties();
+            xDocProps->setTemplateName(::rtl::OUString::createFromAscii(""));
+            xDocProps->setTemplateURL(::rtl::OUString::createFromAscii(""));
+            xDocProps->setTemplateDate(::util::DateTime());
         }
     }
 
