@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:51:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
 #endif
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
 #endif
@@ -100,9 +101,6 @@
 #endif
 #ifndef _HTMLOUT_HXX
 #include <svtools/htmlout.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _FRMHTMLW_HXX
 #include <sfx2/frmhtmlw.hxx>
@@ -129,6 +127,7 @@
 using namespace dbaui;
 using namespace dbtools;
 using namespace svx;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -745,13 +744,18 @@ BOOL OHTMLImportExport::Read()
 //-------------------------------------------------------------------
 void OHTMLImportExport::WriteHeader()
 {
-    SfxDocumentInfo rInfo;
-    rInfo.SetTitle(m_sName);
-    String  aStrOut;
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        m_xFactory->createInstance(::rtl::OUString::createFromAscii(
+            "com.sun.star.document.DocumentProperties")),
+        uno::UNO_QUERY);
+    if (xDocProps.is()) {
+        xDocProps->setTitle(m_sName);
+    }
 
     IncIndent(1); TAG_ON_LF( sHTML_head );
 
-    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), String(), &rInfo, sIndent );
+    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), String(),
+        xDocProps, sIndent );
     OUT_LF();
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
 }
