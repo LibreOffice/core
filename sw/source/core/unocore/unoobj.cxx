@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:38:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1306,7 +1306,7 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     else if(pRange && pRange->GetBookmark())
     {
         SwBookmark* pBkm = pRange->GetBookmark();
-        pSrcNode = &pBkm->GetPos().nNode.GetNode();
+        pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
     }
     const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
@@ -1348,8 +1348,8 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         else
         {
             SwBookmark* pBkm = pRange->GetBookmark();
-            pParamLeft = new SwPosition(pBkm->GetPos());
-            pParamRight = new SwPosition(pBkm->GetOtherPos() ? *pBkm->GetOtherPos() : *pParamLeft);
+            pParamLeft = new SwPosition(pBkm->GetBookmarkPos());
+            pParamRight = new SwPosition(pBkm->GetOtherBookmarkPos() ? *pBkm->GetOtherBookmarkPos() : *pParamLeft);
         }
         if(*pParamRight < *pParamLeft)
         {
@@ -1388,11 +1388,11 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         else
         {
             SwBookmark* pBkm = pRange->GetBookmark();
-            *pOwnCursor->GetPoint() = pBkm->GetPos();
-            if(pBkm->GetOtherPos())
+            *pOwnCursor->GetPoint() = pBkm->GetBookmarkPos();
+            if(pBkm->GetOtherBookmarkPos())
             {
                 pOwnCursor->SetMark();
-                *pOwnCursor->GetMark() = *pBkm->GetOtherPos();
+                *pOwnCursor->GetMark() = *pBkm->GetOtherBookmarkPos();
             }
             else
                 pOwnCursor->DeleteMark();
