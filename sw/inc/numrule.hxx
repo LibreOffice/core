@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:06:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:31:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,11 @@ public:
                           const BOOL bInclStrings = TRUE,
                           const BOOL bOnlyArabic = FALSE,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+    // <--
+    // --> OD 2007-08-24 #i81002#
+    String MakeRefNumString( const SwNodeNum& rNodeNum,
+                             const bool bInclSuperiorNumLabels = false,
+                             const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
     // <--
 
     /**
