@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:57:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ namespace DOM
         }
     }
 
-    static void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent)
+    /*static*/ void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent)
     {
         xmlNodePtr cur = aNode;
 
@@ -277,6 +277,12 @@ namespace DOM
             }
             cur = cur->next;
         }
+    }
+
+    void SAL_CALL CNode::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        if (!i_xHandler.is()) throw RuntimeException();
+        // default: do nothing
     }
 
     /**
