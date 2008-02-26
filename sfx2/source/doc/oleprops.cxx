@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleprops.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 16:26:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,9 @@
 
 #include "oleprops.hxx"
 
-#include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
-#include <vcl/gdimtf.hxx>
+#include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
 
 // ============================================================================
@@ -49,15 +48,8 @@
 
 // ============================================================================
 
-static const char __FAR_DATA pDocInfoSlot[] = "SfxDocumentInfo";
-static const char __FAR_DATA pDocInfoHeader[] = "SfxDocumentInfo";
-
 #define VERSION 11
 #define STREAM_BUFFER_SIZE 2048
-
-// stream names
-#define STREAM_SUMMARYINFO      "\005SummaryInformation"
-#define STREAM_DOCSUMMARYINFO   "\005DocumentSummaryInformation"
 
 // usings
 using ::rtl::OUString;
@@ -67,6 +59,19 @@ using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star;
 
 #define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )   /// Invalid value for date and time to create invalid instance of TimeStamp.
+
+static
+bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
+{
+    return i_rLeft.Year             == i_rRight.Year
+        && i_rLeft.Month            == i_rRight.Month
+        && i_rLeft.Day              == i_rRight.Day
+        && i_rLeft.Hours            == i_rRight.Hours
+        && i_rLeft.Minutes          == i_rRight.Minutes
+        && i_rLeft.Seconds          == i_rRight.Seconds
+        && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+}
 
 // ============================================================================
 
@@ -190,19 +195,19 @@ class SfxOleFileTimeProperty : public SfxOlePropertyBase
 public:
     explicit            SfxOleFileTimeProperty( sal_Int32 nPropId );
     /** @param rDateTime  Date and time as LOCAL time. */
-    explicit            SfxOleFileTimeProperty( sal_Int32 nPropId, const DateTime& rDateTime );
+    explicit            SfxOleFileTimeProperty( sal_Int32 nPropId, const util::DateTime& rDateTime );
 
     /** Returns the time value as LOCAL time. */
-    inline const DateTime& GetValue() const { return maDateTime; }
+    inline const util::DateTime& GetValue() const { return maDateTime; }
     /** @param rDateTime  Date and time as LOCAL time. */
-    inline void         SetValue( const DateTime& rDateTime ) { maDateTime = rDateTime; }
+    inline void         SetValue( const util::DateTime& rDateTime ) { maDateTime = rDateTime; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
-    DateTime            maDateTime;
+    util::DateTime      maDateTime;
 };
 
 // ============================================================================
@@ -214,17 +219,42 @@ private:
 class SfxOleThumbnailProperty : public SfxOlePropertyBase
 {
 public:
-    explicit            SfxOleThumbnailProperty( sal_Int32 nPropId, const GDIMetaFile& rMetaFile );
+    explicit            SfxOleThumbnailProperty( sal_Int32 nPropId,
+                            const uno::Sequence<sal_uInt8> & i_rData);
 
-    inline bool         IsValid() const { return maBitmapData.GetSize() > 0; }
+    inline bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
-    SvMemoryStream      maBitmapData;
+    uno::Sequence<sal_uInt8>    mData;
 };
+
+// ============================================================================
+
+/** Property representing a BLOB (which presumably stands for binary large
+    object).
+
+    Currently, only saving this property is implemented.
+ */
+class SfxOleBlobProperty : public SfxOlePropertyBase
+{
+public:
+    explicit            SfxOleBlobProperty( sal_Int32 nPropId,
+                            const uno::Sequence<sal_uInt8> & i_rData);
+    inline bool         IsValid() const { return mData.getLength() > 0; }
+
+private:
+    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplSave( SvStream& rStrm );
+
+private:
+    uno::Sequence<sal_uInt8>    mData;
+};
+
+// ============================================================================
 
 sal_uInt16 SfxOleTextEncoding::GetCodePage() const
 {
@@ -538,7 +568,7 @@ SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId ) :
 {
 }
 
-SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId, const DateTime& rDateTime ) :
+SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId, const util::DateTime& rDateTime ) :
     SfxOlePropertyBase( nPropId, PROPTYPE_FILETIME ),
     maDateTime( rDateTime )
 {
@@ -548,17 +578,41 @@ void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm )
 {
     sal_uInt32 nLower, nUpper;
     rStrm >> nLower >> nUpper;
-    maDateTime = DateTime::CreateFromWin32FileDateTime( nLower, nUpper );
-    if ( maDateTime != TIMESTAMP_INVALID_DATETIME )
-        maDateTime.ConvertToLocalTime();
+    ::DateTime aDateTime = DateTime::CreateFromWin32FileDateTime( nLower, nUpper );
+    // note: editing duration is stored as offset to TIMESTAMP_INVALID_DATETIME
+    //       of course we should not convert the time zone of a duration!
+    // heuristic to detect editing durations (which we assume to be < 1 year):
+    // check only the year, not the entire date
+    if ( aDateTime.GetYear() != TIMESTAMP_INVALID_DATETIME.GetYear() )
+        aDateTime.ConvertToLocalTime();
+    maDateTime.Year    = aDateTime.GetYear();
+    maDateTime.Month   = aDateTime.GetMonth();
+    maDateTime.Day     = aDateTime.GetDay();
+    maDateTime.Hours   = aDateTime.GetHour();
+    maDateTime.Minutes = aDateTime.GetMin();
+    maDateTime.Seconds = aDateTime.GetSec();
+    maDateTime.HundredthSeconds = aDateTime.Get100Sec();
 }
 
 void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
 {
-    DateTime aDateTimeUtc( maDateTime );
+    DateTime aDateTimeUtc(
+            Date(
+                static_cast< USHORT >( maDateTime.Day ),
+                static_cast< USHORT >( maDateTime.Month ),
+                static_cast< USHORT >( maDateTime.Year ) ),
+            Time(
+                static_cast< ULONG >( maDateTime.Hours ),
+                static_cast< ULONG >( maDateTime.Minutes ),
+                static_cast< ULONG >( maDateTime.Seconds ),
+                static_cast< ULONG >( maDateTime.HundredthSeconds ) ) );
     // invalid time stamp is not converted to UTC
-    if( aDateTimeUtc.IsValid() && maDateTime != TIMESTAMP_INVALID_DATETIME )
-        aDateTimeUtc.ConvertToUTC();
+    // heuristic to detect editing durations (which we assume to be < 1 year):
+    // check only the year, not the entire date
+    if( aDateTimeUtc.IsValid()
+        && aDateTimeUtc.GetYear() != TIMESTAMP_INVALID_DATETIME.GetYear() ) {
+            aDateTimeUtc.ConvertToUTC();
+    }
     sal_uInt32 nLower, nUpper;
     aDateTimeUtc.GetWin32FileDateTime( nLower, nUpper );
     rStrm << nLower << nUpper;
@@ -567,13 +621,10 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
 // ----------------------------------------------------------------------------
 
 SfxOleThumbnailProperty::SfxOleThumbnailProperty(
-        sal_Int32 nPropId, const GDIMetaFile& rMetaFile ) :
-    SfxOlePropertyBase( nPropId, PROPTYPE_CLIPFMT )
+        sal_Int32 nPropId, const uno::Sequence<sal_uInt8> & i_rData) :
+    SfxOlePropertyBase( nPropId, PROPTYPE_CLIPFMT ),
+    mData(i_rData)
 {
-    BitmapEx aBitmap;
-    // magic value 160 taken from GraphicHelper::getThumbnailFormatFromGDI_Impl()
-    if( rMetaFile.CreateThumbnail( 160, aBitmap ) )
-        aBitmap.GetBitmap().Write( maBitmapData, FALSE, FALSE );
 }
 
 void SfxOleThumbnailProperty::ImplLoad( SvStream& )
@@ -605,14 +656,39 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
      */
     if( IsValid() )
     {
-        // clibboard size: clip_format_tag + data_format_tag + bitmap_len
-        sal_Int32 nClipSize = static_cast< sal_Int32 >( 4 + 4 + maBitmapData.GetSize() );
+        // clipboard size: clip_format_tag + data_format_tag + bitmap_len
+        sal_Int32 nClipSize = static_cast< sal_Int32 >( 4 + 4 + mData.getLength() );
         rStrm << nClipSize << CLIPFMT_WIN << CLIPDATAFMT_DIB;
-        rStrm.Write( maBitmapData.GetData(), maBitmapData.GetSize() );
+        rStrm.Write( mData.getConstArray(), mData.getLength() );
     }
     else
     {
         DBG_ERRORFILE( "SfxOleThumbnailProperty::ImplSave - invalid thumbnail property" );
+        SetError( SVSTREAM_INVALID_ACCESS );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+SfxOleBlobProperty::SfxOleBlobProperty( sal_Int32 nPropId,
+        const uno::Sequence<sal_uInt8> & i_rData) :
+    SfxOlePropertyBase( nPropId, PROPTYPE_BLOB ),
+    mData(i_rData)
+{
+}
+
+void SfxOleBlobProperty::ImplLoad( SvStream& )
+{
+    DBG_ERRORFILE( "SfxOleBlobProperty::ImplLoad - not implemented" );
+    SetError( SVSTREAM_INVALID_ACCESS );
+}
+
+void SfxOleBlobProperty::ImplSave( SvStream& rStrm )
+{
+    if (IsValid()) {
+        rStrm.Write( mData.getConstArray(), mData.getLength() );
+    } else {
+        DBG_ERRORFILE( "SfxOleBlobProperty::ImplSave - invalid BLOB property" );
         SetError( SVSTREAM_INVALID_ACCESS );
     }
 }
@@ -722,15 +798,15 @@ bool SfxOleSection::GetStringValue( String& rValue, sal_Int32 nPropId ) const
     return pProp != 0;
 }
 
-bool SfxOleSection::GetFileTimeValue( DateTime& rValue, sal_Int32 nPropId ) const
+bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId ) const
 {
     SfxOlePropertyRef xProp = GetProperty( nPropId );
     const SfxOleFileTimeProperty* pProp =
         dynamic_cast< const SfxOleFileTimeProperty* >( xProp.get() );
     if( pProp )
     {
-        if ( pProp->GetValue() == TIMESTAMP_INVALID_DATETIME )
-            rValue = DateTime(0,0);
+        if ( pProp->GetValue() == TIMESTAMP_INVALID_UTILDATETIME )
+            rValue = util::DateTime();
         else
             rValue = pProp->GetValue();
     }
@@ -766,20 +842,31 @@ bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const String& rValue, boo
     return bInserted;
 }
 
-void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const DateTime& rValue )
+void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const util::DateTime& rValue )
 {
-    if ( !rValue.GetDate() )
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_DATETIME ) ) );
+    if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
+        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
     else
         SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, rValue ) ) );
 }
 
-void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId, const GDIMetaFile& rMetaFile )
+void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
+    const uno::Sequence<sal_uInt8> & i_rData)
 {
-    SfxOleThumbnailProperty* pThumbnail = new SfxOleThumbnailProperty( nPropId, rMetaFile );
+    SfxOleThumbnailProperty* pThumbnail = new SfxOleThumbnailProperty( nPropId, i_rData );
     SfxOlePropertyRef xProp( pThumbnail );  // take ownership
     if( pThumbnail->IsValid() )
         SetProperty( xProp );
+}
+
+void SfxOleSection::SetBlobValue( sal_Int32 nPropId,
+    const uno::Sequence<sal_uInt8> & i_rData)
+{
+    SfxOleBlobProperty* pBlob( new SfxOleBlobProperty( nPropId, i_rData ) );
+    SfxOlePropertyRef xProp( pBlob );
+    if( pBlob->IsValid() ) {
+        SetProperty( xProp );
+    }
 }
 
 Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
@@ -789,7 +876,7 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     double fDouble = 0.0;
     bool bBool = false;
     String aString;
-    DateTime aDateTime;
+    ::com::sun::star::util::DateTime aApiDateTime;
 
     if( GetInt32Value( nInt32, nPropId ) )
         aValue <<= nInt32;
@@ -799,16 +886,8 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
         ::comphelper::setBOOL( aValue, bBool ? sal_True : sal_False );
     else if( GetStringValue( aString, nPropId ) )
         aValue <<= OUString( aString );
-    else if( GetFileTimeValue( aDateTime, nPropId ) )
+    else if( GetFileTimeValue( aApiDateTime, nPropId ) )
     {
-        ::com::sun::star::util::DateTime aApiDateTime(
-            static_cast< sal_uInt16 >( aDateTime.Get100Sec() ),
-            static_cast< sal_uInt16 >( aDateTime.GetSec() ),
-            static_cast< sal_uInt16 >( aDateTime.GetMin() ),
-            static_cast< sal_uInt16 >( aDateTime.GetHour() ),
-            static_cast< sal_uInt16 >( aDateTime.GetDay() ),
-            static_cast< sal_uInt16 >( aDateTime.GetMonth() ),
-            static_cast< sal_uInt16 >( aDateTime.GetYear() ) );
         aValue <<= aApiDateTime;
     }
     return aValue;
@@ -832,17 +911,7 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
         bInserted = SetStringValue( nPropId, aString );
     else if( rValue >>= aApiDateTime )
     {
-        DateTime aDateTime(
-            Date(
-                static_cast< USHORT >( aApiDateTime.Day ),
-                static_cast< USHORT >( aApiDateTime.Month ),
-                static_cast< USHORT >( aApiDateTime.Year ) ),
-            Time(
-                static_cast< ULONG >( aApiDateTime.Hours ),
-                static_cast< ULONG >( aApiDateTime.Minutes ),
-                static_cast< ULONG >( aApiDateTime.Seconds ),
-                static_cast< ULONG >( aApiDateTime.HundredthSeconds ) ) );
-        SetFileTimeValue( nPropId, aDateTime );
+        SetFileTimeValue( nPropId, aApiDateTime );
     }
     else
         bInserted = false;
