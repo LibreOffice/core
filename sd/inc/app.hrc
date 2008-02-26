@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:56:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,9 +148,7 @@
 #define SID_ANIMATOR_STATE                  (SID_SD_START+112)
 #define SID_PRESENTATIONOBJECT              (SID_SD_START+113)
 #define SID_SIZE_VISAREA                    (SID_SD_START+114)
-
 #define SID_CLEAR_UNDO_STACK                (SID_SD_START+115)
-
 #define SID_BEHIND_OBJ                      (SID_SD_START+116)
 #define SID_REVERSE_ORDER                   (SID_SD_START+117)
 #define SID_SDOPTIONS                       (SID_SD_START+118)
@@ -449,6 +447,7 @@
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
 
 #define SID_SELECT_BACKGROUND               (SID_SD_START+422)
+#define SID_OBJECT_CROP                     (SID_SD_START+423)
 
 // Slots for the tool pane popup
 #define SID_TP_APPLY_TO_ALL_SLIDES          (SID_SD_START+425)
