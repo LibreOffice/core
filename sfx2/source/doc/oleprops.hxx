@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleprops.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:45:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 #include <boost/shared_ptr.hpp>
 #include <sot/storage.hxx>
 #include <vcl/bitmapex.hxx>
-#include <tools/datetime.hxx>
+
+#include <com/sun/star/util/DateTime.hpp>
+
 
 // ============================================================================
 
@@ -63,6 +65,7 @@ const sal_Int32 PROPTYPE_UINT64         = 21;
 const sal_Int32 PROPTYPE_STRING8        = 30;
 const sal_Int32 PROPTYPE_STRING16       = 31;
 const sal_Int32 PROPTYPE_FILETIME       = 64;
+const sal_Int32 PROPTYPE_BLOB           = 65;
 const sal_Int32 PROPTYPE_CLIPFMT        = 71;
 
 // static property IDs
@@ -304,7 +307,7 @@ public:
     bool                GetStringValue( String& rValue, sal_Int32 nPropId ) const;
     /** Returns the value of a time stamp property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
-    bool                GetFileTimeValue( DateTime& rValue, sal_Int32 nPropId ) const;
+    bool                GetFileTimeValue( ::com::sun::star::util::DateTime& rValue, sal_Int32 nPropId ) const;
 
     /** Adds the passed property to the property set. Drops an existing old property. */
     void                SetProperty( SfxOlePropertyRef xProp );
@@ -318,9 +321,13 @@ public:
         @return  true = Property inserted; false = String was empty, property not inserted. */
     bool                SetStringValue( sal_Int32 nPropId, const String& rValue, bool bSkipEmpty = true );
     /** Inserts a time stamp property with the passed value. */
-    void                SetFileTimeValue( sal_Int32 nPropId, const DateTime& rValue );
+    void                SetFileTimeValue( sal_Int32 nPropId, const ::com::sun::star::util::DateTime& rValue );
     /** Inserts a thumbnail property from the passed meta file. */
-    void                SetThumbnailValue( sal_Int32 nPropId, const GDIMetaFile& rMetaFile );
+    void                SetThumbnailValue( sal_Int32 nPropId,
+                            const ::com::sun::star::uno::Sequence<sal_uInt8> & i_rData);
+    /** Inserts a BLOB property with the passed data. */
+    void                SetBlobValue( sal_Int32 nPropId,
+                            const ::com::sun::star::uno::Sequence<sal_uInt8> & i_rData);
 
     /** Returns the value of the property with the passed ID in a UNO any. */
     com::sun::star::uno::Any GetAnyValue( sal_Int32 nPropId ) const;
