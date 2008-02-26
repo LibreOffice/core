@@ -1,0 +1,507 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AdabasNewDb.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:54:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef ADABASUI_ADABASNEWDB_HRC
+#include "AdabasNewDb.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+#include "adabasui_resource.hrc"
+//==================================================================
+// NEWDB Admin
+//==================================================================
+#define WIN_X   268
+#define WIN_Y   210
+#define MOVE_Y  21
+#define ADJUST_X 45
+ModalDialog DLG_ADABAS_NEWDB
+{
+    Moveable    = TRUE ;
+    Closeable   = TRUE ;
+    OutputSize  = TRUE ;
+    SVLook      = TRUE;
+    HelpID      = HID_DLG_ADABAS_NEWDB ;
+    Size        = MAP_APPFONT ( WIN_X , WIN_Y + MOVE_Y) ;
+
+    FixedText FT_DATABASENAME
+    {
+        Pos     = MAP_APPFONT ( 12 , 6) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Text[ en-US ] = "Database ~name";
+};
+    Edit ET_DATABASENAME
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 5) ;
+        Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_DBNAME ;
+    };
+
+    FixedLine FL_USER
+    {
+        Pos     = MAP_APPFONT ( 6 , 3 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
+        Text[ en-US ] = "User settings";
+};
+
+    FixedText FT_CONUSR
+    {
+        Pos     = MAP_APPFONT ( 12 , 31 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Text[ en-US ] = "~Control user";
+};
+    FixedText FT_SYSUSR
+    {
+        Pos     = MAP_APPFONT ( 12 , 14 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Text[ en-US ] = "~Administrator";
+};
+    FixedText FT_DOMAIN_USR
+    {
+        Pos     = MAP_APPFONT ( 12 , 48 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Text[ en-US ] = "~Domain user";
+};
+
+    Edit ET_SYSUSR
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 13 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_SYSUSR ;
+    };
+
+    PushButton PB_SYSPWD
+    {
+        Pos     = MAP_APPFONT ( 188 , 13 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_SYSPWD ;
+        Text[ en-US ] = "P~assword...";
+};
+
+    Edit ET_CONUSR
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 30 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_CONUSR ;
+    };
+
+    PushButton PB_CONPWD
+    {
+        Pos     = MAP_APPFONT ( 188 , 30 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_CONPWD ;
+        Text[ en-US ] = "~Password...";
+};
+    Edit ET_DOMAIN_USR
+    {
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 47 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        Border  = TRUE ;
+        TabStop = TRUE ;
+        ReadOnly= TRUE;
+        HelpID  = HID_DLG_ADABAS_USR ;
+        Text = "adabas";
+    };
+
+    PushButton PB_DOMAINPWD
+    {
+        Pos     = MAP_APPFONT ( 188 , 47 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_DOMAINPWD ;
+        Text[ en-US ] = "Passwo~rd...";
+};
+
+    FixedImage BMP_CON
+    {
+        Pos     = MAP_APPFONT ( 240 , 27 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 20 , 20 ) ;
+        HelpID  = HID_DLG_ADABAS_CON_PWD ;
+    };
+    FixedImage BMP_SYS
+    {
+        Pos     = MAP_APPFONT ( 240 , 11 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 20 , 20 ) ;
+        HelpID  = HID_DLG_ADABAS_SYS_PWD ;
+    };
+    FixedImage BMP_DOMAIN
+    {
+        Pos     = MAP_APPFONT ( 240 , 44 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 20 , 20 ) ;
+        HelpID  = HID_DLG_ADABAS_DOMAIN_PWD ;
+    };
+
+    FixedText FT_RESTORE
+    {
+        Pos     = MAP_APPFONT ( 12 , 13 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
+        Text[ en-US ] = "~Backup file";
+};
+
+    Edit ET_RESTORE
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 13 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 105 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_RESTORE ;
+    };
+
+    PushButton PB_RESTORE
+    {
+        Pos     = MAP_APPFONT ( 188 , 13 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_PBRESTORE ;
+        Text[ en-US ]   = "...";
+};
+
+    /* DEVSPACE positions */
+    FixedLine FL_DBSETTINGS
+    {
+        Pos     = MAP_APPFONT ( 6 , 70 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
+        Text[ en-US ] = "Database settings";
+};
+
+    FixedText FT_SYSDEVSPACE
+    {
+        Pos     = MAP_APPFONT ( 12 , 83 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "S~YSDEVSPACE";
+};
+
+    FixedText FT_TRANSACTIONLOG
+    {
+        Pos     = MAP_APPFONT ( 12 , 99 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "TRANSACTI~ONLOG";
+};
+
+    FixedText FT_DATADEVSPACE
+    {
+        Pos     = MAP_APPFONT ( 12 , 116 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "DATAD~EVSPACE";
+};
+
+    Edit ET_SYSDEVSPACE
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 81 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_SYSDEVSPACE ;
+    };
+
+    PushButton PB_SYSDEVSPACE
+    {
+        Pos     = MAP_APPFONT ( WIN_X - 24, 81 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_PBSYSDEVSPACE ;
+        Text[ en-US ]   = "...";
+};
+
+    Edit ET_TRANSACTIONLOG
+    {
+        Border  = TRUE ;
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 97 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 161 - ADJUST_X, 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_TRANSACTIONLOG ;
+    };
+
+    PushButton PB_TRANSACTIONLOG
+    {
+        Pos     = MAP_APPFONT ( WIN_X - 24, 97+ MOVE_Y) ;
+        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_PBTRANSACTIONLOG ;
+        Text[ en-US ] = "...";
+};
+
+    Edit ET_DATADEVSPACE
+    {
+        Pos     = MAP_APPFONT ( 77 + ADJUST_X, 114 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 161 - ADJUST_X, 12) ;
+        Border  = TRUE ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_DATADEVSPACE ;
+    };
+
+
+    PushButton PB_DATADEVSPACE
+    {
+        Pos     = MAP_APPFONT ( WIN_X - 24, 114 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        HelpID  = HID_DLG_ADABAS_PBDATADEVSPACE ;
+        Text[ en-US ] = "...";
+};
+    /* DEVSPACE sizes */
+    FixedText FT_TRANSACTIONLOG_SIZE
+    {
+        Pos = MAP_APPFONT ( 12 , 133 + MOVE_Y) ;
+        Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "Transaction ~file (MB)";
+};
+    NumericField NF_TRANSACTIONLOG_SIZE
+    {
+        Pos             = MAP_APPFONT ( 77 + ADJUST_X, 131 + MOVE_Y) ;
+        Size            = MAP_APPFONT ( 40 , 12 ) ;
+        Border          = TRUE ;
+        TabStop         = TRUE ;
+        Spin            = TRUE ;
+StrictFormat    = TRUE;
+        HelpID  = HID_DLG_ADABAS_TRANSACTIONLOG_SIZE ;
+    };
+    FixedText FT_DATADEVSPACE_SIZE
+    {
+        Pos = MAP_APPFONT ( 12 , 150 + MOVE_Y) ;
+        Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "Data~base size (MB)";
+};
+    NumericField NF_DATADEVSPACE_SIZE
+    {
+        Pos             = MAP_APPFONT ( 77 + ADJUST_X, 148 + MOVE_Y) ;
+        Size            = MAP_APPFONT ( 40 , 12 ) ;
+        Border          = TRUE ;
+        TabStop         = TRUE ;
+        Spin            = TRUE ;
+StrictFormat    = TRUE;
+        HelpID  = HID_DLG_ADABAS_DATADEVSPACE_SIZE ;
+    };
+    FixedText FT_CACHE_SIZE
+    {
+        Pos = MAP_APPFONT ( 12 , 167 + MOVE_Y) ;
+        Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
+        Text[ en-US ] = "Data ~buffer size (MB)";
+};
+    NumericField NF_CACHE_SIZE
+    {
+        Pos             = MAP_APPFONT ( 77 + ADJUST_X, 165 + MOVE_Y) ;
+        Size            = MAP_APPFONT ( 40 , 12 ) ;
+        Border          = TRUE ;
+        TabStop         = TRUE ;
+        Spin            = TRUE ;
+StrictFormat    = TRUE;
+        HelpID          = HID_DLG_ADABAS_CACHE_SIZE ;
+    };
+    FixedLine FL_END
+    {
+        Pos     = MAP_APPFONT ( 0 , WIN_Y - 24 + MOVE_Y) ;
+        Size    = MAP_APPFONT ( WIN_X , 1 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos         = MAP_APPFONT ( WIN_X - 112, WIN_Y - 20 + MOVE_Y) ;
+        Size        = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop     = TRUE ;
+        DefButton   = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos         = MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20+ MOVE_Y) ;
+        Size        = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop     = TRUE ;
+    };
+
+    String STR_BACKUPFILE_LOAD
+    {
+        Text[ en-US ]   = "Backup file information";
+};
+
+    Text[ en-US ] = "Create New Adabas D Database";
+};
+
+Image CHECK_GREEN
+{
+    ImageBitmap = Bitmap { File = "nu07.bmp"; };
+    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+Image UNCHECK_RED
+{
+    ImageBitmap = Bitmap { File = "nu08.bmp"; };
+    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+Image DEFAULT_BLUE
+{
+    ImageBitmap = Bitmap { File = "nu09.bmp"; };
+    MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+/* Fehlermeldungen beim Erstellen einer Adabas DB */
+String STR_ADABAS_NO_NEW_CONFIG_FILE
+{
+    Text[ en-US ]   = "An \"empty\" DB configuration file cannot be created.";
+};
+
+String STR_ADABAS_NO_PARAM_SET
+{
+    Text[ en-US ]   = "No entry could be written in the configuration file.";
+};
+
+String STR_ADABAS_WRONG_KERNEL_PARAMETER
+{
+    Text[ en-US ]   = "The parameters set for the kernel are not large enough. Please see the Help.";
+};
+
+String STR_ADABAS_NO_SERVER_START
+{
+    Text[ en-US ]   = "The DB server could not be started.";
+};
+
+String STR_ADABAS_NO_DB_CREATED
+{
+    Text[ en-US ]   = "An error occurred as the DB files were being created.";
+};
+
+String STR_ADABAS_NO_SYSTEM_TABLES
+{
+    Text[ en-US ]   = "An error occurred as the system tables were being created.";
+};
+String STR_ADABAS_NO_BACKUP_FILE
+{
+    Text[ en-US ]   = "The backup file entered does not exist.";
+};
+
+InfoBox INFO_STR_MAX_FILE_LENGTH
+{
+    Message[ en-US ]    = "The fully qualified file cannot be longer than \'#\' characters.";
+};
+
+String STR_ADABAS_NOT_ENOUGH_SPACE
+{
+    Text[ en-US ]   = "An error occurred as the file \'#\' was being created. Please check if there is enough memory available.";
+};
+
+String STR_NO_SAME_USER
+{
+    Text[ en-US ] = "The administrator and the control user cannot have the same name!";
+};
+String STR_DEVSPACE_NO_FILE
+{
+    Text[ en-US ] = "No name has been entered for the $name$ file!";
+};
+String STR_NO_PERMISSION
+{
+    Text[ en-US ] = "You have to have administrator rights to create a new database!";
+};
+
+String STR_FILE_OR_DIR_UNKNOWN
+{
+    Text[ en-US ] = "The specified file name or directory does not exist.";
+};
+
+String STR_ERROR_IN_ADABAS_INSTALLATION
+{
+    Text [ en-US ] = "No new database can be created.\nPlease check your Adabas D installation, especially the variables \"DBROOT\" and \"DBWORK\".";
+};
+
+String STR_STAT_WARNING
+{
+    Text [ en-US ] = "Warning!" ;
+};
+
+String STR_ADABAS_CREATEFILES
+{
+    Text [ en-US ] = "Creating database files." ;
+};
+
+String STR_ADABAS_CREATEPARAM_FILE
+{
+    Text [ en-US ] = "Creating database configuration file." ;
+};
+String STR_ADABAS_START_DATABASE
+{
+    Text [ en-US ] = "Starting database for the first time." ;
+
+};
+String STR_ADABAS_DB_EXISTS
+{
+    Text[ en-US ] = "The name entered already exists.";
+};
+
+String STR_ADABAS_NO_DEFAULTNAME
+{
+    Text[ en-US ] = "No default names could be set for the database files. The total length is more than 40 characters.";
+};
+
+String STR_ADABAS_NO_ACCESSRIGHTS
+{
+    Text[ en-US ] = "No default names could be set for the database files. There is no write access.";
+};
+
+String STR_ADABAS_CANNOT_CONVERT
+{
+    Text[ en-US ] = "The current database need to be converted. Please insert control user  and password.";
+};
+
+String STR_ADABAS_PASSWORD_ILLEGAL
+{
+    Text[ en-US ] = "Spaces are not permitted in the password. Please enter a new password.";
+};
+
