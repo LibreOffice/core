@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:22:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1056,6 +1056,11 @@ String STR_DragMethDistort
 {
     Text [ en-US ] = "Distort %O" ;
 };
+String STR_DragMethCrop
+{
+    Text [ en-US ] = "Crop %O" ;
+};
+
 String STR_DragRectEckRad
 {
     /* ### ACHTUNG: Neuer Text in Resource? Eckenradius von %O verändern : Eckenradius von %O verõndern */
@@ -3068,6 +3073,21 @@ String STR_ObjNameSingulMEDIA
 String STR_ObjNamePluralMEDIA
 {
     Text [ en-US ] = "Media objects" ;
+};
+
+Bitmap SIP_SA_CROP_MARKERS
+{
+    File = "cropmarkers.bmp";
+};
+
+Bitmap SIP_SA_CROP_FINE_MARKERS
+{
+    File = "cropmarkers2.bmp";
+};
+
+Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
+{
+    File = "cropmarkersACC.bmp";
 };
 
 // ******************************************************************* EOF
