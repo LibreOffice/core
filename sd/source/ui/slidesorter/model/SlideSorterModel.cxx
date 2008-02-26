@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:36:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ void DumpSlideSorterModel (const SlideSorterModel& rModel)
     for (int i=0; i<rModel.GetPageCount(); i++)
     {
         SharedPageDescriptor pDescriptor = rModel.GetRawPageDescriptor(i);
-        OSL_TRACE ("    page %d points to %x", i, pDescriptor);
+        OSL_TRACE ("    page %d points to %x", i, pDescriptor.get());
         if (pDescriptor.get() != NULL)
             OSL_TRACE ("        focused %d, selected %d, visible %d",
                 pDescriptor->IsFocused()?1:0,
