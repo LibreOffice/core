@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:11:06 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,14 +391,16 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 //-----------------------------------------------
 ::comphelper::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
 {
-    ::comphelper::MediaDescriptor             lDescriptor(lOutsideDescriptor);
+    ::comphelper::MediaDescriptor lDescriptor(lOutsideDescriptor);
     css::uno::Reference< css::frame::XModel > xModel     = lDescriptor.getUnpackedValueOrDefault(
                                                             ::comphelper::MediaDescriptor::PROP_MODEL (),
                                                             css::uno::Reference< css::frame::XModel > ());
     if (xModel.is ())
     {
         ::comphelper::MediaDescriptor lModelDescriptor(xModel->getArgs());
-        lDescriptor.update (lModelDescriptor);
+        ::comphelper::MediaDescriptor::iterator pIt = lModelDescriptor.find( ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() );
+        if ( pIt != lModelDescriptor.end() )
+            lDescriptor[::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
     }
 
     return lDescriptor;
