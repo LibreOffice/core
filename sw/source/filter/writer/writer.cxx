@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:56:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ void Writer_Impl::InsertBkmk( const SwBookmark& rBkmk )
     if( !pBkmkNodePos )
         pBkmkNodePos = new SwBookmarkNodeTable;
 
-    ULONG nNd = rBkmk.GetPos().nNode.GetIndex();
+    ULONG nNd = rBkmk.GetBookmarkPos().nNode.GetIndex();
     SvPtrarr* pArr = pBkmkNodePos->Get( nNd );
     if( !pArr )
     {
@@ -153,9 +153,9 @@ void Writer_Impl::InsertBkmk( const SwBookmark& rBkmk )
     void* p = (void*)&rBkmk;
     pArr->Insert( p, pArr->Count() );
 
-    if( rBkmk.GetOtherPos() && rBkmk.GetOtherPos()->nNode != nNd )
+    if( rBkmk.GetOtherBookmarkPos() && rBkmk.GetOtherBookmarkPos()->nNode != nNd )
     {
-        nNd = rBkmk.GetOtherPos()->nNode.GetIndex();
+        nNd = rBkmk.GetOtherBookmarkPos()->nNode.GetIndex();
         pArr = pBkmkNodePos->Get( nNd );
         if( !pArr )
         {
@@ -608,15 +608,15 @@ USHORT Writer::GetBookmarks( const SwCntntNode& rNd, xub_StrLen nStt,
             {
                 void* p = (*pArr)[ n ];
                 const SwBookmark& rBkmk = *(SwBookmark*)p;
-                if( rBkmk.GetPos().nNode == nNd &&
-                    (nCntnt = rBkmk.GetPos().nContent.GetIndex() ) >= nStt &&
+                if( rBkmk.GetBookmarkPos().nNode == nNd &&
+                    (nCntnt = rBkmk.GetBookmarkPos().nContent.GetIndex() ) >= nStt &&
                     nCntnt < nEnd )
                 {
                     rArr.Insert( p, rArr.Count() );
                 }
-                else if( rBkmk.GetOtherPos() && nNd ==
-                        rBkmk.GetOtherPos()->nNode.GetIndex() && (nCntnt =
-                        rBkmk.GetOtherPos()->nContent.GetIndex() ) >= nStt &&
+                else if( rBkmk.GetOtherBookmarkPos() && nNd ==
+                        rBkmk.GetOtherBookmarkPos()->nNode.GetIndex() && (nCntnt =
+                        rBkmk.GetOtherBookmarkPos()->nContent.GetIndex() ) >= nStt &&
                         nCntnt < nEnd )
                 {
                     rArr.Insert( p, rArr.Count() );
