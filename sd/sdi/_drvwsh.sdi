@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:57:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,6 +720,12 @@ interface DrawView
 */
 
     SID_OBJECT_MIRROR // ole : no, status : play rec
+    [
+        ExecMethod = FuPermanent ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_OBJECT_CROP // ole : no, status : play rec
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
