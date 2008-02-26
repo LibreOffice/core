@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,15 +779,6 @@ public:
     //SS Fuer holen/ersetzen DropCap-Inhalt
     String GetDropTxt( const USHORT nChars ) const;
     void   ReplaceDropTxt( const String &rStr );
-
-    // Abfrage von Oultine Informationen:
-    USHORT GetOutlineCnt() const;
-
-    BYTE GetOutlineLevel( USHORT nIdx ) const;
-    // mit exp. Felder und KapitelNummern
-    String GetOutlineText( USHORT nIdx, BOOL bWithNum = TRUE ) const;
-    // die Nummer
-    SwTxtNode * GetOutlineNode( USHORT nIdx ) const;
 
     // may an outline be moved or copied?
     // Check whether it's in text body, not in table, and not read-only (move)
