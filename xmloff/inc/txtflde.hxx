@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:12:24 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,6 @@ enum FieldIdEnum {
     FIELD_ID_DOCINFO_CREATION_TIME,
     FIELD_ID_DOCINFO_CREATION_DATE,
     FIELD_ID_DOCINFO_DESCRIPTION,
-    FIELD_ID_DOCINFO_INFORMATION0,  // ATTENTION: INFO-fields must be numbered
-    FIELD_ID_DOCINFO_INFORMATION1,  //            consecutively (to find out
-    FIELD_ID_DOCINFO_INFORMATION2,  //            number)
-    FIELD_ID_DOCINFO_INFORMATION3,
     FIELD_ID_DOCINFO_CUSTOM,
     FIELD_ID_DOCINFO_PRINT_TIME,
     FIELD_ID_DOCINFO_PRINT_DATE,
