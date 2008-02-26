@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:39:36 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,11 @@ BOOL SwServerObject::GetData( uno::Any & rData,
         switch( eType )
         {
         case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
             {
                 // Bereich aufspannen
-                pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetPos(),
-                                *CNTNT_TYPE.pBkmk->GetOtherPos() );
+                pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetBookmarkPos(),
+                                *CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() );
             }
             break;
 
@@ -168,12 +168,12 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         switch( eType )
         {
         case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
             {
                 SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-                bCall = rBkmk.GetPos() < *rBkmk.GetOtherPos()
-                    ? ( rBkmk.GetPos() <= rPos && rPos < *rBkmk.GetOtherPos() )
-                    : ( *rBkmk.GetOtherPos() <= rPos && rPos < rBkmk.GetPos() );
+                bCall = rBkmk.GetBookmarkPos() < *rBkmk.GetOtherBookmarkPos()
+                    ? ( rBkmk.GetBookmarkPos() <= rPos && rPos < *rBkmk.GetOtherBookmarkPos() )
+                    : ( *rBkmk.GetOtherBookmarkPos() <= rPos && rPos < rBkmk.GetBookmarkPos() );
             }
             break;
 
@@ -212,11 +212,11 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         switch( eType )
         {
         case BOOKMARK_SERVER:
-            if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+            if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
             {
                 SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-                const SwPosition* pBkStt = &rBkmk.GetPos(),
-                                * pBkEnd = rBkmk.GetOtherPos();
+                const SwPosition* pBkStt = &rBkmk.GetBookmarkPos(),
+                                * pBkEnd = rBkmk.GetOtherBookmarkPos();
                 if( *pBkStt > *pBkEnd )
                 {
                     const SwPosition* pTmp = pBkStt;
@@ -263,11 +263,11 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     switch( eType )
     {
     case BOOKMARK_SERVER:
-        if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+        if( CNTNT_TYPE.pBkmk->GetOtherBookmarkPos() )
         {
             SwBookmark& rBkmk = *CNTNT_TYPE.pBkmk;
-            const SwPosition* pStt = &rBkmk.GetPos(),
-                            * pEnd = rBkmk.GetOtherPos();
+            const SwPosition* pStt = &rBkmk.GetBookmarkPos(),
+                            * pEnd = rBkmk.GetOtherBookmarkPos();
             if( *pStt > *pEnd )
             {
                 const SwPosition* pTmp = pStt;
