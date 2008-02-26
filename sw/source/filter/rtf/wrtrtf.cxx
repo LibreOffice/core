@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:44:48 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include <hintids.hxx>
 #endif
 
+#include <comphelper/string.hxx>
+
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -57,9 +59,6 @@
 #endif
 #ifndef _RTFOUT_HXX
 #include <svtools/rtfout.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
@@ -173,6 +172,9 @@
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #if defined(UNX)
 const sal_Char SwRTFWriter::sNewLine = '\012';
@@ -642,14 +644,15 @@ void SwRTFWriter::MakeHeader()
     Strm() << SwRTFWriter::sNewLine;        // ein Trenner
 }
 
-void SwRTFWriter::OutInfoDateTime( const DateTime& rDT, const char* pStr )
+void SwRTFWriter::OutInfoDateTime( const sal_Char* i_pStr,
+    const util::DateTime& i_rDT )
 {
-    Strm() << '{' << pStr << sRTF_YR;
-    OutLong( Strm(), rDT.GetYear() ) << sRTF_MO;
-    OutLong( Strm(), rDT.GetMonth() ) << sRTF_DY;
-    OutLong( Strm(), rDT.GetDay() ) << sRTF_HR;
-    OutLong( Strm(), rDT.GetHour() ) << sRTF_MIN;
-    OutLong( Strm(), rDT.GetMin() ) << '}';
+    Strm() << '{' << i_pStr << sRTF_YR;
+    OutLong( Strm(), i_rDT.Year ) << sRTF_MO;
+    OutLong( Strm(), i_rDT.Month ) << sRTF_DY;
+    OutLong( Strm(), i_rDT.Day ) << sRTF_HR;
+    OutLong( Strm(), i_rDT.Hours ) << sRTF_MIN;
+    OutLong( Strm(), i_rDT.Minutes ) << '}';
 }
 
 bool CharsetSufficient(const String &rString, rtl_TextEncoding eChrSet)
@@ -692,20 +695,32 @@ void SwRTFWriter::OutDocInfoStat()
 {
     Strm() << '{' << sRTF_INFO;
 
-    if (const SfxDocumentInfo* pInfo = pDoc->GetpInfo())
+    SwDocShell *pDocShell(pDoc->GetDocShell());
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        xDocProps.set(xDPS->getDocumentProperties());
+    }
+
+    // may be null (in case of copying)
+    if (xDocProps.is())
     {
-        OutUnicodeSafeRecord(sRTF_TITLE, pInfo->GetTitle());
-        OutUnicodeSafeRecord(sRTF_SUBJECT, pInfo->GetTheme());
-        OutUnicodeSafeRecord(sRTF_KEYWORDS, pInfo->GetKeywords());
-        OutUnicodeSafeRecord(sRTF_DOCCOMM, pInfo->GetComment());
+        OutUnicodeSafeRecord(sRTF_TITLE,    xDocProps->getTitle());
+        OutUnicodeSafeRecord(sRTF_SUBJECT,  xDocProps->getSubject());
 
-        OutUnicodeSafeRecord(sRTF_AUTHOR, pInfo->GetAuthor() );
-        OutInfoDateTime(pInfo->GetCreationDate(), sRTF_CREATIM);
+        OutUnicodeSafeRecord(sRTF_KEYWORDS,
+        ::comphelper::string::convertCommaSeparated(xDocProps->getKeywords()));
+        OutUnicodeSafeRecord(sRTF_DOCCOMM,  xDocProps->getDescription());
 
-        OutUnicodeSafeRecord(sRTF_AUTHOR, pInfo->GetModificationAuthor() );
-        OutInfoDateTime(pInfo->GetModificationDate(), sRTF_REVTIM);
+        OutUnicodeSafeRecord(sRTF_AUTHOR,   xDocProps->getAuthor() );
+        OutInfoDateTime(sRTF_CREATIM,       xDocProps->getCreationDate());
 
-        OutInfoDateTime(pInfo->GetPrintDate(), sRTF_PRINTIM);
+        OutUnicodeSafeRecord(sRTF_AUTHOR,   xDocProps->getModifiedBy() );
+        OutInfoDateTime(sRTF_REVTIM,        xDocProps->getModificationDate());
+
+        OutInfoDateTime(sRTF_PRINTIM,       xDocProps->getPrintDate());
+
     }
 
     // fuer interne Zwecke - Versionsnummer rausschreiben
