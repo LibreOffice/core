@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:57:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 08:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1421,6 +1421,30 @@ String RID_DB_REPORT_WIZARD_START + 79
     Text [ en-US ] = "What kind of report do you want to create?";
 };
 
+String RID_DB_REPORT_WIZARD_START + 80
+{
+    Text [ en-US ] = "Tabular";
+};
+String RID_DB_REPORT_WIZARD_START + 81
+{
+    Text [ en-US ] = "Columnar, single-column";
+};
+String RID_DB_REPORT_WIZARD_START + 82
+{
+    Text [ en-US ] = "Columnar, two columns";
+};
+String RID_DB_REPORT_WIZARD_START + 83
+{
+    Text [ en-US ] = "Columnar, three columns";
+};
+String RID_DB_REPORT_WIZARD_START + 84
+{
+    Text [ en-US ] = "In blocks, labels left";
+};
+String RID_DB_REPORT_WIZARD_START + 85
+{
+    Text [ en-US ] = "In blocks, labels above";
+};
 
 // ============================================================================
 
