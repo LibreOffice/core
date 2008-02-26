@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:40:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 16:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ Module gid_Module_Prg_Base_Bin
         ,gid_File_Lib_Abp
         ,gid_File_Lib_Dbp
         ,gid_File_Lib_Dbu
+        ,gid_File_Lib_Adabasui
         ,gid_File_Registry_Spool_Oo_Setup_Report_Xcu,gid_File_Registry_Spool_Oo_Embedding_Report_Xcu
         ,gid_File_Oo_Office_Ui_Reportcommands_Xcs,gid_File_Oo_Office_Ui_Reportcommands_Xcu
         ,gid_File_Oo_Office_Ui_Dbreportwindowstate_Xcs,gid_File_Oo_Office_Ui_Dbreportwindowstate_xcu
