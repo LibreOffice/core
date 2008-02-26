@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:37:10 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1181,7 +1181,7 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                         aBkmkArr, SAVEFLY_SPLIT );
 
-        pTNd = (SwTxtNode*)pTNd->SplitNode( rPos );
+        pTNd = (SwTxtNode*)pTNd->SplitCntntNode( rPos );
 
         if( aBkmkArr.Count() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
@@ -1715,7 +1715,9 @@ SetRedlineMode( eOld );
     }
 
     if( bJoinTxt )
+    {
         lcl_JoinText( rPam, bJoinPrev );
+    }
 
     return sal_True;
 }
@@ -2184,8 +2186,8 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
         SetRedlineMode(
                (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
-                *aDelPam.GetPoint() = pBkmk->GetPos();
-                *aDelPam.GetMark() = *pBkmk->GetOtherPos();
+                *aDelPam.GetPoint() = pBkmk->GetBookmarkPos();
+                *aDelPam.GetMark() = *pBkmk->GetOtherBookmarkPos();
                 deleteBookmark( getBookmarks().GetPos( pBkmk ));
                 pStt = aDelPam.Start();
                 pTxtNd = pStt->nNode.GetNode().GetTxtNode();
@@ -2271,8 +2273,8 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
 
-                *rPam.GetPoint() = pBkmk->GetPos();
-                *rPam.GetMark() = *pBkmk->GetOtherPos();
+                *rPam.GetPoint() = pBkmk->GetBookmarkPos();
+                *rPam.GetMark() = *pBkmk->GetOtherBookmarkPos();
                 deleteBookmark( getBookmarks().GetPos( pBkmk ));
             }
             bJoinTxt = sal_False;
