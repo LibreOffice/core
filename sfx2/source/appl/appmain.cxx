@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:09:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 
 #define _SDINTERN_HXX
 
-#ifndef GCC
-#endif
 #include <stdio.h>
 
 #ifndef _URLOBJ_HXX //autogen
@@ -82,7 +80,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/appuno.hxx>
-#include <sfx2/objuno.hxx>
 #include "app.hrc"
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
