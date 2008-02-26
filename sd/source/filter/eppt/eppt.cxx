@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:54:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,17 +87,14 @@
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
-#ifndef _DINFOS2_HXX_
-#include <dinfos2.hxx>
-#endif
 #ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
 #include <com/sun/star/view/PaperOrientation.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_PAPERFORMAT_HPP_
 #include <com/sun/star/view/PaperFormat.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
@@ -122,6 +119,7 @@
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
+#include <sfx2/docinf.hxx>
 
 #define PPT_TRANSITION_TYPE_NONE            0
 #define PPT_TRANSITION_TYPE_RANDOM          1
@@ -258,9 +256,6 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     if ( !ImplCreateCurrentUserStream() )
         return;
 
-    if ( !ImplCreateSummaryInformation() )
-        return;
-
     mpStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "PowerPoint Document" ) ) );
     if ( !mpStrm )
         return;
@@ -389,240 +384,50 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCreateSummaryInformation()
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfoSupplier >
-        aXDocumentInfoSupplier( mXModel, ::com::sun::star::uno::UNO_QUERY );
-    if ( aXDocumentInfoSupplier.is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo >
-            aXDocumentInfo( aXDocumentInfoSupplier->getDocumentInfo() );
-        if ( aXDocumentInfo.is() )
-        {
-            DInfo aDInfo( *mrStg, String( RTL_CONSTASCII_USTRINGPARAM( "\005SummaryInformation" ) ) );
-
-            if ( aDInfo.IsValid() )
-            {
-                sal_uInt8 aPropSetGUID[ 16 ] =
-                {
-                    0xe0, 0x85, 0x9f, 0xf2, 0xf9, 0x4f, 0x68, 0x10, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9
-                };
-                Section aPropSet( aPropSetGUID );
-
-                PropItem aPropItem;
-
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    aXDocInfoPropSet( aXDocumentInfo, ::com::sun::star::uno::UNO_QUERY );                       ;
-                if ( aXDocInfoPropSet.is() )
-                {
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_AUTHOR, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ModifiedBy" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_LASTAUTHOR, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Theme" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_SUBJECT, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_TITLE, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Keywords" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_KEYWORDS, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Description" ) ) ) )
-                    {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
-                        {
-                            aPropItem.Clear();
-                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
-                            aPropItem.Write( aTmpStr );
-                            aPropSet.AddProperty( PID_COMMENTS, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CreationDate" ) ) ) )
-                    {
-                        DateTime aDateTime( *(DateTime*)mAny.getValue() );
-                        if ( aDateTime.IsValid() )
-                        {
-                            aPropItem.Clear();
-                            aPropItem.Write( aDateTime );
-                            aPropSet.AddProperty( PID_CREATE_DTM, aPropItem );
-                        }
-                    }
-                    if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "PrintDate" ) ) ) )
-                    {
-                        DateTime aDateTime( *(DateTime*)mAny.getValue() );
-                        if ( aDateTime.IsValid() )
-                        {
-                            aPropItem.Clear();
-                            aPropItem.Write( aDateTime );
-                            aPropSet.AddProperty( PID_LASTPRINTED_DTM, aPropItem );
-                        }
-                    }
-                }
-
-                if ( ImplGetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
-                {
-                    ::com::sun::star::uno::Sequence<sal_uInt8> aSeq;
-                    aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)mAny.getValue();
-
-                    const sal_uInt8* pAry = aSeq.getArray();
-                    sal_uInt32 nAryLen = aSeq.getLength();
-
-                    if ( pAry && nAryLen )
-                    {
-                        aPropItem.Clear();
-                        aPropItem << (sal_uInt32)VT_CF
-                                  << (sal_uInt32)0            /* size - filled later */
-                                  << (sal_uInt32)0xffffffff   /* windows clipboard format */
-                                  << (sal_uInt32)8;           /* CF_DIB data format DIB */
-
-                        aPropItem.Write( pAry, nAryLen );
-
-                        sal_uInt32 nSize = aPropItem.Tell() - 8;
-                        aPropItem.Seek( 4 );
-                        aPropItem << nSize;
-                        aPropSet.AddProperty( PID_PREVIEW, aPropItem );
-                        aDInfo.AddSection( aPropSet );
-                    }
-                }
-                aDInfo.Write();
-            }
-        }
-    }
-    return TRUE;
-}
-
-// ---------------------------------------------------------------------------------------------
-
 sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
 {
-    DInfo aDInfo( *mrStg, String( RTL_CONSTASCII_USTRINGPARAM( "\005DocumentSummaryInformation" ) ) );
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        mXModel, uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
 
-    if ( aDInfo.IsValid() )
-    {
-        // first section
+    if (xDocProps.is()) {
 
-        sal_uInt8 aPropSetGUID[ 16 ] =
+        // no idea what this is...
+        static sal_uInt8 aGuid[ 0x52 ] =
         {
-            0x02, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
-        };
-        Section aPropSet( aPropSetGUID );
-        aDInfo.AddSection( aPropSet );
-
-        // second section
-
-        sal_uInt32 nNextId = 2;
-        sal_uInt8 aUserPropSetGUID[ 16 ] =
-        {
-            0x05, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
-        };
-        Section aUserPropSet( aUserPropSetGUID );
-
-        Dictionary aDict;
-
-        // code page indicator
-
-        sal_uInt8 aCodePageIndicator[ 8 ] =
-        {
-            0x02, 0x00, 0x00, 0x00, 0xe4, 0x04, 0x00, 0x00
-        };
-        aUserPropSet.AddProperty( 1, aCodePageIndicator, 8 );   // 1 is always the code page indicator
-
-        // guid
-
-        sal_uInt8 aGuid[ 0x56 ] =
-        {
-            0x41, 0x00, 0x00, 0x00,
             0x4e, 0x00, 0x00, 0x00,
             '{',0,'D',0,'B',0,'1',0,'A',0,'C',0,'9',0,'6',0,'4',0,'-',0,
             'E',0,'3',0,'9',0,'C',0,'-',0,'1',0,'1',0,'D',0,'2',0,'-',0,
             'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
             '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
         };
-        aDict.AddProperty( nNextId, String( RTL_CONSTASCII_USTRINGPARAM( "_PID_GUID" ) ) );
-        aUserPropSet.AddProperty( nNextId++, aGuid, 0x56 );
+        uno::Sequence<sal_uInt8> aGuidSeq(aGuid, 0x52);
 
-        // hyperlinks
+        SvMemoryStream  aHyperBlob;
+        ImplCreateHyperBlob( aHyperBlob );
 
-        if ( maHyperlink.Count() )
-        {
-            SvMemoryStream  aHyperBlob;
-            ImplCreateHyperBlob( aHyperBlob );
-            aDict.AddProperty( nNextId, String( RTL_CONSTASCII_USTRINGPARAM( "_PID_HLINKS" ) ) );
-            aUserPropSet.AddProperty( nNextId++, aHyperBlob );
+        uno::Sequence<sal_uInt8> aHyperSeq(aHyperBlob.Tell());
+        const sal_uInt8* pBlob(
+            static_cast<const sal_uInt8*>(aHyperBlob.GetData()));
+        for (sal_Int32 j = 0; j < aHyperSeq.getLength(); ++j) {
+            aHyperSeq[j] = pBlob[j];
         }
 
-        // special propertys
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfoSupplier >
-            aXDocumentInfoSupplier( mXModel, ::com::sun::star::uno::UNO_QUERY );
-
-        if ( aXDocumentInfoSupplier.is() )
+        uno::Sequence<sal_uInt8> aThumbSeq;
+        if ( ImplGetPageByIndex( 0, NORMAL ) &&
+             ImplGetPropertyValue( mXPagePropSet,
+                String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
         {
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo >
-                    aXDocumentInfo( aXDocumentInfoSupplier->getDocumentInfo() );
-            if ( aXDocumentInfo.is() )
-            {
-                sal_Int16 nUserFieldCount = aXDocumentInfo->getUserFieldCount();
-                PropItem aPropItem;
-                for ( sal_Int16 i = 0; i < nUserFieldCount; i++ )
-                {
-                    aPropItem.Clear();
-                    ::rtl::OUString aUValue( aXDocumentInfo->getUserFieldValue( i ) );
-                    if ( aUValue.getLength() )
-                    {
-                        String aTmpStr( aUValue );
-                        aPropItem.Write( aTmpStr );
-                        aDict.AddProperty( nNextId, aXDocumentInfo->getUserFieldName( i ) );
-                        aUserPropSet.AddProperty( nNextId++, aPropItem );
-                    }
-                }
-            }
+            aThumbSeq =
+                *static_cast<const uno::Sequence<sal_uInt8>*>(mAny.getValue());
         }
 
-        aUserPropSet.AddDictionary( aDict );
-        aDInfo.AddSection( aUserPropSet );
-        aDInfo.Write();
+        sfx2::SaveOlePropertySet( xDocProps, mrStg,
+                &aThumbSeq, &aGuidSeq, &aHyperSeq);
     }
-    return TRUE;
+
+    return sal_True;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1158,7 +963,8 @@ sal_Bool PPTWriter::ImplCreateDocument()
 sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
-    rStrm << (sal_uInt32)0x41;      // property type VT_BLOB
+// SfxOlePropertySection does this...
+//    rStrm << (sal_uInt32)0x41;      // property type VT_BLOB
     nParaOfs = rStrm.Tell();
     rStrm << (sal_uInt32)0;         // property size
     rStrm << (sal_uInt32)0;         // property count
@@ -1228,6 +1034,7 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
             break;
         }
     }
+fprintf(stderr, "Tell: %d \n", rStrm.Tell());
     nCurrentOfs = rStrm.Tell();
     rStrm.Seek( nParaOfs );
     rStrm << (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) );
