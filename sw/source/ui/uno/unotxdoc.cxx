@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:35:17 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@
 #endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
+#endif
+#ifndef _UNOFLATPARA_HXX
+#include <unoflatpara.hxx>
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
@@ -2976,6 +2979,16 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     SwDoc* pDoc = pDocShell->GetDoc();
     return pDoc->getXForms();
 }
+
+/* -----------------------------25.09.07 -------------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic)
+    throw ( uno::RuntimeException )
+{
+    return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
+}
+
 /* -----------------------------20.06.00 09:54--------------------------------
 
  ---------------------------------------------------------------------------*/
