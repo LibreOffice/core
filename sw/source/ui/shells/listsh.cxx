@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:28:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
+#include <IDocumentOutlineNodes.hxx>
 
 SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
 {
@@ -128,25 +129,26 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 
         if ( bMove )
         {
-            const sal_uInt16 nActLevel = rSh.GetOutlineLevel( nActPos );
+            const IDocumentOutlineNodes* pIDoc( rSh.getIDocumentOutlineNodesAccess() );
+            const sal_uInt16 nActLevel = static_cast<sal_uInt16>(pIDoc->getOutlineLevel( nActPos ));
             sal_uInt16 nActEndPos = nActPos + 1;
             sal_Int16 nDir = 0;
 
             if ( !bUp )
             {
                 // Move down with subpoints:
-                while ( nActEndPos < rSh.GetOutlineCnt() &&
-                        rSh.GetOutlineLevel( nActEndPos ) > nActLevel )
+                while ( nActEndPos < pIDoc->getOutlineNodesCount() &&
+                        pIDoc->getOutlineLevel( nActEndPos ) > nActLevel )
                     ++nActEndPos;
 
-                if ( nActEndPos < rSh.GetOutlineCnt() )
+                if ( nActEndPos < pIDoc->getOutlineNodesCount() )
                 {
                     // The current subpoint which should be moved
                     // starts at nActPos and ends at nActEndPos - 1
                     --nActEndPos;
                     sal_uInt16 nDest = nActEndPos + 2;
-                    while ( nDest < rSh.GetOutlineCnt() &&
-                            rSh.GetOutlineLevel( nDest ) > nActLevel )
+                    while ( nDest < pIDoc->getOutlineNodesCount() &&
+                            pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         ++nDest;
 
                     nDir = nDest - 1 - nActEndPos;
@@ -159,7 +161,7 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
                 {
                     --nActEndPos;
                     sal_uInt16 nDest = nActPos - 1;
-                    while ( nDest > 0 && rSh.GetOutlineLevel( nDest ) > nActLevel )
+                    while ( nDest > 0 && pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         --nDest;
 
                     nDir = nDest - nActPos;
