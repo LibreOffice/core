@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:42:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, BOOL bEndNotes )
                 String sTxt( rFtn.GetViewNumStr( *pDoc ));
                 if( sTxt.Len() )
                     sTxt += ' ';
-                sTxt += pTxtNd->GetExpandTxt( 0, USHRT_MAX, FALSE );
+                sTxt += pTxtNd->GetExpandTxt( 0, USHRT_MAX );
 
                 _SeqFldLstElem* pNew = new _SeqFldLstElem( sTxt,
                                             pTxtFtn->GetSeqRefNo() );
