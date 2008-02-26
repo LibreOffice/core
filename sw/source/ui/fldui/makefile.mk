@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 10:48:24 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:25:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES =  \
+        $(SLO)$/fldtdlg.obj \
+        $(SLO)$/fldedt.obj \
         $(SLO)$/xfldui.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
