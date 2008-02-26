@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 08:27:25 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:03:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,9 @@ SLOFILES =  \
         $(SLO)$/SwSmartTagMgr.obj
 
 EXCEPTIONSFILES = \
-                $(SLO)$/tabcol.obj
+        $(SLO)$/SwBitArray.obj \
+        $(SLO)$/tabcol.obj
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
