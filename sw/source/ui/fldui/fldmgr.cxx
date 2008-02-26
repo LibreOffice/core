@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:55:48 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,6 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
@@ -713,9 +710,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
                         String* pNew;
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
-                            if (i >= DI_INFO1 && i <= DI_INFO4)
-                                pNew = new String( pSh->GetInfo()->GetUserKeyTitle(i-DI_INFO1));
-                            else if ( i == DI_CUSTOM )
+                            if ( i == DI_CUSTOM )
                                 pNew = new String( String(SW_RES( STR_CUSTOM )) );
                             else
                                 pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
