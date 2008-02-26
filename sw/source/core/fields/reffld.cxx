@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:24:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,9 @@
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
+// --> OD 2007-10-18 #i81002#
+#include <crossrefbookmark.hxx>
+// <--
 #ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
 #endif
@@ -284,8 +287,14 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
                               const String& rSetRef, USHORT nSubTyp,
                               USHORT nSeqenceNo, ULONG nFmt )
-    : SwField( pFldType, nFmt ), sSetRefName( rSetRef ),
-    nSubType( nSubTyp ), nSeqNo( nSeqenceNo )
+    : SwField( pFldType, nFmt ),
+      sSetRefName( rSetRef ),
+      nSubType( nSubTyp ),
+      nSeqNo( nSeqenceNo )
+{
+}
+
+SwGetRefField::~SwGetRefField()
 {
 }
 
@@ -302,6 +311,35 @@ USHORT SwGetRefField::GetSubType() const
 void SwGetRefField::SetSubType( USHORT n )
 {
     nSubType = n;
+}
+
+// --> OD 2007-11-09 #i81002#
+bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
+{
+    return GetSubType() == REF_BOOKMARK &&
+           bookmarkfunc::isHeadingCrossRefBookmarkName( sSetRefName );
+}
+
+bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
+{
+    return GetSubType() == REF_BOOKMARK &&
+           bookmarkfunc::isNumItemCrossRefBookmarkName( sSetRefName );
+}
+
+const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
+{
+    SwDoc* pDoc = dynamic_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
+    USHORT nDummy = USHRT_MAX;
+    return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
+}
+// <--
+// --> OD 2008-01-09 #i85090#
+String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
+{
+    const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
+    return pReferencedTxtNode
+           ? pReferencedTxtNode->GetExpandTxt( 0, STRING_LEN, true, true )
+           : aEmptyStr;
 }
 
 String SwGetRefField::Expand() const
@@ -321,17 +359,21 @@ String SwGetRefField::GetCntnt(BOOL bName) const
     return aStr;
 }
 
-
-void SwGetRefField::UpdateField()
+// --> OD 2007-09-07 #i81002# - parameter <pFldTxtAttr> added
+void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
     sTxt.Erase();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-    USHORT nStt, nEnd;
+    USHORT nStt = USHRT_MAX;
+    USHORT nEnd = USHRT_MAX;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( pDoc, sSetRefName,
                                         nSubType, nSeqNo, &nStt, &nEnd );
-    if( !pTxtNd )
+    if ( !pTxtNd )
+    {
+        sTxt = ViewShell::GetShellRes()->aGetRefFld_RefItemNotFound;
         return ;
+    }
 
     switch( GetFormat() )
     {
@@ -406,7 +448,7 @@ void SwGetRefField::UpdateField()
 
             if( nStt != nEnd )      // ein Bereich?
             {
-                sTxt = pTxtNd->GetExpandTxt( nStt, nEnd - nStt, FALSE );
+                sTxt = pTxtNd->GetExpandTxt( nStt, nEnd - nStt );
 
                 // alle Sonderzeichen entfernen (durch Blanks ersetzen):
                 if( sTxt.Len() )
@@ -463,20 +505,9 @@ void SwGetRefField::UpdateField()
 
     case REF_UPDOWN:
         {
-            const SwTxtFld* pTFld = 0;
-
-            {
-                SwClientIter aIter( *GetTyp() );
-                for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                        pFld; pFld = (SwFmtFld*)aIter.Next() )
-                    if( pFld->GetFld() == this )
-                    {
-                        pTFld = pFld->GetTxtFld();
-                        break;
-                    }
-            }
-
-            if( !pTFld || !pTFld->GetpTxtNode() )   // noch nicht im Node gestezt?
+            // --> OD 2007-09-07 #i81002#
+            // simplified: use parameter <pFldTxtAttr>
+            if( !pFldTxtAttr || !pFldTxtAttr->GetpTxtNode() )
                 break;
 
             LocaleDataWrapper aLocaleData(
@@ -485,23 +516,111 @@ void SwGetRefField::UpdateField()
 
             // erstmal ein "Kurz" - Test - falls beide im selben
             // Node stehen!
-            if( pTFld->GetpTxtNode() == pTxtNd )
+            if( pFldTxtAttr->GetpTxtNode() == pTxtNd )
             {
-                sTxt = nStt < *pTFld->GetStart()
+                sTxt = nStt < *pFldTxtAttr->GetStart()
                             ? aLocaleData.getAboveWord()
                             : aLocaleData.getBelowWord();
                 break;
             }
 
-            sTxt = ::IsFrameBehind( *pTFld->GetpTxtNode(), *pTFld->GetStart(),
+            sTxt = ::IsFrameBehind( *pFldTxtAttr->GetpTxtNode(), *pFldTxtAttr->GetStart(),
                                     *pTxtNd, nStt )
                         ? aLocaleData.getAboveWord()
                         : aLocaleData.getBelowWord();
         }
         break;
+    // --> OD 2007-08-24 #i81002#
+    case REF_NUMBER:
+    case REF_NUMBER_NO_CONTEXT:
+    case REF_NUMBER_FULL_CONTEXT:
+        {
+            if ( pFldTxtAttr && pFldTxtAttr->GetpTxtNode() )
+            {
+                sTxt = MakeRefNumStr( pFldTxtAttr->GetTxtNode(), *pTxtNd, GetFormat() );
+            }
+        }
+        break;
+    // <--
+    default:
+        DBG_ERROR("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
 }
 
+// --> OD 2007-09-06 #i81002#
+String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
+                                     const SwTxtNode& rTxtNodeOfReferencedItem,
+                                     const sal_uInt32 nRefNumFormat ) const
+{
+    if ( rTxtNodeOfReferencedItem.HasNumber() && rTxtNodeOfReferencedItem.IsCounted() )
+    {
+        ASSERT( rTxtNodeOfReferencedItem.GetNum(),
+                "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
+
+        // Determine, up to which level the superior list labels have to be
+        // included - default is to include all superior list labels.
+        sal_uInt8 nRestrictInclToThisLevel( 0 );
+        // Determine for format REF_NUMBER the level, up to which the superior
+        // list labels have to be restricted, if the text node of the reference
+        // field and the text node of the referenced item are in the same
+        // document context.
+        if ( nRefNumFormat == REF_NUMBER &&
+             rTxtNodeOfField.FindFlyStartNode()
+                            == rTxtNodeOfReferencedItem.FindFlyStartNode() &&
+             rTxtNodeOfField.FindFootnoteStartNode()
+                            == rTxtNodeOfReferencedItem.FindFootnoteStartNode() &&
+             rTxtNodeOfField.FindHeaderStartNode()
+                            == rTxtNodeOfReferencedItem.FindHeaderStartNode() &&
+             rTxtNodeOfField.FindFooterStartNode()
+                            == rTxtNodeOfReferencedItem.FindFooterStartNode() )
+        {
+            const SwNodeNum* pNodeNumForTxtNodeOfField( 0 );
+            if ( rTxtNodeOfField.HasNumber() &&
+                 rTxtNodeOfField.GetNumRule() == rTxtNodeOfReferencedItem.GetNumRule() )
+            {
+                pNodeNumForTxtNodeOfField = rTxtNodeOfField.GetNum();
+            }
+            else
+            {
+                pNodeNumForTxtNodeOfField =
+                    rTxtNodeOfReferencedItem.GetNum()->GetPrecedingNodeNumOf( rTxtNodeOfField );
+            }
+            if ( pNodeNumForTxtNodeOfField )
+            {
+                const SwNodeNum::tNumberVector rFieldNumVec = pNodeNumForTxtNodeOfField->GetNumberVector();
+                const SwNodeNum::tNumberVector rRefItemNumVec = rTxtNodeOfReferencedItem.GetNum()->GetNumberVector();
+                sal_uInt8 nLevel( 0 );
+                while ( nLevel < rFieldNumVec.size() && nLevel < rRefItemNumVec.size() )
+                {
+                    if ( rRefItemNumVec[nLevel] == rFieldNumVec[nLevel] )
+                    {
+                        nRestrictInclToThisLevel = nLevel + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    ++nLevel;
+                }
+            }
+        }
+
+        // Determine, if superior list labels have to be included
+        const bool bInclSuperiorNumLabels(
+            ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetLevel() &&
+              ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
+
+        ASSERT( rTxtNodeOfReferencedItem.GetNumRule(),
+                "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set --> please inform OD!" );
+        return rTxtNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
+                                            *(rTxtNodeOfReferencedItem.GetNum()),
+                                            bInclSuperiorNumLabels,
+                                            nRestrictInclToThisLevel );
+    }
+
+    return String();
+}
+// <--
 
 SwField* SwGetRefField::Copy() const
 {
@@ -554,6 +673,11 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
             case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
             case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
+            // --> OD 2007-09-06 #i81002#
+            case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
+            case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
+            case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
+            // <--
             }
             rAny <<= nPart;
         }
@@ -625,6 +749,11 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
             case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
+            // --> OD 2007-09-06 #i81002#
+            case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
+            case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
+            case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
+            // <--
             default: return FALSE;
             }
             SetFormat(nPart);
@@ -741,10 +870,14 @@ void SwGetRefFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( !pGRef->GetLanguage() &&
                 0 != ( pTFld = pFld->GetTxtFld()) &&
                 pTFld->GetpTxtNode() )
+            {
                 pGRef->SetLanguage( pTFld->GetpTxtNode()->GetLang(
                                                 *pTFld->GetStart() ) );
+            }
 
-            pGRef->UpdateField();
+            // --> OD 2007-09-06 #i81002#
+            pGRef->UpdateField( pFld->GetTxtFld() );
+            // <--
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
@@ -804,21 +937,39 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
             if( USHRT_MAX != nPos )
             {
                 const SwBookmark& rBkmk = *pDoc->getBookmarks()[ nPos ];
-                const SwPosition* pPos = &rBkmk.GetPos();
-                if( rBkmk.GetOtherPos() && *pPos > *rBkmk.GetOtherPos() )
-                    pPos = rBkmk.GetOtherPos();
+                // --> OD 2007-09-27 #i81002# - refactoring
+                // simplify by using <SwBookmark::GetBookmarkStart()>
+//                const SwPosition* pPos = &rBkmk.GetBookmarkPos();
+//                if( rBkmk.GetOtherBookmarkPos() && *pPos > *rBkmk.GetOtherBookmarkPos() )
+//                    pPos = rBkmk.GetOtherBookmarkPos();
+                const SwPosition* pPos = rBkmk.BookmarkStart();
+                // <--
 
                 pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
                 *pStt = pPos->nContent.GetIndex();
                 if( pEnd )
                 {
-                    if( !rBkmk.GetOtherPos() )
-                        *pEnd = *pStt;
-                    else if( rBkmk.GetOtherPos()->nNode == rBkmk.GetPos().nNode )
+                    if( !rBkmk.GetOtherBookmarkPos() )
                     {
-                        *pEnd = rBkmk.GetOtherPos() == pPos
-                                ? rBkmk.GetPos().nContent.GetIndex()
-                                : rBkmk.GetOtherPos()->nContent.GetIndex();
+                        *pEnd = *pStt;
+                        // --> OD 2007-10-18 #i81002#
+                        if ( dynamic_cast<const SwCrossRefBookmark*>(&rBkmk) != 0 )
+                        {
+                            ASSERT( pTxtNd,
+                                    "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
+                            *pEnd = pTxtNd->Len();
+                        }
+                        // <--
+                    }
+                    else if( rBkmk.GetOtherBookmarkPos()->nNode == rBkmk.GetBookmarkPos().nNode )
+                    {
+                        // --> OD 2007-09-27 #i81002# - refactoring
+                        // simplify by using <SwBookmark::GetBookmarkEnd()>
+//                        *pEnd = rBkmk.GetOtherBookmarkPos() == pPos
+//                                ? rBkmk.GetBookmarkPos().nContent.GetIndex()
+//                                : rBkmk.GetOtherBookmarkPos()->nContent.GetIndex();
+                        *pEnd = rBkmk.BookmarkEnd()->nContent.GetIndex();
+                        // <--
                     }
                     else
                         *pEnd = USHRT_MAX;
