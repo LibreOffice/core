@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:41:36 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1880,7 +1880,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
                 pInsDoc->DoUndo( bIsUndo );
             }
             else
-                pDestNd->SplitNode( rPos );
+                pDestNd->SplitCntntNode( rPos );
 
             if( rPos.nNode == aEndIdx )
                 aEndIdx--;
@@ -1939,7 +1939,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
                     pInsDoc->DoUndo( bIsUndo );
                 }
                 else
-                    pDestNd->SplitNode( rPos );
+                    pDestNd->SplitCntntNode( rPos );
 
                 pDestNd = rPos.nNode.GetNode().GetTxtNode();
 
