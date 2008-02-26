@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:58:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ ImportInfo::~ImportInfo()
 }
 
 EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, ImpEditEngine* pImpEE  )
-    : SvxRTFParser( rAttrPool, rIn ), aRTFMapMode( MAP_TWIP )
+    : SvxRTFParser( rAttrPool, rIn, 0 ), aRTFMapMode( MAP_TWIP )
 {
 
     pImpEditEngine  = pImpEE;
