@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:39:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:41:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,8 +715,14 @@ void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL )
 // JP 21.03.94: jetzt auch die Bookmarks in die History aufnehmen
 SwHstryBookmark::SwHstryBookmark( const SwBookmark& rBkmk, BYTE nType )
     : SwHstryHint( HSTRY_BOOKMARK ),
-    nNode1( 0 ), nNode2( rBkmk.GetOtherPos() ? 0 : ULONG_MAX ),
-    nCntnt1( 0 ), nCntnt2( 0 ), nTyp( nType )
+      nNode1( 0 ),
+      nNode2( rBkmk.GetOtherBookmarkPos() ? 0 : ULONG_MAX ),
+      nCntnt1( 0 ),
+      nCntnt2( 0 ),
+      nTyp( nType ),
+      // --> OD 2007-10-17 #i81002#
+      eBkmkType( rBkmk.GetType() )
+      // <--
 {
     aName = rBkmk.GetName();
     aShortName = rBkmk.GetShortName();
@@ -724,13 +730,13 @@ SwHstryBookmark::SwHstryBookmark( const SwBookmark& rBkmk, BYTE nType )
 
     if( BKMK_POS & nTyp )
     {
-        nNode1 = rBkmk.GetPos().nNode.GetIndex();
-        nCntnt1 = rBkmk.GetPos().nContent.GetIndex();
+        nNode1 = rBkmk.GetBookmarkPos().nNode.GetIndex();
+        nCntnt1 = rBkmk.GetBookmarkPos().nContent.GetIndex();
     }
     if( BKMK_OTHERPOS & nTyp )
     {
-        nNode2 = rBkmk.GetOtherPos()->nNode.GetIndex();
-        nCntnt2 = rBkmk.GetOtherPos()->nContent.GetIndex();
+        nNode2 = rBkmk.GetOtherBookmarkPos()->nNode.GetIndex();
+        nCntnt2 = rBkmk.GetOtherBookmarkPos()->nContent.GetIndex();
     }
 }
 
@@ -761,7 +767,9 @@ void SwHstryBookmark::SetInDoc( SwDoc* pDoc, BOOL )
                 ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
                 aPam.GetMark()->nContent.Assign( pCntntNd, nCntnt2 );
             }
-            pDoc->makeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName, IDocumentBookmarkAccess::BOOKMARK );
+            // --> OD 2007-10-17 #i81002#
+            pDoc->makeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName, eBkmkType );
+            // <--
         }
     }
     else
@@ -773,50 +781,75 @@ void SwHstryBookmark::SetInDoc( SwDoc* pDoc, BOOL )
             {
                 ULONG nNd;
                 USHORT nCnt;
-                SwPosition* pPos;
                 if( BKMK_POS == nTyp )
                 {
-                    if( !nNode2 && !(*ppBkmks)->GetOtherPos() )
+                    if( !nNode2 && !(*ppBkmks)->GetOtherBookmarkPos() )
                     {
                         // dann muss der neu angelegt werden.
-                        SwPaM aPam( (*ppBkmks)->GetPos() );
+                        SwPaM aPam( (*ppBkmks)->GetBookmarkPos() );
                         aPam.SetMark();
                         aPam.GetPoint()->nNode = nNode1;
                         aPam.GetPoint()->nContent.Assign(
                                 rNds[ nNode1 ]->GetCntntNode(), nCntnt1 );
 
                         pDoc->deleteBookmark( pDoc->getBookmarks().Count() - n );
-                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName, IDocumentBookmarkAccess::BOOKMARK );
+                        // --> OD 2007-10-17 #i81002#
+                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ),
+                                            aName, aShortName,
+                                            eBkmkType );
+                        // <--
                         break;
 
                     }
                     nNd = nNode1;
                     nCnt = nCntnt1;
-                    pPos = (SwPosition*)&(*ppBkmks)->GetPos();
+                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // Do not directly manipulate member of <SwBookmark>
+//                    pPos = (SwPosition*)&(*ppBkmks)->GetBookmarkPos();
+                    SwPosition aNewPos( (*ppBkmks)->GetBookmarkPos() );
+                    aNewPos.nNode = nNd;
+                    aNewPos.nContent.Assign( rNds[ aNewPos.nNode ]->GetCntntNode(),
+                                             nCnt );
+                    (*ppBkmks)->SetBookmarkPos( &aNewPos );
+                    // <--
                 }
                 else
                 {
-                    if( !(*ppBkmks)->GetOtherPos() )
+                    if( !(*ppBkmks)->GetOtherBookmarkPos() )
                     {
                         // dann muss der neu angelegt werden.
-                        SwPaM aPam( (*ppBkmks)->GetPos() );
+                        SwPaM aPam( (*ppBkmks)->GetBookmarkPos() );
                         aPam.SetMark();
                         aPam.GetMark()->nNode = nNode2;
                         aPam.GetMark()->nContent.Assign(
                                 rNds[ nNode2 ]->GetCntntNode(), nCntnt2 );
 
                         pDoc->deleteBookmark( pDoc->getBookmarks().Count() - n );
-                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName, IDocumentBookmarkAccess::BOOKMARK );
+                        // --> OD 2007-10-17 #i81002#
+                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ),
+                                            aName, aShortName, eBkmkType );
+                        // <--
                         break;
                     }
                     nNd = nNode2;
                     nCnt = nCntnt2;
-                    pPos = (SwPosition*)(*ppBkmks)->GetOtherPos();
+                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // Do not directly manipulate member of <SwBookmark>
+//                    pPos = (SwPosition*)(*ppBkmks)->GetOtherBookmarkPos();
+                    SwPosition aNewPos( *((*ppBkmks)->GetOtherBookmarkPos()) );
+                    aNewPos.nNode = nNd;
+                    aNewPos.nContent.Assign( rNds[ aNewPos.nNode ]->GetCntntNode(),
+                                             nCnt );
+                    (*ppBkmks)->SetOtherBookmarkPos( &aNewPos );
+                    // <--
                 }
 
-                pPos->nNode = nNd;
-                pPos->nContent.Assign( rNds[ pPos->nNode ]->GetCntntNode(),
-                                        nCnt );
+                // --> OD 2007-10-10 #i81002# - refactoring
+                // Do not directly manipulate member of <SwBookmark>
+//                pPos->nNode = nNd;
+//                pPos->nContent.Assign( rNds[ pPos->nNode ]->GetCntntNode(),
+//                                        nCnt );
+                // <--
                 break;
             }
     }
@@ -827,8 +860,8 @@ void SwHstryBookmark::SetInDoc( SwDoc* pDoc, BOOL )
 
 BOOL SwHstryBookmark::IsEqualBookmark( const SwBookmark& rBkmk )
 {
-    return nNode1 == rBkmk.GetPos().nNode.GetIndex() &&
-           nCntnt1 == rBkmk.GetPos().nContent.GetIndex() &&
+    return nNode1 == rBkmk.GetBookmarkPos().nNode.GetIndex() &&
+           nCntnt1 == rBkmk.GetBookmarkPos().nContent.GetIndex() &&
             aName == rBkmk.GetName() &&
             aShortName == rBkmk.GetShortName() &&
             nKeyCode == (rBkmk.GetKeyCode().GetCode() |
