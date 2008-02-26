@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:55 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,12 @@
 #endif
 
 #include <tools/solar.h>
+#include <comphelper/string.hxx>
 #ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
@@ -142,6 +140,8 @@
 #include <w1par.hxx>
 #endif
 
+#include <docsh.hxx>
+
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
@@ -154,6 +154,9 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #define MAX_FIELDLEN 64000
 
@@ -1580,21 +1583,26 @@ void Ww1Dop::Out(Ww1Shell& rOut)
 ///////////////////////////////////////////////////////////////// Assoc
 void Ww1Assoc::Out(Ww1Shell& rOut)
 {
-    SfxDocumentInfo* pInfo;
-    if (rOut.GetDoc().GetpInfo()) //~ mdt: besser (GetDoc)
-        pInfo = new SfxDocumentInfo(*rOut.GetDoc().GetpInfo());
-    else
-        pInfo = new SfxDocumentInfo();
 //~ mdt: fehlen: FileNext, Dot, DataDoc, HeaderDoc, Criteria1,
 // Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7
-    pInfo->SetTitle( GetStr(Title) );
-    pInfo->SetTheme( GetStr(Subject) );
-    pInfo->SetComment( GetStr(Comments) );
-    pInfo->SetKeywords( GetStr(KeyWords) );
-    pInfo->SetCreated( GetStr(Author) );
-    pInfo->SetChanged( GetStr(LastRevBy) );
-    rOut.GetDoc().SetDocumentInfo(*pInfo);
-    delete pInfo;
+    SwDocShell *pDocShell(rOut.GetDoc().GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        if (xDocProps.is()) {
+            xDocProps->setTitle( GetStr(Title) );
+            xDocProps->setSubject( GetStr(Subject) );
+            xDocProps->setDescription( GetStr(Comments) );
+            xDocProps->setKeywords(
+              ::comphelper::string::convertCommaSeparated( GetStr(KeyWords) ) );
+            xDocProps->setAuthor( GetStr(Author) );
+            xDocProps->setModifiedBy( GetStr(LastRevBy) );
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////// StyleSheet
