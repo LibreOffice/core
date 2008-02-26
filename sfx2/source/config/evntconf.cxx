@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:05:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,6 @@
 #include <sot/storage.hxx>
 #include <svtools/securityoptions.hxx>
 
-#ifndef GCC
-#endif
-
 #ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
 #endif
@@ -82,7 +79,6 @@
 #include "config.hrc"
 #include "sfxresid.hxx"
 #include <sfx2/macropg.hxx>
-#include <sfx2/docinf.hxx>
 #include "eventsupplier.hxx"
 
 //#include <sfx2/sfxsids.hrc>
