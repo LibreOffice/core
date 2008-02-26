@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:57:30 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,6 +361,8 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_THEAD_OFF:
     case HTML_TBODY_ON:
     case HTML_TBODY_OFF:
+    case HTML_TITLE_ON:
+    case HTML_TITLE_OFF:
     // inline elements, structural markup
     // HTML 3.0
     case HTML_BANNER_ON:
