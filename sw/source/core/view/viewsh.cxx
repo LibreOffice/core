@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:50:15 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2714,4 +2714,14 @@ IDocumentContentOperations* ViewShell::getIDocumentContentOperations() { return 
 IDocumentStylePoolAccess* ViewShell::getIDocumentStylePoolAccess() { return pDoc; }
 const IDocumentStatistics* ViewShell::getIDocumentStatistics() const { return pDoc; }
 IDocumentUndoRedo* ViewShell::getIDocumentUndoRedoAccess() { return pDoc; }
+// --> OD 2007-11-14 #i83479#
+const IDocumentListItems* ViewShell::getIDocumentListItemsAccess() const
+{
+    return pDoc;
+}
+const IDocumentOutlineNodes* ViewShell::getIDocumentOutlineNodesAccess() const
+{
+    return pDoc;
+}
+// <--
 
