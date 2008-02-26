@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:00:04 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@ namespace DOM
         CElement(const xmlNodePtr aNodePtr);
 
     public:
+
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
         /**
         Retrieves an attribute value by name.
@@ -179,6 +182,8 @@ namespace DOM
             throw (RuntimeException);
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
             throw (RuntimeException);
+        virtual OUString SAL_CALL getLocalName()
+            throw (RuntimeException);
 
         // resolve uno inheritance problems...
         // --- delegation for XNde base.
@@ -206,11 +211,6 @@ namespace DOM
             throw (RuntimeException)
         {
             return CNode::getLastChild();
-        }
-        virtual OUString SAL_CALL getLocalName()
-            throw (RuntimeException)
-        {
-            return CNode::getLocalName();
         }
         virtual OUString SAL_CALL getNamespaceURI()
             throw (RuntimeException)
