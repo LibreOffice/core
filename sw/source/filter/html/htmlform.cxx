@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:48:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,6 @@
 
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_OBJUNO_HXX //autogen
-#include <sfx2/objuno.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/viewfrm.hxx>
