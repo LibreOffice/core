@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:21:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,9 @@ public:
     void                    FinishStyles();
 
     // namespace office
+
+    // NB: in contrast to other CreateFooContexts, this particular one handles
+    //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateScriptContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
@@ -208,7 +211,8 @@ public:
                              const SfxItemSet **ppItemSet=0,
                              ::rtl::OUString *pParent=0 ) const;
 
-    virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+    virtual void SetStatistics(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
