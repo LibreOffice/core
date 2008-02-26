@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: adabasui_resource.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:55:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _ADABASUI_RESOURCE_HRC_
+#define _ADABASUI_RESOURCE_HRC_
+
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+#define RID_DIALOG_START                RID_DB_EXTENSIONS_START
+#define RID_PAGE_START                  RID_DB_EXTENSIONS_START
+#define RID_ERRORBOX_START              RID_DB_EXTENSIONS_START
+#define RID_QUERYBOX_START              RID_DB_EXTENSIONS_START
+#define RID_TOOLBOX_START               RID_DB_EXTENSIONS_START
+#define RID_BITMAP_START                RID_DB_EXTENSIONS_START
+#define RID_IMAGE_START                 RID_DB_EXTENSIONS_START
+#define RID_IMAGELIST_START             RID_DB_EXTENSIONS_START
+#define RID_MENU_START                  RID_DB_EXTENSIONS_START
+#define RID_STRING_START                RID_DB_EXTENSIONS_START
+#define RID_UNTYPED_START               RID_DB_EXTENSIONS_START
+#define RID_WARN_START                  RID_DB_EXTENSIONS_START
+
+//========================================================================
+// dialog ids
+
+#define DLG_ADABAS_NEWDB                RID_DIALOG_START + 0
+//========================================================================
+// images
+
+#define CHECK_GREEN                     RID_IMAGE_START + 0
+#define UNCHECK_RED                     RID_IMAGE_START + 1
+#define DEFAULT_BLUE                    RID_IMAGE_START + 2
+
+//========================================================================
+// warning boxes
+
+#define INFO_STR_MAX_FILE_LENGTH        RID_WARN_START +  0
+
+//========================================================================
+// strings
+
+#define STR_ADABAS_NO_BACKUP_FILE           RID_STRING_START + 0
+#define STR_ADABAS_NOT_ENOUGH_SPACE         RID_STRING_START + 1
+#define STR_NO_SAME_USER                    RID_STRING_START + 2
+#define STR_DEVSPACE_NO_FILE                RID_STRING_START + 3
+#define STR_NO_PERMISSION                   RID_STRING_START + 4
+#define STR_FILE_OR_DIR_UNKNOWN             RID_STRING_START + 5
+#define STR_STAT_WARNING                    RID_STRING_START + 6
+#define STR_ADABAS_NO_NEW_CONFIG_FILE       RID_STRING_START + 7
+#define STR_ADABAS_NO_PARAM_SET             RID_STRING_START + 8
+#define STR_ADABAS_NO_SERVER_START          RID_STRING_START + 9
+#define STR_ADABAS_WRONG_KERNEL_PARAMETER   RID_STRING_START + 10
+#define STR_ADABAS_NO_DB_CREATED            RID_STRING_START + 11
+#define STR_ADABAS_NO_SYSTEM_TABLES         RID_STRING_START + 12
+#define STR_ERROR_IN_ADABAS_INSTALLATION    RID_STRING_START + 13
+#define STR_ADABAS_CREATEFILES              RID_STRING_START + 14
+#define STR_ADABAS_CREATEPARAM_FILE         RID_STRING_START + 15
+#define STR_ADABAS_START_DATABASE           RID_STRING_START + 16
+#define STR_ADABAS_DB_EXISTS                RID_STRING_START + 17
+#define STR_ADABAS_NO_DEFAULTNAME           RID_STRING_START + 18
+#define STR_ADABAS_NO_ACCESSRIGHTS          RID_STRING_START + 19
+#define STR_ADABAS_CANNOT_CONVERT           RID_STRING_START + 20
+#define STR_ADABAS_PASSWORD_ILLEGAL         RID_STRING_START + 21
+
+
+#endif //  _ADABASUI_RESOURCE_HRC_
+
