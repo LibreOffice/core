@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:31:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,14 +594,14 @@ String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
 #if OSL_DEBUG_LEVEL > 1
     {
-        sal_Int32 nCol, nRow;
-        lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow);
+        sal_Int32 nCol, nRow2;
+        lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow2);
         DBG_ASSERT( nCol == 51, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("AA1"), nCol, nRow);
+        lcl_GetCellPosition( String::CreateFromAscii("AA1"), nCol, nRow2);
         DBG_ASSERT( nCol == 52, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("AB1"), nCol, nRow);
+        lcl_GetCellPosition( String::CreateFromAscii("AB1"), nCol, nRow2);
         DBG_ASSERT( nCol == 53, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("BB1"), nCol, nRow);
+        lcl_GetCellPosition( String::CreateFromAscii("BB1"), nCol, nRow2);
         DBG_ASSERT( nCol == 105, "lcl_GetCellPosition failed" );
     }
 #endif
