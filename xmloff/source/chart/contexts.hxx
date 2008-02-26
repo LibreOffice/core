@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contexts.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:53:45 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include <xmloff/xmltkmap.hxx>
 #endif
 
+#include <xmloff/xmlmetai.hxx>
+
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
         class XAttributeList;
 }}}}}
@@ -57,9 +59,9 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 
    ======================================== */
 
-class SchXMLDocContext : public SvXMLImportContext
+class SchXMLDocContext : public virtual SvXMLImportContext
 {
-private:
+protected:
     SchXMLImportHelper& mrImportHelper;
 
 public:
@@ -76,6 +78,27 @@ public:
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+};
+
+// ========================================
+
+// context for flat file xml format
+class SchXMLFlatDocContext_Impl
+    : public SchXMLDocContext, public SvXMLMetaDocumentContext
+{
+public:
+    SchXMLFlatDocContext_Impl(
+        SchXMLImportHelper& i_rImpHelper,
+        SchXMLImport& i_rImport,
+        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
+        const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps,
+        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& i_xDocBuilder);
+
+    virtual ~SchXMLFlatDocContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
+        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList);
 };
 
 // ========================================
