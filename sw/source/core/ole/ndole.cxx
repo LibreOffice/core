@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:25:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ Graphic* SwOLENode::GetHCGraphic()
     return aOLEObj.xOLERef.GetHCGraphic();
 }
 
-SwCntntNode *SwOLENode::SplitNode( const SwPosition & )
+SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??
     ASSERT( FALSE, "OleNode: can't split." );
