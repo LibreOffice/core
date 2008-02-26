@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:40:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,12 @@
 #endif
 
 #include "fldpage.hxx"
+// --> OD 2007-11-15 #i83479#
+#include <IDocumentOutlineNodes.hxx>
+#include <IDocumentListItems.hxx>
+#include <FldRefTreeListBox.hxx>
+class SwTxtNode;
+// <--
 
 /*--------------------------------------------------------------------
    Beschreibung:
@@ -66,15 +72,31 @@ class SwFldRefPage : public SwFldPage
     ListBox         aTypeLB;
     FixedText       aSelectionFT;
     ListBox         aSelectionLB;
+    // --> OD 2007-11-21 #i83479#
+    SwFldRefTreeListBox aSelectionToolTipLB;
+    // <--
     FixedText       aFormatFT;
     ListBox         aFormatLB;
     FixedText       aNameFT;
     Edit            aNameED;
     FixedText       aValueFT;
     Edit            aValueED;
-    String          sBookmarkTxt;
-    String          sFootnoteTxt;
-    String          sEndnoteTxt;
+    const String    sBookmarkTxt;
+    const String    sFootnoteTxt;
+    const String    sEndnoteTxt;
+    // --> OD 2007-11-09 #i83479#
+    const String    sHeadingTxt;
+    const String    sNumItemTxt;
+
+    IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
+    IDocumentListItems::tSortedNodeNumList maNumItems;
+
+    // selected text node in the listbox for headings and numbered items
+    // in order to restore selection after update of selection listbox
+    const SwTxtNode* mpSavedSelectedTxtNode;
+    // fallback, if previously selected text node doesn't exist anymore
+    sal_uInt16 mnSavedSelectedPos;
+    // <--
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
@@ -82,6 +104,12 @@ class SwFldRefPage : public SwFldPage
 
     void                UpdateSubType();
     USHORT              FillFormatLB(USHORT nTypeId);
+
+    // --> OD 2007-12-05 #i83479#
+    void SaveSelectedTxtNode();
+    const SwTxtNode* GetSavedSelectedTxtNode() const;
+    const sal_uInt16 GetSavedSelectedPos() const;
+    // <--
 
 protected:
     virtual USHORT      GetGroup();
