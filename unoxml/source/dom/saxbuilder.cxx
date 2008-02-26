@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxbuilder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:01:49 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #pragma warning(disable : 4701)
 #endif
 
-#include <stdio.h>
 #include "node.hxx"
 #include "saxbuilder.hxx"
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
@@ -122,17 +121,6 @@ namespace DOM
         if (m_aState != SAXDocumentBuilderState_DOCUMENT_FINISHED)
             throw RuntimeException();
 
-        // some debugging...
-
-    xmlNodePtr pNode = CNode::getNodePtr(m_aDocument.get());
-        if( pNode->type == XML_DOCUMENT_NODE )
-        {
-            xmlDocPtr pDoc = (xmlDocPtr)pNode;
-            FILE *f = fopen("c:\\xmlout.xml", "w");
-            xmlDocDump(f, pDoc);
-            fclose(f);
-        }
-
         return m_aDocument;
     }
 
@@ -178,7 +166,6 @@ namespace DOM
     void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (RuntimeException, SAXException)
     {
 
-        fprintf(stderr, "startdocument\n");
         // start a new document and push it onto the stack
         // we have to be in a clean state to do this
         if (!m_aState == SAXDocumentBuilderState_READY)
@@ -194,7 +181,6 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endDocument() throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "enddocument\n");
         // there should only be the document left on the node stack
         if (!m_aState == SAXDocumentBuilderState_BUILDING_DOCUMENT)
             throw SAXException();
@@ -209,12 +195,9 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "startElement <%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
-
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
         {
-            fprintf(stderr, "illegal state in startElement()\n");
             throw SAXException();
         }
 
@@ -239,15 +222,10 @@ namespace DOM
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));
-                fprintf(stderr, "new namespace mapping: %s -> %s\n",
-                    OUStringToOString(newprefix, RTL_TEXTENCODING_UTF8).getStr(),
-                    OUStringToOString(attr_value, RTL_TEXTENCODING_UTF8).getStr());
             }
             else if (attr_qname == OUString::createFromAscii("xmlns"))
             {
                 // new default prefix
-                fprintf(stderr, "new default NS: %s\n",
-                    OUStringToOString(attr_value, RTL_TEXTENCODING_UTF8).getStr());
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));
             }
             else
@@ -300,10 +278,6 @@ namespace DOM
             else
                 aPrefix = OUString();
 
-             fprintf(stderr, "set attribute: %s=\"%s\"\n",
-                OUStringToOString(attr_qname, RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(attr_value, RTL_TEXTENCODING_UTF8).getStr());
-
             result = aNSMap.find(aPrefix);
             if (result != aNSMap.end())
             {
@@ -321,7 +295,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "endElement </%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
         // pop the current element from the stack
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -349,7 +322,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::characters(const OUString& aChars)
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "characters [%s]\n", OUStringToOString(aChars, RTL_TEXTENCODING_UTF8).getStr());
         //  append text node to the current top element
          if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -359,10 +331,9 @@ namespace DOM
          m_aNodeStack.top()->appendChild(Reference< XNode >(aText, UNO_QUERY));
     }
 
-    void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& aSpaces)
+    void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& )
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "whitespace: [%s]\n", OUStringToOString(aSpaces, RTL_TEXTENCODING_UTF8).getStr());
         //  ignore ignorable whitespace
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -372,8 +343,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::processingInstruction(const OUString& aTarget, const OUString& aData)
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "processinginstruction: [target=%s, data=%s]\n", OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8).getStr(),
-                OUStringToOString(aData, RTL_TEXTENCODING_UTF8).getStr());
         //  append PI node to the current top
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -387,7 +356,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)
         throw (RuntimeException, SAXException)
     {
-        fprintf(stderr, "setdocumentlocator\n");
         // set the document locator...
         m_aLocator = aLocator;
     }
