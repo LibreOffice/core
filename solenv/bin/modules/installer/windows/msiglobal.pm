@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 14:55:30 $
+#   last change: $Author: obo $ $Date: 2008-02-26 16:00:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1286,16 +1286,6 @@ sub copy_child_projects_into_installset
     {
         $sourcefile = $installer::globals::javafile->{'sourcepath'};
         $destdir = $installdir . $installer::globals::separator . $installer::globals::javafile->{'Subdir'};
-        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
-    }
-
-    # adding Adabas ( complete directory )
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $sourcefile = $installer::globals::adafile->{'sourcepath'};
-        $destdir = $installdir . $installer::globals::separator . $installer::globals::adafile->{'Subdir'};
         if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
         installer::systemactions::copy_one_file($sourcefile, $destdir);
     }
