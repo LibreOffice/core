@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:53:20 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,8 +162,10 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
                 pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
-            if( nFlags & IMPORT_META )
-                pContext = new SfxXMLMetaContext( GetImport(), nPrefix, rLocalName, GetImport().GetModel());
+          // we come here in the flat ODF file format,
+          // if XDocumentPropertiesSupplier is not supported at the model
+//        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+            pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_BODY:
             if( nFlags & IMPORT_CONTENT )
@@ -176,6 +178,40 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
+}
+
+// ==================================================
+
+SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
+        SchXMLImportHelper& i_rImpHelper,
+        SchXMLImport& i_rImport,
+        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+    SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
+    SchXMLDocContext(i_rImpHelper, i_rImport, i_nPrefix, i_rLName),
+    SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
+        i_xDocProps, i_xDocBuilder)
+{
+}
+
+SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
+
+
+SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
+    USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
+{
+    // behave like meta base class iff we encounter office:meta
+    const SvXMLTokenMap& rTokenMap =
+        mrImportHelper.GetDocElemTokenMap();
+    if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
+        return SvXMLMetaDocumentContext::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    } else {
+        return SchXMLDocContext::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    }
 }
 
 // ----------------------------------------
