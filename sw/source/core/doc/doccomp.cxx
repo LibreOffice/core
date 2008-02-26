@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:33:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
 #endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
-#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -87,6 +84,10 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
+#include <docsh.hxx>
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1451,19 +1452,31 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
     //              document info
     USHORT nAuthor = rDoc.GetRedlineAuthor();
     DateTime aTimeStamp;
-    const SfxDocumentInfo* pDocInfo;
-    if( bUseDocInfo && 0 != (pDocInfo = rDoc.GetpInfo()) )
-    {
-        String aTmp( 1 == pDocInfo->GetDocumentNumber()
-                            ? pDocInfo->GetAuthor()
-                            : pDocInfo->GetModificationAuthor() );
-        DateTime aDT( 1 == pDocInfo->GetDocumentNumber()
-                            ? pDocInfo->GetCreationDate()
-                            : pDocInfo->GetModificationDate() );
-        if( aTmp.Len() )
-        {
-            nAuthor = rDoc.InsertRedlineAuthor( aTmp );
-            aTimeStamp = aDT;
+    SwDocShell *pDocShell(rDoc.GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+
+        if( bUseDocInfo && xDocProps.is() ) {
+            String aTmp( 1 == xDocProps->getEditingCycles()
+                                ? xDocProps->getAuthor()
+                                : xDocProps->getModifiedBy() );
+            util::DateTime uDT( 1 == xDocProps->getEditingCycles()
+                                ? xDocProps->getCreationDate()
+                                : xDocProps->getModificationDate() );
+            Date d(uDT.Day, uDT.Month, uDT.Year);
+            Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+            DateTime aDT(d,t);
+
+            if( aTmp.Len() )
+            {
+                nAuthor = rDoc.InsertRedlineAuthor( aTmp );
+                aTimeStamp = aDT;
+            }
         }
     }
 
