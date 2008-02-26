@@ -1,0 +1,273 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XGrammarChecker.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:52:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XGrammarChecker_idl__
+#define __com_sun_star_linguistic2_XGrammarChecker_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XSupportedLocales_idl__
+#include <com/sun/star/linguistic2/XSupportedLocales.idl>
+#endif
+
+#ifndef __com_sun_star_text_XFlatParagraph_idl__
+#include <com/sun/star/text/XFlatParagraph.idl>
+#endif
+
+
+//---------------------------------------Note----------------------------------
+// to maintain state info (keep track of the "lifetime" of documents
+// and the respective current paragrah in respect to grammar checking
+//-----------------------------------------------------------------------------
+
+//=============================================================================
+
+module com {  module sun {  module star {  module linguistic2 {
+
+//=============================================================================
+interface XGrammarChecker: com::sun::star::linguistic2::XSupportedLocales
+{
+
+    //-------------------------------------------------------------------------
+    /** whether is the text checked by the spellchecker
+
+        @returns
+                  <TRUE/>  If yes,
+                  <FALSE/> otherwise.
+    */
+    boolean isSpellChecker( [in] com::sun::star::lang::Locale aLocale );
+
+
+    //-------------------------------------------------------------------------
+    /** start checking document. This enables the grammar checker to maintain
+        state information about the document
+
+        @param  nDocId
+                the Document ID.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void startDocument( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** start checking paragraph
+
+        @param  nDocId
+                the Document ID.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void startParagraph( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** end checking paragraph
+
+        @param  nDocId
+                the Document ID.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void endParagraph( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** end checking document
+
+        @param  nDocId
+                the Document ID.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void endDocument( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** start checking
+
+        @param  nDocId
+                the Document ID.
+
+        @param  rFlatParaText
+                the flat text to be checked.
+
+        @param  xFlatPara
+                the flat paragraph to be checked.
+
+        @param  aLocale
+                Language used in the text.
+
+        @param  nStartOfSentencePos
+                Start Index of the text.
+
+        @param  nSuggestedSentenceEndPos
+                Probable end position of the text.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void doGrammarChecking( [in] long nDocId,
+                            [in] com::sun::star::text::XFlatParagraph xFlatPara, //string rFlatParaText,
+                            [in] com::sun::star::lang::Locale aLocale,
+                            [in] long nStartOfSentencePos,
+                            [in] long nSuggestedSentenceEndPos )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** get the end position of the specific text
+
+        @param  nDocId
+                the Document ID.
+
+        @param  rFlatParaText
+                the text.
+
+        @param  aLocale
+                Language used in the text.
+
+        @param  nStartOfSentencePos
+                Start Index of the text.
+
+        @returns
+                the locale for the language identified.
+                If no language could be identified, the locale will be empty.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    long  getEndOfSentencePos( [in] long nDocId,
+                               [in] string aFlatParaText,
+                               [in] com::sun::star::lang::Locale aLocale,
+                               [in] long nStartOfSentencePos )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** get the start index of the specific text
+
+        @param  nDocId
+                the Document ID.
+
+        @param  rFlatParaText
+                the text.
+
+        @param  aLocale
+                Language used in the text.
+
+        @returns
+                the locale for the language identified.
+                If no language could be identified, the locale will be empty.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    long  getStartOfSentencePos( [in] long nDocId,
+                                 [in] string aFlatParaText,
+                                 [in] com::sun::star::lang::Locale aLocale )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** check whether the checker needs the previous text to judge current grammar error
+
+        @returns
+                <TRUE/>  If it needs
+                <FALSE/> otherwise.
+
+    */
+    boolean requiresPreviousText();
+
+    //-------------------------------------------------------------------------
+    /** check whether the checker has the checking dialog
+
+        @returns
+                <TRUE/>  If it has
+                <FALSE/> otherwise.
+
+    */
+    boolean hasCheckingDialog();
+
+    //-------------------------------------------------------------------------
+    /** check whether the checker has the options dialog
+
+        @returns
+                <TRUE/>  If it has
+                <FALSE/> otherwise.
+
+    */
+    boolean hasOptionsDialog();
+
+    //-------------------------------------------------------------------------
+    /** call a dialog by which users can the grammar error.
+
+        @param  nDocId
+                the DocumentId.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void runCheckingDialog( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** call a dialog in order to display the setting options
+
+        @param  nDocId
+                the DocumentId.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void runOptionsDialog( [in] long nDocId )
+            raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
