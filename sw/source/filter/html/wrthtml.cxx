@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:40:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1165,7 +1165,7 @@ void SwHTMLWriter::OutBookmarks()
     // wird vorerst nicht beruecksichtigt!
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
     while( USHRT_MAX != nBkmkTabPos &&
-        pBookmark->GetPos().nNode.GetIndex() == nNode )
+        pBookmark->GetBookmarkPos().nNode.GetIndex() == nNode )
     {
         // Der Bereich derBookmark wird erstam ignoriert, da er von uns
         // auch nicht eingelesen wird.
