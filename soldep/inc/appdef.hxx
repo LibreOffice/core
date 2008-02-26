@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 10:51:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 08:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,55 +38,51 @@
 
 
 #ifdef UNX
-#define DEFAULT_INI_ROOT    "/develop6/update/dev"
-#define DEFAULT_EIS_ROOT    "/develop5/update/merge"
+#define DEFAULT_INI_ROOT    "/so/env"
+#define DEFAULT_BS_ROOT     "/so/env/b_server"
+#define DEFAULT_EIS_ROOT    "/so/env/merge"
 #define PATH_SEPARATOR      '/'
 #define S_PATH_SEPARATOR    "/"
 #else
-#ifdef MAC
-#define DEFAULT_INI_ROOT    "dev4.data1:s"
-#define PATH_SEPARATOR      ':'
-#define S_PATH_SEPARATOR    ":"
-#else
 #define DEFAULT_INI_ROOT    "r:"
+#define DEFAULT_BS_ROOT     "n:"
 #define DEFAULT_EIS_ROOT    "w:"
 #define PATH_SEPARATOR      '\\'
 #define S_PATH_SEPARATOR    "\\"
 #endif
-#endif
 
 #define _INI_DRV                DEFAULT_INI_ROOT
-#define DEFAULT_INI_FILE        DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "b_server.ini"
-#define B_SERVER_ROOT           DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server"
-#define BINARYROOT              DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "bin"
-#define _JOB_DIR                DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "db"
-#define _INJOB_DIR              DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dbin"
-#define _OUTJOB_DIR             DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dbout"
-#define _ERRJOB_DIR             DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dberr"
-#define _BUILDPATTERN_DIR       DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "pattern"
-#define _COMMENT_DIR            DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "comment"
-#define _SOLARLIST              DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "solar.lst"
-#define _DEF_STAND_LIST         DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "stand.lst"
-#define _DEF_DEFAULT_LIST       DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "default.lst"
-#define _DEF_SSOLARINI          DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "ssolar.ini"
-#define _DEF_SSCOMMON           DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "ssolar.cmn"
-#define _SERVER_IDENT_FLAG      DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "server.id"
-#define _CUSTOMJOBINI           DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "custom.ini"
-#define _BUILDCOMMANDINI        DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "bcommand.ini"
-#define _DATABASEINI            DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "database.ini"
-#define _ZNINI                  DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "bszn.ini"
-#define _ERRORINFOFILE          DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "errinf.lst"
-#define _REGEXPINFOFILE         DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "regexp.lst"
-#define _POSITIVERRORINFOFILE   DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "perrinf.lst"
-#define _POSITIVREGEXPINFOFILE  DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "pregexp.lst"
-#define _INIROOT                DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config"
-#define _INIROOT_OLD            DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config"
-#define _ENV_DIR                DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "config"
-#define _REDIRECTIONPATH        DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "redir"
-#define _ZLOGSPATH              DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "zlogs"
-#define DEFAULT_PROTPATH        DEFAULT_INI_ROOT S_PATH_SEPARATOR "b_server" S_PATH_SEPARATOR "filesize"
-#define _INI_UNC                "\\\\grande-11050.germany.sun.com\\R-Laufwerk"
-#define _INI_UNC_OLD            "\\\\grande-11050.germany.sun.com\\R-Laufwerk\\s"
+#define B_SERVER_ROOT           DEFAULT_BS_ROOT
+#define DEFAULT_INI_FILE        B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "b_server.ini"
+#define BINARYROOT              B_SERVER_ROOT S_PATH_SEPARATOR "bin"
+#define _JOB_DIR                B_SERVER_ROOT S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "db"
+#define _INJOB_DIR              B_SERVER_ROOT S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dbin"
+#define _OUTJOB_DIR             B_SERVER_ROOT S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dbout"
+#define _ERRJOB_DIR             B_SERVER_ROOT S_PATH_SEPARATOR "server" S_PATH_SEPARATOR "dberr"
+#define _BUILDPATTERN_DIR       B_SERVER_ROOT S_PATH_SEPARATOR "pattern"
+#define _COMMENT_DIR            B_SERVER_ROOT S_PATH_SEPARATOR "comment"
+#define _SOLARLIST              B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "solar.lst"
+#define _DEF_STAND_LIST         B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "stand.lst"
+#define _DEF_DEFAULT_LIST       B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "default.lst"
+#define _DEF_SSOLARINI          B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "ssolar.ini"
+#define _DEF_SSCOMMON           B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "ssolar.cmn"
+#define _SERVER_IDENT_FLAG      B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "server.id"
+#define _CUSTOMJOBINI           B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "custom.ini"
+#define _BUILDCOMMANDINI        B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "bcommand.ini"
+#define _DATABASEINI            B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "database.ini"
+#define _ZNINI                  B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "bszn.ini"
+#define _ERRORINFOFILE          B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "errinf.lst"
+#define _REGEXPINFOFILE         B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "regexp.lst"
+#define _POSITIVERRORINFOFILE   B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "perrinf.lst"
+#define _POSITIVREGEXPINFOFILE  B_SERVER_ROOT S_PATH_SEPARATOR "config" S_PATH_SEPARATOR "pregexp.lst"
+#define _INIROOT                B_SERVER_ROOT S_PATH_SEPARATOR "config"
+#define _INIROOT_OLD            B_SERVER_ROOT S_PATH_SEPARATOR "config"
+#define _ENV_DIR                B_SERVER_ROOT S_PATH_SEPARATOR "config"
+#define _REDIRECTIONPATH        B_SERVER_ROOT S_PATH_SEPARATOR "redir"
+#define _ZLOGSPATH              B_SERVER_ROOT S_PATH_SEPARATOR "zlogs"
+#define DEFAULT_PROTPATH        B_SERVER_ROOT S_PATH_SEPARATOR "filesize"
+#define _INI_UNC                "\\\\jumbo2.germany.sun.com\\R-Laufwerk"
+#define _INI_UNC_OLD            "\\\\jumbo2.germany.sun.com\\R-Laufwerk"
 #define LOG_DIR                 B_SERVER_ROOT S_PATH_SEPARATOR "log"
 
 #define _REDIRECTIONSIZE        "10000"
