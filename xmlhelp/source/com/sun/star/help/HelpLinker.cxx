@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:55:14 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,14 @@
 
 #include <sal/types.h>
 #include <osl/time.h>
+
+#ifdef SYSTEM_EXPAT
+#include <expat.h>
+#else
+#ifndef XmlParse_INCLUDED
+#include <expat/xmlparse.h>
+#endif
+#endif
 
 class JarOutputStream
 {
@@ -5590,6 +5598,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
     return *this;
 }
 
+
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
@@ -5600,8 +5609,6 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 )
 {
     bool bSuccess = true;
-
-    sal_uInt32 starttime = osl_getGlobalTimer();
 
     sal_Int32 argc = nXhpFileCount + 3;
     const char** argv = new const char*[argc];
@@ -5655,13 +5662,43 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     // Reset error handler
     xmlSetStructuredErrorFunc( NULL, NULL );
 
-    sal_uInt32 endtime = osl_getGlobalTimer();
-    double dTimeInSeconds = (endtime-starttime) / 1000.0;
-    (void)dTimeInSeconds;
+    // i83624: Tree files
+    ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
+    aTreeFileURL += rtl::OUString::createFromAscii( "/help.tree" );
+    osl::DirectoryItem aTreeFileItem;
+    osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
+    osl::FileStatus aFileStatus( FileStatusMask_FileSize );
+    if( rcGet == osl::FileBase::E_None &&
+        aTreeFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
+        aFileStatus.isValid( FileStatusMask_FileSize ) )
+    {
+        sal_uInt64 ret, len = aFileStatus.getFileSize();
+        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        osl::File aFile( aTreeFileURL );
+        aFile.open( OpenFlag_Read );
+        aFile.read( s, len, ret );
+        aFile.close();
+
+        XML_Parser parser = XML_ParserCreate( 0 );
+        int parsed = XML_Parse( parser, s, int( len ), true );
+
+        if( parsed == 0 )
+        {
+            XML_Error nError = XML_GetErrorCode( parser );
+            o_rHelpProcessingErrorInfo.m_eErrorClass = HELPPROCESSING_XMLPARSING_ERROR;
+            o_rHelpProcessingErrorInfo.m_aErrorMsg = rtl::OUString::createFromAscii( XML_ErrorString( nError ) );;
+            o_rHelpProcessingErrorInfo.m_aXMLParsingFile = aTreeFileURL;
+            // CRAHSES!!! o_rHelpProcessingErrorInfo.m_nXMLParsingLine = XML_GetCurrentLineNumber( parser );
+            bSuccess = false;
+        }
+
+        XML_ParserFree( parser );
+        delete[] s;
+    }
 
     return bSuccess;
 }
 
-
 // vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
