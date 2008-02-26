@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:28:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,10 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
- #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <boost/shared_ptr.hpp>
+
 
 //________________________________________________________________________________________________________________
 //  include something else
@@ -115,7 +118,6 @@ class SbxArray;
 class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
-class SfxDocumentInfo;
 class SfxDocumentInfoDialog;
 class SfxEventConfigItem_Impl;
 class SfxStyleSheetBasePool;
@@ -168,6 +170,12 @@ namespace sfx2
 }
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
+
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
+} } }
 
 typedef sal_uInt32 SfxObjectShellFlags;
 #define SFXOBJECTSHELL_HASOPENDOC      0x01L
@@ -261,8 +269,8 @@ public:
 private:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Construct_Impl();
-    SAL_DLLPRIVATE SfxDocumentInfo& UpdateTime_Impl(SfxDocumentInfo &);
-    SAL_DLLPRIVATE void DocInfoDlg_Impl( SfxDocumentInfo&, BOOL );
+    SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
     SAL_DLLPRIVATE sal_Bool MakeBackup_Impl(const String &rName,
                                                 sal_Bool bCopyAllways = sal_False);
 
@@ -290,6 +298,9 @@ protected:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void StartLoading_Impl();
 //#endif
+
+    /// template method, called by FlushDocInfo; this implementation is empty
+    virtual void                DoFlushDocInfo();
 
 public:
                                 TYPEINFO();
@@ -324,7 +335,8 @@ public:
     virtual SfxObjectFactory&   GetFactory() const=0;
     SfxMedium *                 GetMedium() const { return pMedium; }
     void                        ForgetMedium() { pMedium = 0; }
-    SfxDocumentInfo&            GetDocInfo();
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties > getDocProperties();
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
     sal_Bool                    HasName() const { return bHasName; }
@@ -467,7 +479,7 @@ public:
     virtual Size                GetFirstPageSize();
     virtual sal_Bool            DoClose();
     virtual void                PrepareReload();
-    virtual GDIMetaFile*        GetPreviewMetaFile( sal_Bool bFullContent = sal_False ) const;
+    virtual ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( sal_Bool bFullContent = sal_False ) const;
     virtual void                CancelTransfers();
 
     sal_Bool                    GenerateAndStoreThumbnail(
@@ -698,7 +710,7 @@ public:
 
 //#if 0 // _SOLAR__PRIVATE
 
-    SAL_DLLPRIVATE GDIMetaFile* CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
+    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
 
     SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
 
