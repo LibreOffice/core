@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Astringconstants.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:54:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef ADABASUI_STRINGCONSTANTS_HRC_
+#define ADABASUI_STRINGCONSTANTS_HRC_
+
+#ifndef STRINGCONSTANTS_INCLUDED_INDIRECT
+#error "don't include this file directly! use adabasuistrings.hrc instead!"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+//============================================================
+//= a helper for static ascii pseudo-unicode strings
+//============================================================
+// string constants
+struct _ConstAsciiString_
+{
+    sal_Int32 length;
+    sal_Char  const* str;
+
+    operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
+    operator const sal_Char* () const { return str; }
+};
+
+#define DECLARE_CONSTASCII_USTRING( name ) \
+    extern _ConstAsciiString_ const name
+
+#define IMPLEMENT_CONSTASCII_USTRING( name, string ) \
+    _ConstAsciiString_ const name = { sizeof(string)-1, string }
+
+//============================================================
+//= property ids
+//============================================================
+
+#define PROPERTY_ID_CREATECATALOG           3
+#define PROPERTY_ID_DATABASENAME            4
+#define PROPERTY_ID_CONTROL_USER            5
+#define PROPERTY_ID_CONTROL_PASSWORD        6
+#define PROPERTY_ID_USER                    7
+#define PROPERTY_ID_PASSWORD                8
+#define PROPERTY_ID_CACHESIZE               9
+
+//============================================================
+//= property names
+//============================================================
+
+DECLARE_CONSTASCII_USTRING(PROPERTY_CREATECATALOG);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DATABASENAME);
+DECLARE_CONSTASCII_USTRING(PROPERTY_USER);
+DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROL_USER);
+DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROL_PASSWORD);
+DECLARE_CONSTASCII_USTRING(PROPERTY_SYSDEVSPACE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_TRANSACTION_LOG);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DATADEVSPACE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_BACKUPNAME);
+DECLARE_CONSTASCII_USTRING(PROPERTY_PASSWORD);
+DECLARE_CONSTASCII_USTRING(PROPERTY_CACHESIZE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_CACHESIZE_INCREMENT);
+DECLARE_CONSTASCII_USTRING(PROPERTY_RESTOREDATABASE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DOMAINPASSWORD);
+DECLARE_CONSTASCII_USTRING(PROPERTY_LOGDEVSIZE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DATADEVSIZE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_SHUTDOWN);
+
+//============================================================
+//= SQLSTATE
+//============================================================
+DECLARE_CONSTASCII_USTRING(SQLSTATE_GENERAL);
+
+
+#endif // ADABASUI_STRINGCONSTANTS_HRC_
+
+
