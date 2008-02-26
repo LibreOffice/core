@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:35:49 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,9 +119,6 @@
 #ifndef _SFX_PRNMON_HXX //autogen
 #include <sfx2/prnmon.hxx>
 #endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -212,6 +209,10 @@
 #include "swslots.hxx"
 
 #include <unomid.h>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -384,11 +385,14 @@ SwSrcView::~SwSrcView()
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
-
-    SfxDocumentInfo& rDocInfo = pDocShell->GetDocInfo();
-    pDocShell->SetAutoLoad(INetURLObject(rDocInfo.GetReloadURL()),
-                                rDocInfo.GetReloadDelay(),
-                                rDocInfo.IsReloadEnabled() );
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps
+        = xDPS->getDocumentProperties();
+    ::rtl::OUString url = xDocProps->getAutoloadURL();
+    sal_Int32 delay = xDocProps->getAutoloadSecs();
+    pDocShell->SetAutoLoad(INetURLObject(url), delay,
+                            (delay != 0) || !url.equalsAscii(""));
 //  EndListening(*GetViewFrame());
     EndListening(*pDocShell);
     delete pSearchItem;
