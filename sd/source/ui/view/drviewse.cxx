@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:57:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,6 +424,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_OBJECT_SELECT:
         case SID_OBJECT_ROTATE:
         case SID_OBJECT_MIRROR:
+        case SID_OBJECT_CROP:
         case SID_OBJECT_TRANSPARENCE:
         case SID_OBJECT_GRADIENT:
         case SID_OBJECT_SHEAR:
