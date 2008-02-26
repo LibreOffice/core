@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:36:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@ class SwCharFmt;
 
 // --> OD 2007-07-09 #i77372#
 #include <SwNodeNum.hxx>
+// <--
+// --> OD 2007-10-17 #i81002#
+#include <IDocumentBookmarkAccess.hxx>
 // <--
 
 #ifndef PRODUCT
@@ -286,6 +289,9 @@ class SwHstryBookmark : public SwHstryHint
     xub_StrLen nCntnt1, nCntnt2;
     USHORT nKeyCode;
     BYTE nTyp;
+    // --> OD 2007-10-17 #i81002#
+    const IDocumentBookmarkAccess::BookmarkType eBkmkType;
+    // <--
 public:
     enum { BKMK_POS = 1, BKMK_OTHERPOS = 2 };
     SwHstryBookmark( const SwBookmark&, BYTE nTyp );
