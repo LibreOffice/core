@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:03:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1131,6 +1131,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_OBJECT_ROTATE );
         rSet.DisableItem( SID_OBJECT_SHEAR );
         rSet.DisableItem( SID_OBJECT_MIRROR );
+        rSet.DisableItem( SID_OBJECT_CROP );
+        rSet.DisableItem( SID_ATTR_GRAF_CROP );
         rSet.DisableItem( SID_OBJECT_TRANSPARENCE );
         rSet.DisableItem( SID_OBJECT_GRADIENT );
         rSet.DisableItem( SID_OBJECT_CROOK_ROTATE );
@@ -1420,6 +1422,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     //             disabled, if the marked objects not able to handle
     //             these attributes
     //
+
+    bool bSingleGraphicSelected = false;
+
     if (!mpDrawView->AreObjectsMarked())
     {
         rSet.DisableItem (SID_CONVERT_TO_METAFILE);
@@ -1437,7 +1442,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         BOOL bFoundNoGraphicObj = FALSE;
         BOOL bFoundAny            = FALSE;
 
-        for (int i=0; i < (int) aMarkList.GetMarkCount() && !bFoundAny; i++)
+//      const int nMarkCount = (int) aMarkList.GetMarkCount();
+        for (ULONG i=0; i < nMarkCount && !bFoundAny; i++)
         {
             SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
             UINT16 nId = pObj->GetObjIdentifier();
@@ -1463,6 +1469,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         bFoundNoGraphicObj = TRUE;
                         break;
                     case OBJ_GRAF :
+                        bSingleGraphicSelected = nMarkCount == 1;
                         switch ( ((SdrGrafObj*)pObj)->GetGraphicType() )
                         {
                             case GRAPHIC_BITMAP :
@@ -1509,6 +1516,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 rSet.DisableItem( SID_CONVERT_TO_METAFILE );
             }
         }
+    }
+
+    if( !bSingleGraphicSelected )
+    {
+        rSet.DisableItem (SID_OBJECT_CROP);
+        rSet.DisableItem (SID_ATTR_GRAF_CROP);
     }
 
     // #96090# moved SID_UNDO to ViewShell::GetMenuState()
