@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:20:14 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,33 +67,38 @@ struct SwPosition;  // fwd Decl. wg. UI
 
 class SwBookmark : public SwModify
 {
-    friend class SwDoc;         // fuers Loeschen
-//  friend class Sw3IoImp;      // fuers Setzen der Position(en)
-
     SwPosition *pPos1, *pPos2;  // wird im CTOR gesetzt, im DTOR geloescht
                                 // pPos1 is always != 0, pPos2 may be 0
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
 
 protected:
-    SvxMacro    aStartMacro;
-    SvxMacro    aEndMacro;
     String      aName;
     String      aShortName;
     KeyCode     aCode;
     IDocumentBookmarkAccess::BookmarkType eMarkType;
 
+    SwBookmark( const SwPosition& aPos,
+                const KeyCode& rCode,
+                const String& rName, const String& rShortName);
+
 public:
     TYPEINFO();
 
-    SwBookmark(const SwPosition& aPos);
-    SwBookmark(const SwPosition& aPos,
-        const KeyCode& rCode,
-        const String& rName, const String& rShortName);
+    SwBookmark( const SwPosition& aPos );
+    // --> OD 2007-09-26 #i81002#
+    SwBookmark( const SwPaM& aPaM,
+                const KeyCode& rCode,
+                const String& rName, const String& rShortName);
+    // <--
+
     // Beim Loeschen von Text werden Bookmarks mitgeloescht!
     virtual ~SwBookmark();
 
-    const SwPosition& GetPos() const { return *pPos1; }
-    const SwPosition* GetOtherPos() const { return pPos2; }
+    // --> OD 2007-10-10 #i81002#
+    // made virtual and thus no longer inline
+    virtual const SwPosition& GetBookmarkPos() const;
+    virtual const SwPosition* GetOtherBookmarkPos() const;
+    // <--
 
     // nicht undofaehig
     const String& GetName() const { return aName; }
@@ -108,17 +113,21 @@ public:
     // falls man wirklich auf gleiche Position abfragen will.
     BOOL IsEqualPos( const SwBookmark &rBM ) const;
 
-    BOOL IsBookMark() const     { return IDocumentBookmarkAccess::BOOKMARK == eMarkType; }
+    BOOL IsBookMark() const    { return IDocumentBookmarkAccess::BOOKMARK == eMarkType; }
+//    // --> OD 2007-10-17 #TESTING#
+//    BOOL IsBookMark() const
+//    {
+//        return IDocumentBookmarkAccess::BOOKMARK == eMarkType ||
+//               IsCrossRefMark();
+//    }
+//    // <--
     BOOL IsMark() const         { return IDocumentBookmarkAccess::MARK == eMarkType; }
-    BOOL IsDDEMark() const      { return IDocumentBookmarkAccess::DDE_BOOKMARK == eMarkType; }
     BOOL IsUNOMark() const      { return IDocumentBookmarkAccess::UNO_BOOKMARK == eMarkType; }
-    BOOL IsHiddenBookMark() const { return IDocumentBookmarkAccess::HIDDEN_BOOKMARK == eMarkType; }
+    // --> OD 2007-10-11 #i81002# - bookmark type for cross-references
+    BOOL IsCrossRefMark() const { return IDocumentBookmarkAccess::CROSSREF_BOOKMARK == eMarkType; }
+    // <--
     void SetType( IDocumentBookmarkAccess::BookmarkType eNewType )  { eMarkType = eNewType; }
     IDocumentBookmarkAccess::BookmarkType GetType() const   { return eMarkType; }
-
-    void SetStartMacro(const SvxMacro& rSt)     { aStartMacro = rSt; }
-    const SvxMacro& GetStartMacro()             { return aStartMacro; }
-    void SetEndMacro(const SvxMacro& rSt)       { aEndMacro = rSt; }
 
         // Daten Server-Methoden
     void SetRefObject( SwServerObject* pObj );
@@ -126,16 +135,18 @@ public:
           SwServerObject* GetObject()           {  return &refObj; }
     BOOL IsServer() const                       {  return refObj.Is(); }
 
+    // --> OD 2007-10-10 #i81002#
+    // made virtual and thus no longer inline
     // to access start and end of a bookmark.
     // start and end may be the same
-    const SwPosition *Start() const
-    {
-        return pPos2 ? (*pPos1 <= *pPos2 ? pPos1 : pPos2) : pPos1;
-    }
-    const SwPosition *End()   const
-    {
-        return pPos2 ? (*pPos1 >= *pPos2 ? pPos1 : pPos2) : pPos1;
-    }
+    virtual const SwPosition* BookmarkStart() const;
+    virtual const SwPosition* BookmarkEnd() const;
+    // <--
+
+    // --> OD 2007-09-26 #i81002#
+    virtual void SetBookmarkPos( const SwPosition* pNewPos1 );
+    virtual void SetOtherBookmarkPos( const SwPosition* pNewPos2 );
+    // <--
 
 private:
     // fuer METWARE:
@@ -147,17 +158,19 @@ private:
 class SwMark: public SwBookmark
 {
 public:
-    SwMark(const SwPosition& aPos,
-        const KeyCode& rCode,
-        const String& rName, const String& rShortName);
+    SwMark( const SwPosition& aPos,
+            const KeyCode& rCode,
+            const String& rName, const String& rShortName);
 };
 
 class SwUNOMark: public SwBookmark
 {
 public:
-    SwUNOMark(const SwPosition& aPos,
-        const KeyCode& rCode,
-        const String& rName, const String& rShortName);
+    // --> OD 2007-09-26 #i81002#
+    SwUNOMark( const SwPaM& aPaM,
+               const KeyCode& rCode,
+               const String& rName, const String& rShortName);
+    // <--
 };
 
 
