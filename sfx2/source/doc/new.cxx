@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:22:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,6 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -138,20 +135,21 @@
 
 void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 {
-    GDIMetaFile* pFile = pObj ? pObj->GetPreviewMetaFile( ) : 0;
-    delete pMetaFile;
+    ::boost::shared_ptr<GDIMetaFile> pFile = pObj
+        ? pObj->GetPreviewMetaFile()
+        : ::boost::shared_ptr<GDIMetaFile>();
     pMetaFile = pFile;
     Invalidate();
 }
 
 SfxPreviewBase_Impl::SfxPreviewBase_Impl(
     Window* pParent, const ResId& rResId )
-    : Window(pParent, rResId), pMetaFile( 0 )
+    : Window(pParent, rResId), pMetaFile()
 {
 }
 
 SfxPreviewBase_Impl::SfxPreviewBase_Impl( Window* pParent )
-    : Window(pParent, 0 ), pMetaFile( 0 )
+    : Window(pParent, 0 ), pMetaFile()
 {
     Resize();
     Show();
@@ -159,7 +157,6 @@ SfxPreviewBase_Impl::SfxPreviewBase_Impl( Window* pParent )
 
 SfxPreviewBase_Impl::~SfxPreviewBase_Impl()
 {
-    delete pMetaFile;
 }
 
 void SfxPreviewBase_Impl::Resize()
@@ -167,9 +164,8 @@ void SfxPreviewBase_Impl::Resize()
     Invalidate();
 }
 
-void SfxPreviewBase_Impl::SetGDIFile( GDIMetaFile* pFile )
+void SfxPreviewBase_Impl::SetGDIFile( ::boost::shared_ptr<GDIMetaFile> pFile )
 {
-    delete pMetaFile;
     pMetaFile = pFile;
     Invalidate();
 }
@@ -231,7 +227,7 @@ void SfxPreviewWin_Impl::ImpPaint(
 
 void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
 {
-    ImpPaint( rRect, pMetaFile, this );
+    ImpPaint( rRect, pMetaFile.get(), this );
 }
 
 SfxPreviewWin::SfxPreviewWin(
@@ -333,7 +329,6 @@ class SfxNewFileDialog_Impl
     USHORT nFlags;
     SfxDocumentTemplates aTemplates;
     SfxObjectShellLock xDocShell;
-    SfxDocumentInfo *pDocInfo;
     SfxNewFileDialog* pAntiImpl;
 
     void ClearInfo();
@@ -395,24 +390,6 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
         aPreviewWin.Invalidate();
         aPreviewWin.SetObjectShell( 0);
         return 0;
-    }
-
-    if (nFlags & SFXWB_DOCINFO)
-    {
-        // DocInfo anzeigen
-        const String aFile(
-            aTemplates.GetPath(aRegionLb.GetSelectEntryPos(), nEntry-1) );
-
-        // Dokumentinfo lesen und anzeigen
-        if (pAntiImpl->FillDocumentInfo(aFile, *pDocInfo))
-        {
-            aTitleEd.SetText(pDocInfo->GetTitle());
-            aThemaEd.SetText(pDocInfo->GetTheme());
-            aKeywordsEd.SetText(pDocInfo->GetKeywords());
-            aDescEd.SetText(pDocInfo->GetComment());
-        }
-        else
-            ClearInfo();
     }
 
     if ( aPreviewBtn.IsChecked() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
@@ -493,8 +470,6 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     aTemplateLb.SetUpdateMode(TRUE);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
-    if (nFlags & SFXWB_DOCINFO && aTemplateLb.GetEntryCount() >= 1)
-        TemplateSelect(&aTemplateLb);
     return 0;
 }
 
@@ -683,7 +658,6 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         aNone( SfxResId(STR_NONE) ),
         sLoadTemplate( SfxResId(STR_LOAD_TEMPLATE)),
         nFlags(nFl),
-        pDocInfo(0),
         pAntiImpl( pAntiImplP )
 {
     short nMoveOffset = *(short *)pAntiImplP->GetClassRes();
@@ -714,20 +688,6 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     else
     {
         MORE_BTN(SetClickHdl(LINK(this, SfxNewFileDialog_Impl, Expand)));
-        if(nFlags & SFXWB_DOCINFO)
-        {
-            MORE_BTN(AddWindow(&aTitleFt));
-            MORE_BTN(AddWindow(&aTitleEd));
-            MORE_BTN(AddWindow(&aThemaFt));
-            MORE_BTN(AddWindow(&aThemaEd));
-            MORE_BTN(AddWindow(&aKeywordsFt));
-            MORE_BTN(AddWindow(&aKeywordsEd));
-            MORE_BTN(AddWindow(&aDescFt));
-            MORE_BTN(AddWindow(&aDescEd));
-            MORE_BTN(AddWindow(&aDocinfoGb));
-            aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
-            pDocInfo = new SfxDocumentInfo;
-        }
         if((nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
         {
             MORE_BTN(AddWindow(&aPreviewBtn));
@@ -795,7 +755,6 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
     rExtra += '|';
     rExtra += aPreviewBtn.IsChecked() ? 'Y' : 'N';
 
-    delete pDocInfo;
     delete pMoreBt;
 }
 //-------------------------------------------------------------------------
@@ -828,23 +787,6 @@ String SfxNewFileDialog::GetTemplateName() const
 String SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();
-}
-//-------------------------------------------------------------------------
-BOOL SfxNewFileDialog::FillDocumentInfo
-(
-    const String&    /*rFile*/,    // Datei incl. Pfad, deren DocInfo gelesen werden soll
-    SfxDocumentInfo& /*rInfo*/  // DocInfo, die gefuellt werden soll
-)
-{
-    // TODO: may need reimplementation, but didn't work for xml anyway
-    return sal_False;
-//REMOVE        SvStorageRef aStor = new SvStorage(
-//REMOVE            rFile, STREAM_READ |STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
-//REMOVE        if ( SVSTREAM_OK != aStor->GetError() )
-//REMOVE            return FALSE;
-//REMOVE        BOOL bLoadOk;
-//REMOVE        bLoadOk=rInfo.Load(aStor);
-//REMOVE        return bLoadOk;
 }
 //-------------------------------------------------------------------------
 USHORT SfxNewFileDialog::GetTemplateFlags()const
