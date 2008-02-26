@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:28:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,14 @@ class GDIMetaFile;
 class SfxPreviewBase_Impl : public Window
 {
 protected:
-    GDIMetaFile*    pMetaFile;
+    ::boost::shared_ptr<GDIMetaFile> pMetaFile;
 public:
                     SfxPreviewBase_Impl( Window* pParent,
                                          const ResId& rResId );
                     SfxPreviewBase_Impl( Window* pParent );
                     ~SfxPreviewBase_Impl(  );
     void            SetObjectShell( SfxObjectShell* pObj );
-    void            SetGDIFile( GDIMetaFile* pFile );
+    void            SetGDIFile( ::boost::shared_ptr<GDIMetaFile> pFile );
     virtual void    Resize();
 };
 
