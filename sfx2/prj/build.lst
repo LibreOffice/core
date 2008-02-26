@@ -1,4 +1,4 @@
-sf      sfx2    :       idl basic xmlscript framework shell setup_native SYSTRAY_GTK:libegg NULL
+sf      sfx2    :       idl basic xmlscript framework shell setup_native sax SYSTRAY_GTK:libegg NULL
 sf	sfx2									usr1	-	all	sf_mkout NULL
 sf	sfx2\inc								nmake	-	all	sf_inc NULL
 sf	sfx2\prj								get		-	all	sf_prj NULL
