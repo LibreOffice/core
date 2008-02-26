@@ -41,7 +41,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_DEPLOYMENT_XPACKAGE_HPP_
+#include <com/sun/star/deployment/XPackage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include "com/sun/star/ucb/XSimpleFileAccess.hpp"
+#endif
 
 namespace treeview {
 
@@ -60,8 +65,8 @@ namespace treeview {
         rtl::OUString          m_vReplacement[5];
         rtl::OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
 
-        sal_uInt64    filelen[MAX_MODULE_COUNT];
-        rtl::OUString fileurl[MAX_MODULE_COUNT];
+        std::vector< sal_uInt64 >       vFileLen;
+        std::vector< rtl::OUString >    vFileURL;
         rtl::OUString locale,system;
         rtl::OUString appendix;
 
@@ -324,6 +329,71 @@ namespace treeview {
             rtl::OUString& instpath ) const;
 
     };  // end class TVChildTarget
+
+
+    enum IteratorState
+    {
+        USER_EXTENSIONS,
+        SHARED_EXTENSIONS,
+        END_REACHED
+    };
+
+    class ExtensionIteratorBase
+    {
+    public:
+        ExtensionIteratorBase( const rtl::OUString& aLanguage );
+        void init( void );
+
+    private:
+        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
+            ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
+              com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+
+    protected:
+        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextUserHelpPackage
+            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
+            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+
+        osl::Mutex                                                                  m_aMutex;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >    m_xSFA;
+
+        IteratorState                                                               m_eState;
+        rtl::OUString                                                               m_aLanguage;
+        rtl::OUString                                                               m_aCorrectedLanguage;
+
+        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+            < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
+        bool                                                                        m_bUserPackagesLoaded;
+
+        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+            < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
+        bool                                                                        m_bSharedPackagesLoaded;
+
+        int                                                                         m_iUserPackage;
+        int                                                                         m_iSharedPackage;
+
+    }; // end class ExtensionIteratorBase
+
+
+    //===================================================================
+    class TreeFileIterator : public ExtensionIteratorBase
+    {
+    public:
+        TreeFileIterator( const rtl::OUString& aLanguage )
+            : ExtensionIteratorBase( aLanguage )
+        {}
+
+        rtl::OUString nextTreeFile( sal_Int32& rnFileSize );
+
+    private:
+        rtl::OUString expandURL( const rtl::OUString& aURL );
+        rtl::OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
+            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+
+    }; // end class TreeFileIterator
+
 
 }
 
