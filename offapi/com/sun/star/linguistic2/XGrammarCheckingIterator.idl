@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XGrammarCheckingIterator.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:52:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XGrammarCheckingIterator_idl__
+#define __com_sun_star_linguistic2_XGrammarCheckingIterator_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_text_XFlatParagraphIteratorProvider_idl__
+#include <com/sun/star/text/XFlatParagraphIteratorProvider.idl>
+#endif
+
+#ifndef __com_sun_star_text_XFlatParagraph_idl__
+#include <com/sun/star/text/XFlatParagraph.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextDocument_idl__
+#include <com/sun/star/text/XTextDocument.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module linguistic2 {
+
+//=============================================================================
+interface XGrammarCheckingIterator: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** start grammar checking and automatically process the whole text
+
+        @param  xDoc
+                the text document.
+
+        @param  xIteratorProvider
+                the flat paragraph iterator provider.
+
+        @param  bAutomatic
+                automatic grammar checking.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void startGrammarChecking( [in] com::sun::star::uno::XInterface xDoc,
+                               [in] com::sun::star::text::XFlatParagraphIteratorProvider xIteratorProvider,
+                               [in] boolean bAutomatic )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** start grammar checking from one given position
+
+        @param  xDoc
+                the document.
+
+        @param  xStartPara
+                the single flat paragraph to be checked.
+
+        @param  nPosInPara
+                the given index.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+
+    void checkGrammarAtPos( [in] com::sun::star::uno::XInterface xDoc,
+                            [in] com::sun::star::text::XFlatParagraph xStartPara,
+                            [in] long nPosInPara )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** get the sentence boundary
+
+        @param  nSentenceStartPos
+                the start index of the sentence.
+
+        @returns
+                the end position.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    long getEndOfSentence( [in] long nSentenceStartPos )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** checks if the given document is currently being checked
+
+        @param  xDoc
+                the document.
+
+        @returns
+                if the document is currently being checked.
+    */
+    boolean isChecking( [in] com::sun::star::uno::XInterface xDoc );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
