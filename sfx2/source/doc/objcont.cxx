@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:04:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
@@ -65,9 +66,6 @@
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-
-#ifndef GCC
 #endif
 
 #include <svtools/stritem.hxx>
@@ -116,7 +114,6 @@
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/objuno.hxx>
 #include <sfx2/request.hxx>
 #include "openflag.hxx"
 
@@ -130,15 +127,42 @@ using namespace ::com::sun::star::uno;
 
 //====================================================================
 
-extern ::com::sun::star::util::DateTime impl_DateTime_Object2Struct( const ::DateTime& aDateTimeObject );
-extern ::DateTime impl_DateTime_Struct2Object ( const ::com::sun::star::util::DateTime& aDateTimeStruct );
+/*
+static
+bool operator< (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
+{
+    return i_rLeft.Year             < i_rRight.Year
+        || i_rLeft.Month            < i_rRight.Month
+        || i_rLeft.Day              < i_rRight.Day
+        || i_rLeft.Hours            < i_rRight.Hours
+        || i_rLeft.Minutes          < i_rRight.Minutes
+        || i_rLeft.Seconds          < i_rRight.Seconds
+        || i_rLeft.HundredthSeconds < i_rRight.HundredthSeconds;
+}
+*/
 
-GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
+static
+bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
+{
+    return i_rLeft.Year             > i_rRight.Year
+        || i_rLeft.Month            > i_rRight.Month
+        || i_rLeft.Day              > i_rRight.Day
+        || i_rLeft.Hours            > i_rRight.Hours
+        || i_rLeft.Minutes          > i_rRight.Minutes
+        || i_rLeft.Seconds          > i_rRight.Seconds
+        || i_rLeft.HundredthSeconds > i_rRight.HundredthSeconds;
+}
+
+
+::boost::shared_ptr<GDIMetaFile>
+SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
     return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
 }
 
-GDIMetaFile* SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
+
+::boost::shared_ptr<GDIMetaFile>
+SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
 {
     // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
     // werden, sonst wird u.U. der Printer abgeschossen !
@@ -146,9 +170,9 @@ GDIMetaFile* SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, 
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
-         return 0;
+         return ::boost::shared_ptr<GDIMetaFile>();
 
-    GDIMetaFile* pFile = new GDIMetaFile;
+    ::boost::shared_ptr<GDIMetaFile> pFile(new GDIMetaFile);
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
@@ -435,26 +459,40 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
 void SfxObjectShell::UpdateDocInfoForSave()
 {
-    SfxDocumentInfo &rDocInfo = GetDocInfo();
+    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
 
     // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
-    if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
-        rDocInfo.DeleteUserData();
+    if ( SvtSecurityOptions().IsOptionSet(
+            SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
+    {
+        xDocProps->resetUserData( ::rtl::OUString() );
+    }
     else if ( IsModified() )
     {
         String aUserName = SvtUserOptions().GetFullName();
         if ( !IsUseUserData() )
-           {
+        {
             // remove all data pointing to the current user
-            rDocInfo.DeleteUserData( &aUserName );
-           }
+            if (xDocProps->getAuthor().equals(aUserName)) {
+                xDocProps->setAuthor( ::rtl::OUString() );
+            }
+            xDocProps->setModifiedBy( ::rtl::OUString() );
+            if (xDocProps->getPrintedBy().equals(aUserName)) {
+                xDocProps->setPrintedBy( ::rtl::OUString() );
+            }
+        }
         else
         {
             // update ModificationAuthor, revision and editing time
-            rDocInfo.SetChanged( aUserName );
+            ::DateTime now;
+            xDocProps->setModificationDate( util::DateTime(
+                now.Get100Sec(), now.GetSec(), now.GetMin(),
+                now.GetHour(), now.GetDay(), now.GetMonth(),
+                now.GetYear() ) );
+            xDocProps->setModifiedBy( aUserName );
             if ( !HasName() || pImp->bIsSaving )
                 // QUESTION: not in case of "real" SaveAs as this is meant to create a new document
-                UpdateTime_Impl( rDocInfo );
+                UpdateTime_Impl( xDocProps );
         }
     }
 }
@@ -462,10 +500,12 @@ void SfxObjectShell::UpdateDocInfoForSave()
 //--------------------------------------------------------------------
 
 // Bearbeitungszeit aktualisieren
-SfxDocumentInfo& SfxObjectShell::UpdateTime_Impl(SfxDocumentInfo &rInfo)
+void SfxObjectShell::UpdateTime_Impl(
+    const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
     // Get old time from documentinfo
-    Time aOldTime(rInfo.GetTime());
+    sal_Int32 secs = i_xDocProps->getEditingDuration();
+    Time aOldTime(secs/3600, (secs%3600)/60, secs%60);
 
     // Initialize some local member! Its neccessary for wollow operations!
     DateTime    aNow                    ;   // Date and time at current moment
@@ -505,25 +545,10 @@ SfxDocumentInfo& SfxObjectShell::UpdateTime_Impl(SfxDocumentInfo &rInfo)
         aOldTime += nAddTime;
     }
 
-    rInfo.SetTime(aOldTime.GetTime());
     pImp->nTime = aNow;
-    rInfo.IncDocumentNumber();
-    //! DocumentNummer
-#if 0
-    const String aDocNo(rInfo.GetUserKey(0).GetWord());
-    const String aTitle(rInfo.GetUserKey(0).GetTitle());
-    USHORT nNo = 1;
-    if ( aDocNo.Len() )
-    {
-        nNo = (USHORT)aDocNo;
-        if(nNo)
-            ++nNo;
-        else
-            nNo = 1;
-    }
-    rInfo.SetUserKey(SfxDocUserKey(aTitle, nNo), 0);
-#endif
-    return rInfo;
+    i_xDocProps->setEditingDuration(
+        aOldTime.GetHour()*3600+aOldTime.GetMin()*60+aOldTime.GetSec());
+    i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
 }
 
 //--------------------------------------------------------------------
@@ -1236,12 +1261,12 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     // created from template?
-    SfxDocumentInfo *pInfo = &GetDocInfo();
-    String aTemplName( pInfo->GetTemplateName() );
-    String aTemplFileName( pInfo->GetTemplateFileName() );
+    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+    ::rtl::OUString aTemplName( xDocProps->getTemplateName() );
+    ::rtl::OUString aTemplURL( xDocProps->getTemplateURL() );
     String aFoundName;
 
-    if ( aTemplName.Len() || aTemplFileName.Len() && !IsReadOnly() )
+    if ( aTemplName.getLength() || aTemplURL.getLength() && !IsReadOnly() )
     {
         // try to locate template, first using filename
         // this must be done because writer global document uses this "great" idea to manage the templates of all parts
@@ -1249,14 +1274,14 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // but it is NOT an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
-        if ( aTemplFileName.Len() )
+        if ( aTemplURL.getLength() )
         {
             String aURL;
-            if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplFileName, GetMedium()->GetName(), aURL ) )
+            if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplURL, GetMedium()->GetName(), aURL ) )
                 aFoundName = aURL;
         }
 
-        if( !aFoundName.Len() && aTemplName.Len() )
+        if( !aFoundName.Len() && aTemplName.getLength() )
             // if the template filename did not lead to success, try to get a file name for the logical template name
             aTempl.GetFull( String(), aTemplName, aFoundName );
     }
@@ -1264,7 +1289,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( aFoundName.Len() )
     {
         // check existence of template storage
-        aTemplFileName = aFoundName;
+        aTemplURL = aFoundName;
         BOOL bLoad = FALSE;
 
         // should the document checked against changes in the template ?
@@ -1272,7 +1297,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         {
             // load document info of template
             BOOL bOK = FALSE;
-            DateTime aTemplDate;
+            util::DateTime aTemplDate;
             Reference < document::XStandaloneDocumentInfo > xDocInfo (
                     ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo") ) ), UNO_QUERY );
@@ -1281,13 +1306,12 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             {
                 try
                 {
-                    xDocInfo->loadFromURL( aTemplFileName );
+                    xDocInfo->loadFromURL( aTemplURL );
                     Any aAny = xSet->getFastPropertyValue( WID_DATE_MODIFIED );
                     ::com::sun::star::util::DateTime aTmp;
-                    if ( aAny >>= aTmp )
+                    if ( aAny >>= aTemplDate )
                     {
                         // get modify date from document info
-                        aTemplDate = impl_DateTime_Struct2Object( aTmp );
                         bOK = TRUE;
                     }
                 }
@@ -1300,7 +1324,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             if ( bOK )
             {
                 // compare modify data of template with the last check date of the document
-                const DateTime aInfoDate( pInfo->GetTemplateDate(), pInfo->GetTemplateDate() );
+                const util::DateTime aInfoDate( xDocProps->getTemplateDate() );
                 if ( aTemplDate > aInfoDate )
                 {
                     // ask user
@@ -1342,7 +1366,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     LoadStyles(*xTemplDoc);
 
                     // remember date/time of check
-                    pInfo->SetTemplateDate(aTemplDate);
+                    xDocProps->setTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
 //REPLACE                   pInfo->Save(xDocStor);
                 }
@@ -1457,9 +1481,11 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
 {
-    SfxDocumentInfo& rInfo( GetDocInfo() );
-    rInfo.ClearTemplateInformation();
-    rInfo.DeleteUserData();
+    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+    xDocProps->setTemplateURL( ::rtl::OUString() );
+    xDocProps->setTemplateName( ::rtl::OUString() );
+    xDocProps->setTemplateDate( util::DateTime() );
+    xDocProps->resetUserData( ::rtl::OUString() );
 
     // TODO/REFACTOR:
     // Title?
@@ -1470,8 +1496,8 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
         if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
         {
             INetURLObject aObj( rFileName );
-            rInfo.SetTemplateFileName( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            rInfo.SetTemplateName( rTemplateName );
+            xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+            xDocProps->setTemplateName( rTemplateName );
             SetQueryLoadTemplate( sal_True );
         }
     }
