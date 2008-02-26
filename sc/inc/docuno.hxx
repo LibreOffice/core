@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:39:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "address.hxx"
 #endif
 
-#ifndef _SFX_OBJUNO_HXX
+#ifndef _SFX_SFXBASEMODEL_HXX_
 #include <sfx2/sfxbasemodel.hxx>
 #endif
 
