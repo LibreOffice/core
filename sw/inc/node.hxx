@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:52:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@ class IDocumentLineNumberAccess;
 class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
+// --> OD 2007-10-31 #i83479#
+class IDocumentListItems;
+// <--
 
 // --------------------
 // class SwNode
@@ -281,6 +284,14 @@ public:
      */
           IStyleAccess& getIDocumentStyleAccess();
 
+    /** Provides access to the document's numbered items interface
+
+        OD 2007-10-31 #i83479#
+
+        @author OD
+    */
+    IDocumentListItems& getIDocumentListItems();
+
     // liegt der Node im Sichtbarenbereich der Shell ?
     BOOL IsInVisibleArea( ViewShell* pSh = 0 ) const;
     // befindet sich der Node in einem geschuetzten Bereich?
@@ -405,7 +416,7 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     virtual SwCntntFrm *MakeFrm() = 0;
-    virtual SwCntntNode *SplitNode(const SwPosition & ) = 0;
+    virtual SwCntntNode *SplitCntntNode(const SwPosition & ) = 0;
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();
     // koennen 2 Nodes zusammengefasst werden ?
