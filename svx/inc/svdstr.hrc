@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:16:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,8 @@
 #define STR_DragEdgeTail             (STR_DragBegin +21)
 #define STR_DragMethGradient         (STR_DragBegin +22)
 #define STR_DragMethTransparence     (STR_DragBegin +23)
-#define STR_DragEnd                  (STR_DragMethTransparence)
+#define STR_DragMethCrop             (STR_DragBegin +24)
+#define STR_DragEnd                  (STR_DragMethCrop)
 
 #define STR_ViewBegin                (STR_DragEnd+1)
 #define STR_ViewTextEdit             (STR_ViewBegin + 0)
@@ -764,7 +765,11 @@
 // #101928#
 #define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 261)
 
-#define SIP_End                             (SIP_SA_ACCESSIBILITY_MARKERS)
+#define SIP_SA_CROP_MARKERS                 (SIP_Begin + 262)
+#define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 263)
+#define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 264)
+
+#define SIP_End                             (SIP_SA_ACCESSIBILITY_CROP_MARKERS)
 
 #define SDR_ResourceEnd                     (SIP_End)
 
