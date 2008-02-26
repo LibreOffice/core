@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:45:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,13 +274,13 @@
 
 #include <math.h>
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #endif
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _SFXITEMITER_HXX
 #   include <svtools/itemiter.hxx>  //SfxItemIter
@@ -1489,13 +1489,20 @@ void SwWW8ImplReader::ImportDop()
 {
     maTracer.EnterEnvironment(sw::log::eDocumentProperties);
     // correct the LastPrinted date in DocumentInfo
-    if (rDoc.GetpInfo())
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocuProps(
+        xDPS->getDocumentProperties());
+    DBG_ASSERT(xDocuProps.is(), "DocumentProperties is null");
+    if (xDocuProps.is())
     {
         DateTime aLastPrinted(
             sw::ms::DTTM2DateTime(pWDop->dttmLastPrint));
-        DateTime aPrinted(rDoc.GetpInfo()->GetPrintDate());
-        if (aPrinted != aLastPrinted)
-           rDoc.GetDocumentInfo()->SetPrintDate( aPrinted );
+       ::util::DateTime uDT(aLastPrinted.Get100Sec(),
+            aLastPrinted.GetSec(), aLastPrinted.GetMin(),
+            aLastPrinted.GetHour(), aLastPrinted.GetDay(),
+            aLastPrinted.GetMonth(), aLastPrinted.GetYear());
+        xDocuProps->setPrintDate(uDT);
     }
 
     //
@@ -3709,19 +3716,50 @@ void SwWW8ImplReader::ReadDocVars()
         pWwFib->lcbStwUser, bVer67 ? 2 : 0, eStructCharSet,
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
     if (!bVer67) {
-        using namespace com::sun::star;
+        using namespace ::com::sun::star;
 
-    SwDoc* pDoc = mpDocShell->GetDoc();
-        if ( pDoc )
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        uno::Reference<beans::XPropertyContainer> xUserDefinedProps =
+            xDocProps->getUserDefinedProperties();
+        DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");
+
+        for(size_t i=0; i<aDocVarStrings.size(); i++)
         {
-            for(size_t i=0; i<aDocVarStrings.size(); i++)
-            {
-                uno::Any aDefaultValue;
-                ::rtl::OUString name(aDocVarStrings[i]);
-                uno::Any aValue;
-                aValue <<= ::rtl::OUString(aDocValueStrings[i]);
-                pDoc->GetDocumentInfo()->InsertCustomProperty( name, aValue );
+            uno::Any aDefaultValue;
+            ::rtl::OUString name(aDocVarStrings[i]);
+            uno::Any aValue;
+            aValue <<= ::rtl::OUString(aDocValueStrings[i]);
+            try {
+                xUserDefinedProps->addProperty( name,
+                    beans::PropertyAttribute::REMOVEABLE,
+                    aValue );
+            } catch (uno::Exception &) {
+                // ignore
             }
+        }
+    }
+}
+
+//-----------------------------------------
+//      Document Info
+//-----------------------------------------
+
+void SwWW8ImplReader::ReadDocInfo()
+{
+    if( pStg )
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+
+        if (xDocProps.is()) {
+            sfx2::LoadOlePropertySet(xDocProps, pStg);
         }
     }
 }
