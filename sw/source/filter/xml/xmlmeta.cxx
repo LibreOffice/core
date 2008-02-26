@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:13:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:22:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -107,14 +107,20 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
 
     if( !(IsStylesOnlyMode() || IsInsertMode()) )
     {
-        pContext = new SfxXMLMetaContext( *this,
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    GetModel() );
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), UNO_QUERY_THROW);
+        pContext = new SvXMLMetaDocumentContext(*this,
+                        XML_NAMESPACE_OFFICE, rLocalName,
+                        xDPS->getDocumentProperties(), xDocBuilder);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-                                              rLocalName );
+        pContext = new SvXMLImportContext( *this,
+                        XML_NAMESPACE_OFFICE, rLocalName );
 
     return pContext;
 }
@@ -133,6 +139,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
 
+/*
 static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
 {
     { XML_NAMESPACE_META, XML_TABLE_COUNT,      XML_TOK_META_STAT_TABLE },
@@ -144,61 +151,58 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
     { XML_NAMESPACE_META, XML_CHARACTER_COUNT,  XML_TOK_META_STAT_CHAR  },
     XML_TOKEN_MAP_END
 };
-void SwXMLImport::SetStatisticAttributes(
-        const Reference< xml::sax::XAttributeList > & xAttrList)
+*/
+
+struct statistic {
+    SvXMLTokenMapAttrs token;
+    const char* name;
+    sal_uInt16 SwDocStat::* target16;
+    sal_uInt32 SwDocStat::* target32;
+};
+
+static const struct statistic s_stats [] = {
+    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTbl, 0  },
+    { XML_TOK_META_STAT_IMAGE, "ImageCount",     &SwDocStat::nGrf, 0  },
+    { XML_TOK_META_STAT_OLE,   "ObjectCount",    &SwDocStat::nOLE, 0  },
+    { XML_TOK_META_STAT_PAGE,  "PageCount",      0, &SwDocStat::nPage },
+    { XML_TOK_META_STAT_PARA,  "ParagraphCount", 0, &SwDocStat::nPara },
+    { XML_TOK_META_STAT_WORD,  "WordCount",      0, &SwDocStat::nWord },
+    { XML_TOK_META_STAT_CHAR,  "CharacterCount", 0, &SwDocStat::nChar },
+    { XML_TOK_META_STAT_END,   0,                0, 0                 }
+};
+
+void SwXMLImport::SetStatistics(
+        const Sequence< beans::NamedValue > & i_rStats)
 {
     if( IsStylesOnlyMode() || IsInsertMode() )
         return;
 
-    SvXMLImport::SetStatisticAttributes(xAttrList);
+    SvXMLImport::SetStatistics(i_rStats);
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( *this );
     SwDocStat aDocStat( pDoc->GetDocStat() );
 
-    SvXMLTokenMap aTokenMap( aMetaStatAttrTokenMap );
-
     sal_uInt32 nTokens = 0;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-        sal_Int32 nValue;
-        if( !GetMM100UnitConverter().convertNumber( nValue, rValue ) )
-            continue;
 
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-
-        sal_uInt32 nToken = aTokenMap.Get( nPrefix, aLocalName );
-        switch( nToken )
-        {
-        case XML_TOK_META_STAT_TABLE:
-            aDocStat.nTbl = (sal_uInt16)nValue;
-            break;
-        case XML_TOK_META_STAT_IMAGE:
-            aDocStat.nGrf = (sal_uInt16)nValue;
-            break;
-        case XML_TOK_META_STAT_OLE:
-            aDocStat.nOLE = (sal_uInt16)nValue;
-            break;
-        case XML_TOK_META_STAT_PAGE:
-            aDocStat.nPage = (sal_uInt32)nValue;
-            break;
-        case XML_TOK_META_STAT_PARA:
-            aDocStat.nPara = (sal_uInt32)nValue;
-            break;
-        case XML_TOK_META_STAT_WORD:
-            aDocStat.nWord = (sal_uInt32)nValue;
-            break;
-        case XML_TOK_META_STAT_CHAR:
-            aDocStat.nChar = (sal_uInt32)nValue;
-            break;
-        default:
-            nToken = 0;
+    for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
+        for (struct statistic const* pStat = s_stats; pStat->name != 0;
+                ++pStat) {
+            if (i_rStats[i].Name.equalsAscii(pStat->name)) {
+                sal_Int32 val;
+                if (i_rStats[i].Value >>= val) {
+                    if (pStat->target16 != 0) {
+                        aDocStat.*(pStat->target16)
+                            = static_cast<sal_uInt16> (val);
+                    } else {
+                        aDocStat.*(pStat->target32)
+                            = static_cast<sal_uInt32> (val);
+                    }
+                    nTokens |= pStat->token;
+                } else {
+                    DBG_ERROR("SwXMLImport::SetStatistics: invalid entry");
+                }
+            }
         }
-        nTokens |= nToken;
     }
 
     if( 127 == nTokens )
@@ -228,49 +232,6 @@ void SwXMLExport::_ExportMeta()
 
     if( !IsBlockMode() )
     {
-        OUStringBuffer aOut(16);
-
-        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-        Reference < XText > xText = xTextDoc->getText();
-        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-        if( !xTextTunnel.is() )
-            return;
-
-        SwXText *pText = reinterpret_cast< SwXText * >(
-                sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-        ASSERT( pText, "SwXText missing" );
-        if( !pText )
-            return;
-
-        SwDocStat aDocStat( pText->GetDoc()->GetDocStat() );
-        aOut.append( (sal_Int32)aDocStat.nTbl );
-        AddAttribute( XML_NAMESPACE_META, XML_TABLE_COUNT,
-                      aOut.makeStringAndClear() );
-        aOut.append( (sal_Int32)aDocStat.nGrf );
-        AddAttribute( XML_NAMESPACE_META, XML_IMAGE_COUNT,
-                      aOut.makeStringAndClear() );
-        aOut.append( (sal_Int32)aDocStat.nOLE );
-        AddAttribute( XML_NAMESPACE_META, XML_OBJECT_COUNT,
-                      aOut.makeStringAndClear() );
-        if( aDocStat.nPage )
-        {
-            aOut.append( (sal_Int32)aDocStat.nPage );
-            AddAttribute( XML_NAMESPACE_META, XML_PAGE_COUNT,
-                          aOut.makeStringAndClear() );
-        }
-        aOut.append( (sal_Int32)aDocStat.nPara );
-        AddAttribute( XML_NAMESPACE_META, XML_PARAGRAPH_COUNT,
-                      aOut.makeStringAndClear() );
-        aOut.append( (sal_Int32)aDocStat.nWord );
-        AddAttribute( XML_NAMESPACE_META, XML_WORD_COUNT,
-                      aOut.makeStringAndClear() );
-        aOut.append( (sal_Int32)aDocStat.nChar );
-        AddAttribute( XML_NAMESPACE_META, XML_CHARACTER_COUNT,
-                      aOut.makeStringAndClear() );
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
-                                  XML_DOCUMENT_STATISTIC,
-                                  sal_True, sal_True );
 
         if( IsShowProgress() )
         {
