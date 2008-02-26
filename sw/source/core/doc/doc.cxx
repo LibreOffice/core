@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:29:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1391,7 +1391,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     }
 }
 
-BOOL lcl_SpellAgain( const SwNodePtr& rpNd, void* pArgs )
+BOOL lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     BOOL bOnlyWrong = *(BOOL*)pArgs;
@@ -1402,12 +1402,18 @@ BOOL lcl_SpellAgain( const SwNodePtr& rpNd, void* pArgs )
             if( pTxtNode->GetWrong() &&
                 pTxtNode->GetWrong()->InvalidateWrong() )
                 pTxtNode->SetWrongDirty( true );
+            if( pTxtNode->GetGrammarCheck() &&
+                pTxtNode->GetGrammarCheck()->InvalidateWrong() )
+                pTxtNode->SetGrammarCheckDirty( true );
         }
         else
         {
             pTxtNode->SetWrongDirty( true );
             if( pTxtNode->GetWrong() )
                 pTxtNode->GetWrong()->SetInvalid( 0, STRING_LEN );
+            pTxtNode->SetGrammarCheckDirty( true );
+            if( pTxtNode->GetGrammarCheck() )
+                pTxtNode->GetGrammarCheck()->SetInvalid( 0, STRING_LEN );
         }
     }
     return TRUE;
@@ -1461,7 +1467,7 @@ void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
 
-        GetNodes().ForEach( lcl_SpellAgain, &bOnlyWrong );
+        GetNodes().ForEach( lcl_SpellAndGrammarAgain, &bOnlyWrong );
     }
 
     GetRootFrm()->SetIdleFlags();
