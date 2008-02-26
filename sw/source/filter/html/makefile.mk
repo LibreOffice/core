@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 05:46:35 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:17:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,11 @@ SLOFILES =  \
         $(SLO)$/SwAppletImpl.obj \
 
 EXCEPTIONSFILES = \
+        $(SLO)$/htmlfld.obj \
         $(SLO)$/htmlplug.obj \
-        $(SLO)$/htmlsect.obj
+        $(SLO)$/htmlsect.obj \
+        $(SLO)$/swhtml.obj \
+        $(SLO)$/wrthtml.obj
 
 # --- Tagets -------------------------------------------------------
 
