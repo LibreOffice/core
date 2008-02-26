@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:40:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #include <svtools/filter.hxx>
 #endif
 #include <sot/storage.hxx>
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
