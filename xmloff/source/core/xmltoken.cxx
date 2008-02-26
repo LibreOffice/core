@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 11:01:01 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1884,10 +1884,6 @@ namespace xmloff { namespace token {
         TOKEN( "user-index-mark-end",             XML_USER_INDEX_MARK_END ),
         TOKEN( "user-index-mark-start",           XML_USER_INDEX_MARK_START ),
         TOKEN( "user-index-source",               XML_USER_INDEX_SOURCE ),
-        TOKEN( "user-info-0",                     XML_USER_INFO_0 ),
-        TOKEN( "user-info-1",                     XML_USER_INFO_1 ),
-        TOKEN( "user-info-2",                     XML_USER_INFO_2 ),
-        TOKEN( "user-info-3",                     XML_USER_INFO_3 ),
         TOKEN( "user-transformed",                XML_USER_TRANSFORMED ),
         TOKEN( "username",                        XML_USERNAME ),
         TOKEN( "value",                           XML_VALUE ),
