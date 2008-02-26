@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:45:17 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,10 @@
 #include "writerwordglue.hxx"
 #endif
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
+
 using namespace sw::util;
 using namespace sw::types;
 
@@ -335,15 +339,31 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
-    const SfxDocumentInfo *pInf = rWrt.pDoc->GetDocumentInfo();
-    ASSERT(pInf, "No document Info, very suspicious");
-    if (!pInf)
+    SwDocShell *pDocShell(rWrt.pDoc->GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        xDocProps = xDPS->getDocumentProperties();
+        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+    }
+
+    if (!xDocProps.is()) {
         rDop.dttmCreated = rDop.dttmRevised = rDop.dttmLastPrint = 0x45FBAC69;
-    else
-    {
-        rDop.dttmCreated = sw::ms::DateTime2DTTM(pInf->GetCreationDate());
-        rDop.dttmRevised = sw::ms::DateTime2DTTM(pInf->GetModificationDate());
-        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(pInf->GetPrintDate());
+    } else {
+        ::util::DateTime uDT = xDocProps->getCreationDate();
+        Date aD(uDT.Day, uDT.Month, uDT.Year);
+        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        rDop.dttmCreated = sw::ms::DateTime2DTTM(DateTime(aD,aT));
+        uDT = xDocProps->getModificationDate();
+        Date aD2(uDT.Day, uDT.Month, uDT.Year);
+        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        rDop.dttmRevised = sw::ms::DateTime2DTTM(DateTime(aD2,aT2));
+        uDT = xDocProps->getPrintDate();
+        Date aD3(uDT.Day, uDT.Month, uDT.Year);
+        Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(aD3,aT3));
     }
 
     rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
@@ -2426,9 +2446,6 @@ void SwWW8Writer::PrepareStorage()
     const BYTE* pData;
     const char* pName;
     UINT32 nId1;
-    const SwDocShell* pDocShell;
-    SfxDocumentInfo* pInfo;
-
 
     if (bWrtWW8)
     {
@@ -2488,15 +2505,24 @@ void SwWW8Writer::PrepareStorage()
     SvStorageStreamRef xStor( pStg->OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
 
-    pInfo = pDoc->GetDocumentInfo ();
-    pDocShell = pDoc->GetDocShell ();
+    SwDocShell* pDocShell = pDoc->GetDocShell ();
+    DBG_ASSERT(pDocShell, "no SwDocShell");
 
-    GDIMetaFile *pMetaFile=0;
-    if (pDocShell)
-        pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
 
-    pInfo->SavePropertySet( pStg, pMetaFile );   // DocInfo
-    delete pMetaFile;
+        if (xDocProps.is()) {
+            ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                pDocShell->GetPreviewMetaFile (sal_False);
+            uno::Sequence<sal_uInt8> metaFile(
+                sfx2::convertMetaFile(pMetaFile.get()));
+            sfx2::SaveOlePropertySet(xDocProps, pStg, &metaFile);
+        }
+    }
 }
 
 ULONG SwWW8Writer::WriteStorage()
