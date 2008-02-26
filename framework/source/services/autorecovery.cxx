@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:04:13 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,8 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
@@ -1853,11 +1853,11 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // Further we must know, if this document base on a template.
     // Then we must load it in a different way.
-    css::uno::Reference< css::document::XDocumentInfoSupplier > xSupplier(aNew.Document, css::uno::UNO_QUERY);
+    css::uno::Reference< css::document::XDocumentPropertiesSupplier > xSupplier(aNew.Document, css::uno::UNO_QUERY);
     if (xSupplier.is()) // optional interface!
     {
-        css::uno::Reference< css::beans::XPropertySet > xDocInfo(xSupplier->getDocumentInfo(), css::uno::UNO_QUERY_THROW);
-        xDocInfo->getPropertyValue(DOCINFO_PROP_TEMPLATE) >>= aNew.TemplateURL;
+        css::uno::Reference< css::document::XDocumentProperties > xDocProps(xSupplier->getDocumentProperties(), css::uno::UNO_QUERY_THROW);
+        aNew.TemplateURL = xDocProps->getTemplateURL();
     }
 
     css::uno::Reference< css::util::XModifiable > xModifyCheck(xDocument, css::uno::UNO_QUERY_THROW);
