@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:42:36 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,8 @@
 #ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
 #include <com/sun/star/text/DocumentStatistic.hpp>
 #endif
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -102,6 +104,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include <comphelper/types.hxx>
+#include <comphelper/string.hxx>
 
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -116,7 +119,8 @@
 #include <svtools/useroptions.hxx>
 #endif
 
-#include <sfx2/docinf.hxx>
+#include <tools/time.hxx>
+#include <tools/datetime.hxx>
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -740,13 +744,18 @@ String SwTemplNameFieldType::Expand(ULONG nFmt) const
     ASSERT( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
     String aRet;
-    const SfxDocumentInfo* pDInfo = pDoc->GetpInfo();
+    SwDocShell *pDocShell(pDoc->GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
 
-    if( pDInfo )
-    {
         if( FF_UI_NAME == nFmt )
-            aRet = pDInfo->GetTemplateName();
-        else if( pDInfo->GetTemplateFileName().Len() )
+            aRet = xDocProps->getTemplateName();
+        else if( !xDocProps->getTemplateURL().equalsAscii("") )
         {
             if( FF_UI_RANGE == nFmt )
             {
@@ -754,11 +763,11 @@ String SwTemplNameFieldType::Expand(ULONG nFmt) const
                 SfxDocumentTemplates aFac;
                 aFac.Construct();
                 String sTmp;
-                aFac.GetLogicNames( pDInfo->GetTemplateFileName(), aRet, sTmp );
+                aFac.GetLogicNames( xDocProps->getTemplateURL(), aRet, sTmp );
             }
             else
             {
-                INetURLObject aPathName( pDInfo->GetTemplateFileName() );
+                INetURLObject aPathName( xDocProps->getTemplateURL() );
                 if( FF_NAME == nFmt )
                     aRet = aPathName.GetName(URL_DECODE);
                 else if( FF_NAME_NOEXT == nFmt )
@@ -1040,33 +1049,42 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 {
     String aStr;
     LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
-    const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
+    SwDocShell *pDocShell(GetDoc()->GetDocShell());
+    DBG_ASSERT(pDocShell, "no SwDocShell");
+    if (!pDocShell) { return aStr; }
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
 
     sal_uInt16 nExtSub = nSub & 0xff00;
     nSub &= 0xff;   // ExtendedSubTypes nicht beachten
 
     switch(nSub)
     {
-    case DI_TITEL:  aStr = pInf->GetTitle();    break;
-    case DI_THEMA:  aStr = pInf->GetTheme();    break;
-    case DI_KEYS:   aStr = pInf->GetKeywords(); break;
-    case DI_COMMENT:aStr = pInf->GetComment();  break;
-    case DI_INFO1:
-    case DI_INFO2:
-    case DI_INFO3:
-    case DI_INFO4:  aStr = pInf->GetUserKeyWord(nSub - DI_INFO1);break;
+    case DI_TITEL:  aStr = xDocProps->getTitle();       break;
+    case DI_THEMA:  aStr = xDocProps->getSubject();     break;
+    case DI_KEYS:   aStr = ::comphelper::string::convertCommaSeparated(
+                                xDocProps->getKeywords());
+                    break;
+    case DI_COMMENT:aStr = xDocProps->getDescription(); break;
     case DI_DOCNO:  aStr = String::CreateFromInt32(
-                                                pInf->GetDocumentNumber() );
+                                        xDocProps->getEditingCycles() );
                     break;
     case DI_EDIT:
         if ( !nFormat )
         {
             lcl_GetLocalDataWrapper( nLang, &pAppLocalData, &pLocalData );
-            aStr = pLocalData->getTime( pInf->GetTime(), sal_False, sal_False);
+            sal_Int32 dur = xDocProps->getEditingDuration();
+            aStr = pLocalData->getTime( Time(dur/3600, (dur%3600)/60, dur%60),
+                                        sal_False, sal_False);
         }
         else
         {
-            double fVal = Time(pInf->GetTime()).GetTimeInDays();
+            sal_Int32 dur = xDocProps->getEditingDuration();
+            double fVal = Time(dur/3600, (dur%3600)/60, dur%60).GetTimeInDays();
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
@@ -1076,7 +1094,9 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             try
             {
                 uno::Any aAny;
-                uno::Reference < beans::XPropertySet > xSet( pInf->GetInfo(), uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet(
+                    xDocProps->getUserDefinedProperties(),
+                    uno::UNO_QUERY_THROW);
                 aAny = xSet->getPropertyValue( rName );
 
                 uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
@@ -1091,23 +1111,30 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
     default:
         {
-            String aName( pInf->GetAuthor() );
-            DateTime aDate( pInf->GetCreationDate() );
+            String aName( xDocProps->getAuthor() );
+            util::DateTime uDT( xDocProps->getCreationDate() );
+            Date aD(uDT.Day, uDT.Month, uDT.Year);
+            Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+            DateTime aDate(aD,aT);
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
-            else if( nSub == DI_CHANGE &&
-                    (pInf->GetModificationDate() != aDate ||
-                    (nExtSub & ~DI_SUB_FIXED) == DI_SUB_AUTHOR &&
-                    pInf->GetDocumentNumber() > 1) )
+            else if( nSub == DI_CHANGE )
             {
-                aName = pInf->GetModificationAuthor();
-                aDate = pInf->GetModificationDate();
+                aName = xDocProps->getModifiedBy();
+                uDT = xDocProps->getModificationDate();
+                Date bD(uDT.Day, uDT.Month, uDT.Year);
+                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+                DateTime bDate(bD,bT);
+                aDate = bDate;
             }
-            else if( nSub == DI_PRINT &&
-                    pInf->GetPrintDate() != aDate )
+            else if( nSub == DI_PRINT )
             {
-                aName = pInf->GetPrintedBy();
-                aDate = pInf->GetPrintDate();
+                aName = xDocProps->getPrintedBy();
+                uDT = xDocProps->getPrintDate();
+                Date bD(uDT.Day, uDT.Month, uDT.Year);
+                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+                DateTime bDate(bD,bT);
+                aDate = bDate;
             }
             else
                 break;
@@ -1198,15 +1225,6 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
 
         switch(nSub)
         {
-            case DI_INFO1:
-            case DI_INFO2:
-            case DI_INFO3:
-            case DI_INFO4:
-            {
-                const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
-                aStr += pInf->GetUserKeyTitle(nSub - DI_INFO1);
-                break;
-            }
             case DI_CUSTOM:
                 aStr += aName;
                 break;
