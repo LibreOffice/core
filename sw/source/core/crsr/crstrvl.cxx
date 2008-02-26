@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:22:21 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,7 +1125,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
             if( pONd )
             {
                 rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_OUTLINE;
-                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, TRUE );
+                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, true );
                 bRet = TRUE;
             }
         }
@@ -1345,8 +1345,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                             if( pEnd )
                                 rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
                                             *pTxtAttr->GetStart(),
-                                            *pEnd - *pTxtAttr->GetStart(),
-                                            FALSE );
+                                            *pEnd - *pTxtAttr->GetStart() );
                             else if( RES_TXTATR_TOXMARK == pTxtAttr->Which())
                                 rCntntAtPos.sStr = pTxtAttr->GetTOXMark().
                                                     GetAlternativeText();
@@ -1389,8 +1388,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         {
                             rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
                                         *pTxtAttr->GetStart(),
-                                        *pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
-                                        FALSE );
+                                        *pTxtAttr->GetEnd() - *pTxtAttr->GetStart() );
 
                             rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_INETATTR;
