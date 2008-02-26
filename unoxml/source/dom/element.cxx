@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:56:41 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,10 @@
 #include "attributesmap.hxx"
 #include "../events/mutationevent.hxx"
 
+#include "comphelper/attributelist.hxx"
+
 #include <string.h>
+
 
 namespace DOM
 {
@@ -49,6 +52,55 @@ namespace DOM
     {
         m_aNodeType = NodeType_ELEMENT_NODE;
         init_node(aNodePtr);
+    }
+
+    void SAL_CALL CElement::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        if (!i_xHandler.is()) throw RuntimeException();
+        comphelper::AttributeList *pAttrs =
+            new comphelper::AttributeList();
+        OUString type = OUString::createFromAscii("");
+        // add namespace definitions to attributes
+        for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
+            const xmlChar *pPrefix = pNs->prefix;
+            OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
+                strlen(reinterpret_cast<const char*>(pPrefix)),
+                RTL_TEXTENCODING_UTF8);
+            OUString name = (prefix.equalsAscii(""))
+                ? OUString::createFromAscii("xmlns")
+                : OUString::createFromAscii("xmlns:") + prefix;
+            const xmlChar *pHref = pNs->href;
+            OUString val(reinterpret_cast<const sal_Char*>(pHref),
+                strlen(reinterpret_cast<const char*>(pHref)),
+                RTL_TEXTENCODING_UTF8);
+            pAttrs->AddAttribute(name, type, val);
+        }
+        // add attributes
+        for (xmlAttrPtr pAttr = m_aNodePtr->properties;
+                        pAttr != 0; pAttr = pAttr->next) {
+            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            OUString prefix = pNode->getPrefix();
+            OUString name = (prefix.getLength() == 0)
+                ? pNode->getLocalName()
+                : prefix + OUString(static_cast<sal_Unicode>(':')) + pNode->getLocalName();
+            OUString val  = pNode->getNodeValue();
+            pAttrs->AddAttribute(name, type, val);
+        }
+        OUString prefix = getPrefix();
+        OUString name = (prefix.getLength() == 0)
+            ? getLocalName()
+            : prefix + OUString(static_cast<sal_Unicode>(':')) + getLocalName();
+        Reference< XAttributeList > xAttrList(pAttrs);
+        i_xHandler->startElement(name, xAttrList);
+        // recurse
+        for (xmlNodePtr pChild = m_aNodePtr->children;
+                        pChild != 0; pChild = pChild->next) {
+            CNode * pNode = CNode::get(pChild);
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            pNode->saxify(i_xHandler);
+        }
+        i_xHandler->endElement(name);
     }
 
     /**
@@ -466,6 +518,10 @@ namespace DOM
         return aMap;
     }
     OUString SAL_CALL CElement::getNodeName()throw (RuntimeException)
+    {
+        return getLocalName();
+    }
+    OUString SAL_CALL CElement::getLocalName()throw (RuntimeException)
     {
         OUString aName;
         if (m_aNodePtr != NULL)
