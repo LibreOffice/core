@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:03:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,6 @@
 #ifndef   SVTOOLS_ASYNCLINK_HXX
 #include <svtools/asynclink.hxx>
 #endif
-
-#ifndef GCC
-#endif
-
-#include <sfx2/docinf.hxx>
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
