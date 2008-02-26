@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 09:53:39 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:18:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,8 @@ CDEFS=$(CDEFS) -Dmydebug
 EXCEPTIONSFILES=	\
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
-        $(SLO)$/swparrtf.obj
+        $(SLO)$/swparrtf.obj \
+        $(SLO)$/wrtrtf.obj
 
 
 SLOFILES =	\
