@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:08:09 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
@@ -63,6 +60,8 @@
 #include <svtools/itempool.hxx>
 #endif
 
+#include <comphelper/string.hxx>
+
 #include <com/sun/star/lang/Locale.hpp>
 #include <svx/scriptspaceitem.hxx>
 #include "fontitem.hxx"
@@ -70,6 +69,12 @@
 #include "svxrtf.hxx"
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
+
+using namespace ::com::sun::star;
+
 
 SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
 SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
@@ -95,14 +100,15 @@ const CharSet lcl_GetDefaultTextEncodingForRTF()
 // -------------- Methoden --------------------
 
 SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
-                            int bReadNewDoc )
+            uno::Reference<document::XDocumentProperties> i_xDocProps,
+            int bReadNewDoc )
     : SvRTFParser( rIn, 5 ),
     rStrm(rIn),
     aColorTbl( 16, 4 ),
     aFontTbl( 16, 4 ),
     pInsPos( 0 ),
     pAttrPool( &rPool ),
-    pSfxInfo( 0 ),
+    m_xDocProps( i_xDocProps ),
     pRTFDefaults( 0 ),
     nVersionNo( 0 )
 {
@@ -151,9 +157,6 @@ SvxRTFParser::~SvxRTFParser()
     delete pRTFDefaults;
 
     delete pInsPos;
-#ifndef SVX_LIGHT
-    delete pSfxInfo;
-#endif
     delete pDfltFont;
     delete pDfltColor;
 }
@@ -289,7 +292,7 @@ INSINGLECHAR:
         break;
     case RTF_INFO:
 #ifndef SVX_LIGHT
-        if (bReadDocInfo && bNewDoc)
+        if (bReadDocInfo && bNewDoc && m_xDocProps.is())
             ReadInfo();
         else
 #endif
@@ -706,37 +709,36 @@ String& SvxRTFParser::GetTextToEndGroup( String& rStr )
     return rStr;
 }
 
-DateTime& SvxRTFParser::GetDateTimeStamp( DateTime& rDT )
+util::DateTime SvxRTFParser::GetDateTimeStamp( )
 {
-    DateTime aDT;
+    util::DateTime aDT;
     BOOL bWeiter = TRUE;
     int nToken;
     while( bWeiter && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case RTF_YR:    aDT.SetYear( (USHORT)nTokenValue  );    break;
-        case RTF_MO:    aDT.SetMonth( (USHORT)nTokenValue  );   break;
-        case RTF_DY:    aDT.SetDay( (USHORT)nTokenValue  );     break;
-        case RTF_HR:    aDT.SetHour( (USHORT)nTokenValue );     break;
-        case RTF_MIN:   aDT.SetMin( (USHORT)nTokenValue  );     break;
+        case RTF_YR:    aDT.Year = (USHORT)nTokenValue;     break;
+        case RTF_MO:    aDT.Month = (USHORT)nTokenValue;    break;
+        case RTF_DY:    aDT.Day = (USHORT)nTokenValue;      break;
+        case RTF_HR:    aDT.Hours = (USHORT)nTokenValue;    break;
+        case RTF_MIN:   aDT.Minutes = (USHORT)nTokenValue;  break;
         default:
             bWeiter = FALSE;
         }
     }
-    rDT = aDT;
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
-    return rDT;
+    return aDT;
 }
 
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
 #ifndef SVX_LIGHT
     int _nOpenBrakets = 1, nToken;      // die erste wurde schon vorher erkannt !!
-    pSfxInfo = new SfxDocumentInfo;
+    DBG_ASSERT(m_xDocProps.is(),
+        "SvxRTFParser::ReadInfo: no DocumentProperties");
     String sStr, sComment;
     long nVersNo = 0;
-    DateTime aDT;
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -763,22 +765,26 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             break;
 
         case RTF_TITLE:
-            pSfxInfo->SetTitle( GetTextToEndGroup( sStr ) );
+            m_xDocProps->setTitle( GetTextToEndGroup( sStr ) );
             break;
         case RTF_SUBJECT:
-            pSfxInfo->SetTheme( GetTextToEndGroup( sStr ) );
+            m_xDocProps->setSubject( GetTextToEndGroup( sStr ) );
             break;
         case RTF_AUTHOR:
-            pSfxInfo->SetAuthor( GetTextToEndGroup( sStr ) );
+            m_xDocProps->setAuthor( GetTextToEndGroup( sStr ) );
             break;
         case RTF_OPERATOR:
-            pSfxInfo->SetModificationAuthor( GetTextToEndGroup( sStr ) );
+            m_xDocProps->setModifiedBy( GetTextToEndGroup( sStr ) );
             break;
         case RTF_KEYWORDS:
-            pSfxInfo->SetKeywords( GetTextToEndGroup( sStr ) );
-            break;
+            {
+                ::rtl::OUString sTemp = GetTextToEndGroup( sStr );
+                m_xDocProps->setKeywords(
+                    ::comphelper::string::convertCommaSeparated(sTemp) );
+                break;
+            }
         case RTF_DOCCOMM:
-            pSfxInfo->SetComment( GetTextToEndGroup( sStr ) );
+            m_xDocProps->setDescription( GetTextToEndGroup( sStr ) );
             break;
 
         case RTF_HLINKBASE:
@@ -786,15 +792,15 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             break;
 
         case RTF_CREATIM:
-            pSfxInfo->SetCreationDate( GetDateTimeStamp( aDT ) );
+            m_xDocProps->setCreationDate( GetDateTimeStamp() );
             break;
 
         case RTF_REVTIM:
-            pSfxInfo->SetModificationDate( GetDateTimeStamp( aDT ) );
+            m_xDocProps->setModificationDate( GetDateTimeStamp() );
             break;
 
         case RTF_PRINTIM:
-            pSfxInfo->SetPrintDate( GetDateTimeStamp( aDT ) );
+            m_xDocProps->setPrintDate( GetDateTimeStamp() );
             break;
 
         case RTF_COMMENT:
