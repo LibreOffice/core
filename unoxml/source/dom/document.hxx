@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:17:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,18 @@
 #include <list>
 #include <set>
 #include <sal/types.h>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -57,17 +60,22 @@
 
 #include <libxml/tree.h>
 
-using namespace rtl;
 using namespace std;
+using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
-    class CDocument : public cppu::ImplInheritanceHelper4<
-        CNode, XDocument, XDocumentEvent, XActiveDataControl, XActiveDataSource >
+
+    class CDocument : public cppu::ImplInheritanceHelper5<
+        CNode, XDocument, XDocumentEvent,
+        XActiveDataControl, XActiveDataSource, XSAXSerializable>
     {
         friend class CNode;
         typedef std::list< Reference< XNode >* > nodereflist_t;
@@ -86,9 +94,13 @@ namespace DOM
         CDocument(xmlDocPtr aDocPtr);
 
         void addnode(xmlNodePtr aNode);
+
     public:
 
         virtual ~CDocument();
+
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
         /**
         Creates an Attr of the given name.
@@ -341,6 +353,11 @@ namespace DOM
         }
 
 
+    // ::com::sun::star::xml::sax::XSAXSerializable
+    virtual void SAL_CALL serialize(
+            const Reference< XDocumentHandler >& i_xHandler,
+            const Sequence< beans::StringPair >& i_rNamespaces)
+        throw (RuntimeException, SAXException);
     };
 }
 
