@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 12:46:18 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:32:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ IDLFILES=\
     XExtendedDocumentHandler.idl\
     XLocator.idl\
     XParser.idl\
+    XSAXSerializable.idl\
     XFastParser.idl\
     XFastDocumentHandler.idl\
     XFastContextHandler.idl\
