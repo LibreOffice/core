@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:27:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,9 +169,6 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef GCC
-#endif
-
 #include "about.hxx"
 #include "referers.hxx"
 #include <sfx2/app.hxx>
@@ -189,7 +186,6 @@
 #include <sfx2/docfilt.hxx>
 #include "docvor.hxx"
 #include <sfx2/new.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
 #include "sfxbasic.hxx"
