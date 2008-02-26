@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:33:48 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,11 @@
 #ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
 #include <IDocumentChartDataProviderAccess.hxx>
 #endif
-
+// --> OD 2007-10-26 #i83479#
+#include <IDocumentOutlineNodes.hxx>
+#include <IDocumentListItems.hxx>
+#include <set>
+// <--
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
@@ -328,7 +332,11 @@ class SwDoc :
     public IDocumentDrawModelAccess,
     public IDocumentLayoutAccess,
     public IDocumentTimerAccess,
-    public IDocumentChartDataProviderAccess
+    public IDocumentChartDataProviderAccess,
+    // --> OD 2007-10-26 #i83479#
+    public IDocumentListItems,
+    public IDocumentOutlineNodes
+    // <--
 {
 
     friend void _InitCore();
@@ -445,6 +453,19 @@ class SwDoc :
 
     // table of forbidden characters of this document
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+
+    // --> OD 2007-10-26 #i83479#
+public:
+    struct lessThanNodeNum
+    {
+        bool operator()( const SwNodeNum* pNodeNumOne,
+                         const SwNodeNum* pNodeNumTwo ) const;
+    };
+
+    typedef ::std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
+private:
+    tImplSortedNodeNumList* mpListItemsList;
+    // <--
 
     // -------------------------------------------------------------------
     // sonstige
@@ -786,10 +807,17 @@ public:
                                       /*[in]*/BookmarkType eMark );
     virtual void deleteBookmark( /*[in]*/sal_uInt16 nPos );
     virtual void deleteBookmark( /*[in]*/const String& rName );
+    virtual bool isCrossRefBookmarkName( /*[in]*/const String& rName );
     virtual sal_uInt16 findBookmark( /*[in]*/const String& rName );
     virtual void makeUniqueBookmarkName( /*[in/out]*/String& rName );
     virtual sal_uInt16 getBookmarkCount( /*[in]*/ bool bBkmrk ) const;
     virtual SwBookmark& getBookmark( /*[in]*/sal_uInt16 nPos, /*[in]*/bool bBkmrk );
+    virtual String getCrossRefBookmarkName(
+            /*[in]*/const SwTxtNode& rTxtNode,
+            /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) const;
+    virtual String makeCrossRefBookmark(
+            /*[in]*/const SwTxtNode& rTxtNode,
+            /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType );
 
     /** IDocumentRedlineAccess
     */
@@ -1025,6 +1053,30 @@ public:
     virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const;
     virtual void CreateChartInternalDataProviders( const SwTable *pTable );
     virtual SwChartLockController_Helper & GetChartControllerHelper();
+
+    /** IDocumentListItems
+
+        OD 2007-10-26 #i83479#
+    */
+    virtual void addListItem( const SwNodeNum& rNodeNum );
+    virtual void removeListItem( const SwNodeNum& rNodeNum );
+    virtual String getListItemText( const SwNodeNum& rNodeNum,
+                                    const bool bWithNumber = true,
+                                    const bool bWithSpacesForLevel = false ) const;
+    virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;
+    virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;
+
+    /** IDocumentOutlineNodes
+
+        OD 2007-11-15 #i83479#
+    */
+    virtual sal_Int32 getOutlineNodesCount() const;
+    virtual int getOutlineLevel( const sal_Int32 nIdx ) const;
+    virtual String getOutlineText( const sal_Int32 nIdx,
+                                   const bool bWithNumber,
+                                   const bool bWithSpacesForLevel ) const;
+    virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const;
+    virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const;
 
     /** INextInterface here
     */
