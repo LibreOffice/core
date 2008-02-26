@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:34:23 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,8 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 /** === end UNO includes === **/
 
@@ -65,7 +66,8 @@ namespace comphelper {
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::document::XDocumentInfoSupplier;
+    using ::com::sun::star::document::XDocumentPropertiesSupplier;
+    using ::com::sun::star::document::XDocumentProperties;
     using ::com::sun::star::frame::XStorable;
     using ::com::sun::star::beans::XPropertySetInfo;
     /** === end UNO using === **/
@@ -116,11 +118,13 @@ namespace comphelper {
                 return sTitle;
 
             // 2. try the UNO DocumentInfo
-            Reference< XDocumentInfoSupplier > xDIS( _rxDocument, UNO_QUERY );
-            if ( xDIS.is() )
+            Reference< XDocumentPropertiesSupplier > xDPS( _rxDocument, UNO_QUERY );
+            if ( xDPS.is() )
             {
-                Reference< XPropertySet > xProp ( xDIS->getDocumentInfo(), UNO_QUERY_THROW );
-                OSL_VERIFY( xProp->getPropertyValue( sTitlePropName ) >>= sTitle );
+                Reference< XDocumentProperties > xDocProps (
+                    xDPS->getDocumentProperties(), UNO_QUERY_THROW );
+                OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
+                sTitle = xDocProps->getTitle();
             }
 
             if ( sTitle.getLength() != 0 )
