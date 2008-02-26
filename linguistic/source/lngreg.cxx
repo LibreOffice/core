@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:23:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,16 @@ extern sal_Bool SAL_CALL ConvDicList_writeInfo
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey
 );
 
+extern sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo
+(
+    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
+);
+
+extern sal_Bool SAL_CALL GrammarChecker_writeInfo
+(
+    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
+);
+
 extern void * SAL_CALL LngSvcMgr_getFactory
 (
     const sal_Char * pImplName,
@@ -102,12 +112,31 @@ extern void * SAL_CALL ConvDicList_getFactory
     void *
 );
 
+extern void * SAL_CALL GrammarCheckingIterator_getFactory
+(
+    const sal_Char * pImplName,
+    XMultiServiceFactory * pServiceManager,
+    void *
+);
+
+extern void * SAL_CALL GrammarChecker_getFactory
+(
+    const sal_Char * pImplName,
+    XMultiServiceFactory * pServiceManager,
+    void *
+);
 ////////////////////////////////////////
 // definition of the two functions that are used to provide the services
 //
 
 extern "C"
 {
+
+void SAL_CALL component_getImplementationEnvironment(
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
 
 sal_Bool SAL_CALL component_writeInfo
 (
@@ -122,13 +151,11 @@ sal_Bool SAL_CALL component_writeInfo
         bRet = DicList_writeInfo( pServiceManager, pRegistryKey );
     if(bRet)
         bRet = ConvDicList_writeInfo( pServiceManager, pRegistryKey );
+    if(bRet)
+        bRet = GrammarCheckingIterator_writeInfo( pServiceManager, pRegistryKey );
+    if(bRet)
+        bRet = GrammarChecker_writeInfo( pServiceManager, pRegistryKey );
     return bRet;
-}
-
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 void * SAL_CALL component_getFactory(
@@ -154,6 +181,18 @@ void * SAL_CALL component_getFactory(
 
     if(!pRet)
         pRet =  ConvDicList_getFactory(
+            pImplName,
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            pRegistryKey );
+
+    if(!pRet)
+        pRet =  GrammarCheckingIterator_getFactory(
+            pImplName,
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            pRegistryKey );
+
+    if(!pRet)
+        pRet =  GrammarChecker_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
