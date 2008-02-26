@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
+#   last change: $Author: aw $ $Date: 2008-02-26 08:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ SLOFILES= \
         $(SLO)$/mediaprimitive2d.obj			\
         $(SLO)$/metafileprimitive2d.obj			\
         $(SLO)$/modifiedcolorprimitive2d.obj	\
-        $(SLO)$/oleprimitive2d.obj				\
         $(SLO)$/pagepreviewprimitive2d.obj		\
         $(SLO)$/polypolygonprimitive2d.obj		\
         $(SLO)$/polygonprimitive2d.obj			\

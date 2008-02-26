@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:25:04 $
+ *  last change: $Author: aw $ $Date: 2008-02-26 08:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,13 +87,19 @@ namespace drawinglayer
             // are created in maLabelPrimitives
             unsigned                                            mbLabel3DChecked : 1;
 
-            // the last used viewInformation, used from getDecomposition for buffering
-            basegfx::B2DHomMatrix                               maLastViewTransformation;
-            basegfx::B2DRange                                   maLastViewport;
+            // the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
+            double                                              mfOldDiscreteSizeX;
+            double                                              mfOldDiscreteSizeY;
+            basegfx::B2DRange                                   maOldUnitVisiblePart;
 
             // protected helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
             bool impGetLabel3D(const geometry::ViewInformation2D& rViewInformation) const;
+            void ScenePrimitive2D::calculateDsicreteSizes(
+                const geometry::ViewInformation2D& rViewInformation,
+                basegfx::B2DRange& rDiscreteRange,
+                basegfx::B2DRange& rVisibleDiscreteRange,
+                basegfx::B2DRange& rUnitVisibleRange) const;
 
         protected:
             // local decomposition.

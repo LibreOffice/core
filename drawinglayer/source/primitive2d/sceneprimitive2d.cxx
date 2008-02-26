@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
+ *  last change: $Author: aw $ $Date: 2008-02-26 08:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,61 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        void ScenePrimitive2D::calculateDsicreteSizes(
+            const geometry::ViewInformation2D& rViewInformation,
+            basegfx::B2DRange& rDiscreteRange,
+            basegfx::B2DRange& rVisibleDiscreteRange,
+            basegfx::B2DRange& rUnitVisibleRange) const
+        {
+            // use unit range and transform to discrete coordinates
+            rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+            rDiscreteRange.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
+
+            // force to discrete expanded bounds (it grows, so expanding works perfectly well)
+            rDiscreteRange.expand(basegfx::B2DTuple(floor(rDiscreteRange.getMinX()), floor(rDiscreteRange.getMinY())));
+            rDiscreteRange.expand(basegfx::B2DTuple(ceil(rDiscreteRange.getMaxX()), ceil(rDiscreteRange.getMaxY())));
+
+            // clip it against discrete Viewport (if set)
+            rVisibleDiscreteRange = rDiscreteRange;
+
+            if(!rViewInformation.getViewport().isEmpty())
+            {
+                rVisibleDiscreteRange.intersect(rViewInformation.getDiscreteViewport());
+            }
+
+            // force to discrete expanded bounds, too
+            rVisibleDiscreteRange.expand(basegfx::B2DTuple(floor(rVisibleDiscreteRange.getMinX()), floor(rVisibleDiscreteRange.getMinY())));
+            rVisibleDiscreteRange.expand(basegfx::B2DTuple(ceil(rVisibleDiscreteRange.getMaxX()), ceil(rVisibleDiscreteRange.getMaxY())));
+
+            if(rVisibleDiscreteRange.isEmpty())
+            {
+                rUnitVisibleRange = rVisibleDiscreteRange;
+            }
+            else
+            {
+                // create UnitVisibleRange containing unit range values [0.0 .. 1.0] describing
+                // the relative position of rVisibleDiscreteRange inside rDiscreteRange
+                const double fDiscreteScaleFactorX(basegfx::fTools::equalZero(rDiscreteRange.getWidth()) ? 1.0 : 1.0 / rDiscreteRange.getWidth());
+                const double fDiscreteScaleFactorY(basegfx::fTools::equalZero(rDiscreteRange.getHeight()) ? 1.0 : 1.0 / rDiscreteRange.getHeight());
+
+                const double fMinX(basegfx::fTools::equal(rVisibleDiscreteRange.getMinX(), rDiscreteRange.getMinX())
+                    ? 0.0
+                    : (rVisibleDiscreteRange.getMinX() - rDiscreteRange.getMinX()) * fDiscreteScaleFactorX);
+                const double fMinY(basegfx::fTools::equal(rVisibleDiscreteRange.getMinY(), rDiscreteRange.getMinY())
+                    ? 0.0
+                    : (rVisibleDiscreteRange.getMinY() - rDiscreteRange.getMinY()) * fDiscreteScaleFactorY);
+
+                const double fMaxX(basegfx::fTools::equal(rVisibleDiscreteRange.getMaxX(), rDiscreteRange.getMaxX())
+                    ? 1.0
+                    : (rVisibleDiscreteRange.getMaxX() - rDiscreteRange.getMinX()) * fDiscreteScaleFactorX);
+                const double fMaxY(basegfx::fTools::equal(rVisibleDiscreteRange.getMaxY(), rDiscreteRange.getMaxY())
+                    ? 1.0
+                    : (rVisibleDiscreteRange.getMaxY() - rDiscreteRange.getMinY()) * fDiscreteScaleFactorY);
+
+                rUnitVisibleRange = basegfx::B2DRange(fMinX, fMinY, fMaxX, fMaxY);
+            }
+        }
+
         Primitive2DSequence ScenePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
@@ -122,35 +177,17 @@ namespace drawinglayer
                 }
             }
 
-            // get geometry of output range
-            basegfx::B2DPolygon aLogicOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-            aLogicOutline.transform(getObjectTransformation());
+            // get the involved ranges (see helper method calculateDsicreteSizes for details)
+            basegfx::B2DRange aDiscreteRange;
+            basegfx::B2DRange aVisibleDiscreteRange;
+            basegfx::B2DRange aUnitVisibleRange;
+            calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
-            // clip it against ViewRange
-            const basegfx::B2DPolyPolygon aLogicClippedOutline(basegfx::tools::clipPolygonOnRange(aLogicOutline, rViewInformation.getViewport(), true, false));
-            const basegfx::B2DRange aLogicVisiblePart(basegfx::tools::getRange(aLogicClippedOutline));
-
-            if(!aLogicVisiblePart.isEmpty())
+            if(!aVisibleDiscreteRange.isEmpty())
             {
-                // transform back to unity
-                basegfx::B2DHomMatrix aInverseTransform(getObjectTransformation());
-                basegfx::B2DPolyPolygon aUnitClippedOutline(aLogicClippedOutline);
-                aInverseTransform.invert();
-                aUnitClippedOutline.transform(aInverseTransform);
-
-                // get logical size by decomposing
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // get logical sizes and generate visible part in unit coordinates
-                double fLogicSizeX(aScale.getX());
-                double fLogicSizeY(aScale.getY());
-                const basegfx::B2DRange aUnitVisiblePart(basegfx::tools::getRange(aUnitClippedOutline));
-
-                // test if view size (pixel) maybe too big and limit it
-                const double fViewSizeX(fLogicSizeX * (rViewInformation.getViewTransformation() * basegfx::B2DVector(aUnitVisiblePart.getWidth(), 0.0)).getLength());
-                const double fViewSizeY(fLogicSizeY * (rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, aUnitVisiblePart.getHeight())).getLength());
+                // test if discrete view size (pixel) maybe too big and limit it
+                double fViewSizeX(aVisibleDiscreteRange.getWidth());
+                double fViewSizeY(aVisibleDiscreteRange.getHeight());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
                 const SvtOptionsDrawinglayer aDrawinglayerOpt;
                 const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
@@ -159,9 +196,15 @@ namespace drawinglayer
                 if(fViewVisibleArea > fMaximumVisibleArea)
                 {
                     fReduceFactor = sqrt(fMaximumVisibleArea / fViewVisibleArea);
-                    fLogicSizeX *= fReduceFactor;
-                    fLogicSizeY *= fReduceFactor;
+                    fViewSizeX *= fReduceFactor;
+                    fViewSizeY *= fReduceFactor;
                 }
+
+                // calculate logic render size in world coordinates for usage in renderer
+                basegfx::B2DVector aLogicRenderSize(
+                    aDiscreteRange.getWidth() * fReduceFactor,
+                    aDiscreteRange.getHeight() * fReduceFactor);
+                aLogicRenderSize *= rViewInformation.getInverseViewTransformation();
 
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
                 processor3d::DefaultProcessor3D aProcessor3D(
@@ -169,9 +212,9 @@ namespace drawinglayer
                     getTransformation3D(),
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
-                    fLogicSizeX,
-                    fLogicSizeY,
-                    aUnitVisiblePart);
+                    aLogicRenderSize.getX(),
+                    aLogicRenderSize.getY(),
+                    aUnitVisibleRange);
 
                 aProcessor3D.processNonTransparent(getChildren3D());
                 aProcessor3D.processTransparent(getChildren3D());
@@ -181,53 +224,21 @@ namespace drawinglayer
 
                 if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
                 {
-                    // correct reduce-factor free logic, view-unit-aligned coordinates for the created bitmap
-                    // without translation
-                    basegfx::B2DPoint aViewTopLeft(aUnitVisiblePart.getMinX() * aScale.getX(), aUnitVisiblePart.getMinY() * aScale.getY());
-                    aViewTopLeft *= rViewInformation.getViewTransformation();
-                    aViewTopLeft.setX(floor(aViewTopLeft.getX()));
-                    aViewTopLeft.setY(floor(aViewTopLeft.getY()));
-                    const basegfx::B2DPoint aLogicTopLeft(rViewInformation.getInverseViewTransformation() * aViewTopLeft);
-
-                    // same for size, do not forget to correct by fReduceFactor
-                    const basegfx::B2DVector aViewSize(aBitmapSizePixel.getWidth() / fReduceFactor, aBitmapSizePixel.getHeight() / fReduceFactor);
-                    const basegfx::B2DVector aLogicSize(rViewInformation.getInverseViewTransformation() * aViewSize);
-
-                    // create 2d transform from it. Target is to always have a output-pixel-aligned
-                    // logic position and size wich corresponds to the bitmap size (when no reduceFactor)
+                    // create transform for the created bitmap in discrete coordinates first
                     basegfx::B2DHomMatrix aNew2DTransform;
-                    aNew2DTransform.scale(aLogicSize.getX(), aLogicSize.getY());
-                    aNew2DTransform.translate(aLogicTopLeft.getX(), aLogicTopLeft.getY());
-                    aNew2DTransform.shearX(fShearX);
-                    aNew2DTransform.rotate(fRotate);
-                    aNew2DTransform.translate(aTranslate.getX(), aTranslate.getY());
+
+                    aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
+                    aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
+                    aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
+                    aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
+
+                    // transform back to world coordinates for usage in primitive creation
+                    aNew2DTransform *= rViewInformation.getInverseViewTransformation();
 
                     // create bitmap primitive and add
                     BitmapPrimitive2D* pNewTextBitmap = new BitmapPrimitive2D(aNewBitmap, aNew2DTransform);
                     const Primitive2DReference xRef(pNewTextBitmap);
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef);
-
-#ifdef DBG_UTIL
-                    {
-                        // check if pixel size and transformation is correct
-                        if(basegfx::fTools::equal(fReduceFactor, 1.0))
-                        {
-                            if(basegfx::fTools::equalZero(fShearX) && basegfx::fTools::equalZero(fRotate))
-                            {
-                                basegfx::B2DVector aScaleB, aTranslateB;
-                                double fRotateB, fShearXB;
-
-                                pNewTextBitmap->getTransform().decompose(aScaleB, aTranslateB, fRotateB, fShearXB);
-                                basegfx::B2DVector aViewSizeB(basegfx::absolute(aScaleB));
-                                aViewSizeB *= rViewInformation.getViewTransformation();
-                                const Size aSourceSizePixel(pNewTextBitmap->getBitmapEx().GetSizePixel());
-                                const bool bXEqual(aSourceSizePixel.getWidth() == basegfx::fround(aViewSizeB.getX()));
-                                const bool bYEqual(aSourceSizePixel.getHeight() == basegfx::fround(aViewSizeB.getY()));
-                                OSL_ENSURE(bXEqual && bYEqual, "3D renderer produced non-pixel-aligned graphic (!)");
-                            }
-                        }
-                    }
-#endif
                 }
             }
 
@@ -301,8 +312,9 @@ namespace drawinglayer
             maTransformation3D(rTransformation3D),
             mbShadow3DChecked(false),
             mbLabel3DChecked(false),
-            maLastViewTransformation(),
-            maLastViewport()
+            mfOldDiscreteSizeX(0.0),
+            mfOldDiscreteSizeY(0.0),
+            maOldUnitVisiblePart()
         {
         }
 
@@ -324,10 +336,16 @@ namespace drawinglayer
 
         basegfx::B2DRange ScenePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // call parent. Do not calculate using unit range since the decomposition may extend the range
-            // by single pixels to level out the boundaries of the created bitmap primitives. So, use
-            // the default mechanism to use the range of the sub-primitives.
-            basegfx::B2DRange aRetval(BasePrimitive2D::getB2DRange(rViewInformation));
+            // transform unit range to discrete coordinate range
+            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
+            aRetval.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
+
+            // force to discrete expanded bounds (it grows, so expanding works perfectly well)
+            aRetval.expand(basegfx::B2DTuple(floor(aRetval.getMinX()), floor(aRetval.getMinY())));
+            aRetval.expand(basegfx::B2DTuple(ceil(aRetval.getMaxX()), ceil(aRetval.getMaxY())));
+
+            // transform back from discrete (view) to world coordinates
+            aRetval.transform(rViewInformation.getInverseViewTransformation());
 
             // expand by evtl. existing shadow primitives
             if(impGetShadow3D(rViewInformation))
@@ -358,50 +376,27 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            // check if mpLocalDecomposition can be reused. Basic decision is based on the
-            // comparison of old and new viewTransformations, if they are equal reuse is possible anyways.
+            // get the involved ranges (see helper method calculateDsicreteSizes for details)
             bool bNeedNewDecomposition(false);
+            basegfx::B2DRange aDiscreteRange;
+            basegfx::B2DRange aVisibleDiscreteRange;
+            basegfx::B2DRange aUnitVisibleRange;
+            calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(getLocalDecomposition().hasElements())
             {
-                if(maLastViewport != rViewInformation.getViewport() || maLastViewTransformation != rViewInformation.getViewTransformation())
+                // display has changed and cannot be reused when resolution did change
+                if(!basegfx::fTools::equal(aVisibleDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
+                    !basegfx::fTools::equal(aVisibleDiscreteRange.getHeight(), mfOldDiscreteSizeY))
                 {
                     bNeedNewDecomposition = true;
                 }
-            }
 
-            if(bNeedNewDecomposition)
-            {
-                // here is space to find out if only the visible view area has changed (scroll)
-                // and thus the object decomposition may be reused. For that, the logic visible part
-                // and the view sizes need to be the same
-                basegfx::B2DPolygon aWorldOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                aWorldOutline.transform(getObjectTransformation());
-
-                // calculate last clipped visible part
-                const basegfx::B2DPolyPolygon aLastLogicClippedOutline(basegfx::tools::clipPolygonOnRange(aWorldOutline, maLastViewport, true, false));
-                const basegfx::B2DRange aLastLogicVisiblePart(basegfx::tools::getRange(aLastLogicClippedOutline));
-
-                // calculate new clipped visible part
-                const basegfx::B2DPolyPolygon aNewLogicClippedOutline(basegfx::tools::clipPolygonOnRange(aWorldOutline, rViewInformation.getViewport(), true, false));
-                const basegfx::B2DRange aNewLogicVisiblePart(basegfx::tools::getRange(aNewLogicClippedOutline));
-
-                if(aLastLogicVisiblePart.equal(aNewLogicVisiblePart))
+                // display has changed and cannot be reused when the shown relative part did change
+                if(!bNeedNewDecomposition
+                    && !aUnitVisibleRange.equal(maOldUnitVisiblePart))
                 {
-                    // logic visible part is the same, check for same view size to test for zooming
-                    basegfx::B2DRange aLastViewVisiblePart(aLastLogicVisiblePart);
-                    aLastViewVisiblePart.transform(maLastViewTransformation);
-                    const basegfx::B2DVector aLastViewSize(aLastViewVisiblePart.getRange());
-
-                    basegfx::B2DRange aNewViewVisiblePart(aNewLogicVisiblePart);
-                    aNewViewVisiblePart.transform(rViewInformation.getViewTransformation());
-                    const basegfx::B2DVector aNewViewSize(aNewViewVisiblePart.getRange());
-
-                    if(aLastViewSize.equal(aNewViewSize))
-                    {
-                        // view size is the same, reuse possible
-                        bNeedNewDecomposition = false;
-                    }
+                    bNeedNewDecomposition = true;
                 }
             }
 
@@ -413,9 +408,11 @@ namespace drawinglayer
 
             if(!getLocalDecomposition().hasElements())
             {
-                // remember ViewRange and ViewTransformation
-                const_cast< ScenePrimitive2D* >(this)->maLastViewTransformation = rViewInformation.getViewTransformation();
-                const_cast< ScenePrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
+                // remember last used NewDiscreteSize and NewUnitVisiblePart
+                ScenePrimitive2D* pThat = const_cast< ScenePrimitive2D* >(this);
+                pThat->mfOldDiscreteSizeX = aVisibleDiscreteRange.getWidth();
+                pThat->mfOldDiscreteSizeY = aVisibleDiscreteRange.getHeight();
+                pThat->maOldUnitVisiblePart = aUnitVisibleRange;
             }
 
             // use parent implementation
