@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 08:38:40 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:07:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,13 @@ TARGET=doc
 EXCEPTIONSFILES = \
     $(SLO)$/SwStyleNameMapper.obj \
     $(SLO)$/acmplwrd.obj \
+    $(SLO)$/dbgoutsw.obj \
     $(SLO)$/doc.obj \
+    $(SLO)$/doccomp.obj \
     $(SLO)$/docdraw.obj \
     $(SLO)$/docfmt.obj \
+    $(SLO)$/docglbl.obj \
+    $(SLO)$/docglos.obj \
     $(SLO)$/doclay.obj \
     $(SLO)$/docxforms.obj \
     $(SLO)$/docnew.obj \
@@ -63,11 +67,9 @@ EXCEPTIONSFILES = \
     $(SLO)$/tblrwcl.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
-        $(SLO)$/dbgoutsw.obj \
         $(SLO)$/docbasic.obj \
         $(SLO)$/docbm.obj \
         $(SLO)$/docchart.obj \
-        $(SLO)$/doccomp.obj \
         $(SLO)$/doccorr.obj \
         $(SLO)$/docdde.obj \
         $(SLO)$/docdesc.obj \
@@ -75,8 +77,6 @@ SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/docfld.obj \
         $(SLO)$/docfly.obj \
         $(SLO)$/docftn.obj \
-        $(SLO)$/docglbl.obj \
-        $(SLO)$/docglos.obj \
         $(SLO)$/docredln.obj \
         $(SLO)$/docruby.obj \
         $(SLO)$/docstat.obj \
