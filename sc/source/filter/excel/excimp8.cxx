@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:24:17 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,10 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "detfunc.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 using namespace com::sun::star;
 
@@ -353,10 +357,11 @@ void ImportExcel8::PostDocLoad( void )
         SotStorageRef xRootStrg = GetRootStorage();
         if( xRootStrg.Is() )
         {
-            SfxDocumentInfo aNewDocInfo;
-            SfxDocumentInfo& rOldDocInfo = pShell->GetDocInfo();
-            aNewDocInfo.LoadPropertySet( GetRootStorage() );
-            rOldDocInfo = aNewDocInfo;
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pShell->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps
+                = xDPS->getDocumentProperties();
+            sfx2::LoadOlePropertySet(xDocProps, GetRootStorage());
         }
     }
 
