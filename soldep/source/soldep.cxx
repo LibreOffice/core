@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldep.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 14:44:09 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 08:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <svtools/filedlg.hxx>
 #include <tools/iparser.hxx>
 #include <tools/geninfo.hxx>
-#include <bootstrp/appdef.hxx>
+#include <appdef.hxx>
 #include "time.h"
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>
