@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:19:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@
 #endif
 #include <svx/scriptspaceitem.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <svtools/pathoptions.hxx>
