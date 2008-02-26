@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:33:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
+#include <comphelper/string.hxx>
 
 #include <svtools/saveopt.hxx> // only for testing of relative saving options in PDF
 
@@ -83,11 +84,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIES_HPP_
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -790,20 +791,16 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                        );
             }
             PDFDocInfo aDocInfo;
-            Reference< document::XDocumentInfoSupplier > xDocumentInfoSupplier( mxSrcDoc, UNO_QUERY );
-            if ( xDocumentInfoSupplier.is() )
+            Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
+            if ( xDocumentPropsSupplier.is() )
             {
-                Reference< document::XDocumentInfo > xDocumentInfo( xDocumentInfoSupplier->getDocumentInfo() );
-                if ( xDocumentInfo.is() )
+                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
+                if ( xDocumentProps.is() )
                 {
-                    Reference< XPropertySet > xPropSet( xDocumentInfo, UNO_QUERY );
-                    if ( xPropSet.is() )
-                    {
-                        aDocInfo.Title = GetProperty( xPropSet, "Title" );
-                        aDocInfo.Author = GetProperty( xPropSet, "Author" );
-                        aDocInfo.Subject = GetProperty( xPropSet, "Subject" );
-                        aDocInfo.Keywords = GetProperty( xPropSet, "Keywords" );
-                    }
+                    aDocInfo.Title = xDocumentProps->getTitle();
+                    aDocInfo.Author = xDocumentProps->getAuthor();
+                    aDocInfo.Subject = xDocumentProps->getSubject();
+                    aDocInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
                 }
             }
             // getting the string for the producer
