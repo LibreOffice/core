@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:20:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,6 +278,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.Len() );
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( NULL );
+    aDrawInf.SetGrammarCheck( NULL );
     aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
@@ -642,6 +643,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 aDrawInf.SetSpace( 0 );
                 aDrawInf.SetKanaComp( 0 );
                 aDrawInf.SetWrong( NULL );
+                aDrawInf.SetGrammarCheck( NULL );
                 aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
                 aDrawInf.SetFrm( this );
                 aDrawInf.SetFont( pFnt );
@@ -757,6 +759,7 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
 
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
+        aInf.SetGrammarCheckList( ( (SwTxtNode*)GetTxtNode() )->GetGrammarCheck() );
         aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );  // SMARTTAGS
         aInf.GetTxtFly()->SetTopRule();
 
