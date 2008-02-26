@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:52 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,17 +186,7 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
     {
         if (!IsFldEdit() || nSubType == i)
         {
-            if (i >= DI_INFO1 && i <= DI_INFO4)
-            {
-                if (!pInfo && !IsFldEdit())
-                {
-                    pInfo = aTypeTLB.InsertEntry(aInfoStr);
-                    pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
-                }
-                pEntry = aTypeTLB.InsertEntry(*aLst[i], pInfo);
-                pEntry->SetUserData(reinterpret_cast<void*>(i));
-            }
-            else if (i == DI_CUSTOM )
+            if (DI_CUSTOM == i)
             {
                 if (aPropertyNames.getLength() )
                 {
@@ -406,7 +396,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
     EnableInsert(nSubType != USHRT_MAX);
 
     if (nSubType == USHRT_MAX)  // Info-Text
-        nSubType = DI_INFO1;
+        nSubType = DI_SUBTYPE_BEGIN;
 
     aSelectionLB.Clear();
 
@@ -467,6 +457,11 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     ULONG nFormat = 0;
 
     USHORT nPos = aSelectionLB.GetSelectEntryPos();
+
+    String aName;
+    if (DI_CUSTOM == nSubType)
+        aName = aTypeTLB.GetEntryText(pSelEntry);
+
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         nSubType |= (USHORT)(ULONG)aSelectionLB.GetEntryData(nPos);
 
@@ -480,10 +475,7 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     if (!IsFldEdit() || nOldSel != aSelectionLB.GetSelectEntryPos() ||
         nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue())
     {
-        String aPar;
-        if ( nSubType == 13 )
-            aPar = aTypeTLB.GetEntryText(pSelEntry);
-        InsertFld(nTypeId, nSubType, aPar, aEmptyStr, nFormat,
+        InsertFld(nTypeId, nSubType, aName, aEmptyStr, nFormat,
                 ' ', aFormatLB.IsAutomaticLanguage());
     }
 
