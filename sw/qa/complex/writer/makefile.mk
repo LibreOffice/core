@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 09:07:18 $
+#   last change: $Author: obo $ $Date: 2008-02-26 10:32:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ PACKAGE = complex$/writer
 #----- compile .java files -----------------------------------------
 
 JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java
+JAVAFILES       = CheckIndexedPropertyValues.java CheckNamedPropertyValues.java CheckCrossReferences.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
@@ -86,7 +86,8 @@ ALL: ALLDEP
 
 run: \
     CheckIndexedPropertyValues \
-    CheckNamedPropertyValues
+    CheckNamedPropertyValues \
+    CheckCrossReferences
 
 RUN: run
 
@@ -97,4 +98,6 @@ CheckIndexedPropertyValues:
 CheckNamedPropertyValues:
     +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_PACKAGE).CheckNamedPropertyValues
 
+CheckCrossReferences:
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) -tdoc $(PWD)$/testdocuments $(CT_PACKAGE).CheckCrossReferences
 
