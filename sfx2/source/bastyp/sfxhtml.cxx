@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:41:48 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
-
 #include <tools/urlobj.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
 #include "openflag.hxx"
+
+#include <comphelper/string.hxx>
 
 #ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
@@ -86,6 +84,14 @@
 #endif
 
 #include <sfx2/sfxhtml.hxx>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+using namespace ::com::sun::star;
+
+
 sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
 sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
@@ -311,11 +317,11 @@ IMAPOBJ_SETEVENT:
     return bNewArea;
 }
 
-BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
-                                      SvKeyValueIterator *pHTTPHeader,
-                                      const HTMLOptions *pOptions,
-                                      USHORT &rMetaCount,
-                                      rtl_TextEncoding& rEnc )
+BOOL SfxHTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *pHTTPHeader,
+        const HTMLOptions *pOptions,
+        rtl_TextEncoding& rEnc )
 {
     String aName, aContent;
     USHORT nAction = HTML_META_NONE;
@@ -368,37 +374,52 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
     switch( nAction )
     {
     case HTML_META_AUTHOR:
-        pInfo->SetAuthor( aContent );
-        bChanged = TRUE;
+        if (i_xDocProps.is()) {
+            i_xDocProps->setAuthor( aContent );
+            bChanged = TRUE;
+        }
         break;
     case HTML_META_DESCRIPTION:
-        pInfo->SetComment( aContent );
-        bChanged = TRUE;
+        if (i_xDocProps.is()) {
+            i_xDocProps->setDescription( aContent );
+            bChanged = TRUE;
+        }
         break;
     case HTML_META_KEYWORDS:
-        pInfo->SetKeywords( aContent );
-        bChanged = TRUE;
+        if (i_xDocProps.is()) {
+            i_xDocProps->setKeywords(
+                ::comphelper::string::convertCommaSeparated(aContent));
+            bChanged = TRUE;
+        }
         break;
     case HTML_META_CLASSIFICATION:
-        pInfo->SetTheme( aContent );
-        bChanged = TRUE;
+        if (i_xDocProps.is()) {
+            i_xDocProps->setSubject( aContent );
+            bChanged = TRUE;
+        }
         break;
 
     case HTML_META_CHANGEDBY:
-        pInfo->SetModificationAuthor( aContent );
+        if (i_xDocProps.is()) {
+            i_xDocProps->setModifiedBy( aContent );
+        }
         break;
 
     case HTML_META_CREATED:
     case HTML_META_CHANGED:
-        if( aContent.Len() && aContent.GetTokenCount()==2 )
+        if( i_xDocProps.is() && aContent.Len() && aContent.GetTokenCount()==2 )
         {
             Date aDate( (ULONG)aContent.GetToken(0).ToInt32() );
             Time aTime( (ULONG)aContent.GetToken(1).ToInt32() );
             DateTime aDateTime( aDate, aTime );
+            ::util::DateTime uDT(aDateTime.Get100Sec(),
+                aDateTime.GetSec(), aDateTime.GetMin(),
+                aDateTime.GetHour(), aDateTime.GetDay(),
+                aDateTime.GetMonth(), aDateTime.GetYear());
             if( HTML_META_CREATED==nAction )
-                pInfo->SetCreationDate( aDateTime );
+                i_xDocProps->setCreationDate( uDT );
             else
-                pInfo->SetModificationDate( aDateTime );
+                i_xDocProps->setModificationDate( uDT );
             bChanged = TRUE;
         }
         break;
@@ -416,24 +437,16 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
     case HTML_META_NONE:
         if( !bHTTPEquiv )
         {
-            USHORT nKeys = pInfo->GetUserKeyCount();
-            if( rMetaCount==USHRT_MAX )
-            {
-                rMetaCount = 0;
-                while( rMetaCount<nKeys &&
-                        pInfo->GetUserKeyWord(rMetaCount).Len() )
-                {
-                    rMetaCount++;
-                }
-            }
-            if( rMetaCount < nKeys )
-            {
-                if( !pInfo->GetUserKeyWord(rMetaCount).Len() )
-                {
-                    pInfo->SetUserKey( aName, aContent, rMetaCount );
-                    rMetaCount++;
+            if (i_xDocProps.is()) {
+                uno::Reference<beans::XPropertyContainer> xUDProps
+                    = i_xDocProps->getUserDefinedProperties();
+                try {
+                    xUDProps->addProperty(aName,
+                        beans::PropertyAttribute::REMOVEABLE,
+                        uno::makeAny(::rtl::OUString(aContent)));
                     bChanged = TRUE;
-                    break;
+                } catch (uno::Exception &) {
+                    // ignore
                 }
             }
         }
@@ -443,15 +456,16 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
     return bChanged;
 }
 
-BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
+BOOL SfxHTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
                                       SvKeyValueIterator *pHeader )
 {
     USHORT nContentOption = HTML_O_CONTENT;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
-    BOOL bRet = ParseMetaOptions( pInfo, pHeader,
+    BOOL bRet = ParseMetaOptions( i_xDocProps, pHeader,
                                   GetOptions(&nContentOption),
-                                  nMetaTags, eEnc );
+                                  eEnc );
 
     // If the encoding is set by a META tag, it may only overwrite the
     // current encoding if both, the current and the new encoding, are 1-BYTE
