@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:08:06 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,6 @@
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
-#endif
-
-#ifndef _SFX_OBJUNO_HXX //autogen
-#include <sfx2/objuno.hxx>
 #endif
 
 #include "doc.hxx"
