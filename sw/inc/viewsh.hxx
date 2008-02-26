@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:35:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,10 @@ class IDocumentContentOperations;
 class IDocumentStylePoolAccess;
 class IDocumentStatistics;
 class IDocumentUndoRedo;
+// --> OD 2007-11-14 #i83479#
+class IDocumentListItems;
+class IDocumentOutlineNodes;
+// <--
 class SfxPrinter;
 class SfxProgress;
 class SwRootFrm;
@@ -357,6 +361,11 @@ public:
     /** Provides access to the document undo/redo interface
      */
     IDocumentUndoRedo* getIDocumentUndoRedoAccess();
+
+    // --> OD 2007-11-14 #i83479#
+    const IDocumentListItems* getIDocumentListItemsAccess() const;
+    const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
+    // <--
 
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
