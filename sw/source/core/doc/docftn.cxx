@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:35:26 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,8 +344,12 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             pFtnInfo->Modify( &aOld, &aNew );
         }
 
-        UpdateRefFlds(NULL);
-
+        // --> OD 2008-01-09 #i81002#
+        // no update during loading
+        if ( !IsInReading() )
+        {
+            UpdateRefFlds(NULL);
+        }
         SetModified();
     }
 }
@@ -400,7 +404,12 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             pEndNoteInfo->Modify( &aOld, &aNew );
         }
 
-        UpdateRefFlds(NULL);
+        // --> OD 2008-01-09 #i81002#
+        // no update during loading
+        if ( !IsInReading() )
+        {
+            UpdateRefFlds(NULL);
+        }
         SetModified();
     }
 }
