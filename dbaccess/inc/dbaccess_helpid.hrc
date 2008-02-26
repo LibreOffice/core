@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:08:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,6 +445,31 @@
 #define HID_EXTENSION_NOT_PRESENT_DLG                           ( HID_DBACCESS_START +  381)
 #define HID_DLG_QRY_JOIN_CONTROL                                ( HID_DBACCESS_START +  382)
 #define HID_DSADMIN_IGNORECURRENCY                              ( HID_DBACCESS_START +  383)
+
+// this one below have hid in number space HID_SBA_START
+#define HID_DLG_ADABAS_NEWDB                        (HID_SBA_START +  0)
+#define HID_DLG_ADABAS_DBNAME                       (HID_SBA_START +  1)
+#define HID_DLG_ADABAS_SYSUSR                       (HID_SBA_START +  2)
+#define HID_DLG_ADABAS_SYSPWD                       (HID_SBA_START +  3)
+#define HID_DLG_ADABAS_CONUSR                       (HID_SBA_START +  4)
+#define HID_DLG_ADABAS_CONPWD                       (HID_SBA_START +  5)
+#define HID_DLG_ADABAS_DATADEVSPACE_SIZE            (HID_SBA_START +  6)
+#define HID_DLG_ADABAS_CACHE_SIZE                   (HID_SBA_START +  7)
+#define HID_DLG_ADABAS_USR                          (HID_SBA_START +  8)
+#define HID_DLG_ADABAS_DOMAINPWD                    (HID_SBA_START +  9)
+#define HID_DLG_ADABAS_RESTORE                      (HID_SBA_START +  10)
+#define HID_DLG_ADABAS_PBRESTORE                    (HID_SBA_START +  11)
+#define HID_DLG_ADABAS_SYSDEVSPACE                  (HID_SBA_START +  12)
+#define HID_DLG_ADABAS_PBSYSDEVSPACE                (HID_SBA_START +  13)
+#define HID_DLG_ADABAS_TRANSACTIONLOG               (HID_SBA_START +  14)
+#define HID_DLG_ADABAS_PBTRANSACTIONLOG             (HID_SBA_START +  15)
+#define HID_DLG_ADABAS_DATADEVSPACE                 (HID_SBA_START +  16)
+#define HID_DLG_ADABAS_PBDATADEVSPACE               (HID_SBA_START +  18)
+#define HID_DLG_ADABAS_TRANSACTIONLOG_SIZE          (HID_SBA_START +  19)
+#define HID_DLG_ADABAS_CON_PWD                      (HID_SBA_START +  20)
+#define HID_DLG_ADABAS_SYS_PWD                      (HID_SBA_START +  21)
+#define HID_DLG_ADABAS_DOMAIN_PWD                   (HID_SBA_START +  22)
+//end of HID_SBA_START
 
 // don't forget to update the file util/hidother.src
 
