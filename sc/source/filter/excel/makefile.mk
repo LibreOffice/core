@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-13 09:09:27 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:53:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,8 +125,10 @@ EXCEPTIONSFILES = \
         $(SLO)$/excdoc.obj					\
         $(SLO)$/excform.obj					\
         $(SLO)$/excform8.obj				\
+        $(SLO)$/excimp8.obj					\
         $(SLO)$/excobj.obj					\
         $(SLO)$/excrecds.obj				\
+        $(SLO)$/expop2.obj					\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xeescher.obj				\
