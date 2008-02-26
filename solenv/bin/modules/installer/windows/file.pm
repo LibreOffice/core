@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 17:00:53 $
+#   last change: $Author: obo $ $Date: 2008-02-26 15:59:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -560,7 +560,6 @@ sub create_files_table
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
-        if (( $styles =~ /\bADAFILE\b/ ) && ( ! ($allvariables->{'ADAPRODUCT'} ))) { next; }
 
         $file{'Component_'} = get_file_component_name($onefile, $filesref);
         $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'});
