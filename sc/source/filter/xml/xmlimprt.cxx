@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:37:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@
 #include "postit.hxx"
 #include <comphelper/extract.hxx>
 
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -787,8 +787,11 @@ static __FAR_DATA SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
 };
 
 
-class ScXMLDocContext_Impl : public SvXMLImportContext
+// NB: virtually inherit so we can multiply inherit properly
+//     in ScXMLFlatDocContext_Impl
+class ScXMLDocContext_Impl : public virtual SvXMLImportContext
 {
+protected:
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
@@ -815,6 +818,54 @@ ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, USHORT nPrfx,
 
 ScXMLDocContext_Impl::~ScXMLDocContext_Impl()
 {
+}
+
+// context for flat file xml format
+class ScXMLFlatDocContext_Impl
+    : public ScXMLDocContext_Impl, public SvXMLMetaDocumentContext
+{
+public:
+    ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+
+    virtual ~ScXMLFlatDocContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT i_nPrefix, const OUString& i_rLocalName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
+};
+
+ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+    SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
+    ScXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName, i_xAttrList),
+    SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
+        i_xDocProps, i_xDocBuilder)
+{
+}
+
+ScXMLFlatDocContext_Impl::~ScXMLFlatDocContext_Impl() { }
+
+
+SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
+    USHORT i_nPrefix, const OUString& i_rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
+{
+    // behave like meta base class iff we encounter office:meta
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetDocElemTokenMap();
+    if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
+        return SvXMLMetaDocumentContext::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    } else {
+        return ScXMLDocContext_Impl::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    }
 }
 
 class ScXMLBodyContext_Impl : public SvXMLImportContext
@@ -881,8 +932,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
                                               xAttrList );
         break;
     case XML_TOK_DOC_META:
-        if (GetScImport().getImportFlags() & IMPORT_META)
-            pContext = GetScImport().CreateMetaContext( rLocalName );
+        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
     case XML_TOK_DOC_SCRIPTS:
         if (GetScImport().getImportFlags() & IMPORT_SCRIPTS)
@@ -1372,13 +1422,26 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     SvXMLImportContext *pContext = 0;
 
     if( (XML_NAMESPACE_OFFICE == nPrefix) &&
-        ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
-          IsXMLToken(rLocalName, XML_DOCUMENT_META) ||
-          IsXMLToken(rLocalName, XML_DOCUMENT_STYLES) ||
+        ( IsXMLToken(rLocalName, XML_DOCUMENT_STYLES) ||
           IsXMLToken(rLocalName, XML_DOCUMENT_CONTENT) ||
-          IsXMLToken(rLocalName, XML_DOCUMENT_SETTINGS) ))
+          IsXMLToken(rLocalName, XML_DOCUMENT_SETTINGS) )) {
         pContext = new ScXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
+    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+                ( IsXMLToken(rLocalName, XML_DOCUMENT_META)) ) {
+        pContext = CreateMetaContext(rLocalName);
+    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+                ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY_THROW);
+        // flat OpenDocument file format
+        pContext = new ScXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
+                        xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
+    }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
 
@@ -1649,16 +1712,22 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 {
     SvXMLImportContext *pContext(0);
 
-    if( !IsStylesOnlyMode() )
+    if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
-        pContext = new SfxXMLMetaContext( *this,
-                            XML_NAMESPACE_OFFICE, rLocalName,
-                            GetModel() );
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY_THROW);
+        pContext = new SvXMLMetaDocumentContext(*this,
+                        XML_NAMESPACE_OFFICE, rLocalName,
+                        xDPS->getDocumentProperties(), xDocBuilder);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-                                              rLocalName );
+        pContext = new SvXMLImportContext( *this,
+                            XML_NAMESPACE_OFFICE, rLocalName );
 
     return pContext;
 }
@@ -1682,39 +1751,28 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
     return pContext;
 }
 
-void ScXMLImport::SetStatisticAttributes( const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+void ScXMLImport::SetStatistics(
+        const uno::Sequence<beans::NamedValue> & i_rStats)
 {
-    SvXMLImport::SetStatisticAttributes(xAttrList);
+    static const char* s_stats[] =
+        { "TableCount", "CellCount", "ObjectCount", 0 };
+
+    SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(0);
-    INT16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( INT16 i=0; i < nAttrCount; ++i )
-    {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
-        sal_uInt16 nPrefix(GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        if ( nPrefix == XML_NAMESPACE_META)
-        {
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
-            sal_Int32 nValue(0);
-            if (IsXMLToken(aLocalName, XML_TABLE_COUNT))
-            {
-                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
-                    nCount += nValue;
-            }
-            else if (IsXMLToken(aLocalName, XML_CELL_COUNT))
-            {
-                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
-                    nCount += nValue;
-            }
-            else if (IsXMLToken(aLocalName, XML_OBJECT_COUNT))
-            {
-                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
-                    nCount += nValue;
+    for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
+        for (const char** pStat = s_stats; *pStat != 0; ++pStat) {
+            if (i_rStats[i].Name.equalsAscii(*pStat)) {
+                sal_Int32 val;
+                if (i_rStats[i].Value >>= val) {
+                    nCount += val;
+                } else {
+                    DBG_ERROR("ScXMLImport::SetStatistics: invalid entry");
+                }
             }
         }
     }
+
     if (nCount)
     {
         GetProgressBarHelper()->SetReference(nCount);
