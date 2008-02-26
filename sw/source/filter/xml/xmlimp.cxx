@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:11:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,8 @@
 #include <unotxdoc.hxx>    // for initXForms()
 #endif
 
+#include <xmloff/xmlmetai.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -256,7 +258,9 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
 
 // --> OD 2006-10-11 #i69629#
 // enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
-class SwXMLDocContext_Impl : public SvXMLImportContext
+// NB: virtually inherit so we can multiply inherit properly
+//     in SwXMLOfficeDocContext_Impl
+class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 // --> OD 2006-10-11 #i69629#
 protected:
@@ -328,7 +332,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
                                                             xAttrList );
         break;
     case XML_TOK_DOC_META:
-        pContext = GetSwImport().CreateMetaContext( rLocalName );
+        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
     case XML_TOK_DOC_SCRIPT:
         pContext = GetSwImport().CreateScriptContext( rLocalName );
@@ -355,30 +359,37 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
 
 // --> OD 2006-10-11 #i69629#
 // new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
-class SwXMLOfficeDocContext_Impl : public SwXMLDocContext_Impl
+class SwXMLOfficeDocContext_Impl :
+         public SwXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
 public:
 
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
-                                sal_uInt16 nPrfx,
-                                const OUString& rLName,
-                                const Reference< xml::sax::XAttributeList > & xAttrList );
+                sal_uInt16 nPrfx,
+                const OUString& rLName,
+                const Reference< xml::sax::XAttributeList > & xAttrList,
+                const Reference< document::XDocumentProperties >& xDocProps,
+                const Reference< xml::sax::XDocumentHandler >& xDocBuilder);
     virtual ~SwXMLOfficeDocContext_Impl();
 
     TYPEINFO();
 
     virtual SvXMLImportContext *CreateChildContext(
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
-                            const Reference< xml::sax::XAttributeList > & xAttrList );
+                sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const Reference< xml::sax::XAttributeList > & xAttrList );
 };
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
-                    SwXMLImport& rImport,
-                    sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const Reference< xml::sax::XAttributeList > & xAttrList ) :
-    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
+                SwXMLImport& rImport,
+                sal_uInt16 nPrfx,
+                const OUString& rLName,
+                const Reference< xml::sax::XAttributeList > & xAttrList,
+                const Reference< document::XDocumentProperties >& xDocProps,
+                const Reference< xml::sax::XDocumentHandler >& xDocBuilder) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps, xDocBuilder)
 {
 }
 
@@ -389,22 +400,30 @@ SwXMLOfficeDocContext_Impl::~SwXMLOfficeDocContext_Impl()
 TYPEINIT1( SwXMLOfficeDocContext_Impl, SwXMLDocContext_Impl );
 
 SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
-                            const Reference< xml::sax::XAttributeList > & xAttrList )
+                sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const Reference< xml::sax::XAttributeList > & xAttrList )
 {
+    const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
+
     // assign paragraph styles to list levels of outline style after all styles
     // are imported and finished. This is the case, when <office:body> starts
     // in flat OpenDocument file format.
     {
-        const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
         if ( rTokenMap.Get( nPrefix, rLocalName ) == XML_TOK_DOC_BODY )
         {
             GetImport().GetTextImport()->SetOutlineStyles( sal_True );
         }
     }
 
-    return SwXMLDocContext_Impl::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    // behave like meta base class iff we encounter office:meta
+    if ( XML_TOK_DOC_META == rTokenMap.Get( nPrefix, rLocalName ) ) {
+        return SvXMLMetaDocumentContext::CreateChildContext(
+                    nPrefix, rLocalName, xAttrList );
+    } else {
+        return SwXMLDocContext_Impl::CreateChildContext(
+                    nPrefix, rLocalName, xAttrList );
+    }
 }
 // <--
 
@@ -430,6 +449,7 @@ SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
                     sal_uInt16 nPrfx,
                     const OUString& rLName,
                     const Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
     SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
 {
 }
@@ -470,18 +490,29 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     // own subclasses for <office:document> and <office:document-styles>
     if( XML_NAMESPACE_OFFICE==nPrefix &&
 //        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
-        ( IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
+        ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
 //          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
+              IsXMLToken( rLocalName, XML_DOCUMENT_META ) )
+    {
+        pContext = CreateMetaContext(rLocalName);
+    }
+    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), UNO_QUERY_THROW);
         // flat OpenDocument file format
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                                                   xAttrList );
+                        xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
     }
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
