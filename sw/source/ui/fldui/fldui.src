@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:33:20 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,6 +551,18 @@ String FMT_REF_ONLYCAPTION
 String FMT_REF_ONLYSEQNO
 {
     Text [ en-US ] = "Numbering";
+};
+String FMT_REF_NUMBER
+{
+    Text [ en-US ] = "Number";
+};
+String FMT_REF_NUMBER_NO_CONTEXT
+{
+    Text [ en-US ] = "Number (no context)";
+};
+String FMT_REF_NUMBER_FULL_CONTEXT
+{
+    Text [ en-US ] = "Number (full context)";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Platzhalter
