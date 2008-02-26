@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:54:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,8 +388,33 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             break;
 
                         case RES_GETREFFLD:
-                            sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
-                            break;
+                        {
+                            // --> OD 2008-01-09 #i85090#
+                            const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
+                            ASSERT( pRefFld,
+                                    "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
+                            if ( pRefFld )
+                            {
+                                if ( pRefFld->IsRefToHeadingCrossRefBookmark() ||
+                                     pRefFld->IsRefToNumItemCrossRefBookmark() )
+                                {
+                                    sTxt = pRefFld->GetExpandedTxtOfReferencedTxtNode();
+                                    if ( sTxt.Len() > 80  )
+                                    {
+                                        sTxt.Erase( 80 );
+                                        sTxt += '.';
+                                        sTxt += '.';
+                                        sTxt += '.';
+                                    }
+                                }
+                                else
+                                {
+                                    sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
+                                }
+                            }
+                            // <--
+                        }
+                        break;
                         }
                     }
 
