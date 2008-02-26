@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:32:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #endif
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
-#endif
-
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -4806,29 +4802,6 @@ CharSet SwWW8StyInf::GetCharSet() const
     if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eLTRFontSrcCharSet;
-}
-
-//-----------------------------------------
-//      Document Info
-//-----------------------------------------
-
-// ReadDocInfo() liegt hier und nicht nicht in wwpar.cxx::LoadDoc1(),
-// da hier das noetige sfxcore.hxx bereits includet ist.
-
-void SwWW8ImplReader::ReadDocInfo()
-{
-    if( pStg )
-    {
-        SfxDocumentInfo* pNeu;
-        if( rDoc.GetpInfo() )                           // soo ein Umstand......
-            pNeu = new SfxDocumentInfo( *rDoc.GetpInfo() );
-        else
-            pNeu = new SfxDocumentInfo();
-
-        pNeu->LoadPropertySet( pStg );  // DocInfo laden
-        rDoc.SetDocumentInfo( *pNeu );
-        delete pNeu;
-    }
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
