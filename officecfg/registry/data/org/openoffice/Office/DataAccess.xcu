@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:53:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,17 +150,6 @@
       <node oor:name="com.sun.star.comp.sdbc.ODBCDriver" oor:op="replace">
         <prop oor:name="DriverName">
           <value>com.sun.star.comp.sdbc.ODBCDriver</value>
-        </prop>
-        <prop oor:name="Enable">
-          <value>false</value>
-        </prop>
-        <prop oor:name="Timeout">
-          <value>60</value>
-        </prop>
-      </node>
-      <node oor:name="com.sun.star.comp.sdbcx.adabas.ext.ODriver" oor:op="replace">
-        <prop oor:name="DriverName">
-          <value>com.sun.star.comp.sdbcx.adabas.ext.ODriver</value>
         </prop>
         <prop oor:name="Enable">
           <value>false</value>
