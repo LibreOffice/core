@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:36:21 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,14 @@
 #ifndef _XMLOFF_METAEXPORTCOMPONENT_HXX
 #define _XMLOFF_METAEXPORTCOMPONENT_HXX
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
 
 class XMLMetaExportComponent : public SvXMLExport
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo > xDocInfo;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties > mxDocProps;
 
 public:
     // #110680#
@@ -56,15 +53,18 @@ public:
         sal_uInt16 nFlags
         );
 
-    ~XMLMetaExportComponent();
+    virtual ~XMLMetaExportComponent();
 
 protected:
     // export the events off all autotexts
     virtual sal_uInt32 exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID );
 
-    // allow to set the document info provider instead on model implementation
+    // accept XDocumentProperties in addition to XModel
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // override
+    virtual void _ExportMeta();
 
     // methods without content:
     virtual void _ExportAutoStyles();
