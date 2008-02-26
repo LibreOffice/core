@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:42:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_info1, "INFO1" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_info2, "INFO2" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_info3, "INFO3" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_info4, "INFO4" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_custom, "CUSTOM" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_create, "CREATE" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_FS_change, "CHANGE" );
 
