@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.209 $
+ *  $Revision: 1.210 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:36:55 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,9 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sfx2/objsh.hxx>
 
@@ -752,31 +755,31 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
 
 void ScXMLExport::_ExportMeta()
 {
-    SvXMLExport::_ExportMeta();
     sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
     sal_Int32 nTableCount(0);
     sal_Int32 nShapesCount(0);
     GetAutoStylePool()->ClearEntries();
     CollectSharedData(nTableCount, nShapesCount, nCellCount);
-    rtl::OUStringBuffer sBuffer;
-    if (nTableCount)
-    {
-        GetMM100UnitConverter().convertNumber(sBuffer, nTableCount);
-        AddAttribute(XML_NAMESPACE_META, XML_TABLE_COUNT, sBuffer.makeStringAndClear());
+
+    uno::Sequence<beans::NamedValue> stats(3);
+    stats[0] = beans::NamedValue(::rtl::OUString::createFromAscii("TableCount"),
+                uno::makeAny(nTableCount));
+    stats[1] = beans::NamedValue(::rtl::OUString::createFromAscii("CellCount"),
+                uno::makeAny(nCellCount));
+    stats[2] = beans::NamedValue(::rtl::OUString::createFromAscii("ObjectCount"),
+                uno::makeAny(nShapesCount));
+
+    // update document statistics at the model
+    uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xPropSup->getDocumentProperties());
+    if (xDocProps.is()) {
+        xDocProps->setDocumentStatistics(stats);
     }
-    if (nCellCount)
-    {
-        GetMM100UnitConverter().convertNumber(sBuffer, nCellCount);
-        AddAttribute(XML_NAMESPACE_META, XML_CELL_COUNT, sBuffer.makeStringAndClear());
-    }
-    if (nShapesCount)
-    {
-        GetMM100UnitConverter().convertNumber(sBuffer, nShapesCount);
-        AddAttribute(XML_NAMESPACE_META, XML_OBJECT_COUNT, sBuffer.makeStringAndClear());
-    }
-    {
-        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True);
-    }
+
+    // export document properties
+    SvXMLExport::_ExportMeta();
 }
 
 void ScXMLExport::_ExportFontDecls()
