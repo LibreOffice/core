@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:54 $
+#   last change: $Author: obo $ $Date: 2008-02-26 15:59:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1575,11 +1575,9 @@ sub add_childprojects
     my $line = "";
 
     $installer::globals::javafile = installer::worker::return_first_item_with_special_flag($filesref ,"JAVAFILE");
-    $installer::globals::adafile = installer::worker::return_first_item_with_special_flag($filesref ,"ADAFILE");
     $installer::globals::urefile = installer::worker::return_first_item_with_special_flag($filesref ,"UREFILE");
 
     if (( $installer::globals::javafile eq "" ) && ( $allvariables->{'JAVAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
-    if (( $installer::globals::adafile eq "" ) && ( $allvariables->{'ADAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
     if (( $installer::globals::urefile eq "" ) && ( $allvariables->{'UREPRODUCT'} )) { installer::exiter::exit_program("ERROR: No UREFILE found in files collector!", "add_childprojects"); }
 
     # Content for Directory table
@@ -1626,12 +1624,6 @@ sub add_childprojects
         $subjavadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::javafile);
     }
 
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $dirname = get_directory_name_from_file($installer::globals::adafile);
-        $subadadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::adafile);
-    }
-
     if ( $allvariables->{'UREPRODUCT'} )
     {
         $dirname = get_directory_name_from_file($installer::globals::urefile);
@@ -1642,19 +1634,9 @@ sub add_childprojects
     # The Java and Ada components have new directories
 
     if ( $allvariables->{'JAVAPRODUCT'} ) { include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable); }
-    if ( $allvariables->{'ADAPRODUCT'} ) { include_subdir_into_componenttable($subadadir, $installer::globals::adafile, $componenttable); }
     if ( $allvariables->{'UREPRODUCT'} ) { include_subdir_into_componenttable($suburedir, $installer::globals::urefile, $componenttable); }
 
     # Content for CustomAction table
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $line = "InstallAdabas\t98\tSystemFolder\t[SourceDir]$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
 
     if ( $allvariables->{'JAVAPRODUCT'} )
     {
@@ -1668,15 +1650,6 @@ sub add_childprojects
     if ( $allvariables->{'UREPRODUCT'} )
     {
         $line = "InstallUre\t98\tSystemFolder\t$installer::globals::urefile->{'Subdir'}\\$installer::globals::urefile->{'Name'} /S\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $line = "MaintenanceAdabas\t82\t$installer::globals::adafile->{'uniquename'}\t\/S\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
