@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFlatParagraph.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:53:43 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_XFlatParagraph_idl__
+#define __com_sun_star_text_XFlatParagraph_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextMarkup_idl__
+#include <com/sun/star/text/XTextMarkup.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** provides functionality to ...
+
+    @since OOo 3.0
+ */
+
+interface XFlatParagraph: com::sun::star::text::XTextMarkup
+{
+
+    //-------------------------------------------------------------------------
+    /** get the content of the paragraph
+
+        @returns
+                the content of the paragraph.
+    */
+    string getText();
+
+    //-------------------------------------------------------------------------
+    /** check whether the content has been modified
+
+        @returns
+                <TRUE/>  if the content has been modified,
+                <FALSE/> otherwise.
+    */
+    boolean isModified();
+
+    //-------------------------------------------------------------------------
+    /** change the 'checked' flag of the respective text node, i.e., mark the
+        text node as 'processed'
+
+        @param nType
+                type, see <type>TextMarkupType</type>.
+
+        @param  bVal
+                <TRUE/>  the respective text node has been processed
+                <FALSE/> the respective text node needs to be processed again
+                         later
+    */
+    void setChecked( [in] long nType, [in] boolean bVal );
+
+    //-------------------------------------------------------------------------
+    /** returns whether the respective text node has already been processed
+
+        @param nType
+                type, see <type>TextMarkupType</type>.
+
+        @returns
+                <TRUE/>  if the respective text node has been checked
+                <FALSE/> otherwise.
+    */
+    boolean isChecked( [in] long nType );
+
+    //-------------------------------------------------------------------------
+    /** get the language of the specific text
+
+        @param  nPos
+                start index of the text.
+
+        @param  nLen
+                the length of the text.
+
+        @returns
+                the locale for the language identified.
+                If no language could be identified, the locale will be empty.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    com::sun::star::lang::Locale getLanguageOfText( [in] long nPos, [in] long nLen )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** get the single most probable language of the specific text,
+        especially after getLanguageOfText fails
+
+        @param  nPos
+                start index of the text.
+
+        @param  nLen
+                the length of the text.
+
+        @returns
+                the locale for the language identified.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    com::sun::star::lang::Locale getPrimaryLanguageOfText( [in] long nPos,
+                                                           [in] long nLen )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** replace the specific text with new text.
+
+        @param  nPos
+                start index of the text.
+
+        @param  nLen
+                the length of the text.
+
+        @param  nNewText
+                new text.
+
+        @param aAttributes
+                the given set of attributes e.g. Language
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void changeText( [in] long nPos, [in] long nLen, [in] string aNewText,
+                     [in] sequence<::com::sun::star::beans::PropertyValue> aAttributes )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** replace the attributes of the specific text with the given set of attributes.
+
+        @param  nPos
+                start index of the text.
+
+        @param  nLen
+                the length of the text.
+
+        @param aAttributes
+                the given set of attributes e.g. Language.
+
+        @throws IllegalArgumentException
+                when any argument is wrong.
+    */
+    void    changeAttributes( [in] long nPos, [in] long nLen,
+                              [in] sequence<::com::sun::star::beans::PropertyValue> aAttributes )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** get a list of indexes that separate each two different languages
+
+        @returns
+            a list of indices.
+    */
+    sequence< long > getLanguagePortions();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
