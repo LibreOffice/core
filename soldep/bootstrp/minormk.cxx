@@ -4,9 +4,9 @@
  *
  *  $RCSfile: minormk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:32:13 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 08:09:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "minormk.hxx"
-#include <bootstrp/appdef.hxx>
+#include <appdef.hxx>
 #include <tools/fsys.hxx>
 #include <tools/geninfo.hxx>
 #include "prodmap.hxx"
