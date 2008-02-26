@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup2_tmpl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:31:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:26:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,6 +605,7 @@
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
+        MN_CROP
         MN_OBJECT_ALIGN
         MN_POSITION
         MN_DISTRIBUTE
