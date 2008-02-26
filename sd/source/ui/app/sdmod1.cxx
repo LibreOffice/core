@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:55:15 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,6 @@
 #include <svx/paperinf.hxx>
 #endif
 
-#include <sfx2/docinf.hxx>
-
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
@@ -126,6 +124,10 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_array.hpp>
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 
 using ::sd::framework::FrameworkHelper;
 
@@ -750,9 +752,17 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             pDoc->SetChanged(!bIsDocEmpty);
 
                             // clear document info
-                            SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-                            rInfo.SetTemplateName( rInfo.GetTitle() );
-                            rInfo.SetTemplateFileName( pPilotDlg->GetDocPath() );
+                            using namespace ::com::sun::star;
+                            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                            uno::Reference<document::XDocumentProperties>
+                                xDocProps(xDPS->getDocumentProperties());
+                            DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+                            xDocProps->resetUserData(
+                                SvtUserOptions().GetFullName() );
+                            xDocProps->setTemplateName(xDocProps->getTitle());
+                            xDocProps->setTemplateURL(pPilotDlg->GetDocPath());
+
                             pDocShell->SetUseUserData(TRUE);
 
                             // #94652# clear UNDO stack after autopilot
