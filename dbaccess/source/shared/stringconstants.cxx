@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:40:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP, "com.sun.star.frame.Desktop"
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_ADABASCREATIONDIALOG, "com.sun.star.sdb.AdabasCreationDialog");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_UI_FOLDERPICKER, "com.sun.star.ui.dialogs.FolderPicker");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_I18N_COLLATOR, "com.sun.star.i18n.Collator");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_EXTENDED_ADABAS_DRIVER, "com.sun.star.comp.sdbcx.adabas.ext.ODriver");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_EXTENDED_ADABAS_DRIVER, "com.sun.star.comp.sdbcx.adabas.ODriver");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_TABLEDEFINITION, "com.sun.star.sdb.TableDefinition");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_COMMAND_DEFINITION,    "com.sun.star.sdb.CommandDefinition");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DOCUMENTDEFINITION,    "com.sun.star.sdb.DocumentDefinition");
