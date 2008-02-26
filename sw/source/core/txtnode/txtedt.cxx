@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:25:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1833,24 +1833,28 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 //
 struct SwParaIdleData_Impl
 {
-    SwWrongList* pWrong;
+    SwWrongList* pWrong;            // for spell checking
+    SwWrongList* pGrammarCheck;     // for grammar checking /  proof reading
     SwWrongList* pSmartTags;
     ULONG nNumberOfWords;
     ULONG nNumberOfChars;
-    bool bWordCountDirty : 1;
-    bool bWrongDirty     : 1;    // Ist das Wrong-Feld auf invalid?
-    bool bSmartTagDirty  : 1;
-    bool bAutoComplDirty : 1;    // die ACompl-Liste muss angepasst werden
+    bool bWordCountDirty        : 1;
+    bool bWrongDirty            : 1;    // Ist das Wrong-Feld auf invalid?
+    bool bGrammarCheckDirty     : 1;
+    bool bSmartTagDirty         : 1;
+    bool bAutoComplDirty        : 1;    // die ACompl-Liste muss angepasst werden
 
     SwParaIdleData_Impl() :
-        pWrong         ( 0 ),
-        pSmartTags     ( 0 ),
-        nNumberOfWords ( 0 ),
-        nNumberOfChars ( 0 ),
-        bWordCountDirty( true ),
-        bWrongDirty    ( true ),
-        bSmartTagDirty ( true ),
-        bAutoComplDirty( true ) {};
+        pWrong              ( 0 ),
+        pGrammarCheck       ( 0 ),
+        pSmartTags          ( 0 ),
+        nNumberOfWords      ( 0 ),
+        nNumberOfChars      ( 0 ),
+        bWordCountDirty     ( true ),
+        bWrongDirty         ( true ),
+        bGrammarCheckDirty  ( true ),
+        bSmartTagDirty      ( true ),
+        bAutoComplDirty     ( true ) {};
 };
 
 void SwTxtNode::InitSwParaStatistics( bool bNew )
@@ -1860,6 +1864,7 @@ void SwTxtNode::InitSwParaStatistics( bool bNew )
     else if ( pParaIdleData_Impl )
     {
         delete pParaIdleData_Impl->pWrong;
+        delete pParaIdleData_Impl->pGrammarCheck;
         delete pParaIdleData_Impl->pSmartTags;
         delete pParaIdleData_Impl;
         pParaIdleData_Impl = 0;
@@ -1879,6 +1884,21 @@ void SwTxtNode::SetWrong( SwWrongList* pNew, bool bDelete )
 SwWrongList* SwTxtNode::GetWrong()
 {
     return pParaIdleData_Impl ? pParaIdleData_Impl->pWrong : 0;
+}
+
+void SwTxtNode::SetGrammarCheck( SwWrongList* pNew, bool bDelete )
+{
+    if ( pParaIdleData_Impl )
+    {
+        if ( bDelete )
+            delete pParaIdleData_Impl->pGrammarCheck;
+        pParaIdleData_Impl->pGrammarCheck = pNew;
+    }
+}
+
+SwWrongList* SwTxtNode::GetGrammarCheck()
+{
+    return pParaIdleData_Impl ? pParaIdleData_Impl->pGrammarCheck : 0;
 }
 
 void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
@@ -1934,6 +1954,15 @@ void SwTxtNode::SetWrongDirty( bool bNew ) const
 bool SwTxtNode::IsWrongDirty() const
 {
     return pParaIdleData_Impl ? pParaIdleData_Impl->bWrongDirty : 0;
+}
+void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
+{
+    if ( pParaIdleData_Impl )
+        pParaIdleData_Impl->bGrammarCheckDirty = bNew;
+}
+bool SwTxtNode::IsGrammarCheckDirty() const
+{
+    return pParaIdleData_Impl ? pParaIdleData_Impl->bGrammarCheckDirty : 0;
 }
 void SwTxtNode::SetSmartTagDirty( bool bNew ) const
 {
