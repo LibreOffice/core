@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:43:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,24 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
     SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
+    /** create number for this text node, if not already existing
+
+        OD 2005-11-02 #i51089 - TUNING#
+        OD 2007-10-26 #i83479# - made private
+
+        @return number of this node
+    */
+    inline SwNodeNum* CreateNum()
+    {
+        if ( !mpNodeNum )
+        {
+            // --> OD 2007-10-26 #i83479#
+            mpNodeNum = new SwNodeNum( const_cast<SwTxtNode*>(this) );
+            // <--
+        }
+        return mpNodeNum;
+    }
+
     using SwCntntNode::SetAttr;
     using SwCntntNode::GetAttr;
 
@@ -291,7 +309,7 @@ public:
 
     // virtuelle Methoden aus dem CntntNode
     virtual SwCntntFrm *MakeFrm();
-    virtual SwCntntNode *SplitNode( const SwPosition & );
+    virtual SwCntntNode *SplitCntntNode( const SwPosition & );
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();
 
@@ -347,22 +365,6 @@ public:
      */
     SwNumRule *GetNumRule(BOOL bInParent = TRUE) const;
     SwNumRule *GetNumRuleSync(BOOL bInParent = TRUE);
-
-    /** create number for this text node, if not already existing
-
-        OD 2005-11-02 #i51089 - TUNING#
-
-        @return number of this node
-    */
-    inline SwNodeNum* CreateNum() const
-    {
-        if ( !mpNodeNum )
-        {
-            mpNodeNum = new SwNodeNum;
-            mpNodeNum->SetTxtNode( const_cast<SwTxtNode*>(this) );
-        }
-        return mpNodeNum;
-    }
 
     inline const SwNodeNum* GetNum() const
     {
@@ -583,11 +585,19 @@ public:
     BOOL Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd );
 
-    // Liefert einen String mit expandierten Feldern zurueck
-    //   opt. die Kapitel/Nummer-String zurueck
+    // --> OD 2007-11-15 #i83479#
+    // add 4th optional parameter <bAddSpaceAfterListLabelStr> indicating,
+    // when <bWithNum = true> that a space is inserted after the string for
+    // the list label.
+    // add 5th optional parameter <bWithSpacesForLevel> indicating, if additional
+    // spaces are inserted in front of the expanded text string depending on
+    // the list level.
     XubString GetExpandTxt( const xub_StrLen nIdx = 0,
-                         const xub_StrLen nLen = STRING_LEN,
-                         const BOOL bWithNum = FALSE ) const;
+                            const xub_StrLen nLen = STRING_LEN,
+                            const bool bWithNum = false,
+                            const bool bAddSpaceAfterListLabelStr = false,
+                            const bool bWithSpacesForLevel = false ) const;
+    // <--
     BOOL GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
                         xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
                        BOOL bWithNum = FALSE, BOOL bWithFtn = TRUE,
@@ -693,7 +703,9 @@ public:
         return GetNum() ? GetNum()->IsRestart() : false;
     }
     // <--
-    void SetRestart(bool bRestart) const;
+    // --> OD 2007-10-26 #i83479# - made non-constant
+    void SetRestart(bool bRestart);
+    // <--
 
     void CopyNumber(SwTxtNode & rNode) const;
 
