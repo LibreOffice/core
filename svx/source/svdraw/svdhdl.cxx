@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:55:52 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2188,3 +2188,154 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
    }
    return pRet;
 }
+
+// --------------------------------------------------------------------
+// SdrCropHdl
+// --------------------------------------------------------------------
+
+SdrCropHdl::SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind)
+: SdrHdl( rPnt, eNewKind )
+{
+}
+
+// --------------------------------------------------------------------
+
+BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast )
+{
+    if( bIsHighContrast )
+    {
+        static BitmapEx* pHighContrastBitmap = 0;
+        if( pHighContrastBitmap == 0 )
+            pHighContrastBitmap = new BitmapEx(ResId(SIP_SA_ACCESSIBILITY_CROP_MARKERS, *ImpGetResMgr()));
+        return *pHighContrastBitmap;
+    }
+    else if( bIsFineHdl )
+    {
+        static BitmapEx* pModernBitmap = 0;
+        if( pModernBitmap == 0 )
+            pModernBitmap = new BitmapEx(ResId(SIP_SA_CROP_FINE_MARKERS, *ImpGetResMgr()));
+        return *pModernBitmap;
+    }
+    else
+    {
+        static BitmapEx* pSimpleBitmap = 0;
+        if( pSimpleBitmap == 0 )
+            pSimpleBitmap = new BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
+        return *pSimpleBitmap;
+    }
+}
+
+// --------------------------------------------------------------------
+
+BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
+{
+    int nPixelSize = 0, nX = 0, nY = 0, nOffset = 0;
+
+    if( nSize <= 3 )
+    {
+        nPixelSize = 13;
+        nOffset = 0;
+    }
+    else if( nSize <=4 )
+    {
+        nPixelSize = 17;
+        nOffset = 36;
+    }
+    else
+    {
+        nPixelSize = 21;
+        nOffset = 84;
+    }
+
+    switch( eKind )
+    {
+        case HDL_UPLFT: nX = 0; nY = 0; break;
+        case HDL_UPPER: nX = 1; nY = 0; break;
+        case HDL_UPRGT: nX = 2; nY = 0; break;
+        case HDL_LEFT:  nX = 0; nY = 1; break;
+        case HDL_RIGHT: nX = 2; nY = 1; break;
+        case HDL_LWLFT: nX = 0; nY = 2; break;
+        case HDL_LOWER: nX = 1; nY = 2; break;
+        case HDL_LWRGT: nX = 2; nY = 2; break;
+        default: break;
+    }
+
+    Rectangle aSourceRect( Point( nX * (nPixelSize-1) + nOffset,  nY * (nPixelSize-1)), Size(nPixelSize, nPixelSize) );
+
+    BitmapEx aRetval(rBitmap);
+    aRetval.Crop(aSourceRect);
+    return aRetval;
+}
+
+// --------------------------------------------------------------------
+
+void SdrCropHdl::CreateB2dIAObject()
+{
+    // first throw away old one
+    GetRidOfIAObject();
+
+    SdrMarkView* pView = pHdlList ? pHdlList->GetView() : 0;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
+
+    if( pPageView && !pView->areMarkHandlesHidden() )
+    {
+        sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
+        int nHdlSize = pHdlList->GetHdlSize();
+        if( bIsHighContrast )
+            nHdlSize = 4;
+
+        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl, bIsHighContrast ) );
+        BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
+
+        for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+        {
+            // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+            const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+
+            if(rPageWindow.GetPaintWindow().OutputToWindow())
+            {
+                if(rPageWindow.GetOverlayManager())
+                {
+                    basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+
+                    ::sdr::overlay::OverlayObject* pOverlayObject = 0L;
+
+                    // animate focused handles
+                    if(IsFocusHdl() && (pHdlList->GetFocusHdl() == this))
+                    {
+                        if( nHdlSize >= 2 )
+                            nHdlSize = 1;
+
+                        BitmapEx aBmpEx2( GetBitmapForHandle( aHandlesBitmap, nHdlSize + 1 ) );
+
+                        const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
+
+                        pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBmpEx1, aBmpEx2, nBlinkTime,
+                            (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                            (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                            (UINT16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                    }
+                    else
+                    {
+                        // create centered handle as default
+                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx(aPosition, aBmpEx1,
+                            (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1);
+                    }
+
+                    // OVERLAYMANAGER
+                    if(pOverlayObject)
+                    {
+                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                        maOverlayGroup.append(*pOverlayObject);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// --------------------------------------------------------------------
