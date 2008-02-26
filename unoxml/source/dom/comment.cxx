@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comment.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:44:12 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,21 @@ namespace DOM
         m_aNodeType = NodeType_COMMENT_NODE;
         init_node(aNodePtr);
     }
+
+    void SAL_CALL CComment::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        if (!i_xHandler.is()) throw RuntimeException();
+        Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
+        if (xExtended.is()) {
+            xExtended->comment(getData());
+        }
+    }
+
     OUString SAL_CALL CComment::getNodeName()throw (RuntimeException)
     {
         return OUString::createFromAscii("#comment");
     }
+
     OUString SAL_CALL CComment::getNodeValue() throw (RuntimeException)
     {
         return CCharacterData::getData();
