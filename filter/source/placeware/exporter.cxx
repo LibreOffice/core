@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:28:41 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -238,10 +238,10 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
     const OString aNewLine( "\r\n" );
     OUString aTemp;
 
-    Reference< XDocumentInfoSupplier > xInfoSup( xDoc, UNO_QUERY );
-    Reference< XPropertySet > xDocInfo( xInfoSup->getDocumentInfo(), UNO_QUERY );
+    Reference< XDocumentPropertiesSupplier > xDPS( xDoc, UNO_QUERY );
+    Reference< XDocumentProperties > xDocProps( xDPS->getDocumentProperties() );
 
-    xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Title"))) >>= aTemp;
+    aTemp = xDocProps->getTitle();
     if( 0 == aTemp.getLength() )
     {
         sal_Int32 nPos1 = rURL.lastIndexOf( (sal_Unicode)'/' );
@@ -267,7 +267,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
     aInfo += convertString( aTemp );
     aInfo += aNewLine;
 
-    xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Author"))) >>= aTemp;
+    aTemp = xDocProps->getAuthor();
 
     if( aTemp.getLength() )
     {
