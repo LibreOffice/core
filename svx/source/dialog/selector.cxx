@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:18:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
 
