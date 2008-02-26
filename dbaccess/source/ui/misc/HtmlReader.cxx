@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:50:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXHTML_HXX
 #include <sfx2/sfxhtml.hxx>
@@ -649,12 +646,10 @@ void OHTMLReader::setTextEncoding()
     m_bMetaOptions = sal_True;
     USHORT nContentOption = HTML_O_CONTENT;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    USHORT nMetaTags = 0;
 
-    ::std::auto_ptr<SfxDocumentInfo> pInfo(new SfxDocumentInfo());
-    SfxHTMLParser::ParseMetaOptions( pInfo.get(), NULL,
+    SfxHTMLParser::ParseMetaOptions(NULL, NULL,
                                   GetOptions(&nContentOption),
-                                  nMetaTags, eEnc );
+                                  eEnc );
 
     // If the encoding is set by a META tag, it may only overwrite the
     // current encoding if both, the current and the new encoding, are 1-BYTE
