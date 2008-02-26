@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processinginstruction.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:58:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,14 @@ namespace DOM
         init_node(aNodePtr);
     }
 
+    void SAL_CALL CProcessingInstruction::saxify(
+            const Reference< XDocumentHandler >& i_xHandler) {
+        if (!i_xHandler.is()) throw RuntimeException();
+        Reference< XExtendedDocumentHandler > xExtended(i_xHandler, UNO_QUERY);
+        if (xExtended.is()) {
+            xExtended->processingInstruction(getTarget(), getData());
+        }
+    }
 
     /**
     The content of this processing instruction.
