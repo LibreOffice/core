@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:28:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,10 +175,10 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION        59
 #define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR      60
 #define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME   61
-#define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0             62
-#define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1             63
-#define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2             64
-#define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3             65
+#define SW_SERVICE_FIELDTYPE_DUMMY_O                    62
+#define SW_SERVICE_FIELDTYPE_DUMMY_1                    63
+#define SW_SERVICE_FIELDTYPE_DUMMY_2                    64
+#define SW_SERVICE_FIELDTYPE_DUMMY_3                    65
 #define SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM             66
 #define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR       67
 #define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME    68
@@ -268,10 +268,6 @@ class SwUnoCollection
 #define CSS_TEXT_TEXTFIELD_DOCINFO_DESCRIPTION          "com.sun.star.text.textfield.docinfo.Description"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_AUTHOR        "com.sun.star.text.textfield.docinfo.CreateAuthor"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_DATE_TIME     "com.sun.star.text.textfield.docinfo.CreateDateTime"
-#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO0                "com.sun.star.text.textfield.docinfo.Info0"
-#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO1                "com.sun.star.text.textfield.docinfo.Info1"
-#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO2                "com.sun.star.text.textfield.docinfo.Info2"
-#define CSS_TEXT_TEXTFIELD_DOCINFO_INFO3                "com.sun.star.text.textfield.docinfo.Info3"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_AUTHOR         "com.sun.star.text.textfield.docinfo.PrintAuthor"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_DATE_TIME      "com.sun.star.text.textfield.docinfo.PrintDateTime"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_KEY_WORDS            "com.sun.star.text.textfield.docinfo.KeyWords"
