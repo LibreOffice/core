@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:19:10 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,12 +354,13 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_OUTLINE   :
         {
             sTypeToken = C2S(pMarkToOutline);
-            sal_uInt16 nOutlineCount = nMemberCount = pWrtShell->GetOutlineCnt();
+            sal_uInt16 nOutlineCount = nMemberCount =
+                static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
             if(nOutlineLevel < MAXLEVEL)
             {
                 for(sal_uInt16 j = 0; j < nOutlineCount; j++)
                 {
-                    if(pWrtShell->GetOutlineLevel(j) > nOutlineLevel )
+                    if(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(j) > nOutlineLevel )
                         nMemberCount --;
                 }
             }
@@ -630,17 +631,18 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            sal_uInt16 nOutlineCount = nMemberCount = pWrtShell->GetOutlineCnt();
+            sal_uInt16 nOutlineCount = nMemberCount =
+                static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
 
             sal_uInt16 nPos = 0;
             for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
             {
-                const sal_Int8 nLevel = (sal_Int8)pWrtShell->GetOutlineLevel(i);
+                const sal_Int8 nLevel = (sal_Int8)pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
                 if(nLevel >= nOutlineLevel )
                     nMemberCount--;
                 else
                 {
-                    String aEntry(pWrtShell->GetOutlineText(i));
+                    String aEntry(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i));
                     aEntry.EraseLeadingChars();
                     SwNavigationPI::CleanEntry( aEntry );
                     SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
@@ -1599,14 +1601,15 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case CONTENT_TYPE_OUTLINE:
         {
             sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
-            DBG_ASSERT(nPos < pWrtShell->GetOutlineCnt(),
+            DBG_ASSERT(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
                        "outlinecnt veraendert");
 
             // #100738# make sure outline may actually be copied
             if( pWrtShell->IsOutlineCopyable( nPos ) )
             {
                 const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
-                const SwTxtNode* pTxtNd = pWrtShell->GetOutlineNode(nPos);
+                const SwTxtNode* pTxtNd =
+                        pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(nPos);
                 if( pTxtNd && pOutlRule && pTxtNd->IsNumbered())
                 {
                     SwNodeNum::tNumberVector aNumVector =
@@ -1622,8 +1625,8 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                         sEntry += '.';
                     }
                 }
-                sEntry += pWrtShell->GetOutlineText(nPos, sal_False);
-                sOutlineText = pWrtShell->GetOutlineText(nPos, sal_True);
+                sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, false);
+                sOutlineText = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, true);
                 bIsOutlineMoveable = ((SwOutlineContent*)pCnt)->IsMoveable();
                 bOutline = sal_True;
             }
@@ -1807,7 +1810,8 @@ sal_Bool SwContentTree::HasContentChanged()
                     nSelLevel = ((SwOutlineContent*)pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
                     sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                    bRepaint |= nOutlinePos != USHRT_MAX && pSh->GetOutlineLevel(nOutlinePos) != nSelLevel;
+                    bRepaint |= nOutlinePos != USHRT_MAX &&
+                                pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel;
                 }
 
                 pArrType->Init(&bInvalidate);
@@ -2345,7 +2349,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
             if(pNext)
                 nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() -1;
             else
-                nTargetPos = GetWrtShell()->GetOutlineCnt() - 1;
+                nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount())- 1;
 
         }
 
@@ -2386,7 +2390,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
             if(pNext)
                 nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() - 1;
             else
-                nTargetPos = GetWrtShell()->GetOutlineCnt() - 1;
+                nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount()) - 1;
 
         }
 
