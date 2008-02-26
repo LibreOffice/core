@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:55:43 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,17 +1310,17 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
     const SwPosition* pStartPos = 0;
     const SwPosition* pEndPos = 0;
 
-    if (pBookmark->GetOtherPos())   // this bookmark spans text
+    if (pBookmark->GetOtherBookmarkPos())   // this bookmark spans text
     {
         // the start and endpoints are different
-        SwPaM mPam(pBookmark->GetPos(), *pBookmark->GetOtherPos());
+        SwPaM mPam(pBookmark->GetBookmarkPos(), *pBookmark->GetOtherBookmarkPos());
         pStartPos = mPam.Start();
         pEndPos = mPam.End();
     }
     else                            // this bookmark is a point
     {
         // so the start and endpoints are the same
-        pStartPos = pEndPos = &pBookmark->GetPos();
+        pStartPos = pEndPos = &pBookmark->GetBookmarkPos();
     }
 
     ASSERT(pStartPos && pEndPos, "Impossible");
