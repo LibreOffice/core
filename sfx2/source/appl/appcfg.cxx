@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:40:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,6 @@
 #include <sot/exchange.hxx>
 #endif
 
-#ifndef GCC
-#endif
-
 //#include <svtools/agprop.hxx>
 #include <sj2/sjapplet.hxx>
 
@@ -148,7 +145,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/docinf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include <sfx2/macrconf.hxx>
