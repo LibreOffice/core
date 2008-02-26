@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:34:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,8 +179,8 @@
 #ifndef _COM_SUN_STAR_SDB_DOCUMENTSAVEREQUEST_HPP_
 #include <com/sun/star/sdb/DocumentSaveRequest.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -1082,7 +1082,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) ) )
         {
-            onCommandGetDocumentInfo( aRet );
+            onCommandGetDocumentProperties( aRet );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
         {
@@ -1680,16 +1680,17 @@ void ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, An
     _rDefault.clear();
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::onCommandGetDocumentInfo( Any& _rInfo )
+void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
 {
     loadEmbeddedObjectForPreview();
     if ( m_xEmbeddedObject.is() )
     {
         try
         {
-            Reference<XDocumentInfoSupplier> xDocSup( getComponent(), UNO_QUERY );
+            Reference<XDocumentPropertiesSupplier> xDocSup(
+                getComponent(), UNO_QUERY );
             if ( xDocSup.is() )
-                _rInfo <<= xDocSup->getDocumentInfo();
+                _rProps <<= xDocSup->getDocumentProperties();
         }
         catch( const Exception& )
         {
