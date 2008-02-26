@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:06:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,17 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-
 #include <comphelper/sequenceashashmap.hxx>
+
+
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentInfo;
+    }
+} } }
 
 class Window;
 class ModelData_Impl;
-class SfxDocumentInfo;
 
 class SfxStoringHelper
 {
@@ -110,14 +115,11 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                     const ::rtl::OUString& aFilterName );
 
-    static void FillCopy( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-                         SfxDocumentInfo& aDocInfoToFill );
 
-    static void PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear, sal_Bool bUseUserData );
-
-    static void SetDocInfoState( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-                                const SfxDocumentInfo& aDocInfoState,
-                                sal_Bool bNoModify );
+    static void SetDocInfoState(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo>& i_xOldDocInfo,
+        sal_Bool bNoModify );
 
     static sal_Bool WarnUnacceptableFormat(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
