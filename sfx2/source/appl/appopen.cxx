@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,14 +162,10 @@
 
 #include <rtl/logfile.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/new.hxx>
 #include <sfx2/objitem.hxx>
@@ -319,7 +315,6 @@ void SetTemplate_Impl( const String &rFileName,
     // write TemplateName to DocumentInfo of document
     // TemplateDate stays as default (=current date)
     pDoc->ResetFromTemplate( rLongName, rFileName );
-    pDoc->FlushDocInfo();
 }
 
 //--------------------------------------------------------------------
@@ -361,7 +356,6 @@ ULONG CheckPasswd_Impl
                     // the storage either has no encrypted elements or it's just
                     // does not allow to detect it, probably it should be implemented laiter
                     /*
-                    SfxDocumentInfo aInfo;
                     bIsEncrypted = ( aInfo.Load( xStorage ) && aInfo.IsPasswd() );
                     */
                 }
@@ -565,7 +559,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     else
         SetTemplate_Impl( rFileName, String(), xDoc );
 
-    xDoc->Broadcast( SfxDocumentInfoHint( &xDoc->GetDocInfo() ) );
     xDoc->SetNoName();
     xDoc->InvalidateName();
     xDoc->SetModified(FALSE);
