@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:32:01 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -1215,7 +1214,8 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl = xModelToDocTitle( model );
+            ::rtl::OUString sTdocUrl =
+                ::comphelper::DocumentInfo::getDocumentTitle( model );
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
@@ -1224,62 +1224,6 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         }
     }
     return xModel;
-}
-
-::rtl::OUString SfxConfigGroupListBox_Impl::xModelToDocTitle( const Reference< frame::XModel >& xModel )
-{
-    // Set a default name, this should never be seen.
-    ::rtl::OUString docNameOrURL =
-        ::rtl::OUString::createFromAscii("Unknown");
-    if ( xModel.is() )
-    {
-        ::rtl::OUString tempName;
-        try
-        {
-            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
-            if ( propSet.is() )
-            {
-                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
-                {
-                    docNameOrURL = tempName;
-                    if ( xModel->getURL().getLength() == 0 )
-                    {
-                        // process "UntitledX - YYYYYYYY"
-                        // to get UntitledX
-                        sal_Int32 pos = 0;
-                        docNameOrURL = tempName.getToken(0,' ',pos);
-                        OSL_TRACE("xModelToDocTitle() Title for document is %s.",
-                            ::rtl::OUStringToOString( docNameOrURL,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-                    else
-                    {
-                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
-                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
-                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                        aTitle >>= docNameOrURL;
-                        if ( docNameOrURL.getLength() == 0 )
-                        {
-                            docNameOrURL =  parseLocationName( xModel->getURL() );
-                        }
-                    }
-                }
-            }
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-
-    }
-    else
-    {
-        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
-    }
-    return docNameOrURL;
 }
 
 ::rtl::OUString SfxConfigGroupListBox_Impl::parseLocationName( const ::rtl::OUString& location )
