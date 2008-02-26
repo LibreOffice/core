@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-30 08:36:20 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:38:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/propertybag.obj         \
         $(SLO)$/sdbcoretools.obj        \
         $(SLO)$/services.obj            \
         $(SLO)$/PropertyForward.obj     \
