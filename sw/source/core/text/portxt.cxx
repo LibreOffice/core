@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:18:55 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,14 +605,16 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
             pPortion->PrePaint( rInf, this );
 
         const SwWrongList *pWrongList = rInf.GetpWrongList();
+        const SwWrongList *pGrammarCheckList = rInf.GetGrammarCheckList();
         // SMARTTAGS
         const SwWrongList *pSmarttags = rInf.GetSmartTags();
 
         const bool bWrong = 0 != pWrongList;
+        const bool bGrammarCheck = 0 != pGrammarCheckList;
         const bool bSmartTags = 0 != pSmarttags;
 
-        if ( bWrong || bSmartTags )
-            rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, bWrong, bSmartTags );
+        if ( bWrong || bSmartTags || bGrammarCheck )
+            rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, bWrong, bSmartTags, bGrammarCheck );
         else
             rInf.DrawText( *this, rInf.GetLen(), sal_False );
     }
