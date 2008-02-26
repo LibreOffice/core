@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:15:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,8 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #endif
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -202,6 +204,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
 #include <rtl/logfile.hxx>
@@ -216,7 +219,6 @@
 #include <sfx2/docfile.hxx>
 #include "fltfnc.hxx"
 #include <sfx2/docfilt.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/docfac.hxx>
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
@@ -852,24 +854,30 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 ::rtl::OUString aSubject( RTL_CONSTASCII_USTRINGPARAM("Subject") );
                 Any aAny;
                 ::rtl::OUString aValue;
-                SfxDocumentInfo& rInfo = GetDocInfo();
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps
+                    = xDPS->getDocumentProperties();
                 if ( xProps->hasPropertyByName( aAuthor ) )
                 {
                     aAny = aContent.getPropertyValue( aAuthor );
                     if ( ( aAny >>= aValue ) )
-                        rInfo.SetCreated( String( aValue ) );
+                        xDocProps->setAuthor(aValue);
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
                 {
                     aAny = aContent.getPropertyValue( aKeywords );
                     if ( ( aAny >>= aValue ) )
-                        rInfo.SetKeywords( aValue );
+                        xDocProps->setKeywords(
+                          ::comphelper::string::convertCommaSeparated(aValue));
+;
                 }
                 if ( xProps->hasPropertyByName( aSubject ) )
                 {
                     aAny = aContent.getPropertyValue( aSubject );
-                    if ( ( aAny >>= aValue ) )
-                        rInfo.SetTheme( aValue );
+                    if ( ( aAny >>= aValue ) ) {
+                        xDocProps->setSubject(aValue);
+                    }
                 }
             }
         }
@@ -938,12 +946,27 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( pMedium->GetInteractionHandler().is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
         {
             // scan the generator string (within meta.xml)
-            SfxDocumentInfo aDocInfo( this );
-            uno::Reference< beans::XPropertySet > xSet( aDocInfo.GetInfo(), UNO_QUERY );
-            if ( xSet.is() )
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps
+                = xDPS->getDocumentProperties();
+            if ( xDocProps.is() )
             {
+                uno::Reference<beans::XPropertySet> xUserDefinedProps(
+                    xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+                //FIXME: this should be removed before 3.0!
                 // the new property "ODFVersion" is a temporary solution for OOo2.4
-                uno::Any aAny = xSet->getPropertyValue( DEFINE_CONST_UNICODE("ODFVersion") );
+                uno::Any aAny;
+                try
+                {
+                    aAny = xUserDefinedProps->getPropertyValue(
+                            DEFINE_CONST_UNICODE("ODFVersion"));
+                }
+                catch( const uno::Exception& )
+                {
+                    // Custom Property "ODFVersion" does not exist
+                }
+
                 ::rtl::OUString sTemp;
                 if ( (aAny >>= sTemp) && sTemp.getLength() )
                 {
@@ -1736,19 +1759,26 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 ::rtl::OUString aKeywords( RTL_CONSTASCII_USTRINGPARAM("Keywords") );
                 ::rtl::OUString aSubject( RTL_CONSTASCII_USTRINGPARAM("Subject") );
                 Any aAny;
+
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps
+                    = xDPS->getDocumentProperties();
+
                 if ( xProps->hasPropertyByName( aAuthor ) )
                 {
-                    aAny <<= ::rtl::OUString( GetDocInfo().GetAuthor() );
+                    aAny <<= xDocProps->getAuthor();
                     aContent.setPropertyValue( aAuthor, aAny );
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
                 {
-                    aAny <<= ::rtl::OUString( GetDocInfo().GetKeywords() );
+                    aAny <<= ::comphelper::string::convertCommaSeparated(
+                                xDocProps->getKeywords());
                     aContent.setPropertyValue( aKeywords, aAny );
                 }
                 if ( xProps->hasPropertyByName( aSubject ) )
                 {
-                    aAny <<= ::rtl::OUString( GetDocInfo().GetTheme() );
+                    aAny <<= xDocProps->getSubject();
                     aContent.setPropertyValue( aSubject, aAny );
                 }
             }
@@ -1961,14 +1991,8 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             if( pNewMed->GetName().Len() )
                 bHasName = sal_True;
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
-            try
-            {
-                uno::Reference< beans::XPropertySet > xProps( GetDocInfo().GetInfo(), uno::UNO_QUERY_THROW );
-                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Generator" ) ),
-                                          uno::makeAny( ::utl::DocInfoHelper::GetGeneratorString() ) );
-            }
-            catch( uno::Exception& )
-            {}
+            getDocProperties()->setGenerator(
+               ::utl::DocInfoHelper::GetGeneratorString() );
         }
 
         uno::Reference< embed::XStorage > xStorage;
@@ -3797,11 +3821,12 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
             }
             else
             {
-                GDIMetaFile* pMetaFile = GetPreviewMetaFile( sal_False );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    GetPreviewMetaFile( sal_False );
                 if ( pMetaFile )
                 {
-                    bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl( pMetaFile, bSigned, xStream );
-                    delete pMetaFile;
+                    bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(
+                                pMetaFile.get(), bSigned, xStream );
                 }
             }
         }
