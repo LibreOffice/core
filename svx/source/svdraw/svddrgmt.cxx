@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:55:20 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
 #endif
+#include <vcl/svapp.hxx>
 
 #include "xattr.hxx"
 #include <svx/xpoly.hxx>
@@ -60,6 +61,10 @@
 #include "svdglob.hxx"  // StringCache
 #include <svx/svddrgv.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/sdgcpitm.hxx>
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -2190,6 +2195,99 @@ FASTBOOL SdrDragDistort::End(FASTBOOL bCopy)
 Pointer SdrDragDistort::GetPointer() const
 {
     return Pointer(POINTER_REFHAND);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1(SdrDragCrop,SdrDragResize);
+
+SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
+: SdrDragResize(rNewView)
+{
+}
+
+void SdrDragCrop::TakeComment(XubString& rStr) const
+{
+    ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
+
+    XubString aStr;
+
+    rStr.AppendAscii(" (x=");
+    rView.GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
+    rStr += aStr;
+    rStr.AppendAscii(" y=");
+    rView.GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
+    rStr += aStr;
+    rStr += sal_Unicode(')');
+
+    if(rView.IsDragWithCopy())
+        rStr += ImpGetResStr(STR_EditWithCopy);
+}
+
+FASTBOOL SdrDragCrop::End(FASTBOOL bCopy)
+{
+    Hide();
+    if( DragStat().GetDX()==0 && DragStat().GetDY()==0 )
+        return FALSE;
+
+    const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() != 1 )
+        return FALSE;
+
+    SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+
+    if( !pObj || (pObj->GetGraphicType() == GRAPHIC_NONE) || (pObj->GetGraphicType() == GRAPHIC_DEFAULT) )
+        return FALSE;
+
+    const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
+
+    const MapMode aMapMode100thmm(MAP_100TH_MM);
+
+    Size aGraphicSize(rGraphicObject.GetPrefSize());
+
+    if( MAP_PIXEL == rGraphicObject.GetPrefMapMode().GetMapUnit() )
+        aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
+    else
+        aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
+    if( aGraphicSize.nA == 0 || aGraphicSize.nB == 0 )
+        return FALSE;
+
+    const SdrGrafCropItem& rOldCrop = (const SdrGrafCropItem&)pObj->GetMergedItem(SDRATTR_GRAFCROP);
+
+    String aUndoStr;
+    ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
+
+    rView.BegUndo( aUndoStr );
+    rView.AddUndo( rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+    Rectangle aOldRect( pObj->GetLogicRect() );
+    rView.ResizeMarkedObj(DragStat().Ref1(),aXFact,aYFact,bCopy);
+    Rectangle aNewRect( pObj->GetLogicRect() );
+
+    double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
+    double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
+
+    sal_Int32 nDiffLeft = aNewRect.nLeft - aOldRect.nLeft;
+    sal_Int32 nDiffTop = aNewRect.nTop - aOldRect.nTop;
+    sal_Int32 nDiffRight = aNewRect.nRight - aOldRect.nRight;
+    sal_Int32 nDiffBottom = aNewRect.nBottom - aOldRect.nBottom;
+
+    sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
+    sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
+    sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
+    sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
+
+    SfxItemPool& rPool = rView.GetModel()->GetItemPool();
+    SfxItemSet aSet( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP );
+    aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
+    rView.SetAttributes( aSet, FALSE );
+    rView.EndUndo();
+
+    return TRUE;
+}
+
+Pointer SdrDragCrop::GetPointer() const
+{
+    return Pointer(POINTER_CROP);
 }
 
 // eof
