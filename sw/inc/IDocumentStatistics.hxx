@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentStatistics.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:04:39 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
  #ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
  #define IDOCUMENTSTATISTICS_HXX_INCLUDED
 
- class SfxDocumentInfo;
  struct SwDocStat;
 
  /** Document statistics information
@@ -45,27 +44,10 @@
  {
  public:
 
-    /** Dokument info
-        @return the current document information
-    */
-    virtual SfxDocumentInfo* GetDocumentInfo() = 0;
-
-    /** Return a pointer to the document info.
-        May also return NULL!
-    */
-    virtual const SfxDocumentInfo* GetpInfo() const = 0;
-
-    /** setze ueber die DocShell in den entsp. Storage-Stream. Hier wird
-        jetzt die DocInfo verwaltet. Fuer die Felder ist am Doc eine Kopie
-        der Info, um einen schnellen Zugriff zu ermoeglichen.
-        (impl. in docsh2.cxx)
-    */
-    virtual void SetDocumentInfo(const SfxDocumentInfo& rInfo) = 0;
-
     /** die DocInfo hat siche geaendert (Notify ueber die DocShell)
         stosse die entsp. Felder zum Updaten an.
     */
-    virtual void DocInfoChgd(const SfxDocumentInfo& rInfo) = 0;
+    virtual void DocInfoChgd() = 0;
 
     /** Dokument - Statistics
     */
