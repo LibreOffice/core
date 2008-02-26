@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDocumentInfoSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:09:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ module com {   module sun {   module star {   module document {
     It read/write parts of the document, which include the required informations,
     only.
     </p>
+
+    @deprecated     Use <type>XDocumentPropertiesSupplier</type> instead.
 
     @see DocumentInfo
     @see StandaloneDocumentInfo
