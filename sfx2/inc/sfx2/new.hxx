@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:25:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,14 +60,11 @@
 //=========================================================================
 
 class SfxObjectShellLock;
-class SfxDocumentInfo;
 class SfxObjectShell;
-//REMOVE    class SvStorageRef;
 class MoreButton;
 
 //=========================================================================
 
-#define SFXWB_DOCINFO 0x0001
 #define SFXWB_PREVIEW 0x0003
 #define SFXWB_LOAD_TEMPLATE 0x0004
 
@@ -103,11 +100,10 @@ class SfxNewFileDialog_Impl;
 class SFX2_DLLPUBLIC SfxNewFileDialog : public SfxModalDialog
 {
     friend class SfxNewFileDialog_Impl;
-private:
 
+private:
     SfxNewFileDialog_Impl* pImpl;
-protected:
-    virtual BOOL FillDocumentInfo(const String &rFile, SfxDocumentInfo &);
+
 public:
 
     SfxNewFileDialog(Window *pParent, USHORT nFlags = 0);
