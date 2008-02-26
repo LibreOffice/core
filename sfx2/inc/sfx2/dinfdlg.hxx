@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:37:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include "sfx2/dllapi.h"
 #endif
 
+#include <com/sun/star/util/DateTime.hpp>
+
 #ifndef _SV_EDIT_HXX //autogen wg. Edit
 #include <vcl/edit.hxx>
 #endif
@@ -60,24 +62,117 @@
 #endif
 
 #include "tabdlg.hxx"
-#include "docinf.hxx"
+
+
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentInfo;
+        class XDocumentProperties;
+    }
+} } }
+
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
 class SFX2_DLLPUBLIC SfxDocumentInfoItem : public SfxStringItem
 {
 private:
-    SfxDocumentInfo         aDocInfo;
-    sal_Bool                bHasTemplate;
-    sal_Bool                bDeleteUserData;
-    sal_Bool                bIsUseUserData;
+    sal_Int32                           m_AutoloadDelay;
+    ::rtl::OUString                     m_AutoloadURL;
+    sal_Bool                            m_isAutoloadEnabled;
+    ::rtl::OUString                     m_DefaultTarget;
+    ::rtl::OUString                     m_TemplateName;
+    ::rtl::OUString                     m_Author;
+    ::com::sun::star::util::DateTime    m_CreationDate;
+    ::rtl::OUString                     m_ModifiedBy;
+    ::com::sun::star::util::DateTime    m_ModificationDate;
+    String                              m_PrintedBy;
+    ::com::sun::star::util::DateTime    m_PrintDate;
+    sal_Int16                           m_EditingCycles;
+    sal_Int32                           m_EditingDuration;
+    ::rtl::OUString                     m_Description;
+    ::rtl::OUString                     m_Keywords;
+    ::rtl::OUString                     m_Subject;
+    ::rtl::OUString                     m_Title;
+    ::rtl::OUString                     m_UserDefinedFieldTitles[4];
+    ::rtl::OUString                     m_UserDefinedFieldValues[4];
+    sal_Bool                            bHasTemplate;
+    sal_Bool                            bDeleteUserData;
+    sal_Bool                            bIsUseUserData;
 
 public:
     TYPEINFO();
     SfxDocumentInfoItem();
-    SfxDocumentInfoItem( const String &rFileName, const SfxDocumentInfo&, sal_Bool bUseUserData );
+//FIXME: remove XDocumentInfo when implementing "Custom" tab
+    SfxDocumentInfoItem( const String &rFileName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentInfo> & i_xDocInfo,
+        sal_Bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
+
+//FIXME: remove XDocumentInfo when implementing "Custom" tab
+    /// update i_xDocProps with the data in this object
+    void updateDocumentInfo(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::document::XDocumentInfo> & i_xDocInfo) const;
+
+    sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
+    void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }
+    sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
+    void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
+    ::rtl::OUString getAutoloadURL() const { return m_AutoloadURL; }
+    void        setAutoloadURL(::rtl::OUString i_val) { m_AutoloadURL = i_val; }
+    ::rtl::OUString getDefaultTarget() const { return m_DefaultTarget; }
+    void        setDefaultTarget(::rtl::OUString i_val) { m_DefaultTarget = i_val; }
+    ::rtl::OUString getTemplateName() const { return m_TemplateName; }
+    void        setTemplateName(::rtl::OUString i_val) { m_TemplateName = i_val; }
+    ::rtl::OUString getAuthor() const { return m_Author; }
+    void        setAuthor(::rtl::OUString i_val) { m_Author = i_val; }
+
+    ::com::sun::star::util::DateTime
+                getCreationDate() const { return m_CreationDate; }
+    void        setCreationDate(::com::sun::star::util::DateTime i_val) {
+                    m_CreationDate = i_val;
+                }
+    ::rtl::OUString getModifiedBy() const { return m_ModifiedBy; }
+    void        setModifiedBy(::rtl::OUString i_val) { m_ModifiedBy = i_val; }
+
+    ::com::sun::star::util::DateTime
+                getModificationDate() const { return m_ModificationDate; }
+    void        setModificationDate(::com::sun::star::util::DateTime i_val) {
+                    m_ModificationDate = i_val;
+                }
+    ::rtl::OUString getPrintedBy() const { return m_PrintedBy; }
+    void        setPrintedBy(::rtl::OUString i_val) { m_PrintedBy = i_val; }
+    ::com::sun::star::util::DateTime
+                getPrintDate() const { return m_PrintDate; }
+    void        setPrintDate(::com::sun::star::util::DateTime i_val) {
+                    m_PrintDate = i_val;
+                }
+    sal_Int16   getEditingCycles() const { return m_EditingCycles; }
+    void        setEditingCycles(sal_Int16 i_val) { m_EditingCycles = i_val; }
+    sal_Int32   getEditingDuration() const { return m_EditingDuration; }
+    void        setEditingDuration(sal_Int32 i_val) { m_EditingDuration = i_val; }
+    ::rtl::OUString getDescription() const { return m_Description; }
+    void        setDescription(::rtl::OUString i_val) { m_Description = i_val; }
+    ::rtl::OUString getKeywords() const { return m_Keywords; }
+    void        setKeywords(::rtl::OUString i_val) { m_Keywords = i_val; }
+    ::rtl::OUString getSubject() const { return m_Subject; }
+    void        setSubject(::rtl::OUString i_val) { m_Subject = i_val; }
+    ::rtl::OUString getTitle() const { return m_Title; }
+    void        setTitle(::rtl::OUString i_val) { m_Title = i_val; }
+    ::rtl::OUString getUserDefinedFieldTitle(size_t i_ix) const;
+    void        setUserDefinedFieldTitle(size_t i_ix, ::rtl::OUString i_val);
+    ::rtl::OUString getUserDefinedFieldValue(size_t i_ix) const;
+    void        setUserDefinedFieldValue(size_t i_ix, ::rtl::OUString i_val);
+
+    /// reset user-specific data (author, modified-by, ...)
+    void        resetUserData(const ::rtl::OUString & i_rAuthor);
 
     void                    SetTemplate( BOOL b ) { bHasTemplate = b; }
     FASTBOOL                HasTemplate() const { return bHasTemplate; }
@@ -85,11 +180,6 @@ public:
     void                    SetUseUserData( BOOL bSet );
     BOOL                    IsDeleteUserData() const;
     BOOL                    IsUseUserData() const;
-
-    SfxDocumentInfo&        operator()() { return aDocInfo; }
-    const SfxDocumentInfo&  operator()() const { return aDocInfo; }
-    SfxDocumentInfo&        GetDocInfo() { return aDocInfo; }
-    const SfxDocumentInfo&  GetDocInfo() const { return aDocInfo; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
