@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:06:06 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
 #ifndef _CONNECTIVITY_ADABAS_BDRIVER_HXX_
 #include "adabas/BDriver.hxx"
 #endif
@@ -50,12 +53,49 @@
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
-#endif
+#include "TConnection.hxx"
+
 #ifndef CONNECTIVITY_DIAGNOSE_EX_H
 #include "diagnose_ex.h"
 #endif
+#ifndef _VOS_PROCESS_HXX_
+#include <vos/process.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
+#include <memory>
+#include <sys/stat.h>
+
+#if defined(MAC)
+const char sNewLine = '\015';
+#elif defined(UNX)
+const char sNewLine = '\012';
+#else
+const char sNewLine[] = "\015\012"; // \015\012 and not \n
+#endif
+#define ADABAS_DB_11            "11.02.00"
+#define ADABAS_KERNEL_11        "11.02"
+#define ADABAS_DB_12            "12.01.00"
+#define ADABAS_KERNEL_12        "12.01"
+#define CURRENT_DB_VERSION      "13.01.00"
+#define CURRENT_KERNEL_VERSION  "13.01"
+
+#define OPROCESS_ADABAS     (OProcess::TOption_Hidden | OProcess::TOption_Wait | OProcess::TOption_SearchPath)
+#define OPROCESS_ADABAS_DBG (OProcess::TOption_Wait | OProcess::TOption_SearchPath)
+
 
 using namespace connectivity;
 namespace connectivity
@@ -131,19 +171,109 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace utl;
+using namespace osl;
+using namespace vos;
+using namespace ::dbtools;
 
     sal_Bool LoadFunctions(oslModule pODBCso);
     sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
+    // --------------------------------------------------------------------------------
+void ODriver::fillInfo(const Sequence< PropertyValue >& info, TDatabaseStruct& _rDBInfo)
+{
+    const PropertyValue* pIter = info.getConstArray();
+    const PropertyValue* pEnd = pIter + info.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseName"))))
+        {
+            pIter->Value >>= _rDBInfo.sDBName;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))))
+        {
+            pIter->Value >>= _rDBInfo.sControlUser;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))))
+        {
+            pIter->Value >>= _rDBInfo.sControlPassword;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))))
+            pIter->Value >>= _rDBInfo.nDataIncrement;
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))))
+            pIter->Value >>= _rDBInfo.bShutDown;
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
+        {
+            pIter->Value >>= _rDBInfo.sSysUser;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password"))))
+        {
+            pIter->Value >>= _rDBInfo.sSysPassword;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DomainPassword"))))
+        {
+            pIter->Value >>= _rDBInfo.sDomainPassword;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CacheSize"))))
+        {
+            pIter->Value >>= _rDBInfo.sCacheSize;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RestoreDatabase"))))
+        {
+            pIter->Value >>= _rDBInfo.bRestoreDatabase;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Backup"))))
+        {
+            pIter->Value >>= _rDBInfo.sBackupFile;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataDevSpace"))))
+        {
+            pIter->Value >>= _rDBInfo.sDataDevName;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSDEVSPACE"))))
+        {
+            pIter->Value >>= _rDBInfo.sSysDevSpace;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TRANSACTION_LOG"))))
+        {
+            pIter->Value >>= _rDBInfo.sTransLogName;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataDevSize"))))
+        {
+            pIter->Value >>= _rDBInfo.nDataSize;
+        }
+        else if(pIter->Name.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LogDevSize"))))
+        {
+            pIter->Value >>= _rDBInfo.nLogSize;
+        }
+    }
+}
+
 
 // --------------------------------------------------------------------------------
 ODriver::ODriver(const Reference< XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory)
 {
+    osl_incrementInterlockedCount(&m_refCount);
+    fillEnvironmentVariables();
+    Reference< XComponent >  xComponent(m_xORB, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+        xComponent->addEventListener(xEvtL);
+    }
+    osl_decrementInterlockedCount(&m_refCount);
 }
 //------------------------------------------------------------------------------
 void ODriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ODriver_BASE::disposing();
+    Reference< XComponent >  xComponent(m_xORB, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference< XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+        xComponent->removeEventListener(xEvtL);
+    }
+    m_xORB.clear();
 }
 
 // static ServiceInfo
@@ -169,7 +299,7 @@ Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (
 //------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    const Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
     const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
@@ -186,18 +316,77 @@ Sequence< ::rtl::OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw
 Any SAL_CALL ODriver::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType, static_cast<XDataDefinitionSupplier*>(this));
-    return aRet.hasValue() ? aRet : ODriver_BASE::queryInterface(rType);
+    if ( !aRet.hasValue() )
+        aRet = ODriver_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : ODriver_BASE2::queryInterface(rType);
 }
 //------------------------------------------------------------------
 Reference< XInterface >  SAL_CALL ODriver_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
 {
     return *(new ODriver(_rxFac));
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL ODriver::disposing( const EventObject& Source ) throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if(m_xORB.is() && Reference< XMultiServiceFactory >(Source.Source,UNO_QUERY) == m_xORB)
+    {
+        TDatabaseMap::iterator aIter = m_aDatabaseMap.begin();
+        for(;aIter != m_aDatabaseMap.end();++aIter)
+        {
+            if(aIter->second.bShutDown)
+            {
+                ::rtl::OUString sName;
+                if(getDBName(aIter->first,sName))
+                {
+                    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN QUICK")),sName,aIter->second.sControlUser,aIter->second.sControlPassword);
+                    X_STOP(sName);
+                }
+            }
+        }
+        m_xORB = NULL;
+    }
+}
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
         return NULL;
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (ODriver_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    TDatabaseStruct aDBInfo;
+    aDBInfo.bShutDown = sal_False;
+    fillInfo(info,aDBInfo);
+    aDBInfo.sControlUser = aDBInfo.sControlUser.toAsciiUpperCase();
+    aDBInfo.sControlPassword = aDBInfo.sControlPassword.toAsciiUpperCase();
+    aDBInfo.sSysUser = aDBInfo.sSysUser.toAsciiUpperCase();
+    aDBInfo.sSysPassword = aDBInfo.sSysPassword.toAsciiUpperCase();
+
+
+    TDatabaseMap::iterator aFind = m_aDatabaseMap.find(url);
+    if(aFind == m_aDatabaseMap.end()) // only when not found yet
+        m_aDatabaseMap[url] = aDBInfo;
+    else
+    {
+        if(aFind->second.bShutDown != aDBInfo.bShutDown)
+            aFind->second.bShutDown &= aDBInfo.bShutDown;
+    }
+
+    ::rtl::OUString sName;
+    if(aDBInfo.sControlPassword.getLength() && aDBInfo.sControlUser.getLength() && getDBName(url,sName))
+    {
+        // check if we have to add a new data dev space
+        checkAndInsertNewDevSpace(sName,aDBInfo);
+
+        convertOldVersion(sName,aDBInfo);
+        // check if we must restart the database
+        checkAndRestart(sName,aDBInfo);
+    }
+
 
     if(!m_pDriverHandle)
     {
@@ -218,12 +407,21 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 
     return xCon;
 }
-
+// -----------------------------------------------------------------------------
+sal_Bool ODriver::getDBName(const ::rtl::OUString& _rName,::rtl::OUString& sDBName) const
+{
+    sDBName = ::rtl::OUString();
+    ::rtl::OUString sName = _rName.copy(12);
+    sal_Int32 nPos = sName.indexOf(':');
+    if(nPos != -1 && nPos < 1)
+        sDBName = sName.copy(1);
+    return (nPos != -1 && nPos < 1);
+}
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:adabas:")),12));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/) throw(SQLException, RuntimeException)
@@ -233,13 +431,41 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shut down service when closing."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control user name."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control password."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data increment (MB)."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
@@ -255,7 +481,52 @@ sal_Int32 SAL_CALL ODriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 0;
 }
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// XCreateCatalog
+void SAL_CALL ODriver::createCatalog( const Sequence< PropertyValue >& info ) throw(SQLException, ElementExistException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (ODriver_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    try
+    {
+        TDatabaseStruct aDBInfo;
+        fillInfo(info,aDBInfo);
+        static char envName[] = "DBSERVICE=0";
+        putenv( envName );
+
+        m_sDbRunDir = m_sDbWorkURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/wrk/")) + aDBInfo.sDBName;
+        String sTemp;
+        LocalFileHelper::ConvertURLToPhysicalName(m_sDbRunDir,sTemp);
+        m_sDbRunDir = sTemp;
+
+        createNeededDirs(aDBInfo.sDBName);
+        if(CreateFiles(aDBInfo))
+            throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database files")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+
+        createDb(aDBInfo);
+    }
+    catch( SQLException&)
+    {
+        throw;
+    }
+    catch(Exception&)
+    {
+        throw SQLException();
+    }
+
+}
+// -----------------------------------------------------------------------------
+// XDropCatalog
+void SAL_CALL ODriver::dropCatalog( const ::rtl::OUString& /*catalogName*/, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, NoSuchElementException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (ODriver_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    ::dbtools::throwFeatureNotImplementedException( "!XDropCatalog::dropCatalog", *this );
+}
 //-----------------------------------------------------------------------------
 // ODBC Environment (gemeinsam fuer alle Connections):
 SQLHANDLE ODriver::EnvironmentHandle(::rtl::OUString &_rPath)
@@ -556,8 +827,1003 @@ oslGenericFunction ODriver::getOdbcFunction(sal_Int32 _nIndex) const
     return pFunction;
 }
 // -----------------------------------------------------------------------------
+void ODriver::createNeededDirs(const ::rtl::OUString& sDBName)
+{
+    ::rtl::OUString sDbWork,sDBConfig,sTemp;
+
+    if(m_sDbWork.getLength())
+    {
+        sDbWork = m_sDbWorkURL;
+        if(!UCBContentHelper::IsFolder(m_sDbWorkURL))
+            UCBContentHelper::MakeFolder(m_sDbWorkURL);
+
+        sDbWork += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sDbWork += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrk"));
+        if(!UCBContentHelper::IsFolder(sDbWork))
+            UCBContentHelper::MakeFolder(sDbWork);
+
+        sDbWork += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+        sTemp = sDbWork;
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("config"));
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+
+        sTemp = sDbWork;
+        sTemp += sDBName;
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+    }
+
+    if(m_sDbConfig.getLength())
+    {
+        sDBConfig = m_sDbConfigURL;
+        if(!UCBContentHelper::IsFolder(sDBConfig))
+            UCBContentHelper::MakeFolder(sDBConfig);
+
+        sDBConfig += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sTemp = sDBConfig;
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("config"));
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sTemp += sDBName;
+        if(UCBContentHelper::Exists(sTemp))
+            UCBContentHelper::Kill(sTemp);
+
+#if !(defined(WIN) || defined(WNT))
+        sTemp = sDBConfig;
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diag"));
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+
+        sTemp = sDBConfig;
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ipc"));
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+
+        sTemp = sDBConfig;
+        sTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spool"));
+        if(!UCBContentHelper::IsFolder(sTemp))
+            UCBContentHelper::MakeFolder(sTemp);
+#endif
     }
 }
+// -----------------------------------------------------------------------------
+void ODriver::clearDatabase(const ::rtl::OUString& sDBName)
+{ // stop the database
+    ::rtl::OUString sCommand;
+#if defined(WIN) || defined(WNT)
+    ::rtl::OUString sStop = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stop"));
+    OArgumentList aArgs(2,&sDBName,&sStop);
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_cons.exe"));
+#else
+    OArgumentList aArgs(1,&sDBName);
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_clear"));
+#endif
+
+    OProcess aApp( sCommand,m_sDbWorkURL);
+#if OSL_DEBUG_LEVEL > 0
+    OProcess::TProcessError eError =
+#endif
+        aApp.execute( (OProcess::TProcessOption) OPROCESS_ADABAS, aArgs );
+    OSL_ENSURE( eError == OProcess::E_None, "ODriver::clearDatabase: calling the executable failed!" );
+}
+// -----------------------------------------------------------------------------
+void ODriver::createDb( const TDatabaseStruct& _aInfo)
+{
+
+    clearDatabase(_aInfo.sDBName);
+
+    X_PARAM(_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword,String::CreateFromAscii("BINIT"));
+
+    String sTemp;
+    LocalFileHelper::ConvertURLToPhysicalName(_aInfo.sSysDevSpace,sTemp);
+
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSDEVSPACE")),sTemp);
+
+    sTemp.Erase();
+    LocalFileHelper::ConvertURLToPhysicalName(_aInfo.sTransLogName,sTemp);
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TRANSACTION_LOG")),sTemp);
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXUSERTASKS")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("3")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXDEVSPACES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("7")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXDATADEVSPACES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("5")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXDATAPAGES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("25599")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXBACKUPDEVS")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXSERVERDB")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_CACHE_PAGES")),_aInfo.sCacheSize);
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONV_CACHE_PAGES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("23")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROC_DATA_PAGES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("40")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RUNDIRECTORY")),m_sDbRunDir);
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KERNELTRACESIZE")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100")));
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOG_QUEUE_PAGES")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10")));
+
+#if !(defined(WIN) || defined(WNT))
+    PutParam(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OPMSG1")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/dev/null")));
+#endif
+
+    X_PARAM(_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BCHECK")));
+
+    X_START(_aInfo.sDBName);
+
+    //  SHOW_STATE()
+    //  %m_sDbRoot%\bin\xutil -d %_aInfo.sDBName% -u %CONUSR%,%CONPWD% -b %INITCMD%
+    ::rtl::OUString aBatch2 =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
+
+//  if(!bBsp && INITCMD.Len() >= 40)
+//  {
+//      DirEntry aTmp(INITCMD);
+//      aTmp.CopyTo(aInitFile, FSYS_ACTION_COPYFILE);
+//      INITCMD = aInitFile.GetFull();
+//  }
+    // generate the init file for the database
+    String sInitFile = getDatabaseInitFile(_aInfo);
+
+    LocalFileHelper::ConvertURLToPhysicalName(sInitFile,sTemp);
+    aBatch2 += sTemp;
+    XUTIL(aBatch2,_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sInitFile))
+        UCBContentHelper::Kill(sInitFile);
+#endif
+
+    // install system tables
+    installSystemTables(_aInfo);
+    // now we have to make our SYSDBA user "NOT EXCLUSIVE"
+    {
+        String sExt;
+        sExt.AssignAscii(".sql");
+
+        String sWorkUrl(m_sDbWorkURL);
+        ::utl::TempFile aInitFile(String::CreateFromAscii("Init"),&sExt,&sWorkUrl);
+        aInitFile.EnableKillingFile();
+        {
+            ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(aInitFile.GetURL(),STREAM_WRITE) );
+            (*pFileStream)  << "ALTER USER \""
+                            << ::rtl::OString(_aInfo.sSysUser,_aInfo.sSysUser.getLength(),gsl_getSystemTextEncoding())
+                            << "\" NOT EXCLUSIVE "
+                            << sNewLine;
+            pFileStream->Flush();
+        }
+        { // just to get sure that the tempfile still lives
+            sTemp.Erase();
+            LocalFileHelper::ConvertURLToPhysicalName(aInitFile.GetURL(),sTemp);
+            LoadBatch(_aInfo.sDBName,_aInfo.sSysUser,_aInfo.sSysPassword,sTemp);
+        }
+    }
+}
+
+
+//-------------------------------------------------------------------------------------------------
+int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
+            const ::rtl::OUString& _USR,
+            const ::rtl::OUString& _PWD,
+            const ::rtl::OUString& _CMD)
+{
+    //  %XPARAM% -u %CONUSR%,%CONPWD% BINIT
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+        (*pFileStream)  << "x_param"
+#if defined(WIN) || defined(WNT)
+                        << ".exe"
+#endif
+                        << " -d "
+                        << ::rtl::OString(_DBNAME,_DBNAME.getLength(),gsl_getSystemTextEncoding())
+                        << " -u "
+                        << ::rtl::OString(_USR,_USR.getLength(),gsl_getSystemTextEncoding())
+                        << ","
+                        << ::rtl::OString(_PWD,_PWD.getLength(),gsl_getSystemTextEncoding())
+                        << " "
+                        << ::rtl::OString(_CMD,_CMD.getLength(),gsl_getSystemTextEncoding())
+#if (defined(WIN) || defined(WNT))
+#if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
+                        << " >> %DBWORK%\\create.log 2>&1"
+#endif
+#else
+#if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
+                        << " >> /tmp/kstart.log"
+#else
+                        << " > /dev/null"
+#endif
+#endif
+                        << " "
+                        << sNewLine
+                        << sNewLine;
+
+        pFileStream->Flush();
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+#if OSL_DEBUG_LEVEL > 0
+    OProcess::TProcessError eError =
+#endif
+        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+    OSL_ENSURE( eError == OProcess::E_None, "ODriver::X_PARAM: calling the executable failed!" );
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+
+    return 0;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ODriver::CreateFiles(const TDatabaseStruct& _aInfo)
+{
+    int nRet = CreateFile(_aInfo.sSysDevSpace,_aInfo.nDataSize/50) ? 0 : -9;
+    if(!nRet)
+        nRet = CreateFile(_aInfo.sTransLogName,_aInfo.nLogSize) ? 0 : -10;
+    if(!nRet)
+        nRet = CreateFile(_aInfo.sDataDevName,_aInfo.nDataSize) ? 0 : -11;
+
+    return nRet;
+
+}
+// -----------------------------------------------------------------------------
+void ODriver::PutParam(const ::rtl::OUString& sDBName,
+                      const ::rtl::OUString& rWhat,
+                      const ::rtl::OUString& rHow)
+{
+    OArgumentList aArgs(3,&sDBName,&rWhat,&rHow);
+    ::rtl::OUString sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("putparam"));
+#if defined(WIN) || defined(WNT)
+    sCommand += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
+#endif
+
+    OProcess aApp(sCommand,m_sDbWorkURL);
+#if OSL_DEBUG_LEVEL > 0
+    OProcess::TProcessError eError =
+#endif
+        aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS,aArgs );
+    OSL_ENSURE( eError == OProcess::E_None, "ODriver::PutParam: calling the executable failed!" );
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODriver::CreateFile(const ::rtl::OUString &_FileName,
+                sal_Int32 _nSize)
+{
+OSL_TRACE("CreateFile %d",_nSize);
+    sal_Bool bOK = sal_True;
+    try
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(_FileName,STREAM_WRITE));
+        if( !pFileStream.get())
+        {
+            ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database file: '"));
+            sMsg += _FileName;
+            sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'. Not enough space available!")) ;
+            throw SQLException(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+        }
+        (*pFileStream).SetFiller('\0');
+        sal_Int32 nNewSize = 0;
+        sal_Int32 nCount = _nSize /2;
+        for(sal_Int32 i=0; bOK && i < nCount; ++i)
+        {
+            nNewSize += 8192;//4096;
+            bOK = (*pFileStream).SetStreamSize(nNewSize);
+            pFileStream->Flush();
+        }
+
+        bOK = bOK && static_cast<sal_Int32>(pFileStream->Seek(STREAM_SEEK_TO_END)) == nNewSize;
+    }
+    catch(Exception&)
+    {
+    OSL_TRACE("Exception");
+    }
+    if(!bOK)
+    {
+        ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create the database file: '"));
+        sMsg += _FileName;
+        sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'. Not enough space available!")) ;
+        throw SQLException(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
+    }
+
+    return bOK;
+    // dd if=/dev/zero bs=4k of=$DEV_NAME count=$2
+}
+// -----------------------------------------------------------------------------
+int ODriver::X_START(const ::rtl::OUString& sDBName)
+{
+    ::rtl::OUString sCommand;
+#if defined(WIN) || defined(WNT)
+
+    ::rtl::OUString sArg1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-d"));
+    ::rtl::OUString sArg3 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
+    ::rtl::OUString sArg4 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBWindow"));
+
+    OArgumentList aArgs(4,&sArg1,&sDBName,&sArg3,&sArg4);
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strt.exe"));
+#else
+    OArgumentList aArgs(1,&sDBName);
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_start"));
+#endif
+
+    OProcess aApp( sCommand ,m_sDbWorkURL);
+    OProcess::TProcessError eError = aApp.execute((OProcess::TProcessOption)OPROCESS_ADABAS,aArgs);
+
+    if(eError == OProcess::E_NotFound)
+    {
+        ::rtl::OUString sMsg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Program "));
+        sMsg += sCommand;
+        sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" not found!"));
+        SQLException aNext(sMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("01000")),1000,Any());
+        ::rtl::OUString sMsg2(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not start database: ")));
+        sMsg2 += sDBName;
+        throw SQLException(sMsg2,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("01000")),1000,makeAny(aNext));
+    }
+    OSL_ASSERT(eError == OProcess::E_None);
+
+    OProcess::TProcessInfo aInfo;
+    if(aApp.getInfo(OProcess::TData_ExitCode,&aInfo) == OProcess::E_None && aInfo.Code)
+        return aInfo.Code;
+
+    return 0;
+}
+// -----------------------------------------------------------------------------
+int ODriver::X_STOP(const ::rtl::OUString& sDBName)
+{
+    ::rtl::OUString sCommand;
+#if defined(WIN) || defined(WNT)
+
+    ::rtl::OUString sArg1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-d"));
+    ::rtl::OUString sArg2 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-NoDBService"));
+
+    OArgumentList aArgs(3,&sArg1,&sDBName,&sArg2);
+    sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stp.exe"));
+#else
+    OArgumentList aArgs(1,&sDBName);
+    sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x_stop"));
+#endif
+    OProcess aApp( sCommand ,m_sDbWorkURL);
+
+    OProcess::TProcessError eError = aApp.execute((OProcess::TProcessOption)OPROCESS_ADABAS,aArgs);
+
+
+    OSL_ASSERT(eError == OProcess::E_None);
+    if(eError != OProcess::E_None)
+        return 1;
+        OProcess::TProcessInfo aInfo;
+    if(aApp.getInfo(OProcess::TData_ExitCode,&aInfo) == OProcess::E_None && aInfo.Code)
+        return aInfo.Code;
+
+    return 0;
+}
+// -----------------------------------------------------------------------------
+void ODriver::XUTIL(const ::rtl::OUString& _rParam,
+           const ::rtl::OUString& _DBNAME,
+           const ::rtl::OUString& _USRNAME,
+           const ::rtl::OUString& _USRPWD)
+{
+    String sWorkUrl(m_sDbWorkURL);
+    String sExt = String::CreateFromAscii(".log");
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("xutil"),&sExt,&sWorkUrl);
+    aCmdFile.EnableKillingFile();
+
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+        (*pFileStream)  <<
+#if defined(WIN) || defined(WNT)
+                            "xutil.exe"
+#else
+                            "utility"
+#endif
+                        << " -u "
+                        << ::rtl::OString(_USRNAME,_USRNAME.getLength(),gsl_getSystemTextEncoding())
+                        << ","
+                        << ::rtl::OString(_USRPWD,_USRPWD.getLength(),gsl_getSystemTextEncoding())
+                        << " -d "
+                        << ::rtl::OString(_DBNAME,_DBNAME.getLength(),gsl_getSystemTextEncoding())
+                        << " "
+                        << ::rtl::OString(_rParam,_rParam.getLength(),gsl_getSystemTextEncoding())
+                        << " > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << " 2>&1"
+                        << sNewLine;
+        pFileStream->Flush();
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+#if OSL_DEBUG_LEVEL > 0
+    OProcess::TProcessError eError =
+#endif
+        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+    OSL_ENSURE( eError == OProcess::E_None, "ODriver::XUTIL: calling the executable failed!" );
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+}
+// -----------------------------------------------------------------------------
+void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
+               const ::rtl::OUString& _rUSR,
+               const ::rtl::OUString& _rPWD,
+               const ::rtl::OUString& _rBatch)
+{
+    OSL_ENSURE(_rBatch.getLength(),"No batch file given!");
+    String sWorkUrl(m_sDbWorkURL);
+    String sExt = String::CreateFromAscii(".log");
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("LoadBatch"),&sExt,&sWorkUrl);
+#if OSL_DEBUG_LEVEL < 2
+    aCmdFile.EnableKillingFile();
+#endif
+
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+        (*pFileStream)  << "xload"
+#if defined(WIN) || defined(WNT)
+                        << ".exe"
+#endif
+                        << " -d "
+                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << " -u "
+                        << ::rtl::OString(_rUSR,_rUSR.getLength(),gsl_getSystemTextEncoding())
+                        << ","
+                        << ::rtl::OString(_rPWD,_rPWD.getLength(),gsl_getSystemTextEncoding());
+
+        if ( !isKernelVersion(CURRENT_DB_VERSION) )
+            (*pFileStream) << " -S adabas -b ";
+        else
+            (*pFileStream) << " -S NATIVE -b ";
+
+        (*pFileStream)  << ::rtl::OString(_rBatch,_rBatch.getLength(),gsl_getSystemTextEncoding())
+                        << " > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << " 2>&1"
+                        << sNewLine;
+
+        pFileStream->Flush();
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+#if OSL_DEBUG_LEVEL > 0
+    OProcess::TProcessError eError =
+#endif
+        aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+    OSL_ENSURE( eError == OProcess::E_None, "ODriver::LoadBatch: calling the executable failed!" );
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+}
+// -----------------------------------------------------------------------------
+void ODriver::fillEnvironmentVariables()
+{
+    // read the environment vars
+    struct env_data
+    {
+        const sal_Char*     pAsciiEnvName;
+        ::rtl::OUString*    pValue;
+        ::rtl::OUString*    pValueURL;
+    } EnvData[] = {
+        { "DBWORK",     &m_sDbWork,     &m_sDbWorkURL },
+        { "DBCONFIG",   &m_sDbConfig,   &m_sDbConfigURL },
+        { "DBROOT",     &m_sDbRoot,     &m_sDbRootURL }
+    };
+
+    for ( size_t i = 0; i < sizeof( EnvData ) / sizeof( EnvData[0] ); ++i )
+    {
+        ::rtl::OUString sVarName = ::rtl::OUString::createFromAscii( EnvData[i].pAsciiEnvName );
+        ::rtl::OUString sEnvValue;
+        if(osl_getEnvironment( sVarName.pData, &sEnvValue.pData ) == osl_Process_E_None )
+        {
+            *EnvData[i].pValue = sEnvValue;
+            String sURL;
+            LocalFileHelper::ConvertPhysicalNameToURL( *EnvData[i].pValue, sURL );
+            *EnvData[i].pValueURL = sURL;
+        }
+    }
+
+    m_sDelimit =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODriver::generateInitFile() const
+{
+    String sExt;
+#if !(defined(WIN) || defined(WNT))
+    sExt = String::CreateFromAscii(".sh");
+#else
+    sExt = String::CreateFromAscii(".bat");
+#endif
+
+    String sWorkUrl(m_sDbWorkURL);
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("Init"),&sExt,&sWorkUrl);
+#if !(defined(WIN) || defined(WNT))
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+    chmod(ByteString(sPhysicalPath,gsl_getSystemTextEncoding()).GetBuffer(),S_IRUSR|S_IWUSR|S_IXUSR);
+#endif
+
+#if !(defined(WIN) || defined(WNT))
+    SvStream* pFileStream = aCmdFile.GetStream(STREAM_WRITE);
+    (*pFileStream)  << "#!/bin/sh"
+                    << sNewLine
+                    << "cd \"$DBWORK\""
+                    << sNewLine
+                    << sNewLine;
+    pFileStream->Flush();
+#endif
+
+    return aCmdFile.GetURL();
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODriver::getDatabaseInitFile(  const TDatabaseStruct& _aDBInfo)
+{
+    String sExt;
+    sExt.AssignAscii(".ins");
+
+
+    String sWorkUrl(m_sDbWorkURL);
+    ::utl::TempFile aInitFile(String::CreateFromAscii("Init"),&sExt,&sWorkUrl);
+    {
+        SvStream* pFileStream = aInitFile.GetStream(STREAM_WRITE);
+        (*pFileStream) << "* @(#)init.cmd  6.1.1   1994-11-10\n";
+        (*pFileStream) << "init config\n";
+        (*pFileStream) << "* default code:\n";
+        (*pFileStream) << "ascii\n";
+        (*pFileStream) << "* date time format\n";
+        (*pFileStream) << "internal\n";
+        (*pFileStream) << "* command timeout:\n";
+        (*pFileStream) << "900\n";
+        (*pFileStream) << "* lock timeout:\n";
+        (*pFileStream) << "360\n";
+        (*pFileStream) << "* request timeout:\n";
+        (*pFileStream) << "180\n";
+        (*pFileStream) << "* log mode:\n";
+        (*pFileStream) << "demo\n";
+        (*pFileStream) << "* log segment size:\n";
+        (*pFileStream) << "0\n";
+        (*pFileStream) << "* no of archive logs:\n";
+        (*pFileStream) << "0\n";
+        (*pFileStream) << "* no of data devspaces:\n";
+        (*pFileStream) << "1\n";
+        (*pFileStream) << "* mirror devspaces:\n";
+        (*pFileStream) << "n\n";
+        (*pFileStream) << "if $rc <> 0 then stop\n";
+        (*pFileStream) << "*---  device description ---\n";
+        (*pFileStream) << "* sys devspace name:\n";
+        {
+            String sTemp;
+            LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sSysDevSpace,sTemp);
+            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+        }
+        (*pFileStream) << "\n* log devspace size:\n";
+        (*pFileStream) << ::rtl::OString::valueOf(_aDBInfo.nLogSize);
+        (*pFileStream) << "\n* log devspace name:\n";
+        {
+            String sTemp;
+            LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sTransLogName,sTemp);
+            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+        }
+        (*pFileStream) << "\n* data devspace size:\n";
+        (*pFileStream) << ::rtl::OString::valueOf(_aDBInfo.nDataSize);
+        (*pFileStream) << "\n* data devspace name:\n";
+        {
+            String sTemp;
+            LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sDataDevName,sTemp);
+            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+        }
+
+        (*pFileStream) << "\n* END INIT CONFIG\n";
+        (*pFileStream) << "if $rc <> 0 then stop\n";
+        if(_aDBInfo.bRestoreDatabase)
+        {
+            (*pFileStream) << "RESTORE DATA QUICK FROM '";
+            {
+                String sTemp;
+                LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sBackupFile,sTemp);
+                (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+            }
+            (*pFileStream) << "' BLOCKSIZE 8\n";
+            (*pFileStream) << "if $rc <> 0 then stop\n";
+            (*pFileStream) << "RESTART\n";
+
+        }
+        else
+        {
+            (*pFileStream) << "ACTIVATE SERVERDB SYSDBA \"";
+            (*pFileStream) << ::rtl::OString(_aDBInfo.sSysUser,_aDBInfo.sSysUser.getLength(),gsl_getSystemTextEncoding());
+            (*pFileStream) << "\" PASSWORD \"";
+            (*pFileStream) << ::rtl::OString(_aDBInfo.sSysPassword,_aDBInfo.sSysPassword.getLength(),gsl_getSystemTextEncoding());
+            (*pFileStream) << "\"\n";
+        }
+        (*pFileStream) << "if $rc <> 0 then stop\n";
+        (*pFileStream) << "exit\n";
+    }
+    return aInitFile.GetURL();
+}
+// -----------------------------------------------------------------------------
+void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTION,const ::rtl::OUString& _FILENAME)
+{
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(_FILENAME,sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+
+        (*pFileStream)  << "x_cons"
+#if defined(WIN) || defined(WNT)
+                        << ".exe"
+#endif
+                        << " "
+                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << " SHOW "
+                        << _ACTION
+                        << " > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sNewLine;
+        pFileStream->Flush();
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+}
+// -----------------------------------------------------------------------------
+void ODriver::checkAndRestart(const ::rtl::OUString& sDBName,const TDatabaseStruct& _rDbInfo)
+{
+    String sWorkUrl(m_sDbWorkURL);
+    String sExt = String::CreateFromAscii(".st");
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("State"),&sExt,&sWorkUrl);
+    aCmdFile.EnableKillingFile();
+
+    X_CONS(sDBName,"STATE",aCmdFile.GetURL());
+    SvStream* pFileStream = aCmdFile.GetStream(STREAM_SHARE_DENYALL);
+    if ( pFileStream )
+    {
+        ByteString sStateLine;
+        sal_Bool bRead = sal_True;
+        sal_Int32 nStart = 2;
+        while(bRead && !pFileStream->IsEof())
+        {
+            String aLine;
+            bRead = pFileStream->ReadLine(sStateLine);
+            if(bRead)
+            {
+                if(sStateLine.Search("WARM") != STRING_NOTFOUND)
+                {   // nothing to do
+                    nStart = 0;
+                    break;
+                }
+                else if(sStateLine.Search("COLD") != STRING_NOTFOUND)
+                {
+                    nStart = 1;
+                    break;
+                }
+            }
+        }
+        switch(nStart)
+        {
+            case 2:
+                clearDatabase(sDBName);
+                X_START(sDBName);
+                // don't break here
+            case 1:
+                XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTART")),sDBName,_rDbInfo.sControlUser,_rDbInfo.sControlPassword);
+            case 0:
+                break;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersion)
+{
+    String sWorkUrl(m_sDbWorkURL);
+    String sExt = String::CreateFromAscii(".st");
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("DevSpaces"),&sExt,&sWorkUrl);
+    aCmdFile.EnableKillingFile();
+
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+
+        (*pFileStream)  << "getparam"
+#if defined(WIN) || defined(WNT)
+                        << ".exe"
+#endif
+                        << " "
+                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << " KERNELVERSION > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sNewLine;
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+    SvStream* pFileStream = aCmdFile.GetStream(STREAM_STD_READWRITE);
+    ByteString sStateLine;
+    sal_Bool bRead = sal_True;
+    sal_Bool bIsVersion = sal_False;
+    while ( pFileStream && bRead && !pFileStream->IsEof() )
+    {
+        bRead = pFileStream->ReadLine(sStateLine);
+        if ( bRead )
+        {
+            bIsVersion = sStateLine.GetToken(1,' ').Equals(_pVersion) != 0;
+            break;
+        }
+    }
+    return bIsVersion;
+}
+// -----------------------------------------------------------------------------
+void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
+                                        const TDatabaseStruct& _rDBInfo)
+{
+    //  %DBROOT%\pgm\getparam %2 DATA_CACHE_PAGES > %3
+    String sWorkUrl(m_sDbWorkURL);
+    String sExt = String::CreateFromAscii(".st");
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("DevSpaces"),&sExt,&sWorkUrl);
+    aCmdFile.EnableKillingFile();
+
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+
+        (*pFileStream)  << "getparam"
+#if defined(WIN) || defined(WNT)
+                        << ".exe"
+#endif
+                        << " "
+                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << " DATA_CACHE_PAGES > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sNewLine;
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+    SvStream* pFileStream = aCmdFile.GetStream(STREAM_STD_READWRITE);
+    ByteString sStateLine;
+    sal_Bool bRead = sal_True;
+    sal_Int32 nDataPages = 0;
+    while(pFileStream && bRead && !pFileStream->IsEof())
+    {
+        bRead = pFileStream->ReadLine(sStateLine);
+        if(bRead)
+        {
+            nDataPages = sStateLine.ToInt32();
+            if(nDataPages && nDataPages < 100)
+            {
+                // the space isn't big enough anymore so we increment it
+                PutParam(sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_CACHE_PAGES")),::rtl::OUString::valueOf(nDataPages));
+                X_PARAM(sDBName,_rDBInfo.sControlUser,_rDBInfo.sControlPassword,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BCHECK")));
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODriver::isKernelVersion(const char* _pVersion)
+{
+    ::utl::TempFile aCmdFile(String::CreateFromAscii("KernelVersion"));
+    aCmdFile.EnableKillingFile();
+
+    String sPhysicalPath;
+    LocalFileHelper::ConvertURLToPhysicalName(aCmdFile.GetURL(),sPhysicalPath);
+
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+
+        (*pFileStream)  << "dbversion"
+                        << " > "
+                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sNewLine;
+    }
+
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    aApp.execute( (OProcess::TProcessOption)OPROCESS_ADABAS);
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+    SvStream* pFileStream = aCmdFile.GetStream(STREAM_STD_READWRITE);
+    ByteString sStateLine;
+    sal_Bool bRead = sal_True;
+    sal_Bool bIsVersion = sal_True;
+    while ( pFileStream && bRead && !pFileStream->IsEof() )
+    {
+        bRead = pFileStream->ReadLine(sStateLine);
+        if ( bRead )
+        {
+            // convert a 11.02.00 to a 12.01.30 version
+            bIsVersion = sStateLine.GetToken(0).Equals(_pVersion) != 0;
+            break;
+        }
+    }
+    return bIsVersion;
+}
+// -----------------------------------------------------------------------------
+void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
+{
+#if defined(WIN) || defined(WNT)
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% -b %m_sDbRoot%\env\TERMCHAR.ind
+    ::rtl::OUString aBatch =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-b "));
+    ::rtl::OUString sTemp2 = m_sDbRootURL   + m_sDelimit
+                                            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
+                                            + m_sDelimit
+                                            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TERMCHAR.ind"));
+    String sTemp;
+    sal_Bool bOk = LocalFileHelper::ConvertURLToPhysicalName(sTemp2,sTemp);
+    aBatch += sTemp;
+
+    XUTIL(aBatch,_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD% DIAGNOSE TRIGGER OFF
+    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DIAGNOSE TRIGGER OFF")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+    //  xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\DBS.ins %_DOMAINPWD%
+    {
+        sTemp2 = m_sDbRootURL
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
+                                + m_sDelimit
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBS.ins"));
+        sTemp.Erase();
+        bOk = LocalFileHelper::ConvertURLToPhysicalName(sTemp2,sTemp);
+        OSL_ENSURE(bOk,"File could be converted into file system path!");
+        sTemp.AppendAscii(" ");
+        sTemp += String(_aInfo.sDomainPassword);
+
+        LoadBatch(_aInfo.sDBName,_aInfo.sSysUser,_aInfo.sSysPassword,sTemp);
+    }
+    //  xload -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\XDD.ins
+    {
+        sTemp2 = m_sDbRootURL
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
+                                + m_sDelimit
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XDD.ins"));
+        sTemp.Erase();
+        bOk = LocalFileHelper::ConvertURLToPhysicalName(sTemp2,sTemp);
+        OSL_ENSURE(bOk,"File could be converted into file system path!");
+
+        LoadBatch(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAIN")),_aInfo.sDomainPassword,sTemp);
+    }
+    //  xload -d %_DBNAME% -u %_SYSDBA_USER%,%_SYSDBA_PWD% -S NATIVE -b %m_sDbRoot%\env\QP.ins
+    {
+        sTemp2 = m_sDbRootURL
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
+                                + m_sDelimit
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QP.ins"));
+        sTemp.Erase();
+        bOk = LocalFileHelper::ConvertURLToPhysicalName(sTemp2,sTemp);
+        OSL_ENSURE(bOk,"File could be converted into file system path!");
+        LoadBatch(_aInfo.sDBName,_aInfo.sSysUser,_aInfo.sSysPassword,sTemp);
+    }
+    //  xload  -d %_DBNAME% -u DOMAIN,%_DOMAINPWD% -S NATIVE -b %m_sDbRoot%\env\SPROC.ins
+    {
+        sTemp2 = m_sDbRootURL
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env"))
+                                + m_sDelimit
+                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SPROC.ins"));
+        sTemp.Erase();
+        bOk = LocalFileHelper::ConvertURLToPhysicalName(sTemp2,sTemp);
+        OSL_ENSURE(bOk,"File could be converted into file system path!");
+
+        LoadBatch(_aInfo.sDBName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAIN")),_aInfo.sDomainPassword,sTemp);
+    }
+
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  DIAGNOSE TRIGGER ON
+    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DIAGNOSE TRIGGER ON")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SET NOLOG OFF
+    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET NOLOG OFF")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  SHUTDOWN QUICK
+    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN QUICK")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+    //  xutil -d %_DBNAME% -u %_CONTROL_USER%,%_CONTROL_PWD%  RESTART
+    XUTIL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTART")),_aInfo.sDBName,_aInfo.sControlUser,_aInfo.sControlPassword);
+
+#else // UNX
+    String sCommandFile = generateInitFile();
+    {
+        ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READWRITE));
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+        (*pFileStream)  << "x_dbinst"
+                        << " -d "
+                        << ::rtl::OString(_aInfo.sDBName,_aInfo.sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << " -u "
+                        << ::rtl::OString(_aInfo.sSysUser,_aInfo.sSysUser.getLength(),gsl_getSystemTextEncoding())
+                        << ","
+                        << ::rtl::OString(_aInfo.sSysPassword,_aInfo.sSysPassword.getLength(),gsl_getSystemTextEncoding())
+                        << " -w "
+                        << ::rtl::OString(_aInfo.sDomainPassword,_aInfo.sDomainPassword.getLength(),gsl_getSystemTextEncoding())
+                        << " -b ";
+
+        if ( isKernelVersion(ADABAS_KERNEL_11) )
+            (*pFileStream) << "-i all";
+        (*pFileStream)
+#if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
+                    << " >> /tmp/kstart.log"
+#else
+                    << " > /dev/null"
+#endif
+                        << sNewLine
+                        << sNewLine;
+        pFileStream->Flush();
+    }
+    // now execute the command
+    OProcess aApp(sCommandFile ,m_sDbWorkURL);
+    aApp.execute( (OProcess::TProcessOption)(OProcess::TOption_Hidden | OProcess::TOption_Wait));
+#if OSL_DEBUG_LEVEL < 2
+    if(UCBContentHelper::Exists(sCommandFile))
+        UCBContentHelper::Kill(sCommandFile);
+#endif
+
+#endif //WNT,UNX
+}
+// -----------------------------------------------------------------------------
+void ODriver::convertOldVersion(const ::rtl::OUString& sDBName,const TDatabaseStruct& _rDbInfo)
+{
+    // first we have to check if this databse is a old version and we have to update the system tables
+    if ( !isVersion(sDBName,CURRENT_DB_VERSION) && isKernelVersion(CURRENT_DB_VERSION) )
+    {
+        if (    !_rDbInfo.sControlUser.getLength()
+            ||  !_rDbInfo.sControlPassword.getLength())
+        {
+            throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The current database need to be converted. Please insert control user  and password.")),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),1000,Any());
+        }
+        String sCommandFile = m_sDbWorkURL;
+        sCommandFile += String::CreateFromAscii("/xparam.prt");
+        if ( UCBContentHelper::Exists(sCommandFile) )
+            UCBContentHelper::Kill(sCommandFile);
+        X_PARAM(sDBName,_rDbInfo.sControlUser,_rDbInfo.sControlPassword,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BCHECK")));
+
+        if ( UCBContentHelper::Exists(sCommandFile) )
+        {
+            {
+                ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(sCommandFile,STREAM_STD_READ) );
+                ByteString sStateLine;
+                sal_Bool bRead = sal_True;
+                static ByteString s_ErrorId("-21100");
+                while ( pFileStream.get() && bRead && !pFileStream->IsEof() )
+                {
+                    bRead = pFileStream->ReadLine(sStateLine);
+                    if ( bRead && s_ErrorId == sStateLine.GetToken(0,' ') )
+                    {
+                        UCBContentHelper::Kill(sCommandFile);
+                        ::rtl::OUString sError(::rtl::OUString::createFromAscii(sStateLine.GetBuffer()));
+                        throw SQLException(sError,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),1000,Any());
+                    }
+                }
+            }
+
+            UCBContentHelper::Kill(sCommandFile);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+    } // namespace adabas
+}// namespace connectivity
 // -----------------------------------------------------------------------------
 
 
