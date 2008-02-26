@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:13:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
@@ -328,13 +328,13 @@ void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponen
     if( xCurrentDocument.is() )
     {
         OUString aTitle;
-        Reference< XDocumentInfoSupplier > xInfoSupplier( xCurrentDocument, UNO_QUERY );
-        if( xInfoSupplier.is() )
+        Reference< XDocumentPropertiesSupplier > xDPS( xCurrentDocument, UNO_QUERY );
+        if( xDPS.is() )
         {
-            Reference< XPropertySet > xInfo( xInfoSupplier->getDocumentInfo(), UNO_QUERY );
-            if( xInfo.is() )
+            Reference< XDocumentProperties > xProps( xDPS->getDocumentProperties() );
+            if( xProps.is() )
             {
-                xInfo->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= aTitle;
+                aTitle = xProps->getTitle();
             }
         }
 
