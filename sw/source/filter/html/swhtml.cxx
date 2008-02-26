@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:44:18 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_sw.hxx"
 
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -80,9 +82,6 @@
 #endif
 #ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -988,13 +987,19 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         // und noch die DocumentInfo aufbereiten
         if( IsNewDoc() )
         {
-            const SfxDocumentInfo *pInfo = pDoc->GetDocumentInfo();
-            if( pInfo->IsReloadEnabled() &&
-                !pInfo->GetReloadURL().Len() )
-            {
-                SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
-                aInfo.SetReloadURL( aPathToFile );
-                pDoc->SetDocumentInfo( aInfo );
+            SwDocShell *pDocShell(pDoc->GetDocShell());
+            DBG_ASSERT(pDocShell, "no SwDocShell");
+            if (pDocShell) {
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps(
+                    xDPS->getDocumentProperties());
+                DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+                if ( xDocProps.is() && (xDocProps->getAutoloadSecs() > 0) &&
+                     xDocProps->getAutoloadURL().equalsAscii("") )
+                {
+                    xDocProps->setAutoloadURL(aPathToFile);
+                }
             }
         }
 
@@ -1135,12 +1140,19 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             case HTML_TITLE_OFF:
                 if( IsNewDoc() && sTitle.Len() )
                 {
-                    SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
-                    aInfo.SetTitle( sTitle );
-                    pDoc->SetDocumentInfo( aInfo );
+                    if( pDoc->GetDocShell() ) {
+                        uno::Reference<document::XDocumentPropertiesSupplier>
+                            xDPS(pDoc->GetDocShell()->GetModel(),
+                            uno::UNO_QUERY_THROW);
+                        uno::Reference<document::XDocumentProperties> xDocProps(
+                            xDPS->getDocumentProperties());
+                        DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+                        if (xDocProps.is()) {
+                            xDocProps->setTitle(sTitle);
+                        }
 
-                    if( pDoc->GetDocShell() )
                         pDoc->GetDocShell()->SetTitle( sTitle );
+                    }
                 }
                 bInTitle = FALSE;
                 sTitle.Erase();
@@ -1419,9 +1431,19 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 case HTML_O_TARGET:
                     if( IsNewDoc() )
                     {
-                        SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
-                        aInfo.SetDefaultTarget( pOption->GetString() );
-                        pDoc->SetDocumentInfo( aInfo );
+                        SwDocShell *pDocShell(pDoc->GetDocShell());
+                        DBG_ASSERT(pDocShell, "no SwDocShell");
+                        if (pDocShell) {
+                            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                            uno::Reference<document::XDocumentProperties>
+                                xDocProps(xDPS->getDocumentProperties());
+                            DBG_ASSERT(xDocProps.is(),"no DocumentProperties");
+                            if (xDocProps.is()) {
+                                xDocProps->setDefaultTarget(
+                                    pOption->GetString());
+                            }
+                        }
                     }
                     break;
                 }
@@ -1438,15 +1460,19 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 if( pDocSh )
                     pHTTPHeader = pDocSh->GetHeaderAttributes();
             }
-            SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
-            if( ParseMetaOptions( &aInfo, pHTTPHeader ) )
-            {
-                if( IsNewDoc() )
-                    pDoc->SetDocumentInfo( aInfo );
-            }
-            else if( IsNewDoc() )
-            {
-                ParseMoreMetaOptions();
+            SwDocShell *pDocShell(pDoc->GetDocShell());
+            DBG_ASSERT(pDocShell, "no SwDocShell");
+            if (pDocShell) {
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps(
+                    xDPS->getDocumentProperties());
+                DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+                if (IsNewDoc() && xDocProps.is() &&
+                    !ParseMetaOptions( xDocProps, pHTTPHeader ) )
+                {
+                    ParseMoreMetaOptions();
+                }
             }
         }
         break;
