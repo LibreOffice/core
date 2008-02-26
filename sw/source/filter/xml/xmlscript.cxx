@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlscript.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:13:21 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,30 +40,12 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
-
-#ifndef _SVX_LANGITEM_HXX
-#include <svx/langitem.hxx>
-#endif
-
-#ifndef _SWDOCSH_HXX
-#include "docsh.hxx"
-#endif
-#ifndef _DOC_HXX //autogen wg. SwDoc
-#include <doc.hxx>
 #endif
 
 #ifndef _XMLIMP_HXX
@@ -75,7 +57,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 // ---------------------------------------------------------------------
 
@@ -93,7 +74,7 @@ SvXMLImportContext *SwXMLImport::CreateScriptContext(
 
     if( !pContext )
         pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
-                                              rLocalName );
+                                            rLocalName );
 
     return pContext;
 }
