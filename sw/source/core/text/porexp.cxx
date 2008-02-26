@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:15:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     // ST2
     if ( rInf.GetSmartTags() )
-        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False, sal_True );
+        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False, sal_True, sal_False );
     else
         rInf.DrawText( *this, rInf.GetLen(), sal_False );
 }
