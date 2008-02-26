@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:50:41 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,12 @@
 
 
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentInfo.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+
+#include "docsh.hxx"
 
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
@@ -48,10 +54,6 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
-
 
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -79,6 +81,7 @@
 #endif
 
 using namespace nsSwDocInfoSubType;
+using namespace ::com::sun::star;
 
 struct HTMLNumFmtTblEntry
 {
@@ -181,6 +184,14 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
     { 0,                     0  }
 };
 
+// UGLY: these are extensions of nsSwDocInfoSubType (in inc/docufld.hxx)
+//       these are necessary for importing document info fields written by
+//       older versions of OOo (< 3.0) which did not have DI_CUSTOM fields
+    const SwDocInfoSubType DI_INFO1         =  DI_SUBTYPE_END + 1;
+    const SwDocInfoSubType DI_INFO2         =  DI_SUBTYPE_END + 2;
+    const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
+    const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
+
 static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
 {
     { sHTML_FS_title,    DI_TITEL },
@@ -191,6 +202,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
     { sHTML_FS_info2,    DI_INFO2 },
     { sHTML_FS_info3,    DI_INFO3 },
     { sHTML_FS_info4,    DI_INFO4 },
+    { sHTML_FS_custom,   DI_CUSTOM },
     { sHTML_FS_create,   DI_CREATE },
     { sHTML_FS_change,   DI_CHANGE },
     { 0,                 0 }
@@ -249,7 +261,7 @@ void SwHTMLParser::NewField()
     BOOL bKnownType = FALSE, bFixed = FALSE,
          bHasNumFmt = FALSE, bHasNumValue = FALSE;
     USHORT nType = 0;
-    String aValue, aNumFmt, aNumValue ;
+    String aValue, aNumFmt, aNumValue, aName;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
 
     const HTMLOptions *pHTMLOptions = GetOptions();
@@ -268,6 +280,9 @@ void SwHTMLParser::NewField()
             break;
         case HTML_O_FORMAT:
             pFmtOption = pOption;
+            break;
+        case HTML_O_NAME:
+            aName = pOption->GetString();
             break;
         case HTML_O_VALUE:
             aValue = pOption->GetString();
@@ -299,12 +314,20 @@ void SwHTMLParser::NewField()
     {
         SvtUserOptions aOpt;
         const String& rUser = aOpt.GetFullName();
-        const SfxDocumentInfo *pDocInfo = pDoc->GetDocumentInfo();
-        const String& rChanged = pDocInfo->GetModificationAuthor();
-        const String& rCreated = pDocInfo->GetAuthor();
-        if( !rUser.Len() ||
-            (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
-            bFixed = TRUE;
+        SwDocShell *pDocShell(pDoc->GetDocShell());
+        DBG_ASSERT(pDocShell, "no SwDocShell");
+        if (pDocShell) {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps(
+                xDPS->getDocumentProperties());
+            DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+            const String& rChanged = xDocProps->getModifiedBy();
+            const String& rCreated = xDocProps->getAuthor();
+            if( !rUser.Len() ||
+                (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
+                bFixed = TRUE;
+        }
     }
 
     USHORT nWhich = nType;
@@ -491,6 +514,21 @@ void SwHTMLParser::NewField()
                 else
                     bHasNumValue = FALSE;
 
+                if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.Len() == 0 )
+                {
+                    // backward compatibility: map to names from document info
+                    SfxObjectShell* pShell = pDoc->GetDocShell();
+                    DBG_ASSERT(pShell, "no object shell");
+                    if (pShell) {
+                        uno::Reference<document::XDocumentInfoSupplier> xDIS(
+                            pShell->GetModel(), uno::UNO_QUERY_THROW);
+                        uno::Reference<document::XDocumentInfo> xDocInfo
+                            = xDIS->getDocumentInfo();
+                        aName = xDocInfo->getUserFieldName(nSub - DI_INFO1);
+                    }
+                    nSub = DI_CUSTOM;
+                }
+
                 if( bFixed )
                 {
                     nSub |= DI_SUB_FIXED;
@@ -498,7 +536,7 @@ void SwHTMLParser::NewField()
                 }
 
                 pFld = new SwDocInfoField( (SwDocInfoFieldType *)pType,
-                                             nSub, String(), nNumFmt );
+                                             nSub, aName, nNumFmt );
                 if( bHasNumValue )
                     ((SwDocInfoField*)pFld)->SetValue( dValue );
             }
