@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:49:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,9 +110,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
@@ -535,10 +532,6 @@ SwXTextDocument::~SwXTextDocument()
     }
 }
 
-uno::Reference< document::XDocumentInfo > SAL_CALL SwXTextDocument::getDocumentInfo() throw (::uno::RuntimeException)
-{
-    return pDocShell->GetDoc()->GetDocumentInfo()->GetInfo();
-}
 
 /*-- 18.12.98 11:55:08---------------------------------------------------
 
