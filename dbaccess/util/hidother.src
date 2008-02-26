@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:14:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,4 +501,23 @@ hidspecial HID_BROWSER_ADMINISTRATE                                         { He
 hidspecial HID_DSADMIN_IGNORECURRENCY                                       { HelpId = HID_DSADMIN_IGNORECURRENCY ; };
 hidspecial HID_DLG_QRY_JOIN_CONTROL                                         { HelpId = HID_DLG_QRY_JOIN_CONTROL ; };
 hidspecial HID_EXTENSION_NOT_PRESENT_DLG                                    { HelpId = HID_EXTENSION_NOT_PRESENT_DLG ; };
+hidspecial HID_DLG_ADABAS_NEWDB                                             { HelpId = HID_DLG_ADABAS_NEWDB; };
+hidspecial HID_DLG_ADABAS_DBNAME                                            { HelpId = HID_DLG_ADABAS_DBNAME            ; };
+hidspecial HID_DLG_ADABAS_SYSUSR                                            { HelpId = HID_DLG_ADABAS_SYSUSR            ; };
+hidspecial HID_DLG_ADABAS_SYSPWD                                            { HelpId = HID_DLG_ADABAS_SYSPWD            ; };
+hidspecial HID_DLG_ADABAS_CONUSR                                            { HelpId = HID_DLG_ADABAS_CONUSR            ; };
+hidspecial HID_DLG_ADABAS_CONPWD                                            { HelpId = HID_DLG_ADABAS_CONPWD            ; };
+hidspecial HID_DLG_ADABAS_DATADEVSPACE_SIZE                                 { HelpId = HID_DLG_ADABAS_DATADEVSPACE_SIZE ; };
+hidspecial HID_DLG_ADABAS_CACHE_SIZE                                        { HelpId = HID_DLG_ADABAS_CACHE_SIZE        ; };
+hidspecial HID_DLG_ADABAS_USR                                               { HelpId = HID_DLG_ADABAS_USR               ; };
+hidspecial HID_DLG_ADABAS_DOMAINPWD                                         { HelpId = HID_DLG_ADABAS_DOMAINPWD         ; };
+hidspecial HID_DLG_ADABAS_RESTORE                                           { HelpId = HID_DLG_ADABAS_RESTORE           ; };
+hidspecial HID_DLG_ADABAS_PBRESTORE                                         { HelpId = HID_DLG_ADABAS_PBRESTORE         ; };
+hidspecial HID_DLG_ADABAS_SYSDEVSPACE                                       { HelpId = HID_DLG_ADABAS_SYSDEVSPACE       ; };
+hidspecial HID_DLG_ADABAS_PBSYSDEVSPACE                                     { HelpId = HID_DLG_ADABAS_PBSYSDEVSPACE     ; };
+hidspecial HID_DLG_ADABAS_TRANSACTIONLOG                                    { HelpId = HID_DLG_ADABAS_TRANSACTIONLOG    ; };
+hidspecial HID_DLG_ADABAS_PBTRANSACTIONLOG                                  { HelpId = HID_DLG_ADABAS_PBTRANSACTIONLOG  ; };
+hidspecial HID_DLG_ADABAS_DATADEVSPACE                                      { HelpId = HID_DLG_ADABAS_DATADEVSPACE      ; };
+hidspecial HID_DLG_ADABAS_PBDATADEVSPACE                                    { HelpId = HID_DLG_ADABAS_PBDATADEVSPACE    ; };
+hidspecial HID_DLG_ADABAS_TRANSACTIONLOG_SIZE                               { HelpId = HID_DLG_ADABAS_TRANSACTIONLOG_SIZE; };
 
