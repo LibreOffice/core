@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:44:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@
 #include <svx/frmdiritem.hxx>
 #endif
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -1045,9 +1047,19 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     ByteString sIndent;
     GetIndentString( sIndent );
 //  OutNewLine();
-    SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), pDoc->GetpInfo(),
+    using namespace ::com::sun::star;
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    SwDocShell *pDocShell(pDoc->GetDocShell());
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        xDocProps.set(xDPS->getDocumentProperties());
+    }
+
+    // xDocProps may be null here (when copying)
+    SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
                                      sIndent.GetBuffer(), eDestEnc,
-                                       &aNonConvertableCharacters );
+                                     &aNonConvertableCharacters );
 
     // Kommentare und Meta-Tags des ersten Absatzes
     rHeaderAttrs = OutHeaderAttrs();
