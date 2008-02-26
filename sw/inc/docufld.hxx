@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:34:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,22 +87,23 @@ enum SwDocStatSubType
 typedef sal_uInt16  SwDocInfoSubType;
 namespace nsSwDocInfoSubType
 {
+    // NB: these must denote consecutive integers!
+    // NB2: these are extended by 4 DI_INFO values for backward compatibility
+    //      in filter/html/htmlfld.cxx, so make sure that DI_SUBTYPE_END
+    //      really is the end, and is at least 4 less than DI_SUB_*!
     const SwDocInfoSubType DI_SUBTYPE_BEGIN =  0;
     const SwDocInfoSubType DI_TITEL         =  DI_SUBTYPE_BEGIN;
     const SwDocInfoSubType DI_THEMA         =  1;
     const SwDocInfoSubType DI_KEYS          =  2;
     const SwDocInfoSubType DI_COMMENT       =  3;
-    const SwDocInfoSubType DI_INFO1         =  4;
-    const SwDocInfoSubType DI_INFO2         =  5;
-    const SwDocInfoSubType DI_INFO3         =  6;
-    const SwDocInfoSubType DI_INFO4         =  7;
-    const SwDocInfoSubType DI_CREATE        =  8;
-    const SwDocInfoSubType DI_CHANGE        =  9;
-    const SwDocInfoSubType DI_PRINT         = 10;
-    const SwDocInfoSubType DI_DOCNO         = 11;
-    const SwDocInfoSubType DI_EDIT          = 12;
-    const SwDocInfoSubType DI_CUSTOM        = 13;
-    const SwDocInfoSubType DI_SUBTYPE_END   = 14;
+    const SwDocInfoSubType DI_CREATE        =  4;
+    const SwDocInfoSubType DI_CHANGE        =  5;
+    const SwDocInfoSubType DI_PRINT         =  6;
+    const SwDocInfoSubType DI_DOCNO         =  7;
+    const SwDocInfoSubType DI_EDIT          =  8;
+    const SwDocInfoSubType DI_CUSTOM        =  9;
+    const SwDocInfoSubType DI_SUBTYPE_END   = 10;
+
 
     const SwDocInfoSubType DI_SUB_AUTHOR    = 0x0100;
     const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
@@ -591,7 +592,7 @@ public:
     virtual String          Expand() const;
     virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual SwField*        Copy() const;
-    String                  GetName() { return aName; }
+    String                  GetName() const { return aName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
