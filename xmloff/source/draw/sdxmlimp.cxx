@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:32:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,10 +78,6 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #endif
@@ -119,6 +115,9 @@
 #endif
 
 #include <xmloff/XMLFontStylesContext.hxx>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -271,8 +270,11 @@ SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SdXMLDocContext_Impl : public SvXMLImportContext
+// NB: virtually inherit so we can multiply inherit properly
+//     in SdXMLFlatDocContext_Impl
+class SdXMLDocContext_Impl : public virtual SvXMLImportContext
 {
+protected:
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
@@ -364,11 +366,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_META:
         {
-            if( GetImport().getImportFlags() & IMPORT_META )
-            {
-                // office:meta inside office:document
-                pContext = GetSdImport().CreateMetaContext(rLocalName, xAttrList);
-            }
+            DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
             break;
         }
         case XML_TOK_DOC_SCRIPT:
@@ -397,6 +395,55 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// context for flat file xml format
+class SdXMLFlatDocContext_Impl
+    : public SdXMLDocContext_Impl, public SvXMLMetaDocumentContext
+{
+public:
+    SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+
+    virtual ~SdXMLFlatDocContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT i_nPrefix, const OUString& i_rLocalName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
+};
+
+SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+    SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
+    SdXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName, i_xAttrList),
+    SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
+        i_xDocProps, i_xDocBuilder)
+{
+}
+
+SdXMLFlatDocContext_Impl::~SdXMLFlatDocContext_Impl() { }
+
+SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
+    USHORT i_nPrefix, const OUString& i_rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
+{
+    // behave like meta base class iff we encounter office:meta
+    const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
+    if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
+        return SvXMLMetaDocumentContext::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    } else {
+        return SdXMLDocContext_Impl::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -686,16 +733,26 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
     SvXMLImportContext* pContext = 0;
 
     if(XML_NAMESPACE_OFFICE == nPrefix &&
-        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
-          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
+        ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS )   ))
     {
          pContext = new SdXMLDocContext_Impl(*this, nPrefix, rLocalName, xAttrList);
-    }
-    else
-    {
+    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+                ( IsXMLToken(rLocalName, XML_DOCUMENT_META)) ) {
+        pContext = CreateMetaContext(rLocalName, xAttrList);
+    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+                ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY_THROW);
+        // flat OpenDocument file format
+        pContext = new SdXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
+                        xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
+    } else {
         pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
     }
 
@@ -709,15 +766,17 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if(!IsStylesOnlyMode())
+    if (!IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
-        uno::Reference<document::XDocumentInfoSupplier> xSupp(GetModel(), uno::UNO_QUERY);
-
-        if(xSupp.is())
-        {
-            pContext = new SfxXMLMetaContext(*this,
-                XML_NAMESPACE_OFFICE, rLocalName, GetModel());
-        }
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            GetModel(), uno::UNO_QUERY_THROW);
+        pContext = new SvXMLMetaDocumentContext(*this,
+                        XML_NAMESPACE_OFFICE, rLocalName,
+                        xDPS->getDocumentProperties(), xDocBuilder);
     }
 
     if(!pContext)
@@ -901,28 +960,25 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
 
 // #80365# overload this method to read and use the hint value from the
 // written meta information. If no info is found, guess 10 draw objects
-void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+//void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SdXMLImport::SetStatistics(
+        const uno::Sequence<beans::NamedValue> & i_rStats)
 {
-    SvXMLImport::SetStatisticAttributes(xAttrList);
+    static const char* s_stats[] =
+        { "ObjectCount", 0 };
+
+    SvXMLImport::SetStatistics(i_rStats);
 
     sal_uInt32 nCount(10);
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-
-    for(sal_Int16 a(0); a < nAttrCount; a++)
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex(a);
-        rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-
-        if(nPrefix == XML_NAMESPACE_META)
-        {
-            rtl::OUString sValue = xAttrList->getValueByIndex(a);
-            sal_Int32 nValue(0);
-
-            if(IsXMLToken(aLocalName, XML_OBJECT_COUNT))
-            {
-                SvXMLUnitConverter::convertNumber(nValue, sValue);
-                nCount = nValue;
+    for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
+        for (const char** pStat = s_stats; *pStat != 0; ++pStat) {
+            if (i_rStats[i].Name.equalsAscii(*pStat)) {
+                sal_Int32 val;
+                if (i_rStats[i].Value >>= val) {
+                    nCount = val;
+                } else {
+                    DBG_ERROR("SdXMLImport::SetStatistics: invalid entry");
+                }
             }
         }
     }
