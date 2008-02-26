@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:50:23 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,22 +172,6 @@ Resource RID_SW_SHELLRES
     String FLD_DOCINFO_COMMENT
     {
         Text [ en-US ] = "Comments" ;
-    };
-    String FLD_DOCINFO_INFO1
-    {
-        Text [ en-US ] = "Info 0" ;
-    };
-    String FLD_DOCINFO_INFO2
-    {
-        Text [ en-US ] = "Info 1" ;
-    };
-    String FLD_DOCINFO_INFO3
-    {
-        Text [ en-US ] = "Info 2" ;
-    };
-    String FLD_DOCINFO_INFO4
-    {
-        Text [ en-US ] = "Info 3" ;
     };
     String FLD_DOCINFO_CREATE
     {
