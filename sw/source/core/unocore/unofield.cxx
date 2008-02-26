@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:49:44 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,7 @@ using namespace nsSwDocInfoSubType;
 // case-corrected version of the first part for the service names (see #i67811)
 #define COM_TEXT_FLDMASTER_CC   "com.sun.star.text.fieldmaster."
 
+// note: this thing is indexed as an array, so do not insert/remove entries!
 static const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
     DI_CHANGE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
@@ -223,10 +224,10 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
     DI_COMMENT,                 //PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
     DI_CREATE | DI_SUB_AUTHOR,  //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
     DI_CREATE | DI_SUB_DATE,    //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
-    DI_INFO1,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_0
-    DI_INFO2,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_1
-    DI_INFO3,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_2
-    DI_INFO4,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_3
+    0,                          //DUMMY
+    0,                          //DUMMY
+    0,                          //DUMMY
+    0,                          //DUMMY
     DI_CUSTOM,                  //PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
     DI_PRINT | DI_SUB_AUTHOR,   //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
     DI_PRINT | DI_SUB_DATE,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
@@ -282,10 +283,6 @@ static const ServiceIdResId aServiceToRes[] =
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION     },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR   },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME},
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0          },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1          },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2          },
-    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3          },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM          },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR    },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
@@ -346,10 +343,6 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
                 break;
             case DI_EDIT:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;break;
             case DI_COMMENT:nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;break;
-            case DI_INFO1:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0;   break;
-            case DI_INFO2:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1;   break;
-            case DI_INFO3:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2;   break;
-            case DI_INFO4:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3;   break;
             case DI_KEYS:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;break;
             case DI_THEMA:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;  break;
             case DI_TITEL:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;    break;
@@ -482,10 +475,6 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME; break;
     case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM; break;
     case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION:
-    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0:
-    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1:
-    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2:
-    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3:
     case SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS:
     case SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT:
     case SW_SERVICE_FIELDTYPE_DOCINFO_TITLE: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_MISC; break;
@@ -1572,10 +1561,6 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION       :
             case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR     :
             case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME  :
-            case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0            :
-            case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1            :
-            case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2            :
-            case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3            :
             case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM            :
             case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR      :
             case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME   :
