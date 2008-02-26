@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
