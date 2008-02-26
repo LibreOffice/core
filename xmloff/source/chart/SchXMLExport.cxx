@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:33:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
