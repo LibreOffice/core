@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crbm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:28:35 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,19 +76,30 @@ BOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
     SwCursor* pCrsr = GetSwCrsr();
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    if( pBkmk->GetOtherPos() )
+    // --> OD 2007-09-27 #i81002# - refactoring
+    // simplify by using <SwBookmark::BookmarkStart()/BookmarkEnd()>
+//    if( pBkmk->GetOtherBookmarkPos() )
+//  {
+//      if( bAtStart )
+//            *pCrsr->GetPoint() = *pBkmk->GetOtherBookmarkPos() < pBkmk->GetBookmarkPos()
+//                                    ? *pBkmk->GetOtherBookmarkPos()
+//                                    : pBkmk->GetBookmarkPos();
+//      else
+//            *pCrsr->GetPoint() = *pBkmk->GetOtherBookmarkPos() > pBkmk->GetBookmarkPos()
+//                                    ? *pBkmk->GetOtherBookmarkPos()
+//                                    : pBkmk->GetBookmarkPos();
+//  }
+//  else
+//        *pCrsr->GetPoint() = pBkmk->GetBookmarkPos();
+    if ( bAtStart )
     {
-        if( bAtStart )
-            *pCrsr->GetPoint() = *pBkmk->GetOtherPos() < pBkmk->GetPos()
-                                    ? *pBkmk->GetOtherPos()
-                                    : pBkmk->GetPos();
-        else
-            *pCrsr->GetPoint() = *pBkmk->GetOtherPos() > pBkmk->GetPos()
-                                    ? *pBkmk->GetOtherPos()
-                                    : pBkmk->GetPos();
+        *pCrsr->GetPoint() = *pBkmk->BookmarkStart();
     }
     else
-        *pCrsr->GetPoint() = pBkmk->GetPos();
+    {
+        *pCrsr->GetPoint() = *pBkmk->BookmarkEnd();
+    }
+    // <--
 
     if( pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                          nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
@@ -112,14 +123,19 @@ BOOL SwCrsrShell::GotoBookmark(USHORT nPos)
     SwCursor* pCrsr = GetSwCrsr();
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    *pCrsr->GetPoint() = pBkmk->GetPos();
-    if( pBkmk->GetOtherPos() )
+    // --> OD 2007-09-27 #i81002# - refactoring
+    // simplify by using <SwBookmark::GetBookmarkStart()/GetBookmarkEnd()>
+//    *pCrsr->GetPoint() = pBkmk->GetBookmarkPos();
+    *pCrsr->GetPoint() = *pBkmk->BookmarkStart();
+    if( pBkmk->GetOtherBookmarkPos() )
     {
         pCrsr->SetMark();
-        *pCrsr->GetMark() = *pBkmk->GetOtherPos();
-        if( *pCrsr->GetMark() > *pCrsr->GetPoint() )
-            pCrsr->Exchange();
+//        *pCrsr->GetMark() = *pBkmk->GetOtherBookmarkPos();
+        *pCrsr->GetMark() = *pBkmk->BookmarkEnd();
+//        if( *pCrsr->GetMark() > *pCrsr->GetPoint() )
+//            pCrsr->Exchange();
     }
+    // <--
 
     if( pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                          nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
@@ -182,14 +198,19 @@ BOOL SwCrsrShell::GoPrevBookmark()
     do {
         pBkmk = rBkmks[ nPos ];
 
-        *pCrsr->GetPoint() = pBkmk->GetPos();
-        if( pBkmk->GetOtherPos() )
+        // --> OD 2007-09-27 #i81002# - refactoring
+        // simplify by using <SwBookmark::BookmarkStart()/BookmarkEnd()>
+        *pCrsr->GetPoint() = *pBkmk->BookmarkStart();
+//        *pCrsr->GetPoint() = pBkmk->GetBookmarkPos();
+        if( pBkmk->GetOtherBookmarkPos() )
         {
             pCrsr->SetMark();
-            *pCrsr->GetMark() = *pBkmk->GetOtherPos();
-            if( *pCrsr->GetMark() < *pCrsr->GetPoint() )
-                pCrsr->Exchange();
+//            *pCrsr->GetMark() = *pBkmk->GetOtherBookmarkPos();
+            *pCrsr->GetMark() = *pBkmk->BookmarkEnd();
+//            if( *pCrsr->GetMark() < *pCrsr->GetPoint() )
+//                pCrsr->Exchange();
         }
+        // <--
         if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                               nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
         {
