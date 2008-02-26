@@ -17,7 +17,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
 ..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
 
-..\inc\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
 ..\inc\bootstrp\command.hxx %_DEST%\inc%_EXT%\bootstrp\command.hxx
 ..\inc\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
 ..\inc\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
