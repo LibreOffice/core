@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:13:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1070,6 +1070,12 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
                     return Pointer(POINTER_CROOK);
                 }
             }
+
+            case SDRDRAG_CROP:
+            {
+                return Pointer(POINTER_CROP);
+            }
+
             default: {
                 if ((bCorner || bVertex) && !IsResizeAllowed(TRUE)) return Pointer(POINTER_NOTALLOWED);
             }
