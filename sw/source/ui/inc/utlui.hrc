@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:13:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,16 +86,12 @@
 #define FLD_DOCINFO_THEMA   (FLD_DOCINFO_BEGIN + 1)
 #define FLD_DOCINFO_KEYS    (FLD_DOCINFO_BEGIN + 2)
 #define FLD_DOCINFO_COMMENT (FLD_DOCINFO_BEGIN + 3)
-#define FLD_DOCINFO_INFO1   (FLD_DOCINFO_BEGIN + 4)
-#define FLD_DOCINFO_INFO2   (FLD_DOCINFO_BEGIN + 5)
-#define FLD_DOCINFO_INFO3   (FLD_DOCINFO_BEGIN + 6)
-#define FLD_DOCINFO_INFO4   (FLD_DOCINFO_BEGIN + 7)
-#define FLD_DOCINFO_CREATE  (FLD_DOCINFO_BEGIN + 8)
-#define FLD_DOCINFO_CHANGE  (FLD_DOCINFO_BEGIN + 9)
-#define FLD_DOCINFO_PRINT   (FLD_DOCINFO_BEGIN + 10)
-#define FLD_DOCINFO_DOCNO   (FLD_DOCINFO_BEGIN + 11)
-#define FLD_DOCINFO_EDIT    (FLD_DOCINFO_BEGIN + 12)
-#define FLD_DOCINFO_END     (FLD_DOCINFO_BEGIN + 13)
+#define FLD_DOCINFO_CREATE  (FLD_DOCINFO_BEGIN + 4)
+#define FLD_DOCINFO_CHANGE  (FLD_DOCINFO_BEGIN + 5)
+#define FLD_DOCINFO_PRINT   (FLD_DOCINFO_BEGIN + 6)
+#define FLD_DOCINFO_DOCNO   (FLD_DOCINFO_BEGIN + 7)
+#define FLD_DOCINFO_EDIT    (FLD_DOCINFO_BEGIN + 8)
+#define FLD_DOCINFO_END     (FLD_DOCINFO_BEGIN + 9)
 
 #define STR_SERVICE_UNAVAILABLE (FLD_DOCINFO_END  + 1)
 
