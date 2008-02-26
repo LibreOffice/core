@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:39:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,13 @@
 #include "xformsexport.hxx"
 #endif
 
+#include <unotools/docinfohelper.hxx>
+#include <unotools/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
+#include <tools/inetdef.hxx>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -230,6 +237,8 @@ using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
+
+const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
 
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -1052,13 +1061,7 @@ void SvXMLExport::ImplExportMeta()
 {
     CheckAttrList();
 
-    {
-        // <office:meta>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
-                                sal_True, sal_True );
-
-        _ExportMeta();
-    }
+    _ExportMeta();
 }
 
 void SvXMLExport::ImplExportSettings()
@@ -1430,10 +1433,33 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     return 0;
 }
 
+
 void SvXMLExport::_ExportMeta()
 {
-    SfxXMLMetaExport aMeta( *this, mxModel );
-    aMeta.Export();
+    OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
+    Reference< XDocumentPropertiesSupplier > xDocPropsSupplier(mxModel,
+        UNO_QUERY);
+    if (xDocPropsSupplier.is()) {
+        Reference<XDocumentProperties> xDocProps(
+            xDocPropsSupplier->getDocumentProperties());
+        if (!xDocProps.is()) throw;
+        // update generator here
+        xDocProps->setGenerator(generator);
+        SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, xDocProps);
+        uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
+        pMeta->Export();
+    } else {
+        // office:meta
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
+                                sal_True, sal_True );
+        {
+    // BM: #i60323# export generator even if xInfoProp is empty (which is the
+    // case for charts). The generator does not depend on xInfoProp
+            SvXMLElementExport anElem( *this, XML_NAMESPACE_META, XML_GENERATOR,
+                                      sal_True, sal_True );
+            Characters(generator);
+        }
+    }
 }
 
 void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper )
