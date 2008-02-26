@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 13:45:17 $
+#   last change: $Author: obo $ $Date: 2008-02-26 15:14:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,8 @@ SLOFILES= 	\
             $(SLO)$/propertystatecontainer.obj \
             $(SLO)$/propertycontainer.obj \
             $(SLO)$/propertycontainerhelper.obj \
-            $(SLO)$/propertybag.obj
+            $(SLO)$/propertybag.obj \
+            $(SLO)$/opropertybag.obj
 
 # --- Targets ----------------------------------
 
