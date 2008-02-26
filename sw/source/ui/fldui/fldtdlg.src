@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:09:10 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ TabDialog DLG_FLD_INSERT
             {
                 Identifier = TP_FLD_REF ;
                 PageResID = TP_FLD_REF ;
-                Text [ en-US ] = "References" ;
+                Text [ en-US ] = "Cross-references" ;
             };
             PageItem
             {
