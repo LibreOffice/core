@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:18:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1799,7 +1799,15 @@
             </node>
             <node oor:name=".uno:GrafAttrCrop" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Crop</value>
+                    <value xml:lang="en-US">Crop Picture...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Crop" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Crop Picture</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
