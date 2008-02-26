@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:29:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #endif
 #include <vos/mutex.hxx>
 
-#ifndef GCC
-#endif
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -162,7 +162,6 @@ using namespace ::com::sun::star::script;
 #include <sfx2/bindings.hxx>
 #include "sfxresid.hxx"
 #include <sfx2/docfile.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
@@ -238,25 +237,40 @@ sal_Bool SfxObjectShell::IsAbortingImport() const
 
 //-------------------------------------------------------------------------
 
-SfxDocumentInfo& SfxObjectShell::GetDocInfo()
+uno::Reference<document::XDocumentProperties>
+SfxObjectShell::getDocProperties()
 {
-    if( !pImp->pDocInfo )
-        pImp->pDocInfo = new SfxDocumentInfo(this);
-    return *pImp->pDocInfo;
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    DBG_ASSERT(xDocProps.is(),
+        "SfxObjectShell: model has no DocumentProperties");
+    return xDocProps;
 }
 
 //-------------------------------------------------------------------------
 
+void SfxObjectShell::DoFlushDocInfo()
+{
+}
+
+//-------------------------------------------------------------------------
+
+// Note: the only thing that calls this is the modification event handler
+// that is installed at the XDocumentProperties
 void SfxObjectShell::FlushDocInfo()
 {
     if ( IsLoading() )
         return;
 
     SetModified(sal_True);
-    SfxDocumentInfo &rInfo = GetDocInfo();
-    Broadcast( SfxDocumentInfoHint( &rInfo ) );
-    SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
-        rInfo.GetReloadDelay() * 1000, rInfo.IsReloadEnabled() );
+    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+    DoFlushDocInfo(); // call template method
+    ::rtl::OUString url(xDocProps->getAutoloadURL());
+    sal_Int32 delay(xDocProps->getAutoloadSecs());
+    SetAutoLoad( INetURLObject(url), delay * 1000,
+                 (delay > 0) || url.getLength() );
 /*
     // bitte beachten:
     // 1. Titel in DocInfo aber nicht am Doc (nach HTML-Import)
@@ -1130,9 +1144,12 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         && !(pImp->nFlagsInProgress & SFX_LOADED_IMAGES ))
     {
         pImp->nFlagsInProgress |= SFX_LOADED_IMAGES;
-        SfxDocumentInfo& rInfo = GetDocInfo();
-        SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
-            rInfo.GetReloadDelay() * 1000, rInfo.IsReloadEnabled() );
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            getDocProperties());
+        ::rtl::OUString url(xDocProps->getAutoloadURL());
+        sal_Int32 delay(xDocProps->getAutoloadSecs());
+        SetAutoLoad( INetURLObject(url), delay * 1000,
+                     (delay > 0) || url.getLength() );
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
@@ -1202,7 +1219,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         {
             // !TODO/LATER: what's this?!
             // Interaktiv ( DClick, Contextmenu ) kommt kein Langname mit
-            aTemplateName = GetDocInfo().GetTitle();
+            aTemplateName = getDocProperties()->getTitle();
             if ( !aTemplateName.Len() )
             {
                 INetURLObject aURL( aName );
@@ -1266,7 +1283,6 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
         // notifications about possible changes in readonly state and document info
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-        Broadcast( SfxDocumentInfoHint( &GetDocInfo() ) );
 
         // created untitled document can't be modified
         SetModified( sal_False );
@@ -1699,16 +1715,16 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         sal_uInt32 nTime = aValue.GetToken(  0, ';' ).ToInt32() ;
         String aURL = aValue.GetToken( 1, ';' );
         aURL.EraseTrailingChars().EraseLeadingChars();
-        SfxDocumentInfo& rInfo = pDoc->GetDocInfo();
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            pDoc->getDocProperties());
         if( aURL.Copy(0, 4).CompareIgnoreCaseToAscii( "url=" ) == COMPARE_EQUAL )
         {
             INetURLObject aObj;
             INetURLObject( pDoc->GetMedium()->GetName() ).GetNewAbsURL( aURL.Copy( 4 ), &aObj );
-            rInfo.SetReloadURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            xDocProps->setAutoloadURL(
+                aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         }
-        rInfo.EnableReload( sal_True );
-        rInfo.SetReloadDelay( nTime );
-        pDoc->FlushDocInfo();
+        xDocProps->setAutoloadSecs( nTime );
     }
     else if( rKV.GetKey().CompareIgnoreCaseToAscii( "expires" ) == COMPARE_EQUAL )
     {
@@ -1807,8 +1823,8 @@ sal_Bool SfxObjectShell::IsSecure()
     if ( !aReferer.Len() )
     {
         // bei neuen Dokumenten das Template als Referer nehmen
-        String aTempl( GetDocInfo().GetTemplateFileName() );
-        if ( aTempl.Len() )
+        ::rtl::OUString aTempl( getDocProperties()->getTemplateURL() );
+        if ( aTempl.getLength() )
             aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
@@ -2075,7 +2091,7 @@ sal_Bool SfxObjectShell_Impl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
         if ( !sLocation.getLength() )
         {
             // for documents made from a template: get the name of the template
-            sLocation = rDocShell.GetDocInfo().GetTemplateFileName();
+            sLocation = rDocShell.getDocProperties()->getTemplateURL();
         }
     }
     return sLocation;
