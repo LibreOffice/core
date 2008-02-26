@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:42:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,6 +565,10 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
             pNode->SetWrong( GetWrong()->SplitList( nSplitPos ) );
         SetWrongDirty( true );
 
+        if( GetGrammarCheck() )
+            pNode->SetGrammarCheck( GetGrammarCheck()->SplitList( nSplitPos ) );
+        SetGrammarCheckDirty( true );
+
         // SMARTTAGS
         if( GetSmartTags() )
             pNode->SetSmartTags( GetSmartTags()->SplitList( nSplitPos ) );
@@ -657,6 +661,10 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         SetWrong( 0, false );
         SetWrongDirty( true );
 
+        SwWrongList *pList3 = GetGrammarCheck();
+        SetGrammarCheck( 0, false );
+        SetGrammarCheckDirty( true );
+
         // SMARTTAGS
         SwWrongList *pList2 = GetSmartTags();
         SetSmartTags( 0, false );
@@ -686,6 +694,12 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         {
             pNode->SetWrong( pList->SplitList( nSplitPos ) );
             SetWrong( pList, false );
+        }
+
+        if( pList3 )
+        {
+            pNode->SetGrammarCheck( pList3->SplitList( nSplitPos ) );
+            SetGrammarCheck( pList3, false );
         }
 
         // SMARTTAGS
@@ -753,6 +767,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nOldLen = aText.Len();
+
         SwWrongList *pList = GetWrong();
         if( pList )
         {
@@ -768,6 +783,24 @@ SwCntntNode *SwTxtNode::JoinNext()
                 pList->Move( 0, nOldLen );
                 SetWrongDirty( true );
                 pTxtNode->SetWrong( 0, false );
+            }
+        }
+
+        SwWrongList *pList3 = GetGrammarCheck();
+        if( pList3 )
+        {
+            pList3->JoinList( pTxtNode->GetGrammarCheck(), nOldLen );
+            SetGrammarCheckDirty( true );
+            SetGrammarCheck( 0, false );
+        }
+        else
+        {
+            pList3 = pTxtNode->GetGrammarCheck();
+            if( pList3 )
+            {
+                pList3->Move( 0, nOldLen );
+                SetGrammarCheckDirty( true );
+                pTxtNode->SetGrammarCheck( 0, false );
             }
         }
 
@@ -804,6 +837,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
+        SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false ); // SMARTTAGS
         InvalidateNumRule();
     }
@@ -824,6 +858,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nLen = pTxtNode->Len();
+
         SwWrongList *pList = pTxtNode->GetWrong();
         if( pList )
         {
@@ -840,6 +875,25 @@ SwCntntNode *SwTxtNode::JoinPrev()
                 pList->Move( 0, nLen );
                 SetWrongDirty( true );
                 SetWrong( 0, false );
+            }
+        }
+
+        SwWrongList *pList3 = pTxtNode->GetGrammarCheck();
+        if( pList3 )
+        {
+            pList3->JoinList( GetGrammarCheck(), Len() );
+            SetGrammarCheckDirty( true );
+            pTxtNode->SetGrammarCheck( 0, false );
+            SetGrammarCheck( NULL );
+        }
+        else
+        {
+            pList3 = GetGrammarCheck();
+            if( pList3 )
+            {
+                pList3->Move( 0, nLen );
+                SetGrammarCheckDirty( true );
+                SetGrammarCheck( 0, false );
             }
         }
 
@@ -877,6 +931,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
+        SetGrammarCheck( pList3, false );
         SetSmartTags( pList2, false );
         InvalidateNumRule();
     }
