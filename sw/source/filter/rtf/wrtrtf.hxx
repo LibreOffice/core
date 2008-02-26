@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:56:01 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #ifndef SW_MS_MSFILTER_HXX
 #include "../inc/msfilter.hxx"
 #endif
+
+#include <com/sun/star/util/DateTime.hpp>
 
 // einige Forward Deklarationen
 class Color;
@@ -105,7 +107,8 @@ class SwRTFWriter : public Writer
     void OutUnicodeSafeRecord(const sal_Char *pToken,
         const String &rContent);
     void OutDocInfoStat();
-    void OutInfoDateTime( const DateTime&, const sal_Char* );
+    void OutInfoDateTime( const sal_Char*,
+        const ::com::sun::star::util::DateTime& );
     void CheckEndNodeForSection( const SwNode& rNd );
 
     void BuildNumRuleTbl();
