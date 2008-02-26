@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:47:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,7 +490,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
     }
 }
 
-SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
+SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 {
     // lege den Node "vor" mir an
     xub_StrLen nSplitPos = rPos.nContent.GetIndex(),
@@ -1155,7 +1155,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
             // editing (directly) to the left or right (#i29942#)!
             // And a bookmark with same start and end must remain
             // to the left of the inserted text (used in XML import).
-            const SwPosition* pEnd = rBkmk[i]->End();
+            const SwPosition* pEnd = rBkmk[i]->BookmarkEnd();
             pIdx = (SwIndex*)&pEnd->nContent;
             if( this == &pEnd->nNode.GetNode() &&
                 aPos.GetIndex() == pIdx->GetIndex() )
@@ -2911,19 +2911,45 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
  *                      SwTxtNode::GetExpandTxt
  * Expand fields
  *************************************************************************/
-
-XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx, const xub_StrLen nLen,
-                                const BOOL bWithNum  ) const
+// --> OD 2007-11-15 #i83479# - handling of new parameters
+XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
+                                   const xub_StrLen nLen,
+                                   const bool bWithNum,
+                                   const bool bAddSpaceAfterListLabelStr,
+                                   const bool bWithSpacesForLevel ) const
 {
     XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
     xub_StrLen nTxtStt = nIdx;
     Replace0xFF( aTxt, nTxtStt, aTxt.Len(), TRUE );
-// TODO HIDDEN
     if( bWithNum )
-        aTxt.Insert( GetNumString(), 0 );
+    {
+        XubString aListLabelStr = GetNumString();
+        if ( aListLabelStr.Len() > 0 )
+        {
+            if ( bAddSpaceAfterListLabelStr )
+            {
+                const sal_Unicode aSpace = ' ';
+                aTxt.Insert( aSpace, 0 );
+            }
+            aTxt.Insert( GetNumString(), 0 );
+        }
+    }
+
+    if ( bWithSpacesForLevel && GetLevel() > 0 )
+    {
+        int nLevel( GetLevel() );
+        while ( nLevel > 0 )
+        {
+            const sal_Unicode aSpace = ' ';
+            aTxt.Insert( aSpace , 0 );
+            aTxt.Insert( aSpace , 0 );
+            --nLevel;
+        }
+    }
 
     return aTxt;
 }
+// <--
 
 BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         xub_StrLen nIdx, xub_StrLen nLen, BOOL bWithNum,
@@ -3427,7 +3453,7 @@ void SwTxtNode::SetLevel(int nLevel)
     }
 }
 
-void SwTxtNode::SetRestart(bool bRestart) const
+void SwTxtNode::SetRestart(bool bRestart)
 {
     // --> OD 2005-11-02 #i51089 - TUNING#
     CreateNum()->SetRestart(bRestart);
