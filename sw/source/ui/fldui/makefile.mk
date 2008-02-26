@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:46:14 $
+#   last change: $Author: obo $ $Date: 2008-02-26 10:48:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@ SLOFILES =  \
         $(SLO)$/javaedit.obj \
         $(SLO)$/inpdlg.obj \
         $(SLO)$/fldwrap.obj \
-        $(SLO)$/xfldui.obj
+                $(SLO)$/xfldui.obj \
+                $(SLO)$/FldRefTreeListBox.obj
 
 
 EXCEPTIONSFILES =  \
