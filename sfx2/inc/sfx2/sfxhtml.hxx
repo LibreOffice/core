@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:28:52 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:59:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,13 @@
 #include <svtools/macitem.hxx>
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
+} } }
+
 class ImageMap;
-class SfxDocumentInfo;
 class SfxMedium;
 class SfxObjectShell;
 class SvKeyValueIterator;
@@ -99,10 +104,12 @@ public:
                                  USHORT nEventMouseOver = 0,
                                  USHORT nEventMouseOut = 0);
 
-    // Parsen von Meta-Options in eine SfxDocumentInfo.
-    static BOOL ParseMetaOptions( SfxDocumentInfo*, SvKeyValueIterator*,
-                                  const HTMLOptions*, USHORT& rMetaCnt,
-                                  rtl_TextEncoding& rEnc );
+    /// parse meta options into XDocumentProperties
+    static BOOL ParseMetaOptions( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator*,
+            const HTMLOptions*,
+            rtl_TextEncoding& rEnc );
 
     // <TD SDVAL="..." SDNUM="...">
     static double GetTableDataOptionsValNum( sal_uInt32& nNumForm,
@@ -112,7 +119,9 @@ public:
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
 protected:
 
-    BOOL ParseMetaOptions( SfxDocumentInfo*, SvKeyValueIterator* );
+    BOOL ParseMetaOptions( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::document::XDocumentProperties>&,
+            SvKeyValueIterator* );
 
     // Start eines File-Downloads. Dieser erfolgt synchron oder asynchron.
     // Im synchronen Fall befindet sich der Parser nach dem Aufruf im
