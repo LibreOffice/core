@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:29:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ public:
     const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
           GraphicObject&    GetGrfObj()         { return aGrfObj; }
 
-    virtual SwCntntNode *SplitNode( const SwPosition & );
+    virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
     virtual Size GetTwipSize() const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
