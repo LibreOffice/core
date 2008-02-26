@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:00:49 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,12 @@
 #include <com/sun/star/xml/dom/events/XUIEvent.hpp>
 #include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <libxml/tree.h>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 using com::sun::star::lang::XUnoTunnel;
@@ -107,6 +109,10 @@ namespace DOM
         static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);
 
         //static Sequence< sal_Int8 >
+
+        // recursively create SAX events
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
         // ---- DOM interfaces
 
@@ -292,6 +298,9 @@ namespace DOM
             throw(RuntimeException, EventException);
 
     };
+
+    /// eliminate redundant namespace declarations
+    void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent);
 }
 
 #endif
