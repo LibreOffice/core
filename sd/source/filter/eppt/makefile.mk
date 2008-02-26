@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:50:24 $
+#   last change: $Author: obo $ $Date: 2008-02-26 13:41:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ NOOPTFILES= $(SLO)$/epptso.obj
 SLOFILES =	$(SLO)$/eppt.obj				\
             $(SLO)$/epptso.obj				\
             $(SLO)$/escherex.obj			\
-            $(SLO)$/dinfos2.obj				\
             $(SLO)$/pptexanimations.obj		\
             $(SLO)$/pptexsoundcollection.obj
 
@@ -64,6 +63,7 @@ SHL1LIBS	=	$(SLB)$/eppt.lib
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS = 	$(SVXLIB)			\
+                $(SFX2LIB)          \
                 $(SVTOOLLIB)		\
                 $(SOTLIB)           \
                 $(GOODIESLIB)		\
