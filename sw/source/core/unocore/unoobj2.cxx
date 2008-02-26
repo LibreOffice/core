@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:24:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1465,8 +1465,8 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
     SwBookmark* pBkm = GetBookmark();
     if(pBkm )
     {
-        const SwPosition& rPoint = *pBkm->Start();
-        const SwPosition* pMark = pBkm->End();
+        const SwPosition& rPoint = *pBkm->BookmarkStart();
+        const SwPosition* pMark = pBkm->BookmarkEnd();
         SwCursor aNewCrsr( rPoint, 0, false );
         if(pMark)
         {
@@ -1558,7 +1558,7 @@ uno::Reference< XTextRange >  SwXTextRange::getStart(void) throw( uno::RuntimeEx
         getText();
     if(pBkm)
     {
-        SwPaM aPam(*pBkm->Start());
+        SwPaM aPam(*pBkm->BookmarkStart());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
@@ -1583,7 +1583,7 @@ uno::Reference< XTextRange >  SwXTextRange::getEnd(void) throw( uno::RuntimeExce
     if(pBkm)
     {
 //      SwPaM aPam(pBkm->GetOtherPos()? *pBkm->GetOtherPos() : pBkm->GetPos());
-        SwPaM aPam(*pBkm->End());
+        SwPaM aPam(*pBkm->BookmarkEnd());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
@@ -1605,10 +1605,10 @@ OUString SwXTextRange::getString(void) throw( uno::RuntimeException )
     OUString sRet;
     //fuer Tabellen gibt es keine Bookmark, also auch keinen Text
     //evtl. koennte man hier die Tabelle als ASCII exportieren?
-    if(pBkm && pBkm->GetOtherPos())
+    if(pBkm && pBkm->GetOtherBookmarkPos())
     {
-        const SwPosition& rPoint = pBkm->GetPos();
-        const SwPosition* pMark = pBkm->GetOtherPos();
+        const SwPosition& rPoint = pBkm->GetBookmarkPos();
+        const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
         SwPaM aCrsr(*pMark, rPoint);
 /*      if( rPoint.nNode.GetIndex() ==
             pMark->nNode.GetIndex() )
@@ -1672,11 +1672,11 @@ sal_Bool    SwXTextRange::GetPositions(SwPaM& rToFill) const
     SwBookmark* pBkm = GetBookmark();
     if(pBkm)
     {
-        *rToFill.GetPoint() = pBkm->GetPos();
-        if(pBkm->GetOtherPos())
+        *rToFill.GetPoint() = pBkm->GetBookmarkPos();
+        if(pBkm->GetOtherBookmarkPos())
         {
             rToFill.SetMark();
-            *rToFill.GetMark() = *pBkm->GetOtherPos();
+            *rToFill.GetMark() = *pBkm->GetOtherBookmarkPos();
         }
         else
             rToFill.DeleteMark();
@@ -1918,8 +1918,8 @@ uno::Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
     if( !pBkm || COMPARE_EQUAL != rServiceName.compareToAscii("com.sun.star.text.TextContent") )
         throw RuntimeException();
 
-    const SwPosition& rPoint = pBkm->GetPos();
-    const SwPosition* pMark = pBkm->GetOtherPos();
+    const SwPosition& rPoint = pBkm->GetBookmarkPos();
+    const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
     SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
     if(pMark && *pMark != rPoint)
     {
@@ -1938,8 +1938,8 @@ uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( Run
     SwBookmark* pBkm = GetBookmark();
     if( !pBkm  )
         throw RuntimeException();
-    const SwPosition& rPoint = pBkm->GetPos();
-    const SwPosition* pMark = pBkm->GetOtherPos();
+    const SwPosition& rPoint = pBkm->GetBookmarkPos();
+    const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
     SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
     if(pMark && *pMark != rPoint)
     {
