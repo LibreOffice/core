@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:32:17 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 16:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_CanvasTools,
 	gid_File_Lib_CppCanvas,
 	gid_File_Lib_Agg,
-	gid_File_Lib_Dbext,
 	gid_File_Lib_Fwm,
 	gid_File_Lib_Lprx2,
 	gid_File_Lib_Lprxw,
@@ -312,7 +311,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_PurpEnvHelper,
 	gid_File_Lib_Corefl,
 	gid_File_Lib_Sysmgr1,
-	gid_File_Lib_Adabas_2,
+	gid_File_Lib_Adabas,
 	gid_File_Lib_Cached1,
 	gid_File_Lib_Curl,
 	gid_File_Lib_Db,
