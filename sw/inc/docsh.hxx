@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:04:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,10 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     using SfxObjectShell::GetVisArea;
     using SfxObjectShell::GetStyleFamilyBitmap;
+
+protected:
+    /// override to update text fields
+    virtual void                DoFlushDocInfo();
 
 public:
     using SotObject::GetInterface;
