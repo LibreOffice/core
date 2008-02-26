@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:30:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,10 @@
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
@@ -344,6 +348,7 @@ struct IMPL_SfxBaseModel_MutexContainer
     @implements XChild
                 XComponent
                 XDocumentInfoSupplier
+                XDocumentPropertiesSupplier
                 XEventListener
                 XModel
                 XModifiable2
@@ -362,6 +367,7 @@ struct IMPL_SfxBaseModel_MutexContainer
 class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
                     ,   public XCHILD
                     ,   public XDOCUMENTINFOSUPPLIER
+                    ,   public ::com::sun::star::document::XDocumentPropertiesSupplier
                     ,   public XEVENTBROADCASTER
                     ,   public XEVENTLISTENER
                     ,   public XEVENTSSUPPLIER
@@ -650,6 +656,11 @@ public:
     */
 
     virtual REFERENCE< XDOCUMENTINFO > SAL_CALL getDocumentInfo() throw (::com::sun::star::uno::RuntimeException);
+
+    // XDocumentPropertiesSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >
+        SAL_CALL getDocumentProperties()
+        throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XEventListener
