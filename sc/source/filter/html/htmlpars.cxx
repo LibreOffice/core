@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:29:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@
 #endif
 #include <svx/wghtitem.hxx>
 #include <svx/boxitem.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/eitem.hxx>
@@ -83,6 +82,12 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "rangelst.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+
+using namespace ::com::sun::star;
 
 
 SV_IMPL_VARARR_SORT( ScHTMLColOffset, ULONG );
@@ -1560,10 +1565,12 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
             rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
             HTMLParser* pParser = (HTMLParser*) pInfo->pParser;
             const HTMLOptions* pOptions = pParser->GetOptions( &nContentOpt );
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
             SfxFrameHTMLParser::ParseMetaOptions(
-                &mpDoc->GetDocumentShell()->GetDocInfo(),
+                xDPS->getDocumentProperties(),
                 mpDoc->GetDocumentShell()->GetHeaderAttributes(),
-                pOptions, nMetaCnt, eEnc );
+                pOptions, eEnc );
             // If the encoding is set by a META tag, it may only overwrite the
             // current encoding if both, the current and the new encoding, are 1-BYTE
             // encodings. Everything else cannot lead to reasonable results.
@@ -1588,7 +1595,10 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
                 // Leerzeichen von Zeilenumbruechen raus
                 aString.EraseLeadingChars();
                 aString.EraseTrailingChars();
-                mpDoc->GetDocumentShell()->GetDocInfo().SetTitle( aString );
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    mpDoc->GetDocumentShell()->GetModel(),
+                    uno::UNO_QUERY_THROW);
+                xDPS->getDocumentProperties()->setTitle(aString);
             }
             bInTitle = FALSE;
         }
@@ -2985,11 +2995,13 @@ void ScHTMLQueryParser::MetaOn( const ImportInfo& rInfo )
         rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
         HTMLParser* pParser = static_cast< HTMLParser* >( rInfo.pParser );
         const HTMLOptions* pOptions = pParser->GetOptions( &nContentOpt );
-        sal_uInt16 nMetaCnt = 0;
+
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
         SfxFrameHTMLParser::ParseMetaOptions(
-            &mpDoc->GetDocumentShell()->GetDocInfo(),
+            xDPS->getDocumentProperties(),
             mpDoc->GetDocumentShell()->GetHeaderAttributes(),
-            pOptions, nMetaCnt, eEnc );
+            pOptions, eEnc );
         // If the encoding is set by a META tag, it may only overwrite the
         // current encoding if both, the current and the new encoding, are 1-BYTE
         // encodings. Everything else cannot lead to reasonable results.
@@ -3013,8 +3025,12 @@ void ScHTMLQueryParser::TitleOff( const ImportInfo& rInfo )
     if( mbTitleOn )
     {
         maTitle.EraseLeadingAndTrailingChars();
-        if( maTitle.Len() && mpDoc->GetDocumentShell() )
-            mpDoc->GetDocumentShell()->GetDocInfo().SetTitle( maTitle );
+        if( maTitle.Len() && mpDoc->GetDocumentShell() ) {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+
+            xDPS->getDocumentProperties()->setTitle(maTitle);
+        }
         InsertText( rInfo );
         mbTitleOn = false;
     }
