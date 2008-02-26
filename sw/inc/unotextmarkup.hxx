@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotextmarkup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:14:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,12 @@ class SfxPoolItem;
  */
 class SwXTextMarkup:
     public ::cppu::WeakImplHelper1<
-        ::com::sun::star::text::XTextMarkup>,
+        ::com::sun::star::text::XTextMarkup >,
     public SwClient
 {
 public:
     SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pConversionMap );
+    virtual ~SwXTextMarkup();
 
     // ::com::sun::star::smarttags::XTextMarkup:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (::com::sun::star::uno::RuntimeException);
@@ -77,14 +78,13 @@ public:
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 private:
+    SwXTextMarkup( const SwXTextMarkup & ); // not defined
+    SwXTextMarkup & operator =( const SwXTextMarkup & ); // not defined
 
+protected:
     SwTxtNode* mpTxtNode;
     const ModelToViewHelper::ConversionMap* mpConversionMap;
 
-    SwXTextMarkup(SwXTextMarkup &); // not defined
-    void operator =(SwXTextMarkup &); // not defined
-
-    virtual ~SwXTextMarkup();
 };
 
 
