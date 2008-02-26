@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:14 $
+#   last change: $Author: obo $ $Date: 2008-02-26 15:59:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -279,12 +279,10 @@ BEGIN
     $localinstalldirset = 0;
     $localinstalldir = "";
 
-    $adafilename = "";
     $javafilename = "";
     $javafilename2 = "";
     $javafilename3 = "";
     $javafile = "";
-    $adafile = "";
     $urefile = "";
 
     $subdir = "";
