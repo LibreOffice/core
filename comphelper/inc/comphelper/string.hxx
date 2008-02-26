@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:14:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,11 @@
 #include "sal/types.h"
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+
 namespace rtl { class OUString; }
 
 // rtl::OUString helper functions that are not widespread or mature enough to
@@ -86,6 +91,30 @@ COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplace(
     rtl::OUString const & source, char const * from, sal_Int32 fromLength,
     rtl::OUString const & to, sal_Int32 beginAt = 0,
     sal_Int32 * replacedAt = NULL);
+
+/** Convert a sequence of strings to a single comma separated string.
+
+    Note that no escaping of commas or anything fancy is done.
+
+    @param i_rSeq   A list of strings to be concatenated.
+
+    @return         A single string containing the concatenation of the given
+                    list, interspersed with the string ", ".
+ */
+COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & i_rSeq);
+
+/** Convert a single comma separated string to a sequence of strings.
+
+    Note that no escaping of commas or anything fancy is done.
+
+    @param i_rString    A string containing comma-separated words.
+
+    @return         A sequence of strings resulting from splitting the given
+                    string at ',' tokens and stripping whitespace.
+ */
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    convertCommaSeparated( ::rtl::OUString const & i_rString );
 
 } }
 
