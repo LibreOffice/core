@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:33:35 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #include "xelink.hxx"
 #endif
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
@@ -117,11 +120,16 @@ FltError ExportBiff5::Write()
 
     if( pDocShell && xRootStrg.Is() )
     {
-        GDIMetaFile *pMetaFile=0;
-        SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-        pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
-        rInfo.SavePropertySet( xRootStrg, pMetaFile );
-        delete pMetaFile;
+        using namespace ::com::sun::star;
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps
+                = xDPS->getDocumentProperties();
+        ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+            pDocShell->GetPreviewMetaFile (sal_False);
+        uno::Sequence<sal_uInt8> metaFile(
+            sfx2::convertMetaFile(pMetaFile.get()));
+        sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
     }
 
     //! TODO: separate warnings for columns and sheets
