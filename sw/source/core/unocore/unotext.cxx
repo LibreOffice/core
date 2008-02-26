@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:31:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ void SwXText::insertString(const uno::Reference< text::XTextRange > & xTextRange
             else //dann pRange
             {
                 SwBookmark* pBkm = pRange->GetBookmark();
-                const SwStartNode* pTmp = pBkm->GetPos().nNode.GetNode().StartOfSectionNode();
+                const SwStartNode* pTmp = pBkm->GetBookmarkPos().nNode.GetNode().StartOfSectionNode();
                 while( pTmp && pTmp->IsSectionNode())
                 {
                     pTmp = pTmp->StartOfSectionNode();
@@ -356,7 +356,9 @@ void SwXText::insertString(const uno::Reference< text::XTextRange > & xTextRange
                 //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
                 //Text davor eingefuegt wird
                 UnoActionContext aContext(GetDoc());
-                const SwPosition* pPos = pCursor ? pCursor->GetPaM()->Start() : pRange->GetBookmark()->Start();
+                const SwPosition* pPos = pCursor
+                                         ? pCursor->GetPaM()->Start()
+                                         : pRange->GetBookmark()->BookmarkStart();
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
@@ -542,7 +544,7 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
             else if (pRange && pRange->GetBookmark())
             {
                 SwBookmark* pBkm = pRange->GetBookmark();
-                pSrcNode = &pBkm->GetPos().nNode.GetNode();
+                pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
             }
             else if (pPortion && pPortion->GetCrsr())
             {
@@ -1102,7 +1104,7 @@ sal_Bool    SwXText::CheckForOwnMember(
     else //dann pRange
     {
         SwBookmark* pBkm = pRange->GetBookmark();
-        pSrcNode = &pBkm->GetPos().nNode.GetNode();
+        pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
     }
     const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
@@ -1166,12 +1168,12 @@ sal_Int16 SwXText::ComparePositions(
                 const SwPosition *pStart2 = 0;
 
                 if(pRange1)
-                    pStart1 = pRange1->GetBookmark() ? pRange1->GetBookmark()->Start() : 0;
+                    pStart1 = pRange1->GetBookmark() ? pRange1->GetBookmark()->BookmarkStart() : 0;
                 else
                     pStart1 = pCursor1->GetPaM() ? pCursor1->GetPaM()->Start() : 0;
 
                 if(pRange2)
-                    pStart2 = pRange2->GetBookmark() ? pRange2->GetBookmark()->Start() : 0;
+                    pStart2 = pRange2->GetBookmark() ? pRange2->GetBookmark()->BookmarkStart() : 0;
                 else
                     pStart2 = pCursor2->GetPaM() ? pCursor2->GetPaM()->Start() : 0;
 
