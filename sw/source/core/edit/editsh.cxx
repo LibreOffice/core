@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:22:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,12 +650,6 @@ void SwEditShell::UpdateDocStat( SwDocStat& rStat )
 }
 
 // OPT: eddocinl.cxx
-
-
-const SfxDocumentInfo* SwEditShell::GetInfo() const
-{
-    return GetDoc()->GetDocumentInfo();
-}
 
 
     // returne zum Namen die im Doc gesetzte Referenz
