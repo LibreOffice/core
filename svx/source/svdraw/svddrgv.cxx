@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:13:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,6 +548,23 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         pDragBla=new SdrDragMirror(*this);
                     }
                 } break;
+
+                case SDRDRAG_CROP:
+                {
+                    if (eDragHdl==HDL_MOVE && IsMarkedHitMovesAlways())
+                    {
+                        if (!IsMoveAllowed())
+                            return FALSE;
+                        pDragBla=new SdrDragMove(*this);
+                    }
+                    else
+                    {
+                        if (!IsCrookAllowed(TRUE) && !IsCrookAllowed(FALSE))
+                            return FALSE;
+                        pDragBla=new SdrDragCrop(*this);
+                    }
+                }
+                break;
 
                 case SDRDRAG_TRANSPARENCE:
                 {
