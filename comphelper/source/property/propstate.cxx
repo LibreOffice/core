@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propstate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:54:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,11 @@ namespace comphelper
         }
         return aTypes;
     }
+
+    OPropertyStateHelper::OPropertyStateHelper(
+        ::cppu::OBroadcastHelper& rBHlp,
+        ::cppu::IEventNotificationHook *i_pFireEvents)
+        :   ::cppu::OPropertySetHelper(rBHlp, i_pFireEvents) { }
 
     OPropertyStateHelper::~OPropertyStateHelper() {}
 
