@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:06:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,14 +186,18 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 public:
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
+    bool IsGrammarCheckDirty() const;
     bool IsSmartTagDirty() const;   // SMARTTAGS
     bool IsAutoCompleteWordDirty() const;
     void SetWordCountDirty( bool bNew ) const;
     void SetWrongDirty( bool bNew ) const;
+    void SetGrammarCheckDirty( bool bNew ) const;
     void SetSmartTagDirty( bool bNew ) const;  // SMARTTAGS
     void SetAutoCompleteWordDirty( bool bNew ) const;
     void SetWrong( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetWrong();
+    void SetGrammarCheck( SwWrongList* pNew, bool bDelete = true );
+    SwWrongList* GetGrammarCheck();
     // SMARTTAGS
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
