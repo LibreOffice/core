@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:20:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,21 @@ public:
     virtual FASTBOOL Beg();
     virtual void MovAllPoints();
     virtual void Mov(const Point& rPnt);
+    virtual FASTBOOL End(FASTBOOL bCopy);
+    virtual Pointer GetPointer() const;
+};
+
+//************************************************************
+//   SdrDragCrop
+//************************************************************
+
+class SdrDragCrop : public SdrDragResize
+{
+public:
+    TYPEINFO();
+    SdrDragCrop(SdrDragView& rNewView);
+
+    virtual void TakeComment(String& rStr) const;
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
 };
