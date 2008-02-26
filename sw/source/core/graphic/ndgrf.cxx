@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:58 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ SwGrfNode::~SwGrfNode()
 }
 
 
-SwCntntNode *SwGrfNode::SplitNode( const SwPosition & )
+SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
 {
     return this;
 }
