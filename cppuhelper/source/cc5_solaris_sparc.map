@@ -348,3 +348,9 @@ UDK_3.5 { # OOo 2.4
     global:
         __1cEcppuTbootstrap_expandUri6FrknDrtlIOUString__2_; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
 } UDK_3.4;
+
+UDK_3.6 { # OOo 3.0
+    global:
+        __1cEcppuSOPropertySetHelper2t5B6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___pn0AWIEventNotificationHook_b_v_;
+        __1cEcppuSOPropertySetHelper2t6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___pn0AWIEventNotificationHook_b_v_;
+} UDK_3.5;
