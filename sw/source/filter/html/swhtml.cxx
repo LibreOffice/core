@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:50:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2867,7 +2867,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         {
                             const SwBookmark *pBkMk =
                                 pDoc->getBookmarks()[nBookPos];
-                            if( pBkMk->GetPos() != *pAttrPam->GetPoint() )
+                            if( pBkMk->GetBookmarkPos() != *pAttrPam->GetPoint() )
                                 pDoc->makeUniqueBookmarkName( aName );
                             else
                                 break; // keine doppelte Bookmark an dieser Pos
