@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 13:35:35 $
+#   last change: $Author: obo $ $Date: 2008-02-26 14:59:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,11 @@ PACKAGE = complex$/framework
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckGlobalEventBroadcaster_writer1.java
+JAVAFILES       = CheckGlobalEventBroadcaster_writer1.java \
+                  DocumentMetaData.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
-SUBDIRS         = dochelper
+SUBDIRS         = DocHelper
 #----- make a jar from compiled files ------------------------------
 
 MAXLINELENGTH = 100000
@@ -63,4 +64,4 @@ JARCOMPRESS 	= TRUE
 
 
 run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
+    +java -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -sce tests.sce -tdoc $(PWD)$/testdocuments
