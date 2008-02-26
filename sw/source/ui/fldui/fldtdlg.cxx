@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:59 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@
 #include <svx/htmlmode.hxx>
 #endif
 
-#include <sfx2/docinf.hxx>
-
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
@@ -122,6 +120,10 @@
 #ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
 #endif
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
@@ -266,9 +268,23 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
     {
         SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
         SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
-        com::sun::star::uno::Any aAny;
-        aAny <<= pDocSh->GetDocInfo().GetCustomPropertyNames();
-        pISet->Put( SfxUnoAnyItem( SID_DOCINFO, aAny ) );
+        using namespace ::com::sun::star;
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocSh->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps
+            = xDPS->getDocumentProperties();
+        uno::Reference< beans::XPropertySet > xUDProps(
+            xDocProps->getUserDefinedProperties(),
+            uno::UNO_QUERY_THROW);
+        uno::Reference< beans::XPropertySetInfo > xSetInfo
+            = xUDProps->getPropertySetInfo();
+        const uno::Sequence< beans::Property > props
+            = xSetInfo->getProperties();
+        uno::Sequence< ::rtl::OUString > names(props.getLength());
+        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+            names[i] = props[i].Name;
+        }
+        pISet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(names) ) );
         return pISet;
     }
     else
