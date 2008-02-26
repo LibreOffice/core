@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:33:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
     do {    // middle check Loop
         ((SwBookmarks&)*pBookmarkTbl).ForEach( 0, pBookmarkTbl->Count(),
                                                 lcl_FindBookmark, &aPara );
-        if( aPara.pBkmk && aPara.pBkmk->GetOtherPos() )
+        if( aPara.pBkmk && aPara.pBkmk->GetOtherBookmarkPos() )
         {
             // gefunden, also Hotlink einrichten
             // sollten wir schon einer sein?
@@ -410,10 +410,10 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         if( aPara.pBkmk )
         {
             // gefunden, also erzeuge einen Bereich
-            if( aPara.pBkmk->GetOtherPos() )
+            if( aPara.pBkmk->GetOtherBookmarkPos() )
                 // ein aufgespannter Bereich
-                rpPam = new SwPaM( aPara.pBkmk->GetPos(),
-                                    *aPara.pBkmk->GetOtherPos() );
+                rpPam = new SwPaM( aPara.pBkmk->GetBookmarkPos(),
+                                    *aPara.pBkmk->GetOtherBookmarkPos() );
             return 0 != rpPam;
         }
     }
