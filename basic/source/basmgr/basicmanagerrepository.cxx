@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:03:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #endif
@@ -103,6 +100,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include <comphelper/documentinfo.hxx>
 
 #ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #include <unotools/eventlisteneradapter.hxx>
@@ -131,7 +129,6 @@ namespace basic
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::document::XDocumentInfoSupplier;
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
@@ -210,11 +207,6 @@ namespace basic
                     const Reference< XModel >& _rxDocumentModel,
                     BasicManager& _rManager
                  );
-
-        /** returns a title for the given document
-        */
-        ::rtl::OUString
-                impl_getDocumentTitle_nothrow( const Reference< XModel >& _rxDocument );
 
         /** retrieves the current storage of a given document
 
@@ -488,7 +480,8 @@ namespace basic
         if ( xStorage.is() )
         {
             // load BASIC-manager
-            SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, impl_getDocumentTitle_nothrow( _rxDocumentModel ) );
+            SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC,
+                ::comphelper::DocumentInfo::getDocumentTitle( _rxDocumentModel ) );
             String aAppBasicDir = SvtPathOptions().GetBasicPath();
 
             // Storage and BaseURL are only needed by binary documents!
@@ -589,45 +582,6 @@ namespace basic
             DBG_UNHANDLED_EXCEPTION();
         }
         return _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is();
-    }
-
-    //--------------------------------------------------------------------
-    ::rtl::OUString ImplRepository::impl_getDocumentTitle_nothrow( const Reference< XModel >& _rxDocument )
-    {
-        OSL_PRECOND( _rxDocument.is(), "ImplRepository::impl_getDocumentTitle: invalid document: this will crash!" );
-
-        ::rtl::OUString sTitle;
-
-        // try the title from the DocumentInfo
-        try
-        {
-            Reference< XDocumentInfoSupplier > xSuppInfo( _rxDocument, UNO_QUERY_THROW );
-            Reference< XPropertySet > xInfoProps( xSuppInfo->getDocumentInfo(), UNO_QUERY_THROW );
-            OSL_VERIFY( xInfoProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= sTitle );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        if ( sTitle.getLength() > 0 )
-            return sTitle;
-
-        // get the URL
-        try
-        {
-            ::rtl::OUString sURL( _rxDocument->getURL() );
-            if ( sURL.getLength() )
-            {
-                INetURLObject aURL( sURL );
-                sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        return sTitle;
     }
 
     //--------------------------------------------------------------------
