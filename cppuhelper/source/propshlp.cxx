@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:25:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,24 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
 }
 
 //  ----------------------------------------------------
+//  class PropertySetHelper_Impl
+//  ----------------------------------------------------
+class OPropertySetHelper::Impl {
+
+public:
+    Impl (  bool i_bIgnoreRuntimeExceptionsWhileFiring,
+            IEventNotificationHook *i_pFireEvents)
+    :   m_bIgnoreRuntimeExceptionsWhileFiring(
+            i_bIgnoreRuntimeExceptionsWhileFiring ),
+        m_pFireEvents( i_pFireEvents )
+    { }
+
+    bool m_bIgnoreRuntimeExceptionsWhileFiring;
+    class IEventNotificationHook * const m_pFireEvents;
+};
+
+
+//  ----------------------------------------------------
 //  class PropertySetHelper
 //  ----------------------------------------------------
 OPropertySetHelper::OPropertySetHelper(
@@ -154,7 +172,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_pReserved( 0 )
+      m_pReserved( new Impl(false, 0) )
 {
 }
 
@@ -163,8 +181,18 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_pReserved( reinterpret_cast< void * >(
-                       bIgnoreRuntimeExceptionsWhileFiring ? 1 : 0 ) )
+      m_pReserved( new Impl( bIgnoreRuntimeExceptionsWhileFiring, 0 ) )
+{
+}
+
+OPropertySetHelper::OPropertySetHelper(
+    OBroadcastHelper  & rBHelper_, IEventNotificationHook * i_pFireEvents,
+    bool bIgnoreRuntimeExceptionsWhileFiring)
+    : rBHelper( rBHelper_ ),
+      aBoundLC( rBHelper_.rMutex ),
+      aVetoableLC( rBHelper_.rMutex ),
+      m_pReserved(
+        new Impl( bIgnoreRuntimeExceptionsWhileFiring, i_pFireEvents) )
 {
 }
 
@@ -510,6 +538,13 @@ void OPropertySetHelper::fire
     sal_Bool bVetoable
 )
 {
+    OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
+    if (m_pReserved->m_pFireEvents) {
+        m_pReserved->m_pFireEvents->fireEvents(
+            pnHandles, nHandles, bVetoable,
+            m_pReserved->m_bIgnoreRuntimeExceptionsWhileFiring);
+    }
+
     // Only fire, if one or more properties changed
     if( nHandles )
     {
@@ -542,7 +577,7 @@ void OPropertySetHelper::fire
         }
 
         bool bIgnoreRuntimeExceptionsWhileFiring =
-            (m_pReserved == reinterpret_cast< void const * >(1));
+                m_pReserved->m_bIgnoreRuntimeExceptionsWhileFiring;
 
         // fire the events for all changed properties
         for( i = 0; i < nChangesLen; i++ )
