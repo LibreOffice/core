@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:29:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:12:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,11 +67,11 @@ class SfxFrame;
 class SfxToolBoxConfig;
 class SfxAcceleratorManager;
 class SfxBasicManagerHolder;
+
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
     SfxAcceleratorManager*  pAccMgr;
-    SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;
@@ -168,6 +168,9 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     sal_Bool                m_bCreateTempStor;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::util::XModifyListener > m_xDocInfoListener;
 
     sal_Bool                m_bIsInit;
 
