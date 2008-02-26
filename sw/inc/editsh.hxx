@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:29:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,6 @@ class SwDDEFieldType;
 class SwNewDBMgr;
 
 struct SwDocStat;
-class SfxDocumentInfo;
 class SvStringsDtor;
 class SvStringsSort;
 class SwAutoCompleteWord;
@@ -405,9 +404,6 @@ public:
 
     // Dokument - Statistics
     void UpdateDocStat( SwDocStat& rStat );
-
-    // Dokument - Info
-    const SfxDocumentInfo* GetInfo() const;
 
     // Verzeichnismarke einfuegen loeschen
     void    Insert(const SwTOXMark& rMark);
