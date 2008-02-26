@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,6 +885,8 @@ void SwTxtFrm::CalcLineSpace()
 { \
     if ( !IsFollow() && GetTxtNode()->GetWrong() ) \
         GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
+    if ( !IsFollow() && GetTxtNode()->GetGrammarCheck() ) \
+        GetTxtNode()->GetGrammarCheck()->fnFunc( nPos, nCnt ); \
     if ( !IsFollow() && GetTxtNode()->GetSmartTags() ) \
         GetTxtNode()->GetSmartTags()->fnFunc( nPos, nCnt ); \
     lcl_SetWrong( *this, nPos, nCnt ); \
@@ -900,6 +902,11 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
             pTxtNode->SetWrong( new SwWrongList );
             pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
+        if ( !pTxtNode->GetGrammarCheck() && !pTxtNode->IsGrammarCheckDirty() )
+        {
+            pTxtNode->SetGrammarCheck( new SwWrongList() );
+            pTxtNode->GetGrammarCheck()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+        }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
@@ -907,6 +914,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
             pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
+        pTxtNode->SetGrammarCheckDirty( true );
         pTxtNode->SetWordCountDirty( true );
         pTxtNode->SetAutoCompleteWordDirty( true );
         // SMARTTAGS
