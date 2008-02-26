@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:50:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,7 @@ class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
     static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
     // <--
 protected:
-    void SetTxtNode(SwTxtNode * pTxtNode);
-    SwTxtNode * GetTxtNode() const;
-
-    void SetNumRule(SwNumRule * pRule);
-    SwNumRule * GetNumRule() const;
+//    void SetTxtNode(SwTxtNode * pTxtNode);
 
     // --> OD 2006-04-26 #i64010#
     virtual bool HasCountedChildren() const;
@@ -68,12 +64,27 @@ protected:
 
 public:
     SwNodeNum();
-    SwNodeNum(const SwNodeNum & rNodeNum);
+    // --> OD 2007-10-26 #i83479#
+    explicit SwNodeNum( SwTxtNode* pTxtNode );
+    explicit SwNodeNum( SwNumRule* pRule );
+    // <--
+    SwNodeNum( const SwNodeNum & rNodeNum );
+
+    // --> OD 2007-10-26 #i83479# - made public
+    SwTxtNode* GetTxtNode() const;
+    SwNumRule* GetNumRule() const;
+    void SetNumRule(SwNumRule * pRule);
+    // <--
+
     virtual ~SwNodeNum();
 
     virtual SwNumberTreeNode * Create() const;
 
     virtual SwNumberTreeNode * Copy() const;
+
+    // --> OD 2007-10-25 #i83479#
+    virtual void AddChild(SwNumberTreeNode * pChild, unsigned int nDepth = 0);
+    // <--
 
     virtual void RemoveChild(SwNumberTreeNode * pChild);
 
@@ -105,8 +116,8 @@ public:
 
     SwPosition GetPosition() const;
 
-    friend class SwTxtNode;
-    friend class SwNumRule;
+//    friend class SwTxtNode;
+//    friend class SwNumRule;
 
     // --> OD 2005-11-16 #i57919# - direct access on <mnStart>, needed for HTML export
     inline const tSwNumTreeNumber GetStartValue() const
@@ -125,6 +136,14 @@ public:
     // in this situation - this will be asserted.
     static void HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum );
     // <--
+
+    /** determines the <SwNodeNum> instance, which is preceding the given text node
+
+        OD 2007-09-06 #i81002#
+
+        @author OD
+    */
+    const SwNodeNum* GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const;
 };
 
 #endif // _SW_NODE_NUM_HXX
