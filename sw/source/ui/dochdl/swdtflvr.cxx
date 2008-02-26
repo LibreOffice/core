@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:46:01 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,8 +260,6 @@
 #include <comcore.hrc> // #111827#
 #endif
 #include <sot/stg.hxx>
-
-#include <sfx2/docinf.hxx>
 
 // #108584#
 #ifndef _SVDITER_HXX
