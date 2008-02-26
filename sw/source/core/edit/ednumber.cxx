@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:46:14 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,30 +495,6 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
     return bRet;
 }
 
-// Abfrage von Oultine Informationen:
-
-
-USHORT SwEditShell::GetOutlineCnt() const
-{
-    return GetDoc()->GetNodes().GetOutLineNds().Count();
-}
-
-
-BYTE SwEditShell::GetOutlineLevel( USHORT nIdx ) const
-{
-    const SwNodes& rNds = GetDoc()->GetNodes();
-
-    return static_cast<BYTE>(rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetOutlineLevel());
-}
-
-
-String SwEditShell::GetOutlineText( USHORT nIdx, BOOL bWithNum ) const
-{
-    const SwNodes& rNds = GetDoc()->GetNodes();
-    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNum );
-}
-
-
 BOOL SwEditShell::OutlineUpDown( short nOffset )
 {
     StartAllAction();
@@ -655,12 +631,6 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
     }
 
     return bResult;
-}
-
-SwTxtNode * SwEditShell::GetOutlineNode( USHORT nIdx ) const
-{
-    const SwNodes& rNds = GetDoc()->GetNodes();
-    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode();
 }
 
 BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
