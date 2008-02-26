@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:58:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
-#include <sfx2/docinf.hxx>
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -271,6 +269,10 @@
 #include <annotsh.hxx>
 
 #include <unomid.h>
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1311,14 +1313,16 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 //#i43146# go to the last editing position when opening own files
 bool lcl_IsOwnDocument( SwView& rView )
 {
-    SfxDocumentInfo& rInfo = rView.GetDocShell()->GetDocInfo();
-    const String& rCreated =   rInfo.GetAuthor();
-    const String& rChanged = rInfo.GetModificationAuthor();
-    const String& rFullName = SW_MOD()->GetUserOptions().GetFullName();
-    bool bRet = rFullName.Len() &&
-            (rChanged.Len() && rChanged == rFullName ) ||
-            (!rChanged.Len() && rCreated.Len() && rCreated == rFullName );
-    return bRet;
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        rView.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps
+        = xDPS->getDocumentProperties();
+    String Created = xDocProps->getAuthor();
+    String Changed = xDocProps->getModifiedBy();
+    String FullName = SW_MOD()->GetUserOptions().GetFullName();
+    return FullName.Len() &&
+            (Changed.Len() && Changed == FullName ) ||
+            (!Changed.Len() && Created.Len() && Created == FullName );
 }
 
 
