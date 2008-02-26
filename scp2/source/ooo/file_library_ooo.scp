@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.275 $
+ *  $Revision: 1.276 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:46:14 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 16:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,19 +54,7 @@ File gid_File_Lib_Accessbridge
 End
 #endif
 #if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
-
-File gid_File_Lib_Adabas_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libadabas2,UNXSUFFIX));
-  #else
-    Name = "adabas2.dll";
-  #endif
-End
-
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Adabas, adabas)
 #endif
 
 #if defined(WNT) && !defined(DISABLE_ADO)
