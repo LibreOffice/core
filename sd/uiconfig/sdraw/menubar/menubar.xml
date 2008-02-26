@@ -195,6 +195,7 @@
             <menu:menuitem menu:id=".uno:FormatLine"/>
             <menu:menuitem menu:id=".uno:FormatArea"/>
             <menu:menuitem menu:id=".uno:TextAttributes"/>
+            <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ModifyLayer"/>
             <menu:menuitem menu:id=".uno:DesignerDialog"/>
