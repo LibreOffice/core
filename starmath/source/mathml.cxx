@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:01:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,8 @@ one go*/
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -2468,7 +2470,9 @@ public:
     void EndElement();
 };
 
-class SmXMLOfficeContext_Impl : public SvXMLImportContext
+// NB: virtually inherit so we can multiply inherit properly
+//     in SmXMLFlatDocContext_Impl
+class SmXMLOfficeContext_Impl : public virtual SvXMLImportContext
 {
 public:
     SmXMLOfficeContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
@@ -2485,11 +2489,9 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
 {
     SvXMLImportContext *pContext = 0;
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName == GetXMLToken(XML_META) )
-        pContext = new SfxXMLMetaContext( GetImport(),
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    GetImport().GetModel() );
-    else if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName == GetXMLToken(XML_META) ) {
+        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+    } else if( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_SETTINGS) )
         pContext = new XMLDocumentSettingsContext( GetImport(),
                                     XML_NAMESPACE_OFFICE, rLocalName,
@@ -2498,6 +2500,52 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
+}
+
+// context for flat file xml format
+class SmXMLFlatDocContext_Impl
+    : public SmXMLOfficeContext_Impl, public SvXMLMetaDocumentContext
+{
+public:
+    SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+
+    virtual ~SmXMLFlatDocContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT i_nPrefix, const OUString& i_rLocalName,
+        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
+};
+
+SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
+        USHORT i_nPrefix, const OUString & i_rLName,
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+    SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
+    SmXMLOfficeContext_Impl(i_rImport, i_nPrefix, i_rLName),
+    SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
+        i_xDocProps, i_xDocBuilder)
+{
+}
+
+SmXMLFlatDocContext_Impl::~SmXMLFlatDocContext_Impl() { }
+
+
+SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
+    USHORT i_nPrefix, const OUString& i_rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
+{
+    // behave like meta base class iff we encounter office:meta
+    if( XML_NAMESPACE_OFFICE == i_nPrefix &&
+            i_rLocalName == GetXMLToken(XML_META) ) {
+        return SvXMLMetaDocumentContext::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    } else {
+        return SmXMLOfficeContext_Impl::CreateChildContext(
+                    i_nPrefix, i_rLocalName, i_xAttrList );
+    }
 }
 
 static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
@@ -3279,9 +3327,27 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
-    if( XML_NAMESPACE_OFFICE == nPrefix )
-        return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
-    else
+    if( XML_NAMESPACE_OFFICE == nPrefix ) {
+        if ( (IsXMLToken(rLocalName, XML_DOCUMENT) ||
+              IsXMLToken(rLocalName, XML_DOCUMENT_META))) {
+            uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+                mxServiceFactory->createInstance(
+                    ::rtl::OUString::createFromAscii(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                    uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetModel(), uno::UNO_QUERY_THROW);
+            return IsXMLToken(rLocalName, XML_DOCUMENT_META)
+                ? new SvXMLMetaDocumentContext(*this,
+                        XML_NAMESPACE_OFFICE, rLocalName,
+                        xDPS->getDocumentProperties(), xDocBuilder)
+                // flat OpenDocument file format -- this has not been tested...
+                : new SmXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
+                            xDPS->getDocumentProperties(), xDocBuilder);
+        } else {
+            return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
+        }
+    } else
         return new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
 }
 
