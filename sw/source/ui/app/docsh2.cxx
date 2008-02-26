@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:52:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,6 @@
 #endif
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_DINFDLG_HXX //autogen
 #include <sfx2/dinfdlg.hxx>
@@ -293,7 +290,6 @@ extern BOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
     Beschreibung:   DocInfo kreieren (virtuell)
  --------------------------------------------------------------------*/
 
-
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
@@ -317,10 +313,33 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
+
+/// update text fields on document properties changes
+void SwDocShell::DoFlushDocInfo()
+{
+    if ( !pDoc ) return;
+
+    bool bUnlockView(true);
+    if ( pWrtShell ) {
+        bUnlockView = !pWrtShell->IsViewLocked();
+        pWrtShell->LockView( TRUE );    // lock visible section
+        pWrtShell->StartAllAction();
+    }
+
+    pDoc->DocInfoChgd();
+
+    if ( pWrtShell ) {
+        pWrtShell->EndAllAction();
+        if ( bUnlockView ) {
+            pWrtShell->LockView( FALSE );
+        }
+    }
+}
+
+
 /*--------------------------------------------------------------------
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
  --------------------------------------------------------------------*/
-
 
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -332,9 +351,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 
     USHORT nAction = 0;
-    if( rHint.ISA(SfxDocumentInfoHint) )
-        nAction = 1;
-    else if( rHint.ISA(SfxSimpleHint) )
+    if( rHint.ISA(SfxSimpleHint) )
     {
         // swithc for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
@@ -364,10 +381,6 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         switch( nAction )
         {
-        case 1:
-            pDoc->DocInfoChgd( GetDocInfo() );
-            break;
-
         case 2:
             pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
@@ -385,7 +398,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 const bool bIsDocModified = pDoc->IsModified();
                 // <--
 
-                pDoc->DocInfoChgd( GetDocInfo() );
+                pDoc->DocInfoChgd( );
 
                 // --> OD 2005-02-01 #i41679#
                 if ( !bIsDocModified )
@@ -411,7 +424,6 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     Beschreibung:   Benachrichtigung Doc schliessen
  --------------------------------------------------------------------*/
 
-
 USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     USHORT nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
@@ -425,7 +437,6 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 /*--------------------------------------------------------------------
     Beschreibung:   Organizer
  --------------------------------------------------------------------*/
-
 
 BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     USHORT  nSourceIdx1,        // SourcePool: oberste Inhaltsebene (Vorlagen/Makros)
@@ -653,7 +664,6 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     Beschreibung:   Vorlagen Remove
  --------------------------------------------------------------------*/
 
-
 BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
                         USHORT nIdx2,
                         USHORT nIdx3)
@@ -723,7 +733,6 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 
 void SwDocShell::Execute(SfxRequest& rReq)
 {
@@ -1921,7 +1930,4 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     delete pReader;
     return nErr;
 }
-
-
-
 
