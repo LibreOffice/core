@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:58:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,6 +880,14 @@
         Identifier = SID_SAVEGRAPHIC ; \
         HelpID = SID_SAVEGRAPHIC ; \
         Text [ en-US ] = "Save as Picture..." ; \
+    };
+
+#define MN_CROP\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_GRAF_CROP ; \
+        HelpID = SID_ATTR_GRAF_CROP ; \
+        Text [ en-US ] = "Crop Picture..." ; \
     };
 
 #define MN_NAVIGATOR\
