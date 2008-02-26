@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:34:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ private:
     //- commands
     //-------------------------------------------------------------------------
 
-    void onCommandGetDocumentInfo( ::com::sun::star::uno::Any& _rInfo );
+    void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
     void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
     void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
     void onCommandOpenSomething( const ::com::sun::star::uno::Any& _rArgument, const bool _bActivate,
