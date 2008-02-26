@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
-#include <sfx2/docinf.hxx>
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -112,6 +110,10 @@
 #endif
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 namespace swui
 {
@@ -245,9 +247,23 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
             {
                 SfxObjectShell* pDocSh = SfxObjectShell::Current();
                 SfxItemSet* pSet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
-                com::sun::star::uno::Any aAny;
-                aAny <<= pDocSh->GetDocInfo().GetCustomPropertyNames();
-                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, aAny ) );
+                using namespace ::com::sun::star;
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    pDocSh->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps
+                    = xDPS->getDocumentProperties();
+                uno::Reference< beans::XPropertySet > xUDProps(
+                    xDocProps->getUserDefinedProperties(),
+                    uno::UNO_QUERY_THROW);
+                uno::Reference< beans::XPropertySetInfo > xSetInfo
+                    = xUDProps->getPropertySetInfo();
+                const uno::Sequence< beans::Property > props
+                    = xSetInfo->getProperties();
+                uno::Sequence< ::rtl::OUString > names(props.getLength());
+                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+                    names[i] = props[i].Name;
+                }
+                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(names) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
                 nHelpId = HID_EDIT_FLD_DOKINF;
                 break;
