@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:49:06 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1402,7 +1402,7 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
         for( USHORT i=0; i<rBookmarks.Count(); i++ )
         {
             const SwBookmark* pBookmark = rBookmarks[i];
-            ULONG nBookNdIdx = pBookmark->GetPos().nNode.GetIndex();
+            ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = TRUE;
@@ -1471,12 +1471,15 @@ void SwHTMLParser::StripTrailingPara()
             const SwBookmarks& rBookmarks = pDoc->getBookmarks();
             for( i=0; i<rBookmarks.Count(); i++ )
             {
-                const SwBookmark* pBookmark = rBookmarks[i];
-                ULONG nBookNdIdx = pBookmark->GetPos().nNode.GetIndex();
+                SwBookmark* pBookmark = rBookmarks[i];
+                ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
                 if( nBookNdIdx==nNodeIdx )
                 {
-                    SwPosition &rBookmkPos =
-                        (SwPosition&)pBookmark->GetPos();
+                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // Do not directly manipulate member of <SwBookmark>
+//                    SwPosition &rBookmkPos =
+//                        (SwPosition&)pBookmark->GetBookmarkPos();
+                    // <--
 
                     SwNodeIndex nNewNdIdx( pPam->GetPoint()->nNode );
                     SwCntntNode* pNd = pDoc->GetNodes().GoPrevious( &nNewNdIdx );
@@ -1486,8 +1489,13 @@ void SwHTMLParser::StripTrailingPara()
                         return;
                     }
 
-                    rBookmkPos.nNode = nNewNdIdx;
-                    rBookmkPos.nContent.Assign( pNd, pNd->Len() );
+                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // Do not directly manipulate member of <SwBookmark>
+                    SwPosition aNewPos ( pBookmark->GetBookmarkPos() );
+                    aNewPos.nNode = nNewNdIdx;
+                    aNewPos.nContent.Assign( pNd, pNd->Len() );
+                    pBookmark->SetBookmarkPos( &aNewPos );
+                    // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )
                     break;
