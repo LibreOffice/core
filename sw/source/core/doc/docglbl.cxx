@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:35:38 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -113,6 +110,12 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
+using namespace ::com::sun::star;
 
 enum SwSplitDocType
 {
@@ -293,20 +296,28 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
 
-                    // die Vorlage ist das GlobalDoc
-                    SfxDocumentInfo aDocInfo( *pDoc->GetDocumentInfo() );
-                    aDocInfo.SetTemplateName( aEmptyStr );
-                    aDocInfo.SetTemplateDate( aTmplDate );
-                    aDocInfo.SetTemplateFileName( rPath );
+                    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                        ((SwDocShell*)(&xDocSh))->GetModel(),
+                        uno::UNO_QUERY_THROW);
+                    uno::Reference<document::XDocumentProperties> xDocProps(
+                        xDPS->getDocumentProperties());
+                    DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+                    // the GlobalDoc is the template
+                    xDocProps->setTemplateName(aEmptyStr);
+                    ::util::DateTime uDT(aTmplDate.Get100Sec(),
+                        aTmplDate.GetSec(), aTmplDate.GetMin(),
+                        aTmplDate.GetHour(), aTmplDate.GetDay(),
+                        aTmplDate.GetMonth(), aTmplDate.GetYear());
+                    xDocProps->setTemplateDate(uDT);
+                    xDocProps->setTemplateURL(rPath);
                     //JP 14.06.99: Set the text of the "split para" as title
                     //              from the new doc. Is the current doc has
                     //              a title, insert it at begin.
-                    String sTitle( aDocInfo.GetTitle() );
+                    String sTitle( xDocProps->getTitle() );
                     if( sTitle.Len() )
                         sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
                     sTitle += ((SwTxtNode*)pSttNd)->GetExpandTxt();
-                    aDocInfo.SetTitle( sTitle );
-                    pDoc->SetDocumentInfo( aDocInfo );
+                    xDocProps->setTitle( sTitle );
 
                     // Vorlagen ersetzen
                     pDoc->ReplaceStyles( *this );
