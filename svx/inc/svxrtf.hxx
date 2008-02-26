@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:56:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,16 @@ class DateTime;
 struct SvxRTFStyleType;
 class SvxRTFItemStackType;
 class SvxRTFItemStackList;
-class SfxDocumentInfo;
+
+namespace com { namespace sun { namespace star {
+    namespace document {
+        class XDocumentProperties;
+    }
+    namespace util {
+        class DateTime;
+    }
+} } }
+
 
 // Mapper-Klassen fuer die verschiedenen Anforderungen an Doc-Positionen
 //        Swg - NodePosition ist ein SwIndex, der intern veraendert wird
@@ -243,7 +252,8 @@ class SVX_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SfxItemPool* pAttrPool;
     Color*  pDfltColor;
     Font*   pDfltFont;
-    SfxDocumentInfo* pSfxInfo;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentProperties> m_xDocProps;
     SfxItemSet *pRTFDefaults;
 
     long    nVersionNo;
@@ -312,7 +322,7 @@ protected:
     void ReadTabAttr( int nToken, SfxItemSet& rSet );
 
     // Dokument-Info lesen
-    DateTime& GetDateTimeStamp( DateTime& rDT );
+    ::com::sun::star::util::DateTime GetDateTimeStamp( );
     String& GetTextToEndGroup( String& rStr );
     virtual void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
@@ -336,6 +346,8 @@ protected:
 
     SvxRTFParser( SfxItemPool& rAttrPool,
                     SvStream& rIn,
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::document::XDocumentProperties> i_xDocProps,
                     int bReadNewDoc = TRUE );
     virtual ~SvxRTFParser();
 
@@ -367,8 +379,6 @@ protected:
     SvxRTFItemStack& GetAttrStack()             { return aAttrStack; }
     SvxRTFColorTbl& GetColorTbl()               { return aColorTbl; }
     SvxRTFFontTbl& GetFontTbl()                 { return aFontTbl; }
-
-    SfxDocumentInfo* GetDocInfo() const         { return pSfxInfo; }
 
     const String& GetBaseURL() const            { return sBaseURL; }
 
