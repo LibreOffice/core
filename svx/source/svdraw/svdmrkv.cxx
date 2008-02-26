@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:50:49 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -752,27 +752,42 @@ void SdrMarkView::SetMarkHandles()
 
             if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit)
             { // sonst nix gefunden
-                BOOL bWdt0=aRect.Left()==aRect.Right();
-                BOOL bHgt0=aRect.Top()==aRect.Bottom();
-                if (bWdt0 && bHgt0)
+
+                if( eDragMode==SDRDRAG_CROP )
                 {
-                    aHdl.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
-                }
-                else if (!bStdDrag && (bWdt0 || bHgt0))
-                {
-                    aHdl.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
-                    aHdl.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.TopLeft()     ,HDL_UPLFT));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.TopCenter()   ,HDL_UPPER));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.TopRight()    ,HDL_UPRGT));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.LeftCenter()  ,HDL_LEFT ));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.RightCenter() ,HDL_RIGHT));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomLeft()  ,HDL_LWLFT));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomCenter(),HDL_LOWER));
+                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomRight() ,HDL_LWRGT));
                 }
                 else
                 {
-                    if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
-                    if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
-                    if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopRight()    ,HDL_UPRGT));
-                    if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.LeftCenter()  ,HDL_LEFT ));
-                    if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.RightCenter() ,HDL_RIGHT));
-                    if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomLeft()  ,HDL_LWLFT));
-                    if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomCenter(),HDL_LOWER));
-                    if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomRight() ,HDL_LWRGT));
+                    BOOL bWdt0=aRect.Left()==aRect.Right();
+                    BOOL bHgt0=aRect.Top()==aRect.Bottom();
+                    if (bWdt0 && bHgt0)
+                    {
+                        aHdl.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
+                    }
+                    else if (!bStdDrag && (bWdt0 || bHgt0))
+                    {
+                        aHdl.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
+                        aHdl.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
+                    }
+                    else
+                    {
+                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
+                        if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
+                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopRight()    ,HDL_UPRGT));
+                        if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.LeftCenter()  ,HDL_LEFT ));
+                        if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.RightCenter() ,HDL_RIGHT));
+                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomLeft()  ,HDL_LWLFT));
+                        if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomCenter(),HDL_LOWER));
+                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomRight() ,HDL_LWRGT));
+                    }
                 }
             }
         }
@@ -1040,6 +1055,11 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             }
             break;
         }
+        case SDRDRAG_CROP:
+        {
+            // todo
+            break;
+        }
         default: break;
     }
 }
@@ -1123,6 +1143,7 @@ void SdrMarkView::ForceRefToMarked()
 
         case SDRDRAG_TRANSPARENCE:
         case SDRDRAG_GRADIENT:
+        case SDRDRAG_CROP:
         {
             Rectangle aRect(GetMarkedObjBoundRect());
             aRef1 = aRect.TopLeft();
