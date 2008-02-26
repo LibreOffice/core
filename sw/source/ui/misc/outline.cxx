@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:22:42 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,8 @@
 #endif
 
 #include <unomid.h>
+
+#include <IDocumentOutlineNodes.hxx>
 
 using namespace ::com::sun::star;
 
@@ -955,7 +957,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     USHORT nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
     {
-        nTmp = pSh->GetOutlineLevel(nOutlinePos);
+        nTmp = static_cast<USHORT>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
     }
     aLevelLB.SelectEntryPos(nTmp);
 
