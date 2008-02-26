@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:55:25 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 09:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ class SwDrawTextInfo
     const Point* pPos;
     const XubString* pText;
     const SwWrongList* pWrong;
+    const SwWrongList* pGrammarCheck;
     const SwWrongList* pSmartTags; // SMARTTAGS
     const Size* pSize;
     SwFont *pFnt;
@@ -102,9 +103,10 @@ class SwDrawTextInfo
 public:
 
 #ifndef PRODUCT
-    BOOL bPos   : 1;    // These flags should control, that the appropriate
-    BOOL bWrong : 1;    // Set-function has been called before calling
-    BOOL bSize  : 1;    //  the Get-function of a member
+    BOOL bPos   : 1;            // These flags should control, that the appropriate
+    BOOL bWrong : 1;            // Set-function has been called before calling
+    BOOL bGrammarCheck : 1;     //  the Get-function of a member
+    BOOL bSize  : 1;
     BOOL bFnt   : 1;
     BOOL bHyph  : 1;
     BOOL bLeft  : 1;
@@ -148,6 +150,7 @@ public:
         // be accessed by their Get-function:
         pPos = 0;
         pWrong = 0;
+        pGrammarCheck = 0;
         pSmartTags = 0;
         pSize = 0;
         pFnt = 0;
@@ -166,7 +169,7 @@ public:
         // these flags control, whether the matching member variables have
         // been set by using the Set-function before they may be accessed
         // by their Get-function:
-        bPos = bWrong = bSize = bFnt = bAscent = bSpace = bNumberOfBlanks = bUppr =
+        bPos = bWrong = bGrammarCheck = bSize = bFnt = bAscent = bSpace = bNumberOfBlanks = bUppr =
         bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = FALSE;
 #endif
     }
@@ -222,6 +225,12 @@ public:
     {
         ASSERT( bWrong, "DrawTextInfo: Undefined WrongList" );
         return pWrong;
+    }
+
+    const SwWrongList* GetGrammarCheck() const
+    {
+        ASSERT( bGrammarCheck, "DrawTextInfo: Undefined GrammarCheck List" );
+        return pGrammarCheck;
     }
 
     const SwWrongList* GetSmartTags() const
@@ -402,6 +411,14 @@ public:
         pWrong = pNew;
 #ifndef PRODUCT
         bWrong = TRUE;
+#endif
+    }
+
+    void SetGrammarCheck( const SwWrongList* pNew )
+    {
+        pGrammarCheck = pNew;
+#ifndef PRODUCT
+        bGrammarCheck = TRUE;
 #endif
     }
 
