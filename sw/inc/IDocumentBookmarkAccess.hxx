@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentBookmarkAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:41:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,22 +45,33 @@ class SwBookmarks;
 class SwPaM;
 class KeyCode;
 class String;
+class SwTxtNode;
 
- /** Provides access to the bookmarks of a document.
- */
- class IDocumentBookmarkAccess
- {
- public:
+/** Provides access to the bookmarks of a document.
+*/
+class IDocumentBookmarkAccess
+{
+public:
     enum BookmarkType
     {
         BOOKMARK,
         MARK,
         DDE_BOOKMARK,
         UNO_BOOKMARK,
-        HIDDEN_BOOKMARK
+        // --> OD 2007-10-11 #i81002# - bookmark type for cross-references
+        CROSSREF_BOOKMARK
+        // <--
     };
 
- public:
+    // --> OD 2007-11-16 #i83479#
+    enum CrossReferenceBookmarkSubType
+    {
+        HEADING,
+        NUMITEM
+    };
+    // <--
+
+public:
     /** Returns all bookmarks set at the document.
 
        @returns
@@ -106,6 +117,21 @@ class String;
     */
     virtual void deleteBookmark( /*[in]*/const String& rName ) = 0;
 
+    /** Checks, if the given name fits to the cross-reference bookmark
+        name schema
+
+        OD 2007-10-24 #i81002#
+
+        @author OD
+
+        @param rName
+        [in] the name to be checked.
+
+        @returns
+        boolean indicating , if the name fits or not
+    */
+    virtual bool isCrossRefBookmarkName( /*[in]*/const String& rName ) = 0;
+
     /** Find a bookmark.
 
        @param rName
@@ -148,8 +174,106 @@ class String;
     */
     virtual SwBookmark& getBookmark(  /*[in]*/sal_uInt16 nPos, /*[in]*/bool bBkmrk) = 0;
 
+    /** Get cross-reference bookmark name for certain text node
+
+        OD 2007-11-16 #i83479#
+
+        @author OD
+
+        @param rTxtNode
+        [in] reference to text node, whose cross-reference bookmark name has to be returned.
+
+        @param nCrossRefType
+        [in] sub type of cross-reference bookmark, whose name has to be returned.
+
+        @returns
+        name of cross-reference bookmark of given cross-reference sub type,
+        if such a cross-reference bookmark exists at given textnode.
+        otherwise, empty string
+    */
+    virtual String getCrossRefBookmarkName(
+            /*[in]*/const SwTxtNode& rTxtNode,
+            /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) const = 0;
+
+    /** Generates new cross-reference bookmark for given text node of given sub type
+
+        OD 2007-11-16 #i83479#
+
+        @author OD
+
+        @param rTxtNode
+        [in] reference to text node, at which the cross-reference bookmark has to be generated.
+
+        @param nCrossRefType
+        [in] sub type of cross-reference bookmark.
+
+        @returns
+        name of generated cross-reference bookmark.
+        If empty, cross-reference bookmark is not generated.
+    */
+    virtual String makeCrossRefBookmark(
+                /*[in]*/const SwTxtNode& rTxtNode,
+                /*[in]*/const CrossReferenceBookmarkSubType nCrossRefType ) = 0;
+
 protected:
     virtual ~IDocumentBookmarkAccess() {};
- };
+};
 
- #endif // IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+namespace bookmarkfunc
+{
+    /** return the prefix used for cross-reference bookmark for headings
+
+        OD 2007-11-16 #i83479#
+
+        @author OD
+    */
+    const String getHeadingCrossRefBookmarkNamePrefix();
+
+    /** return the prefix used for cross-reference bookmark for numbered items
+
+        OD 2007-11-16 #i83479#
+
+        @author OD
+    */
+    const String getNumItemCrossRefBookmarkNamePrefix();
+
+    /** Checks, if the given name fits to the heading cross-reference bookmark
+        name schema
+
+        OD 2007-11-09 #i81002#
+
+        @author OD
+
+        @param rName
+        [in] the name to be checked.
+
+        @returns
+        boolean indicating , if the name fits or not
+    */
+    bool isHeadingCrossRefBookmarkName( /*[in]*/const String& rName );
+
+    /** Checks, if the given name fits to the numbered item cross-reference
+        bookmark name schema
+
+        OD 2007-11-09 #i81002#
+
+        @author OD
+
+        @param rName
+        [in] the name to be checked.
+
+        @returns
+        boolean indicating , if the name fits or not
+    */
+    bool isNumItemCrossRefBookmarkName( /*[in]*/const String& rName );
+
+    /** generate new name for a cross-reference bookmark of given sub type
+
+        OD 2007-11-16 #i83479#
+
+        @author OD
+    */
+    String generateNewCrossRefBookmarkName(
+            /*[in]*/const IDocumentBookmarkAccess::CrossReferenceBookmarkSubType nSubType );
+}
+#endif // IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
