@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:45:31 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,9 @@ ShellResource::ShellResource()
 
     aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
+    // --> OD 2007-09-13 #i81002#
+    aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
+    // <--
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
