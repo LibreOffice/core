@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:34:22 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:35:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,6 @@
 
 #ifndef _COM_SUN_STAR_PRESENTATION_XCUSTOMPRESENTATIONSUPPLIER_HPP_
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
@@ -226,6 +222,9 @@
 #endif
 
 #include "animationexport.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1942,24 +1941,21 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
 
 void SdXMLExport::_ExportMeta()
 {
-    // call parent
-    SvXMLExport::_ExportMeta();
+    uno::Sequence<beans::NamedValue> stats(1);
+    stats[0] = beans::NamedValue(::rtl::OUString::createFromAscii("ObjectCount"),
+                uno::makeAny(mnObjectCount));
 
-    // prepare export statistic info (mainly for progress bar at reload)
-    sal_Bool bContentUsed(FALSE);
-    rtl::OUStringBuffer sBuffer;
-
-    // export shape count info
-    if(mnObjectCount)
-    {
-        GetMM100UnitConverter().convertNumber(sBuffer, mnObjectCount);
-        AddAttribute(XML_NAMESPACE_META, XML_OBJECT_COUNT, sBuffer.makeStringAndClear());
-        bContentUsed = TRUE;
+    // update document statistics at the model
+    uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xPropSup->getDocumentProperties());
+    if (xDocProps.is()) {
+        xDocProps->setDocumentStatistics(stats);
     }
 
-    // when there is data, export it
-    if(bContentUsed)
-        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True);
+    // call parent
+    SvXMLExport::_ExportMeta();
 }
 
 //////////////////////////////////////////////////////////////////////////////
