@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:32:49 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 07:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,6 +370,7 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
     {
         case SID_OBJECT_ROTATE:
         case SID_OBJECT_MIRROR:
+        case SID_OBJECT_CROP:
         case SID_OBJECT_TRANSPARENCE:
         case SID_OBJECT_GRADIENT:
         case SID_OBJECT_SHEAR:
