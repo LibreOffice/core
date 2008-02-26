@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-20 06:15:24 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,6 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -278,11 +275,14 @@ void SmDocShell::LoadSymbols()
 }
 
 
-const String &SmDocShell::GetComment() const
+const String SmDocShell::GetComment() const
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetComment" );
-    static String aString(((SmDocShell *) this)->GetDocInfo().GetComment());
-    return aString;// ((SmDocShell *) this)->GetDocInfo().GetComment();
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        const_cast<SmDocShell*>(this)->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps(
+        xDPS->getDocumentProperties());
+    return xDocProps->getDescription();
 }
 
 
