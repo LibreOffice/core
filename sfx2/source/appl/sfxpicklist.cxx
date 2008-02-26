@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:10:33 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
@@ -89,7 +91,6 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/docinf.hxx>
 #include <sfx2/bindings.hxx>
 #include "referers.hxx"
 #include <sfx2/docfile.hxx>
@@ -408,9 +409,17 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( bAllowModif )
                     pDocSh->EnableSetModified( sal_False );
 
-                SfxDocumentInfo &rInfo = pDocSh->GetDocInfo();
-                rInfo.SetCreated( SvtUserOptions().GetFullName() );
-                pDocSh->Broadcast( SfxDocumentInfoHint( &rInfo ) );
+                using namespace ::com::sun::star;
+                uno::Reference<document::XDocumentProperties> xDocProps(
+                    pDocSh->getDocProperties());
+                if (xDocProps.is()) {
+                    xDocProps->setAuthor( SvtUserOptions().GetFullName() );
+                    ::DateTime now;
+                    xDocProps->setCreationDate( util::DateTime(
+                        now.Get100Sec(), now.GetSec(), now.GetMin(),
+                        now.GetHour(), now.GetDay(), now.GetMonth(),
+                        now.GetYear() ) );
+                }
 
                 if ( bAllowModif )
                     pDocSh->EnableSetModified( bAllowModif );
