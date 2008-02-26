@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:32:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #include <com/sun/star/view/XPrintJobListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -66,6 +67,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
 
 #include <cppuhelper/interfacecontainer.hxx>
@@ -119,7 +121,6 @@
 #include "stormodifylistener.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
-#include <sfx2/docinf.hxx>
 #include <sfx2/msgpool.hxx>
 
 using namespace com::sun::star;
@@ -148,6 +149,7 @@ struct IMPL_SfxBaseModel_DataContainer
     uno::Reference< uno::XInterface >                       m_xParent               ;
     uno::Reference< frame::XController >                    m_xCurrent              ;
     uno::Reference< document::XDocumentInfo >               m_xDocumentInfo         ;
+    uno::Reference< document::XDocumentProperties >         m_xDocumentProperties;
     uno::Reference< script::XStarBasicAccess >              m_xStarBasicAccess      ;
     uno::Reference< container::XNameReplace >               m_xEvents               ;
     uno::Sequence< beans::PropertyValue>                    m_seqArguments          ;
@@ -460,6 +462,7 @@ uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( un
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
+                                            static_cast< document::XDocumentPropertiesSupplier* > ( this )  ,
                                             static_cast< XSTORABLE2*            > ( this )  ,
                                             static_cast< XMODULE*               > ( this )  ,
                                             static_cast< XMODEL2*               > ( this )  ,
@@ -562,6 +565,7 @@ uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeEx
             static ::cppu::OTypeCollection aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
                                                           ::getCppuType(( const REFERENCE< XMODEL2      >*)NULL ) ,
                                                           ::getCppuType(( const REFERENCE< XEMBEDDEDSCRIPTS >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< document::XDocumentPropertiesSupplier  >*)NULL ) ,
                                                          aTypeCollection.getTypes()                                   );
 
             // ... and set his address to static pointer!
@@ -762,6 +766,11 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         m_pData->m_xDocumentInfo = 0;
     }
 
+    if ( m_pData->m_xDocumentProperties.is() )
+    {
+        m_pData->m_xDocumentProperties = 0;
+    }
+
     EndListening( *m_pData->m_pObjectShell );
 
     m_pData->m_xCurrent = uno::Reference< frame::XController > ();
@@ -818,17 +827,67 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
 
     if ( !m_pData->m_xDocumentInfo.is() )
     {
-        ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = new SfxDocumentInfoObject();
-        ::rtl::OUString aMediaType;
-        rtl::OUString aName = rtl::OUString::createFromAscii("MediaType");
-        uno::Reference < beans::XPropertySet > xSet( getDocumentStorage(), uno::UNO_QUERY );
-        uno::Any aValue = xSet->getPropertyValue( aName );
-        uno::Reference < beans::XPropertySet > xDocSet( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
-        xDocSet->setPropertyValue( aName, makeAny( aMediaType ) );
+        // WARNING: this will only work if (when loading a document) the
+        // document meta-data has already been read and completely written
+        // into the XDocumentProperties at this point
+        // ==> DO NOT call getDocumentInfo before document info has been read!
+        uno::Reference< document::XDocumentInfo > xDocInfo =
+            new SfxDocumentInfoObject;
+        uno::Reference< document::XDocumentProperties > xDocProps =
+            getDocumentProperties();
+        uno::Sequence< uno::Any > args(1);
+        args[0] <<= xDocProps;
+        uno::Reference< lang::XInitialization > xInit(
+            xDocInfo, uno::UNO_QUERY_THROW);
+        try {
+            xInit->initialize(args);
+            ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = xDocInfo;
+        } catch (uno::RuntimeException &) {
+            throw;
+        } catch (uno::Exception & e) {
+            throw lang::WrappedTargetRuntimeException(::rtl::OUString::createFromAscii(
+                "SfxBaseModel::getDocumentInfo: cannot initialize"), *this,
+                uno::makeAny(e));
+        }
+        try {
+            rtl::OUString aName = rtl::OUString::createFromAscii("MediaType");
+            uno::Reference < beans::XPropertySet > xSet(
+                getDocumentStorage(), uno::UNO_QUERY );
+            uno::Any aMediaType = xSet->getPropertyValue( aName );
+            uno::Reference < beans::XPropertySet > xDocSet(
+                m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+            xDocSet->setPropertyValue( aName, aMediaType );
+        } catch (uno::Exception &) {
+            //ignore
+        }
     }
 
     return m_pData->m_xDocumentInfo;
 }
+
+// document::XDocumentPropertiesSupplier:
+uno::Reference< document::XDocumentProperties > SAL_CALL
+SfxBaseModel::getDocumentProperties()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    if ( !m_pData->m_xDocumentProperties.is() )
+    {
+        uno::Reference< lang::XInitialization > xDocProps(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
+            uno::UNO_QUERY_THROW);
+//        xDocProps->initialize(uno::Sequence<uno::Any>());
+        m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
+    }
+
+    return m_pData->m_xDocumentProperties;
+}
+
 
 //________________________________________________________________________________________________________
 //  XEVENTLISTENER
@@ -1885,7 +1944,9 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
@@ -1893,7 +1954,6 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     pMetaFile->Write( aMemStm );
-                    delete pMetaFile;
                     aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
@@ -1905,7 +1965,8 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True, sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True, sal_True );
 
                 if ( pMetaFile )
                 {
@@ -1913,7 +1974,6 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     pMetaFile->Write( aMemStm );
-                    delete pMetaFile;
                     aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
@@ -1925,30 +1985,32 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
-                    delete pMetaFile;
+                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                        GraphicHelper::getFormatStrFromGDI_Impl(
+                            pMetaFile.get(), CVT_EMF ) );
                     if ( pStream )
                     {
                         pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
-                        delete pStream;
                     }
                 }
             }
             else if ( GraphicHelper::supportsMetaFileHandle_Impl()
               && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    aAny <<= reinterpret_cast< const sal_uInt64 >( GraphicHelper::getEnhMetaFileFromGDI_Impl( pMetaFile ) );
-                    delete pMetaFile;
+                    aAny <<= reinterpret_cast< const sal_uInt64 >(
+                        GraphicHelper::getEnhMetaFileFromGDI_Impl( pMetaFile.get() ) );
                 }
             }
             else
@@ -1958,19 +2020,20 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
-                    delete pMetaFile;
+                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                        GraphicHelper::getFormatStrFromGDI_Impl(
+                            pMetaFile.get(), CVT_WMF ) );
 
                     if ( pStream )
                     {
                         pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
-                        delete pStream;
                     }
                 }
             }
@@ -1979,14 +2042,15 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             {
                 // means HGLOBAL handler to memory storage containing METAFILEPICT structure
 
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
                     Size aMetaSize = pMetaFile->GetPrefSize();
-                    aAny <<= reinterpret_cast< const sal_uInt64 >( GraphicHelper::getWinMetaFileFromGDI_Impl( pMetaFile, aMetaSize ) );
-
-                    delete pMetaFile;
+                    aAny <<= reinterpret_cast< const sal_uInt64 >(
+                        GraphicHelper::getWinMetaFileFromGDI_Impl(
+                            pMetaFile.get(), aMetaSize ) );
                 }
             }
             else
@@ -1996,19 +2060,20 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_BMP );
-                    delete pMetaFile;
+                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                        GraphicHelper::getFormatStrFromGDI_Impl(
+                            pMetaFile.get(), CVT_BMP ) );
 
                     if ( pStream )
                     {
                         pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
-                        delete pStream;
                     }
                 }
             }
@@ -2019,19 +2084,20 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
-                    delete pMetaFile;
+                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                        GraphicHelper::getFormatStrFromGDI_Impl(
+                            pMetaFile.get(), CVT_PNG ) );
 
                     if ( pStream )
                     {
                         pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
-                        delete pStream;
                     }
                 }
             }
@@ -2544,7 +2610,37 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!") ),
                     uno::Reference< uno::XInterface >() );
 
+        // since saving a document modifies its DocumentInfo, the current
+        // DocumentInfo must be saved on "SaveTo", so it can be restored
+        // after saving
+        sal_Bool bCopyTo =  bSaveTo ||
+            m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
+        uno::Reference<document::XDocumentProperties> xOldDocProps;
+        uno::Reference<document::XDocumentInfo> xOldDocInfo;
+        if ( bCopyTo )
+        {
+            xOldDocProps = getDocumentProperties();
+            xOldDocInfo = getDocumentInfo();
+            Reference<util::XCloneable> xCloneable(xOldDocInfo,
+                UNO_QUERY_THROW);
+            Reference<document::XDocumentInfo> xNewDocInfo(
+                xCloneable->createClone(), UNO_QUERY_THROW);
+            Reference<document::XDocumentPropertiesSupplier> xDPS(
+                xNewDocInfo, UNO_QUERY_THROW);
+            Reference<document::XDocumentProperties> xNewDocProps(
+                xDPS->getDocumentProperties());
+            m_pData->m_xDocumentProperties = xNewDocProps;
+            m_pData->m_xDocumentInfo = xNewDocInfo;
+        }
+
         sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
+
+        if ( bCopyTo )
+        {
+            // restore DocumentInfo if a copy was created
+            m_pData->m_xDocumentProperties = xOldDocProps;
+            m_pData->m_xDocumentInfo = xOldDocInfo;
+        }
 
         uno::Reference < task::XInteractionHandler > xHandler;
         SFX_ITEMSET_ARG( aParams, pItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False);
