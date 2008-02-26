@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:32:53 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1135,7 +1135,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 if( *pTxt == cCh )
                 {
                     aCntPos.nContent = nChPos;
-                    SwCntntNode* pNewNd = pTxtNd->SplitNode( aCntPos );
+                    SwCntntNode* pNewNd = pTxtNd->SplitCntntNode( aCntPos );
 
                     if( aBkmkArr.Count() )
                         _RestoreCntntIdx( aBkmkArr, *pNewNd, nChPos,
