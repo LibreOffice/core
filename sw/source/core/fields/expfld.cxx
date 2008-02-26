@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:42:50 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,9 +670,9 @@ USHORT SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
         {
-            _SeqFldLstElem* pNew = new _SeqFldLstElem( pNd->GetExpandTxt( 0,
-                                (*pF->GetTxtFld()->GetStart()) + 1, FALSE ),
-                            ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+            _SeqFldLstElem* pNew = new _SeqFldLstElem(
+                    pNd->GetExpandTxt( 0, (*pF->GetTxtFld()->GetStart()) + 1 ),
+                    ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
 
