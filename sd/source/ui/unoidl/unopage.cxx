@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:30:00 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1055,7 +1055,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
                         nPgNum++;
                     }
-                    GDIMetaFile* pMetaFile = pDocShell->GetPreviewMetaFile();
+                    ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                        pDocShell->GetPreviewMetaFile();
                     if ( pMetaFile )
                     {
                         Point   aPoint;
@@ -1069,7 +1070,6 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, sal_False );
                         Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
-                        delete pMetaFile;
                     }
                 }
             }
@@ -1092,7 +1092,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
                         nPgNum++;
                     }
-                    GDIMetaFile* pMetaFile = pDocShell->GetPreviewMetaFile();
+                    ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                        pDocShell->GetPreviewMetaFile();
                     BitmapEx aBitmap;
                     if ( pMetaFile && pMetaFile->CreateThumbnail( 160, /* magic value taken from GraphicHelper::getThumbnailFormatFromGDI_Impl() */
                                                                   aBitmap ) )
@@ -1101,7 +1102,6 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         aBitmap.GetBitmap().Write( aMemStream, FALSE, FALSE );
                         uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
                         aAny <<= aSeq;
-                        delete pMetaFile;
                     }
                 }
             }
