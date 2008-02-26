@@ -105,7 +105,6 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\sfx2\sfxbasemodel.hxx %_DEST%\inc%_EXT%\sfx2\sfxbasemodel.hxx
 ..\inc\sfx2\sfxbasecontroller.hxx %_DEST%\inc%_EXT%\sfx2\sfxbasecontroller.hxx
 ..\inc\sfx2\unoctitm.hxx %_DEST%\inc%_EXT%\sfx2\unoctitm.hxx
-..\inc\sfx2\objuno.hxx %_DEST%\inc%_EXT%\sfx2\objuno.hxx
 ..\inc\sfx2\srchitem.hxx %_DEST%\inc%_EXT%\sfx2\srchitem.hxx
 ..\inc\sfx2\srchdefs.hxx %_DEST%\inc%_EXT%\sfx2\srchdefs.hxx
 ..\inc\sfx2\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
