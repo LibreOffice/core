@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-15 12:18:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+
+#include <memory>
+
 
 namespace cppu
 {
@@ -317,6 +320,28 @@ private:
 };
 
 
+/** An interface to extend event notification actions.
+  */
+class IEventNotificationHook
+{
+public:
+    /**
+        Method to be called by OPropertySetHelper::fire.
+
+        @param bIgnoreRuntimeExceptionsWhileFiring
+                        indicates whether occuring RuntimeExceptions shall be
+                        ignored when firing notifications
+
+        @see OPropertySetHelper::fire
+     */
+    virtual void fireEvents(
+        sal_Int32 * pnHandles,
+        sal_Int32 nCount,
+        sal_Bool bVetoable,
+        bool bIgnoreRuntimeExceptionsWhileFiring) = 0;
+};
+
+
 
 /**
    This abstract class maps the methods of the interfaces XMultiPropertySet, XFastPropertySet
@@ -336,7 +361,7 @@ class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
 {
 public:
     /**
-       @param rBHelper  this structure containes the basic members of
+       @param rBHelper  this structure contains the basic members of
                           a broadcaster.
                           The lifetime must be longer than the lifetime
                           of this object. Stored in the variable rBHelper.
@@ -346,7 +371,7 @@ public:
     /** Constructor.
 
         @param rBHelper
-                        this structure containes the basic members of
+                        this structure contains the basic members of
                         a broadcaster.
                           The lifetime must be longer than the lifetime
                           of this object. Stored in the variable rBHelper.
@@ -362,6 +387,31 @@ public:
     */
     OPropertySetHelper(
         OBroadcastHelper & rBHelper, bool bIgnoreRuntimeExceptionsWhileFiring );
+
+    /** Constructor.
+
+        @param rBHelper
+                        this structure contains the basic members of
+                        a broadcaster.
+                        The lifetime must be longer than the lifetime
+                        of this object. Stored in the variable rBHelper.
+
+        @param i_pFireEvents
+                        additional event notifier
+
+        @param bIgnoreRuntimeExceptionsWhileFiring
+                        indicates whether occuring RuntimeExceptions will be
+                        ignored when firing notifications (vetoableChange((),
+                        propertyChange()) to listeners.
+                        PropertyVetoExceptions may still be thrown.
+                        This flag is useful in a inter-process scenarios when
+                        remote bridges may break down
+                        (firing DisposedExceptions).
+    */
+    OPropertySetHelper(
+        OBroadcastHelper & rBHelper,
+        IEventNotificationHook *i_pFireEvents,
+        bool bIgnoreRuntimeExceptionsWhileFiring = false);
 
     /**
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
@@ -564,9 +614,11 @@ protected:
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
 
-    /** reserved for future use. do not use.
+    class Impl;
+
+    /** reserved for future use. finally, the future has arrived...
      */
-    void * m_pReserved;
+    const std::auto_ptr<const Impl> m_pReserved;
 
 private:
     OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW( () );
