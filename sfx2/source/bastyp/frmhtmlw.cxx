@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:41:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 15:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,14 @@
 #include "svtools/htmlkywd.hxx"
 
 //!(dv) #include <chaos2/cntapi.hxx>
-#ifndef GCC
-#endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
 
 #include <unotools/configmgr.hxx>
 #include "svtools/urihelper.hxx"
+#include <tools/datetime.hxx>
 
-#include <sfx2/docinf.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/frame.hxx>
@@ -63,9 +61,16 @@
 #include <sfx2/sfx.hrc>
 #include "bastyp.hrc"
 
+#include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
+
 // -----------------------------------------------------------------------
 
-using namespace com::sun::star;
+using namespace ::com::sun::star;
 
 static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
 static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
@@ -114,10 +119,10 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
 }
 
 void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
-                                      const SfxDocumentInfo* pInfo,
-                                      const sal_Char *pIndent,
-                                         rtl_TextEncoding eDestEnc,
-                                  String *pNonConvertableChars  )
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        const sal_Char *pIndent,
+        rtl_TextEncoding eDestEnc,
+        String *pNonConvertableChars    )
 {
     const sal_Char *pCharSet =
                 rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
@@ -127,7 +132,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         String aContentType = String::CreateFromAscii( sHTML_MIME_text_html );
         aContentType.AppendAscii( pCharSet );
         OutMeta( rStrm, pIndent, sHTML_META_content_type, aContentType, TRUE,
-                  eDestEnc, pNonConvertableChars );
+                 eDestEnc, pNonConvertableChars );
     }
 
     // Titel (auch wenn er leer ist)
@@ -135,18 +140,18 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     if( pIndent )
         rStrm << pIndent;
     HTMLOutFuncs::Out_AsciiTag( rStrm, sHTML_title );
-    if( pInfo  )
+    if( i_xDocProps.is() )
     {
-        const String& rTitle = pInfo->GetTitle();
+        const String& rTitle = i_xDocProps->getTitle();
         if( rTitle.Len() )
             HTMLOutFuncs::Out_String( rStrm, rTitle, eDestEnc, pNonConvertableChars );
     }
     HTMLOutFuncs::Out_AsciiTag( rStrm, sHTML_title, FALSE );
 
     // Target-Frame
-    if( pInfo )
+    if( i_xDocProps.is() )
     {
-        const String& rTarget = pInfo->GetDefaultTarget();
+        const String& rTarget = i_xDocProps->getDefaultTarget();
         if( rTarget.Len() )
         {
             rStrm << sNewLine;
@@ -166,15 +171,16 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     sGenerator.SearchAndReplaceAscii( "%1", String( DEFINE_CONST_UNICODE( TOOLS_INETDEF_OS ) ) );
     OutMeta( rStrm, pIndent, sHTML_META_generator, sGenerator, FALSE, eDestEnc, pNonConvertableChars );
 
-    if( pInfo )
+    if( i_xDocProps.is() )
     {
         // Reload
-        if( pInfo->IsReloadEnabled() )
+        if( (i_xDocProps->getAutoloadSecs() != 0) ||
+            !i_xDocProps->getAutoloadURL().equalsAscii("") )
         {
             String sContent = String::CreateFromInt32(
-                                (sal_Int32)pInfo->GetReloadDelay() );
+                                i_xDocProps->getAutoloadSecs() );
 
-            const String &rReloadURL = pInfo->GetReloadURL();
+            const String &rReloadURL = i_xDocProps->getAutoloadURL();
             if( rReloadURL.Len() )
             {
                 sContent.AppendAscii( ";URL=" );
@@ -184,69 +190,87 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
             }
 
             OutMeta( rStrm, pIndent, sHTML_META_refresh, sContent, TRUE,
-                      eDestEnc, pNonConvertableChars );
+                     eDestEnc, pNonConvertableChars );
         }
 
         // Author
-        const String& rAuthor = pInfo->GetAuthor();
+        const String& rAuthor = i_xDocProps->getAuthor();
         if( rAuthor.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_author, rAuthor, FALSE,
-                      eDestEnc, pNonConvertableChars );
+                     eDestEnc, pNonConvertableChars );
 
         // created
-        const DateTime& rCreatedDT = pInfo->GetCreationDate();
-        String sOut(
-            String::CreateFromInt32( (sal_Int32)rCreatedDT.GetDate() ) );
-        (sOut += ';') +=
-            String::CreateFromInt32( (sal_Int32)rCreatedDT.GetTime() );
-        OutMeta( rStrm, pIndent, sHTML_META_created, sOut, FALSE, eDestEnc, pNonConvertableChars );
+        ::util::DateTime uDT = i_xDocProps->getCreationDate();
+        Date aD(uDT.Day, uDT.Month, uDT.Year);
+        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        String sOut = String::CreateFromInt32(aD.GetDate());
+        sOut += ';';
+        sOut += String::CreateFromInt32(aT.GetTime());
+        OutMeta( rStrm, pIndent, sHTML_META_created, sOut, FALSE,
+                 eDestEnc, pNonConvertableChars );
 
         // changedby
-        const String& rChangedBy = pInfo->GetModificationAuthor();
+        const String& rChangedBy = i_xDocProps->getModifiedBy();
         if( rChangedBy.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_changedby, rChangedBy, FALSE,
-                      eDestEnc, pNonConvertableChars );
+                     eDestEnc, pNonConvertableChars );
 
         // changed
-        const DateTime& rChangedDT = pInfo->GetModificationDate();
-        sOut = String::CreateFromInt32( (sal_Int32)rChangedDT.GetDate() );
-        (sOut += ';') +=
-            String::CreateFromInt32( (sal_Int32)rChangedDT.GetTime() );
-        OutMeta( rStrm, pIndent, sHTML_META_changed, sOut, FALSE, eDestEnc, pNonConvertableChars );
+        uDT = i_xDocProps->getModificationDate();
+        Date aD2(uDT.Day, uDT.Month, uDT.Year);
+        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        sOut = String::CreateFromInt32(aD2.GetDate());
+        sOut += ';';
+        sOut += String::CreateFromInt32(aT2.GetTime());
+        OutMeta( rStrm, pIndent, sHTML_META_changed, sOut, FALSE,
+                 eDestEnc, pNonConvertableChars );
 
-        // Thema
-        const String& rTheme = pInfo->GetTheme();
+        // Subject
+        const String& rTheme = i_xDocProps->getSubject();
         if( rTheme.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_classification, rTheme, FALSE,
-                      eDestEnc, pNonConvertableChars );
+                     eDestEnc, pNonConvertableChars );
 
-        // Beschreibung
-        const String& rComment = pInfo->GetComment();
+        // Description
+        const String& rComment = i_xDocProps->getDescription();
         if( rComment.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_description, rComment, FALSE,
-                      eDestEnc, pNonConvertableChars);
+                     eDestEnc, pNonConvertableChars);
 
         // Keywords
-        const String& rKeywords = pInfo->GetKeywords();
-        if( rKeywords.Len() )
-            OutMeta( rStrm, pIndent, sHTML_META_keywords, rKeywords, FALSE,
-                      eDestEnc, pNonConvertableChars);
+        String Keywords = ::comphelper::string::convertCommaSeparated(
+            i_xDocProps->getKeywords());
+        if( Keywords.Len() )
+            OutMeta( rStrm, pIndent, sHTML_META_keywords, Keywords, FALSE,
+                     eDestEnc, pNonConvertableChars);
 
-        // die Benutzer-Eintraege
-        USHORT nKeys = pInfo->GetUserKeyCount();
-
-        // Leere Eintraege am Ende werden nicht ausgegeben
-        while( nKeys && !pInfo->GetUserKeyWord(nKeys-1).Len() )
-            nKeys--;
-
-        for( USHORT i=0; i< nKeys; i++ )
-        {
-            String aWord( pInfo->GetUserKeyWord(i) );
-            String aTitle( pInfo->GetUserKeyTitle(i) );
-            aWord.EraseTrailingChars();
-            if( aTitle.Len() )
-                OutMeta( rStrm, pIndent, aTitle, aWord, FALSE,
+        uno::Reference < script::XTypeConverter > xConverter(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                uno::UNO_QUERY_THROW );
+        uno::Reference<beans::XPropertySet> xUserDefinedProps(
+            i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+        DBG_ASSERT(xUserDefinedProps.is(), "UserDefinedProperties is null");
+        uno::Reference<beans::XPropertySetInfo> xPropInfo =
+            xUserDefinedProps->getPropertySetInfo();
+        DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
+        uno::Sequence<beans::Property> props = xPropInfo->getProperties();
+        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+            try {
+                ::rtl::OUString name = props[i].Name;
+                ::rtl::OUString str;
+                uno::Any aStr = xConverter->convertToSimpleType(
+                        xUserDefinedProps->getPropertyValue(name),
+                        uno::TypeClass_STRING);
+                aStr >>= str;
+                String valstr(str);
+                valstr.EraseTrailingChars();
+                OutMeta( rStrm, pIndent, name, valstr, FALSE,
                          eDestEnc, pNonConvertableChars );
+            } catch (uno::Exception &) {
+                // may happen with concurrent modification...
+                DBG_WARNING("SfxFrameHTMLWriter::Out_DocInfo: exception");
+            }
         }
     }
 }
