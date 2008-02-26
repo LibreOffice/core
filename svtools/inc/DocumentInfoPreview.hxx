@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentInfoPreview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:27:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 14:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIES_HPP_
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -51,6 +51,7 @@
 
 class SvtExtendedMultiLineEdit_Impl;
 class SvtDocInfoTable_Impl;
+
 namespace svtools
 {
     class SVT_DLLPUBLIC ODocumentInfoPreview : public Window
@@ -65,8 +66,9 @@ namespace svtools
 
         virtual void Resize();
         void    Clear();
-        void    fill(const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStandaloneDocumentInfo>& _xDocInfo
-                    ,const String& rURL);
+        void    fill(const ::com::sun::star::uno::Reference<
+                  ::com::sun::star::document::XDocumentProperties>& i_xDocProps
+                    ,const String& i_rURL);
         void    InsertEntry( const String& rTitle, const String& rValue );
         void SetAutoScroll(BOOL _bAutoScroll);
     };
