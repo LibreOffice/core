@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:00:12 $
+#   last change: $Author: obo $ $Date: 2008-02-26 07:46:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,13 @@ APP1OBJS=\
       $(OBJ)$/HelpLinker.obj \
       $(OBJ)$/HelpCompiler.obj
 
-APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
+APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
 
 SHL1TARGET	=$(LIBBASENAME)$(DLLPOSTFIX)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1IMPLIB	=i$(LIBBASENAME)
 SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
-SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
+SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB) $(EXPATASCII3RDLIB)
 SHL1USE_EXPORTS	=ordinal
 
 DEF1NAME	=$(SHL1TARGET) 
