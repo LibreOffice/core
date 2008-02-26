@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:25:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,14 +152,6 @@
 #include <com/sun/star/text/PlaceholderType.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
-#include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_TEXT_FILENAMEDISPLAYFORMAT_HPP_
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #endif
@@ -248,10 +240,6 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.Ed
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO0[] = "DocInfo.Info0";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO1[] = "DocInfo.Info1";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO2[] = "DocInfo.Info2";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO3[] = "DocInfo.Info3";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
@@ -313,10 +301,6 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME, FIELD_ID_DOCINFO_SAVE_TIME ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_EDIT_TIME, FIELD_ID_DOCINFO_EDIT_DURATION ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_DESCRIPTION, FIELD_ID_DOCINFO_DESCRIPTION ),
-    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO0, FIELD_ID_DOCINFO_INFORMATION0 ),
-    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO1, FIELD_ID_DOCINFO_INFORMATION1 ),
-    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO2, FIELD_ID_DOCINFO_INFORMATION2 ),
-    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO3, FIELD_ID_DOCINFO_INFORMATION3 ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_CUSTOM, FIELD_ID_DOCINFO_CUSTOM ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR, FIELD_ID_DOCINFO_PRINT_AUTHOR ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME, FIELD_ID_DOCINFO_PRINT_TIME ),
@@ -714,10 +698,6 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_HIDDEN_PARAGRAPH:
         case FIELD_ID_DOCINFO_CREATION_AUTHOR:
         case FIELD_ID_DOCINFO_DESCRIPTION:
-        case FIELD_ID_DOCINFO_INFORMATION0:
-        case FIELD_ID_DOCINFO_INFORMATION1:
-        case FIELD_ID_DOCINFO_INFORMATION2:
-        case FIELD_ID_DOCINFO_INFORMATION3:
         case FIELD_ID_DOCINFO_CUSTOM:
         case FIELD_ID_DOCINFO_PRINT_AUTHOR:
         case FIELD_ID_DOCINFO_TITLE:
@@ -835,10 +815,6 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_HIDDEN_PARAGRAPH:
     case FIELD_ID_DOCINFO_CREATION_AUTHOR:
     case FIELD_ID_DOCINFO_DESCRIPTION:
-    case FIELD_ID_DOCINFO_INFORMATION0:
-    case FIELD_ID_DOCINFO_INFORMATION1:
-    case FIELD_ID_DOCINFO_INFORMATION2:
-    case FIELD_ID_DOCINFO_INFORMATION3:
     case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
@@ -1047,10 +1023,6 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_HIDDEN_PARAGRAPH:
     case FIELD_ID_DOCINFO_CREATION_AUTHOR:
     case FIELD_ID_DOCINFO_DESCRIPTION:
-    case FIELD_ID_DOCINFO_INFORMATION0:
-    case FIELD_ID_DOCINFO_INFORMATION1:
-    case FIELD_ID_DOCINFO_INFORMATION2:
-    case FIELD_ID_DOCINFO_INFORMATION3:
     case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
@@ -1605,25 +1577,6 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
         break;
-
-    case FIELD_ID_DOCINFO_INFORMATION0:
-    case FIELD_ID_DOCINFO_INFORMATION1:
-    case FIELD_ID_DOCINFO_INFORMATION2:
-    case FIELD_ID_DOCINFO_INFORMATION3:
-    {
-        Reference<XDocumentInfoSupplier> xDocInfoSupplier(
-            GetExport().GetModel(), UNO_QUERY);
-        Reference<XDocumentInfo> xDocInfo =xDocInfoSupplier->getDocumentInfo();
-        Any aAny;
-        ProcessString(XML_NAME,
-                      xDocInfo->getUserFieldName(
-                          sal::static_int_cast< sal_Int16 >(
-                              nToken - FIELD_ID_DOCINFO_INFORMATION0)));
-        ProcessBoolean(XML_FIXED,
-                       GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
-        ExportElement(XML_USER_DEFINED, sPresentation);
-        break;
-    }
 
     case FIELD_ID_DOCINFO_CUSTOM:
     {
@@ -3370,18 +3323,6 @@ enum XMLTokenEnum XMLTextFieldExport::MapDocInfoFieldName(
             break;
         case FIELD_ID_DOCINFO_DESCRIPTION:
             eElement = XML_DESCRIPTION;
-            break;
-        case FIELD_ID_DOCINFO_INFORMATION0:
-            eElement = XML_USER_INFO_0;
-            break;
-        case FIELD_ID_DOCINFO_INFORMATION1:
-            eElement = XML_USER_INFO_1;
-            break;
-        case FIELD_ID_DOCINFO_INFORMATION2:
-            eElement = XML_USER_INFO_2;
-            break;
-        case FIELD_ID_DOCINFO_INFORMATION3:
-            eElement = XML_USER_INFO_3;
             break;
         case FIELD_ID_DOCINFO_PRINT_TIME:
             eElement = XML_PRINT_TIME;
