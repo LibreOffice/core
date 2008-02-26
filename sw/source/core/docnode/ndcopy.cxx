@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:32:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,7 @@ BOOL lcl_ChkFlyFly( SwDoc* pDoc, ULONG nSttNd, ULONG nEndNd,
     nNewIdx is the new position of interest.
 */
 
-void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, ULONG nNewIdx, ULONG& rDelCount )
+void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const ULONG nNewIdx, ULONG& rDelCount )
 {
     ULONG nStart = rPam.Start()->nNode.GetIndex();
     ULONG nEnd = rPam.End()->nNode.GetIndex();
@@ -578,24 +578,24 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
     for( USHORT nCnt = pSrcDoc->getBookmarks().Count(); nCnt; )
     {
         // liegt auf der Position ??
-        if( ( pBkmk = pSrcDoc->getBookmarks()[ --nCnt ])->GetPos() < rStt
-            || pBkmk->GetPos() >= rEnd )
+        if( ( pBkmk = pSrcDoc->getBookmarks()[ --nCnt ])->GetBookmarkPos() < rStt
+            || pBkmk->GetBookmarkPos() >= rEnd )
             continue;
 
-        int bHasOtherPos = 0 != pBkmk->GetOtherPos();
-        if( bHasOtherPos && ( *pBkmk->GetOtherPos() < rStt ||
-            *pBkmk->GetOtherPos() >= rEnd ) )
+        int bHasOtherPos = 0 != pBkmk->GetOtherBookmarkPos();
+        if( bHasOtherPos && ( *pBkmk->GetOtherBookmarkPos() < rStt ||
+            *pBkmk->GetOtherBookmarkPos() >= rEnd ) )
             continue;
 
         SwPaM aTmpPam( *pCpyStt );
 
-        lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetPos().nNode.GetIndex(), nDelCount );
-        lcl_SetCpyPos( pBkmk->GetPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount );
+        lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetBookmarkPos().nNode.GetIndex(), nDelCount );
+        lcl_SetCpyPos( pBkmk->GetBookmarkPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount );
         if( bHasOtherPos )
         {
             aTmpPam.SetMark();
-            lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetOtherPos()->nNode.GetIndex(), nDelCount );
-            lcl_SetCpyPos( *pBkmk->GetOtherPos(), rStt, *pCpyStt,
+            lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetOtherBookmarkPos()->nNode.GetIndex(), nDelCount );
+            lcl_SetCpyPos( *pBkmk->GetOtherBookmarkPos(), rStt, *pCpyStt,
                             *aTmpPam.GetMark(), nDelCount );
         }
 
