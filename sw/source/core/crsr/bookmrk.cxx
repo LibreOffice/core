@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:44:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 10:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,17 +53,34 @@
 #include <errhdl.hxx>
 #endif
 #include <IDocumentBookmarkAccess.hxx>
+#ifndef _NDTXT_HXX
+#include "ndtxt.hxx"
+#endif
 
 SV_IMPL_REF( SwServerObject )
 
 TYPEINIT1( SwBookmark, SwModify );  //rtti
 
+void lcl_FixPosition( SwPosition& rPos )
+{
+    // make sure the position has 1) the proper node, and 2) a proper index
+    SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
 
-SwBookmark::SwBookmark(const SwPosition& aPos)
+    if( rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
+    {
+        DBG_ERROR( "illegal position" );
+        xub_StrLen nLen = rPos.nContent.GetIndex();
+        if( pTxtNode == NULL )
+            nLen = 0;
+        else if( nLen >= pTxtNode->Len() )
+            nLen = pTxtNode->Len();
+        rPos.nContent.Assign( pTxtNode, nLen );
+    }
+}
+
+SwBookmark::SwBookmark(const SwPosition& aPos )
     : SwModify( 0 ),
     pPos2( 0 ),
-    aStartMacro( aEmptyStr, aEmptyStr ),
-    aEndMacro  ( aEmptyStr, aEmptyStr ),
     eMarkType( IDocumentBookmarkAccess::BOOKMARK )
 {
     pPos1 = new SwPosition( aPos );
@@ -74,14 +91,36 @@ SwBookmark::SwBookmark(const SwPosition& aPos, const KeyCode& rCode,
                         const String& rName, const String& rShortName )
     : SwModify( 0 ),
     pPos2( 0 ),
-    aStartMacro( aEmptyStr, aEmptyStr ),
-    aEndMacro  ( aEmptyStr, aEmptyStr ),
     aName(rName),
     aShortName(rShortName),
     aCode(rCode),
     eMarkType( IDocumentBookmarkAccess::BOOKMARK )
 {
     pPos1 = new SwPosition(aPos);
+    // --> OD 2007-09-26 #i81002#
+    lcl_FixPosition( *pPos1 );
+    // <--
+}
+
+SwBookmark::SwBookmark( const SwPaM& aPaM,
+                        const KeyCode& rCode,
+                        const String& rName, const String& rShortName)
+    : SwModify( 0 ),
+      pPos1( 0 ),
+      pPos2( 0 ),
+      refObj(),
+      aName(rName),
+      aShortName(rShortName),
+      aCode(rCode),
+      eMarkType( IDocumentBookmarkAccess::BOOKMARK )
+{
+    pPos1 = new SwPosition( *(aPaM.GetPoint()) );
+    lcl_FixPosition( *pPos1 );
+    if ( aPaM.HasMark() )
+    {
+        pPos2 = new SwPosition( *(aPaM.GetMark()) );
+        lcl_FixPosition( *pPos2 );
+    }
 }
 
 // Beim Loeschen von Text werden Bookmarks mitgeloescht!
@@ -111,11 +150,14 @@ SwBookmark::~SwBookmark()
 
 BOOL SwBookmark::operator<(const SwBookmark &rBM) const
 {
-    const SwPosition* pThisPos = ( !pPos2 || *pPos1 <= *pPos2 ) ? pPos1 : pPos2;
-    const SwPosition* pBMPos = ( !rBM.pPos2 || *rBM.pPos1 <= *rBM.pPos2 )
-                                        ? rBM.pPos1 : rBM.pPos2;
+    // --> OD 2007-10-11 #i81002# - refactoring
+    // simplification by using <BookmarkStart()>
+//    const SwPosition* pThisPos = ( !pPos2 || *pPos1 <= *pPos2 ) ? pPos1 : pPos2;
+//    const SwPosition* pBMPos = ( !rBM.pPos2 || *rBM.pPos1 <= *rBM.pPos2 )
+//                                        ? rBM.pPos1 : rBM.pPos2;
 
-    return *pThisPos < *pBMPos;
+//    return *pThisPos < *pBMPos;
+    return *(BookmarkStart()) < *(rBM.BookmarkStart());
 }
 
 BOOL SwBookmark::operator==(const SwBookmark &rBM) const
@@ -125,11 +167,14 @@ BOOL SwBookmark::operator==(const SwBookmark &rBM) const
 
 BOOL SwBookmark::IsEqualPos( const SwBookmark &rBM ) const
 {
-    const SwPosition* pThisPos = ( !pPos2 || *pPos1 <= *pPos2 ) ? pPos1 : pPos2;
-    const SwPosition* pBMPos = ( !rBM.pPos2 || *rBM.pPos1 <= *rBM.pPos2 )
-                                        ? rBM.pPos1 : rBM.pPos2;
+    // --> OD 2007-10-11 #i81002# - refactoring
+    // simplification by using <BookmarkStart()>
+//    const SwPosition* pThisPos = ( !pPos2 || *pPos1 <= *pPos2 ) ? pPos1 : pPos2;
+//    const SwPosition* pBMPos = ( !rBM.pPos2 || *rBM.pPos1 <= *rBM.pPos2 )
+//                                        ? rBM.pPos1 : rBM.pPos2;
 
-    return *pThisPos == *pBMPos;
+//    return *pThisPos == *pBMPos;
+    return *(BookmarkStart()) == *(rBM.BookmarkStart());
 }
 
 void SwBookmark::SetRefObject( SwServerObject* pObj )
@@ -137,6 +182,55 @@ void SwBookmark::SetRefObject( SwServerObject* pObj )
     refObj = pObj;
 }
 
+// --> OD 2007-10-10 #i81002#
+const SwPosition& SwBookmark::GetBookmarkPos() const
+{
+    return *pPos1;
+}
+
+const SwPosition* SwBookmark::GetOtherBookmarkPos() const
+{
+    return pPos2;
+}
+
+const SwPosition* SwBookmark::BookmarkStart() const
+{
+    return pPos2 ? (*pPos1 <= *pPos2 ? pPos1 : pPos2) : pPos1;
+}
+
+const SwPosition* SwBookmark::BookmarkEnd() const
+{
+    return pPos2 ? (*pPos1 >= *pPos2 ? pPos1 : pPos2) : pPos1;
+}
+// <--
+
+// --> OD 2007-09-26 #i81002#
+void SwBookmark::SetBookmarkPos( const SwPosition* pNewPos1 )
+{
+    ASSERT( pNewPos1 != 0,
+            "<SwBookmark::SetBookmarkPos(..)> - Bookmark position 1 can't be NULL --> crash." );
+    *pPos1 = *pNewPos1;
+}
+void SwBookmark::SetOtherBookmarkPos( const SwPosition* pNewPos2 )
+{
+    if ( pNewPos2 != 0 )
+    {
+        if ( pPos2 != 0 )
+        {
+            *pPos2 = *pNewPos2;
+        }
+        else
+        {
+            pPos2 = new SwPosition( *pNewPos2 );
+        }
+    }
+    else
+    {
+        delete pPos2;
+        pPos2 = 0;
+    }
+}
+// <--
 
 SwMark::SwMark( const SwPosition& aPos,
                 const KeyCode& rCode,
@@ -147,12 +241,14 @@ SwMark::SwMark( const SwPosition& aPos,
     eMarkType = IDocumentBookmarkAccess::MARK;
 }
 
-SwUNOMark::SwUNOMark( const SwPosition& aPos,
+// --> OD 2007-09-26 #i81002#
+SwUNOMark::SwUNOMark( const SwPaM& aPaM,
                 const KeyCode& rCode,
                 const String& rName,
                 const String& rShortName )
-    : SwBookmark( aPos, rCode, rName, rShortName )
+    : SwBookmark( aPaM, rCode, rName, rShortName )
 {
     eMarkType = IDocumentBookmarkAccess::UNO_BOOKMARK;
 }
+// <--
 
