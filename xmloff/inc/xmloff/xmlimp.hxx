@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:13:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-26 13:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,8 @@
 #include <xmloff/formlayerimport.hxx>
 #endif
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
@@ -190,9 +192,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
 
     SvXMLImport_Impl            *mpImpl;            // dummy
 
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
-
     SvXMLNamespaceMap           *mpNamespaceMap;
     SvXMLUnitConverter          *mpUnitConv;
     SvXMLImportContexts_Impl    *mpContexts;
@@ -209,9 +208,12 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     sal_uInt16  mnErrorFlags;
 
 protected:
+    // #110680#
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     sal_Bool                    mbIsFormsSupported;
-    bool                        mbIsGraphicLoadOnDemmandSupported;
+    bool                        mbIsGraphicLoadOnDemandSupported;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -318,8 +320,11 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // is called if the meta contains a meta:document-statistic element and gives the attributes of this element
-    virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+    // may be called by certain subclasses that handle document meta-data
+    // override to provide customized handling of document statistics
+    // the base class implementation initializes the progress bar and should
+    // be called by overriding methods
+    virtual void SetStatistics(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > & i_rStats);
 
     // get import helper for text
     inline UniReference< XMLTextImportHelper > GetTextImport();
@@ -347,7 +352,7 @@ public:
         SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &
-               GetModel() const { return mxModel; }
+        GetModel() const { return mxModel; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetGradientHelper();
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & GetHatchHelper();
@@ -475,12 +480,12 @@ public:
     bool getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const;
 
     /** If true, the URL for graphic shapes may be stored as a package URL and
-        loaded later (on demmand) by the application. Otherwise graphics are
+        loaded later (on demand) by the application. Otherwise graphics are
         loaded immediately and the graphic shape gets the graphic manager URL.
 
-        @see <member>mbIsGraphicLoadOnDemmandSupported</member>
+        @see <member>mbIsGraphicLoadOnDemandSupported</member>
      */
-    bool isGraphicLoadOnDemmandSupported() const;
+    bool isGraphicLoadOnDemandSupported() const;
 };
 
 inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()
