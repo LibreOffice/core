@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:57:23 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,10 +699,13 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     // decide if alpha masking or transparency masking is needed
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( TRUE );
-    int nMaskFormat = pAlphaBuffer->mnFormat;
-    const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, TRUE );
-    if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
-        drawAlphaBitmap( *pPosAry, rSrcBitmap, rMaskBitmap );
+    if( pAlphaBuffer )
+    {
+        int nMaskFormat = pAlphaBuffer->mnFormat;
+        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, TRUE );
+        if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
+            drawAlphaBitmap( *pPosAry, rSrcBitmap, rMaskBitmap );
+    }
 
     drawMaskedBitmap( pPosAry, rSrcBitmap, rMaskBitmap );
 }
@@ -949,8 +952,14 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
+    if( ! m_pFrame && ! m_pVDev )
+        return false;
+
     if( bPenGC_ || !bBrushGC_ || bXORMode_ )
         return false; // can only perform solid fills without XOR.
+
+    if( m_pVDev && m_pVDev->GetDepth() < 8 )
+        return false;
 
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
     if( rPeer.GetVersion() < 0x02 )
@@ -983,6 +992,9 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                          &aRenderColor,
                          nX, nY,
                          nWidth, nHeight );
+
+    // cleanup
+    rPeer.FreePicture( aDstPic );
 
     return true;
 }
