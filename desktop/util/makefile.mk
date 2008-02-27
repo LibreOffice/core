@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:31:48 $
+#   last change: $Author: obo $ $Date: 2008-02-27 10:28:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,11 @@ TARGETOBJS=	\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
             $(OBJ)$/userinstall.obj         \
-            $(OBJ)$/desktopcontext.obj
-
-
+            $(OBJ)$/desktopcontext.obj      \
+            $(SLO)$/pages.obj               \
+            $(SLO)$/wizard.obj              \
+            $(SLO)$/migration.obj           \
+            $(SLO)$/cfgfilter.obj
 
 # --- Resourcen ----------------------------------------------------
 
@@ -123,7 +125,7 @@ APP1NOSAL=TRUE
 APP1STDLIBS=			\
     $(VCLLIB)			\
     $(SVLLIB)           \
-    $(SVTOOLLIB)            \
+    $(SVTOOLLIB)        \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(I18NISOLANGLIB)   \
@@ -133,8 +135,8 @@ APP1STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(TKLIB)            \
-        $(SALLIB)
-
+    $(SALLIB)           \
+    $(SFXLIB)
 
 APP1OBJS=$(TARGETOBJS)
 APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
@@ -178,7 +180,8 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(TKLIB)
+    $(TKLIB)            \
+    $(SFXLIB)
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
