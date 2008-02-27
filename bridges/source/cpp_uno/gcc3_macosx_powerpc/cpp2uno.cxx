@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:15:28 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -655,30 +655,37 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * bp
   __asm__ volatile ( "sync;" "isync;" : : : "memory");
 }
 
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return static_cast< void ** >(block) + 2;
+    return static_cast< Slot * >(block) + 2;
 }
 
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return (slotCount + 2) * sizeof (void *) + slotCount * codeSnippetSize;
+    return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
-    void ** slots = mapBlockToVtable(block);
-    slots[-2] = 0;
-    slots[-1] = 0;
-    return slots;
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::initializeBlock(
+    void * block, sal_Int32 slotCount)
+{
+    Slot * slots = mapBlockToVtable(block);
+    slots[-2].fn = 0;
+    slots[-1].fn = 0;
+    return slots + slotCount;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    void ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 /* functionCount */, sal_Int32 vtableOffset)
+    sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+    (*slots) -= functionCount;
+    Slot * s = *slots;
 
   // fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
   // fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
@@ -691,7 +698,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
@@ -704,13 +711,13 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                *slots++ = code;
+                (s++)->fn = code;
                 code = codeSnippet(code, functionOffset++, vtableOffset, true);
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
