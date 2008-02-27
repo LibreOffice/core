@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:34 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,3 +105,9 @@
 
 #define FL_SEPARATOR (108 + CFG_OFFSET)
 #define BTN_DELETE (109 + CFG_OFFSET)
+//added for issue83555
+#define MD_ICONCHANGE (119 + CFG_OFFSET)
+#define FTCHGE_DESCRIPTION (120 + CFG_OFFSET)
+#define EDT_ADDR (121 + CFG_OFFSET)
+#define MD_BTN_OK (122 + CFG_OFFSET)
+#define FI_INFO (123 + CFG_OFFSET)
