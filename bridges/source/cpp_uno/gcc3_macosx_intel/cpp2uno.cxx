@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:51:08 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,29 +450,37 @@ unsigned char * codeSnippet(
 
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
+
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return static_cast< void ** >(block) + 2;
+    return static_cast< Slot * >(block) + 2;
 }
 
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return (slotCount + 2) * sizeof (void *) + slotCount * codeSnippetSize;
+    return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
-    void ** slots = mapBlockToVtable(block);
-    slots[-2] = 0;
-    slots[-1] = 0;
-    return slots;
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::initializeBlock(
+    void * block, sal_Int32 slotCount)
+{
+    Slot * slots = mapBlockToVtable(block);
+    slots[-2].fn = 0;
+    slots[-1].fn = 0;
+    return slots + slotCount;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    void ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 /*functionCount*/, sal_Int32 vtableOffset)
+    sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+    (*slots) -= functionCount;
+    Slot * s = *slots;
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
@@ -480,7 +488,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
@@ -490,7 +498,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                *slots++ = code;
+                (s++)->fn = code;
                 code = codeSnippet(
                     code, functionOffset++, vtableOffset,
                     0 /* indicates VOID */);
@@ -498,7 +506,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
