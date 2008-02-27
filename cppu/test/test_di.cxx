@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:16:06 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "precompiled_cppu.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
@@ -236,6 +237,15 @@ public:
                                                ::com::sun::star::uno::Sequence< test::TestElement >& rSequence,
                                                test::TestData& rStruct )
         throw(com::sun::star::uno::RuntimeException);
+
+    virtual test::SmallStruct echoSmallStruct(const test::SmallStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual test::MediumStruct echoMediumStruct(const test::MediumStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual test::BigStruct echoBigStruct(const test::BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual test::AllFloats echoAllFloats(const test::AllFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
 
     virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException)
         { return _aData.Bool; }
@@ -493,7 +503,27 @@ static sal_Bool performTest(
         aRet.Sequence = xLBT->getSequence();
         aRet2 = xLBT->getStruct();
 
-        return (equals( aData, aRet ) && equals( aData, aRet2 ));
+            OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) );
+        }
+        {
+            test::SmallStruct aIn(1, 2);
+            test::SmallStruct aOut = xLBT->echoSmallStruct(aIn);
+            OSL_ASSERT( memcmp(&aIn, &aOut, sizeof(test::SmallStruct)) == 0 );
+        }
+        {
+            test::MediumStruct aIn(1, 2, 3, 4);
+            test::MediumStruct aOut = xLBT->echoMediumStruct(aIn);
+            OSL_ASSERT( memcmp(&aIn, &aOut, sizeof(test::MediumStruct)) == 0 );
+        }
+        {
+            test::BigStruct aIn(1, 2, 3, 4, 5, 6, 7, 8);
+            test::BigStruct aOut = xLBT->echoBigStruct(aIn);
+            OSL_ASSERT( memcmp(&aIn, &aOut, sizeof(test::BigStruct)) == 0 );
+        }
+        {
+            test::AllFloats aIn(1.1, 2.2, 3.3, 4.4);
+            test::AllFloats aOut = xLBT->echoAllFloats(aIn);
+            return( memcmp(&aIn, &aOut, sizeof(test::AllFloats)) == 0 );
         }
     }
     return sal_False;
