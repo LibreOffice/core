@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:17:36 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,11 +109,18 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
     //used later in the event handler asyncModified. It also keeps the NodeImpl
     //instance alive so that the posted events (to ourself) can always be processed
     struct ModifiedParams
-    {   ModifiedParams(Reference<XCommandEnvironment> const & _xCmdEnv, Reference<XInterface> const & _xNodeImpl);
-        //The argument supplied to XModifyListener::modified
-        Reference<XCommandEnvironment> xCmdEnv;
+    {
+        ModifiedParams(Reference<XInterface> const & _xNodeImpl,
+        Reference<XCommandEnvironment> const & _xCmdEnv, PackageState _state,
+        Sequence< Reference<deployment::XPackage> > const & _packages);
         //This reference keeps the NodeImpl alive until the event has been processed
         Reference<XInterface> xNodeImpl;
+        //The argument supplied to XModifyListener::modified
+        Reference<XCommandEnvironment> xCmdEnv;
+        //The status: registered, unregistered etc.
+        PackageState state;
+        //deployed packages
+        const Sequence< Reference<deployment::XPackage> > deployedPackages;
     };
 
     DialogImpl::TreeListBoxImpl * m_treelb;
@@ -163,9 +170,13 @@ struct NodeImpl : public ::cppu::WeakImplHelper1<util::XModifyListener>
 };
 
 NodeImpl::ModifiedParams::ModifiedParams(
-    Reference<XCommandEnvironment> const & _xCmdEnv, Reference<XInterface> const & _xNodeImpl):
+    Reference<XInterface> const & _xNodeImpl,
+    Reference<XCommandEnvironment> const & _xCmdEnv, PackageState _state,
+    Sequence< Reference<deployment::XPackage> > const & _deployedPackages):
+    xNodeImpl(_xNodeImpl),
     xCmdEnv(_xCmdEnv),
-    xNodeImpl(_xNodeImpl)
+    state(_state),
+    deployedPackages(_deployedPackages)
 {
 }
 //______________________________________________________________________________
@@ -255,10 +266,6 @@ Image NodeImpl::getIcon() const
     return ret;
 }
 
-// XEventListener
-//Can be called from a separate thread, for example the thread which installes the
-//extension updates. Therefore we make sure to modifiy the gui only in the main thread.
-//We keep the NodeImpl alive by incresing the ref count (ModifiedParams).
 void NodeImpl::disposing( lang::EventObject const & evt )
     throw (RuntimeException)
 {
@@ -297,15 +304,6 @@ void NodeImpl::disposing( lang::EventObject const & evt )
         m_treelb->m_dialog->updateButtonStates();
 }
 
-//void NodeImpl::asyncDisposing( Reference<XCommandEnvironment> const & xCmdEnv )
-//{
-//    Application::PostUserEvent(
-//        LINK( this, NodeImpl, asyncDisposing), 0)
-//}
-//
-//IMPL_LINK(NodeImpl, asyncDisposing, void*, EMPTYARG)
-//{
-//}
 
 struct iface_hash {
     ::std::size_t operator () (Reference<deployment::XPackage> const &x) const {
@@ -316,16 +314,31 @@ struct iface_hash {
 
 //______________________________________________________________________________
 //Can be called from a separate thread, for example the thread which installes the
-//extension updates. Therefore we make sure to modifiy the gui only in the main thread.
+//extension updates, or when clicking the add button. Then the solar mutex is not
+//yet locked. We try to avoid locking it here to prevent a deadlock.
+//We make sure to modifiy the gui only in the main thread.
 //We keep the NodeImpl alive by incresing the ref count (ModifiedParams).
 void NodeImpl::modified( Reference<XCommandEnvironment> const & xCmdEnv )
 {
+    PackageState state = NOT_AVAILABLE;
+    if (m_xPackage.is())
+        state = getPackageState(m_xPackage, xCmdEnv);
+
+    const Sequence< Reference<deployment::XPackage> > packages(
+        m_xPackageManager->getDeployedPackages(
+        Reference<task::XAbortChannel>(), xCmdEnv ) );
+
+
+
     Application::PostUserEvent(
         LINK( this, NodeImpl, asyncModified ),
         new ModifiedParams(
-            xCmdEnv,  Reference<XInterface>(static_cast<OWeakObject*>(this), UNO_QUERY_THROW)));
+            Reference<XInterface>(static_cast<OWeakObject*>(this), UNO_QUERY_THROW),
+            xCmdEnv, state, packages));
 }
 
+//ToDo: We should try to avoid locking the package manager mutex here to prevent
+//deadlocks. However calling updateButtonStates will call into the package manager.
 IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
 {
     //m_bDisposing is guarded by the solar mutex
@@ -335,7 +348,7 @@ IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
         try {
             if (m_xPackage.is())
             {
-                switch (getPackageState( m_xPackage, xCmdEnv ))
+                switch (pModifiedParams->state)
                 {
                 case REGISTERED:
                     m_treelb->SetEntryText( m_treelb->m_strEnabled, m_lbEntry, 2 );
@@ -367,9 +380,8 @@ IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
                             m_treelb->GetEntry(m_lbEntry, pos) )->m_xPackage );
                 }
 
-                const Sequence< Reference<deployment::XPackage> > packages(
-                    m_xPackageManager->getDeployedPackages(
-                        Reference<task::XAbortChannel>(), xCmdEnv ) );
+                const Sequence< Reference<deployment::XPackage> >  & packages =
+                    pModifiedParams->deployedPackages;
                 t_set::const_iterator const iEnd( tlboxPackages.end() );
                 for ( pos = packages.getLength(); pos--; )
                 {
@@ -384,16 +396,12 @@ IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
         catch (...)
         {
             //Make sure we release the reference to NodeImpl
-            pModifiedParams->xNodeImpl.clear();
-            pModifiedParams->xCmdEnv.clear();
             delete pModifiedParams;
             throw;
         }
     } // if (!m_bDisposing)
 
     //Make sure we release the reference to NodeImpl
-    pModifiedParams->xNodeImpl.clear();
-    pModifiedParams->xCmdEnv.clear();
     delete pModifiedParams;
 
     return 0;
