@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vtablefactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 11:59:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,12 @@ namespace bridges { namespace cpp_uno { namespace shared {
  */
 class VtableFactory {
 public:
+    // This structure is not defined in the generic part, but instead has to be
+    // defined individually for each CPP--UNO bridge:
+    /** A vtable slot.
+     */
+    struct Slot;
+
     /** A raw vtable block.
      */
     struct Block {
@@ -99,7 +105,7 @@ public:
     // defined individually for each CPP--UNO bridge:
     /** Given a pointer to a block, turn it into a vtable pointer.
      */
-    static void ** mapBlockToVtable(void * block);
+    static Slot * mapBlockToVtable(void * block);
 
 private:
     class GuardedBlocks;
@@ -133,11 +139,10 @@ private:
     /** Initialize a raw vtable block.
 
         @param block  the start address of the raw vtable block
-        @return  a pointer to the first virtual function slot (minus any
-        platform-specific ones, like a pointer to a destructor) within the given
-        block
+        @param slotCount  the number of slots
+        @return  a pointer past the last vtable slot
      */
-    static void ** initializeBlock(void * block);
+    static Slot * initializeBlock(void * block, sal_Int32 slotCount);
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:
@@ -145,8 +150,10 @@ private:
         functions of a given interface type (and generate any necessary code
         snippets for them).
 
-        @param slots  points to the first vtable slot to be filled with the
-        first virtual function local to the given type
+        @param slots  on input, points past the vtable slot to be filled with
+        the last virtual function local to the given type; on output, points to
+        the vtable slot filled with the first virtual function local to the
+        given type
         @param code  points to the start of the area where code snippets can be
         generated
         @param type  the interface type description for which to generate vtable
@@ -162,7 +169,7 @@ private:
         @return  a pointer to the remaining code snippet area
      */
     static unsigned char * addLocalFunctions(
-        void ** slots, unsigned char * code,
+        Slot ** slots, unsigned char * code,
         typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
         sal_Int32 functionCount, sal_Int32 vtableOffset);
 
