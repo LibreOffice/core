@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:21:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -678,9 +678,9 @@ ModalDialog MD_ICONSELECTOR
     FixedText FT_NOTE
     {
         Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 172 , 24 ) ;
+        Size = MAP_APPFONT ( 200 , 24 ) ;
         Text [ de ] = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
-        Text [ en-US ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
+        Text [ en-US ] = "Note:\nThe size of an icon should be 16x16 pixel to achieve best quality. Different sized icons will be scaled automatically." ;
         Left = TRUE ;
         WordBreak = TRUE;
     };
@@ -696,12 +696,54 @@ ModalDialog MD_ICONSELECTOR
         Blue = 0xC000 ;
     };
 };
+//added for issue83555
+ModalDialog MD_ICONCHANGE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 150 ) ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Moveable = TRUE ;
+    FixedImage FI_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 24 , 24 ) ;
+        Fixed = Image
+        {
+
+        };
+    };
+    FixedText FTCHGE_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 30 ,15 ) ;
+        Size = MAP_APPFONT ( 200 , 50 ) ;
+        Text [ en-US ] = "The files listed below could not be imported.\nThe file format could not be interpreted." ;
+    };
+
+    MultiLineEdit EDT_ADDR
+    {
+        Pos = MAP_APPFONT ( 30 , 38) ;
+        Size = MAP_APPFONT ( 140 , 83 ) ;
+        Border = TRUE;
+      //  VScroll = TRUE;
+        IgnoreTab = TRUE;
+        ReadOnly = TRUE;
+    };
+    OKButton MD_BTN_OK
+    {
+        Pos = MAP_APPFONT ( 68 , 131 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+
+};
 
 // Strings ---------------------------------------------------------------
 String RID_SVXSTR_IMPORT_ICON_ERROR
 {
     Text [ de ] = "Die aufgelisteten Dateien konnten nicht importiert werden. Die Symbole entsprechen nicht der Größe von 16x16 Pixel." ;
-    Text [ en-US ] = "The files listed here could not be imported. The icons are not the required 16x16 pixels in size." ;
+    Text [ en-US ] = "The files listed below could not be imported. The file format could not be interpreted." ;
 };
 
 String RID_SVXSTR_DELETE_ICON_CONFIRM  //added for issue73355
@@ -834,6 +876,5 @@ String RID_SVXSTR_RENAME_TOOLBAR
     Text [ de ] = "Symbolleiste umbenennen";
     Text [ en-US ] = "Rename Toolbar";
 };
-
 
 
