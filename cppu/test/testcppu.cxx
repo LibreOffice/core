@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:27:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <test/XSimpleInterface.hpp>
 #include <test/XLanguageBindingTest.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 using namespace test;
 using namespace rtl;
