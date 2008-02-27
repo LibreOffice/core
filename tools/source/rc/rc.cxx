@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:16:55 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ Time::Time( const ResId& rResId )
 
 // =======================================================================
 
-Date::Date( const ResId& rResId )
+Date::Date( const ResId& rResId ) : nDate(0)
 {
     rResId.SetRT( RSC_DATE );
     ResMgr* pResMgr = NULL;
