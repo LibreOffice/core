@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 15:58:41 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,12 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "ls.so"
 #elif defined LINUX && defined __x86_64__
   #define __DLLEXTENSION "lx.so"
+#elif defined LINUX && defined MIPS
+  #define __DLLEXTENSION "lm.so"
+#elif defined LINUX && defined IA64
+  #define __DLLEXTENSION "la.so"
+#elif defined LINUX
+  #error unknown plattform
 #elif defined FREEBSD && defined X86
   #define __DLLEXTENSION "fi.so"
 #elif defined FREEBSD && defined X86_64
