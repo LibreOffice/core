@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:47 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@
 #endif
 #ifndef _SVTOOLS_SVMEDIT2_HXX
 #include <svtools/svmedit2.hxx>
+#endif
+//add by shizhoubo
+#ifndef _SVTOOLS_SVMEDIT2_HXX
+#include <svtools/svmedit.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -812,6 +816,7 @@ private:
     PushButton      aBtnImport;
     PushButton      aBtnDelete;
     FixedLine       aFlSeparator;
+    sal_uInt16      m_nNextId;
 
     sal_Int32       m_nExpectedSize;
 
@@ -833,6 +838,8 @@ private:
 
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
+
+    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);// Added by shizhoubo
 
 public:
 
@@ -868,5 +875,16 @@ public:
 
     rtl::OUString ReplaceIconName( const rtl::OUString& );
     USHORT ShowDialog();
+};
+//added for issue83555
+class SvxIconChangeDialog : public ModalDialog
+{
+private:
+    FixedImage      aFImageInfo;
+    OKButton        aBtnOK;
+    FixedText         aDescriptionLabel;
+    SvxDescriptionEdit aLineEditDescription;
+public:
+    SvxIconChangeDialog(Window *pWindow, const rtl::OUString& aMessage);
 };
 #endif // _SVXCFG_HXX
