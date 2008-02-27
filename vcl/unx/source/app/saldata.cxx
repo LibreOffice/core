@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:04:16 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,6 +416,7 @@ void SalXLib::PushXErrorLevel( bool bIgnore )
     XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
     rEnt.m_bWas = false;
     rEnt.m_bIgnore = bIgnore;
+    rEnt.m_nLastErrorRequest = 0;
     rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)X11SalData::XErrorHdl );
 }
 
