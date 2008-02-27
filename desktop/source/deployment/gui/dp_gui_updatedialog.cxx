@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 13:55:32 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1104,7 +1104,13 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 
     if (p != NULL)
     {
-        bInserted = showDescription( m_enabledUpdates[ m_updates.GetSelectEntryPos() ] );
+        //When the index is greater or equal than the amount of enabled updates then the "Show all"
+        //button is probably checked. Then we show first all enabled and then the disabled
+        //updates. Currently release notes and publisher name for disabled updates are not supported.
+        USHORT pos = m_updates.GetSelectEntryPos();
+        if (pos < m_enabledUpdates.size())
+            bInserted = showDescription(m_enabledUpdates[pos]);
+
         switch (p->kind)
         {
             case ENABLED_UPDATE:
