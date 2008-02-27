@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typesconfig.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:28:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,16 @@ int check( TestFunc func, Type eT, void* p )
 *************************************************************************/
 int GetAtAddress( Type eT, void* p )
 {
+#if defined(IA64) || defined(ARM32)
+  switch ( eT )
+  {
+  case t_char:      return *((char*)p);
+  case t_short:     if ((long)p % sizeof(short)) abort(); else return *((short*)p);
+  case t_int:       if ((long)p % sizeof(int)) abort(); else return *((int*)p);
+  case t_long:      if ((long)p % sizeof(long)) abort(); else return *((long*)p);
+  case t_double:    if ((long)p % sizeof(double)) abort(); else return *((double*)p);
+  }
+#else
   switch ( eT )
   {
   case t_char:      return *((char*)p);
@@ -222,6 +232,7 @@ int GetAtAddress( Type eT, void* p )
   case t_long:      return *((long*)p);
   case t_double:    return *((double*)p);
   }
+#endif
   abort();
 }
 
