@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:33:56 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,7 +437,6 @@ void SfxLibraryContainer::checkDisposed() const
 
 void SfxLibraryContainer::enterMethod()
 {
-    Application::GetSolarMutex().acquire();
     maMutex.acquire();
     checkDisposed();
 }
@@ -445,7 +444,6 @@ void SfxLibraryContainer::enterMethod()
 void SfxLibraryContainer::leaveMethod()
 {
     maMutex.release();
-    Application::GetSolarMutex().release();
 }
 
 BasicManager* SfxLibraryContainer::getBasicManager( void )
