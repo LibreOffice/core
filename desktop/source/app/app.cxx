@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.214 $
+ *  $Revision: 1.215 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:47:02 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
+#include "../migration/pages.hxx"
 
 #include <svtools/javacontext.hxx>
 
@@ -1737,6 +1738,9 @@ void Desktop::Main()
                 }
             }
         }
+        else if ( RegistrationPage::hasReminderDateCome() )
+            RegistrationPage::executeSingleMode();
+
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
 
         // keep a language options instance...
