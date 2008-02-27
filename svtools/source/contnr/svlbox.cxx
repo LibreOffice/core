@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:52:54 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -725,7 +725,7 @@ DBG_NAME(SvLBox);
 
 SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
-    DropTargetHelper( this ), DragSourceHelper( this )
+    DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
 {
     DBG_CTOR(SvLBox,0);
     nWindowStyle = nWinStyle;
@@ -748,7 +748,7 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
 
 SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
-    DropTargetHelper( this ), DragSourceHelper( this )
+    DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
 {
     DBG_CTOR(SvLBox,0);
     pTargetEntry = 0;
@@ -766,7 +766,6 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
     SetType(WINDOW_TREELISTBOX);
 }
-
 
 __EXPORT SvLBox::~SvLBox()
 {
