@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 16:00:06 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:04:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,6 @@ sub save_packorder
             my $oneline = ${$ddffile}[$j];
 
             # Getting the Cabinet file name
-            # .Set CabinetName1=adabasd1.cab
 
             if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
             if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }

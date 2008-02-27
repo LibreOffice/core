@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 15:59:45 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:05:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1609,13 +1609,11 @@ sub add_childprojects
     push(@installer::globals::logfileinfo, $infoline);
 
     # Additional content for the directory table
-    # subadabas INSTALLLOCATION program:adabas
     # subjava   INSTALLLOCATION program:java
     # subure    INSTALLLOCATION program:ure
 
     my $dirname = "";
     my $subjavadir = "";
-    my $subadadir = "";
     my $suburedir = "";
 
     if ( $allvariables->{'JAVAPRODUCT'} )
@@ -1752,7 +1750,6 @@ sub add_childprojects
     }
 
     # Content for Feature table, better from scp (translation)
-    # gm_o_adabas gm_optional Adabas Description 2 200
     # gm_o_java gm_optional Java 1.4.2 Description 2 200
 
     installer::files::save_file($customactiontablename, $customactiontable);

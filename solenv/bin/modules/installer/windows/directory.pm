@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-16 07:56:00 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:04:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -313,12 +313,6 @@ sub add_root_directories
             $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
         }
 
-        push(@{$directorytableref}, $oneline);
-    }
-
-    if ($installer::globals::product =~ /ada/i )    # the following directories only for ada products
-    {
-        $oneline = "INSTALLLOCATION\tTARGETDIR\t$installer::globals::adafolder\n";
         push(@{$directorytableref}, $oneline);
     }
 

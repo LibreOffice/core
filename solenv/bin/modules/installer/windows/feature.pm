@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:38 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:05:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ sub get_feature_level
 
     # special handling for Java and Ada
 
-    if ( $onefeature->{'Name'} =~ /java/i || $onefeature->{'Name'} =~ /adabas/i ) { $level = $level + 40; }
+    if ( $onefeature->{'Name'} =~ /java/i ) { $level = $level + 40; }
 
     # if FeatureLevel is defined in scp, this will be used
 

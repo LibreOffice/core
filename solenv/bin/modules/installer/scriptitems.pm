@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:58:54 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:05:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1047,45 +1047,6 @@ sub remove_Files_For_Languagepacks
     }
 
     return \@newitemsarray;
-}
-
-#################################################################################
-# Removing files, that are not part of ada products
-#################################################################################
-
-sub remove_Files_For_Ada_Products
-{
-    my ($filesarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Files_For_Ada_Products : $#{$filesarrayref}"); }
-
-    my $infoline;
-
-    my @newfilesarray = ();
-
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
-    {
-        my $onefile = ${$filesarrayref}[$i];
-
-        my $filename = $onefile->{'Name'};
-
-        # only adabas.zip and license and readme files for Ada products.
-
-        if (($filename eq "adabas.zip") || ($filename =~ /license/i) || ($filename =~ /readme/i) || ($filename =~ /services.bat/i))
-        {
-            push(@newfilesarray, $onefile);
-        }
-        else
-        {
-            $infoline = "Warning: Removing file $filename from file list for Ada product.\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    return \@newfilesarray;
 }
 
 #################################################################################

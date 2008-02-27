@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 12:23:28 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:05:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -968,42 +968,6 @@ sub prepare_linkrpm_in_xmlfile
     }
 }
 
-###########################################################
-# Removing Ada product from xml file for Solaris x86
-###########################################################
-
-sub remove_ada_from_xmlfile
-{
-    my ($xmlfile) = @_;
-
-    # Component begins with "<component selected='true' name='gid_Module_Optional_Adabas' componentVersion="12">"
-    # and ends with "</component>"
-
-    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
-    {
-        if ( ${$xmlfile}[$i] =~ /name\s*\=\'\s*gid_Module_Optional_Adabas/ )
-        {
-            # Counting the lines till "</component>"
-
-            my $linecounter = 1;
-            my $startline = $i+1;
-            my $line = ${$xmlfile}[$startline];
-
-            while ((!( $line =~ /^\s*\<\/component\>\s*$/ )) && ( $startline <= $#{$xmlfile} ))
-            {
-                $linecounter++;
-                $startline++;
-                $line = ${$xmlfile}[$startline];
-            }
-
-            $linecounter = $linecounter + 2;     # last line and following empty line
-
-            splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
-            last;
-        }
-    }
-}
-
 #######################################################################
 # Removing w4w filter module from xml file for Solaris x86 and Linux
 #######################################################################
@@ -1863,7 +1827,6 @@ sub create_java_installer
     installer::files::save_file($xmlfilename3, $xmlfile);
     substitute_variables($xmlfile, $allvariableshashref);
     if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
-    if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     remove_module_if_not_defined($xmlfile, $modulesarrayref, "gid_Module_Optional_Onlineupdate");
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);

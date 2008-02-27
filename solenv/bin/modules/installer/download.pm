@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:56:16 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:05:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -848,7 +848,6 @@ sub get_file_list
 
         # Syntax:
         # SetOutPath "$INSTDIR"
-        # SetOutPath "$INSTDIR\adabas"
 
         my $relativedir = $onedir;
         $relativedir =~ s/\Q$basedir\E//;

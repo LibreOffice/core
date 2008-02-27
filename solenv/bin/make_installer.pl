@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:00 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:00:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -698,12 +698,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_Without_Sourcedirectory($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10.log", $filesinproductlanguageresolvedarrayref); }
-
-    if ($installer::globals::product =~ /ada/i )
-    {
-        $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_For_Ada_Products($filesinproductlanguageresolvedarrayref);
-        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10a.log", $filesinproductlanguageresolvedarrayref); }
-    }
 
     if ($installer::globals::languagepack)
     {

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 15:59:06 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:04:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,6 @@ BEGIN
     $templatefolder = "TemplateFolder";
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
-    $adafolder = "adabas";
     $encodinglistname = "msi-encodinglist.txt";
     $msiencoding = "";  # hash reference for msi encodings
     $msilanguage = "";  # hash reference for msi languages LCID

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-15 10:33:50 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:04:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2648,16 +2648,6 @@ sub put_childprojects_into_installset
         my $allmodules = collect_modules_with_style("JAVAMODULE", $modulesarrayref);
         $allmodules = remove_modules_without_package($allmodules);
         copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "jre");
-    }
-
-    # adding Ada
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        # Collect all modules with flag "ADAMODULE"
-        my $allmodules = collect_modules_with_style("ADAMODULE", $modulesarrayref);
-        $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "adabas");
     }
 
     # Adding additional required packages (freetype).
