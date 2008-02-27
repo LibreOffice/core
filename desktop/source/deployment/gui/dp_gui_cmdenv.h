@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:01:13 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <memory>
 
+#include "com/sun/star/uno/XInterface.hpp"
+
 namespace com { namespace sun { namespace star {
     namespace ucb {
         class XProgressHandler;
@@ -55,6 +57,7 @@ namespace com { namespace sun { namespace star {
         class XAbortChannel;
     }
     namespace uno {
+//        class XInterface;
         class XComponentContext;
     }
 } } }
@@ -106,6 +109,22 @@ class ProgressCommandEnv
 
         ProgressDialog( ProgressCommandEnv * cmdEnv );
     };
+
+    //Keeps the parameters of the ProgressCommandEnv::updateProgress call so they can be
+    //used later in the event handler asyncUpdateProgress. It also keeps the ProgressCommandEnv
+    //instance alive so that the posted events (to ourself) can always be processed
+    struct UpdateParams
+    {
+        UpdateParams(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+            const & xProgressCommandEnv, ::rtl::OUString const & _text);
+        //This reference keeps the ProgressCommandEnv alive until the event has been processed
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xProgressCommandEnv;
+        //The argument supplied to ProgressCommandEnv::updateProgress
+        ::rtl::OUString text;
+    };
+    //Perfom asynchronous updateProgress call in main thread
+    DECL_LINK(asyncUpdateProgress, UpdateParams*);
+
     friend struct ProgressDialog;
     friend struct ProgressDialog::CancelButtonImpl;
 
@@ -148,6 +167,8 @@ public:
         String const & text,
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > const & xAbortChannel = 0 );
     inline bool isAborted() const { return m_aborted; }
+
+
 
     // XCommandEnvironment
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL
