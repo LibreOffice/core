@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:54:51 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,18 +442,23 @@ unsigned char * codeSnippet(
 
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
+
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return static_cast< void ** >(block) + 1;
+    return static_cast< Slot * >(block) + 1;
 }
 
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return (slotCount + 1) * sizeof (void *) + slotCount * codeSnippetSize;
+    return (slotCount + 1) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::initializeBlock(
+    void * block, sal_Int32 slotCount)
     struct Rtti {
         sal_Int32 n0, n1, n2;
         type_info * rtti;
@@ -466,18 +471,20 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
     };
     static Rtti rtti;
 
-    void ** slots = mapBlockToVtable(block);
-    slots[-1] = &rtti;
-    return slots;
+    Slot * slots = mapBlockToVtable(block);
+    slots[-1].fn = &rtti;
+    return slots + slotCount;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    void ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const *, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+    (*slots) -= functionCount;
+    Slot * s = *slots;
     for (sal_Int32 i = 0; i < functionCount; ++i) {
-        *slots++ = code;
+        (s++)->fn = code;
         code = codeSnippet(code, functionOffset++, vtableOffset);
     }
     return code;
