@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:00:19 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,9 @@
 |*
 ***************************************************************************/
 
-SbiExpression::SbiExpression( SbiParser* p, SbiExprType t, BOOL bNested )
+SbiExpression::SbiExpression( SbiParser* p, SbiExprType t )
 {
     pParser = p;
-    mbNested = bNested;
     bError = bByVal = bBased = FALSE;
     eCurExpr = t;
     pNext = NULL;
@@ -62,10 +61,9 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t, BOOL bNested )
         p->Error( SbERR_VAR_EXPECTED );
 }
 
-SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t, BOOL bNested )
+SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
 {
     pParser = p;
-    mbNested = bNested;
     eCurExpr = SbOPERAND;
     pNext = NULL;
     bError = bByVal = bBased = FALSE;
@@ -73,30 +71,27 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t, BOOL bNeste
     pExpr->Optimize();
 }
 
-SbiExpression::SbiExpression( SbiParser* p, const String& r, BOOL bNested )
+SbiExpression::SbiExpression( SbiParser* p, const String& r )
 {
     pParser = p;
-    mbNested = bNested;
     pNext = NULL;
     bError = bByVal = bBased = FALSE;
     eCurExpr = SbOPERAND;
     pExpr = new SbiExprNode( pParser, r );
 }
 
-SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar, BOOL bNested )
+SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar )
 {
     pParser = p;
-    mbNested = bNested;
     pNext = NULL;
     bError = bByVal = bBased = FALSE;
     eCurExpr = SbOPERAND;
     pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
 }
 
-SbiExpression::SbiExpression( SbiParser* p, SbiToken t, BOOL bNested )
+SbiExpression::SbiExpression( SbiParser* p, SbiToken t )
 {
     pParser = p;
-    mbNested = bNested;
     pNext = NULL;
     bError = bByVal = bBased = FALSE;
     eCurExpr = SbOPERAND;
@@ -117,7 +112,7 @@ SbiExpression::~SbiExpression()
 // Folgen Parameter ohne Klammer? Dies kann eine Zahl, ein String,
 // ein Symbol oder auch ein Komma sein (wenn der 1. Parameter fehlt)
 
-static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok, bool bNested )
+static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
 {
     if( eTok == LPAREN )
         return TRUE;
@@ -130,15 +125,11 @@ static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
         return TRUE;
     }
     else // check for default params with reserved names ( e.g. names of tokens )
-         // also cater for aFuncCall -10 ( where we need to handle the minus )
     {
         SbiTokenizer tokens( *(SbiTokenizer*)p );
         // Urk the Next() / Peek() symantics are... weird
         tokens.Next();
-        SbiToken eNext = tokens.Peek();
-        if ( !bNested && eTok == MINUS && ( eNext == NUMBER || eNext == FIXSTRING || eNext == SYMBOL ) ) // note vba will strip a leadin +
-            return TRUE;
-        if ( eNext == ASSIGN )
+        if ( tokens.Peek() == ASSIGN )
             return TRUE;
     }
     return FALSE;
@@ -249,9 +240,9 @@ SbiExprNode* SbiExpression::Term()
         }
     }
 
-    if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok, mbNested ) )
+    if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
     {
-        pPar = new SbiParameters( pParser, FALSE, TRUE, mbNested );
+        pPar = new SbiParameters( pParser );
         bError |= !pPar->IsValid();
         eTok = pParser->Peek();
     }
@@ -357,7 +348,7 @@ SbiExprNode* SbiExpression::Term()
     }
     SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
     if( !pPar )
-        pPar = new SbiParameters( pParser,FALSE,FALSE, mbNested );
+        pPar = new SbiParameters( pParser,FALSE,FALSE );
     pNd->aVar.pPar = pPar;
     if( bObj )
     {
@@ -412,9 +403,9 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     SbiParameters* pPar = NULL;
     eTok = pParser->Peek();
     // Parameter?
-    if( DoParametersFollow( pParser, eCurExpr, eTok, mbNested ) )
+    if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
-        pPar = new SbiParameters( pParser, FALSE, TRUE, mbNested );
+        pPar = new SbiParameters( pParser );
         bError |= !pPar->IsValid();
         eTok = pParser->Peek();
     }
@@ -822,10 +813,9 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 // Dann handelt es sich um eine Funktion ohne Parameter
 // respektive um die Angabe eines Arrays als Prozedurparameter.
 
-SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar, BOOL bNested ) :
+SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar) :
     SbiExprList( p )
 {
-    (void)bNested;
     if (bPar)
     {
         SbiExpression *pExpr;
@@ -853,7 +843,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar, BOOL bNested
             // Fehlendes Argument
             if( eTok == COMMA )
             {
-                pExpr = new SbiExpression( pParser, 0, SbxEMPTY, TRUE );
+                pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
                 if( bConst )
                     pParser->Error( SbERR_SYNTAX ), bError = TRUE;
             }
@@ -861,7 +851,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar, BOOL bNested
             else
             {
                 pExpr = bConst ? new SbiConstExpression( pParser )
-                                : new SbiExpression( pParser, SbSTDEXPR, TRUE  );
+                                : new SbiExpression( pParser );
                 if( pParser->Peek() == ASSIGN )
                 {
                     // VBA mode: name:=
@@ -869,7 +859,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar, BOOL bNested
                     aName = pExpr->GetString();
                     delete pExpr;
                     pParser->Next();
-                    pExpr = new SbiExpression( pParser,  SbSTDEXPR, TRUE );
+                    pExpr = new SbiExpression( pParser );
                     if( bConst )
                         pParser->Error( SbERR_SYNTAX ), bError = TRUE;
                 }
@@ -886,37 +876,14 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar, BOOL bNested
             eTok = pParser->Peek();
             if( eTok != COMMA )
             {
-                if ( bBracket && eTok == RPAREN )
-                {
-                    if ( !bNested )
-                    {
-                        SbiTokenizer tokens( *(SbiTokenizer*)pParser );
-                        tokens.Next();
-                        if ( tokens.Peek() == COMMA )
-                        {
-                            // advance the parser to the comma
-                            pParser->Next();
-                            pParser->Peek();
-                        }
-                        else
-                            break;
-                    }
-                    else
-                        break;
-                }
-                else if(  pParser->IsEoln( eTok ) )
-                {
+                if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
                     break;
-                }
-                else
-                {
-                    pParser->Error( bBracket
-                    ? SbERR_BAD_BRACKETS
-                    : SbERR_EXPECTED, COMMA );
-                    bError = TRUE;
-                }
+                pParser->Error( bBracket
+                                ? SbERR_BAD_BRACKETS
+                                : SbERR_EXPECTED, COMMA );
+                bError = TRUE;
             }
-            if ( !bError )
+            else
             {
                 pParser->Next();
                 eTok = pParser->Peek();
