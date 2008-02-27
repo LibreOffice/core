@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:55:27 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1316,18 +1316,23 @@ void Databases::setActiveText( const rtl::OUString& Module,
     DataBaseIterator aDbIt( m_xContext, *this, Module, Language, true );
     bool bSuccess = false;
 
+    // #i84550 Cache information about failed ids
+    rtl::OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
+    EmptyActiveTextSet::iterator it = m_aEmptyActiveTextSet.find( id );
+    bool bFoundAsEmpty = ( it != m_aEmptyActiveTextSet.end() );
     Dbt data;
-    Db* db;
-    while( (db = aDbIt.nextDb()) != NULL )
+    if( !bFoundAsEmpty )
     {
-        rtl::OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
+        Db* db;
         Dbt key( static_cast< void* >( const_cast< sal_Char* >( id.getStr() ) ),id.getLength() );
-
-        int err = db->get( 0, &key, &data, 0 );
-        if( err == 0 )
+        while( (db = aDbIt.nextDb()) != NULL )
         {
-            bSuccess = true;
-            break;
+            int err = db->get( 0, &key, &data, 0 );
+            if( err == 0 )
+            {
+                bSuccess = true;
+                break;
+            }
         }
     }
 
@@ -1361,6 +1366,8 @@ void Databases::setActiveText( const rtl::OUString& Module,
     {
         *byteCount = 0;
         *buffer = new char[0];
+        if( !bFoundAsEmpty )
+            m_aEmptyActiveTextSet.insert( id );
     }
 }
 
@@ -1383,6 +1390,8 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 
 //===================================================================
 // class ExtensionIteratorBase
+
+ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
 
 ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xContext,
     Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
@@ -1456,6 +1465,14 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     if( !xPackage.is() )
         return xHelpPackage;
 
+    // #i84550 Cache information about help content in extension
+    rtl::OUString aExtensionPath = xPackage->getURL();
+    ExtensionHelpExistanceMap::iterator it = aHelpExistanceMap.find( aExtensionPath );
+    bool bFound = ( it != aHelpExistanceMap.end() );
+    bool bHasHelp = bFound ? it->second : false;
+    if( bFound && !bHasHelp )
+        return xHelpPackage;
+
     // Check if parent package is registered
     beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
@@ -1466,35 +1483,38 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
         if( !reg.IsAmbiguous && reg.Value )
             bRegistered = true;
     }
-    if( !bRegistered )
-        return xHelpPackage;
-
-    if( xPackage->isBundle() )
+    if( bRegistered )
     {
-        Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
-            ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
-        sal_Int32 nPkgCount = aPkgSeq.getLength();
-        const Reference< deployment::XPackage >* pSeq = aPkgSeq.getConstArray();
-        for( sal_Int32 iPkg = 0 ; iPkg < nPkgCount ; ++iPkg )
+        if( xPackage->isBundle() )
         {
-            const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
-            const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
-            rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType.equals( aHelpMediaType ) )
+            Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
+                ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
+            sal_Int32 nPkgCount = aPkgSeq.getLength();
+            const Reference< deployment::XPackage >* pSeq = aPkgSeq.getConstArray();
+            for( sal_Int32 iPkg = 0 ; iPkg < nPkgCount ; ++iPkg )
             {
-                xHelpPackage = xSubPkg;
-                o_xParentPackageBundle = xPackage;
-                break;
+                const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
+                const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
+                rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
+                if( aMediaType.equals( aHelpMediaType ) )
+                {
+                    xHelpPackage = xSubPkg;
+                    o_xParentPackageBundle = xPackage;
+                    break;
+                }
             }
         }
+        else
+        {
+            const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
+            rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
+            if( aMediaType.equals( aHelpMediaType ) )
+                xHelpPackage = xPackage;
+        }
     }
-    else
-    {
-        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
-        rtl::OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if( aMediaType.equals( aHelpMediaType ) )
-            xHelpPackage = xPackage;
-    }
+
+    if( !bFound )
+        aHelpExistanceMap[ aExtensionPath ] = xHelpPackage.is();
 
     return xHelpPackage;
 }
