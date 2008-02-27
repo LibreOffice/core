@@ -1,0 +1,23 @@
+mkdir: %_DEST%\inc%_EXT%\cppunit
+mkdir: %_DEST%\inc%_EXT%\cppunit\portability
+mkdir: %_DEST%\inc%_EXT%\cppunit\autoregister
+mkdir: %_DEST%\inc%_EXT%\cppunit\extensions
+mkdir: %_DEST%\inc%_EXT%\cppunit\result
+mkdir: %_DEST%\inc%_EXT%\testshl
+
+..\inc\cppunit\*.h %_DEST%\inc%_EXT%\cppunit\*.h
+..\inc\cppunit\*.hxx %_DEST%\inc%_EXT%\cppunit\*.hxx
+..\inc\cppunit\autoregister\*.h %_DEST%\inc%_EXT%\cppunit\autoregister\*.h
+..\inc\cppunit\extensions\*.h %_DEST%\inc%_EXT%\cppunit\extensions\*.h
+..\inc\cppunit\portability\*.h %_DEST%\inc%_EXT%\cppunit\portability\*.h
+..\inc\cppunit\result\*.h %_DEST%\inc%_EXT%\cppunit\result\*.h
+..\inc\cppunit\result\*.hxx %_DEST%\inc%_EXT%\cppunit\result\*.hxx
+..\inc\testshl\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
+..\inc\testshl\*.h   %_DEST%\inc%_EXT%\testshl\*.h
+
+
+
+..\%__SRC%\lib\cppunit.lib %_DEST%\lib%_EXT%\cppunit.lib
+..\%__SRC%\lib\c5t_*.lib %_DEST%\lib%_EXT%\c5t_*.lib
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+

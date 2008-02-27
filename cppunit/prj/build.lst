@@ -1,0 +1,6 @@
+c5t  cppunit   :  sal NULL
+c5t  cppunit					usr1	- all  c5t_mkout NULL
+c5t  cppunit\inc				nmake	- all  c5t_inc NULL
+c5t  cppunit\source\win32			nmake	- w    c5t_win c5t_inc NULL
+c5t  cppunit\source\cppunit			nmake	- all  c5t_cpp c5t_inc NULL
+c5t  cppunit\source\result			nmake	- all  c5t_res c5t_inc NULL
