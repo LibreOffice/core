@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppinterfaceproxy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:38:14 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
 #include "uno/environment.h"
+#include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
@@ -102,7 +103,7 @@ private:
     typelib_InterfaceTypeDescription * pTypeDescr;
     rtl::OUString oid;
 
-    void ** vtables[1];
+    VtableFactory::Slot * vtables[1];
 
     friend void SAL_CALL freeCppInterfaceProxy(
         uno_ExtEnvironment * pEnv, void * pInterface);
