@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:04:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "amd64"
 #elif defined ARM
 #define JFW_PLUGIN_ARCH "arm"
+#elif defined IA64
+#define JFW_PLUGIN_ARCH "ia64"
 #else // SPARC, INTEL, POWERPC, MIPS, ARM
 #error unknown plattform
 #endif // SPARC, INTEL, POWERPC, MIPS, ARM
