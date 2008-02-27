@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:16:11 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
+
 //added for issue73355
 //#ifndef _SV_SVDATA_HXX
 //#include <vcl/svdata.hxx>
@@ -78,7 +79,7 @@
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
-
+//add
 #include <svx/dialogs.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
@@ -5446,6 +5447,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     aBtnImport           ( this, SVX_RES( BTN_IMPORT ) ),
     aBtnDelete           ( this, SVX_RES( BTN_DELETE ) ),
     aFlSeparator         ( this, SVX_RES( FL_SEPARATOR ) ),
+    m_nNextId            ( 0 ),
     m_xImageManager      ( rXImageManager ),
     m_xParentImageManager( rXParentImageManager )
 {
@@ -5627,6 +5629,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     aTbSymbol.SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
     aBtnImport.SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
     aBtnDelete.SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
+
+    m_nNextId = aTbSymbol.GetItemCount()+1;
 }
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
@@ -5776,9 +5780,21 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
     aMediaProps[0].Value <<= aURL;
 
+    com::sun::star::awt::Size aSize;
+    bool bOK = FALSE;
     try
     {
         xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
+
+        uno::Reference< beans::XPropertySet > props =
+            m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
+        uno::Any a = props->getPropertyValue(
+            OUString::createFromAscii("SizePixel") );
+        a >>= aSize;
+        if (0 == aSize.Width || 0 == aSize.Height)
+            return FALSE;
+        else
+            bOK = TRUE;
     }
     catch ( uno::Exception& )
     {
@@ -5796,14 +5812,24 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
             try
             {
                 // replace/insert image with provided URL
+                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
+                aMediaProps[0].Value <<= aURL;
+
+                Image aImage( xGraphic );
+                if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
+                {
+                    BitmapEx aBitmap = aImage.GetBitmapEx();
+                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    aImage = Image( aBitmapex);
+                }
+                aTbSymbol.InsertItem( nId,aImage, aURL, 0, 0 ); //modify
+
+                xGraphic = aImage.GetXGraphic();
+
                 URLs[0] = aURL;
                 aImportGraph[ 0 ] = xGraphic;
                 m_xImportedImageManager->replaceImages( GetImageType(), URLs, aImportGraph );
                 xConfigPer->store();
-
-                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
-                aMediaProps[0].Value <<= aURL;
-                aTbSymbol.InsertItem( nId, Image( xGraphic ), aURL, 0, 0 );
 
                 bResult = true;
                 break;
@@ -5907,23 +5933,19 @@ void SvxIconSelectorDialog::ImportGraphics(
 
     if ( rejectedCount != 0 )
     {
-        OUString message = String( SVX_RES( RID_SVXSTR_IMPORT_ICON_ERROR ) );
-        if ( m_nExpectedSize != 16 )
-        {
-            message = replaceSixteen( message, m_nExpectedSize );
-        }
-
+        OUString message =OUString::createFromAscii("");
         OUString newLine = OUString::createFromAscii("\n");
-        message += newLine;
-        message += newLine;
-
+        rtl::OUString fPath = OUString::createFromAscii("");
+        if (rejectedCount > 1)
+              fPath = rPaths[0].copy(8) + ::rtl::OUString::createFromAscii( "/" );
         for ( sal_Int32 i = 0; i < rejectedCount; i++ )
         {
-            message += rejected[i];
+            message += fPath + rejected[i];
             message += newLine;
         }
 
-        InfoBox( this, message ).Execute();
+        SvxIconChangeDialog aDialog(this, message);
+        aDialog.Execute();
     }
 }
 
@@ -5931,17 +5953,16 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
     bool result = FALSE;
 
-    USHORT nId = aTbSymbol.GetItemCount();
-    nId++;
+    USHORT nId = m_nNextId;
+    ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
     aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
-
+    bool bOK = TRUE;
     aMediaProps[0].Value <<= aURL;
-
     try
     {
         uno::Reference< beans::XPropertySet > props =
@@ -5950,30 +5971,35 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         uno::Any a = props->getPropertyValue(
             OUString::createFromAscii("SizePixel") );
 
-        if ( ( a >>= aSize ) && aSize.Width == m_nExpectedSize &&
-                aSize.Height == m_nExpectedSize )
-        {
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
-
             if ( xGraphic.is() )
             {
+                a >>= aSize;
+                if ( 0 == aSize.Width || 0 == aSize.Height )
+                    bOK = FALSE;
+
                 Image aImage( xGraphic );
 
-                if ( !!aImage )
+                if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
+                {
+                    BitmapEx aBitmap = aImage.GetBitmapEx();
+                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    aImage = Image( aBitmapex);
+                }
+                if ( bOK && !!aImage )
                 {
                     aTbSymbol.InsertItem( nId, aImage, aURL, 0, 0 );
 
+                    xGraphic = aImage.GetXGraphic();
                     xGraphic->acquire();
 
                     aTbSymbol.SetItemData(
                         nId, static_cast< void * > ( xGraphic.get() ) );
-
                     uno::Sequence< OUString > aImportURL( 1 );
                     aImportURL[ 0 ] = aURL;
                     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
                     aImportGraph[ 0 ] = xGraphic;
                     m_xImportedImageManager->insertImages( GetImageType(), aImportURL, aImportGraph );
-
                     uno::Reference< css::ui::XUIConfigurationPersistence >
                     xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5993,7 +6019,6 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
             {
                 OSL_TRACE("could not get query XGraphic");
             }
-        }
     }
     catch( uno::Exception& e )
     {
@@ -6049,4 +6074,81 @@ USHORT SvxIconReplacementDialog :: ShowDialog()
 {
     this->Execute();
     return ( this->GetCurButtonId() );
+}
+/*******************************************************************************
+*
+* The SvxIconChangeDialog class added for issue83555
+*
+*******************************************************************************/
+SvxIconChangeDialog::SvxIconChangeDialog(
+    Window *pWindow, const rtl::OUString& aMessage)
+    :
+    ModalDialog            ( pWindow, SVX_RES( MD_ICONCHANGE ) ),
+    aFImageInfo            (this, SVX_RES( FI_INFO ) ),
+    aBtnOK                 (this, SVX_RES(MD_BTN_OK)),
+    aDescriptionLabel      (this, SVX_RES(FTCHGE_DESCRIPTION)),
+    aLineEditDescription   (this, SVX_RES(EDT_ADDR))
+{
+    FreeResource();
+    aFImageInfo.SetImage(InfoBox::GetStandardImage());
+    aLineEditDescription.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+    aLineEditDescription.SetAutoScroll( TRUE );
+    aLineEditDescription.EnableCursor( FALSE );
+    aLineEditDescription.SetText(aMessage);
+}
+
+BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
+{
+    Point aEmptyPoint(0,0);
+    sal_Int32 imgNewWidth = 0;
+    sal_Int32 imgNewHeight = 0;
+    double imgposX = 0;
+    double imgposY = 0;
+    BitmapEx  aRet = aBitmap;
+    double imgOldWidth = aRet.GetSizePixel().Width();
+    double imgOldHeight =aRet.GetSizePixel().Height();
+
+    Size aScaledSize;
+    if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
+    {
+        if (imgOldWidth >= imgOldHeight)
+        {
+            imgNewWidth = aStandardSize;
+            imgNewHeight = sal_Int32(imgOldHeight / (imgOldWidth / aStandardSize) + 0.5);
+            imgposX = 0;
+            imgposY = (aStandardSize - (imgOldHeight / (imgOldWidth / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+        else
+        {
+            imgNewHeight = aStandardSize;
+            imgNewWidth = sal_Int32(imgOldWidth / (imgOldHeight / aStandardSize) + 0.5);
+            imgposY = 0;
+            imgposX = (aStandardSize - (imgOldWidth / (imgOldHeight / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+
+        aScaledSize = Size( imgNewWidth, imgNewHeight );
+        aRet.Scale( aScaledSize, BMP_SCALE_INTERPOLATE );
+    }
+    else
+    {
+        imgposX = (aStandardSize - imgOldWidth) / 2 + 0.5;
+        imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
+    }
+
+    Size aBmpSize = aRet.GetSizePixel();
+    Size aStdSize( aStandardSize, aStandardSize );
+    Rectangle aRect(aEmptyPoint, aStdSize );
+
+    VirtualDevice aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
+    aVirDevice.SetOutputSizePixel( aStdSize );
+    aVirDevice.SetFillColor( COL_TRANSPARENT );
+    aVirDevice.SetLineColor( COL_TRANSPARENT );
+
+    //draw a rect into virDevice
+    aVirDevice.DrawRect( aRect );
+    Point aPointPixel( (long)imgposX, (long)imgposY );
+    aVirDevice.DrawBitmapEx( aPointPixel, aRet );
+    aRet = aVirDevice.GetBitmapEx( aEmptyPoint, aStdSize );
+
+    return aRet;
 }
