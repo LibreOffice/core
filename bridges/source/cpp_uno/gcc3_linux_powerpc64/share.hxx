@@ -4,9 +4,9 @@
  *
  *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:35:29 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,4 +96,9 @@ void raiseException(
 //==================================================================================================
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+}
+
+namespace ppc64
+{
+    enum ppclimits { MAX_GPR_REGS = 8, MAX_SSE_REGS = 13 };
 }

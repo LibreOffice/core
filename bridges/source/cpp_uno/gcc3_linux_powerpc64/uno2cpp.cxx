@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:35:40 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:57:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
-namespace ppc64
-{
-    enum ppclimits { MAX_GPR_REGS = 8, MAX_SSE_REGS = 13 };
-}
 
 void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegisterReturn)
 {

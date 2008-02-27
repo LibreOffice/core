@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:35:07 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,8 +141,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
+    t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
+    if (iRttiFind == m_rttis.end())
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
@@ -206,7 +206,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     }
     else
     {
-        rtti = iFind->second;
+        rtti = iRttiFind->second;
     }
 
     return rtti;
