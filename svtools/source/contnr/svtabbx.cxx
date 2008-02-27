@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 10:37:44 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:19:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1222,7 +1222,7 @@ void SvHeaderTabListBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSe
         _rStateSet.AddState( AccessibleStateType::ENABLED );
     }
 
-    if ( IsSelected( GetEntry( _nRow ) ) )
+    if ( IsRowSelected( _nRow ) )
     {
         _rStateSet.AddState( AccessibleStateType::ACTIVE );
         _rStateSet.AddState( AccessibleStateType::SELECTED );
