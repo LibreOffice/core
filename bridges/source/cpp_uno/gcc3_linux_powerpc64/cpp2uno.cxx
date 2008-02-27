@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:34:57 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ static typelib_TypeClass cpp2uno_call(
             {
                 case typelib_TypeClass_FLOAT:
                 case typelib_TypeClass_DOUBLE:
-                    if (nf < 13)
+                    if (nf < ppc64::MAX_SSE_REGS)
                     {
                         if (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT)
                         {
@@ -154,7 +154,7 @@ static typelib_TypeClass cpp2uno_call(
                     break;
                 case typelib_TypeClass_BYTE:
                 case typelib_TypeClass_BOOLEAN:
-                    if (ng < 8)
+                    if (ng < ppc64::MAX_GPR_REGS)
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-1));
                         ng++;
@@ -170,7 +170,7 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_CHAR:
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_UNSIGNED_SHORT:
-                    if (ng < 8)
+                    if (ng < ppc64::MAX_GPR_REGS)
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-2));
                         ng++;
@@ -186,7 +186,7 @@ static typelib_TypeClass cpp2uno_call(
         case typelib_TypeClass_ENUM:
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
-                    if (ng < 8)
+                    if (ng < ppc64::MAX_GPR_REGS)
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-4));
                         ng++;
@@ -200,7 +200,7 @@ static typelib_TypeClass cpp2uno_call(
                     if (bOverFlowUsed) ovrflw++;
                     break;
                 default:
-                    if (ng < 8)
+                    if (ng < ppc64::MAX_GPR_REGS)
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = gpreg++;
                         ng++;
@@ -224,7 +224,7 @@ static typelib_TypeClass cpp2uno_call(
 #endif
             void *pCppStack; //temporary stack pointer
 
-            if (ng < 8)
+            if (ng < ppc64::MAX_GPR_REGS)
             {
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 ng++;
@@ -521,8 +521,8 @@ extern "C" void privateSnippetExecutor( ... )
                 "mr     %0,    11\n\t"
                 : "=r" (nOffsetAndIndex) : );
 
-    sal_uInt64 gpreg[8];
-    double fpreg[13];
+    sal_uInt64 gpreg[ppc64::MAX_GPR_REGS];
+    double fpreg[ppc64::MAX_SSE_REGS];
 
     __asm__ __volatile__ (
         "std 3,   0(%0)\t\n"
@@ -645,31 +645,37 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * bp
   __asm__ volatile ( "sync;" "isync;" : : : "memory");
 }
 
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
-
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return static_cast< void ** >(block) + 2;
+    return static_cast< Slot * >(block) + 2;
 }
 
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return (slotCount + 2) * sizeof (void *) + slotCount * codeSnippetSize;
+    return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
-void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock(void * block) {
-    void ** slots = mapBlockToVtable(block);
-    slots[-2] = 0;
-    slots[-1] = 0;
-    return slots;
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::initializeBlock(
+    void * block, sal_Int32 slotCount)
+{
+    Slot * slots = mapBlockToVtable(block);
+    slots[-2].fn = 0;
+    slots[-1].fn = 0;
+    return slots + slotCount;
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    void ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
+     (*slots) -= functionCount;
+     Slot * s = *slots;
 #ifdef CMC_DEBUG
     fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
     fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
@@ -682,7 +688,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
@@ -695,13 +701,13 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                *slots++ = code;
+                (s++)->fn = code;
                 code = codeSnippet(code, functionOffset++, vtableOffset, true);
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
