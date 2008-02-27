@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:46:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 09:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,35 +465,42 @@ unsigned char * codeSnippet( unsigned char * code,
 }
 
 //==================================================================================================
-void ** bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable( void * block )
+struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
+
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 {
-    return static_cast<void **>( block ) + 2;
+    return static_cast< Slot * >(block) + 2;
 }
 
 //==================================================================================================
 sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
-    return ( slotCount + 2 ) * sizeof( void * ) + slotCount * codeSnippetSize;
+    return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
 }
 
 //==================================================================================================
-void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock( void * block )
+bridges::cpp_uno::shared::VtableFactory::Slot *
+bridges::cpp_uno::shared::VtableFactory::initializeBlock(
+    void * block, sal_Int32 slotCount)
 {
-    void ** slots = mapBlockToVtable( block );
-    slots[-2] = 0;
-    slots[-1] = 0;
-
-    return slots;
+    Slot * slots = mapBlockToVtable(block);
+    slots[-2].fn = 0;
+    slots[-1].fn = 0;
+    return slots + slotCount;
 }
 
 //==================================================================================================
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    void ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
     sal_Int32 functionCount, sal_Int32 nVtableOffset )
 {
+    (*slots) -= functionCount;
+    Slot * s = *slots;
+
     for ( sal_Int32 nPos = 0; nPos < type->nMembers; ++nPos )
     {
         typelib_TypeDescription * pTD = 0;
@@ -507,14 +514,14 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( pTD );
 
             // get method
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pAttrTD->pAttributeTypeRef ) );
 
             if ( ! pAttrTD->bReadOnly )
             {
                 // set method
-                *slots++ = code;
+                (s++)->fn = code;
                 code = codeSnippet( code, nFunctionOffset++, nVtableOffset, false );
             }
         }
@@ -523,7 +530,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
 
-            *slots++ = code;
+            (s++)->fn = code;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pMethodTD->pReturnTypeRef ) );
         }
