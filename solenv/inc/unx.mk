@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 15:20:22 $
+#   last change: $Author: obo $ $Date: 2008-02-27 09:45:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,10 @@
 
 .IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXR2REDHAT60"
 .INCLUDE : unxlngr.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXA2REDHAT60"
+.INCLUDE : unxlnga.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
