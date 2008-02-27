@@ -18,6 +18,7 @@ br	bridges\source\cpp_uno\gcc3_linux_mips		nmake	-	u	br_gcc3mips br_cppuno_share
 br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gccl33 br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_sparc		nmake	-	u	br_gccl3s br_unotypes br_cppuno_shared br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_arm		nmake	-	u	br_gccl3r br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_linux_ia64		nmake	-	u	br_gccl3a br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_macosx_intel			nmake	-	u	br_gcc3macoxi br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes br_cppuno_shared br_inc NULL
