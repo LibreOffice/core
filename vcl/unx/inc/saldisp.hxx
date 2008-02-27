@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:21:27 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,7 @@ protected:
     {
         bool            m_bIgnore;
         bool            m_bWas;
+        unsigned int    m_nLastErrorRequest;
         XErrorHandler   m_aHandler;
     };
     std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
@@ -267,7 +268,8 @@ public:
     virtual void    Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
-    inline  bool    HasXErrorOccured() const { return m_aXErrorHandlerStack.back().m_bWas; }
+    bool            HasXErrorOccured() const { return m_aXErrorHandlerStack.back().m_bWas; }
+    unsigned int    GetLastXErrorRequestCode() const { return m_aXErrorHandlerStack.back().m_nLastErrorRequest; }
     void            ResetXErrorOccured() { m_aXErrorHandlerStack.back().m_bWas = false; }
     void PushXErrorLevel( bool bIgnore );
     void PopXErrorLevel();
