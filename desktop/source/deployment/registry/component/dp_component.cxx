@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:59:46 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1304,6 +1304,8 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         that->removeFromUnoRc( m_jarFile, url, xCmdEnv );
 
         // revoking types at runtime, possible, sensible?
+        if (!m_xTDprov.is())
+            m_xTDprov.set( that->getObject( url ), UNO_QUERY );
         if (m_xTDprov.is()) {
             // remove live:
             const Reference<container::XSet> xSet(
