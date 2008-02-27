@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:23:15 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <sys/types.h>
 #endif
 #include <prex.h>
+#include "Xproto.h"
 #include <postx.h>
 #include <salunx.h>
 #ifndef _OSL_ENDIAN_H_
@@ -226,7 +227,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
         // so better catch the XError
         pXLib->PushXErrorLevel( true );
         XImage* pImage = XGetImage( pXDisp, aDrawable, nX, nY, nWidth, nHeight, AllPlanes, ZPixmap );
-        bool bWasError = pXLib->HasXErrorOccured();
+        bool bWasError = pXLib->HasXErrorOccured() && pXLib->GetLastXErrorRequestCode() == X_GetImage;
         pXLib->PopXErrorLevel();
 
         if( ! bWasError && pImage && pImage->data )
