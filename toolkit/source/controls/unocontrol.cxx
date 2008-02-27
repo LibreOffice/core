@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:44:37 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,7 +825,7 @@ awt::Size SAL_CALL UnoControl::getOutputSize(  ) throw (RuntimeException)
 
 ::sal_Bool SAL_CALL UnoControl::isVisible(  ) throw (RuntimeException)
 {
-    return lcl_askPeer( getPeer(), &XWindow2::isVisible, sal_False );
+    return lcl_askPeer( getPeer(), &XWindow2::isVisible, maComponentInfos.bVisible );
 }
 
 ::sal_Bool SAL_CALL UnoControl::isActive(  ) throw (RuntimeException)
@@ -835,7 +835,7 @@ awt::Size SAL_CALL UnoControl::getOutputSize(  ) throw (RuntimeException)
 
 ::sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException)
 {
-    return lcl_askPeer( getPeer(), &XWindow2::isEnabled, sal_False );
+    return lcl_askPeer( getPeer(), &XWindow2::isEnabled, maComponentInfos.bEnable );
 }
 
 ::sal_Bool SAL_CALL UnoControl::hasFocus(  ) throw (RuntimeException)
