@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:12:05 $
+ *  last change: $Author: obo $ $Date: 2008-02-27 10:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,12 @@ rtl::OUString getVersion(
 
 namespace dp_gui
 {
-
+    ProgressCommandEnv::UpdateParams::UpdateParams(
+        Reference<XInterface> const & _xProgressCommandEnv, OUString const & _text):
+        xProgressCommandEnv(_xProgressCommandEnv),
+        text(_text)
+{
+}
 //______________________________________________________________________________
 void ProgressCommandEnv::ProgressDialog::CancelButtonImpl::Click()
 {
@@ -229,24 +234,49 @@ void ProgressCommandEnv::progressSection(
 //______________________________________________________________________________
 void ProgressCommandEnv::updateProgress( OUString const & text )
 {
-    if (m_progressDialog.get() != 0)
+    //We pass a reference to this to keep the ProgrssCommandEnv alive until
+    //asyncUpdateProgress was called.
+    Application::PostUserEvent(
+        LINK(this, ProgressCommandEnv, asyncUpdateProgress),
+        new UpdateParams(
+        Reference<XInterface>(static_cast<OWeakObject*>(this), UNO_QUERY_THROW), text));
+ }
+
+// This function may not call in any package manager functions. These use a mutex and
+//then we have both the Solar and the package manager mutex locked here, which may
+//cause deadlocks.
+IMPL_LINK(ProgressCommandEnv, asyncUpdateProgress, UpdateParams*, pUpdateParams)
+{
+    try
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
-        if (text.getLength() > 0)
-            m_progressDialog->m_ftCurrentAction->SetText( text );
-        // xxx todo: how to do better?
-        m_progressDialog->m_statusBar->SetProgressValue(
-            static_cast<USHORT>(
-                (((m_currentProgressSection - 1) +
-                  (m_currentInnerProgress >= 20
-                   ? 0.99 : (double)m_currentInnerProgress / 20.0)) * 100)
-                / m_progressSections ) % 101 );
-//             static_cast<USHORT>(
-//                 ((m_currentProgressSection +
-//                   (1.0 - (m_currentInnerProgress == 0
-//                           ? 1.0 : 1.0 / m_currentInnerProgress))) * 100)
-//                 / m_progressSections ) % 101 );
+        if (m_progressDialog.get() != 0)
+        {
+    //        const ::vos::OGuard guard( Application::GetSolarMutex() );
+            if (pUpdateParams->text.getLength() > 0)
+                m_progressDialog->m_ftCurrentAction->SetText(pUpdateParams->text);
+            // xxx todo: how to do better?
+            m_progressDialog->m_statusBar->SetProgressValue(
+                static_cast<USHORT>(
+                    (((m_currentProgressSection - 1) +
+                      (m_currentInnerProgress >= 20
+                       ? 0.99 : (double)m_currentInnerProgress / 20.0)) * 100)
+                    / m_progressSections ) % 101 );
+    //             static_cast<USHORT>(
+    //                 ((m_currentProgressSection +
+    //                   (1.0 - (m_currentInnerProgress == 0
+    //                           ? 1.0 : 1.0 / m_currentInnerProgress))) * 100)
+    //                 / m_progressSections ) % 101 );
+        }
     }
+    catch (...)
+    {
+        delete pUpdateParams;
+    }
+
+    //Make sure we release the reference to NodeImpl
+    delete pUpdateParams;
+
+    return 0;
 }
 
 // XCommandEnvironment
