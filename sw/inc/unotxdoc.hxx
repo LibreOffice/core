@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:21:03 $
+ *  last change: $Author: obo $ $Date: 2008-02-28 10:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,8 +508,6 @@ public:
 
     // ::com::sun::star::text::XFlatParagraphIteratorProvider:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > SAL_CALL getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic ) throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo > SAL_CALL getDocumentInfo() throw (::com::sun::star::uno::RuntimeException);
 
     //
     void                        Invalidate();
