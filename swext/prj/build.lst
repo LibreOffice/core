@@ -4,5 +4,6 @@ swext swext\mediawiki\help\en-US\com.sun.sun-mediawiki                  nmake   
 swext swext\mediawiki\src\registry\schema\org\openoffice\Office\Custom  nmake   -    all    swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office\Custom    nmake   -    all    swext_mwcustomdata swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office           nmake   -    all    swext_mwofficedata NULL
-swext swext\mediawiki                                                   nmake   -    all    swext_mw swext_mwhelp swext_mwschema swext_mwcustomdata swext_mwofficedata NULL
+swext swext\mediawiki\src                                               nmake   -    all    swext_mwlicense NULL
+swext swext\mediawiki                                                   nmake   -    all    swext_mw swext_mwhelp swext_mwschema swext_mwcustomdata swext_mwofficedata swext_mwlicense NULL
 

@@ -5,6 +5,11 @@
     <display-name>
         <name lang="en-US">MediaWiki Extension</name>
     </display-name>
+    <registration>
+        <simple-license accept-by="user" default-license-id="lic-en-US">
+            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+        </simple-license>
+    </registration>
     <dependencies>
         <OpenOffice.org-minimal-version value="2.4" d:name="OpenOffice.org 2.4 or StarOffice 8 Update 10"/>
     </dependencies>
