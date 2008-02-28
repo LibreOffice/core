@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:02:44 $
+ *  last change: $Author: obo $ $Date: 2008-02-28 08:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,6 +459,7 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount)
+{
     struct Rtti {
         sal_Int32 n0, n1, n2;
         type_info * rtti;
