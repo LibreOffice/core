@@ -1,12 +1,12 @@
 /*************************************************************************
- *
+*
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:12:18 $
+ *  last change: $Author: jobin $ $Date: 2008-02-29 13:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
