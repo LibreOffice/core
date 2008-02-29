@@ -11,7 +11,7 @@ OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pr
 BrOffice                                                                                          pt-BR   broffice
 OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro,wntmsci11                    en-US   openofficewithjre
 BrOffice_wJRE                                                                                     pt-BR   brofficewithjre
-OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro                              en-US   openofficedev
+OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro,unxmacxi.pro                 en-US   openofficedev
 BrOffice_Dev                                                                                      pt-BR   brofficedev
 OpenOffice_Dev_Archive   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro                     en-US   openofficedevarchive
 OpenOffice_SDK  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro,unxlngi6,unxsoli4,unxsols4,wntmsci11  en-US   sdkoo
