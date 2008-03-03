@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-03 07:26:08 $
+ *  last change: $Author: rt $ $Date: 2008-03-03 10:35:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,8 +156,8 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
 struct statistic {
     SvXMLTokenMapAttrs token;
     const char* name;
-    sal_uInt16 SwDocStat::* target16;
-    sal_uInt32 SwDocStat::* target32;
+    USHORT SwDocStat::* target16;
+    ULONG  SwDocStat::* target32; /* or 64, on LP64 platforms */
 };
 
 static const struct statistic s_stats [] = {
