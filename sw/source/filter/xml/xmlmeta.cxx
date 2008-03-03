@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:22:04 $
+ *  last change: $Author: obo $ $Date: 2008-03-03 07:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ void SwXMLImport::SetStatistics(
         for (struct statistic const* pStat = s_stats; pStat->name != 0;
                 ++pStat) {
             if (i_rStats[i].Name.equalsAscii(pStat->name)) {
-                sal_Int32 val;
+                sal_Int32 val = 0;
                 if (i_rStats[i].Value >>= val) {
                     if (pStat->target16 != 0) {
                         aDocStat.*(pStat->target16)
