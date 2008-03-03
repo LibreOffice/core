@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:41:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-03 11:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1034,7 +1034,6 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
             break;
         }
     }
-fprintf(stderr, "Tell: %d \n", rStrm.Tell());
     nCurrentOfs = rStrm.Tell();
     rStrm.Seek( nParaOfs );
     rStrm << (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) );
