@@ -240,7 +240,7 @@ common
 		{
             SO_GEN_ERROR
             SO_GEN_ERROR2
-            CVS_HEAD SRC680
+            CVS_HEAD DEV300
 		}
 		bsclient
 		{
