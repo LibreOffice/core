@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SfxDocumentMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-03 07:16:00 $
+ *  last change: $Author: rt $ $Date: 2008-03-03 08:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,7 +880,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 
         // convert according to type
         if (type == ::cppu::UnoType<bool>::get()) {
-            bool b;
+            bool b = false;
             any >>= b;
             ::rtl::OUStringBuffer buf;
             ::sax::Converter::convertBool(buf, b);
@@ -917,7 +917,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
                 ::rtl::OUString::createFromAscii("time")));
         } else if (::cppu::UnoType<double>::get().isAssignableFrom(type)) {
             // support not just double, but anything that can be converted
-            double d;
+            double d = 0;
             any >>= d;
             ::rtl::OUStringBuffer buf;
             ::sax::Converter::convertDouble(buf, d);
