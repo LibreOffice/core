@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:35:47 $
+ *  last change: $Author: obo $ $Date: 2008-03-03 07:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -973,7 +973,7 @@ void SdXMLImport::SetStatistics(
     for (sal_Int32 i = 0; i < i_rStats.getLength(); ++i) {
         for (const char** pStat = s_stats; *pStat != 0; ++pStat) {
             if (i_rStats[i].Name.equalsAscii(*pStat)) {
-                sal_Int32 val;
+                sal_Int32 val = 0;
                 if (i_rStats[i].Value >>= val) {
                     nCount = val;
                 } else {

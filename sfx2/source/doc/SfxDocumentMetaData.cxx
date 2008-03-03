@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SfxDocumentMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:07:47 $
+ *  last change: $Author: obo $ $Date: 2008-03-03 07:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1724,7 +1724,7 @@ SfxDocumentMetaData::setDocumentStatistics(
         for (size_t j = 0; s_stdStats[j] != 0; ++j) {
             if (name.equalsAscii(s_stdStats[j])) {
                 const css::uno::Any any = the_value[i].Value;
-                sal_Int32 val;
+                sal_Int32 val = 0;
                 if (any >>= val) {
                     ::rtl::OUStringBuffer buf;
                     ::sax::Converter::convertNumber(buf, val);
