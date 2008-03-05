@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlReport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:34:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,16 @@
 #ifndef RPT_XMLREPORTELEMENTBASE_HXX
 #include "xmlReportElementBase.hxx"
 #endif
+#include <vector>
 
 namespace rptxml
 {
     class ORptFilter;
-    class OXMLReport : public OXMLReportElementBase
+    class OXMLReport : public OXMLReportElementBase, public IMasterDetailFieds
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xComponent;
+        ::std::vector< ::rtl::OUString> m_aMasterFields;
+        ::std::vector< ::rtl::OUString> m_aDetailFields;
         OXMLReport(const OXMLReport&);
         void operator =(const OXMLReport&);
     public:
@@ -61,6 +64,8 @@ namespace rptxml
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual void EndElement();
+
+        virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair);
 
     private:
         /** initializes our object's properties whose runtime (API) default is different from the file
