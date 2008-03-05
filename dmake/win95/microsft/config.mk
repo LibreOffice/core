@@ -15,12 +15,12 @@ TMPDIR :=
 
 # The following sources are required for MSC
 OSR_SRC += ruletab.c
-DOS_SRC += runargv.c rmprq.c
+UNX_SRC += runargv.c rmprq.c
 
 .SETDIR=$(osrdir) : $(OSR_SRC)
-.SETDIR=msdos     : $(DOS_SRC)
+.SETDIR=unix      : $(UNX_SRC)
 
-SRC += $(OSR_SRC) $(DOS_SRC)
+SRC += $(OSR_SRC) $(UNX_SRC)
 .SOURCE.h : $(osrdir)
 
 SET_STACK  = /stack:4096
