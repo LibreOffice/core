@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:58:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -752,7 +752,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     {
         rSh.StartAction();
         SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
-        rSh.GetAttr( aSet );
+        rSh.GetCurAttr( aSet );
 
         const SfxPoolItem* pItem;
         if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE, &pItem))
