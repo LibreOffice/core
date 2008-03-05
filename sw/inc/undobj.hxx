@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:36:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -677,6 +677,27 @@ public:
     void PutAttr( const SfxPoolItem& rItem );
     SwFmt* GetFmt( SwDoc& rDoc );       // prueft, ob es noch im Doc ist!
 };
+
+// --> OD 2008-02-12 #newlistlevelattrs#
+class SwUndoFmtResetAttr : public SwUndo
+{
+    public:
+        SwUndoFmtResetAttr( SwFmt& rChangedFormat,
+                            const USHORT nWhichId );
+        ~SwUndoFmtResetAttr();
+
+        virtual void Undo( SwUndoIter& );
+        virtual void Redo( SwUndoIter& );
+
+    private:
+        // format at which a certain attribute is reset.
+        SwFmt* mpChangedFormat;
+        // which ID of the reset attribute
+        USHORT mnWhichId;
+        // old attribute which has been reset - needed for undo.
+        SfxPoolItem* mpOldItem;
+};
+// <--
 
 class SwUndoDontExpandFmt : public SwUndo
 {
