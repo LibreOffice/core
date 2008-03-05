@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:37:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1096,6 +1096,15 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
             dispose();
         }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "storeOwn" ) ) )
+        {
+            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+            if ( xPersist.is() )
+            {
+                xPersist->storeOwn();
+                notifyDataSourceModified();
+            }
+        }
         else if ( aCommand.Name.compareToAscii( "shutdown" ) == 0 )
         {
             bool bClose = prepareClose();
@@ -1407,13 +1416,7 @@ sal_Bool ODocumentDefinition::saveAs()
             }
         }
 
-        ::osl::MutexGuard aGuard(m_aMutex);
-        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-        if ( xPersist.is() )
-        {
-            xPersist->storeOwn();
-            notifyDataSourceModified();
-        }
+
     }
     catch(Exception&)
     {
