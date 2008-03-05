@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querytablefragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,6 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::xml::sax::SAXException;
 
 namespace oox {
 namespace xls {
@@ -54,18 +48,19 @@ OoxQueryTableFragment::OoxQueryTableFragment(
 {
 }
 
-bool OoxQueryTableFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxQueryTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
-        case XML_ROOT_CONTEXT: return (nElement == XLS_TOKEN( queryTable ));
+        case XML_ROOT_CONTEXT:
+            return  (nElement == XLS_TOKEN( queryTable ));
     }
     return false;
 }
 
 void OoxQueryTableFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch ( getCurrentContext() )
+    switch ( getCurrentElement() )
     {
         case XLS_TOKEN( queryTable ):
             importQueryTable( rAttribs );
@@ -80,3 +75,4 @@ void OoxQueryTableFragment::importQueryTable( const AttributeList& rAttribs )
 
 } // namespace xls
 } // namespace oox
+

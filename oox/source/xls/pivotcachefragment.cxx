@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivotcachefragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,24 +59,30 @@ OoxPivotCacheFragment::OoxPivotCacheFragment( const WorkbookHelper& rHelper,
 {
 }
 
-bool OoxPivotCacheFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxPivotCacheFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
-        case XML_ROOT_CONTEXT:                      return nElement == XLS_TOKEN( pivotCacheDefinition );
-        case XLS_TOKEN( pivotCacheDefinition ):     return (nElement == XLS_TOKEN( cacheSource ) ||
-                                                            nElement == XLS_TOKEN( cacheFields ));
-        case XLS_TOKEN( cacheSource ):              return nElement == XLS_TOKEN( worksheetSource );
-        case XLS_TOKEN( cacheFields ):              return nElement == XLS_TOKEN( cacheField );
-        case XLS_TOKEN( cacheField ):               return nElement == XLS_TOKEN( sharedItems );
-        case XLS_TOKEN( sharedItems ):              return nElement == XLS_TOKEN( s );
+        case XML_ROOT_CONTEXT:
+            return  (nElement == XLS_TOKEN( pivotCacheDefinition ));
+        case XLS_TOKEN( pivotCacheDefinition ):
+            return  (nElement == XLS_TOKEN( cacheSource )) ||
+                    (nElement == XLS_TOKEN( cacheFields ));
+        case XLS_TOKEN( cacheSource ):
+            return  (nElement == XLS_TOKEN( worksheetSource ));
+        case XLS_TOKEN( cacheFields ):
+            return  (nElement == XLS_TOKEN( cacheField ));
+        case XLS_TOKEN( cacheField ):
+            return  (nElement == XLS_TOKEN( sharedItems ));
+        case XLS_TOKEN( sharedItems ):
+            return  (nElement == XLS_TOKEN( s ));
     }
     return false;
 }
 
 void OoxPivotCacheFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch ( getCurrentContext() )
+    switch ( getCurrentElement() )
     {
         case XLS_TOKEN( pivotCacheDefinition ):
             importPivotCacheDefinition( rAttribs );

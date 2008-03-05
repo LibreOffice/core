@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivottablefragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,24 +38,10 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 
-#define DEBUG_OOX_PIVOTTABLE 1
-
 #include <vector>
-#include <stdexcept>
-#if DEBUG_OOX_PIVOTTABLE
-#include <stdio.h>
-#endif
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::xml::sax::SAXException;
 
 namespace oox {
 namespace xls {
@@ -67,36 +53,47 @@ OoxPivotTableFragment::OoxPivotTableFragment(
 {
 }
 
-bool OoxPivotTableFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxPivotTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
-        case XML_ROOT_CONTEXT:                      return (nElement == XLS_TOKEN( pivotTableDefinition ));
-        case XLS_TOKEN( pivotTableDefinition ):     return (nElement == XLS_TOKEN( location )) ||
-                                                           (nElement == XLS_TOKEN( pivotFields )) ||
-                                                           (nElement == XLS_TOKEN( rowFields )) ||
-                                                           (nElement == XLS_TOKEN( rowItems )) ||
-                                                           (nElement == XLS_TOKEN( colFields )) ||
-                                                           (nElement == XLS_TOKEN( colItems )) ||
-                                                           (nElement == XLS_TOKEN( pageFields )) ||
-                                                           (nElement == XLS_TOKEN( dataFields )) ||
-                                                           (nElement == XLS_TOKEN( pivotTableStyleInfo ));
-        case XLS_TOKEN( pivotFields ):              return (nElement == XLS_TOKEN( pivotField ));
-        case XLS_TOKEN( pivotField ):               return (nElement == XLS_TOKEN( items ));
-        case XLS_TOKEN( items ):                    return (nElement == XLS_TOKEN( item ));
-        case XLS_TOKEN( rowFields ):                return (nElement == XLS_TOKEN( field ));
-        case XLS_TOKEN( colFields ):                return (nElement == XLS_TOKEN( field ));
-        case XLS_TOKEN( pageFields ):               return (nElement == XLS_TOKEN( pageField ));
-        case XLS_TOKEN( dataFields ):               return (nElement == XLS_TOKEN( dataField ));
-        case XLS_TOKEN( colItems ):                 return (nElement == XLS_TOKEN( i ));
-        case XLS_TOKEN( rowItems ):                 return (nElement == XLS_TOKEN( i ));
+        case XML_ROOT_CONTEXT:
+            return  (nElement == XLS_TOKEN( pivotTableDefinition ));
+        case XLS_TOKEN( pivotTableDefinition ):
+            return  (nElement == XLS_TOKEN( location )) ||
+                    (nElement == XLS_TOKEN( pivotFields )) ||
+                    (nElement == XLS_TOKEN( rowFields )) ||
+                    (nElement == XLS_TOKEN( rowItems )) ||
+                    (nElement == XLS_TOKEN( colFields )) ||
+                    (nElement == XLS_TOKEN( colItems )) ||
+                    (nElement == XLS_TOKEN( pageFields )) ||
+                    (nElement == XLS_TOKEN( dataFields )) ||
+                    (nElement == XLS_TOKEN( pivotTableStyleInfo ));
+        case XLS_TOKEN( pivotFields ):
+            return  (nElement == XLS_TOKEN( pivotField ));
+        case XLS_TOKEN( pivotField ):
+            return  (nElement == XLS_TOKEN( items ));
+        case XLS_TOKEN( items ):
+            return  (nElement == XLS_TOKEN( item ));
+        case XLS_TOKEN( rowFields ):
+            return  (nElement == XLS_TOKEN( field ));
+        case XLS_TOKEN( colFields ):
+            return  (nElement == XLS_TOKEN( field ));
+        case XLS_TOKEN( pageFields ):
+            return  (nElement == XLS_TOKEN( pageField ));
+        case XLS_TOKEN( dataFields ):
+            return  (nElement == XLS_TOKEN( dataField ));
+        case XLS_TOKEN( colItems ):
+            return  (nElement == XLS_TOKEN( i ));
+        case XLS_TOKEN( rowItems ):
+            return  (nElement == XLS_TOKEN( i ));
     }
     return false;
 }
 
 void OoxPivotTableFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch ( getCurrentContext() )
+    switch ( getCurrentElement() )
     {
         case XLS_TOKEN( pivotTableDefinition ):
             importPivotTableDefinition( rAttribs );
@@ -192,3 +189,4 @@ void OoxPivotTableFragment::importPivotField( const AttributeList& rAttribs )
 
 } // namespace xls
 } // namespace oox
+
