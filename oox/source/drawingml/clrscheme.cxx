@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clrscheme.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ sal_Bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) con
 {
     switch( nSchemeClrToken )
     {
-        case XML_bg1 : nSchemeClrToken = XML_dk1; break;
-        case XML_bg2 : nSchemeClrToken = XML_dk2; break;
-        case XML_tx1 : nSchemeClrToken = XML_lt1; break;
-        case XML_tx2 : nSchemeClrToken = XML_lt2; break;
+        case XML_bg1 : nSchemeClrToken = XML_lt1; break;
+        case XML_bg2 : nSchemeClrToken = XML_lt2; break;
+        case XML_tx1 : nSchemeClrToken = XML_dk1; break;
+        case XML_tx2 : nSchemeClrToken = XML_dk2; break;
     }
     std::map < sal_Int32, sal_Int32 >::const_iterator aIter( maClrScheme.find( nSchemeClrToken ) );
     if ( aIter != maClrScheme.end() )
