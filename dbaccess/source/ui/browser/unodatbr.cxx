@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:43:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
+#include <com/sun/star/document/MacroExecMode.hpp>
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -349,6 +350,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::datatransfer;
+using namespace ::com::sun::star::document;
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svx;
@@ -3393,14 +3395,25 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
 
             if ( xDocumentModel.is() )
             {
-                Sequence<PropertyValue > aArgs(1);
-                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
-                aArgs[0].Value <<= xDocumentModel;
+                Reference< XInteractionHandler > xInteractionHandler(
+                    getORB()->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) ) ),
+                        UNO_QUERY );
+                OSL_ENSURE( xInteractionHandler.is(), "SbaTableQueryBrowser::implAdministrate: no interaction handler available!" );
+
+                ::comphelper::NamedValueCollection aLoadArgs;
+                aLoadArgs.put( "Model", xDocumentModel );
+                aLoadArgs.put( "InteractionHandler", xInteractionHandler );
+                aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+
+                Sequence< PropertyValue > aLoadArgPV;
+                aLoadArgs >>= aLoadArgPV;
+
                 xFrameLoader->loadComponentFromURL(
                     xDocumentModel->getURL(),
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
                     nFrameSearchFlag,
-                    aArgs
+                    aLoadArgPV
                 );
             }
         }
