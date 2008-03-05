@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: vg $ $Date: 2008-01-24 16:02:57 $
+#  last change: $Author: kz $ $Date: 2008-03-05 17:10:54 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
 #CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 #CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
@@ -54,6 +55,7 @@ SLOFILES= \
     $(SLO)$/qnametostr.obj \
     $(SLO)$/sprmcodetostr.obj \
     $(SLO)$/resourcemodel.obj \
+    $(SLO)$/util.obj \
     $(SLO)$/WW8Analyzer.obj
 
 SHL1TARGET=$(TARGET)
@@ -111,8 +113,8 @@ DOCTOKRESOURCETOOLS=..$/doctok$/resourcetools.xsl
 MODELPROCESSED=$(MISC)$/model_preprocessed.xml
 
 QNAMETOSTRCXX=$(RESOURCEMODELCXXOUTDIR)$/qnametostr.cxx
-OOXMLQNAMETOSTRTMP=$(RESOURCEMODELCXXOUTDIR)/OOXMLqnameToStr.tmp
-DOCTOKQNAMETOSTRTMP=$(RESOURCEMODELCXXOUTDIR)/DOCTOKqnameToStr.tmp
+OOXMLQNAMETOSTRTMP=$(RESOURCEMODELCXXOUTDIR)$/OOXMLqnameToStr.tmp
+DOCTOKQNAMETOSTRTMP=$(RESOURCEMODELCXXOUTDIR)$/DOCTOKqnameToStr.tmp
 SPRMCODETOSTRCXX=$(RESOURCEMODELCXXOUTDIR)$/sprmcodetostr.cxx
 SPRMCODETOSTRTMP=$(RESOURCEMODELCXXOUTDIR)$/sprmcodetostr.tmp
 DOCTOKRESOURCEIDSHXX=$(DOCTOKHXXOUTDIR)$/resourceids.hxx
@@ -141,9 +143,8 @@ $(OOXMLQNAMETOSTRTMP): $(OOXMLQNAMETOSTRXSL) $(MODELPROCESSED)
 $(DOCTOKQNAMETOSTRTMP): $(DOCTOKQNAMETOSTRXSL) $(DOCTOKMODEL)
     $(XSLTPROC) $(DOCTOKQNAMETOSTRXSL) $(DOCTOKMODEL) > $@
 
-$(QNAMETOSTRCXX):  qnametostrheader $(OOXMLQNAMETOSTRTMP) $(DOCTOKQNAMETOSTRTMP) qnametostrfooter 
-    $(TYPE) $^ > $@
-
+$(QNAMETOSTRCXX): $(OOXMLQNAMETOSTRTMP) $(DOCTOKQNAMETOSTRTMP) qnametostrheader qnametostrfooter $(OOXMLRESOURCESTOOLSXSL) $(DOCTOKRESOURCETOOLS)
+    $(TYPE) qnametostrheader $(OOXMLQNAMETOSTRTMP) $(DOCTOKQNAMETOSTRTMP) qnametostrfooter > $@
 $(SPRMCODETOSTRTMP): $(DOCTOKSPRMCODETOSTRXSL) $(DOCTOKMODEL)
     $(XSLTPROC) $(DOCTOKSPRMCODETOSTRXSL) $(DOCTOKMODEL) > $@
 
