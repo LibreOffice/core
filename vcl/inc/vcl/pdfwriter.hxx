@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:22:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,37 +35,22 @@
 #ifndef _VCL_PDFWRITER_HXX
 #define _VCL_PDFWRITER_HXX
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
-#ifndef _TL_GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef _VCL_DLLAPI_H
-#include <vcl/dllapi.h>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
 
-#ifndef _VCL_VCLENUM_HXX
-#include <vcl/vclenum.hxx>
-#endif
-#ifndef _SV_FONT_HXX
-#include <vcl/font.hxx>
-#endif
-#ifndef _VCL_GRAPHICTOOLS_HXX_
-#include <vcl/graphictools.hxx>
-#endif
-#ifndef _STRING_HXX
+#include <tools/gen.hxx>
 #include <tools/string.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
+
+#include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
+#include <vcl/font.hxx>
+#include <vcl/graphictools.hxx>
+
+#include <com/sun/star/io/XOutputStream.hpp>
 
 #include <list>
 #include <vector>
+#include <set>
 
 class Font;
 class Point;
@@ -230,6 +215,21 @@ public:
         // PushButton, RadioButton, CheckBox; Down means selected for
         // RadioButton and CheckBox
         Up, Down
+    };
+
+    enum ErrorCode
+    {
+        // transparent object occurred and was draw opaque because
+        // PDF/A does not allow transparency
+        Warning_Transparency_Omitted_PDFA,
+
+        // transparent object occured but is only supported since
+        // PDF 1.4
+        Warning_Transparency_Omitted_PDF13,
+
+        // a form action was exported that is not suitable for PDF/A
+        // the action was skipped
+        Warning_FormAction_Omitted_PDFA
     };
 
     struct VCL_DLLPUBLIC AnyWidget
@@ -655,6 +655,13 @@ The following structure describes the permissions used in PDF security
 
     /* finishes the file */
     bool Emit();
+
+    /*
+     * Get a list of errors that occured during processing
+     * this should enable the producer to give feedback about
+     * any anomalies that might have occured
+     */
+    std::set< ErrorCode > GetErrors();
 
     PDFVersion GetVersion() const;
 
