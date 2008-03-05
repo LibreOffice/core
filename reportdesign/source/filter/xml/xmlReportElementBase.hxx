@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlReportElementBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,19 @@
 #ifndef _COM_SUN_STAR_REPORT_XREPORTCOMPONENT_HPP_
 #include <com/sun/star/report/XReportComponent.hpp>
 #endif
-
+#include <vector>
 
 namespace rptxml
 {
     class ORptFilter;
     class OXMLTable;
+
+    class SAL_NO_VTABLE IMasterDetailFieds
+    {
+    public:
+        virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair) = 0;
+    };
+
     class OXMLReportElementBase : public SvXMLImportContext
     {
         OXMLReportElementBase(const OXMLReportElementBase&);
