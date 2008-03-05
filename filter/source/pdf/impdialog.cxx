@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:45:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1369,4 +1369,98 @@ IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, void*, EMPTYARG )
     return 0;
 }
 
+ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& rErrors, ResMgr& rResMgr ) :
+    ModalDialog( NULL, ResId( RID_PDF_ERROR_DLG, rResMgr ) ),
+    maFI( this, 0 ),
+    maProcessText( this, ResId( FT_PROCESS, rResMgr ) ),
+    maErrors( this, WB_BORDER | WB_AUTOVSCROLL ),
+    maExplanation( this, WB_WORDBREAK ),
+    maButton( this, WB_DEFBUTTON )
 
+{
+    // load images
+    Image aWarnImg( BitmapEx( ResId( IMG_WARN, rResMgr ) ) );
+    Image aErrImg( BitmapEx( ResId( IMG_ERR, rResMgr ) ) );
+
+    for( std::set<vcl::PDFWriter::ErrorCode>::const_iterator it = rErrors.begin();
+         it != rErrors.end(); ++it )
+    {
+        switch( *it )
+        {
+        case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
+        {
+            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_TRANSP_PDFA_SHORT, rResMgr ) ),
+                                                aWarnImg );
+            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_TRANSP_PDFA, rResMgr ) ) );
+        }
+        break;
+        case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
+        {
+            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_TRANSP_VERSION_SHORT, rResMgr ) ),
+                                                aWarnImg );
+            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_TRANSP_VERSION, rResMgr ) ) );
+        }
+        break;
+        case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
+        {
+            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_FORMACTION_PDFA_SHORT, rResMgr ) ),
+                                                aWarnImg );
+            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_FORMACTION_PDFA, rResMgr ) ) );
+        }
+        break;
+        default:
+            break;
+        }
+    }
+
+    FreeResource();
+
+    if( maErrors.GetEntryCount() > 0 )
+    {
+        maErrors.SelectEntryPos( 0 );
+        String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( 0 ));
+        maExplanation.SetText( pStr ? *pStr : String() );
+    }
+
+    // adjust layout
+    Image aWarnImage( WarningBox::GetStandardImage() );
+    Size aImageSize( aWarnImage.GetSizePixel() );
+    Size aDlgSize( GetSizePixel() );
+    aImageSize.Width() += 6;
+    aImageSize.Height() += 6;
+    maFI.SetImage( aWarnImage );
+    maFI.SetPosSizePixel( Point( 5, 5 ), aImageSize );
+    maFI.Show();
+
+    maProcessText.SetStyle( maProcessText.GetStyle() | WB_VCENTER );
+    maProcessText.SetPosSizePixel( Point( aImageSize.Width() + 10, 5 ),
+                                   Size(  aDlgSize.Width() - aImageSize.Width() - 15, aImageSize.Height() ) );
+
+    Point aErrorLBPos( 5, aImageSize.Height() + 10 );
+    Size aErrorLBSize( aDlgSize.Width()/2 - 10, aDlgSize.Height() - aErrorLBPos.Y() - 35 );
+    maErrors.SetPosSizePixel( aErrorLBPos, aErrorLBSize );
+    maErrors.SetSelectHdl( LINK( this, ImplErrorDialog, SelectHdl ) );
+    maErrors.Show();
+
+    maExplanation.SetPosSizePixel( Point( aErrorLBPos.X() + aErrorLBSize.Width() + 5, aErrorLBPos.Y() ),
+                                   Size( aDlgSize.Width() - aErrorLBPos.X() - aErrorLBSize.Width() - 10, aErrorLBSize.Height() ) );
+    maExplanation.Show();
+
+    maButton.SetPosSizePixel( Point( (aDlgSize.Width() - 50)/2, aDlgSize.Height() - 30 ),
+                              Size( 50, 25 ) );
+    maButton.Show();
+}
+
+ImplErrorDialog::~ImplErrorDialog()
+{
+    // free strings again
+    for( USHORT n = 0; n < maErrors.GetEntryCount(); n++ )
+        delete (String*)maErrors.GetEntryData( n );
+}
+
+IMPL_LINK( ImplErrorDialog, SelectHdl, ListBox*, EMPTYARG )
+{
+    String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
+    maExplanation.SetText( pStr ? *pStr : String() );
+    return 0;
+}
