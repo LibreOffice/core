@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:32:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,9 +294,8 @@ sal_Bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nPitchIdx,
                          sal_Int32 nCharsetIdx ) const
 {
-    const XMLFontStyleContext_Impl *pFontStyle =
-        PTR_CAST( XMLFontStyleContext_Impl,
-            FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, sal_True ) );
+    const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, sal_True );
+    const XMLFontStyleContext_Impl *pFontStyle = PTR_CAST( XMLFontStyleContext_Impl,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );
