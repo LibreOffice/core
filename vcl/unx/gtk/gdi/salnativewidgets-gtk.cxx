@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <plugins/gtk/gtkframe.hxx>
-#include <plugins/gtk/gtkdata.hxx>
-#include <plugins/gtk/gtkinst.hxx>
-#include <plugins/gtk/gtkgdi.hxx>
+#include "plugins/gtk/gtkframe.hxx"
+#include "plugins/gtk/gtkdata.hxx"
+#include "plugins/gtk/gtkinst.hxx"
+#include "plugins/gtk/gtkgdi.hxx"
 
-#include <pspgraphics.h>
+#include "pspgraphics.h"
 
 #include <cstdio>
 #include <cmath>
@@ -49,14 +49,9 @@
 #include <algorithm>
 #include <hash_map>
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _SV_SALDISP_HXX
-#include <saldisp.hxx>
-#endif
-
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "vcl/svapp.hxx"
 
 // initialize statics
 BOOL GtkSalGraphics::bThemeChanged = TRUE;
@@ -107,6 +102,7 @@ struct NWFWidgetData
     GtkWidget *  gMenuItemCheckMenuWidget;
     GtkWidget *  gMenuItemRadioMenuWidget;
     GtkWidget *  gTooltipPopup;
+    GtkWidget *  gProgressBar;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -140,6 +136,7 @@ struct NWFWidgetData
         gMenuItemCheckMenuWidget( NULL ),
         gMenuItemRadioMenuWidget( NULL ),
         gTooltipPopup( NULL ),
+        gProgressBar( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -175,6 +172,7 @@ static void NWEnsureGTKToolbar          ( int nScreen );
 static void NWEnsureGTKMenubar          ( int nScreen );
 static void NWEnsureGTKMenu             ( int nScreen );
 static void NWEnsureGTKTooltip          ( int nScreen );
+static void NWEnsureGTKProgressBar      ( int nScreen );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
 static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen );
@@ -573,6 +571,9 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 ||  (nPart==PART_MENU_ITEM)
                 ||  (nPart==PART_MENU_ITEM_CHECK_MARK)
                 ||  (nPart==PART_MENU_ITEM_RADIO_MARK)
+                )                                                   ||
+        ((nType == CTRL_PROGRESS) &&
+                (   (nPart == PART_ENTIRE_CONTROL) )
                 )
         )
         return( TRUE );
@@ -745,6 +746,7 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         && nType != CTRL_SPINBOX
         && nType != CTRL_TAB_ITEM
         && nType != CTRL_TAB_PANE
+        && nType != CTRL_PROGRESS
         && ! (bToolbarGripWorkaround && nType == CTRL_TOOLBAR && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
         )
     {
@@ -844,6 +846,10 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
     else if( (nType == CTRL_TOOLTIP) && (nPart == PART_ENTIRE_CONTROL) )
     {
         returnVal = NWPaintGTKTooltip( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, rCaption );
+    }
+    else if( (nType == CTRL_PROGRESS) && (nPart == PART_ENTIRE_CONTROL) )
+    {
+        returnVal = NWPaintGTKProgress( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, rCaption );
     }
     if( pixmap )
     {
@@ -1435,11 +1441,8 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         unsigned int sliderHeight = slider_width + (trough_border * 2);
         vShim = (pixmapRect.GetHeight() - sliderHeight) / 2;
 
-        if ( int(sliderHeight) < scrollbarRect.GetHeight() );
-        {
-            scrollbarRect.Move( 0, vShim );
-            scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
-        }
+        scrollbarRect.Move( 0, vShim );
+        scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
 
         scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nScreen].gScrollHorizWidget );
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
@@ -1489,11 +1492,8 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         unsigned int sliderWidth = slider_width + (trough_border * 2);
         hShim = (pixmapRect.GetWidth() - sliderWidth) / 2;
 
-        if ( int(sliderWidth) < scrollbarRect.GetWidth() );
-        {
-            scrollbarRect.Move( hShim, 0 );
-            scrollbarRect.SetSize( Size( sliderWidth, scrollbarRect.GetHeight() ) );
-        }
+        scrollbarRect.Move( hShim, 0 );
+        scrollbarRect.SetSize( Size( sliderWidth, scrollbarRect.GetHeight() ) );
 
         scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nScreen].gScrollVertWidget );
         scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
@@ -2856,6 +2856,70 @@ BOOL GtkSalGraphics::NWPaintGTKTooltip(
     return( TRUE );
 }
 
+BOOL GtkSalGraphics::NWPaintGTKProgress(
+            GdkDrawable*,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList&,
+            ControlState, const ImplControlValue& rValue,
+            SalControlHandle&, const OUString& )
+{
+    NWEnsureGTKProgressBar( m_nScreen );
+
+    gint            w, h;
+    w = rControlRectangle.GetWidth();
+    h = rControlRectangle.GetHeight();
+
+    long nProgressWidth = rValue.getNumericVal();
+
+    GdkPixmap* pixmap = NWGetPixmapFromScreen( Rectangle( Point( 0, 0 ), Size( w, h ) ) );
+    if( ! pixmap )
+        return FALSE;
+
+    GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
+
+    // paint background
+    gtk_paint_flat_box( gWidgetData[m_nScreen].gProgressBar->style,
+                        pixDrawable,
+                        GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE,
+                        NULL,
+                        gWidgetData[m_nScreen].gProgressBar,
+                        "trough",
+                        0, 0, w, h );
+    if( nProgressWidth > 0 )
+    {
+        // paint progress
+        if( Application::GetSettings().GetLayoutRTL() )
+        {
+            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+                           pixDrawable,
+                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                           NULL,
+                           gWidgetData[m_nScreen].gProgressBar,
+                           "bar",
+                           w-nProgressWidth, 0, nProgressWidth, h
+                           );
+        }
+        else
+        {
+            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+                           pixDrawable,
+                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                           NULL,
+                           gWidgetData[m_nScreen].gProgressBar,
+                           "bar",
+                           0, 0, nProgressWidth, h
+                           );
+        }
+    }
+
+    BOOL bRet = NWRenderPixmapToScreen( pixmap, rControlRectangle );
+    g_object_unref( pixmap );
+
+    return bRet;
+}
+
 //----
 
 static Rectangle NWGetListBoxButtonRect( int nScreen,
@@ -3715,5 +3779,14 @@ static void NWEnsureGTKTooltip( int nScreen )
         gtk_widget_set_name( gWidgetData[nScreen].gTooltipPopup, "gtk-tooltips");
         gtk_widget_realize( gWidgetData[nScreen].gTooltipPopup );
         gtk_widget_ensure_style( gWidgetData[nScreen].gTooltipPopup );
+    }
+}
+
+static void NWEnsureGTKProgressBar( int nScreen )
+{
+    if( !gWidgetData[nScreen].gProgressBar )
+    {
+        gWidgetData[nScreen].gProgressBar = gtk_progress_bar_new ();
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gProgressBar, nScreen );
     }
 }
