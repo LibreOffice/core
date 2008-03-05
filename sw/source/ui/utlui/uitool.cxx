@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:49:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,7 +643,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     else
     {
         SfxItemSet aCoreSet(rShell.GetView().GetPool(), RES_PAGEDESC, RES_PAGEDESC );
-        rShell.GetAttr( aCoreSet );
+        rShell.GetCurAttr( aCoreSet );
         if(SFX_ITEM_SET == aCoreSet.GetItemState( RES_PAGEDESC, TRUE, &pItem ) )
         {
             if( ((SwFmtPageDesc*)pItem)->GetPageDesc() )
