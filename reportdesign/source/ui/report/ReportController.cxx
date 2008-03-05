@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:19:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,6 +278,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include "UndoEnv.hxx"
+#include "InsertFunctions.hxx"
 #include <svx/svdpagv.hxx>
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
@@ -287,6 +288,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <unotools/confignode.hxx>
 #include <helpids.hrc>
 
 using namespace ::com::sun::star;
@@ -386,6 +388,8 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_bShowProperties(sal_True)
 ,m_bGroupFloaterWasVisible(sal_False)
 ,m_bHelplinesMove(sal_True)
+,m_bChartEnabled(false)
+,m_bChartEnabledAsked(false)
 {
     DBG_CTOR( rpt_OReportController,NULL);
 }
@@ -609,18 +613,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = sal_True;
             break;
         case SID_EXECUTE_REPORT:
-            aReturn.bEnabled = isConnected() && isEditable() && m_xReportDefinition.is()
-                                             && m_xReportDefinition->getCommand().getLength();
-            if ( aReturn.bEnabled )
-            {
-                aReturn.bEnabled = sal_False;
-                const sal_uInt16 nCount = m_aReportModel->GetPageCount();
-                for (sal_uInt16 i = 0; i < nCount && !aReturn.bEnabled ; ++i)
-                {
-                    const SdrPage* pPage = m_aReportModel->GetPage(i);
-                    aReturn.bEnabled = pPage->GetObjCount() != 0;
-                }
-            }
+            aReturn.bEnabled = isConnected() && m_xReportDefinition.is();
             break;
         case SID_DELETE:
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && !m_pMyOwnView->isHandleEvent(_nId);
@@ -648,6 +641,11 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_OBJECT_SELECT:
             aReturn.bEnabled = sal_True;
             aReturn.bChecked = m_pMyOwnView->GetMode() == RPTUI_SELECT;
+            break;
+        case SID_INSERT_DIAGRAM:
+            aReturn.bEnabled = isEditable();
+            aReturn.bInvisible = optional< bool >(!m_bChartEnabled);
+            aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_OLE2;
             break;
         case SID_FM_FIXEDTEXT:
             aReturn.bEnabled = isEditable();
@@ -1006,9 +1004,6 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DATETIME:
             aReturn.bEnabled = m_xReportDefinition.is() && isEditable() && m_pMyOwnView->getCurrentSection().is();
             break;
-        case SID_INSERT_DIAGRAM:
-            aReturn.bEnabled = isEditable();
-            break;
         case SID_EXPORTDOC:
         case SID_EXPORTDOCASPDF:
             aReturn.bEnabled = m_xReportDefinition.is();
@@ -1255,6 +1250,20 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_OBJECT_SELECT:
             m_pMyOwnView->SetMode(RPTUI_SELECT);
+            InvalidateAll();
+            break;
+        case SID_INSERT_DIAGRAM:
+            /*{
+                OSectionView* pView = getCurrentSectionView();
+                if ( pView )
+                {
+                    Reference< awt::XWindow> xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
+                    InsertChart(m_xContext,m_xReportDefinition.get(),xWindow,pView,getSdrModel().get());
+                }
+            }*/
+            m_pMyOwnView->SetMode( RPTUI_INSERT );
+            m_pMyOwnView->SetInsertObj( OBJ_OLE2);
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_FIXEDTEXT:
@@ -1666,7 +1675,6 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     createPageNumber(aArgs);
             } // if ( m_xReportDefinition.is() )
             break;
-        case SID_INSERT_DIAGRAM:
         case SID_EXPORTDOC:
         case SID_EXPORTDOCASPDF:
             break;
@@ -1779,6 +1787,8 @@ void OReportController::impl_initialize( )
 
         } // if ( m_xReportDefinition.is() )
 
+        // check if chart is supported by the engine
+        checkChartEnabled();
         // restore the view data
         m_pMyOwnView->toggleGrid(m_bGridVisible);
         m_pMyOwnView->showRuler(m_bShowRuler);
@@ -1910,11 +1920,6 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:ReportHeaderFooter",        SID_REPORTHEADERFOOTER,         CommandGroup::VIEW );
     //implDescribeSupportedFeature( ".uno:SwitchControlDesignMode", SID_FM_DESIGN_MODE,             CommandGroup::VIEW );
 
-    implDescribeSupportedFeature( ".uno:InsertPageNumberField",     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertDateTimeField",       SID_DATETIME,                   CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertObjectChart",         SID_INSERT_DIAGRAM,             CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertGraphic",             SID_INSERT_GRAPHIC,             CommandGroup::INSERT );
-
     implDescribeSupportedFeature( ".uno:ConditionalFormatting",     SID_CONDITIONALFORMATTING,      CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:PageDialog",                SID_PAGEDIALOG,                 CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:ResetAttributes",           SID_SETCONTROLDEFAULTS,         CommandGroup::FORMAT );
@@ -1973,6 +1978,10 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Save",                      SID_SAVEDOC,                    CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",                    SID_SAVEASDOC,                  CommandGroup::DOCUMENT );
 
+    implDescribeSupportedFeature( ".uno:InsertPageNumberField",     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertDateTimeField",       SID_DATETIME,                   CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertObjectChart",         SID_INSERT_DIAGRAM,             CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertGraphic",             SID_INSERT_GRAPHIC,             CommandGroup::INSERT );
     // controls
     implDescribeSupportedFeature( ".uno:SelectObject",              SID_OBJECT_SELECT,              CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:Label",                     SID_FM_FIXEDTEXT,               CommandGroup::INSERT );
@@ -2909,64 +2918,112 @@ Reference<XFrame> OReportController::getXFrame()
 // -----------------------------------------------------------------------------
 uno::Reference<frame::XModel> OReportController::executeReport()
 {
+    OSL_ENSURE(m_xReportDefinition.is(),"Where is my report?");
+
     uno::Reference<frame::XModel> xModel;
     if ( m_xReportDefinition.is() )
     {
-        dbtools::SQLExceptionInfo aInfo;
-        try
+        sal_uInt16 nErrorId = RID_ERR_NO_COMMAND;
+        bool bEnabled = m_xReportDefinition->getCommand().getLength() != 0;
+        if ( bEnabled )
         {
-            WaitObject aWait(getView()); // cursor
-            if ( !m_xReportEngine.is() )
-                m_xReportEngine.set(getORB()->createInstance(SERVICE_REPORTENGINE),uno::UNO_QUERY_THROW);
-            m_xReportEngine->setReportDefinition(m_xReportDefinition);
-            m_xReportEngine->setActiveConnection(getConnection());
-            // if ( !m_xFrameLoader.is() )
-            //    m_xFrameLoader.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),uno::UNO_QUERY_THROW);
-            // const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-            // const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
-            // Reference<XFrame> xFrame = Reference<XFrame>(m_xFrameLoader,uno::UNO_QUERY_THROW)->findFrame(sTarget,nFrameSearchFlag);
-            Reference<XFrame> xFrame = getXFrame();
-            xModel = m_xReportEngine->createDocumentAlive(xFrame);
-        }
-        catch( const sdbc::SQLException& /*e*/ )
-        {   // SQLExceptions and derived exceptions must not be translated
-            aInfo = ::cppu::getCaughtException();
-        }
-        catch(const uno::Exception& e)
-        {
-            uno::Any aCaughtException( ::cppu::getCaughtException() );
-
-            // our first message says: we caught an exception
-            sdb::SQLContext aFirstMessage;
-            String sInfo = String( ModuleRes( RID_STR_CAUGHT_FOREIGN_EXCEPTION ) );
-            sInfo.SearchAndReplaceAllAscii( "$type$", aCaughtException.getValueTypeName() );
-            aFirstMessage.Message = sInfo;
-
-            // our second message: the message of the exception we caught
-            sdbc::SQLException aSecondMessage;
-            aSecondMessage.Message = e.Message;
-            aSecondMessage.Context = e.Context;
-
-            // maybe our third message: the message which is wrapped in the exception we caught
-            sdbc::SQLException aThirdMessage;
-            lang::WrappedTargetException aWrapped;
-            if ( aCaughtException >>= aWrapped )
+            bEnabled = false;
+            const sal_uInt16 nCount = m_aReportModel->GetPageCount();
+            sal_uInt16 i = 0;
+            for (; i < nCount && !bEnabled ; ++i)
             {
-                aThirdMessage.Message = aWrapped.Message;
-                aThirdMessage.Context = aWrapped.Context;
+                const SdrPage* pPage = m_aReportModel->GetPage(i);
+                bEnabled = pPage->GetObjCount() != 0;
             }
+            if ( !bEnabled )
+                nErrorId = RID_ERR_NO_OBJECTS;
+        }
 
-            if ( aThirdMessage.Message.getLength() )
-                aSecondMessage.NextException <<= aThirdMessage;
-            aFirstMessage.NextException <<= aSecondMessage;
-
+        dbtools::SQLExceptionInfo aInfo;
+        if ( !bEnabled )
+        {
+            sdb::SQLContext aFirstMessage;
+            String sInfo = String( ModuleRes( nErrorId ) );
+            aFirstMessage.Message = sInfo;
             aInfo = aFirstMessage;
+            if ( isEditable() )
+            {
+                sal_uInt16 nCommand = 0;
+                if ( nErrorId == RID_ERR_NO_COMMAND )
+                {
+                    if ( !m_bShowProperties )
+                        executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
+
+                    m_sLastActivePage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data"));
+                    m_pMyOwnView->setCurrentPage(m_sLastActivePage);
+                    nCommand = SID_SELECT_REPORT;
+                }
+                else if ( m_pMyOwnView && !m_pMyOwnView->isAddFieldVisible() )
+                {
+                    nCommand = SID_FM_ADD_FIELD;
+                }
+                if ( nCommand )
+                {
+                    uno::Sequence< beans::PropertyValue> aArgs;
+                    executeUnChecked(nCommand,aArgs);
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                WaitObject aWait(getView()); // cursor
+                if ( !m_xReportEngine.is() )
+                    m_xReportEngine.set(getORB()->createInstance(SERVICE_REPORTENGINE),uno::UNO_QUERY_THROW);
+                m_xReportEngine->setReportDefinition(m_xReportDefinition);
+                m_xReportEngine->setActiveConnection(getConnection());
+                Reference<XFrame> xFrame = getXFrame();
+                xModel = m_xReportEngine->createDocumentAlive(xFrame);
+            }
+            catch( const sdbc::SQLException& /*e*/ )
+            {   // SQLExceptions and derived exceptions must not be translated
+                aInfo = ::cppu::getCaughtException();
+            }
+            catch(const uno::Exception& e)
+            {
+                uno::Any aCaughtException( ::cppu::getCaughtException() );
+
+                // our first message says: we caught an exception
+                sdb::SQLContext aFirstMessage;
+                String sInfo = String( ModuleRes( RID_STR_CAUGHT_FOREIGN_EXCEPTION ) );
+                sInfo.SearchAndReplaceAllAscii( "$type$", aCaughtException.getValueTypeName() );
+                aFirstMessage.Message = sInfo;
+
+                // our second message: the message of the exception we caught
+                sdbc::SQLException aSecondMessage;
+                aSecondMessage.Message = e.Message;
+                aSecondMessage.Context = e.Context;
+
+                // maybe our third message: the message which is wrapped in the exception we caught
+                sdbc::SQLException aThirdMessage;
+                lang::WrappedTargetException aWrapped;
+                if ( aCaughtException >>= aWrapped )
+                {
+                    aThirdMessage.Message = aWrapped.Message;
+                    aThirdMessage.Context = aWrapped.Context;
+                }
+
+                if ( aThirdMessage.Message.getLength() )
+                    aSecondMessage.NextException <<= aThirdMessage;
+                aFirstMessage.NextException <<= aSecondMessage;
+
+                aInfo = aFirstMessage;
+            }
+            if (aInfo.isValid())
+            {
+                const String suSQLContext = String( ModuleRes( RID_STR_COULD_NOT_CREATE_REPORT ) );
+                aInfo.prepend(suSQLContext);
+            }
         }
 
         if (aInfo.isValid())
         {
-            const String suSQLContext = String( ModuleRes( RID_STR_COULD_NOT_CREATE_REPORT ) );
-            aInfo.prepend(suSQLContext);
             showError(aInfo);
         }
     }
@@ -3929,3 +3986,27 @@ uno::Reference< util::XNumberFormatter > OReportController::getReportNumberForma
     return m_xFormatter;
 }
 // -----------------------------------------------------------------------------
+void OReportController::checkChartEnabled()
+{
+    if ( !m_bChartEnabledAsked )
+    {
+        m_bChartEnabledAsked = true;
+        const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.ReportDesign" ) );
+        const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "UserData/Chart" ) );
+
+        try
+        {
+            ::utl::OConfigurationTreeRoot aConfiguration(
+                ::utl::OConfigurationTreeRoot::createWithServiceFactory( m_xServiceFactory, sConfigName ) );
+
+            sal_Bool bChartEnabled = sal_False;
+            if ( aConfiguration.hasByHierarchicalName(sPropertyName) )
+                aConfiguration.getNodeValue( sPropertyName ) >>= bChartEnabled;
+            m_bChartEnabled = bChartEnabled;
+        }
+        catch(const Exception&)
+        {
+        }
+    }
+}
+
