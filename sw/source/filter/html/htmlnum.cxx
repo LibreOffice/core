@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:49:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,10 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     else
     {
         aNumRuleName = pDoc->GetUniqueNumRuleName();
-        SwNumRule aNumRule( aNumRuleName );
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        SwNumRule aNumRule( aNumRuleName,
+                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+        // <--
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
         // --> OD 2006-06-27 #b6440955#
 //        aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
