@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:56:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,6 +412,7 @@ PrinterJob::StartJob (
 {
     m_bQuickJob = bIsQuickJob;
     mnMaxWidthPt = mnMaxHeightPt = 0;
+    mnLandscapes = mnPortraits = 0;
     m_pGraphics = pGraphics;
     InitPaperSize (rSetupData);
 
@@ -504,6 +505,7 @@ PrinterJob::StartJob (
     // Other
     WritePS (mpJobHeader, "%%DocumentData: Clean7Bit\n");
     WritePS (mpJobHeader, "%%Pages: (atend)\n");
+    WritePS (mpJobHeader, "%%Orientation: (atend)\n");
     WritePS (mpJobHeader, "%%PageOrder: Ascend\n");
     WritePS (mpJobHeader, "%%EndComments\n");
 
@@ -535,6 +537,10 @@ PrinterJob::EndJob ()
     aTrailer.append( (sal_Int32)mnMaxWidthPt );
     aTrailer.append( " " );
     aTrailer.append( (sal_Int32)mnMaxHeightPt );
+    if( mnLandscapes > mnPortraits )
+        aTrailer.append("\n%%Orientation: Landscape");
+    else
+        aTrailer.append("\n%%Orientation: Portrait");
     aTrailer.append( "\n%%Pages: " );
     aTrailer.append( (sal_Int32)maPageList.size() );
     aTrailer.append( "\n%%EOF\n" );
@@ -714,6 +720,17 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     WritePS (pPageHeader, " ");
     WritePS (pPageHeader, aPageNo);
     WritePS (pPageHeader, "\n");
+
+    if( rJobSetup.m_eOrientation == orientation::Landscape )
+    {
+        WritePS (pPageHeader, "%%PageOrientation: Landscape\n");
+        mnLandscapes++;
+    }
+    else
+    {
+        WritePS (pPageHeader, "%%PageOrientation: Portrait\n");
+        mnPortraits++;
+    }
 
     sal_Char  pBBox [256];
     sal_Int32 nChar = 0;
