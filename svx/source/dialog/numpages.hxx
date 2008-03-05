@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:37:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,18 +406,34 @@ class SvxNumPositionTabPage : public SfxTabPage
     FixedText           aLevelFT;
     MultiListBox        aLevelLB;
 
+    // --> OD 2008-01-11 #newlistlevelattrs#
+    // former set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedText           aDistBorderFT;
     MetricField         aDistBorderMF;
     CheckBox            aRelativeCB;
-
-
     FixedText           aIndentFT;
     MetricField         aIndentMF;
     FixedText           aDistNumFT;
     MetricField         aDistNumMF;
-
     FixedText           aAlignFT;
     ListBox             aAlignLB;
+    // <--
+
+    // --> OD 2008-01-10 #newlistlevelattrs#
+    // new set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
+    FixedText           aLabelFollowedByFT;
+    ListBox             aLabelFollowedByLB;
+    FixedText           aListtabFT;
+    MetricField         aListtabMF;
+    FixedText           aAlign2FT;
+    ListBox             aAlign2LB;
+    FixedText           aAlignedAtFT;
+    MetricField         aAlignedAtMF;
+    FixedText           aIndentAtFT;
+    MetricField         aIndentAtMF;
+    // <--
 
     PushButton          aStandardPB;
 
@@ -437,8 +453,10 @@ class SvxNumPositionTabPage : public SfxTabPage
     BOOL                bHasChild           : 1;
     BOOL                bPreset             : 1;
     BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    // --> OD 2008-01-11 #newlistlevelattrs#
+    bool                bLabelAlignmentPosAndSpaceModeActive;
+    // <--
 
-//  void                SetMinDist();
     void                InitControls();
 
     DECL_LINK( LevelHdl_Impl, ListBox * );
@@ -447,7 +465,17 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl_Impl, CheckBox * );
     DECL_LINK( StandardHdl_Impl, PushButton * );
 
-    public:
+    // --> OD 2008-01-11 #newlistlevelattrs#
+    void InitPosAndSpaceMode();
+    void ShowControlsDependingOnPosAndSpaceMode();
+
+    DECL_LINK( LabelFollowedByHdl_Impl, ListBox* );
+    DECL_LINK( ListtabPosHdl_Impl, MetricField* );
+    DECL_LINK( AlignAtHdl_Impl, MetricField* );
+    DECL_LINK( IndentAtHdl_Impl, MetricField* );
+    // <--
+
+public:
         SvxNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet);
         ~SvxNumPositionTabPage();
