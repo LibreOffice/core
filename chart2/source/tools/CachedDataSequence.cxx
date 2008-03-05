@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CachedDataSequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "ModifyListenerHelper.hxx"
+
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <algorithm>
 
@@ -94,6 +96,15 @@ CachedDataSequence::CachedDataSequence()
           m_bIsHidden( true ),
           m_eCurrentDataType( NUMERICAL ),
           m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+{
+    registerProperties();
+}
+CachedDataSequence::CachedDataSequence( const Reference< uno::XComponentContext > & /*xContext*/ )
+        : OPropertyContainer( GetBroadcastHelper()),
+          CachedDataSequence_Base( GetMutex()),
+          m_bIsHidden( true ),
+          m_eCurrentDataType( MIXED ),
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( ))
 {
     registerProperties();
 }
@@ -507,5 +518,24 @@ void CachedDataSequence::fireModifyEvent()
     // note: currently never called, as the data is not mutable
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
+// lang::XInitialization:
+void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
+{
+    ::comphelper::SequenceAsHashMap aMap(_aArguments);
+    m_aNumericalSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aNumericalSequence);
+    if ( m_aNumericalSequence.getLength() )
+        m_eCurrentDataType = NUMERICAL;
+    else
+    {
+        m_aTextualSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aTextualSequence);
+        if ( m_aTextualSequence.getLength() )
+            m_eCurrentDataType = TEXTUAL;
+        else
+        {
+            m_aMixedSequence = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSequence")),m_aMixedSequence);
+            if ( m_aMixedSequence.getLength() )
+                m_eCurrentDataType = MIXED;
+        }
+    }
+}
 }  // namespace chart
