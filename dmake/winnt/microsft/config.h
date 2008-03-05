@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.8 2007-10-15 15:59:27 ihi Exp $
+/* RCS  $Id: config.h,v 1.9 2008-03-05 18:41:51 kz Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -27,7 +27,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.11"
+#define VERSION "4.12"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
@@ -78,7 +78,7 @@
 #endif
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 /* Use my own tempnam */
 #define tempnam dtempnam
