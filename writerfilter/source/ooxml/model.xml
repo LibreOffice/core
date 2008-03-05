@@ -1,16 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
-  <namespace-alias name="http://sprm" alias="sprm" id="10"/>
+  <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="2"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="4"/>
+  <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="5"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="6"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="7"/>
   <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="9"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="8"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="7"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="6"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="5"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="4"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="3"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="2"/>
-  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="1"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="14"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="15"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="32"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="33"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="34"/>
+  <namespace-alias name="http://sprm" alias="sprm" id="35"/>
   <token tokenid="ooxml:shape"/>
+  <token tokenid="ooxml:token"/>
+  <token tokenid="ooxml:inputstream"/>
   <fasttoken>1D</fasttoken>
   <fasttoken>1pic</fasttoken>
   <fasttoken>1picTitle</fasttoken>
@@ -1913,6 +1917,7 @@
   <fasttoken>eggsBlack</fasttoken>
   <fasttoken>el</fasttoken>
   <fasttoken>elbow</fasttoken>
+  <fasttoken>element</fasttoken>
   <fasttoken>ellipse</fasttoken>
   <fasttoken>ellipseRibbon</fasttoken>
   <fasttoken>ellipseRibbon2</fasttoken>
@@ -3086,6 +3091,7 @@
   <fasttoken>mPr</fasttoken>
   <fasttoken>mac</fasttoken>
   <fasttoken>macro</fasttoken>
+  <fasttoken>macrosheet</fasttoken>
   <fasttoken>magenta</fasttoken>
   <fasttoken>mailAsAttachment</fasttoken>
   <fasttoken>mailMerge</fasttoken>
@@ -5580,12 +5586,11 @@
   <fasttoken>zoomScalePageLayoutView</fasttoken>
   <fasttoken>zoomScaleSheetLayoutView</fasttoken>
   <fasttoken>zoomToFit</fasttoken>
-  <fasttoken>element</fasttoken>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
     <start name="themeManager"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseStylesheet.rng"/>
       <include href="dml-styleDefaults.rng"/>
@@ -5807,7 +5812,7 @@
     </grammar>
   </namespace>
   <namespace name="dml-shape3DLighting" file="dml-shape3DLighting.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <define name="ST_LightRigDirection">
@@ -5977,7 +5982,7 @@
     </grammar>
   </namespace>
   <namespace name="dml-shape3DStyles" file="dml-shape3DStyles.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
       <define name="ST_BevelPresetType">
@@ -6173,7 +6178,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shape3DCamera" file="dml-shape3DCamera.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <define name="ST_PresetCameraType">
@@ -6400,7 +6405,7 @@
     </resource>
   </namespace>
   <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <define name="ST_StyleMatrixColumnIndex">
         <data type="unsignedInt">
@@ -6731,7 +6736,7 @@
     </resource>
   </namespace>
   <namespace name="dml-textCharacter" file="dml-textCharacter.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <include href="dml-shapeEffects.rng"/>
@@ -7141,7 +7146,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
 <!-- start = blip -->
@@ -8468,7 +8473,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeLineProperties" file="dml-shapeLineProperties.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
       <define name="ST_LineEndType">
@@ -8809,7 +8814,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeProperties" file="dml-shapeProperties.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-shape3DStyles.rng"/>
       <include href="dml-shape3DScene.rng"/>
@@ -8902,7 +8907,7 @@
     </resource>
   </namespace>
   <namespace name="dml-baseTypes" file="dml-baseTypes">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="shared-relationshipReference.rng"/>
       <define name="CT_OfficeArtExtension">
@@ -10261,7 +10266,7 @@
     <resource name="ST_DrawingElementId" resource="Integer" generated="yes"/>
   </namespace>
   <namespace name="dml-documentProperties" file="dml-documentProperties.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <include href="dml-shapeGeometry.rng"/>
@@ -10671,7 +10676,7 @@
   </namespace>
   <namespace name="dml-graphicalObject" file="dml-graphicalObject.rng">
     <start name="graphic"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
 <!-- start = graphic -->
       <define name="CT_GraphicalObjectData">
@@ -10712,7 +10717,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <define name="ST_ShapeType">
@@ -11843,7 +11848,7 @@
   <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
     <start name="inline"/>
     <start name="anchor"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
       <include href="dml-graphicalObject.rng"/>
       <include href="dml-documentProperties.rng"/>
@@ -12433,7 +12438,7 @@
   </namespace>
   <namespace name="sml-customXmlMappings" file="sml-customXmlMappings-rng">
     <start name="schemaLibrary"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 <!-- ISO RELAX NG Schema -->
 <!-- start = schemaLibrary -->
       <define name="CT_Schema">
@@ -12474,7 +12479,7 @@
     <start name="mathPar"/>
     <start name="oMathPara"/>
     <start name="oMath"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
+    <grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
 <!-- ISO RELAX NG Schema -->
       <include href="wml.rng"/>
 <!-- start = mathPr | oMathPara | oMath -->
@@ -13773,8 +13778,8 @@
       <value name="roman" tokenid="ooxml:Value_math_ST_Script_roman">roman</value>
       <value name="script" tokenid="ooxml:Value_math_ST_Script_script">script</value>
       <value name="fraktur" tokenid="ooxml:Value_math_ST_Script_fraktur">fraktur</value>
-      <value name="double-struck" tokenid="ooxml:Value_math_ST_Script_doublemstruck">double-struck</value>
-      <value name="sans-serif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
+      <value name="doublemstruck" tokenid="ooxml:Value_math_ST_Script_doublemstruck">double-struck</value>
+      <value name="sansmserif" tokenid="ooxml:Value_math_ST_Script_sansmserif">sans-serif</value>
       <value name="monospace" tokenid="ooxml:Value_math_ST_Script_monospace">monospace</value>
     </resource>
     <resource name="ST_Style" resource="List">
@@ -13797,13 +13802,13 @@
       <value name="repeat" tokenid="ooxml:Value_math_ST_BreakBin_repeat">repeat</value>
     </resource>
     <resource name="ST_BreakBinSub" resource="List" generated="yes">
-      <value name="--" tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
-      <value name="-+" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
-      <value name="+-" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
+      <value name="mm" tokenid="ooxml:Value_math_ST_BreakBinSub_mm">--</value>
+      <value name="mp" tokenid="ooxml:Value_math_ST_BreakBinSub_mp">-+</value>
+      <value name="pm" tokenid="ooxml:Value_math_ST_BreakBinSub_pm">+-</value>
     </resource>
   </namespace>
   <namespace name="shared-relationshipReference" file="shared-relationshipReference.rng">
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
 <!-- ISO RELAX NG Schema -->
       <define name="ST_RelationshipId">
         <data type="string">
@@ -13897,6 +13902,3665 @@
       <element name="pic" tokenid="ooxml:pic_pic"/>
     </resource>
   </namespace>
+  <namespace name="vml-main" file="vml-main.rng">
+    <start name="shape"/>
+    <start name="shapetype"/>
+    <start name="group"/>
+    <start name="background"/>
+    <start name="fill"/>
+    <start name="formulas"/>
+    <start name="handles"/>
+    <start name="imagedata"/>
+    <start name="path"/>
+    <start name="textbox"/>
+    <start name="shadow"/>
+    <start name="stroke"/>
+    <start name="textpath"/>
+    <start name="arc"/>
+    <start name="curve"/>
+    <start name="image"/>
+    <start name="line"/>
+    <start name="oval"/>
+    <start name="polyline"/>
+    <start name="rect"/>
+    <start name="roundrect"/>
+    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<!-- ISO RELAX NG Schema -->
+      <include href="vml-officeDrawing.rng"/>
+<!--  External schema: http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
+      <include href="vml-wordprocessingDrawing.rng"/>
+<!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
+      <include href="vml-spreadsheetDrawing.rng"/>
+      <include href="vml-presentationDrawing.rng"/>
+<!-- start = shape | shapetype | group | background | fill | formulas | handles | imagedata | path | textbox | shadow | stroke | textpath | arc | curve | image | line | oval | polyline | rect | roundrect -->
+      <define name="AG_Id">
+        <optional>
+          <attribute name="id">
+            <data type="string">
+              <xs:documentation>Unique Identifier</xs:documentation>
+            </data>
+            <xs:documentation>Unique Identifier</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Style">
+        <optional>
+          <attribute name="style">
+            <data type="string">
+              <xs:documentation>Shape Styling Properties</xs:documentation>
+            </data>
+            <xs:documentation>Shape Styling Properties</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Type">
+        <optional>
+          <attribute name="type">
+            <data type="string">
+              <xs:documentation>Shape Type Reference</xs:documentation>
+            </data>
+            <xs:documentation>Shape Type Reference</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Adj">
+        <optional>
+          <attribute name="adj">
+            <data type="string">
+              <xs:documentation>Adjustment Parameters</xs:documentation>
+            </data>
+            <xs:documentation>Adjustment Parameters</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Path">
+        <optional>
+          <attribute name="path">
+            <data type="string">
+              <xs:documentation>Edge Path</xs:documentation>
+            </data>
+            <xs:documentation>Edge Path</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Fill">
+        <optional>
+          <attribute name="filled">
+            <text/>
+            <xs:documentation>Shape Fill Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fillcolor">
+            <text/>
+            <xs:documentation>Fill Color</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Chromakey">
+        <optional>
+          <attribute name="chromakey">
+            <text/>
+            <xs:documentation>Image Transparency Color</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_Ext">
+        <attribute name="ext">
+          <text/>
+          <xs:documentation>VML Extension Handling Behavior</xs:documentation>
+        </attribute>
+      </define>
+      <define name="AG_CoreAttributes">
+        <ref name="AG_Id"/>
+        <ref name="AG_Style"/>
+        <optional>
+          <attribute name="href">
+            <data type="string">
+              <xs:documentation>Hyperlink Target</xs:documentation>
+            </data>
+            <xs:documentation>Hyperlink Target</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="target">
+            <data type="string">
+              <xs:documentation>Hyperlink Display Target</xs:documentation>
+            </data>
+            <xs:documentation>Hyperlink Display Target</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="class">
+            <data type="string">
+              <xs:documentation>CSS Reference</xs:documentation>
+            </data>
+            <xs:documentation>CSS Reference</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="title">
+            <data type="string">
+              <xs:documentation>Shape Title</xs:documentation>
+            </data>
+            <xs:documentation>Shape Title</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="alt">
+            <data type="string">
+              <xs:documentation>Alternate Text</xs:documentation>
+            </data>
+            <xs:documentation>Alternate Text</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="coordsize">
+            <data type="string">
+              <xs:documentation>Coordinate Space Size</xs:documentation>
+            </data>
+            <xs:documentation>Coordinate Space Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="coordorigin">
+            <data type="string">
+              <xs:documentation>Coordinate Space Origin</xs:documentation>
+            </data>
+            <xs:documentation>Coordinate Space Origin</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="wrapcoords">
+            <data type="string">
+              <xs:documentation>Shape Bounding Polygon</xs:documentation>
+            </data>
+            <xs:documentation>Shape Bounding Polygon</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="print">
+            <text/>
+            <xs:documentation>Print Toggle</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_ShapeAttributes">
+        <ref name="AG_Chromakey"/>
+        <ref name="AG_Fill"/>
+        <optional>
+          <attribute name="opacity">
+            <data type="string">
+              <xs:documentation>Fill Color Opacity</xs:documentation>
+            </data>
+            <xs:documentation>Fill Color Opacity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="stroked">
+            <text/>
+            <xs:documentation>Shape Stroke Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="strokecolor">
+            <text/>
+            <xs:documentation>Shape Stroke Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="strokeweight">
+            <data type="string">
+              <xs:documentation>Shape Stroke Weight</xs:documentation>
+            </data>
+            <xs:documentation>Shape Stroke Weight</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="insetpen">
+            <text/>
+            <xs:documentation>Inset Border From Path</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_OfficeCoreAttributes">
+        <attribute name="o:spid"/>
+        <attribute name="o:oned"/>
+        <attribute name="o:regroupid"/>
+        <attribute name="o:doubleclicknotify"/>
+        <attribute name="o:button"/>
+        <attribute name="o:userhidden"/>
+        <attribute name="o:bullet"/>
+        <attribute name="o:hr"/>
+        <attribute name="o:hrstd"/>
+        <attribute name="o:hrnoshade"/>
+        <attribute name="o:hrpct"/>
+        <attribute name="o:hralign"/>
+        <attribute name="o:allowincell"/>
+        <attribute name="o:allowoverlap"/>
+        <attribute name="o:userdrawn"/>
+        <attribute name="o:bordertopcolor"/>
+        <attribute name="o:borderleftcolor"/>
+        <attribute name="o:borderbottomcolor"/>
+        <attribute name="o:borderrightcolor"/>
+        <attribute name="o:dgmlayout"/>
+        <attribute name="o:dgmnodekind"/>
+        <attribute name="o:dgmlayoutmru"/>
+        <attribute name="o:insetmode"/>
+      </define>
+      <define name="AG_OfficeShapeAttributes">
+        <attribute name="o:spt"/>
+        <attribute name="o:connectortype"/>
+        <attribute name="o:bwmode"/>
+        <attribute name="o:bwpure"/>
+        <attribute name="o:bwnormal"/>
+        <attribute name="o:forcedash"/>
+        <attribute name="o:oleicon"/>
+        <attribute name="o:ole"/>
+        <attribute name="o:preferrelative"/>
+        <attribute name="o:cliptowrap"/>
+        <attribute name="o:clip"/>
+      </define>
+      <define name="AG_AllCoreAttributes">
+        <ref name="AG_CoreAttributes"/>
+        <ref name="AG_OfficeCoreAttributes"/>
+      </define>
+      <define name="AG_AllShapeAttributes">
+        <ref name="AG_ShapeAttributes"/>
+        <ref name="AG_OfficeShapeAttributes"/>
+      </define>
+      <define name="AG_ImageAttributes">
+        <optional>
+          <attribute name="src">
+            <data type="string">
+              <xs:documentation>Image Source</xs:documentation>
+            </data>
+            <xs:documentation>Image Source</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cropleft">
+            <data type="string">
+              <xs:documentation>Image Left Crop</xs:documentation>
+            </data>
+            <xs:documentation>Image Left Crop</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="croptop">
+            <data type="string">
+              <xs:documentation>Image Top Crop</xs:documentation>
+            </data>
+            <xs:documentation>Image Top Crop</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cropright">
+            <data type="string">
+              <xs:documentation>Image Right Crop</xs:documentation>
+            </data>
+            <xs:documentation>Image Right Crop</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cropbottom">
+            <data type="string">
+              <xs:documentation>Image Bottom Crop</xs:documentation>
+            </data>
+            <xs:documentation>Image Bottom Crop</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="gain">
+            <data type="string">
+              <xs:documentation>Image Intensity</xs:documentation>
+            </data>
+            <xs:documentation>Image Intensity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="blacklevel">
+            <data type="string">
+              <xs:documentation>Image Brightness</xs:documentation>
+            </data>
+            <xs:documentation>Image Brightness</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="gamma">
+            <data type="string">
+              <xs:documentation>Image Gamma Correction</xs:documentation>
+            </data>
+            <xs:documentation>Image Gamma Correction</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="grayscale">
+            <text/>
+            <xs:documentation>Image Grayscale Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="bilevel">
+            <text/>
+            <xs:documentation>Image Bilevel Toggle</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="AG_StrokeAttributes">
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Stroke Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="weight">
+            <data type="string">
+              <xs:documentation>Stroke Weight</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Weight</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color">
+            <text/>
+            <xs:documentation>Stroke Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="opacity">
+            <data type="string">
+              <xs:documentation>Stroke Opacity</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Opacity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="linestyle">
+            <text/>
+            <xs:documentation>Stroke Line Style</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="miterlimit">
+            <data type="decimal">
+              <xs:documentation>Miter Joint Limit</xs:documentation>
+            </data>
+            <xs:documentation>Miter Joint Limit</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="joinstyle">
+            <text/>
+            <xs:documentation>Line End Join Style</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endcap">
+            <text/>
+            <xs:documentation>Line End Cap</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dashstyle">
+            <data type="string">
+              <xs:documentation>Stroke Dash Pattern</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Dash Pattern</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="filltype">
+            <text/>
+            <xs:documentation>Stroke Image Style</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="src">
+            <data type="string">
+              <xs:documentation>Stroke Image Location</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Image Location</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imageaspect">
+            <text/>
+            <xs:documentation>Stroke Image Aspect Ratio</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imagesize">
+            <data type="string">
+              <xs:documentation>Stroke Image Size</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Image Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imagealignshape">
+            <text/>
+            <xs:documentation>Stoke Image Alignment</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color2">
+            <text/>
+            <xs:documentation>Stroke Alternate Pattern Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrow">
+            <text/>
+            <xs:documentation>Line Start Arrowhead</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrowwidth">
+            <text/>
+            <xs:documentation>Line Start Arrowhead Width</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrowlength">
+            <text/>
+            <xs:documentation>Line Start Arrowhead Length</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrow">
+            <text/>
+            <xs:documentation>Line End Arrowhead</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrowwidth">
+            <text/>
+            <xs:documentation>Line End Arrowhead Width</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrowlength">
+            <text/>
+            <xs:documentation>Line End Arrowhead Length</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:href"/>
+        <attribute name="o:althref"/>
+        <attribute name="o:title"/>
+        <attribute name="o:forcedash"/>
+        <optional>
+          <attribute name="r:id"/>
+        </optional>
+        <optional>
+          <attribute name="insetpen">
+            <text/>
+            <xs:documentation>Inset Border From Path</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:relid"/>
+      </define>
+      <define name="EG_ShapeElements">
+        <choice>
+          <ref name="path"/>
+          <ref name="formulas"/>
+          <ref name="handles"/>
+          <ref name="fill"/>
+          <ref name="stroke"/>
+          <ref name="shadow"/>
+          <ref name="textbox"/>
+          <ref name="textpath"/>
+          <ref name="imagedata"/>
+          <element name="o:skew">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="o:extrusion">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="o:callout">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="o:lock">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="o:clippath">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="o:signatureline">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:wrap">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:anchorlock">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:bordertop">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:borderbottom">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:borderleft">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <element name="wvml:borderright">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+          <optional>
+            <element name="x:ClientData">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="p:textdata">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+        </choice>
+      </define>
+      <define name="shape">
+        <element name="shape">
+          <ref name="CT_Shape"/>
+        </element>
+      </define>
+      <define name="shapetype">
+        <element name="shapetype">
+          <ref name="CT_Shapetype"/>
+        </element>
+      </define>
+      <define name="group">
+        <element name="group">
+          <ref name="CT_Group"/>
+        </element>
+      </define>
+      <define name="background">
+        <element name="background">
+          <ref name="CT_Background"/>
+        </element>
+      </define>
+      <define name="CT_Shape">
+        <oneOrMore>
+          <choice>
+            <ref name="EG_ShapeElements"/>
+            <element name="o:ink">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+            <element name="p:iscomment">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </choice>
+        </oneOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <ref name="AG_Type"/>
+        <ref name="AG_Adj"/>
+        <ref name="AG_Path"/>
+        <attribute name="o:gfxdata"/>
+        <optional>
+          <attribute name="equationxml">
+            <data type="string">
+              <xs:documentation>Storage for Alternate Math Content</xs:documentation>
+            </data>
+            <xs:documentation>Storage for Alternate Math Content</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Shapetype">
+        <group>
+          <zeroOrMore>
+            <ref name="EG_ShapeElements"/>
+          </zeroOrMore>
+          <optional>
+            <element name="o:complex">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+        </group>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <ref name="AG_Adj"/>
+        <ref name="AG_Path"/>
+        <attribute name="o:master"/>
+      </define>
+      <define name="CT_Group">
+        <oneOrMore>
+          <choice>
+            <ref name="EG_ShapeElements"/>
+            <ref name="group"/>
+            <ref name="shape"/>
+            <ref name="shapetype"/>
+            <ref name="arc"/>
+            <ref name="curve"/>
+            <ref name="image"/>
+            <ref name="line"/>
+            <ref name="oval"/>
+            <ref name="polyline"/>
+            <ref name="rect"/>
+            <ref name="roundrect"/>
+            <element name="o:diagram">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </choice>
+        </oneOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_Fill"/>
+        <optional>
+          <attribute name="editas">
+            <text/>
+            <xs:documentation>Group Diagram Type</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:tableproperties"/>
+        <attribute name="o:tablelimits"/>
+      </define>
+      <define name="CT_Background">
+        <optional>
+          <ref name="fill"/>
+        </optional>
+        <ref name="AG_Id"/>
+        <ref name="AG_Fill"/>
+        <attribute name="o:bwmode"/>
+        <attribute name="o:bwpure"/>
+        <attribute name="o:bwnormal"/>
+        <attribute name="o:targetscreensize"/>
+      </define>
+      <define name="fill">
+        <element name="fill">
+          <ref name="CT_Fill"/>
+        </element>
+      </define>
+      <define name="formulas">
+        <element name="formulas">
+          <ref name="CT_Formulas"/>
+        </element>
+      </define>
+      <define name="handles">
+        <element name="handles">
+          <ref name="CT_Handles"/>
+        </element>
+      </define>
+      <define name="imagedata">
+        <element name="imagedata">
+          <ref name="CT_ImageData"/>
+        </element>
+      </define>
+      <define name="path">
+        <element name="path">
+          <ref name="CT_Path"/>
+        </element>
+      </define>
+      <define name="textbox">
+        <element name="textbox">
+          <ref name="CT_Textbox"/>
+        </element>
+      </define>
+      <define name="shadow">
+        <element name="shadow">
+          <ref name="CT_Shadow"/>
+        </element>
+      </define>
+      <define name="stroke">
+        <element name="stroke">
+          <ref name="CT_Stroke"/>
+        </element>
+      </define>
+      <define name="textpath">
+        <element name="textpath">
+          <ref name="CT_TextPath"/>
+        </element>
+      </define>
+      <define name="CT_Fill">
+        <optional>
+          <element name="o:fill">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+        </optional>
+        <ref name="AG_Id"/>
+        <optional>
+          <attribute name="type">
+            <text/>
+            <xs:documentation>Fill Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Fill Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color">
+            <text/>
+            <xs:documentation>Primary Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="opacity">
+            <data type="string">
+              <xs:documentation>Primary Color Opacity</xs:documentation>
+            </data>
+            <xs:documentation>Primary Color Opacity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color2">
+            <text/>
+            <xs:documentation>Secondary Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="src">
+            <data type="string">
+              <xs:documentation>Fill Image Source</xs:documentation>
+            </data>
+            <xs:documentation>Fill Image Source</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:href"/>
+        <attribute name="o:althref"/>
+        <optional>
+          <attribute name="size">
+            <data type="string">
+              <xs:documentation>Fill Image Size</xs:documentation>
+            </data>
+            <xs:documentation>Fill Image Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="origin">
+            <data type="string">
+              <xs:documentation>Fill Image Origin</xs:documentation>
+            </data>
+            <xs:documentation>Fill Image Origin</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="position">
+            <data type="string">
+              <xs:documentation>Fill Image Position</xs:documentation>
+            </data>
+            <xs:documentation>Fill Image Position</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="aspect">
+            <text/>
+            <xs:documentation>Image Aspect Ratio</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="colors">
+            <data type="string">
+              <xs:documentation>Intermediate Colors</xs:documentation>
+            </data>
+            <xs:documentation>Intermediate Colors</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="angle">
+            <data type="decimal">
+              <xs:documentation>Gradient Angle</xs:documentation>
+            </data>
+            <xs:documentation>Gradient Angle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="alignshape">
+            <text/>
+            <xs:documentation>Align Image With Shape</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="focus">
+            <data type="string">
+              <xs:documentation>Gradient Center</xs:documentation>
+            </data>
+            <xs:documentation>Gradient Center</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="focussize">
+            <data type="string">
+              <xs:documentation>Radial Gradient Size</xs:documentation>
+            </data>
+            <xs:documentation>Radial Gradient Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="focusposition">
+            <data type="string">
+              <xs:documentation>Radial Gradient Center</xs:documentation>
+            </data>
+            <xs:documentation>Radial Gradient Center</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="method">
+            <text/>
+            <xs:documentation>Gradient Fill Method</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:detectmouseclick"/>
+        <attribute name="o:title"/>
+        <attribute name="o:opacity2"/>
+        <optional>
+          <attribute name="recolor">
+            <text/>
+            <xs:documentation>Recolor Fill as Picture</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="rotate">
+            <text/>
+            <xs:documentation>Rotate Fill with Shape</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="r:id"/>
+        </optional>
+        <optional>
+          <attribute name="o:relid"/>
+        </optional>
+      </define>
+      <define name="CT_Formulas">
+        <zeroOrMore>
+          <element name="f">
+            <ref name="CT_F"/>
+          </element>
+        </zeroOrMore>
+      </define>
+      <define name="CT_F">
+        <attribute name="eqn">
+          <data type="string">
+            <xs:documentation>Equation</xs:documentation>
+          </data>
+          <xs:documentation>Equation</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_Handles">
+        <zeroOrMore>
+          <element name="h">
+            <ref name="CT_H"/>
+          </element>
+        </zeroOrMore>
+      </define>
+      <define name="CT_H">
+        <attribute name="position">
+          <data type="string">
+            <xs:documentation>Handle Position</xs:documentation>
+          </data>
+          <xs:documentation>Handle Position</xs:documentation>
+        </attribute>
+        <attribute name="polar">
+          <data type="string">
+            <xs:documentation>Handle Polar Center</xs:documentation>
+          </data>
+          <xs:documentation>Handle Polar Center</xs:documentation>
+        </attribute>
+        <attribute name="map">
+          <data type="string">
+            <xs:documentation>Handle Coordinate Mapping</xs:documentation>
+          </data>
+          <xs:documentation>Handle Coordinate Mapping</xs:documentation>
+        </attribute>
+        <attribute name="invx">
+          <text/>
+          <xs:documentation>Invert Handle's X Position</xs:documentation>
+        </attribute>
+        <attribute name="invy">
+          <text/>
+          <xs:documentation>Invert Handle's Y Position</xs:documentation>
+        </attribute>
+        <attribute name="switch">
+          <text/>
+          <xs:documentation>Handle Inversion Toggle</xs:documentation>
+        </attribute>
+        <attribute name="xrange">
+          <data type="string">
+            <xs:documentation>Handle X Position Range</xs:documentation>
+          </data>
+          <xs:documentation>Handle X Position Range</xs:documentation>
+        </attribute>
+        <attribute name="yrange">
+          <data type="string">
+            <xs:documentation>Handle Y Position Range</xs:documentation>
+          </data>
+          <xs:documentation>Handle Y Position Range</xs:documentation>
+        </attribute>
+        <attribute name="radiusrange">
+          <data type="string">
+            <xs:documentation>Handle Polar Radius Range</xs:documentation>
+          </data>
+          <xs:documentation>Handle Polar Radius Range</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_ImageData">
+        <ref name="AG_Id"/>
+        <ref name="AG_ImageAttributes"/>
+        <ref name="AG_Chromakey"/>
+        <optional>
+          <attribute name="embosscolor">
+            <text/>
+            <xs:documentation>Embossed Color</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="recolortarget">
+          <text/>
+          <xs:documentation>Black Recoloring Color</xs:documentation>
+        </attribute>
+        <attribute name="o:href"/>
+        <attribute name="o:althref"/>
+        <attribute name="o:title"/>
+        <attribute name="o:oleid"/>
+        <attribute name="o:detectmouseclick"/>
+        <attribute name="o:movie"/>
+        <attribute name="o:relid"/>
+        <attribute name="r:id"/>
+        <attribute name="r:pict"/>
+        <attribute name="r:href"/>
+      </define>
+      <define name="CT_Path">
+        <ref name="AG_Id"/>
+        <optional>
+          <attribute name="v">
+            <data type="string">
+              <xs:documentation>Path Definition</xs:documentation>
+            </data>
+            <xs:documentation>Path Definition</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="limo">
+            <data type="string">
+              <xs:documentation>Limo Stretch Point</xs:documentation>
+            </data>
+            <xs:documentation>Limo Stretch Point</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="textboxrect">
+            <data type="string">
+              <xs:documentation>Text Box Bounding Box</xs:documentation>
+            </data>
+            <xs:documentation>Text Box Bounding Box</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fillok">
+            <text/>
+            <xs:documentation>Shape Fill Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="strokeok">
+            <text/>
+            <xs:documentation>Stroke Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="shadowok">
+            <text/>
+            <xs:documentation>Shadow Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="arrowok">
+            <text/>
+            <xs:documentation>Arrowhead Display Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="gradientshapeok">
+            <text/>
+            <xs:documentation>Gradient Shape Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="textpathok">
+            <text/>
+            <xs:documentation>Text Path Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="insetpenok">
+            <text/>
+            <xs:documentation>Inset Stroke From Path Flag</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:connecttype"/>
+        <attribute name="o:connectlocs"/>
+        <attribute name="o:connectangles"/>
+        <attribute name="o:extrusionok"/>
+      </define>
+      <define name="CT_Shadow">
+        <ref name="AG_Id"/>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Shadow Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="type">
+            <text/>
+            <xs:documentation>Shadow Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="obscured">
+            <text/>
+            <xs:documentation>Shadow Transparency</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color">
+            <text/>
+            <xs:documentation>Shadow Primary Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="opacity">
+            <data type="string">
+              <xs:documentation>Shadow Opacity</xs:documentation>
+            </data>
+            <xs:documentation>Shadow Opacity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="offset">
+            <data type="string">
+              <xs:documentation>Shadow Primary Offset</xs:documentation>
+            </data>
+            <xs:documentation>Shadow Primary Offset</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color2">
+            <text/>
+            <xs:documentation>Shadow Secondary Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="offset2">
+            <data type="string">
+              <xs:documentation>Shadow Secondary Offset</xs:documentation>
+            </data>
+            <xs:documentation>Shadow Secondary Offset</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="origin">
+            <data type="string">
+              <xs:documentation>Shadow Origin</xs:documentation>
+            </data>
+            <xs:documentation>Shadow Origin</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="matrix">
+            <data type="string">
+              <xs:documentation>Shadow Perspective Matrix</xs:documentation>
+            </data>
+            <xs:documentation>Shadow Perspective Matrix</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Stroke">
+        <group>
+          <optional>
+            <element name="o:left">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="o:top">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="o:right">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="o:bottom">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="o:column">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+        </group>
+        <ref name="AG_Id"/>
+        <ref name="AG_StrokeAttributes"/>
+      </define>
+      <define name="CT_Textbox">
+        <choice>
+          <optional>
+            <element name="w:txbxContent">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
+          <element>
+            <anyName/>
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
+        </choice>
+        <ref name="AG_Id"/>
+        <ref name="AG_Style"/>
+        <optional>
+          <attribute name="inset">
+            <data type="string">
+              <xs:documentation>Text Box Inset</xs:documentation>
+            </data>
+            <xs:documentation>Text Box Inset</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="o:singleclick"/>
+        <attribute name="o:insetmode"/>
+      </define>
+      <define name="CT_TextPath">
+        <ref name="AG_Id"/>
+        <ref name="AG_Style"/>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Text Path Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fitshape">
+            <text/>
+            <xs:documentation>Shape Fit Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fitpath">
+            <text/>
+            <xs:documentation>Path Fit Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="trim">
+            <text/>
+            <xs:documentation>Text Path Trim Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="xscale">
+            <text/>
+            <xs:documentation>Text X-Scaling</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="string">
+            <data type="string">
+              <xs:documentation>Text Path Text</xs:documentation>
+            </data>
+            <xs:documentation>Text Path Text</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="arc">
+        <element name="arc">
+          <ref name="CT_Arc"/>
+        </element>
+      </define>
+      <define name="curve">
+        <element name="curve">
+          <ref name="CT_Curve"/>
+        </element>
+      </define>
+      <define name="image">
+        <element name="image">
+          <ref name="CT_Image"/>
+        </element>
+      </define>
+      <define name="line">
+        <element name="line">
+          <ref name="CT_Line"/>
+        </element>
+      </define>
+      <define name="oval">
+        <element name="oval">
+          <ref name="CT_Oval"/>
+        </element>
+      </define>
+      <define name="polyline">
+        <element name="polyline">
+          <ref name="CT_PolyLine"/>
+        </element>
+      </define>
+      <define name="rect">
+        <element name="rect">
+          <ref name="CT_Rect"/>
+        </element>
+      </define>
+      <define name="roundrect">
+        <element name="roundrect">
+          <ref name="CT_RoundRect"/>
+        </element>
+      </define>
+      <define name="CT_Arc">
+        <zeroOrMore>
+          <ref name="EG_ShapeElements"/>
+        </zeroOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <optional>
+          <attribute name="startAngle">
+            <data type="decimal">
+              <xs:documentation>Starting Angle</xs:documentation>
+            </data>
+            <xs:documentation>Starting Angle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endAngle">
+            <data type="decimal">
+              <xs:documentation>Ending Angle</xs:documentation>
+            </data>
+            <xs:documentation>Ending Angle</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Curve">
+        <zeroOrMore>
+          <ref name="EG_ShapeElements"/>
+        </zeroOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <optional>
+          <attribute name="from">
+            <data type="string">
+              <xs:documentation>Curve Starting Point</xs:documentation>
+            </data>
+            <xs:documentation>Curve Starting Point</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="control1">
+            <data type="string">
+              <xs:documentation>First Curve Control Point</xs:documentation>
+            </data>
+            <xs:documentation>First Curve Control Point</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="control2">
+            <data type="string">
+              <xs:documentation>Second Curve Control Point</xs:documentation>
+            </data>
+            <xs:documentation>Second Curve Control Point</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="to">
+            <data type="string">
+              <xs:documentation>Curve Ending Point</xs:documentation>
+            </data>
+            <xs:documentation>Curve Ending Point</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Image">
+        <zeroOrMore>
+          <ref name="EG_ShapeElements"/>
+        </zeroOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <ref name="AG_ImageAttributes"/>
+      </define>
+      <define name="CT_Line">
+        <zeroOrMore>
+          <ref name="EG_ShapeElements"/>
+        </zeroOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <optional>
+          <attribute name="from">
+            <data type="string">
+              <xs:documentation>Line Start</xs:documentation>
+            </data>
+            <xs:documentation>Line Start</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="to">
+            <data type="string">
+              <xs:documentation>Line End Point</xs:documentation>
+            </data>
+            <xs:documentation>Line End Point</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Oval">
+        <oneOrMore>
+          <zeroOrMore>
+            <ref name="EG_ShapeElements"/>
+          </zeroOrMore>
+        </oneOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+      </define>
+      <define name="CT_PolyLine">
+        <zeroOrMore>
+          <choice>
+            <ref name="EG_ShapeElements"/>
+            <element name="o:ink">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </choice>
+        </zeroOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <optional>
+          <attribute name="points">
+            <data type="string">
+              <xs:documentation>Points for Compound Line</xs:documentation>
+            </data>
+            <xs:documentation>Points for Compound Line</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Rect">
+        <oneOrMore>
+          <zeroOrMore>
+            <ref name="EG_ShapeElements"/>
+          </zeroOrMore>
+        </oneOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+      </define>
+      <define name="CT_RoundRect">
+        <oneOrMore>
+          <zeroOrMore>
+            <ref name="EG_ShapeElements"/>
+          </zeroOrMore>
+        </oneOrMore>
+        <ref name="AG_AllCoreAttributes"/>
+        <ref name="AG_AllShapeAttributes"/>
+        <optional>
+          <attribute name="arcsize">
+            <data type="string">
+              <xs:documentation>Rounded Corner Arc Size</xs:documentation>
+            </data>
+            <xs:documentation>Rounded Corner Arc Size</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="ST_Ext">
+        <list>
+          <xs:documentation>VML Extension Handling Behaviors</xs:documentation>
+          <choice>
+<!-- Not renderable -->
+            <value>view</value>
+<!-- Editable -->
+            <value>edit</value>
+<!-- Renderable -->
+            <value>backwardCompatible</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_TrueFalse">
+        <list>
+          <xs:documentation>Boolean Value</xs:documentation>
+          <choice>
+<!-- True -->
+            <value>t</value>
+<!-- False -->
+            <value>f</value>
+<!-- True -->
+            <value>true</value>
+<!-- False -->
+            <value>false</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ColorType">
+        <data type="string">
+          <xs:documentation>Color Type</xs:documentation>
+        </data>
+      </define>
+      <define name="ST_FillType">
+        <list>
+          <xs:documentation>Shape Fill Type</xs:documentation>
+          <choice>
+<!-- Solid Fill -->
+            <value>solid</value>
+<!-- Linear Gradient -->
+            <value>gradient</value>
+<!-- Radial Gradient -->
+            <value>gradientRadial</value>
+<!-- Tiled Image -->
+            <value>tile</value>
+<!-- Image Pattern -->
+            <value>pattern</value>
+<!-- Stretch Image to Fit -->
+            <value>frame</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_FillMethod">
+        <list>
+          <xs:documentation>Gradient Fill Computation Type</xs:documentation>
+          <choice>
+<!-- No Gradient Fill -->
+            <value>none</value>
+<!-- Linear Fill -->
+            <value>linear</value>
+<!-- Sigma Fill -->
+            <value>sigma</value>
+<!-- Application Default Fill -->
+            <value>any</value>
+<!-- Linear Sigma Fill -->
+            <value>linear sigma</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ShadowType">
+        <list>
+          <xs:documentation>Shadow Type</xs:documentation>
+          <choice>
+<!-- Single Shadow -->
+            <value>single</value>
+<!-- Double Shadow -->
+            <value>double</value>
+<!-- Embossed Shadow -->
+            <value>emboss</value>
+<!-- Perspective Shadow -->
+            <value>perspective</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeLineStyle">
+        <list>
+          <xs:documentation>Stroke Line Style</xs:documentation>
+          <choice>
+<!-- Single Line -->
+            <value>single</value>
+<!-- Two Thin Lines -->
+            <value>thinThin</value>
+<!-- Thin Line Outside Thick Line -->
+            <value>thinThick</value>
+<!-- Thick Line Outside Thin Line -->
+            <value>thickThin</value>
+<!-- Thck Line Between Thin Lines -->
+            <value>thickBetweenThin</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeJoinStyle">
+        <list>
+          <xs:documentation>Line Join Type</xs:documentation>
+          <choice>
+<!-- Round Joint -->
+            <value>round</value>
+<!-- Bevel Joint -->
+            <value>bevel</value>
+<!-- Miter Joint -->
+            <value>miter</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeEndCap">
+        <list>
+          <xs:documentation>Stroke End Cap Type</xs:documentation>
+          <choice>
+<!-- Flat End -->
+            <value>flat</value>
+<!-- Square End -->
+            <value>square</value>
+<!-- Round End -->
+            <value>round</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeArrowLength">
+        <list>
+          <xs:documentation>Stroke Arrowhead Length</xs:documentation>
+          <choice>
+<!-- Short Arrowhead -->
+            <value>short</value>
+<!-- Medium Arrowhead -->
+            <value>medium</value>
+<!-- Long Arrowhead -->
+            <value>long</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeArrowWidth">
+        <list>
+          <xs:documentation>Stroke Arrowhead Width</xs:documentation>
+          <choice>
+<!-- Narrow Arrowhead -->
+            <value>narrow</value>
+<!-- Medium Arrowhead -->
+            <value>medium</value>
+<!-- Wide Arrowhead -->
+            <value>wide</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_StrokeArrowType">
+        <list>
+          <xs:documentation>Stroke Arrowhead Type</xs:documentation>
+          <choice>
+<!-- No Arrowhead -->
+            <value>none</value>
+<!-- Block Arrowhead -->
+            <value>block</value>
+<!-- Classic Arrowhead -->
+            <value>classic</value>
+<!-- Oval Arrowhead -->
+            <value>oval</value>
+<!-- Diamond Arrowhead -->
+            <value>diamond</value>
+<!-- Open Arrowhead -->
+            <value>open</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ImageAspect">
+        <list>
+          <xs:documentation>Image Scaling Behavior</xs:documentation>
+          <choice>
+<!-- Ignore Aspect Ratio -->
+            <value>ignore</value>
+<!-- At Most -->
+            <value>atMost</value>
+<!-- At Least -->
+            <value>atLeast</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_TrueFalseBlank">
+        <list>
+          <xs:documentation>Boolean Value with Blank [False] State</xs:documentation>
+          <choice>
+<!-- Logical True -->
+            <value>t</value>
+<!-- Logical False -->
+            <value>f</value>
+<!-- Logical True -->
+            <value>true</value>
+<!-- Logical False -->
+            <value>false</value>
+<!-- Blank – Logical False -->
+            <value/>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_EditAs">
+        <list>
+          <xs:documentation>Shape Grouping Types</xs:documentation>
+          <choice>
+<!-- Shape Canvas -->
+            <value>canvas</value>
+<!-- Organization Chart Diagram -->
+            <value>orgchart</value>
+<!-- Radial Diagram -->
+            <value>radial</value>
+<!-- Cycle Diagram -->
+            <value>cycle</value>
+<!-- Pyramid Diagram -->
+            <value>stacked</value>
+<!-- Venn Diagram -->
+            <value>venn</value>
+<!-- Bullseye Diagram -->
+            <value>bullseye</value>
+          </choice>
+        </list>
+      </define>
+      <define name="BUILT_IN_ANY_TYPE">
+        <zeroOrMore>
+          <choice>
+            <element>
+              <anyName/>
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+            <attribute>
+              <anyName/>
+            </attribute>
+            <text/>
+          </choice>
+        </zeroOrMore>
+      </define>
+    </grammar>
+    <resource name="ST_Ext" resource="List" generated="yes">
+      <value name="view" tokenid="ooxml:Value_vml_ST_Ext_view">view</value>
+      <value name="edit" tokenid="ooxml:Value_vml_ST_Ext_edit">edit</value>
+      <value name="backwardCompatible" tokenid="ooxml:Value_vml_ST_Ext_backwardCompatible">backwardCompatible</value>
+    </resource>
+    <resource name="ST_TrueFalse" resource="List" generated="yes">
+      <value name="t" tokenid="ooxml:Value_vml_ST_TrueFalse_t">t</value>
+      <value name="f" tokenid="ooxml:Value_vml_ST_TrueFalse_f">f</value>
+      <value name="true" tokenid="ooxml:Value_vml_ST_TrueFalse_true">true</value>
+      <value name="false" tokenid="ooxml:Value_vml_ST_TrueFalse_false">false</value>
+    </resource>
+    <resource name="ST_ColorType" resource="String" generated="yes"/>
+    <resource name="ST_FillType" resource="List" generated="yes">
+      <value name="solid" tokenid="ooxml:Value_vml_ST_FillType_solid">solid</value>
+      <value name="gradient" tokenid="ooxml:Value_vml_ST_FillType_gradient">gradient</value>
+      <value name="gradientRadial" tokenid="ooxml:Value_vml_ST_FillType_gradientRadial">gradientRadial</value>
+      <value name="tile" tokenid="ooxml:Value_vml_ST_FillType_tile">tile</value>
+      <value name="pattern" tokenid="ooxml:Value_vml_ST_FillType_pattern">pattern</value>
+      <value name="frame" tokenid="ooxml:Value_vml_ST_FillType_frame">frame</value>
+    </resource>
+    <resource name="ST_FillMethod" resource="List" generated="yes">
+      <value name="none" tokenid="ooxml:Value_vml_ST_FillMethod_none">none</value>
+      <value name="linear" tokenid="ooxml:Value_vml_ST_FillMethod_linear">linear</value>
+      <value name="sigma" tokenid="ooxml:Value_vml_ST_FillMethod_sigma">sigma</value>
+      <value name="any" tokenid="ooxml:Value_vml_ST_FillMethod_any">any</value>
+      <value name="linear_sigma" tokenid="ooxml:Value_vml_ST_FillMethod_linear_sigma">linear sigma</value>
+    </resource>
+    <resource name="ST_ShadowType" resource="List" generated="yes">
+      <value name="single" tokenid="ooxml:Value_vml_ST_ShadowType_single">single</value>
+      <value name="double" tokenid="ooxml:Value_vml_ST_ShadowType_double">double</value>
+      <value name="emboss" tokenid="ooxml:Value_vml_ST_ShadowType_emboss">emboss</value>
+      <value name="perspective" tokenid="ooxml:Value_vml_ST_ShadowType_perspective">perspective</value>
+    </resource>
+    <resource name="ST_StrokeLineStyle" resource="List" generated="yes">
+      <value name="single" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_single">single</value>
+      <value name="thinThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThin">thinThin</value>
+      <value name="thinThick" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thinThick">thinThick</value>
+      <value name="thickThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickThin">thickThin</value>
+      <value name="thickBetweenThin" tokenid="ooxml:Value_vml_ST_StrokeLineStyle_thickBetweenThin">thickBetweenThin</value>
+    </resource>
+    <resource name="ST_StrokeJoinStyle" resource="List" generated="yes">
+      <value name="round" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_round">round</value>
+      <value name="bevel" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_bevel">bevel</value>
+      <value name="miter" tokenid="ooxml:Value_vml_ST_StrokeJoinStyle_miter">miter</value>
+    </resource>
+    <resource name="ST_StrokeEndCap" resource="List" generated="yes">
+      <value name="flat" tokenid="ooxml:Value_vml_ST_StrokeEndCap_flat">flat</value>
+      <value name="square" tokenid="ooxml:Value_vml_ST_StrokeEndCap_square">square</value>
+      <value name="round" tokenid="ooxml:Value_vml_ST_StrokeEndCap_round">round</value>
+    </resource>
+    <resource name="ST_StrokeArrowLength" resource="List" generated="yes">
+      <value name="short" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_short">short</value>
+      <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_medium">medium</value>
+      <value name="long" tokenid="ooxml:Value_vml_ST_StrokeArrowLength_long">long</value>
+    </resource>
+    <resource name="ST_StrokeArrowWidth" resource="List" generated="yes">
+      <value name="narrow" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_narrow">narrow</value>
+      <value name="medium" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_medium">medium</value>
+      <value name="wide" tokenid="ooxml:Value_vml_ST_StrokeArrowWidth_wide">wide</value>
+    </resource>
+    <resource name="ST_StrokeArrowType" resource="List" generated="yes">
+      <value name="none" tokenid="ooxml:Value_vml_ST_StrokeArrowType_none">none</value>
+      <value name="block" tokenid="ooxml:Value_vml_ST_StrokeArrowType_block">block</value>
+      <value name="classic" tokenid="ooxml:Value_vml_ST_StrokeArrowType_classic">classic</value>
+      <value name="oval" tokenid="ooxml:Value_vml_ST_StrokeArrowType_oval">oval</value>
+      <value name="diamond" tokenid="ooxml:Value_vml_ST_StrokeArrowType_diamond">diamond</value>
+      <value name="open" tokenid="ooxml:Value_vml_ST_StrokeArrowType_open">open</value>
+    </resource>
+    <resource name="ST_ImageAspect" resource="List" generated="yes">
+      <value name="ignore" tokenid="ooxml:Value_vml_ST_ImageAspect_ignore">ignore</value>
+      <value name="atMost" tokenid="ooxml:Value_vml_ST_ImageAspect_atMost">atMost</value>
+      <value name="atLeast" tokenid="ooxml:Value_vml_ST_ImageAspect_atLeast">atLeast</value>
+    </resource>
+    <resource name="ST_TrueFalseBlank" resource="List" generated="yes">
+      <value name="t" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_t">t</value>
+      <value name="f" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_f">f</value>
+      <value name="true" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_true">true</value>
+      <value name="false" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_false">false</value>
+      <value name="" tokenid="ooxml:Value_vml_ST_TrueFalseBlank_"/>
+    </resource>
+    <resource name="ST_EditAs" resource="List" generated="yes">
+      <value name="canvas" tokenid="ooxml:Value_vml_ST_EditAs_canvas">canvas</value>
+      <value name="orgchart" tokenid="ooxml:Value_vml_ST_EditAs_orgchart">orgchart</value>
+      <value name="radial" tokenid="ooxml:Value_vml_ST_EditAs_radial">radial</value>
+      <value name="cycle" tokenid="ooxml:Value_vml_ST_EditAs_cycle">cycle</value>
+      <value name="stacked" tokenid="ooxml:Value_vml_ST_EditAs_stacked">stacked</value>
+      <value name="venn" tokenid="ooxml:Value_vml_ST_EditAs_venn">venn</value>
+      <value name="bullseye" tokenid="ooxml:Value_vml_ST_EditAs_bullseye">bullseye</value>
+    </resource>
+  </namespace>
+  <namespace name="vml-officeDrawing" file="vml-officeDrawing.rng">
+    <start name="shapedefaults"/>
+    <start name="shapelayout"/>
+    <start name="signatureline"/>
+    <start name="ink"/>
+    <start name="diagram"/>
+    <start name="skew"/>
+    <start name="extrusion"/>
+    <start name="callout"/>
+    <start name="lock"/>
+    <start name="OLEObject"/>
+    <start name="complex"/>
+    <start name="left"/>
+    <start name="top"/>
+    <start name="right"/>
+    <start name="bottom"/>
+    <start name="column"/>
+    <start name="clippath"/>
+    <start name="fill"/>
+    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<!-- ISO RELAX NG Schema -->
+      <include href="vml-main.rng"/>
+<!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
+<!-- start = shapedefaults | shapelayout | signatureline | ink | diagram | skew | extrusion | callout | lock | OLEObject | complex | left | top | right | bottom | column | clippath | fill -->
+      <define name="bwmode">
+        <attribute name="bwmode"/>
+      </define>
+      <define name="bwpure">
+        <attribute name="bwpure"/>
+      </define>
+      <define name="bwnormal">
+        <attribute name="bwnormal"/>
+      </define>
+      <define name="targetscreensize">
+        <attribute name="targetscreensize"/>
+      </define>
+      <define name="insetmode">
+        <attribute name="insetmode"/>
+      </define>
+      <define name="spt">
+        <attribute name="spt">
+          <data type="float"/>
+        </attribute>
+      </define>
+      <define name="wrapcoords">
+        <attribute name="wrapcoords">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="oned">
+        <attribute name="oned"/>
+      </define>
+      <define name="regroupid">
+        <attribute name="regroupid">
+          <data type="integer"/>
+        </attribute>
+      </define>
+      <define name="doubleclicknotify">
+        <attribute name="doubleclicknotify"/>
+      </define>
+      <define name="connectortype">
+        <attribute name="connectortype"/>
+      </define>
+      <define name="button">
+        <attribute name="button"/>
+      </define>
+      <define name="userhidden">
+        <attribute name="userhidden"/>
+      </define>
+      <define name="forcedash">
+        <attribute name="forcedash"/>
+      </define>
+      <define name="oleicon">
+        <attribute name="oleicon"/>
+      </define>
+      <define name="ole">
+        <attribute name="ole"/>
+      </define>
+      <define name="preferrelative">
+        <attribute name="preferrelative"/>
+      </define>
+      <define name="cliptowrap">
+        <attribute name="cliptowrap"/>
+      </define>
+      <define name="clip">
+        <attribute name="clip"/>
+      </define>
+      <define name="bullet">
+        <attribute name="bullet"/>
+      </define>
+      <define name="hr">
+        <attribute name="hr"/>
+      </define>
+      <define name="hrstd">
+        <attribute name="hrstd"/>
+      </define>
+      <define name="hrnoshade">
+        <attribute name="hrnoshade"/>
+      </define>
+      <define name="hrpct">
+        <attribute name="hrpct">
+          <data type="float"/>
+        </attribute>
+      </define>
+      <define name="hralign">
+        <attribute name="hralign"/>
+      </define>
+      <define name="allowincell">
+        <attribute name="allowincell"/>
+      </define>
+      <define name="allowoverlap">
+        <attribute name="allowoverlap"/>
+      </define>
+      <define name="userdrawn">
+        <attribute name="userdrawn"/>
+      </define>
+      <define name="bordertopcolor">
+        <attribute name="bordertopcolor">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="borderleftcolor">
+        <attribute name="borderleftcolor">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="borderbottomcolor">
+        <attribute name="borderbottomcolor">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="borderrightcolor">
+        <attribute name="borderrightcolor">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="connecttype">
+        <attribute name="connecttype"/>
+      </define>
+      <define name="connectlocs">
+        <attribute name="connectlocs">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="connectangles">
+        <attribute name="connectangles">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="master">
+        <attribute name="master">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="extrusionok">
+        <attribute name="extrusionok"/>
+      </define>
+      <define name="href">
+        <attribute name="href">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="althref">
+        <attribute name="althref">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="title">
+        <attribute name="title">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="singleclick">
+        <attribute name="singleclick"/>
+      </define>
+      <define name="oleid">
+        <attribute name="oleid">
+          <data type="float"/>
+        </attribute>
+      </define>
+      <define name="detectmouseclick">
+        <attribute name="detectmouseclick"/>
+      </define>
+      <define name="movie">
+        <attribute name="movie">
+          <data type="float"/>
+        </attribute>
+      </define>
+      <define name="spid">
+        <attribute name="spid">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="opacity2">
+        <attribute name="opacity2">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="relid">
+        <attribute name="relid"/>
+      </define>
+      <define name="dgmlayout">
+        <attribute name="dgmlayout">
+          <data type="integer"/>
+        </attribute>
+      </define>
+      <define name="dgmnodekind">
+        <attribute name="dgmnodekind">
+          <data type="integer"/>
+        </attribute>
+      </define>
+      <define name="dgmlayoutmru">
+        <attribute name="dgmlayoutmru">
+          <data type="integer"/>
+        </attribute>
+      </define>
+      <define name="gfxdata">
+        <attribute name="gfxdata">
+          <data type="base64Binary"/>
+        </attribute>
+      </define>
+      <define name="tableproperties">
+        <attribute name="tableproperties">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="tablelimits">
+        <attribute name="tablelimits">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="shapedefaults">
+        <element name="shapedefaults">
+          <ref name="CT_ShapeDefaults"/>
+        </element>
+      </define>
+      <define name="shapelayout">
+        <element name="shapelayout">
+          <ref name="CT_ShapeLayout"/>
+        </element>
+      </define>
+      <define name="signatureline">
+        <element name="signatureline">
+          <ref name="CT_SignatureLine"/>
+        </element>
+      </define>
+      <define name="ink">
+        <element name="ink">
+          <ref name="CT_Ink"/>
+        </element>
+      </define>
+      <define name="diagram">
+        <element name="diagram">
+          <ref name="CT_Diagram"/>
+        </element>
+      </define>
+      <define name="CT_ShapeDefaults">
+        <optional>
+          <interleave>
+            <optional>
+              <element name="v:fill">
+                <ref name="BUILT_IN_ANY_TYPE"/>
+              </element>
+            </optional>
+            <optional>
+              <element name="v:stroke">
+                <ref name="BUILT_IN_ANY_TYPE"/>
+              </element>
+            </optional>
+            <optional>
+              <element name="v:textbox">
+                <ref name="BUILT_IN_ANY_TYPE"/>
+              </element>
+            </optional>
+            <optional>
+              <element name="v:shadow">
+                <ref name="BUILT_IN_ANY_TYPE"/>
+              </element>
+            </optional>
+            <optional>
+              <ref name="skew"/>
+            </optional>
+            <optional>
+              <ref name="extrusion"/>
+            </optional>
+            <optional>
+              <ref name="callout"/>
+              <xs:documentation>Callout</xs:documentation>
+            </optional>
+            <optional>
+              <ref name="lock"/>
+              <xs:documentation>Shape Protections</xs:documentation>
+            </optional>
+            <optional>
+              <element name="colormru">
+                <ref name="CT_ColorMru"/>
+              </element>
+            </optional>
+            <optional>
+              <element name="colormenu">
+                <ref name="CT_ColorMenu"/>
+              </element>
+            </optional>
+          </interleave>
+        </optional>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="spidmax">
+            <data type="integer">
+              <xs:documentation>Shape ID Optional Storage</xs:documentation>
+            </data>
+            <xs:documentation>Shape ID Optional Storage</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="style">
+            <data type="string">
+              <xs:documentation>Shape Styling Properties</xs:documentation>
+            </data>
+            <xs:documentation>Shape Styling Properties</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fill">
+            <text/>
+            <xs:documentation>Shape Fill Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="fillcolor">
+            <text/>
+            <xs:documentation>Default Fill Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="stroke">
+            <text/>
+            <xs:documentation>Shape Stroke Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <attribute name="strokecolor">
+          <text/>
+          <xs:documentation>Shape Stroke Color</xs:documentation>
+        </attribute>
+        <attribute name="allowincell">
+          <text/>
+          <xs:documentation>Allow in Table Cell</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_Ink">
+        <empty/>
+        <attribute name="i">
+          <data type="base64Binary">
+            <xs:documentation>Ink Data</xs:documentation>
+          </data>
+          <xs:documentation>Ink Data</xs:documentation>
+        </attribute>
+        <attribute name="annotation">
+          <text/>
+          <xs:documentation>Annotation Flag</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_SignatureLine">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <attribute name="issignatureline">
+          <text/>
+          <xs:documentation>Signature Line Flag</xs:documentation>
+        </attribute>
+        <attribute name="id">
+          <text/>
+          <xs:documentation>Unique ID</xs:documentation>
+        </attribute>
+        <attribute name="provid">
+          <text/>
+          <xs:documentation>Signature Provider ID</xs:documentation>
+        </attribute>
+        <attribute name="signinginstructionsset">
+          <text/>
+          <xs:documentation>Use Signing Instructions Flag</xs:documentation>
+        </attribute>
+        <attribute name="allowcomments">
+          <text/>
+          <xs:documentation>User-specified Comments Flag</xs:documentation>
+        </attribute>
+        <attribute name="showsigndate">
+          <text/>
+          <xs:documentation>Show Signed Date Flag</xs:documentation>
+        </attribute>
+        <attribute name="suggestedsigner">
+          <data type="string">
+            <xs:documentation>Suggested Signer Line 1</xs:documentation>
+          </data>
+          <xs:documentation>Suggested Signer Line 1</xs:documentation>
+        </attribute>
+        <attribute name="suggestedsigner2">
+          <data type="string">
+            <xs:documentation>Suggested Signer Line 2</xs:documentation>
+          </data>
+          <xs:documentation>Suggested Signer Line 2</xs:documentation>
+        </attribute>
+        <attribute name="suggestedsigneremail">
+          <data type="string">
+            <xs:documentation>Suggested Signer E-mail Address</xs:documentation>
+          </data>
+          <xs:documentation>Suggested Signer E-mail Address</xs:documentation>
+        </attribute>
+        <attribute name="signinginstructions">
+          <data type="string">
+            <xs:documentation>Instructions for Signing</xs:documentation>
+          </data>
+          <xs:documentation>Instructions for Signing</xs:documentation>
+        </attribute>
+        <attribute name="addlxml">
+          <data type="string">
+            <xs:documentation>Additional Signature Information</xs:documentation>
+          </data>
+          <xs:documentation>Additional Signature Information</xs:documentation>
+        </attribute>
+        <attribute name="sigprovurl">
+          <data type="string">
+            <xs:documentation>Signature Provider Download URL</xs:documentation>
+          </data>
+          <xs:documentation>Signature Provider Download URL</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_ShapeLayout">
+        <interleave>
+          <optional>
+            <element name="idmap">
+              <ref name="CT_IdMap"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="regrouptable">
+              <ref name="CT_RegroupTable"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="rules">
+              <ref name="CT_Rules"/>
+            </element>
+          </optional>
+        </interleave>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+      </define>
+      <define name="CT_IdMap">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="data">
+            <data type="string">
+              <xs:documentation>Shape IDs</xs:documentation>
+            </data>
+            <xs:documentation>Shape IDs</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_RegroupTable">
+        <zeroOrMore>
+          <element name="entry">
+            <ref name="CT_Entry"/>
+          </element>
+        </zeroOrMore>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+      </define>
+      <define name="CT_Entry">
+        <optional>
+          <attribute name="new">
+            <data type="int">
+              <xs:documentation>New Group ID</xs:documentation>
+            </data>
+            <xs:documentation>New Group ID</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="old">
+            <data type="int">
+              <xs:documentation>Old Group ID</xs:documentation>
+            </data>
+            <xs:documentation>Old Group ID</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Rules">
+        <zeroOrMore>
+          <element name="r">
+            <ref name="CT_R"/>
+          </element>
+        </zeroOrMore>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+      </define>
+      <define name="CT_R">
+        <zeroOrMore>
+          <element name="proxy">
+            <ref name="CT_Proxy"/>
+          </element>
+        </zeroOrMore>
+        <attribute name="id">
+          <data type="string">
+            <xs:documentation>Rule ID</xs:documentation>
+          </data>
+          <xs:documentation>Rule ID</xs:documentation>
+        </attribute>
+        <optional>
+          <attribute name="type">
+            <text/>
+            <xs:documentation>Rule Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="how">
+            <text/>
+            <xs:documentation>Alignment Rule Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="idref">
+            <data type="string">
+              <xs:documentation>Rule Shape Reference</xs:documentation>
+            </data>
+            <xs:documentation>Rule Shape Reference</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Proxy">
+        <optional>
+          <attribute name="start">
+            <text/>
+            <xs:documentation>Start Point Connection Flag</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="end">
+            <text/>
+            <xs:documentation>End Point Connection Flag</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="idref">
+            <data type="string">
+              <xs:documentation>Proxy Shape Reference</xs:documentation>
+            </data>
+            <xs:documentation>Proxy Shape Reference</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="connectloc">
+            <data type="int">
+              <xs:documentation>Connection Location</xs:documentation>
+            </data>
+            <xs:documentation>Connection Location</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Diagram">
+        <optional>
+          <element name="relationtable">
+            <ref name="CT_RelationTable"/>
+          </element>
+        </optional>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="dgmstyle">
+            <data type="integer">
+              <xs:documentation>Diagram Style Options</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Style Options</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="autoformat">
+            <text/>
+            <xs:documentation>Diagram Automatic Format</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="reverse">
+            <text/>
+            <xs:documentation>Diagram Reverse Direction</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="autolayout">
+            <text/>
+            <xs:documentation>Diagram Automatic Layout</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dgmscalex">
+            <data type="integer">
+              <xs:documentation>Diagram Layout X Scale</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Layout X Scale</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dgmscaley">
+            <data type="integer">
+              <xs:documentation>Diagram Layout Y Scale</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Layout Y Scale</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dgmfontsize">
+            <data type="integer">
+              <xs:documentation>Diagram Font Size</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Font Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="constrainbounds">
+            <data type="string">
+              <xs:documentation>Diagram Layout Extents</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Layout Extents</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dgmbasetextscale">
+            <data type="integer">
+              <xs:documentation>Diagram Base Font Size</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Base Font Size</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_RelationTable">
+        <zeroOrMore>
+          <element name="rel">
+            <ref name="CT_Relation"/>
+          </element>
+        </zeroOrMore>
+        <ref name="BUILT_IN_ANY_TYPE"/>
+      </define>
+      <define name="CT_Relation">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="idsrc">
+            <data type="string">
+              <xs:documentation>Diagram Relationship Source Shape</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Relationship Source Shape</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="iddest">
+            <data type="string">
+              <xs:documentation>Diagram Relationship Destination Shape</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Relationship Destination Shape</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="idcntr">
+            <data type="string">
+              <xs:documentation>Diagram Relationship Center Shape</xs:documentation>
+            </data>
+            <xs:documentation>Diagram Relationship Center Shape</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_ColorMru">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <attribute name="colors">
+          <data type="string">
+            <xs:documentation>Recent colors</xs:documentation>
+          </data>
+          <xs:documentation>Recent colors</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_ColorMenu">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <attribute name="strokecolor">
+          <text/>
+          <xs:documentation>Default stroke color</xs:documentation>
+        </attribute>
+        <attribute name="fillcolor">
+          <text/>
+          <xs:documentation>Default fill color</xs:documentation>
+        </attribute>
+        <attribute name="shadowcolor">
+          <text/>
+          <xs:documentation>Default shadow color</xs:documentation>
+        </attribute>
+        <attribute name="extrusioncolor">
+          <text/>
+          <xs:documentation>Default extrusion color</xs:documentation>
+        </attribute>
+      </define>
+      <define name="skew">
+        <element name="skew">
+          <ref name="CT_Skew"/>
+        </element>
+      </define>
+      <define name="extrusion">
+        <element name="extrusion">
+          <ref name="CT_Extrusion"/>
+        </element>
+      </define>
+      <define name="callout">
+        <element name="callout">
+          <ref name="CT_Callout"/>
+        </element>
+      </define>
+      <define name="lock">
+        <element name="lock">
+          <ref name="CT_Lock"/>
+        </element>
+      </define>
+      <define name="OLEObject">
+        <element name="OLEObject">
+          <ref name="CT_OLEObject"/>
+        </element>
+      </define>
+      <define name="complex">
+        <element name="complex">
+          <ref name="CT_Complex"/>
+        </element>
+      </define>
+      <define name="left">
+        <element name="left">
+          <ref name="CT_StrokeChild"/>
+        </element>
+      </define>
+      <define name="top">
+        <element name="top">
+          <ref name="CT_StrokeChild"/>
+        </element>
+      </define>
+      <define name="right">
+        <element name="right">
+          <ref name="CT_StrokeChild"/>
+        </element>
+      </define>
+      <define name="bottom">
+        <element name="bottom">
+          <ref name="CT_StrokeChild"/>
+        </element>
+      </define>
+      <define name="column">
+        <element name="column">
+          <ref name="CT_StrokeChild"/>
+        </element>
+      </define>
+      <define name="clippath">
+        <element name="clippath">
+          <ref name="CT_ClipPath"/>
+        </element>
+      </define>
+      <define name="fill">
+        <element name="fill">
+          <ref name="CT_Fill"/>
+        </element>
+      </define>
+      <define name="CT_Skew">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="id">
+            <data type="string">
+              <xs:documentation>Skew ID</xs:documentation>
+            </data>
+            <xs:documentation>Skew ID</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Skew Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="offset">
+            <data type="string">
+              <xs:documentation>Skew Offset</xs:documentation>
+            </data>
+            <xs:documentation>Skew Offset</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="origin">
+            <data type="string">
+              <xs:documentation>Skew Origin</xs:documentation>
+            </data>
+            <xs:documentation>Skew Origin</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="matrix">
+            <data type="string">
+              <xs:documentation>Skew Perspective Matrix</xs:documentation>
+            </data>
+            <xs:documentation>Skew Perspective Matrix</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Extrusion">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Extrusion Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="type">
+            <text/>
+            <xs:documentation>Extrusion Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="render">
+            <text/>
+            <xs:documentation>Extrusion Render Mode</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="viewpointorigin">
+            <data type="string">
+              <xs:documentation>Extrusion Viewpoint Origin</xs:documentation>
+            </data>
+            <xs:documentation>Extrusion Viewpoint Origin</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="viewpoint">
+            <data type="string">
+              <xs:documentation>Extrusion Viewpoint</xs:documentation>
+            </data>
+            <xs:documentation>Extrusion Viewpoint</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="plane">
+            <text/>
+            <xs:documentation>Extrusion Direction</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="skewangle">
+            <data type="float">
+              <xs:documentation>Extrusion Skew Angle</xs:documentation>
+            </data>
+            <xs:documentation>Extrusion Skew Angle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="skewamt">
+            <data type="string">
+              <xs:documentation>Extrusion Skew</xs:documentation>
+            </data>
+            <xs:documentation>Extrusion Skew</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="foredepth">
+            <data type="string">
+              <xs:documentation>Forward Extrusion</xs:documentation>
+            </data>
+            <xs:documentation>Forward Extrusion</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="backdepth">
+            <data type="string">
+              <xs:documentation>Backward Extrusion Depth</xs:documentation>
+            </data>
+            <xs:documentation>Backward Extrusion Depth</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="orientation">
+            <data type="string">
+              <xs:documentation>Rotation Axis</xs:documentation>
+            </data>
+            <xs:documentation>Rotation Axis</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="orientationangle">
+            <data type="float">
+              <xs:documentation>Rotation Around Axis</xs:documentation>
+            </data>
+            <xs:documentation>Rotation Around Axis</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lockrotationcenter">
+            <text/>
+            <xs:documentation>Rotation Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="autorotationcenter">
+            <text/>
+            <xs:documentation>Center of Rotation Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="rotationcenter">
+            <data type="string">
+              <xs:documentation>Rotation Center</xs:documentation>
+            </data>
+            <xs:documentation>Rotation Center</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="rotationangle">
+            <data type="string">
+              <xs:documentation>X-Y Rotation Angle</xs:documentation>
+            </data>
+            <xs:documentation>X-Y Rotation Angle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="colormode">
+            <text/>
+            <xs:documentation>Extrusion Color Mode</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color">
+            <text/>
+            <xs:documentation>Extrusion Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="shininess">
+            <data type="float">
+              <xs:documentation>Shininess</xs:documentation>
+            </data>
+            <xs:documentation>Shininess</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="specularity">
+            <data type="string">
+              <xs:documentation>Specularity</xs:documentation>
+            </data>
+            <xs:documentation>Specularity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="diffusity">
+            <data type="string">
+              <xs:documentation>Diffuse Reflection</xs:documentation>
+            </data>
+            <xs:documentation>Diffuse Reflection</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="metal">
+            <text/>
+            <xs:documentation>Metallic Surface Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="edge">
+            <data type="string">
+              <xs:documentation>Simulated Bevel</xs:documentation>
+            </data>
+            <xs:documentation>Simulated Bevel</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="facet">
+            <data type="string">
+              <xs:documentation>Faceting Quality</xs:documentation>
+            </data>
+            <xs:documentation>Faceting Quality</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightface">
+            <text/>
+            <xs:documentation>Shape Face Lighting Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="brightness">
+            <data type="string">
+              <xs:documentation>Brightness</xs:documentation>
+            </data>
+            <xs:documentation>Brightness</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightposition">
+            <data type="string">
+              <xs:documentation>Primary Light Position</xs:documentation>
+            </data>
+            <xs:documentation>Primary Light Position</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightlevel">
+            <data type="string">
+              <xs:documentation>Primary Light Intensity</xs:documentation>
+            </data>
+            <xs:documentation>Primary Light Intensity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightharsh">
+            <text/>
+            <xs:documentation>Primary Light Harshness Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightposition2">
+            <data type="string">
+              <xs:documentation>Secondary Light Position</xs:documentation>
+            </data>
+            <xs:documentation>Secondary Light Position</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightlevel2">
+            <data type="string">
+              <xs:documentation>Secondary Light Intensity</xs:documentation>
+            </data>
+            <xs:documentation>Secondary Light Intensity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lightharsh2">
+            <text/>
+            <xs:documentation>Secondary Light Harshness Toggle</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Callout">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Callout toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="type">
+            <data type="string">
+              <xs:documentation>Callout type</xs:documentation>
+            </data>
+            <xs:documentation>Callout type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="gap">
+            <data type="string">
+              <xs:documentation>Callout gap</xs:documentation>
+            </data>
+            <xs:documentation>Callout gap</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="angle">
+            <text/>
+            <xs:documentation>Callout angle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dropauto">
+            <text/>
+            <xs:documentation>Callout automatic drop toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="drop">
+            <text/>
+            <xs:documentation>Callout drop position</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="distance">
+            <data type="string">
+              <xs:documentation>Callout drop distance</xs:documentation>
+            </data>
+            <xs:documentation>Callout drop distance</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="lengthspecified">
+            <text/>
+            <xs:documentation>Callout length toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="length">
+            <data type="string">
+              <xs:documentation>Callout length</xs:documentation>
+            </data>
+            <xs:documentation>Callout length</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="accentbar">
+            <text/>
+            <xs:documentation>Callout accent bar toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="textborder">
+            <text/>
+            <xs:documentation>Callout text border toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="minusx">
+            <text/>
+            <xs:documentation>Callout flip x</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="minusy">
+            <text/>
+            <xs:documentation>Callout flip y</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Lock">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="position">
+            <text/>
+            <xs:documentation>Position Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="selection">
+            <text/>
+            <xs:documentation>Selection Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="grouping">
+            <text/>
+            <xs:documentation>Grouping Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ungrouping">
+            <text/>
+            <xs:documentation>Ungrouping Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="rotation">
+            <text/>
+            <xs:documentation>Rotation Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cropping">
+            <text/>
+            <xs:documentation>Cropping Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="verticies">
+            <text/>
+            <xs:documentation>Vertices Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="adjusthandles">
+            <text/>
+            <xs:documentation>Handles Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="text">
+            <text/>
+            <xs:documentation>Text Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="aspectratio">
+            <text/>
+            <xs:documentation>Aspect Ratio Lock</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="shapetype">
+            <text/>
+            <xs:documentation>AutoShape Type Lock</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_OLEObject">
+        <group>
+          <optional>
+            <element name="LinkType">
+              <ref name="ST_OLELinkType"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="LockedField">
+              <ref name="ST_TrueFalseBlank"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="FieldCodes">
+              <data type="string">
+                <xs:documentation>WordprocessingML Field Switches</xs:documentation>
+              </data>
+            </element>
+          </optional>
+        </group>
+        <optional>
+          <attribute name="Type">
+            <text/>
+            <xs:documentation>OLE Object Type</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ProgID">
+            <data type="string">
+              <xs:documentation>OLE Object Application</xs:documentation>
+            </data>
+            <xs:documentation>OLE Object Application</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ShapeID">
+            <data type="string">
+              <xs:documentation>OLE Object Shape</xs:documentation>
+            </data>
+            <xs:documentation>OLE Object Shape</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="DrawAspect">
+            <text/>
+            <xs:documentation>OLE Object Representation</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="ObjectID">
+            <data type="string">
+              <xs:documentation>OLE Object Unique ID</xs:documentation>
+            </data>
+            <xs:documentation>OLE Object Unique ID</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="r:id">
+            <data type="string"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="UpdateMode">
+            <text/>
+            <xs:documentation>OLE Update Mode</xs:documentation>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_Complex">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+      </define>
+      <define name="CT_StrokeChild">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <optional>
+          <attribute name="on">
+            <text/>
+            <xs:documentation>Stroke Toggle</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="weight">
+            <data type="string">
+              <xs:documentation>Stroke Weight</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Weight</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color">
+            <text/>
+            <xs:documentation>Stroke Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="color2">
+            <text/>
+            <xs:documentation>Stroke Alternate Pattern Color</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="opacity">
+            <data type="string">
+              <xs:documentation>Stroke Opacity</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Opacity</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="linestyle">
+            <ref name="ST_StrokeLineStyle"/>
+            <xs:documentation>Stroke Line Style</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="miterlimit">
+            <data type="decimal">
+              <xs:documentation>Miter Joint Limit</xs:documentation>
+            </data>
+            <xs:documentation>Miter Joint Limit</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="joinstyle">
+            <ref name="ST_StrokeJoinStyle"/>
+            <xs:documentation>Line End Join Style)</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endcap">
+            <ref name="ST_StrokeEndCap"/>
+            <xs:documentation>Line End Cap</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="dashstyle">
+            <data type="string">
+              <xs:documentation>Stroke Dash Pattern</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Dash Pattern</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="insetpen">
+            <text/>
+            <xs:documentation>Inset Border From Path</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="filltype">
+            <ref name="ST_FillType"/>
+            <xs:documentation>Stroke Image Style</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="src">
+            <data type="string">
+              <xs:documentation>Stroke Image Location</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Image Location</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imageaspect">
+            <ref name="ST_ImageAspect"/>
+            <xs:documentation>Stroke Image Aspect Ratio</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imagesize">
+            <data type="string">
+              <xs:documentation>Stroke Image Size</xs:documentation>
+            </data>
+            <xs:documentation>Stroke Image Size</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="imagealignshape">
+            <text/>
+            <xs:documentation>Stoke Image Alignment</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrow">
+            <ref name="ST_StrokeArrowType"/>
+            <xs:documentation>Line Start Arrowhead</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrowwidth">
+            <ref name="ST_StrokeArrowWidth"/>
+            <xs:documentation>Line Start Arrowhead Width</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startarrowlength">
+            <ref name="ST_StrokeArrowLength"/>
+            <xs:documentation>Line Start Arrowhead Length</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrow">
+            <ref name="ST_StrokeArrowType"/>
+            <xs:documentation>Line End Arrowhead</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrowwidth">
+            <ref name="ST_StrokeArrowWidth"/>
+            <xs:documentation>Line End Arrowhead Width</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endarrowlength">
+            <ref name="ST_StrokeArrowLength"/>
+            <xs:documentation>Line End Arrowhead Length</xs:documentation>
+          </attribute>
+        </optional>
+        <ref name="href"/>
+        <xs:documentation>Original Image Reference</xs:documentation>
+        <ref name="althref"/>
+        <xs:documentation>Alternate Image Reference</xs:documentation>
+        <ref name="title"/>
+        <xs:documentation>Stroke Title</xs:documentation>
+        <ref name="forcedash"/>
+        <xs:documentation>Force Dashed Outline</xs:documentation>
+      </define>
+      <define name="CT_ClipPath">
+        <attribute name="v">
+          <data type="string">
+            <xs:documentation>Path Definition</xs:documentation>
+          </data>
+          <xs:documentation>Path Definition</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_Fill">
+        <ref name="BUILT_IN_ANY_TYPE"/>
+        <attribute name="type">
+          <text/>
+          <xs:documentation>Fill Type</xs:documentation>
+        </attribute>
+      </define>
+      <define name="ST_RType">
+        <list>
+          <xs:documentation>Rule Type</xs:documentation>
+          <choice>
+<!-- Arc Rule -->
+            <value>arc</value>
+<!-- Callout Rule -->
+            <value>callout</value>
+<!-- Connector Rule -->
+            <value>connector</value>
+<!-- Alignment Rule -->
+            <value>align</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_How">
+        <list>
+          <xs:documentation>Alignment Type</xs:documentation>
+          <choice>
+<!-- Top Alignment -->
+            <value>top</value>
+<!-- Middle Alignment -->
+            <value>middle</value>
+<!-- Bottom Alignment -->
+            <value>bottom</value>
+<!-- Left Alignment -->
+            <value>left</value>
+<!-- Center Alignment -->
+            <value>center</value>
+<!-- Right Alignment -->
+            <value>right</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_BWMode">
+        <list>
+          <xs:documentation>Black And White Modes</xs:documentation>
+          <choice>
+<!-- Color -->
+            <value>color</value>
+<!-- Automatic -->
+            <value>auto</value>
+<!-- Grayscale -->
+            <value>grayScale</value>
+<!-- Light grayscale -->
+            <value>lightGrayscale</value>
+<!-- Inverse Grayscale -->
+            <value>inverseGray</value>
+<!-- Gray Outlines -->
+            <value>grayOutline</value>
+<!-- Black And White -->
+            <value>highContrast</value>
+<!-- Black -->
+            <value>black</value>
+<!-- White -->
+            <value>white</value>
+<!-- Hide Object When Displayed in Black and White -->
+            <value>hide</value>
+<!-- Do Not Show -->
+            <value>undrawn</value>
+<!-- Black Text And Lines -->
+            <value>blackTextAndLines</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ScreenSize">
+        <list>
+          <xs:documentation>Screen Sizes Type</xs:documentation>
+          <choice>
+<!-- 544x376 pixels -->
+            <value>544,376</value>
+<!-- 640x480 pixels -->
+            <value>640,480</value>
+<!-- 720x512 pixels -->
+            <value>720,512</value>
+<!-- 800x600 pixels -->
+            <value>800,600</value>
+<!-- 1024x768 pixels -->
+            <value>1024,768</value>
+<!-- 1152x862 pixels -->
+            <value>1152,862</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_InsetMode">
+        <list>
+          <xs:documentation>Inset Margin Type</xs:documentation>
+          <choice>
+<!-- Automatic Margins -->
+            <value>auto</value>
+<!-- Custom Margins -->
+            <value>custom</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ColorMode">
+        <list>
+          <xs:documentation>Extrusion Color Types</xs:documentation>
+          <choice>
+<!-- Use Shape Fill Color -->
+            <value>auto</value>
+<!-- Use Custom Color -->
+            <value>custom</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ColorType">
+        <data type="string">
+          <xs:documentation>Color Type</xs:documentation>
+        </data>
+      </define>
+      <define name="ST_ExtrusionType">
+        <list>
+          <xs:documentation>Extrusion Type</xs:documentation>
+          <choice>
+<!-- Perspective Projection -->
+            <value>perspective</value>
+<!-- Parallel Projection -->
+            <value>parallel</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ExtrusionRender">
+        <list>
+          <xs:documentation>Extrusion Rendering Types</xs:documentation>
+          <choice>
+<!-- Solid -->
+            <value>solid</value>
+<!-- Wireframe -->
+            <value>wireFrame</value>
+<!-- Bounding Cube -->
+            <value>boundingCube</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ExtrusionPlane">
+        <list>
+          <xs:documentation>Extrusion Planes</xs:documentation>
+          <choice>
+<!-- XY Plane -->
+            <value>XY</value>
+<!-- ZX Plane -->
+            <value>ZX</value>
+<!-- YZ Plane -->
+            <value>YZ</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_Angle">
+        <list>
+          <xs:documentation>Callout Angles</xs:documentation>
+          <choice>
+<!-- Any Angle -->
+            <value>any</value>
+<!-- 30 degrees -->
+            <value>30</value>
+<!-- 45 degrees -->
+            <value>45</value>
+<!-- 60 degrees -->
+            <value>60</value>
+<!-- 90 degrees -->
+            <value>90</value>
+<!-- Automatic Angle -->
+            <value>auto</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_CalloutDrop">
+        <data type="string">
+          <xs:documentation>Callout Drop Location</xs:documentation>
+        </data>
+      </define>
+      <define name="ST_CalloutPlacement">
+        <list>
+          <xs:documentation>Callout Placement</xs:documentation>
+          <choice>
+<!-- Top placement -->
+            <value>top</value>
+<!-- Center placement -->
+            <value>center</value>
+<!-- Bottom placement -->
+            <value>bottom</value>
+<!-- User-defined placement -->
+            <value>user</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ConnectorType">
+        <list>
+          <xs:documentation>Connector Type</xs:documentation>
+          <choice>
+<!-- No Connector -->
+            <value>none</value>
+<!-- Straight Connector -->
+            <value>straight</value>
+<!-- Elbow Connector -->
+            <value>elbow</value>
+<!-- Curved Connector -->
+            <value>curved</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_HrAlign">
+        <list>
+          <xs:documentation>Alignment Type</xs:documentation>
+          <choice>
+<!-- Left Alignment -->
+            <value>left</value>
+<!-- Right Alignment -->
+            <value>right</value>
+<!-- Center Alignment -->
+            <value>center</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_ConnectType">
+        <list>
+          <xs:documentation>Connection Locations Type</xs:documentation>
+          <choice>
+<!-- No -->
+            <value>none</value>
+<!-- Four Connections -->
+            <value>rect</value>
+<!-- Edit Point Connections -->
+            <value>segments</value>
+<!-- Custom Connections -->
+            <value>custom</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_OLELinkType">
+        <list>
+          <xs:documentation>Embedded Object Alternate Image Request Types</xs:documentation>
+          <choice>
+<!-- Other Image -->
+            <value>Picture</value>
+<!-- Bitmap Image -->
+            <value>Bitmap</value>
+<!-- Enhanced Metafile Image -->
+            <value>EnhancedMetaFile</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_OLEType">
+        <list>
+          <xs:documentation>OLE Connection Type</xs:documentation>
+          <choice>
+<!-- Embedded Object -->
+            <value>Embed</value>
+<!-- Linked Object -->
+            <value>Link</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_OLEDrawAspect">
+        <list>
+          <xs:documentation>OLE Object Representations</xs:documentation>
+          <choice>
+<!-- Snapshot -->
+            <value>Content</value>
+<!-- Icon -->
+            <value>Icon</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_OLEUpdateMode">
+        <list>
+          <xs:documentation>OLE Update Method Type</xs:documentation>
+          <choice>
+<!-- Server Application Update -->
+            <value>Always</value>
+<!-- User Update -->
+            <value>OnCall</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_Guid">
+        <data type="token">
+          <xs:documentation>128-Bit GUID</xs:documentation>
+          <param name="pattern">\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}</param>
+        </data>
+      </define>
+      <define name="ST_RelationshipId">
+        <data type="string">
+          <xs:documentation>Explicit Relationship ID</xs:documentation>
+        </data>
+      </define>
+      <define name="ST_TrueFalse">
+        <list>
+          <xs:documentation>Boolean Value</xs:documentation>
+          <choice>
+<!-- True -->
+            <value>t</value>
+<!-- False -->
+            <value>f</value>
+<!-- True -->
+            <value>true</value>
+<!-- False -->
+            <value>false</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_TrueFalseBlank">
+        <list>
+          <xs:documentation>Boolean Value with Blank [False] State</xs:documentation>
+          <choice>
+<!-- Blank – Logical False -->
+            <value/>
+<!-- Logical True -->
+            <value>t</value>
+<!-- Logical False -->
+            <value>f</value>
+<!-- Logical True -->
+            <value>true</value>
+<!-- Logical False -->
+            <value>false</value>
+          </choice>
+        </list>
+      </define>
+      <define name="ST_FillType">
+        <list>
+          <xs:documentation>Shape Fill Type</xs:documentation>
+          <choice>
+<!-- Centered Radial Gradient -->
+            <value>gradientCenter</value>
+<!-- Solid Fill -->
+            <value>solid</value>
+<!-- Image Pattern -->
+            <value>pattern</value>
+<!-- Tiled Image -->
+            <value>tile</value>
+<!-- Stretch Image to Fit -->
+            <value>frame</value>
+<!-- Unscaled Gradient -->
+            <value>gradientUnscaled</value>
+<!-- Radial Gradient -->
+            <value>gradientRadial</value>
+<!-- Linear Gradient -->
+            <value>gradient</value>
+<!-- Use Background Fill -->
+            <value>background</value>
+          </choice>
+        </list>
+      </define>
+      <define name="BUILT_IN_ANY_TYPE">
+        <zeroOrMore>
+          <choice>
+            <element>
+              <anyName/>
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+            <attribute>
+              <anyName/>
+            </attribute>
+            <text/>
+          </choice>
+        </zeroOrMore>
+      </define>
+    </grammar>
+    <resource name="OLEObject" resource="Properties">
+      <sprm name="OLEObject" tokenid="ooxml:OLEObject_OLEObject"/>
+    </resource>
+    <resource name="CT_OLEObject" resource="Properties" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+      <sprm name="LinkType" tokenid="ooxml:CT_OLEObject_LinkType"/>
+      <sprm name="LockedField" tokenid="ooxml:CT_OLEObject_LockedField"/>
+      <sprm name="FieldCodes" tokenid="ooxml:CT_OLEObject_FieldCodes"/>
+      <attribute name="Type" tokenid="ooxml:CT_OLEObject_Type"/>
+      <attribute name="ProgID" tokenid="ooxml:CT_OLEObject_ProgID"/>
+      <attribute name="ShapeID" tokenid="ooxml:CT_OLEObject_ShapeID"/>
+      <attribute name="DrawAspect" tokenid="ooxml:CT_OLEObject_DrawAspect"/>
+      <attribute name="ObjectID" tokenid="ooxml:CT_OLEObject_ObjectID"/>
+      <attribute name="r:id" tokenid="ooxml:CT_OLEObject_r_id"/>
+      <attribute name="UpdateMode" tokenid="ooxml:CT_OLEObject_UpdateMode"/>
+      <action name="end" action="handleOLE"/>
+    </resource>
+    <resource name="ST_RType" resource="List" generated="yes">
+      <value name="arc" tokenid="ooxml:Value_office_ST_RType_arc">arc</value>
+      <value name="callout" tokenid="ooxml:Value_office_ST_RType_callout">callout</value>
+      <value name="connector" tokenid="ooxml:Value_office_ST_RType_connector">connector</value>
+      <value name="align" tokenid="ooxml:Value_office_ST_RType_align">align</value>
+    </resource>
+    <resource name="ST_How" resource="List" generated="yes">
+      <value name="top" tokenid="ooxml:Value_office_ST_How_top">top</value>
+      <value name="middle" tokenid="ooxml:Value_office_ST_How_middle">middle</value>
+      <value name="bottom" tokenid="ooxml:Value_office_ST_How_bottom">bottom</value>
+      <value name="left" tokenid="ooxml:Value_office_ST_How_left">left</value>
+      <value name="center" tokenid="ooxml:Value_office_ST_How_center">center</value>
+      <value name="right" tokenid="ooxml:Value_office_ST_How_right">right</value>
+    </resource>
+    <resource name="ST_BWMode" resource="List" generated="yes">
+      <value name="color" tokenid="ooxml:Value_office_ST_BWMode_color">color</value>
+      <value name="auto" tokenid="ooxml:Value_office_ST_BWMode_auto">auto</value>
+      <value name="grayScale" tokenid="ooxml:Value_office_ST_BWMode_grayScale">grayScale</value>
+      <value name="lightGrayscale" tokenid="ooxml:Value_office_ST_BWMode_lightGrayscale">lightGrayscale</value>
+      <value name="inverseGray" tokenid="ooxml:Value_office_ST_BWMode_inverseGray">inverseGray</value>
+      <value name="grayOutline" tokenid="ooxml:Value_office_ST_BWMode_grayOutline">grayOutline</value>
+      <value name="highContrast" tokenid="ooxml:Value_office_ST_BWMode_highContrast">highContrast</value>
+      <value name="black" tokenid="ooxml:Value_office_ST_BWMode_black">black</value>
+      <value name="white" tokenid="ooxml:Value_office_ST_BWMode_white">white</value>
+      <value name="hide" tokenid="ooxml:Value_office_ST_BWMode_hide">hide</value>
+      <value name="undrawn" tokenid="ooxml:Value_office_ST_BWMode_undrawn">undrawn</value>
+      <value name="blackTextAndLines" tokenid="ooxml:Value_office_ST_BWMode_blackTextAndLines">blackTextAndLines</value>
+    </resource>
+    <resource name="ST_ScreenSize" resource="List" generated="yes">
+      <value name="544_376" tokenid="ooxml:Value_office_ST_ScreenSize_544_376">544,376</value>
+      <value name="640_480" tokenid="ooxml:Value_office_ST_ScreenSize_640_480">640,480</value>
+      <value name="720_512" tokenid="ooxml:Value_office_ST_ScreenSize_720_512">720,512</value>
+      <value name="800_600" tokenid="ooxml:Value_office_ST_ScreenSize_800_600">800,600</value>
+      <value name="1024_768" tokenid="ooxml:Value_office_ST_ScreenSize_1024_768">1024,768</value>
+      <value name="1152_862" tokenid="ooxml:Value_office_ST_ScreenSize_1152_862">1152,862</value>
+    </resource>
+    <resource name="ST_InsetMode" resource="List" generated="yes">
+      <value name="auto" tokenid="ooxml:Value_office_ST_InsetMode_auto">auto</value>
+      <value name="custom" tokenid="ooxml:Value_office_ST_InsetMode_custom">custom</value>
+    </resource>
+    <resource name="ST_ColorMode" resource="List" generated="yes">
+      <value name="auto" tokenid="ooxml:Value_office_ST_ColorMode_auto">auto</value>
+      <value name="custom" tokenid="ooxml:Value_office_ST_ColorMode_custom">custom</value>
+    </resource>
+    <resource name="ST_ColorType" resource="String" generated="yes"/>
+    <resource name="ST_ExtrusionType" resource="List" generated="yes">
+      <value name="perspective" tokenid="ooxml:Value_office_ST_ExtrusionType_perspective">perspective</value>
+      <value name="parallel" tokenid="ooxml:Value_office_ST_ExtrusionType_parallel">parallel</value>
+    </resource>
+    <resource name="ST_ExtrusionRender" resource="List" generated="yes">
+      <value name="solid" tokenid="ooxml:Value_office_ST_ExtrusionRender_solid">solid</value>
+      <value name="wireFrame" tokenid="ooxml:Value_office_ST_ExtrusionRender_wireFrame">wireFrame</value>
+      <value name="boundingCube" tokenid="ooxml:Value_office_ST_ExtrusionRender_boundingCube">boundingCube</value>
+    </resource>
+    <resource name="ST_ExtrusionPlane" resource="List" generated="yes">
+      <value name="XY" tokenid="ooxml:Value_office_ST_ExtrusionPlane_XY">XY</value>
+      <value name="ZX" tokenid="ooxml:Value_office_ST_ExtrusionPlane_ZX">ZX</value>
+      <value name="YZ" tokenid="ooxml:Value_office_ST_ExtrusionPlane_YZ">YZ</value>
+    </resource>
+    <resource name="ST_Angle" resource="List" generated="yes">
+      <value name="any" tokenid="ooxml:Value_office_ST_Angle_any">any</value>
+      <value name="30" tokenid="ooxml:Value_office_ST_Angle_30">30</value>
+      <value name="45" tokenid="ooxml:Value_office_ST_Angle_45">45</value>
+      <value name="60" tokenid="ooxml:Value_office_ST_Angle_60">60</value>
+      <value name="90" tokenid="ooxml:Value_office_ST_Angle_90">90</value>
+      <value name="auto" tokenid="ooxml:Value_office_ST_Angle_auto">auto</value>
+    </resource>
+    <resource name="ST_CalloutDrop" resource="String" generated="yes"/>
+    <resource name="ST_CalloutPlacement" resource="List" generated="yes">
+      <value name="top" tokenid="ooxml:Value_office_ST_CalloutPlacement_top">top</value>
+      <value name="center" tokenid="ooxml:Value_office_ST_CalloutPlacement_center">center</value>
+      <value name="bottom" tokenid="ooxml:Value_office_ST_CalloutPlacement_bottom">bottom</value>
+      <value name="user" tokenid="ooxml:Value_office_ST_CalloutPlacement_user">user</value>
+    </resource>
+    <resource name="ST_ConnectorType" resource="List" generated="yes">
+      <value name="none" tokenid="ooxml:Value_office_ST_ConnectorType_none">none</value>
+      <value name="straight" tokenid="ooxml:Value_office_ST_ConnectorType_straight">straight</value>
+      <value name="elbow" tokenid="ooxml:Value_office_ST_ConnectorType_elbow">elbow</value>
+      <value name="curved" tokenid="ooxml:Value_office_ST_ConnectorType_curved">curved</value>
+    </resource>
+    <resource name="ST_HrAlign" resource="List" generated="yes">
+      <value name="left" tokenid="ooxml:Value_office_ST_HrAlign_left">left</value>
+      <value name="right" tokenid="ooxml:Value_office_ST_HrAlign_right">right</value>
+      <value name="center" tokenid="ooxml:Value_office_ST_HrAlign_center">center</value>
+    </resource>
+    <resource name="ST_ConnectType" resource="List" generated="yes">
+      <value name="none" tokenid="ooxml:Value_office_ST_ConnectType_none">none</value>
+      <value name="rect" tokenid="ooxml:Value_office_ST_ConnectType_rect">rect</value>
+      <value name="segments" tokenid="ooxml:Value_office_ST_ConnectType_segments">segments</value>
+      <value name="custom" tokenid="ooxml:Value_office_ST_ConnectType_custom">custom</value>
+    </resource>
+    <resource name="ST_OLELinkType" resource="List" generated="yes">
+      <value name="Picture" tokenid="ooxml:Value_office_ST_OLELinkType_Picture">Picture</value>
+      <value name="Bitmap" tokenid="ooxml:Value_office_ST_OLELinkType_Bitmap">Bitmap</value>
+      <value name="EnhancedMetaFile" tokenid="ooxml:Value_office_ST_OLELinkType_EnhancedMetaFile">EnhancedMetaFile</value>
+    </resource>
+    <resource name="ST_OLEType" resource="List" generated="yes">
+      <value name="Embed" tokenid="ooxml:Value_office_ST_OLEType_Embed">Embed</value>
+      <value name="Link" tokenid="ooxml:Value_office_ST_OLEType_Link">Link</value>
+    </resource>
+    <resource name="ST_OLEDrawAspect" resource="List" generated="yes">
+      <value name="Content" tokenid="ooxml:Value_office_ST_OLEDrawAspect_Content">Content</value>
+      <value name="Icon" tokenid="ooxml:Value_office_ST_OLEDrawAspect_Icon">Icon</value>
+    </resource>
+    <resource name="ST_OLEUpdateMode" resource="List" generated="yes">
+      <value name="Always" tokenid="ooxml:Value_office_ST_OLEUpdateMode_Always">Always</value>
+      <value name="OnCall" tokenid="ooxml:Value_office_ST_OLEUpdateMode_OnCall">OnCall</value>
+    </resource>
+    <resource name="ST_Guid" resource="String" generated="yes"/>
+    <resource name="ST_RelationshipId" resource="String" generated="yes"/>
+    <resource name="ST_TrueFalse" resource="List" generated="yes">
+      <value name="t" tokenid="ooxml:Value_office_ST_TrueFalse_t">t</value>
+      <value name="f" tokenid="ooxml:Value_office_ST_TrueFalse_f">f</value>
+      <value name="true" tokenid="ooxml:Value_office_ST_TrueFalse_true">true</value>
+      <value name="false" tokenid="ooxml:Value_office_ST_TrueFalse_false">false</value>
+    </resource>
+    <resource name="ST_TrueFalseBlank" resource="List" generated="yes">
+      <value name="" tokenid="ooxml:Value_office_ST_TrueFalseBlank_"/>
+      <value name="t" tokenid="ooxml:Value_office_ST_TrueFalseBlank_t">t</value>
+      <value name="f" tokenid="ooxml:Value_office_ST_TrueFalseBlank_f">f</value>
+      <value name="true" tokenid="ooxml:Value_office_ST_TrueFalseBlank_true">true</value>
+      <value name="false" tokenid="ooxml:Value_office_ST_TrueFalseBlank_false">false</value>
+    </resource>
+    <resource name="ST_FillType" resource="List" generated="yes">
+      <value name="gradientCenter" tokenid="ooxml:Value_office_ST_FillType_gradientCenter">gradientCenter</value>
+      <value name="solid" tokenid="ooxml:Value_office_ST_FillType_solid">solid</value>
+      <value name="pattern" tokenid="ooxml:Value_office_ST_FillType_pattern">pattern</value>
+      <value name="tile" tokenid="ooxml:Value_office_ST_FillType_tile">tile</value>
+      <value name="frame" tokenid="ooxml:Value_office_ST_FillType_frame">frame</value>
+      <value name="gradientUnscaled" tokenid="ooxml:Value_office_ST_FillType_gradientUnscaled">gradientUnscaled</value>
+      <value name="gradientRadial" tokenid="ooxml:Value_office_ST_FillType_gradientRadial">gradientRadial</value>
+      <value name="gradient" tokenid="ooxml:Value_office_ST_FillType_gradient">gradient</value>
+      <value name="background" tokenid="ooxml:Value_office_ST_FillType_background">background</value>
+    </resource>
+  </namespace>
   <namespace name="wml" file="wml.rng">
     <start name="recipients"/>
     <start name="txbxContent"/>
@@ -13912,7 +17576,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
 <!-- ISO RELAX NG Schema -->
       <include href="shared-customXmlSchemaProperties.rng"/>
       <include href="shared-math.rng"/>
@@ -14154,7 +17818,7 @@
       </define>
       <define name="ST_HexColorAuto">
         <list>
-          <xs:documentation>‘Automatic’ Color Value</xs:documentation>
+          <xs:documentation>&#x2018;Automatic&#x2019; Color Value</xs:documentation>
 <!-- Automatically Determined Color -->
           <value>auto</value>
         </list>
@@ -15138,91 +18802,91 @@
       <define name="CT_FramePr">
         <optional>
           <attribute name="dropCap">
-            <text/>
+            <ref name="ST_DropCap"/>
             <xs:documentation>Drop Cap Frame</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="lines">
-            <text/>
+            <ref name="ST_DecimalNumber"/>
             <xs:documentation>Drop Cap Vertical Height in Lines</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="w">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Frame Width</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="h">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Frame Height</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="vSpace">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Vertical Frame Padding</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="hSpace">
-            <text/>
+            <ref name="ST_TwipsMeasure"/>
             <xs:documentation>Horizontal Frame Padding</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="wrap">
-            <text/>
+            <ref name="ST_Wrap"/>
             <xs:documentation>Text Wrapping Around Frame</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="hAnchor">
-            <text/>
+            <ref name="ST_HAnchor"/>
             <xs:documentation>Frame Horizontal Positioning Base</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="vAnchor">
-            <text/>
+            <ref name="ST_VAnchor"/>
             <xs:documentation>Frame Vertical Positioning Base</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="x">
-            <text/>
+            <ref name="ST_SignedTwipsMeasure"/>
             <xs:documentation>Absolute Horizontal Position</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="xAlign">
-            <text/>
+            <ref name="ST_XAlign"/>
             <xs:documentation>Relative Horizontal Position</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="y">
-            <text/>
+            <ref name="ST_SignedTwipsMeasure"/>
             <xs:documentation>Absolute Vertical Position</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="yAlign">
-            <text/>
+            <ref name="ST_YAlign"/>
             <xs:documentation>Relative Vertical Position</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="hRule">
-            <text/>
+            <ref name="ST_HeightRule"/>
             <xs:documentation>Frame Height Type</xs:documentation>
           </attribute>
         </optional>
         <optional>
           <attribute name="anchorLock">
-            <text/>
+            <ref name="ST_OnOff"/>
             <xs:documentation>Lock Frame Anchor to Paragraph</xs:documentation>
           </attribute>
         </optional>
@@ -15842,7 +19506,7 @@
       </define>
       <define name="CT_TextAlignment">
         <attribute name="val">
-          <text/>
+          <ref name="ST_TextAlignment"/>
           <xs:documentation>Vertical Character Alignment Position</xs:documentation>
         </attribute>
       </define>
@@ -16445,12 +20109,6 @@
       </define>
       <define name="CT_PictureBase">
         <oneOrMore>
-          <optional>
-            <element>
-              <anyName/>
-              <ref name="BUILT_IN_ANY_TYPE"/>
-            </element>
-          </optional>
           <optional>
             <element>
               <anyName/>
@@ -22545,6 +26203,11 @@
         </zeroOrMore>
       </define>
     </grammar>
+    <resource name="CT_Empty" resource="Stream">
+      <action name="end" tokenid="ooxml:EG_RunInnerContent_noBreakHyphen" action="noBreakHyphen"/>
+      <action name="end" tokenid="ooxml:EG_RunInnerContent_softHyphen" action="softHyphen"/>
+      <action name="end" tokenid="ooxml:EG_RunInnerContent_cr" action="cr"/>
+    </resource>
     <resource name="ST_OnOff" resource="Boolean"/>
     <resource name="CT_OnOff" resource="BooleanValue"/>
     <resource name="ST_LongHexNumber" resource="Hex"/>
@@ -23189,7 +26852,6 @@
       <value name="bottom" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_bottom">bottom</value>
       <value name="auto" tokenid="ooxml:Value_wordprocessingml_ST_TextAlignment_auto">auto</value>
     </resource>
-    <resource name="CT_TextAlignment" resource="StringValue" generated="yes"/>
     <resource name="ST_DisplacedByCustomXml" resource="List" generated="yes">
       <value name="next" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_next">next</value>
       <value name="prev" tokenid="ooxml:Value_wordprocessingml_ST_DisplacedByCustomXml_prev">prev</value>
@@ -23266,6 +26928,7 @@
       <element name="rPr" tokenid="ooxml:CT_ParaRPrChange_rPr"/>
     </resource>
     <resource name="CT_RunTrackChange" resource="Stream">
+      <action name="start" action="tokenproperty"/>
       <action name="start" action="propagateCharacterProperties"/>
       <action name="start" action="clearProps"/>
     </resource>
@@ -23721,17 +27384,11 @@
     <resource name="EG_RunInnerContent" resource="Stream">
       <element name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
       <element name="t" tokenid="ooxml:EG_RunInnerContent_t"/>
-      <element name="delText" tokenid="ooxml:EG_RunInnerContent_delText">
-        <action name="newProperty" tokenid="ooxml:delText" value="1"/>
-      </element>
+      <element name="delText" tokenid="ooxml:EG_RunInnerContent_delText"/>
       <element name="instrText" tokenid="ooxml:EG_RunInnerContent_instrText"/>
       <element name="delInstrText" tokenid="ooxml:EG_RunInnerContent_delInstrText"/>
-      <element name="noBreakHyphen" tokenid="ooxml:EG_RunInnerContent_noBreakHyphen">
-        <action name="noBreakHyphen"/>
-      </element>
-      <element name="softHyphen" tokenid="ooxml:EG_RunInnerContent_softHyphen">
-        <action name="softHyphen"/>
-      </element>
+      <element name="noBreakHyphen" tokenid="ooxml:EG_RunInnerContent_noBreakHyphen"/>
+      <element name="softHyphen" tokenid="ooxml:EG_RunInnerContent_softHyphen"/>
       <element name="dayShort" tokenid="ooxml:EG_RunInnerContent_dayShort"/>
       <element name="monthShort" tokenid="ooxml:EG_RunInnerContent_monthShort"/>
       <element name="yearShort" tokenid="ooxml:EG_RunInnerContent_yearShort"/>
@@ -23745,9 +27402,7 @@
       <element name="continuationSeparator" tokenid="ooxml:EG_RunInnerContent_continuationSeparator"/>
       <element name="sym" tokenid="ooxml:EG_RunInnerContent_sym"/>
       <element name="pgNum" tokenid="ooxml:EG_RunInnerContent_pgNum"/>
-      <element name="cr" tokenid="ooxml:EG_RunInnerContent_cr">
-        <action name="cr"/>
-      </element>
+      <element name="cr" tokenid="ooxml:EG_RunInnerContent_cr"/>
       <element name="tab" tokenid="ooxml:EG_RunInnerContent_tab"/>
       <element name="object" tokenid="ooxml:EG_RunInnerContent_object"/>
       <element name="pict" tokenid="ooxml:EG_RunInnerContent_pict"/>
@@ -23996,9 +27651,11 @@
       <element name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
     </resource>
     <resource name="CT_TrPr" resource="Properties">
+      <kind name="table"/>
       <element name="ins" tokenid="ooxml:CT_TrPr_ins"/>
       <element name="del" tokenid="ooxml:CT_TrPr_del"/>
       <element name="trPrChange" tokenid="ooxml:CT_TrPr_trPrChange"/>
+      <action name="end" action="propagateTableProperties"/>
     </resource>
     <resource name="CT_Row" resource="TextTableRow"/>
     <resource name="ST_TblLayoutType" resource="List" generated="yes">
@@ -24079,11 +27736,13 @@
     </resource>
     <resource name="CT_FtnEdnRef" resource="Properties">
       <attribute name="customMarkFollows" tokenid="ooxml:CT_FtnEdnRef_customMarkFollows"/>
-      <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id"/>
+      <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id" action="setXNoteId"/>
       <action name="end" action="handleXNotes"/>
     </resource>
     <resource name="CT_FtnEdn" resource="XNote">
-      <attribute name="id" action="checkId"/>
+      <attribute name="type" tokenid="ooxml:CT_FtnEdn_type"/>
+      <attribute name="id" tokenid="ooxml:CT_FtnEdn_id" action="checkId"/>
+      <action name="start" action="propagateCharacterProperties"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
     <resource name="CT_CommentRef" resource="Properties">
@@ -24348,17 +28007,11 @@
       <element name="permStart" tokenid="ooxml:EG_RunLevelElts_permStart"/>
       <element name="permEnd" tokenid="ooxml:EG_RunLevelElts_permEnd"/>
       <element name="ins" tokenid="ooxml:EG_RunLevelElts_ins">
-        <action name="newProperty" tokenid="ooxml:ins" value="1"/>
+        <action name="newProperty" id="ooxml:ins" value="1"/>
       </element>
-      <element name="del" tokenid="ooxml:EG_RunLevelElts_del">
-        <action name="newProperty" tokenid="ooxml:del" value="1"/>
-      </element>
-      <element name="moveFrom" tokenid="ooxml:EG_RunLevelElts_moveFrom">
-        <action name="newProperty" tokenid="ooxml:moveFrom" value="1"/>
-      </element>
-      <element name="moveTo" tokenid="ooxml:EG_RunLevelElts_moveTo">
-        <action name="newProperty" tokenid="ooxml:moveTo" value="1"/>
-      </element>
+      <element name="del" tokenid="ooxml:EG_RunLevelElts_del"/>
+      <element name="moveFrom" tokenid="ooxml:EG_RunLevelElts_moveFrom"/>
+      <element name="moveTo" tokenid="ooxml:EG_RunLevelElts_moveTo"/>
     </resource>
     <resource name="CT_Body" resource="Stream">
       <action name="start" action="startSectionGroup"/>
