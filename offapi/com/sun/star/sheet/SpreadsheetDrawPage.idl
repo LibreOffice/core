@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpreadsheetDrawPage.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:52:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
     <listing>
     xPage = xDoc.DrawPages(0)
     for x% = 0 to 200
-    xShape = xProv.createInstance( "com::sun::star::drawing::LineShape" )
+    xShape = xProv.createInstance( "com.sun.star.drawing.LineShape" )
     xShape.LineColor = rgb( 255, 0, n%+20 )
     xShape.LineWidth = 20
     xShape.Position = Point( x%, 2*x% )
