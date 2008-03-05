@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:53:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,15 @@ hidspecial SID_SECTION_ALIGN_DOWN { HelpId = SID_SECTION_ALIGN_DOWN; };
 hidspecial SID_NEXT_MARK { HelpId = SID_NEXT_MARK; };
 hidspecial SID_PREV_MARK { HelpId = SID_PREV_MARK; };
 
+hidspecial UID_RPT_PROP_CHARTTYPE_DLG { HelpId = UID_RPT_PROP_CHARTTYPE_DLG; };
+hidspecial HID_RPT_PROP_CHARTTYPE { HelpId = HID_RPT_PROP_CHARTTYPE; };
 hidspecial HID_RPT_FIELD_SEL_WIN { HelpId = HID_RPT_FIELD_SEL_WIN; };
 hidspecial HID_RPT_FIELD_SEL { HelpId = HID_RPT_FIELD_SEL; };
 hidspecial HID_RPT_PROP_FORMULALIST { HelpId = HID_RPT_PROP_FORMULALIST; };
 hidspecial HID_RPT_PROP_SCOPE { HelpId = HID_RPT_PROP_SCOPE; };
 hidspecial HID_RPT_PROP_TYPE { HelpId = HID_RPT_PROP_TYPE; };
+hidspecial UID_RPT_PROP_DLG_LINKFIELDS { HelpId = UID_RPT_PROP_DLG_LINKFIELDS; };
+hidspecial HID_RPT_PROP_MASTERFIELDS { HelpId = HID_RPT_PROP_MASTERFIELDS; };
+hidspecial HID_RPT_PROP_DETAILFIELDS { HelpId = HID_RPT_PROP_DETAILFIELDS; };
+hidspecial HID_RPT_PROP_PREVIEW_COUNT { HelpId = HID_RPT_PROP_PREVIEW_COUNT; };
 
