@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:26:02 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:39:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ sub get_arpcomments_for_property_table
 
     if ( $installer::globals::patch )
     {
-        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_productname_for_property_table"); }
+        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_arpcomments_for_property_table"); }
         my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
         $comment = $comment . " " . $patchstring;
     }
@@ -143,6 +143,13 @@ sub get_productname_for_property_table
     {
         $postversionextension = $allvariables->{'POSTVERSIONEXTENSION'};
         $productname = $productname . " " . $postversionextension;
+    }
+
+    my $productextension = "";
+    if ( $allvariables->{'PRODUCTEXTENSION'} )
+    {
+        $productextension = $allvariables->{'PRODUCTEXTENSION'};
+        $productname = $productname . " " . $productextension;
     }
 
     if ( $installer::globals::languagepack )
