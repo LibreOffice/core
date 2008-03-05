@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:58:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ enum SfxTitleQuery
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
-class SFX2_DLLPUBLIC SfxObjectShell: public SfxShell, virtual public SotObject
+class SFX2_DLLPUBLIC SfxObjectShell: public SfxShell, virtual public SotObject, public ::comphelper::IEmbeddedHelper
 {
 friend struct ModifyBlocker_Impl;
 
@@ -672,6 +672,20 @@ public:
 //REMOVE        void SetFileName( const ::rtl::OUString& );
     SvGlobalName    GetClassName() const;
 
+    // comphelper::IEmbeddedHelper
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+    virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const
+    {
+        return const_cast<SfxObjectShell*>(this)->GetStorage();
+    }
+    virtual comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const
+    {
+        return GetEmbeddedObjectContainer();
+    }
+    bool    isEnableSetModified() const
+    {
+        return IsEnableSetModified();
+    }
     comphelper::EmbeddedObjectContainer&    GetEmbeddedObjectContainer() const;
     void    ClearEmbeddedObjects();
 
