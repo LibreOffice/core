@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.12 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:38:21 $
+-- $Revision: 1.13 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:28:04 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -146,14 +146,16 @@ char **argv;
 
    /* Initialize Global variables to their default values       */
    Prolog(argc, argv);
+   /* Set internal macros to their initial values, some are changed
+    * later again by Make_rules() that parses the values from ruletab.c. */
    Create_macro_vars();
    Catch_signals(Quit);
 
    /* This macro is only defined for some OSs, see sysintf.c for details *
     * and NULL if undefined.                                             */
-   Def_macro("ABSMAKECMD", AbsPname, M_PRECIOUS|M_NOEXPORT );
+   Def_macro("ABSMAKECMD", AbsPname, M_PRECIOUS|M_NOEXPORT|M_EXPANDED );
 
-   Def_macro( "MAKECMD", Pname, M_PRECIOUS|M_NOEXPORT );
+   Def_macro( "MAKECMD", Pname, M_PRECIOUS|M_NOEXPORT|M_EXPANDED );
    Pname = Basename(Pname);
 
    DB_PROCESS(Pname);
@@ -315,8 +317,9 @@ char **argv;
         case 'P':
            if( p[1] ) {
           /* Only set MAXPROCESS if -S flag is *not* used. */
-          if( !(Glob_attr & A_SEQ) )
+          if( !(Glob_attr & A_SEQ) ) {
              Def_macro( "MAXPROCESS", p+1, M_MULTI|M_EXPANDED );
+          }
           p += strlen(p)-1;
            }
            else
@@ -337,6 +340,8 @@ char **argv;
       }
       else if( (q = strchr(p, '=')) != NIL(char) ) {
      cmdmacs = DmStrAdd( cmdmacs, DmStrDup2(p), TRUE );
+     /* Macros defined on the command line are marked precious.
+      * FIXME: The exception for += appears to be bogus. */
      Parse_macro( p, (q[-1]!='+')?M_PRECIOUS:M_DEFAULT );
       }
       else {
@@ -545,7 +550,7 @@ _set_inc_depth()
    Def_macro( "INCDEPTH", buf, M_MULTI|M_NOEXPORT );
    Def_macro( "INCFILENAME",
               next_file_slot ? ftab[next_file_slot-1].name : "",
-              M_MULTI|M_NOEXPORT );
+              M_MULTI|M_NOEXPORT|M_EXPANDED );
 }
 
 
@@ -657,10 +662,16 @@ char **rname;
     *   MACNAME  from builtin rules (not precious)
     */
 
-   if( (hp = GET_MACRO(macname)) != NIL(HASH) )
-      ename = fname = Expand(hp->ht_value);
+   if( (hp = GET_MACRO(macname)) != NIL(HASH) ) {
+      /* Only expand if needed. */
+      if( hp->ht_flag & M_EXPANDED ) {
+     ename = fname = DmStrDup(hp->ht_value);
+      } else {
+     ename = fname = Expand(hp->ht_value);
+      }
 
-   if( hp->ht_flag & M_PRECIOUS ) fil = Openfile(fname, FALSE, FALSE);
+      if( hp->ht_flag & M_PRECIOUS ) fil = Openfile(fname, FALSE, FALSE);
+   }
 
    if( fil == NIL(FILE) ) {
       fname=Expand(Read_env_string(macname));
