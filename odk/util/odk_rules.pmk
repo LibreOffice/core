@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 14:23:55 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:40:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -177,12 +177,10 @@ $(DESTDIRLIB)$/%.a : $(LIBOUT)$/%.a
 $(DIR_CREATE_FLAG) :
 .IF "$(USE_SHELL)" != "4nt"
     $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
-    sleep 2
 .ELSE
-    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | tr "\\" "/" | xargs mkdir.exe -p && echo "dirs created" > $@ && touch $@
-# keep forced shell as delay is a 4nt internal command
-    +delay 2
+    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s#\#/#)) | $(XARGS) $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
 .ENDIF
+    $(DELAY) 2
 
 $(DESTDIRSETTINGS)$/component.uno.def : $(PRJ)$/settings$/component.uno.def
     @@-rm -f $@
