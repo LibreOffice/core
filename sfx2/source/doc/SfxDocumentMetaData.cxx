@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SfxDocumentMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-03 08:50:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1110,11 +1110,18 @@ void SAL_CALL SfxDocumentMetaData::init(
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
-    ::rtl::OUString prefix = ::rtl::OUString::createFromAscii(
-        "/child::office:document-meta/child::office:meta");
-    css::uno::Reference<css::xml::dom::XNode> xDocNode(
-        m_xDoc, css::uno::UNO_QUERY_THROW);
-    m_xParent = xPath->selectSingleNode(xDocNode, prefix);
+    try
+    {
+        ::rtl::OUString prefix = ::rtl::OUString::createFromAscii(
+            "/child::office:document-meta/child::office:meta");
+        css::uno::Reference<css::xml::dom::XNode> xDocNode(
+            m_xDoc, css::uno::UNO_QUERY_THROW);
+        m_xParent = xPath->selectSingleNode(xDocNode, prefix);
+    }
+    catch(com::sun::star::uno::RuntimeException& rRE)
+    {
+        DBG_ERROR("caught RuntimeException from libxml!");
+    }
 
     if (!m_xParent.is()) {
         // all this create/append stuff may throw DOMException
