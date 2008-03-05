@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:17:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,8 @@ PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
         m_aCommand( this, PaResId( RID_PA_TXT_COMMAND_STRING ) ),
         m_aCommentTxt( this, PaResId( RID_PA_TXT_COMMENT ) ),
         m_aComment( this, PaResId( RID_PA_TXT_COMMENT_STRING ) ),
+        m_aCUPSFL( this, PaResId( RID_PA_FL_CUPSUSAGE ) ),
+        m_aCUPSCB( this, PaResId( RID_PA_CB_CUPSUSAGE ) ),
         m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
         m_aAddPB( this, PaResId( RID_PA_BTN_ADD ) ),
         m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
@@ -165,6 +167,7 @@ void PADialog::Init()
 {
     // #i79787# initially ensure printer discovery has ended
     m_rPIManager.checkPrintersChanged( true );
+    m_aCUPSCB.Check( m_rPIManager.isCUPSDisabled() );
 
     UpdateDevice();
     UpdateText();
@@ -181,6 +184,7 @@ void PADialog::Init()
     m_aFontsPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aAddPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aDevicesLB.setDelPressedLink( LINK( this, PADialog, DelPressedHdl ) );
+    m_aCUPSCB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
 
     ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
     if( ! rFontManager.checkImportPossible() )
@@ -254,6 +258,12 @@ IMPL_LINK( PADialog, ClickBtnHdl, PushButton*, pButton )
     {
         FontNameDlg aDialog( this );
         aDialog.Execute();
+    }
+    else if( static_cast<Button*>(pButton) == &m_aCUPSCB )
+    {
+        m_rPIManager.setCUPSDisabled( m_aCUPSCB.IsChecked() );
+            UpdateDevice();
+            UpdateText();
     }
 
     return 0;
