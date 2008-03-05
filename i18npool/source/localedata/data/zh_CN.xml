@@ -125,11 +125,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
-<FormatCode>YYYY"年"MMMD"日"</FormatCode>
+<FormatCode>YYYY"年"MMMD"月"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-<FormatCode>YYYY "年" MMM D "日"</FormatCode>
+<FormatCode>YYYY "年" MMM D "月"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
@@ -169,7 +169,7 @@
 <DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="short" usage="DATE" formatindex="34">
-<FormatCode>YY"年"M"日"</FormatCode>
+<FormatCode>YY"年"M"月"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="35">
@@ -239,11 +239,11 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
-<FormatCode>MM"分"SS"秒"00"毫秒"</FormatCode>
+<FormatCode>MM"分"SS"秒"00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey14" default="false" type="long" usage="TIME"  formatindex="56">
-<FormatCode>[HH]"时"MM"分"SS"秒"00"毫秒"</FormatCode>
+<FormatCode>[HH]"时"MM"分"SS"秒"00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <!-- Date_Time formats. Index range is from 46 to 47. -->
