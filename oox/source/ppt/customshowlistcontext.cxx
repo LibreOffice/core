@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshowlistcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,12 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-class CustomShowContext : public ::oox::core::Context
+class CustomShowContext : public ::oox::core::ContextHandler
 {
     CustomShow mrCustomShow;
 
 public:
-    CustomShowContext( const ::oox::core::FragmentHandlerRef& xHandler,
+    CustomShowContext( ::oox::core::ContextHandler& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
             CustomShow& rCustomShow );
     ~CustomShowContext( );
@@ -58,10 +58,10 @@ public:
             throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 };
 
-CustomShowContext::CustomShowContext( const FragmentHandlerRef& xHandler,
+CustomShowContext::CustomShowContext( ContextHandler& rParent,
     const Reference< XFastAttributeList >& rxAttribs,
         CustomShow& rCustomShow )
-: Context( xHandler )
+: ContextHandler( rParent )
 , mrCustomShow( rCustomShow )
 {
     mrCustomShow.maName = rxAttribs->getOptionalValue( XML_name );
@@ -92,9 +92,9 @@ Reference< XFastContextHandler > SAL_CALL CustomShowContext::createFastChildCont
 
 //---------------------------------------------------------------------------
 
-CustomShowListContext::CustomShowListContext( const FragmentHandlerRef& xHandler,
+CustomShowListContext::CustomShowListContext( ContextHandler& rParent,
     std::vector< CustomShow >& rCustomShowList )
-: Context( xHandler )
+: ContextHandler( rParent )
 , mrCustomShowList( rCustomShowList )
 {
 }
@@ -114,7 +114,7 @@ Reference< XFastContextHandler > SAL_CALL CustomShowListContext::createFastChild
         {
             CustomShow aCustomShow;
             mrCustomShowList.push_back( aCustomShow );
-            xRet = new CustomShowContext( getHandler(), xAttribs, mrCustomShowList.back() );
+            xRet = new CustomShowContext( *this, xAttribs, mrCustomShowList.back() );
         }
         default:
         break;

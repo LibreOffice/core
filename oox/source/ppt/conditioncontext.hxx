@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditioncontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CondContext( const ::oox::core::FragmentHandlerRef & xHandler,
+        CondContext( ::oox::core::ContextHandler& rParent,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
                      const TimeNodePtr & pNode, AnimationCondition & aCond );
         ~CondContext( ) throw( );
@@ -73,10 +73,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CondListContext( const ::oox::core::FragmentHandlerRef & xHandler,
-                                         sal_Int32  aElement,
-                                         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-                                         const TimeNodePtr & pNode, AnimationConditionList & aCondList );
+        CondListContext( ::oox::core::ContextHandler& rParent,
+             sal_Int32  aElement,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+             const TimeNodePtr & pNode, AnimationConditionList & aCondList );
         ~CondListContext( ) throw( );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );

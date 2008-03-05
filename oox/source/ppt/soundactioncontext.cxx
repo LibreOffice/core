@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundactioncontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ using namespace ::com::sun::star::uno;
 namespace oox { namespace ppt {
 
 
-    SoundActionContext::SoundActionContext( const FragmentHandlerRef& xHandler, PropertyMap & aProperties ) throw()
-    : Context( xHandler )
+    SoundActionContext::SoundActionContext( ContextHandler& rParent, PropertyMap & aProperties ) throw()
+    : ContextHandler( rParent )
     , maSlideProperties( aProperties )
     , mbHasStartSound( false )
     , mbLoopSound( false )
@@ -117,7 +117,7 @@ namespace oox { namespace ppt {
             if( mbHasStartSound )
             {
                 drawingml::EmbeddedWAVAudioFile aAudio;
-                drawingml::getEmbeddedWAVAudioFile( getHandler(), xAttribs, aAudio);
+                drawingml::getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio);
 
                 msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msLink );
             }

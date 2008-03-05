@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:47:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,34 +49,34 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/animationspersist.obj \
+        $(SLO)$/animationtypes.obj \
+        $(SLO)$/animvariantcontext.obj \
+        $(SLO)$/backgroundproperties.obj\
+        $(SLO)$/buildlistcontext.obj \
+        $(SLO)$/commonbehaviorcontext.obj \
+        $(SLO)$/commontimenodecontext.obj \
+        $(SLO)$/conditioncontext.obj \
+        $(SLO)$/customshowlistcontext.obj \
+        $(SLO)$/layoutfragmenthandler.obj\
+        $(SLO)$/pptfilterhelpers.obj\
         $(SLO)$/pptimport.obj\
+        $(SLO)$/pptshape.obj \
+        $(SLO)$/pptshapecontext.obj \
+        $(SLO)$/pptshapegroupcontext.obj \
+        $(SLO)$/pptshapepropertiescontext.obj \
         $(SLO)$/presentationfragmenthandler.obj\
         $(SLO)$/slidefragmenthandler.obj\
-        $(SLO)$/layoutfragmenthandler.obj\
-        $(SLO)$/backgroundproperties.obj\
-        $(SLO)$/slidetransitioncontext.obj\
-        $(SLO)$/slidetransition.obj\
-        $(SLO)$/slidetimingcontext.obj\
-        $(SLO)$/slidepersist.obj\
         $(SLO)$/slidemastertextstylescontext.obj \
-        $(SLO)$/timenode.obj\
-        $(SLO)$/pptfilterhelpers.obj\
+        $(SLO)$/slidepersist.obj\
+        $(SLO)$/slidetimingcontext.obj\
+        $(SLO)$/slidetransition.obj\
+        $(SLO)$/slidetransitioncontext.obj\
         $(SLO)$/soundactioncontext.obj \
-        $(SLO)$/commontimenodecontext.obj \
-        $(SLO)$/commonbehaviorcontext.obj \
-        $(SLO)$/conditioncontext.obj \
-        $(SLO)$/timetargetelementcontext.obj \
-        $(SLO)$/timenodelistcontext.obj \
-        $(SLO)$/animationspersist.obj \
-        $(SLO)$/animvariantcontext.obj \
         $(SLO)$/timeanimvaluecontext.obj \
-        $(SLO)$/pptshape.obj \
-        $(SLO)$/pptshapegroupcontext.obj \
-        $(SLO)$/pptshapecontext.obj \
-        $(SLO)$/pptshapepropertiescontext.obj \
-        $(SLO)$/buildlistcontext.obj \
-        $(SLO)$/animationtypes.obj \
-        $(SLO)$/customshowlistcontext.obj
+        $(SLO)$/timenode.obj\
+        $(SLO)$/timenodelistcontext.obj \
+        $(SLO)$/timetargetelementcontext.obj
 
 # --- Targets -------------------------------------------------------
 

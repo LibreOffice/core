@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditioncontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/animationspersist.hxx"
 #include "animationtypes.hxx"
 
@@ -61,9 +60,9 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-    CondContext::CondContext( const FragmentHandlerRef & xHandler, const Reference< XFastAttributeList >& xAttribs,
-                                                        const TimeNodePtr & pNode, AnimationCondition & aValue )
-        :  TimeNodeContext( xHandler, NMSP_PPT|XML_cond, xAttribs, pNode )
+    CondContext::CondContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+                const TimeNodePtr & pNode, AnimationCondition & aValue )
+        :  TimeNodeContext( rParent, NMSP_PPT|XML_cond, xAttribs, pNode )
         , maCond( aValue )
     {
         maEvent.Trigger =  EventTrigger::NONE;
@@ -166,7 +165,7 @@ namespace oox { namespace ppt {
         }
         case NMSP_PPT|XML_tgtEl:
             // CT_TLTimeTargetElement
-            xRet.set( new TimeTargetElementContext( getHandler(), maCond.getTarget() ) );
+            xRet.set( new TimeTargetElementContext( *this, maCond.getTarget() ) );
             break;
         default:
             break;
@@ -182,11 +181,12 @@ namespace oox { namespace ppt {
 
 
     /** CT_TLTimeConditionList */
-    CondListContext::CondListContext( const FragmentHandlerRef & xHandler, sal_Int32  aElement,
-                                                                        const Reference< XFastAttributeList >& xAttribs,
-                                                                        const TimeNodePtr & pNode,
-                                                                        AnimationConditionList & aCond )
-        : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+    CondListContext::CondListContext(
+            ContextHandler& rParent, sal_Int32  aElement,
+            const Reference< XFastAttributeList >& xAttribs,
+            const TimeNodePtr & pNode,
+            AnimationConditionList & aCond )
+        : TimeNodeContext( rParent, aElement, xAttribs, pNode )
         , maConditions( aCond )
     {
     }
@@ -205,7 +205,7 @@ namespace oox { namespace ppt {
         case NMSP_PPT|XML_cond:
             // add a condition to the list
             maConditions.push_back( AnimationCondition() );
-            xRet.set( new CondContext( getHandler(), xAttribs, mpNode, maConditions.back() ) );
+            xRet.set( new CondContext( *this, xAttribs, mpNode, maConditions.back() ) );
             break;
         default:
             break;

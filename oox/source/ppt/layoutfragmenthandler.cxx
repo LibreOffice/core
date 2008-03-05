@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutfragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ namespace oox { namespace ppt {
 
 // CT_SlideLayout
 
-LayoutFragmentHandler::LayoutFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, oox::ppt::SlidePersistPtr pMasterPersistPtr )
+LayoutFragmentHandler::LayoutFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr )
     throw()
-: SlideFragmentHandler( xFilter, rFragmentPath, pMasterPersistPtr, Layout )
+: SlideFragmentHandler( rFilter, rFragmentPath, pMasterPersistPtr, Layout )
 {
 }
 
@@ -71,7 +71,7 @@ LayoutFragmentHandler::~LayoutFragmentHandler()
 Reference< XFastContextHandler > LayoutFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet( this );
+    Reference< XFastContextHandler > xRet = getFastContextHandler();
     switch( aElementToken )
     {
         case NMSP_PPT|XML_sldLayout:        // CT_SlideLayout

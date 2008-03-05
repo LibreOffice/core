@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commontimenodecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,11 +382,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
 // END
 
-    CommonTimeNodeContext::CommonTimeNodeContext( const FragmentHandlerRef& xHandler,
-                                                                                                sal_Int32  aElement,
-                                                                                                const Reference< XFastAttributeList >& xAttribs,
-                                                                                                const TimeNodePtr & pNode )
-        : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+    CommonTimeNodeContext::CommonTimeNodeContext(
+            ContextHandler& rParent,
+            sal_Int32  aElement,
+            const Reference< XFastAttributeList >& xAttribs,
+            const TimeNodePtr & pNode )
+        : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             , mbIterate( false )
     {
         AttributeList attribs( xAttribs );
@@ -641,18 +642,18 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         {
         case NMSP_PPT|XML_childTnLst:
         case NMSP_PPT|XML_subTnLst:
-            xRet.set( new TimeNodeListContext( getHandler(), mpNode->getChilds() ) );
+            xRet.set( new TimeNodeListContext( *this, mpNode->getChilds() ) );
             break;
 
         case NMSP_PPT|XML_stCondLst:
-            xRet.set( new CondListContext( getHandler(), aElementToken, xAttribs, mpNode, mpNode->getStartCondition() ) );
+            xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getStartCondition() ) );
             break;
         case NMSP_PPT|XML_endCondLst:
-            xRet.set( new CondListContext( getHandler(), aElementToken, xAttribs, mpNode, mpNode->getEndCondition() ) );
+            xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getEndCondition() ) );
             break;
 
         case NMSP_PPT|XML_endSync:
-            xRet.set( new CondContext( getHandler(), xAttribs, mpNode, mpNode->getEndSyncValue() ) );
+            xRet.set( new CondContext( *this, xAttribs, mpNode, mpNode->getEndSyncValue() ) );
             break;
         case NMSP_PPT|XML_iterate:
         {

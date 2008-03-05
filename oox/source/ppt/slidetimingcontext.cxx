@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetimingcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:50:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,9 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-SlideTimingContext::SlideTimingContext( const ::oox::core::FragmentHandlerRef& xHandler,  TimeNodePtrList & aTimeNodeList ) throw()
-    : Context( xHandler )
-        , maTimeNodeList( aTimeNodeList )
+SlideTimingContext::SlideTimingContext( ContextHandler& rParent, TimeNodePtrList & aTimeNodeList ) throw()
+    : ContextHandler( rParent )
+    , maTimeNodeList( aTimeNodeList )
 {
 }
 
@@ -82,15 +82,15 @@ Reference< XFastContextHandler > SlideTimingContext::createFastChildContext( sal
     switch( aElementToken )
     {
     case NMSP_PPT|XML_bldLst:
-        xRet.set( new BuildListContext( getHandler(), xAttribs, maTimeNodeList ) );
+        xRet.set( new BuildListContext( *this, xAttribs, maTimeNodeList ) );
         break;
     case NMSP_PPT|XML_extLst:
-        xRet.set( new SkipContext( getHandler() ) );
+        xRet.set( new SkipContext( *this ) );
         break;
     case NMSP_PPT|XML_tnLst:
         // timing nodes
     {
-        xRet.set( new TimeNodeListContext( getHandler(), maTimeNodeList ) );
+        xRet.set( new TimeNodeListContext( *this, maTimeNodeList ) );
     }
     break;
 

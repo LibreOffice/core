@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshowlistcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
 #define OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include <vector>
 
 namespace oox { namespace ppt {
@@ -52,12 +52,12 @@ namespace oox { namespace ppt {
     };
 
     /** CT_ */
-    class CustomShowListContext : public ::oox::core::Context
+    class CustomShowListContext : public ::oox::core::ContextHandler
     {
         std::vector< CustomShow >& mrCustomShowList;
 
     public:
-        CustomShowListContext( const ::oox::core::FragmentHandlerRef& xHandler,
+        CustomShowListContext( ::oox::core::ContextHandler& rParent,
                 std::vector< CustomShow >& rCustomShowList );
 
         ~CustomShowListContext( );

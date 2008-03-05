@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buildlistcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@ using ::rtl::OUString;
 
 namespace oox { namespace ppt {
 
-    BuildListContext::BuildListContext( const FragmentHandlerRef& xHandler,
-                                                                            const Reference< XFastAttributeList >& /*xAttribs*/,
-                                                                            TimeNodePtrList & aTimeNodeList)
-        : Context( xHandler )
+    BuildListContext::BuildListContext( ContextHandler& rParent,
+                const Reference< XFastAttributeList >& /*xAttribs*/,
+                TimeNodePtrList & aTimeNodeList)
+        : ContextHandler( rParent )
         , maTimeNodeList( aTimeNodeList )
         , mbInBldGraphic( false )
         ,   mbBuildAsOne( false )

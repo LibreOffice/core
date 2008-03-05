@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidemastertextstylescontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-SlideMasterTextStylesContext::SlideMasterTextStylesContext( const ::oox::core::FragmentHandlerRef& xHandler, SlidePersistPtr pSlidePersistPtr )
-: Context( xHandler )
+SlideMasterTextStylesContext::SlideMasterTextStylesContext( ContextHandler& rParent, SlidePersistPtr pSlidePersistPtr )
+: ContextHandler( rParent )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {
 }
@@ -84,7 +84,7 @@ Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildCo
         }
     }
     if ( aTextListStylePtr )
-        xRet.set( new oox::drawingml::TextListStyleContext( getHandler(), *(aTextListStylePtr.get()) ) );
+        xRet.set( new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr ) );
     if( !xRet.is() )
         xRet.set( this );
 

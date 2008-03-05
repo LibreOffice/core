@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animvariantcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    AnimVariantContext::AnimVariantContext( const FragmentHandlerRef & xHandler, sal_Int32 aElement,
-                                                                                     Any & aValue )
-        : Context( xHandler )
+    AnimVariantContext::AnimVariantContext( ContextHandler& rParent, sal_Int32 aElement, Any & aValue )
+        : ContextHandler( rParent )
             , mnElement( aElement )
             , maValue( aValue )
     {
@@ -73,14 +72,14 @@ namespace oox { namespace ppt {
     {
         if( ( aElement == mnElement ) && maColor.isUsed() )
         {
-            maValue = makeAny( maColor.getColor( *getHandler()->getFilter().get() ) );
+            maValue = makeAny( maColor.getColor( getFilter() ) );
         }
     }
 
 
     Reference< XFastContextHandler >
     SAL_CALL AnimVariantContext::createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                             const Reference< XFastAttributeList >& xAttribs )
+                             const Reference< XFastAttributeList >& xAttribs )
         throw ( SAXException, RuntimeException )
     {
         Reference< XFastContextHandler > xRet;
@@ -95,7 +94,7 @@ namespace oox { namespace ppt {
             break;
         }
         case NMSP_PPT|XML_clrVal:
-            xRet.set( new ::oox::drawingml::colorChoiceContext( getHandler(), maColor ) );
+            xRet.set( new ::oox::drawingml::colorChoiceContext( *this, maColor ) );
             // we'll defer setting the Any until the end.
             break;
         case NMSP_PPT|XML_fltVal:

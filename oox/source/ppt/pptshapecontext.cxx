@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptshapecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,8 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 // CT_Shape
-PPTShapeContext::PPTShapeContext( const oox::ppt::SlidePersistPtr pSlidePersistPtr, const FragmentHandlerRef& xHandler,
-        oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
-: oox::drawingml::ShapeContext( xHandler, pMasterShapePtr, pShapePtr )
+PPTShapeContext::PPTShapeContext( ContextHandler& rParent, const SlidePersistPtr pSlidePersistPtr, oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
+: oox::drawingml::ShapeContext( rParent, pMasterShapePtr, pShapePtr )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {
 }
@@ -185,16 +184,16 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     // nvSpPr CT_ShapeNonVisual end
 
     case NMSP_PPT|XML_spPr:
-        xRet = new PPTShapePropertiesContext( this, *(mpShapePtr.get()) );
+        xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
         break;
 
     case NMSP_PPT|XML_style:
-        xRet = new oox::drawingml::ShapeStyleContext( this, *(mpShapePtr.get()) );
+        xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
         break;
 
     case NMSP_PPT|XML_txBody:
     {
-        xRet = new oox::drawingml::TextBodyContext( getHandler(), *(mpShapePtr.get()) );
+        xRet = new oox::drawingml::TextBodyContext( *this, *mpShapePtr );
         break;
     }
     }

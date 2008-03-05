@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animvariantcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,17 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/color.hxx"
 
 namespace oox { namespace ppt {
 
     /** context CT_TLAnimVariant */
     class AnimVariantContext
-        : public ::oox::core::Context
+        : public ::oox::core::ContextHandler
     {
     public:
-        AnimVariantContext( const ::oox::core::FragmentHandlerRef & xHandler, ::sal_Int32 aElement, ::com::sun::star::uno::Any & aValue );
+        AnimVariantContext( ::oox::core::ContextHandler& rParent, ::sal_Int32 aElement, ::com::sun::star::uno::Any & aValue );
         ~AnimVariantContext( ) throw( );
         virtual void SAL_CALL endFastElement( sal_Int32 /*aElement*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
