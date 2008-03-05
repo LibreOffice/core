@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ka $ $Date: 2008-02-28 07:01:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,6 +291,8 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFileDlgFL          ( this, SVX_RES( FL_FILEDLG ) ),
     aFileDlgROImage     ( this, SVX_RES( FI_FILEDLG_RO ) ),
     aFileDlgCB          ( this, SVX_RES( CB_FILEDLG ) ),
+    aPrintDlgFL         ( this, SVX_RES( FL_PRINTDLG ) ),
+    aPrintDlgCB         ( this, SVX_RES( CB_PRINTDLG ) ),
     aDocStatusFL        ( this, SVX_RES( FL_DOCSTATUS ) ),
     aDocStatusCB        ( this, SVX_RES( CB_DOCSTATUS ) ),
     aTwoFigureFL        ( this, SVX_RES( FL_TWOFIGURE ) ),
@@ -316,6 +318,11 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #   endif
 #endif
 
+    #if ! defined(QUARTZ)
+    aPrintDlgFL.Hide();
+    aPrintDlgCB.Hide();
+    #endif
+
     if ( !aFileDlgCB.IsVisible() )
     {
         // rearrange the following controls
@@ -324,7 +331,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         Window* pWins[] =
         {
-            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
             &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
@@ -340,6 +347,27 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     {
         aFileDlgROImage.Show();
         aFileDlgCB.Disable();
+    }
+
+    if ( aPrintDlgCB.IsVisible() )
+    {
+        // rearrange the following controls
+        Point aNewPos = aDocStatusFL.GetPosPixel();
+        long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
+
+        Window* pWins[] =
+        {
+            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aInterpretFT, &aYearValueField, &aToYearFT
+        };
+        Window** pCurrent = pWins;
+        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
+        {
+            aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() += nDelta;
+            (*pCurrent)->SetPosPixel( aNewPos );
+        }
     }
 
     // at least the button is as wide as its text
@@ -431,6 +459,13 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    if ( aPrintDlgCB.IsChecked() != aPrintDlgCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetUseSystemPrintDialog( !aPrintDlgCB.IsChecked() );
+        bModified = TRUE;
+    }
+
     if ( aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
@@ -477,6 +512,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     SvtMiscOptions aMiscOpt;
     aFileDlgCB.Check( !aMiscOpt.UseSystemFileDialog() );
     aFileDlgCB.SaveValue();
+    aPrintDlgCB.Check( !aMiscOpt.UseSystemPrintDialog() );
+    aPrintDlgCB.SaveValue();
 
     SvtPrintWarningOptions aPrintOptions;
     aDocStatusCB.Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
