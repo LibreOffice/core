@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JobDefinitionException.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report;
 
 /**
@@ -43,31 +42,32 @@ package com.sun.star.report;
  */
 public class JobDefinitionException extends RuntimeException
 {
-  /**
-   * Creates a StackableRuntimeException with no message and no parent.
-   */
-  public JobDefinitionException ()
-  {
-  }
 
-  /**
-   * Creates an exception.
-   *
-   * @param message the exception message.
-   */
-  public JobDefinitionException (final String message)
-  {
-    super(message);
-  }
+    /**
+     * Creates a StackableRuntimeException with no message and no parent.
+     */
+    public JobDefinitionException()
+    {
+    }
 
-  /**
-   * Creates an exception.
-   *
-   * @param message the exception message.
-   * @param ex      the parent exception.
-   */
-  public JobDefinitionException (final String message, final Exception ex)
-  {
-    super(message, ex);
-  }
+    /**
+     * Creates an exception.
+     *
+     * @param message the exception message.
+     */
+    public JobDefinitionException(final String message)
+    {
+        super(message);
+    }
+
+    /**
+     * Creates an exception.
+     *
+     * @param message the exception message.
+     * @param ex      the parent exception.
+     */
+    public JobDefinitionException(final String message, final Exception ex)
+    {
+        super(message, ex);
+    }
 }

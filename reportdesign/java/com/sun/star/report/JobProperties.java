@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JobProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,22 +33,22 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report;
 
 public interface JobProperties
 {
-  public void setProperty (String key, Object value)
-          throws JobDefinitionException;
-  public Object getProperty (String key);
 
-  /**
-   * A type safe clone operation. We derive a copy of all properties,
-   * so that changes to the original job properties collection does not
-   * affect the copy.
-   *
-   * @return a copy.
-   */
-  public JobProperties copy();
+    public void setProperty(String key, Object value)
+            throws JobDefinitionException;
+
+    public Object getProperty(String key);
+
+    /**
+     * A type safe clone operation. We derive a copy of all properties,
+     * so that changes to the original job properties collection does not
+     * affect the copy.
+     *
+     * @return a copy.
+     */
+    public JobProperties copy();
 }

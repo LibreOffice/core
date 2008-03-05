@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportExpressionMetaData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,21 +33,24 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report;
 
 import java.util.Locale;
 
 public interface ReportExpressionMetaData
 {
-  public int getParameterCount();
 
-  public String getParameterName(int param);
-  public String getParameterDisplayName(int param, Locale locale);
-  public String getParameterDescription(int param, Locale locale);
+    public int getParameterCount();
 
-  public String getName();
-  public String getDisplayName(Locale l);
-  public String getDescription(Locale l);
+    public String getParameterName(int param);
+
+    public String getParameterDisplayName(int param, Locale locale);
+
+    public String getParameterDescription(int param, Locale locale);
+
+    public String getName();
+
+    public String getDisplayName(Locale l);
+
+    public String getDescription(Locale l);
 }

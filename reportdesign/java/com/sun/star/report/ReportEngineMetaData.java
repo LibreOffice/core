@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportEngineMetaData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,36 +33,36 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report;
 
 public interface ReportEngineMetaData
 {
-  /**
-   * Checks, whether a certain output type is available.
-   * Feed the mime-type of the output type in and you'll get
-   * a true or false back.
-   *
-   * @param mimeType
-   * @return true, if the output type is supported; false otherwise.
-   */
-  public boolean isOutputSupported(String mimeType);
 
-  /**
-   * Lists all supported output parameters for the given mime-type.
-   * This listing can be used to build a generic user interface for
-   * configuring a certain output.
-   *
-   * @param mimeType
-   * @return
-   */
-  public String[] getOutputParameters (String mimeType);
+    /**
+     * Checks, whether a certain output type is available.
+     * Feed the mime-type of the output type in and you'll get
+     * a true or false back.
+     *
+     * @param mimeType
+     * @return true, if the output type is supported; false otherwise.
+     */
+    public boolean isOutputSupported(String mimeType);
 
-  public Class getParameterType (String parameter);
+    /**
+     * Lists all supported output parameters for the given mime-type.
+     * This listing can be used to build a generic user interface for
+     * configuring a certain output.
+     *
+     * @param mimeType
+     * @return
+     */
+    public String[] getOutputParameters(String mimeType);
 
-  public boolean isMandatory(String parameter);
-  public boolean isEnumeration(String parameter);
-  public Object[] getEnumerationValues (String parameter);
+    public Class getParameterType(String parameter);
 
+    public boolean isMandatory(String parameter);
+
+    public boolean isEnumeration(String parameter);
+
+    public Object[] getEnumerationValues(String parameter);
 }

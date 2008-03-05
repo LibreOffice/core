@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportJob.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report;
 
 import java.io.IOException;
@@ -62,36 +61,38 @@ import java.io.IOException;
  */
 public interface ReportJob
 {
-  /**
-   * Although we might want to run the job as soon as it has been
-   * created, sometimes it is wiser to let the user add some listeners
-   * first. If we execute at once, the user either has to deal with
-   * threading code or wont receive any progress information in single
-   * threaded environments.
-   */
-  public void execute()
-          throws ReportExecutionException, IOException;
 
-  /**
-   * Interrupt the job.
-   */
-  public void interrupt();
+    /**
+     * Although we might want to run the job as soon as it has been
+     * created, sometimes it is wiser to let the user add some listeners
+     * first. If we execute at once, the user either has to deal with
+     * threading code or wont receive any progress information in single
+     * threaded environments.
+     */
+    public void execute()
+            throws ReportExecutionException, IOException;
 
-  /**
-   * Queries the jobs execution status.
-   *
-   * @return true, if the job is currently running, false otherwise.
-   */
-  public boolean isRunning();
+    /**
+     * Interrupt the job.
+     */
+    public void interrupt();
 
-  /**
-   * Queries the jobs result status.
-   *
-   * @return true, if the job is finished (or has been interrupted), false
-   * if the job waits for activation.
-   */
-  public boolean isFinished();
+    /**
+     * Queries the jobs execution status.
+     *
+     * @return true, if the job is currently running, false otherwise.
+     */
+    public boolean isRunning();
 
-  public void addProgressIndicator(JobProgressIndicator indicator);
-  public void removeProgressIndicator(JobProgressIndicator indicator);
+    /**
+     * Queries the jobs result status.
+     *
+     * @return true, if the job is finished (or has been interrupted), false
+     * if the job waits for activation.
+     */
+    public boolean isFinished();
+
+    public void addProgressIndicator(JobProgressIndicator indicator);
+
+    public void removeProgressIndicator(JobProgressIndicator indicator);
 }
