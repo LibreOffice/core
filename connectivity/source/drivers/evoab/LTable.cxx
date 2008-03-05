@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include <svtools/syslocale.hxx>
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
 #endif
@@ -385,10 +386,8 @@ OEvoabTable::OEvoabTable(sdbcx::OCollection* _pTables,OEvoabConnection* _pConnec
 // -----------------------------------------------------------------------------
 void OEvoabTable::construct()
 {
-    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
-
-    ::com::sun::star::lang::Locale aAppLocale(MsLangId::convertLanguageToLocale(eLanguage));
+    SvtSysLocale aLocale;
+    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLocaleDataPtr()->getLocale());
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
