@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConnectionTools.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:51:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,22 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
 
+module com {  module sun {  module star {
+    module container {
+        interface XNameAccess;
+    };
+    module lang {
+        interface XComponent;
+    };
+};};};
 //=============================================================================
-module com {  module sun {  module star {  module sdb { module tools {
+module com {  module sun {  module star {  module sdb {
+    interface XSingleSelectQueryComposer;
+    module tools {
 //=============================================================================
 
 interface XTableName;
@@ -83,6 +96,55 @@ interface XConnectionTools
     */
     XDataSourceMetaData
                     getDataSourceMetaData();
+
+    /** get fields for a result set given by a "command descriptor"
+
+        <p>A command descriptor here means:
+        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+            <li>a string specifying the name of an object relative to the connection</li>
+            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+                of the object</type></li>
+        </ul>
+        </p>
+
+        @param commandType
+            the type of the object
+
+        @param command
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+
+        @param _rxCollectionOner
+            If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
+            by this function here is a temporary object. It is kept alive by another object, which is to be
+            created temporarily, too. To ensure that the fields you get are valid as long as you need them,
+            the owner which controls their life time is transfered to this parameter upon return.<br/>
+
+            Your fields live as long as this component lives.<br/>
+
+            Additionally, you are encouraged to dispose this component as soon as you don't need the fields anymore.
+            It depends on the connection's implementation if this is necessary, but the is no guarantee, so to
+            be on the safe side with respect to resource leaks, you should dispose the component.
+
+        @return
+            the container of the columns (aka fields) of the object
+    */
+    ::com::sun::star::container::XNameAccess getFieldsByCommandDescriptor(  [in] long commandType,
+                                                                            [in] string command,
+                                                                            [out] ::com::sun::star::lang::XComponent  keepFieldsAlive
+                                                                            ) raises( com::sun::star::sdbc::SQLException );
+
+    /** get the composer initialized with a command and command type.
+        @param commandType
+            the type of the object
+
+        @param command
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+        @return
+            the composer filled with command and command type.
+    */
+    ::com::sun::star::sdb::XSingleSelectQueryComposer getComposer([in] long commandType,[in] string command);
 };
 
 //=============================================================================
