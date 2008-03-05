@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:55:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,6 +481,9 @@ void CUPSManager::initialize()
     if( ! (m_nDests && m_pDests ) )
         return;
 
+    if( isCUPSDisabled() )
+        return;
+
     // check for CUPS server(?) > 1.2
     // since there is no API to query, check for options that were
     // introduced in dests with 1.2
@@ -646,7 +649,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 #ifdef ENABLE_CUPS
     if( m_aCUPSMutex.tryToAcquire() )
     {
-        if( m_nDests && m_pDests )
+        if( m_nDests && m_pDests && ! isCUPSDisabled() )
         {
             std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
@@ -1056,7 +1059,7 @@ bool CUPSManager::writePrinterConfig()
 
 bool CUPSManager::addOrRemovePossible() const
 {
-    return (m_nDests && m_pDests) ? false : PrinterInfoManager::addOrRemovePossible();
+    return (m_nDests && m_pDests && ! isCUPSDisabled())? false : PrinterInfoManager::addOrRemovePossible();
 }
 
 #include <rtsname.hxx>
