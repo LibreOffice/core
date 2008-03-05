@@ -55,6 +55,8 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -109,6 +111,8 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -163,6 +167,8 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -197,6 +203,8 @@ URE
             NATIVESERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/
             JAVASERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_JAVA_DIR/
             RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
         }
         active 1
         compression 5
@@ -228,6 +236,8 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
         }
         active 1
         compression 5
@@ -279,6 +289,8 @@ BrOffice
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -333,6 +345,8 @@ BrOffice_wJRE
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -386,6 +400,8 @@ BrOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -468,6 +484,8 @@ OpenOffice_woURE
             NATIVESERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/
             JAVASERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/
             RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
         }
         active          1
         compression     5
