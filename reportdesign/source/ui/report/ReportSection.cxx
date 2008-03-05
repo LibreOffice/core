@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:51:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,7 +685,7 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pOb
             {
                 if ( aIter->equalsIgnoreAsciiCase( _sType ) )
                 {
-                    OReportModel aReportModel;
+                    OReportModel aReportModel(NULL);
                     SfxItemPool& rPool = aReportModel.GetItemPool();
                     rPool.FreezeIdRanges();
                     if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aReportModel ) )
