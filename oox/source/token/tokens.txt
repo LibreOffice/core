@@ -1900,6 +1900,7 @@ effectStyleLst
 eggsBlack
 el
 elbow
+element
 ellipse
 ellipseRibbon
 ellipseRibbon2
@@ -2962,7 +2963,6 @@ linen
 lines
 linesAndChars
 linestyle
-lineStyleLst
 link
 linkStyles
 linkTarget
@@ -3073,6 +3073,7 @@ m
 mPr
 mac
 macro
+macrosheet
 magenta
 mailAsAttachment
 mailMerge
