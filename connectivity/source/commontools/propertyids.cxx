@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyids.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:37:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,15 @@ namespace dbtools
         const sal_Char* getPROPERTY_ID_HAVINGCLAUSE()       { return    "HavingClause"; }
         const sal_Char* getPROPERTY_ID_ISSIGNED()           { return    "IsSigned"; }
         const sal_Char* getPROPERTY_ID_ISSEARCHABLE()       { return    "IsSearchable"; }
+
+        const sal_Char* getPROPERTY_ID_APPLYFILTER()        { return    "ApplyFilter"; }
+        const sal_Char* getPROPERTY_ID_FILTER()             { return    "Filter"; }
+        const sal_Char* getPROPERTY_ID_MASTERFIELDS()       { return    "MasterFields"; }
+        const sal_Char* getPROPERTY_ID_DETAILFIELDS()       { return    "DetailFields"; }
+        const sal_Char* getPROPERTY_ID_FIELDTYPE()          { return    "FieldType"; }
+        const sal_Char* getPROPERTY_ID_VALUE()              { return    "Value"; }
+        const sal_Char* getPROPERTY_ID_ACTIVE_CONNECTION()  { return    "ActiveConnection"; }
+
     //============================================================
     //= error messages
     //============================================================
@@ -168,9 +177,9 @@ namespace dbtools
 
                 case PROPERTY_ID_FUNCTION:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_FUNCTION()             ); break; }
                 case PROPERTY_ID_AGGREGATEFUNCTION:          { rtl_uString_newFromAscii(&pStr,getPROPERTY_AGGREGATEFUNCTION()   ); break; }
-                case PROPERTY_ID_TABLENAME:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_TABLENAME()                ); break; }
+                case PROPERTY_ID_TABLENAME:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_TABLENAME()            ); break; }
                 case PROPERTY_ID_REALNAME:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_REALNAME()             ); break; }
-                case PROPERTY_ID_DBASEPRECISIONCHANGED:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_DBASEPRECISIONCHANGED() ); break; }
+                case PROPERTY_ID_DBASEPRECISIONCHANGED:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_DBASEPRECISIONCHANGED()); break; }
                 case PROPERTY_ID_ISCURRENCY:                { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISCURRENCY()           ); break; }
                 case PROPERTY_ID_ISBOOKMARKABLE:            { rtl_uString_newFromAscii(&pStr,getPROPERTY_ISBOOKMARKABLE()       ); break; }
                 case PROPERTY_ID_INVALID_INDEX:             { rtl_uString_newFromAscii(&pStr,getSTAT_INVALID_INDEX()            ); break; }
@@ -179,12 +188,18 @@ namespace dbtools
                 case PROPERTY_ID_DELIMITER:                 { rtl_uString_newFromAscii(&pStr,getSTR_DELIMITER()                 ); break; }
                 case PROPERTY_ID_FORMATKEY:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_FORMATKEY()            ); break; }
                 case PROPERTY_ID_LOCALE:                    { rtl_uString_newFromAscii(&pStr,getPROPERTY_LOCALE()               ); break; }
-                case PROPERTY_ID_AUTOINCREMENTCREATION:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_AUTOINCREMENTCREATION()        ); break; }
+                case PROPERTY_ID_AUTOINCREMENTCREATION:     { rtl_uString_newFromAscii(&pStr,getPROPERTY_AUTOINCREMENTCREATION()); break; }
                 case PROPERTY_ID_PRIVILEGES:                { rtl_uString_newFromAscii(&pStr,getPROPERTY_PRIVILEGES()           ); break; }
-                case PROPERTY_ID_HAVINGCLAUSE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_HAVINGCLAUSE()          ); break; }
+                case PROPERTY_ID_HAVINGCLAUSE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_HAVINGCLAUSE()      ); break; }
                 case PROPERTY_ID_ISSIGNED:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSIGNED()          ); break; }
-                case PROPERTY_ID_ISSEARCHABLE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSEARCHABLE()          ); break; }
-
+                case PROPERTY_ID_ISSEARCHABLE:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ISSEARCHABLE()      ); break; }
+                case PROPERTY_ID_APPLYFILTER:               { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_APPLYFILTER()       ); break; }
+                case PROPERTY_ID_FILTER:                    { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_FILTER()            ); break; }
+                case PROPERTY_ID_MASTERFIELDS:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_MASTERFIELDS()      ); break; }
+                case PROPERTY_ID_DETAILFIELDS:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_DETAILFIELDS()      ); break; }
+                case PROPERTY_ID_FIELDTYPE:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_FIELDTYPE()         ); break; }
+                case PROPERTY_ID_VALUE:                     { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_VALUE()             ); break; }
+                case PROPERTY_ID_ACTIVE_CONNECTION:         { rtl_uString_newFromAscii(&pStr,getPROPERTY_ID_ACTIVE_CONNECTION() ); break; }
             }
             m_aPropertyMap[_nIndex] = pStr;
             return pStr;
