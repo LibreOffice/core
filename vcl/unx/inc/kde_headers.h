@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kde_headers.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:23:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qwidget.h>
-
+#include <qprogressbar.h>
 
 /* ********* See hack on top of this file */
 #undef Region
