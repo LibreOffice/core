@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDictionaryList.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:10:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
             the object to be notified of dictionary-list events.
 
         @param  bReceiveVerbose
-            </TRUE> if the listener requires more detailed event
+            <TRUE/> if the listener requires more detailed event
             notification than usual.
 
         @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
