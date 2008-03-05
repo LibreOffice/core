@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excelfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::xml::sax::XFastDocumentHandler;
 using ::oox::core::BinaryFilterBase;
 using ::oox::core::FragmentHandlerRef;
-using ::oox::core::RecordInfo;
-using ::oox::core::RecordInfoProvider;
-using ::oox::core::RecordInfoProviderRef;
 using ::oox::core::Relation;
 using ::oox::core::Relations;
 using ::oox::core::XmlFilterBase;
@@ -61,62 +58,6 @@ using ::oox::vml::DrawingPtr;
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-namespace {
-
-/** List of OOBIN record identifiers that start a new context level. */
-static const struct RecordInfo spRecInfos[] =
-{
-    { OOBIN_ID_BOOKVIEWS,           OOBIN_ID_BOOKVIEWS + 1          },
-    { OOBIN_ID_BORDERS,             OOBIN_ID_BORDERS + 1            },
-    { OOBIN_ID_CELLSTYLES,          OOBIN_ID_CELLSTYLES + 1         },
-    { OOBIN_ID_CELLSTYLEXFS,        OOBIN_ID_CELLSTYLEXFS + 1       },
-    { OOBIN_ID_CELLXFS,             OOBIN_ID_CELLXFS + 1            },
-    { OOBIN_ID_CFRULE,              OOBIN_ID_CFRULE + 1             },
-    { OOBIN_ID_COLBREAKS,           OOBIN_ID_COLBREAKS + 1          },
-    { OOBIN_ID_COLORS,              OOBIN_ID_COLORS + 1             },
-    { OOBIN_ID_COLORSCALE,          OOBIN_ID_COLORSCALE + 1         },
-    { OOBIN_ID_COLS,                OOBIN_ID_COLS + 1               },
-    { OOBIN_ID_CONDFORMATTING,      OOBIN_ID_CONDFORMATTING + 1     },
-    { OOBIN_ID_DATABAR,             OOBIN_ID_DATABAR + 1            },
-    { OOBIN_ID_DATAVALIDATIONS,     OOBIN_ID_DATAVALIDATIONS + 1    },
-    { OOBIN_ID_DDEITEMVALUES,       OOBIN_ID_DDEITEMVALUES + 1      },
-    { OOBIN_ID_DXFS,                OOBIN_ID_DXFS + 1               },
-    { OOBIN_ID_EXTERNALBOOK,        -1                              },
-    { OOBIN_ID_EXTERNALREFS,        OOBIN_ID_EXTERNALREFS + 1       },
-    { OOBIN_ID_EXTROW,              -1                              },
-    { OOBIN_ID_EXTSHEETDATA,        OOBIN_ID_EXTSHEETDATA + 1       },
-    { OOBIN_ID_FILLS,               OOBIN_ID_FILLS + 1              },
-    { OOBIN_ID_FONTS,               OOBIN_ID_FONTS + 1              },
-    { OOBIN_ID_HEADERFOOTER,        OOBIN_ID_HEADERFOOTER + 1       },
-    { OOBIN_ID_ICONSET,             OOBIN_ID_ICONSET + 1            },
-    { OOBIN_ID_INDEXEDCOLORS,       OOBIN_ID_INDEXEDCOLORS + 1      },
-    { OOBIN_ID_MERGECELLS,          OOBIN_ID_MERGECELLS + 1         },
-    { OOBIN_ID_MRUCOLORS,           OOBIN_ID_MRUCOLORS + 1          },
-    { OOBIN_ID_NUMFMTS,             OOBIN_ID_NUMFMTS + 1            },
-    { OOBIN_ID_ROW,                 -1                              },
-    { OOBIN_ID_ROWBREAKS,           OOBIN_ID_ROWBREAKS + 1          },
-    { OOBIN_ID_SHEETDATA,           OOBIN_ID_SHEETDATA + 1          },
-    { OOBIN_ID_SHEETDATASET,        OOBIN_ID_SHEETDATASET + 1       },
-    { OOBIN_ID_SHEETS,              OOBIN_ID_SHEETS + 1             },
-    { OOBIN_ID_SHEETVIEW,           OOBIN_ID_SHEETVIEW + 1          },
-    { OOBIN_ID_SHEETVIEWS,          OOBIN_ID_SHEETVIEWS + 1         },
-    { OOBIN_ID_SST,                 OOBIN_ID_SST + 1                },
-    { OOBIN_ID_STYLESHEET,          OOBIN_ID_STYLESHEET + 1         },
-    { OOBIN_ID_TABLE,               OOBIN_ID_TABLE + 1              },
-    { OOBIN_ID_TABLEPARTS,          OOBIN_ID_TABLEPARTS + 2         },  // end element increased by 2!
-    { OOBIN_ID_TABLESTYLES,         OOBIN_ID_TABLESTYLES + 1        },
-    { OOBIN_ID_VOLTYPE,             OOBIN_ID_VOLTYPE + 1            },
-    { OOBIN_ID_VOLTYPEMAIN,         OOBIN_ID_VOLTYPEMAIN + 1        },
-    { OOBIN_ID_VOLTYPES,            OOBIN_ID_VOLTYPES + 1           },
-    { OOBIN_ID_WORKBOOK,            OOBIN_ID_WORKBOOK + 1           },
-    { OOBIN_ID_WORKSHEET,           OOBIN_ID_WORKSHEET + 1          },
-    { -1,                           -1                              }
-};
-
-} // namespace
 
 // ============================================================================
 
@@ -152,17 +93,13 @@ ExcelFilter::~ExcelFilter()
 
 bool ExcelFilter::importDocument() throw()
 {
-#if OOX_INCLUDE_DUMPER
-    {
-        ::oox::dump::xlsb::Dumper aDumper( *this );
-        aDumper.dump();
-        if( !aDumper.isImportEnabled() )
-            return aDumper.isValid();
-    }
-#endif
+    /*  to activate the XLSX/XLSB dumper, define the environment variable
+        OOO_XLSBDUMPER and insert the full path to the file
+        file:///<path-to-oox-module>/source/dump/xlsbdumperconfig.dat. */
+    OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
     bool bRet = false;
-    OUString aWorkbookPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "officeDocument" ) );
+    OUString aWorkbookPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     if( aWorkbookPath.getLength() > 0 )
     {
         WorkbookHelperRoot aHelper( *this );
@@ -190,13 +127,6 @@ sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
 const DrawingPtr ExcelFilter::getDrawings()
 {
     return DrawingPtr();
-}
-
-RecordInfoProviderRef ExcelFilter::getRecordInfoProvider()
-{
-    if( !mxRecInfoProv )
-        mxRecInfoProv.reset( new RecordInfoProvider( spRecInfos ) );
-    return mxRecInfoProv;
 }
 
 OUString ExcelFilter::implGetImplementationName() const
@@ -237,14 +167,10 @@ ExcelBiffFilter::~ExcelBiffFilter()
 
 bool ExcelBiffFilter::importDocument() throw()
 {
-#if OOX_INCLUDE_DUMPER
-    {
-        ::oox::dump::biff::Dumper aDumper( *this );
-        aDumper.dump();
-        if( !aDumper.isImportEnabled() )
-            return aDumper.isValid();
-    }
-#endif
+    /*  to activate the BIFF dumper, define the environment variable
+        OOO_BIFFDUMPER and insert the full path to the file
+        file:///<path-to-oox-module>/source/dump/biffdumperconfig.dat. */
+    OOX_DUMP_FILE( ::oox::dump::biff::Dumper );
 
     bool bRet = false;
 
