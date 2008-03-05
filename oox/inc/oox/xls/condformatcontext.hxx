@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condformatcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define OOX_XLS_CONDFORMATCONTEXT_HXX
 
 #include "oox/xls/condformatbuffer.hxx"
-#include "oox/xls/ooxcontexthandler.hxx"
+#include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
 namespace xls {
@@ -47,16 +47,16 @@ namespace xls {
 class OoxCondFormatContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            OoxCondFormatContext( const OoxWorksheetFragmentBase& rFragment );
+    explicit            OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual bool        onCanCreateRecordContext( sal_Int32 nRecId );
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:

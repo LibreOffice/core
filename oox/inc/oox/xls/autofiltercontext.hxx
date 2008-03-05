@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofiltercontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,7 @@
 
 #define USE_SC_MULTI_STRING_FILTER_PATCH 0
 
-#include "oox/xls/ooxcontexthandler.hxx"
-#include "oox/xls/worksheethelper.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #if USE_SC_MULTI_STRING_FILTER_PATCH
@@ -87,12 +86,12 @@ struct FilterFieldItem
 class OoxAutoFilterContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            OoxAutoFilterContext( const OoxWorksheetFragmentBase& rFragment );
+    explicit            OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
