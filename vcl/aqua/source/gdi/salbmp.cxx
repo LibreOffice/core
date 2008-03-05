@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:14:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,8 +629,6 @@ BitmapBuffer* AquaSalBitmap::AcquireBuffer( bool bReadOnly )
 
 void AquaSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
-//  AquaLog("AquaSalBitmap::ReleaseBuffer(%lx)\n", this);
-
     // invalidate graphic context if we have different data
     if( !bReadOnly )
     {
@@ -688,12 +686,8 @@ CGImageRef AquaSalBitmap::CreateWithMask( const AquaSalBitmap& rMask, sal_uInt32
 {
     AquaSalBitmap rMaskNew;
     if(!rMaskNew.Create( rMask ))
-    {
-        AquaLog( "AquaSalBitmap::CreateWithMask: error can't copy rMask!");
         return NULL;
-    }
 
-    //AquaLog("source: (%d,%d,%u) mask: (%d,%d,%u)\n", mnWidth, mnHeight, mnBits, rMask.mnWidth, rMask.mnHeight, rMask.mnBits );
 
     CGImageRef xMaskedImage = 0;
 
@@ -871,16 +865,6 @@ bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
         rData.rImageContext = (void *) mxGraphicContext;
         rData.mnWidth = (int) CGBitmapContextGetWidth(mxGraphicContext);
         rData.mnHeight = (int) CGBitmapContextGetHeight(mxGraphicContext);
-
-
-        if (rData.mnWidth != (int) mnWidth || rData.mnHeight != (int) mnHeight) {
-            AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) ERROR size mismatch:, Image:%ldx%ld != Context:%dx%d\n",__func__, mnWidth, mnHeight, rData.mnWidth, rData.mnHeight);
-        } else {
-            AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) mxGraphicContext = OK, w:%d h:%d\n",__func__, rData.mnWidth, rData.mnHeight);
-        }
-
-    } else {
-        AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) w:%ld h:%ld - FAIL mxGraphicContext == NULL\n",__func__, mnWidth, mnHeight);
     }
 
     return bRet;
