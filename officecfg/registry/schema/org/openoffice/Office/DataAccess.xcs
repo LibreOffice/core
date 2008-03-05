@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:05:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@
 					<desc>Specifies the service name for the report engine.</desc>
 				</info>
 			</prop>
-			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
+			<prop oor:name="UIName" oor:type="xs:string">
 				<info>
-					<desc>Specifies the name of the embedded database which will be displayed in the ui.</desc>
+					<desc>Specifies the product name of the report engine.</desc>
 				</info>
 			</prop>
 		</group>
