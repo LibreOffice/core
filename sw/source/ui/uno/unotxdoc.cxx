@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:27:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,6 +245,9 @@
 #include <EnhancedPDFExportHelper.hxx>
 #endif
 // <--
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 ///////////////////////////Modified on Jun. 14th//////////////////////////
 ///////////////////////for getDocumentLanguages///////////////////////////
