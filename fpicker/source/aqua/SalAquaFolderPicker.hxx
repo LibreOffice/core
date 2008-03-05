@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaFolderPicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,24 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
+#include <com/sun/star/util/XCancellable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #endif
 
 #ifndef _SALAQUAPICKER_HXX_
@@ -62,9 +78,10 @@
 
 class SalAquaFolderPicker :
         public SalAquaPicker,
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper4<
     ::com::sun::star::ui::dialogs::XFolderPicker,
     ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::lang::XEventListener,
         ::com::sun::star::util::XCancellable >
 {
 public:
@@ -129,7 +146,7 @@ private:
     // prevent copy and assignment
     SalAquaFolderPicker( const SalAquaFolderPicker& );
     SalAquaFolderPicker& operator=( const SalAquaFolderPicker& );
-private:
+
     // to instantiate own services
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
 
