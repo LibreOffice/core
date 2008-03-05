@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 #ifndef _REPORT_RPTUIOBJ_HXX
 #define _REPORT_RPTUIOBJ_HXX
 
-#ifndef _SVDOUNO_HXX
+#include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
-#endif
+
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -168,6 +168,7 @@ public:
     inline void setOldParent(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) { m_xSection = _xSection; }
     inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getOldParent() const { return m_xSection;}
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getSection() const;
+    inline const ::rtl::OUString getServiceName() const { return m_sComponentName; }
 
     /** releases the reference to our UNO shape (m_xKeepShapeAlive)
     */
@@ -207,6 +208,47 @@ public:
     TYPEINFO();
 
     virtual ~OCustomShape();
+
+    virtual sal_Int32   GetStep() const;
+
+    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
+};
+
+//============================================================================
+// OOle2Obj
+//============================================================================
+class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
+{
+    friend class OReportPage;
+    friend class DlgEdFactory;
+
+public:
+    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent )
+    {
+        return new OOle2Obj( _xComponent );
+    }
+    OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=FALSE);
+
+protected:
+    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    OOle2Obj(const ::rtl::OUString& _sComponentName);
+
+
+    virtual void NbcMove( const Size& rSize );
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+
+    virtual void SetSnapRectImpl(const Rectangle& _rRect);
+    virtual SdrPage* GetImplPage() const;
+
+public:
+    TYPEINFO();
+
+    virtual ~OOle2Obj();
 
     virtual sal_Int32   GetStep() const;
 
