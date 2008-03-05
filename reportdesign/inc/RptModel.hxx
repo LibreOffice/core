@@ -6,9 +6,9 @@
  *
  *  $RCSfile: RptModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@ namespace dbaui
 {
     class OSingleDocumentController;
 }
+namespace reportdesign
+{
+    class OReportDefinition;
+}
 namespace rptui
 {
 //============================================================================
@@ -63,13 +67,16 @@ class REPORTDESIGN_DLLPUBLIC OReportModel : public SdrModel
 private:
     OXUndoEnvironment*                  m_pUndoEnv;
     ::dbaui::OSingleDocumentController* m_pController;
+    ::reportdesign::OReportDefinition*  m_pReportDefinition;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 
     OReportModel( const OReportModel& );
     void operator=(const OReportModel& rSrcModel);
 public:
     TYPEINFO();
 
-    OReportModel();
+    OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();
 
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
