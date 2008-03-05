@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlfontdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:20:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _EXTENSIONS_PROPCTRLR_CONTROLFONTDIALOG_HXX_
-#define _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
+#define _EXTENSIONS_PROPCTRLR_CONTROLFONTDIALOG_HXX_
 
 #ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
@@ -108,5 +108,5 @@ namespace pcr
 }   // namespace pcr
 //........................................................................
 
-#endif // _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
+#endif // _EXTENSIONS_PROPCTRLR_CONTROLFONTDIALOG_HXX_
 
