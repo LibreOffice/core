@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:24:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5117,6 +5117,8 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     aLine.append( ")>>>>\n" );
                 }
             }
+            else
+                m_aErrors.insert( PDFWriter::Warning_FormAction_Omitted_PDFA );
         }
         if( rWidget.m_aDAString.getLength() )
         {
@@ -6238,6 +6240,12 @@ bool PDFWriterImpl::emit()
 
     return true;
 }
+
+std::set< PDFWriter::ErrorCode > PDFWriterImpl::getErrors()
+{
+    return m_aErrors;
+}
+
 
 void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_Int32* pGlyphs,
@@ -7782,6 +7790,10 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
 
     if( m_bIsPDF_A1 || m_aContext.Version < PDFWriter::PDF_1_4 )
     {
+        m_aErrors.insert( m_bIsPDF_A1 ?
+                          PDFWriter::Warning_Transparency_Omitted_PDFA :
+                          PDFWriter::Warning_Transparency_Omitted_PDF13 );
+
         drawPolyPolygon( rPolyPoly );
         return;
     }
@@ -8601,7 +8613,10 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     {
 //i59651
         if( m_bIsPDF_A1 )
+        {
             aLine.append( "/CA 1.0/ca 1.0" );
+            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
+        }
         else
         {
             aLine.append(  "/CA " );
@@ -8617,6 +8632,7 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
         if( m_bIsPDF_A1 )
         {
             aLine.append( "/SMask/None" );
+            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
         }
         else
         {
@@ -8800,7 +8816,14 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
         if( rObject.m_aMask.GetBitCount() == 1 ||
             ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDF_1_4 && !m_bIsPDF_A1 )//i59651
             )
+        {
             nMaskObject = createObject();
+        }
+        else if( m_bIsPDF_A1 )
+            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
+        else if( m_aContext.Version < PDFWriter::PDF_1_4 )
+            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDF13 );
+
     }
 #if OSL_DEBUG_LEVEL > 1
     {
@@ -9074,6 +9097,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( " ]\n" );
         }
     }
+    else if( m_bIsPDF_A1 )
+        m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
+
     aLine.append( ">>\n"
                   "stream\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
