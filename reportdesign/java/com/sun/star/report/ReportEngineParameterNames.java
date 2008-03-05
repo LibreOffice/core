@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportEngineParameterNames.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@ public class ReportEngineParameterNames
   public static final String OUTPUT_REPOSITORY = "output.repository";
   public static final String INPUT_DATASOURCE_FACTORY = "input.datasource-factory";
   public static final String IMAGE_SERVICE = "ImageService";
+  public static final String INPUT_REPORTJOB_FACTORY = "input.reportjob-factory";
+  public static final String INPUT_MASTER_COLUMNS = "input.master-columns";
+  public static final String INPUT_MASTER_VALUES = "input.master-values";
+  public static final String INPUT_DETAIL_COLUMNS = "input.detail-columns";
   public static final String MIMETYPE = "output.mimetype";
 
   private ReportEngineParameterNames ()
