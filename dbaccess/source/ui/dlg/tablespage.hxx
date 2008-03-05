@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:26:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,22 +124,6 @@ namespace dbaui
         /** return the current selection in <member>m_aTablesList</member>
         */
         ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
-
-        typedef sal_Bool (SvListView::*EntryPredicateCheck) (SvListEntry*) const;
-        /// collects the names of the entries which for which the given predicate is <TRUE/>
-        void    collectEntryPaths(StringArray& _rFillInPaths, EntryPredicateCheck _pPredicateCheck);
-
-        typedef void (OTableSubscriptionPage::*EntryAction) (SvLBoxEntry*);
-        /// execute the given action on a list of entries described by paths
-        void    actOnEntryPaths(const StringArray& _rFillInPaths, EntryAction _pAction);
-
-        /// get the entry described by the given path
-        SvLBoxEntry*    getEntryFromPath(const ::rtl::OUString& _rPath);
-
-        /// helper for actOnEntryPaths
-        void    doExpand(SvLBoxEntry*);
-        /// helper for actOnEntryPaths
-        void    doSelect(SvLBoxEntry*);
 
         /// (un)check all entries
         void CheckAll( BOOL bCheck = sal_True );
