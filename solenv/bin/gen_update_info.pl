@@ -8,9 +8,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: gen_update_info.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 15:57:47 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:24:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,14 @@ while ($_ = $ARGV[0], /^-/) {
     }
 }
 
+$sourcefile = $ARGV[0];
+
+if( $^O =~ /cygwin/i ) {
+    # We might get paths with backslashes, fix that.
+    $lstfile =~ s/\\/\//g;
+    $sourcefile =~ s/\\/\//g;
+}
+
 # read openoffice.lst
 unless(open(LSTFILE, "sed -n \"/^$product\$/,/^}\$/ p\" $lstfile |")) {
     print STDERR "Can't open $lstfile file: $!\n";
@@ -105,8 +113,8 @@ $id =~ s/\..*//;
 $id = $productname . "_" . $id . "_" . $languages;
 
 # open input file
-unless (open(SOURCE, $ARGV[0])) {
-    print STDERR "Can't open $ARGV[0] file: $!\n";
+unless (open(SOURCE, $sourcefile)) {
+    print STDERR "Can't open $sourcefile file: $!\n";
     return;
 }
 
