@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rptuiservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:25:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include "DefaultInspection.hxx"
 #include "ReportComponentHandler.hxx"
 #include "GeometryHandler.hxx"
+#include "DataProviderHandler.hxx"
 
 /********************************************************************************************/
 
@@ -75,6 +76,8 @@ cppu::ImplementationEntry entries[] = {
     { &ReportComponentHandler::create, &ReportComponentHandler::getImplementationName_Static, &ReportComponentHandler::getSupportedServiceNames_static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { &GeometryHandler::create, &GeometryHandler::getImplementationName_Static, &GeometryHandler::getSupportedServiceNames_static,
+        &cppu::createSingleComponentFactory, 0, 0 },
+    { &DataProviderHandler::create, &DataProviderHandler::getImplementationName_Static, &DataProviderHandler::getSupportedServiceNames_static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
