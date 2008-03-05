@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:12:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,8 @@ class SfxDialogExecutor_Impl
 {
 private:
     SfxViewShell*           _pViewSh;
-    PrintDialog*            _pParent;
+    PrintDialog*            _pPrintParent;
+    PrinterSetupDialog*     _pSetupParent;
     SfxItemSet*             _pOptions;
     sal_Bool                _bModified;
     sal_Bool                _bHelpDisabled;
@@ -139,6 +140,7 @@ private:
 
 public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent );
+            SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
             ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
     Link                GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
@@ -151,7 +153,20 @@ public:
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent ) :
 
     _pViewSh        ( pViewSh ),
-    _pParent        ( pParent ),
+    _pPrintParent   ( pParent ),
+    _pSetupParent   ( NULL ),
+    _pOptions       ( NULL ),
+    _bModified      ( sal_False ),
+    _bHelpDisabled  ( sal_False )
+
+{
+}
+
+SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent ) :
+
+    _pViewSh        ( pViewSh ),
+    _pPrintParent   ( NULL ),
+    _pSetupParent   ( pParent ),
     _pOptions       ( NULL ),
     _bModified      ( sal_False ),
     _bHelpDisabled  ( sal_False )
@@ -165,21 +180,29 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 {
     // Options lokal merken
     if ( !_pOptions )
-        _pOptions = ( (SfxPrinter*)_pParent->GetPrinter() )->GetOptions().Clone();
+    {
+        DBG_ASSERT( _pPrintParent || _pSetupParent, "no dialog parent" );
+        if( _pPrintParent )
+            _pOptions = ( (SfxPrinter*)_pPrintParent->GetPrinter() )->GetOptions().Clone();
+        else if( _pSetupParent )
+            _pOptions = ( (SfxPrinter*)_pSetupParent->GetPrinter() )->GetOptions().Clone();
+    }
 
-    if ( _pOptions && _pParent && _pParent->IsSheetRangeAvailable() )
+    if ( _pOptions && _pPrintParent && _pPrintParent->IsSheetRangeAvailable() )
     {
         SfxItemState eState = _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET );
         if ( eState != SFX_ITEM_UNKNOWN )
         {
-            PrintSheetRange eRange = _pParent->GetCheckedSheetRange();
+            PrintSheetRange eRange = _pPrintParent->GetCheckedSheetRange();
             BOOL bValue = ( PRINTSHEETS_ALL != eRange );
             _pOptions->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, bValue ) );
         }
     }
 
     // Dialog ausf"uhren
-    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pParent, _pViewSh, _pOptions );
+    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pPrintParent ? static_cast<Window*>(_pPrintParent)
+                                                                           : static_cast<Window*>(_pSetupParent),
+                                                             _pViewSh, _pOptions );
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
@@ -187,12 +210,12 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
         delete _pOptions;
         _pOptions = pDlg->GetOptions().Clone();
 
-        if ( _pOptions && _pParent && _pParent->IsSheetRangeAvailable() )
+        if ( _pOptions && _pPrintParent && _pPrintParent->IsSheetRangeAvailable() )
         {
             const SfxPoolItem* pItem;
             if ( SFX_ITEM_SET == _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
             {
-                _pParent->CheckSheetRange( ( (const SfxBoolItem*)pItem )->GetValue()
+                _pPrintParent->CheckSheetRange( ( (const SfxBoolItem*)pItem )->GetValue()
                     ? PRINTSHEETS_SELECTED_SHEETS : PRINTSHEETS_ALL );
             }
         }
@@ -527,8 +550,31 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 {
                     // execute PrinterSetupDialog
                     PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
+
+                    if ( pImp->bHasPrintOptions )
+                    {
+                        // additional controls for dialog
+                        pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
+                        if ( bPrintOnHelp )
+                            pExecutor->DisableHelp();
+                        pPrintSetupDlg->SetOptionsHdl( pExecutor->GetLink() );
+                    }
+
                     pPrintSetupDlg->SetPrinter( pDlgPrinter );
                     nDialogRet = pPrintSetupDlg->Execute();
+
+                    if ( pExecutor && pExecutor->GetOptions() )
+                    {
+                        if ( nDialogRet == RET_OK )
+                            // remark: have to be recorded if possible!
+                            pDlgPrinter->SetOptions( *pExecutor->GetOptions() );
+                        else
+                        {
+                            pPrinter->SetOptions( *pExecutor->GetOptions() );
+                            SetPrinter( pPrinter, SFX_PRINTER_OPTIONS );
+                        }
+                    }
+
                     DELETEZ( pPrintSetupDlg );
 
                     // no recording of PrinterSetup except printer name (is printer dependent)
