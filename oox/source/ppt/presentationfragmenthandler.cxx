@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presentationfragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-PresentationFragmentHandler::PresentationFragmentHandler( const XmlFilterRef& xFilter, const OUString& rFragmentPath ) throw()
-: FragmentHandler( xFilter, rFragmentPath )
-, mpTextListStyle( new TextListStyle())
+PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw()
+: FragmentHandler( rFilter, rFragmentPath )
+, mpTextListStyle( new TextListStyle )
 {
 }
 
@@ -86,7 +86,9 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 {
     try
     {
-        Reference< frame::XModel > xModel( getFilter()->getModel() );
+        PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
+
+        Reference< frame::XModel > xModel( rFilter.getModel() );
         Reference< drawing::XDrawPage > xSlide;
         sal_uInt32 nSlide;
 
@@ -108,72 +110,69 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 SlidePersistPtr pSlidePersistPtr( new SlidePersist( sal_False, sal_False, xSlide,
                                     ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
 
-                FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( getFilter(), aSlideFragmentPath, pSlidePersistPtr, Slide ) );
+                FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
                 // importing the corresponding masterpage/layout
-                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_RELATIONS_TYPE( "slideLayout" ) );
+                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideLayout" ) );
                 if ( aLayoutFragmentPath.getLength() > 0 )
                 {
                     // importing layout
-                    RelationsRef xLayoutRelations = getFilter()->importRelations( aLayoutFragmentPath );
-                    if( const Relation* pMaster = xLayoutRelations->getRelationFromType( CREATE_RELATIONS_TYPE( "slideMaster" ) ) )
+                    RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
+                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideMaster" ) );
+                    if( aMasterFragmentPath.getLength() )
                     {
-                        OUString aMasterFragmentPath = Relations::getFragmentPathFromTarget( aLayoutFragmentPath, pMaster->maTarget );
-                        if ( aMasterFragmentPath.getLength() )
+                        // check if the corresponding masterpage+layout has already been imported
+                        std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
+                        std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
+                        while( aIter != rMasterPages.end() )
                         {
-                            // check if the corresponding masterpage+layout has already been imported
-                            std::vector< SlidePersistPtr >& rMasterPages( (dynamic_cast< PowerPointImport& >( *getFilter() )).getMasterPages() );
-                            std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
-                            while( aIter != rMasterPages.end() )
+                            if ( ( (*aIter)->getPath() == aMasterFragmentPath ) && ( (*aIter)->getLayoutPath() == aLayoutFragmentPath ) )
                             {
-                                if ( ( (*aIter)->getPath() == aMasterFragmentPath ) && ( (*aIter)->getLayoutPath() == aLayoutFragmentPath ) )
-                                {
-                                    pMasterPersistPtr = *aIter;
-                                    break;
-                                }
-                                aIter++;
+                                pMasterPersistPtr = *aIter;
+                                break;
                             }
-                            if ( aIter == rMasterPages.end() )
-                            {   // masterpersist not found, we have to load it
-                                Reference< drawing::XDrawPage > xMasterPage;
-                                Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
-                                Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
+                            aIter++;
+                        }
+                        if ( aIter == rMasterPages.end() )
+                        {   // masterpersist not found, we have to load it
+                            Reference< drawing::XDrawPage > xMasterPage;
+                            Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
+                            Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
 
-                                if( !((dynamic_cast< PowerPointImport& >( *getFilter() )).getMasterPages().size() ))
-                                    xMasterPages->getByIndex( 0 ) >>= xMasterPage;
+                            if( !(rFilter.getMasterPages().size() ))
+                                xMasterPages->getByIndex( 0 ) >>= xMasterPage;
+                            else
+                                xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
+
+                            pMasterPersistPtr = SlidePersistPtr( new SlidePersist( sal_True, sal_False, xMasterPage,
+                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                            pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
+                            rFilter.getMasterPages().push_back( pMasterPersistPtr );
+                            rFilter.setActualSlidePersist( pMasterPersistPtr );
+                            FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
+
+                            // set the correct theme
+                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+                            if( aThemeFragmentPath.getLength() > 0 )
+                            {
+                                std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
+                                std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
+                                if( aIter2 == rThemes.end() )
+                                {
+                                    oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
+                                    pMasterPersistPtr->setTheme( pThemePtr );
+                                    rFilter.importFragment( new ThemeFragmentHandler( rFilter, aThemeFragmentPath, *pThemePtr ) );
+                                    rThemes[ aThemeFragmentPath ] = pThemePtr;
+                                }
                                 else
-                                    xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
-
-                                pMasterPersistPtr = SlidePersistPtr( new SlidePersist( sal_True, sal_False, xMasterPage,
-                                    ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
-                                pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
-                                (dynamic_cast< PowerPointImport& >( *getFilter() )).getMasterPages().push_back( pMasterPersistPtr );
-                                (dynamic_cast< PowerPointImport& >( *getFilter() )).setActualSlidePersist( pMasterPersistPtr );
-                                FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( getFilter(), aMasterFragmentPath, pMasterPersistPtr, Master ) );
-
-                                // set the correct theme
-                                OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromType( CREATE_RELATIONS_TYPE( "theme" ) );
-                                if( aThemeFragmentPath.getLength() > 0 )
                                 {
-                                    std::map< OUString, oox::drawingml::ThemePtr >& rThemes( (dynamic_cast< PowerPointImport& >( *getFilter() )).getThemes() );
-                                    std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
-                                    if( aIter2 == rThemes.end() )
-                                    {
-                                        oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
-                                        pMasterPersistPtr->setTheme( pThemePtr );
-                                        getFilter()->importFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, *(pThemePtr.get()) ) );
-                                        rThemes[ aThemeFragmentPath ] = pThemePtr;
-                                    }
-                                    else
-                                    {
-                                        pMasterPersistPtr->setTheme( (*aIter2).second );
-                                    }
+                                    pMasterPersistPtr->setTheme( (*aIter2).second );
                                 }
-                                importSlide( xMasterFragmentHandler, pMasterPersistPtr );
-                                getFilter()->importFragment( new LayoutFragmentHandler( getFilter(), aLayoutFragmentPath, pMasterPersistPtr ) );
-                                pMasterPersistPtr->createBackground( *getFilter() );
-                                pMasterPersistPtr->createXShapes( *getFilter(), xModel );
                             }
+                            importSlide( xMasterFragmentHandler, pMasterPersistPtr );
+                            rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
+                            pMasterPersistPtr->createBackground( rFilter );
+                            pMasterPersistPtr->createXShapes( rFilter );
                         }
                     }
                 }
@@ -184,14 +183,14 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
                 if( xMasterPageTarget.is() )
                     xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );
-                (dynamic_cast< PowerPointImport& >( *getFilter() )).getDrawPages().push_back( pSlidePersistPtr );
-                (dynamic_cast< PowerPointImport& >( *getFilter() )).setActualSlidePersist( pSlidePersistPtr );
+                rFilter.getDrawPages().push_back( pSlidePersistPtr );
+                rFilter.setActualSlidePersist( pSlidePersistPtr );
                 importSlide( xSlideFragmentHandler, pSlidePersistPtr );
-                pSlidePersistPtr->createBackground( *getFilter() );
-                pSlidePersistPtr->createXShapes( *getFilter(), xModel );
+                pSlidePersistPtr->createBackground( rFilter );
+                pSlidePersistPtr->createXShapes( rFilter );
 
                 // now importing the notes page
-                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_RELATIONS_TYPE( "notesSlide" ) );
+                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "notesSlide" ) );
                 if( aNotesFragmentPath.getLength() > 0 )
                 {
                     Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
@@ -203,11 +202,11 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             SlidePersistPtr pNotesPersistPtr( new SlidePersist( sal_False, sal_True, xNotesPage,
                                 ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
-                            (dynamic_cast< PowerPointImport& >( *getFilter() )).getNotesPages().push_back( pNotesPersistPtr );
-                            (dynamic_cast< PowerPointImport& >( *getFilter() )).setActualSlidePersist( pNotesPersistPtr );
+                            rFilter.getNotesPages().push_back( pNotesPersistPtr );
+                            rFilter.setActualSlidePersist( pNotesPersistPtr );
                             importSlide( xNotesFragmentHandler, pNotesPersistPtr );
-                            pNotesPersistPtr->createBackground( *getFilter() );
-                            pNotesPersistPtr->createXShapes( *getFilter(), xModel );
+                            pNotesPersistPtr->createBackground( rFilter );
+                            pNotesPersistPtr->createXShapes( rFilter );
                         }
                     }
                 }
@@ -255,14 +254,14 @@ Reference< XFastContextHandler > PresentationFragmentHandler::createFastChildCon
         maNotesSize = GetSize2D( xAttribs );
         break;
     case NMSP_PPT|XML_custShowLst:
-        xRet.set( new CustomShowListContext( this , maCustomShowList ) );
+        xRet.set( new CustomShowListContext( *this, maCustomShowList ) );
         break;
     case NMSP_PPT|XML_defaultTextStyle:
-        xRet.set( new TextListStyleContext( this, *(mpTextListStyle.get()) ) );
+        xRet.set( new TextListStyleContext( *this, *mpTextListStyle ) );
         break;
     }
     if ( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
     return xRet;
 }
 
@@ -294,7 +293,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         xPropertySet->setPropertyValue( sHeight, Any( rPageSize.Height ) );
     }
     pSlidePersistPtr->setPath( rxSlideFragmentHandler->getFragmentPath() );
-    return getFilter()->importFragment( rxSlideFragmentHandler );
+    return getFilter().importFragment( rxSlideFragmentHandler );
 }
 
 } }
