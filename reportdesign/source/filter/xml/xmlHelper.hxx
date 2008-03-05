@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:46:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 class SvXMLImport;
 class SvXMLExport;
 class SvXMLStylesContext;
+class SvXMLTokenMap;
 namespace rptxml
 {
     class OPropertyHandlerFactory : public ::xmloff::OControlPropertyHandlerFactory
@@ -104,6 +105,9 @@ namespace rptxml
 
         static void copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet>& _xProp);
         static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet> createBorderPropertySet();
+
+        static SvXMLTokenMap* GetReportElemTokenMap();
+        static SvXMLTokenMap* GetSubDocumentElemTokenMap();
     };
 // -----------------------------------------------------------------------------
 } // rptxml
