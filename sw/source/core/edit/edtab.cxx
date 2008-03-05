@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-05 13:40:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 #define _SVSTDARR_ULONGS
