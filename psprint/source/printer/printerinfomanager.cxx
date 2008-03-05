@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:56:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( NULL ),
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
-    m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) )
+    m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ),
+    m_bDisableCUPS( false )
 {
     if( eType == Default )
         m_pQueueInfo = new SystemQueueInfo();
@@ -136,6 +137,24 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
+}
+
+// -----------------------------------------------------------------
+
+bool PrinterInfoManager::isCUPSDisabled() const
+{
+    return m_bDisableCUPS;
+}
+
+// -----------------------------------------------------------------
+
+void PrinterInfoManager::setCUPSDisabled( bool bDisable )
+{
+    m_bDisableCUPS = bDisable;
+    writePrinterConfig();
+    // actually we know the printers changed
+    // however this triggers reinitialization the right way
+    checkPrintersChanged( true );
 }
 
 // -----------------------------------------------------------------
@@ -288,6 +307,8 @@ void PrinterInfoManager::initialize()
     // need a parser for the PPDContext. generic printer should do.
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
+    m_aGlobalDefaults.m_bPerformFontSubstitution = true;
+    m_bDisableCUPS = false;
 
     if( ! m_aGlobalDefaults.m_pParser )
     {
@@ -317,28 +338,47 @@ void PrinterInfoManager::initialize()
                 m_aGlobalDefaults.m_nCopies = aValue.ToInt32();
 
             aValue = aConfig.ReadKey( "Orientation" );
-            m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
 
             aValue = aConfig.ReadKey( "MarginAdjust" );
-            m_aGlobalDefaults.m_nLeftMarginAdjust   = aValue.GetToken( 0, ',' ).ToInt32();
-            m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.GetToken( 1, ',' ).ToInt32();
-            m_aGlobalDefaults.m_nTopMarginAdjust    = aValue.GetToken( 2, ',' ).ToInt32();
-            m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.GetToken( 3, ',' ).ToInt32();
+            if( aValue.Len() )
+            {
+                m_aGlobalDefaults.m_nLeftMarginAdjust   = aValue.GetToken( 0, ',' ).ToInt32();
+                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.GetToken( 1, ',' ).ToInt32();
+                m_aGlobalDefaults.m_nTopMarginAdjust    = aValue.GetToken( 2, ',' ).ToInt32();
+                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.GetToken( 3, ',' ).ToInt32();
+            }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
-            m_aGlobalDefaults.m_nColorDepth = aValue.ToInt32();
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nColorDepth = aValue.ToInt32();
 
             aValue = aConfig.ReadKey( "ColorDevice" );
-            m_aGlobalDefaults.m_nColorDevice = aValue.ToInt32();
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nColorDevice = aValue.ToInt32();
 
             aValue = aConfig.ReadKey( "PSLevel" );
-            m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
 
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
-            if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
-                m_aGlobalDefaults.m_bPerformFontSubstitution = true;
-            else
-                m_aGlobalDefaults.m_bPerformFontSubstitution = false;
+            if( aValue.Len() )
+            {
+                if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
+                    m_aGlobalDefaults.m_bPerformFontSubstitution = true;
+                else
+                    m_aGlobalDefaults.m_bPerformFontSubstitution = false;
+            }
+
+            aValue = aConfig.ReadKey( "DisableCUPS" );
+            if( aValue.Len() )
+            {
+                if( aValue.Equals( "1" ) || aValue.EqualsIgnoreCaseAscii( "true" ) )
+                    m_bDisableCUPS = true;
+                else
+                    m_bDisableCUPS = false;
+            }
 
             // get the PPDContext of global JobData
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
@@ -362,13 +402,12 @@ void PrinterInfoManager::initialize()
                     m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
-            setDefaultPaper( m_aGlobalDefaults.m_aContext );
             #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
-            break;
         }
     }
+    setDefaultPaper( m_aGlobalDefaults.m_aContext );
     fillFontSubstitutions( m_aGlobalDefaults );
 
     // now collect all available printers
@@ -717,8 +756,12 @@ bool PrinterInfoManager::writePrinterConfig()
         }
     }
 
-    if( files.begin() == files.end() )
+    if( files.empty() )
         return false;
+
+    Config* pGlobal = files.begin()->second;
+    pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
+    pGlobal->WriteKey( "DisableCUPS", m_bDisableCUPS ? "true" : "false" );
 
     ::std::hash_map< OUString, Printer, OUStringHash >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
