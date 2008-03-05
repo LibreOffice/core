@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:13:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,13 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES =	\
         $(SLO)$/binarycodec.obj				\
         $(SLO)$/binaryfilterbase.obj		\
-        $(SLO)$/context.obj					\
+        $(SLO)$/contexthandler.obj			\
+        $(SLO)$/contexthandler2.obj			\
         $(SLO)$/facreg.obj					\
         $(SLO)$/filterbase.obj				\
         $(SLO)$/filterdetect.obj			\
         $(SLO)$/fragmenthandler.obj			\
-        $(SLO)$/recordcontext.obj			\
-        $(SLO)$/recordinfoprovider.obj		\
+        $(SLO)$/fragmenthandler2.obj		\
         $(SLO)$/recordparser.obj			\
         $(SLO)$/relations.obj				\
         $(SLO)$/relationshandler.obj		\
