@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,11 @@ protected:
                               ControlState nState, const ImplControlValue& aValue,
                               SalControlHandle& rControlHandle, const OUString& rCaption );
     BOOL NWPaintGTKTooltip( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                            const Rectangle& rControlRectangle,
+                            const clipList& rClipList,
+                            ControlState nState, const ImplControlValue& aValue,
+                            SalControlHandle& rControlHandle, const OUString& rCaption );
+    BOOL NWPaintGTKProgress( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const Rectangle& rControlRectangle,
                             const clipList& rClipList,
                             ControlState nState, const ImplControlValue& aValue,
