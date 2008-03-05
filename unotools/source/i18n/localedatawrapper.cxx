@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:48:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
+#include <unotools/digitgroupingiterator.hxx>
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -217,7 +218,9 @@ void LocaleDataWrapper::invalidateData()
         }
         bReservedWordValid = FALSE;
     }
-    xDefaultCalendar = NULL;
+    xDefaultCalendar.reset();
+    if (aGrouping.getLength())
+        aGrouping[0] = 0;
     // dummies
     cCurrZeroChar = '0';
 }
@@ -677,14 +680,14 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const String& r
 //! TODO: could be cached too
     if ( rMS.EqualsIgnoreCaseAscii( "metric" ) )
         return MEASURE_METRIC;
-//! TODO: other measurement systems? => extend enum MeasurementSystem in tools/intn.hxx
+//! TODO: other measurement systems? => extend enum MeasurementSystem
     return MEASURE_US;
 }
 
 
 void LocaleDataWrapper::getDefaultCalendarImpl()
 {
-    if (!xDefaultCalendar.is())
+    if (!xDefaultCalendar)
     {
         Sequence< Calendar > xCals = getAllCalendars();
         sal_Int32 nCount = xCals.getLength();
@@ -701,15 +704,15 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
                 }
             }
         }
-        xDefaultCalendar = new Calendar( xCals[nDef]);
+        xDefaultCalendar.reset( new Calendar( xCals[nDef]));
     }
 }
 
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getDefaultCalendar() const
+const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getDefaultCalendar() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    if (!xDefaultCalendar.is())
+    if (!xDefaultCalendar)
     {   // no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDefaultCalendarImpl();
@@ -1259,6 +1262,53 @@ void LocaleDataWrapper::getDateFormatsImpl()
 }
 
 
+// --- digit grouping -------------------------------------------------
+
+void LocaleDataWrapper::getDigitGroupingImpl()
+{
+    /* TODO: This is a very simplified grouping setup that only serves its
+     * current purpose for Indian locales. A free-form flexible one would
+     * obtain grouping from locale data where it could be specified using, for
+     * example, codes like #,### and #,##,### that would generate the integer
+     * sequence. Needed additional API and a locale data element.
+     */
+
+    if (!aGrouping.getLength())
+    {
+        aGrouping.realloc(3);   // room for {3,2,0}
+        aGrouping[0] = 0;       // invalidate
+    }
+    if (!aGrouping[0])
+    {
+        i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
+        if (aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "IN") ||    // India
+                aLCInfo.Country.equalsIgnoreAsciiCaseAscii( "BT"))  // Bhutan
+        {
+            aGrouping[0] = 3;
+            aGrouping[1] = 2;
+            aGrouping[2] = 0;
+        }
+        else
+        {
+            aGrouping[0] = 3;
+            aGrouping[1] = 0;
+        }
+    }
+}
+
+
+const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
+{
+    ::utl::ReadWriteGuard aGuard( aMutex );
+    if (!aGrouping.getLength() || aGrouping[0] == 0)
+    {   // no cached content
+        aGuard.changeReadToWrite();
+        ((LocaleDataWrapper*)this)->getDigitGroupingImpl();
+    }
+    return aGrouping;
+}
+
+
 // --- simple number formatting helpers -------------------------------
 
 // The ImplAdd... methods are taken from class International and modified to
@@ -1452,15 +1502,18 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 
         // copy number to buffer (excluding decimals)
         USHORT nNumLen2 = nNumLen-nDecimals;
-        while ( i < nNumLen2 )
+        uno::Sequence< sal_Bool > aGroupPos;
+        if (bUseThousandSep)
+            aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
+                    nNumLen2, getDigitGrouping());
+        for ( ; i < nNumLen2; ++i )
         {
             *pBuf = *pNumBuf;
             pBuf++;
             pNumBuf++;
-            i++;
 
             // add thousand separator?
-            if ( bUseThousandSep && !((nNumLen2-i)%3) && (i < nNumLen2) )
+            if ( bUseThousandSep && aGroupPos[i] )
                 pBuf = ImplAddString( pBuf, rThoSep );
         }
 
@@ -1687,9 +1740,9 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USH
 {
     // approximately 3.2 bits per digit
     const size_t nDig = ((sizeof(sal_Int64) * 8) / 3) + 1;
-    // digits, separators, leading zero, sign
+    // digits, separators (pessimized for insane "every digit may be grouped"), leading zero, sign
     size_t nGuess = ((nDecimals < nDig) ?
-        ((((nDig - nDecimals) / 3) * rLoc.getNumThousandSep().Len()) + nDig) :
+        (((nDig - nDecimals) * rLoc.getNumThousandSep().Len()) + nDig) :
         nDecimals) + rLoc.getNumDecimalSep().Len() + 3;
     return nGuess;
 }
@@ -1699,10 +1752,10 @@ String LocaleDataWrapper::getNum( sal_Int64 nNumber, USHORT nDecimals,
         BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[64];       // big enough for 64-bit long
+    sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pBuffer = (nGuess < 54 ? aBuf :
+    sal_Unicode* const pBuffer = (nGuess < 118 ? aBuf :
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
@@ -1719,13 +1772,13 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, USHORT nDecimals,
         const String& rCurrencySymbol, BOOL bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[107];
-    sal_Unicode aNumBuf[64];    // big enough for 64-bit long
+    sal_Unicode aBuf[192];
+    sal_Unicode aNumBuf[128];    // big enough for 64-bit long and crazy grouping
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
-    sal_Unicode* const pNumBuffer = (nGuess < 54 ? aNumBuf :
+    sal_Unicode* const pNumBuffer = (nGuess < 118 ? aNumBuf :
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* const pBuffer =
