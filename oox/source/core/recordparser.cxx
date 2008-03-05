@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recordparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "oox/core/recordparser.hxx"
+#include <vector>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -121,14 +122,14 @@ public:
 
     sal_Int32           getCurrentRecId() const;
     bool                hasCurrentEndRecId() const;
-    RecordContextRef    getCurrentContext() const;
+    ContextHandlerRef   getCurrentContext() const;
 
-    void                pushContext( const RecordInfo& rRec, const RecordContextRef& rxContext );
+    void                pushContext( const RecordInfo& rRec, const ContextHandlerRef& rxContext );
     void                popContext();
 
 private:
-    typedef ::std::pair< RecordInfo, RecordContextRef > ContextInfo;
-    typedef ::std::vector< ContextInfo >                ContextInfoVec;
+    typedef ::std::pair< RecordInfo, ContextHandlerRef >    ContextInfo;
+    typedef ::std::vector< ContextInfo >                    ContextInfoVec;
 
     FragmentHandlerRef  mxHandler;
     ContextInfoVec      maStack;
@@ -151,14 +152,14 @@ bool ContextStack::hasCurrentEndRecId() const
     return !maStack.empty() && (maStack.back().first.mnEndRecId >= 0);
 }
 
-RecordContextRef ContextStack::getCurrentContext() const
+ContextHandlerRef ContextStack::getCurrentContext() const
 {
     if( !maStack.empty() )
         return maStack.back().second;
     return mxHandler.get();
 }
 
-void ContextStack::pushContext( const RecordInfo& rRecInfo, const RecordContextRef& rxContext )
+void ContextStack::pushContext( const RecordInfo& rRecInfo, const ContextHandlerRef& rxContext )
 {
     OSL_ENSURE( (rRecInfo.mnEndRecId >= 0) || maStack.empty() || hasCurrentEndRecId(),
         "ContextStack::pushContext - nested incomplete context record identifiers" );
@@ -245,11 +246,18 @@ RecordParser::~RecordParser()
 void RecordParser::setFragmentHandler( const ::rtl::Reference< FragmentHandler >& rxHandler )
 {
     mxHandler = rxHandler;
-}
 
-void RecordParser::setRecordInfoProvider( const RecordInfoProviderRef& rxProvider )
-{
-    mxRecInfoProvider = rxProvider;
+    // build record infos
+    maStartMap.clear();
+    maEndMap.clear();
+    const RecordInfo* pRecs = mxHandler.is() ? mxHandler->getRecordInfos() : 0;
+    OSL_ENSURE( pRecs, "RecordInfoProvider::RecordInfoProvider - missing record list" );
+    for( ; pRecs && pRecs->mnStartRecId >= 0; ++pRecs )
+    {
+        maStartMap[ pRecs->mnStartRecId ] = *pRecs;
+        if( pRecs->mnEndRecId >= 0 )
+            maEndMap[ pRecs->mnEndRecId ] = *pRecs;
+    }
 }
 
 void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( SAXException, IOException, RuntimeException )
@@ -260,8 +268,6 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
         throw IOException();
     if( !mxHandler.is() )
         throw SAXException();
-    if( !mxRecInfoProvider )
-        throw RuntimeException();
 
     // start the document
     Reference< XLocator > xLocator( mxLocator.get() );
@@ -277,7 +283,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
         // create record stream object from imported record data
         RecordInputStream aRecStrm( aRecData );
         // try to leave a context, there may be other incomplete contexts on the stack
-        if( const RecordInfo* pEndRecInfo = mxRecInfoProvider->getEndRecordInfo( nRecId ) )
+        if( const RecordInfo* pEndRecInfo = getEndRecordInfo( nRecId ) )
         {
             (void)pEndRecInfo; // shut warning up in non-debug
             // finalize contexts without record identifier for context end
@@ -286,7 +292,7 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
             // finalize the current context and pop context info from stack
             OSL_ENSURE( mxStack->getCurrentRecId() == pEndRecInfo->mnStartRecId, "RecordParser::parseStream - context records mismatch" );
             (void)pEndRecInfo;  // suppress compiler warning for unused variable
-            RecordContextRef xCurrContext = mxStack->getCurrentContext();
+            ContextHandlerRef xCurrContext = mxStack->getCurrentContext();
             if( xCurrContext.is() )
             {
                 // context end record may contain some data, handle it as simple record
@@ -302,14 +308,14 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
             if( (mxStack->getCurrentRecId() == nRecId) && !mxStack->hasCurrentEndRecId() )
                 mxStack->popContext();
             // try to start a new context
-            RecordContextRef xCurrContext = mxStack->getCurrentContext();
+            ContextHandlerRef xCurrContext = mxStack->getCurrentContext();
             if( xCurrContext.is() )
             {
                 aRecStrm.seek( 0 );
                 xCurrContext = xCurrContext->createRecordContext( nRecId, aRecStrm );
             }
             // track all context identifiers on the stack (do not push simple records)
-            const RecordInfo* pStartRecInfo = mxRecInfoProvider->getStartRecordInfo( nRecId );
+            const RecordInfo* pStartRecInfo = getStartRecordInfo( nRecId );
             if( pStartRecInfo )
                 mxStack->pushContext( *pStartRecInfo, xCurrContext );
             // import the record
@@ -335,24 +341,16 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( S
     maSource = RecordInputSource();
 }
 
-void RecordParser::pushContext( sal_Int32 nRecId, const RecordContextRef& rxContext )
+const RecordInfo* RecordParser::getStartRecordInfo( sal_Int32 nRecId ) const
 {
-    const RecordInfo* pRecInfo = mxRecInfoProvider->getStartRecordInfo( nRecId );
-    OSL_ENSURE( pRecInfo, "RecordParser::pushContext - invalid record identifier" );
-    OSL_ENSURE( (pRecInfo->mnEndRecId >= 0) || mxStack->empty() || mxStack->hasCurrentEndRecId(),
-        "RecordParser::pushContext - nested incomplete context record identifiers" );
-    mxStack->pushContext( *pRecInfo, rxContext );
-    if( rxContext.is() )
-    {
-        RecordDataSequence aEmptyData;
-        RecordInputStream aRecStrm( aEmptyData );
-        rxContext->startRecord( nRecId, aRecStrm );
-    }
+    RecordInfoMap::const_iterator aIt = maStartMap.find( nRecId );
+    return (aIt == maStartMap.end()) ? 0 : &aIt->second;
 }
 
-void RecordParser::popContext()
+const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
 {
-    mxStack->popContext();
+    RecordInfoMap::const_iterator aIt = maEndMap.find( nRecId );
+    return (aIt == maEndMap.end()) ? 0 : &aIt->second;
 }
 
 // ============================================================================
