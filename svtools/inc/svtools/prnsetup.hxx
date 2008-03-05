@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:32:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ private:
     FixedText       maFtName;
     ListBox         maLbName;
     PushButton      maBtnProperties;
+    PushButton      maBtnOptions;
     FixedText       maFtStatus;
     FixedInfo       maFiStatus;
     FixedText       maFtType;
@@ -95,6 +96,7 @@ private:
     SVT_DLLPRIVATE void         ImplSetInfo();
 
                     DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
+                    DECL_DLLPRIVATE_LINK( ImplOptionsHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplStatusHdl, Timer* );
 
@@ -109,6 +111,9 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual short   Execute();
+
+    void                SetOptionsHdl( const Link& rLink );
+    const Link&         GetOptionsHdl() const;
 };
 
 // --------------------------------------
