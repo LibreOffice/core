@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Graphic.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:37:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@ module com { module sun { module star { module graphic
 
     <p>The main interface that has to be implemented for this service
     is the <type>XGraphic</type> interface, which itself exposes only
-    a few methods. Beside this, a <service>Graphic</service> service
-    incorporates the <service>GraphicDescriptor</service> to give
+    a few methods. Beside this, a <type>Graphic</type> service
+    incorporates the <type>GraphicDescriptor</type> to give
     access to the attributes of the graphic.
 
     @see XGraphic
