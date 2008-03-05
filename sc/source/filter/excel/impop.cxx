@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:24:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1175,8 +1175,7 @@ void ImportExcel::AdjustRowHeight()
         update inside of ScDocShell::ConvertFrom() (causes update of existing
         charts during each and every change of row height). */
     if( ScModelObj* pDocObj = GetDocModelObj() )
-        for( SCTAB nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
-            pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
+        pDocObj->UpdateAllRowHeights();
 }
 
 
