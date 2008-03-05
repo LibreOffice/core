@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DbTableDataWindowState.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:39:07 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema oor:name="DbTableDataWindowState" oor:package="org.openoffice.Office.UI" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <info>
+		<author>CD</author>
+		<desc>Contains state information of all dockable user interface elements based on a Window class which belongs to the database browser module.</desc>
+	</info>
+	<import oor:component="org.openoffice.Office.UI.WindowState"/>
+	<uses oor:component="org.openoffice.Office.UI.WindowState"/>
+	<templates/>
+	<component>
+		<group oor:name="UIElements">
+		    <info>
+		        <desc>Contains user interface element state data specific for the data source browser module."</desc>
+		    </info>
+			<set oor:name="States" oor:node-type="WindowStateType" oor:component="org.openoffice.Office.UI.WindowState">
+		        <info>
+		            <desc>Contains states of all known dockable user interface elements of the data source browser module."</desc>
+		        </info>
+			</set>
+		</group>
+	</component>
+</oor:component-schema>
