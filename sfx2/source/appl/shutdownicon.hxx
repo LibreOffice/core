@@ -70,7 +70,7 @@ typedef ::cppu::WeakComponentImplHelper4<
 #define WRITER_URL      "private:factory/swriter"
 #define CALC_URL        "private:factory/scalc"
 #define IMPRESS_URL     "private:factory/simpress"
-#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
+#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
 #define BASE_URL        "private:factory/sdatabase?Interactive"
@@ -191,6 +191,9 @@ extern "C" {
     // builtin win32 systray
     void win32_init_sys_tray();
     void win32_shutdown_sys_tray();
+#  elif defined QUARTZ
+    void aqua_init_systray();
+    void aqua_shutdown_systray();
 #  endif
     // external plugin systray impl.
     void plugin_init_sys_tray();
