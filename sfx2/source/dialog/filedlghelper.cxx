@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:19:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1379,9 +1379,17 @@ void FileDialogHelper_Impl::preExecute()
     implInitializeFileName( );
     // #106079# / 2002-12-09 / fs@openoffice.org
 
+#if !(defined(MACOSX) && defined(QUARTZ))
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
     mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
+#else
+    // However, the Mac OS X implementation's pickers run modally in execute and so the event doesn't
+    // get through in time... so we call the methods directly
+    enablePasswordBox( sal_True );
+    updateFilterOptionsBox( );
+    updateSelectionBox( );
+#endif
 }
 
 // ------------------------------------------------------------------------
