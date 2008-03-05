@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:29:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,16 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
     return *(new OFormattedField(xContext));
 }
 
+uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
+{
+    ::rtl::OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
+    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+}
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormattedFieldBase(m_aMutex)
-,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
+,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
@@ -100,7 +105,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
                                  ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                                  ,uno::Reference< drawing::XShape >& _xShape)
 :FormattedFieldBase(m_aMutex)
-,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
+,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
@@ -177,8 +182,9 @@ sal_Bool SAL_CALL OFormattedField::supportsService(const ::rtl::OUString& Servic
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL(OFormattedField)
-REPORTCOMPONENT_IMPL2(OFormattedField)
+REPORTCOMPONENT_IMPL(OFormattedField,m_aProps.aComponent)
+REPORTCOMPONENT_IMPL2(OFormattedField,m_aProps.aComponent)
+REPORTCOMPONENT_NOMASTERDETAIL(OFormattedField)
 REPORTCONTROLFORMAT_IMPL(OFormattedField,m_aProps.aFormatProperties)
 
 // -----------------------------------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:30:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,8 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             ,PROPERTY_VISITEDCHARSTYLENAME
             ,PROPERTY_UNVISITEDCHARSTYLENAME
             ,PROPERTY_CHARKERNING
+            ,PROPERTY_MASTERFIELDS
+            ,PROPERTY_DETAILFIELDS
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
@@ -213,8 +215,9 @@ sal_Bool SAL_CALL OImageControl::supportsService(const ::rtl::OUString& ServiceN
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL(OImageControl)
-REPORTCOMPONENT_IMPL2(OImageControl)
+REPORTCOMPONENT_IMPL(OImageControl,m_aProps.aComponent)
+REPORTCOMPONENT_IMPL2(OImageControl,m_aProps.aComponent)
+REPORTCOMPONENT_NOMASTERDETAIL(OImageControl)
 //REPORTCONTROLFORMAT_IMPL(OImageControl,m_aProps.aFormatProperties)
 NO_REPORTCONTROLFORMAT_IMPL(OImageControl)
 ::rtl::OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
