@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylesbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/condformatbuffer.hxx"
-#include "oox/xls/ooxtokens.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -115,10 +115,10 @@ const sal_Int32 OOX_STYLE_LEVELCOUNT        = 7;        /// Number of outline le
 // OOBIN constants ------------------------------------------------------------
 
 // OOBIN color types
-const sal_uInt8 OOBIN_COLOR_AUTO            = 1;
-const sal_uInt8 OOBIN_COLOR_INDEXED         = 3;
-const sal_uInt8 OOBIN_COLOR_RGB             = 5;
-const sal_uInt8 OOBIN_COLOR_THEME           = 7;
+const sal_uInt8 OOBIN_COLOR_AUTO            = 0;
+const sal_uInt8 OOBIN_COLOR_INDEXED         = 1;
+const sal_uInt8 OOBIN_COLOR_RGB             = 2;
+const sal_uInt8 OOBIN_COLOR_THEME           = 3;
 
 // OOBIN diagonal borders
 const sal_uInt8 OOBIN_BORDER_DIAG_TLBR      = 0x01;     /// Top-left to bottom-right.
@@ -168,6 +168,8 @@ const sal_uInt16 OOBIN_DXF_FONT_OUTLINE     = 30;
 const sal_uInt16 OOBIN_DXF_FONT_SHADOW      = 31;
 const sal_uInt16 OOBIN_DXF_FONT_CONDENSE    = 32;
 const sal_uInt16 OOBIN_DXF_FONT_EXTEND      = 33;
+const sal_uInt16 OOBIN_DXF_FONT_CHARSET     = 34;
+const sal_uInt16 OOBIN_DXF_FONT_FAMILY      = 35;
 const sal_uInt16 OOBIN_DXF_FONT_HEIGHT      = 36;
 const sal_uInt16 OOBIN_DXF_FONT_SCHEME      = 37;
 const sal_uInt16 OOBIN_DXF_NUMFMT_CODE      = 38;
@@ -349,36 +351,35 @@ void OoxColor::importColor( const AttributeList& rAttribs )
 
 void OoxColor::importColor( RecordInputStream& rStrm )
 {
-    switch( rStrm.readuInt8() )
+    sal_uInt8 nFlags, nIndex;
+    sal_Int16 nTint;
+    rStrm >> nFlags >> nIndex >> nTint;
+    switch( extractValue< sal_uInt8 >( nFlags, 1, 7 ) )
     {
         case OOBIN_COLOR_AUTO:
             mnType = XML_auto;
-            mfTint = 0.0;
-            rStrm.skip( 7 );
+            rStrm.skip( 4 );
         break;
         case OOBIN_COLOR_INDEXED:
             mnType = XML_indexed;
-            mnValue = rStrm.readuInt8();
-            mfTint = 0.0;
-            rStrm.skip( 6 );
+            mnValue = nIndex;
+            rStrm.skip( 4 );
         break;
         case OOBIN_COLOR_RGB:
-            rStrm.skip( 3 );
             importColorRgb( rStrm );
         break;
         case OOBIN_COLOR_THEME:
             mnType = XML_theme;
-            mnValue = rStrm.readuInt8();
-            // scale tint from signed 16-bit to double range -1.0 ... 1.0
-            mfTint = static_cast< double >( rStrm.readInt16() ) / 0x7FFF;
+            mnValue = nIndex;
             rStrm.skip( 4 );
         break;
         default:
             OSL_ENSURE( false, "OoxColor::importColor - unknown color type" );
             mnType = XML_auto;
-            mfTint = 0.0;
-            rStrm.skip( 7 );
+            rStrm.skip( 4 );
     }
+    // scale tint from signed 16-bit to double range -1.0 ... 1.0
+    mfTint = static_cast< double >( nTint ) / 0x8000;
 }
 
 void OoxColor::importColorId( RecordInputStream& rStrm )
@@ -1229,8 +1230,8 @@ void Alignment::finalizeImport()
     sal_Int32 nIndent = 0;
     switch( getFilterType() )
     {
-        case FILTER_OOX:    nIndent = getUnitConverter().calcMm100FromSpaces( 3.0 * maOoxData.mnIndent );   break;
-        case FILTER_BIFF:   nIndent = getUnitConverter().calcMm100FromPoints( 10.0 * maOoxData.mnIndent );  break;
+        case FILTER_OOX:    nIndent = getUnitConverter().scaleToMm100( 3.0 * maOoxData.mnIndent, UNIT_SPACE );  break;
+        case FILTER_BIFF:   nIndent = getUnitConverter().scaleToMm100( 10.0 * maOoxData.mnIndent, UNIT_POINT ); break;
         case FILTER_UNKNOWN: break;
     }
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
@@ -1254,8 +1255,8 @@ void Alignment::finalizeImport()
     maApiData.meOrientation = (nOoxRot == OOX_XF_ROTATION_STACKED) ?
         csstab::CellOrientation_STACKED : csstab::CellOrientation_STANDARD;
 
-    // alignment flags
-    maApiData.mbWrapText = maOoxData.mbWrapText;
+    // alignment flags (#i84960 automatic line break, if vertically justified/distributed)
+    maApiData.mbWrapText = maOoxData.mbWrapText || (maOoxData.mnVerAlign == XML_distributed) || (maOoxData.mnVerAlign == XML_justify);
     maApiData.mbShrink = maOoxData.mbShrink;
 
 }
