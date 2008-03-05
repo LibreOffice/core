@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:45:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,27 +91,13 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
-#ifndef _COM_SUN_STAR_REPORT_XFIXEDTEXT_HPP_
 #include <com/sun/star/report/XFixedText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XImageControl_HPP_
 #include <com/sun/star/report/XImageControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XSHAPE_HPP_
 #include <com/sun/star/report/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XFUNCTION_HPP_
 #include <com/sun/star/report/XFunction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
@@ -440,15 +426,15 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
     SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, sal_True, sal_True);
 }
 // -----------------------------------------------------------------------------
-void ORptExport::exportMasterDetailFields(const Reference<XReportDefinition>& _xReportDefinition)
+void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
 {
-    uno::Sequence< ::rtl::OUString> aMasterFields = _xReportDefinition->getMasterFields();
+    const uno::Sequence< ::rtl::OUString> aMasterFields = _xReportComponet->getMasterFields();
     if ( aMasterFields.getLength() )
     {
         SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, sal_True, sal_True);
-        uno::Sequence< ::rtl::OUString> aDetailFields = _xReportDefinition->getDetailFields();
+        const uno::Sequence< ::rtl::OUString> aDetailFields = _xReportComponet->getDetailFields();
 
-        OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for amster and detail fields!");
+        OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
 
         const ::rtl::OUString* pDetailFieldsIter = aDetailFields.getConstArray();
         const ::rtl::OUString* pIter = aMasterFields.getConstArray();
@@ -469,6 +455,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
     {
         exportFunctions(_xReportDefinition->getFunctions().get());
         exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
+        //exportMasterDetailFields(_xReportDefinition.get());
 
         if ( _xReportDefinition->getReportHeaderOn() )
         {
@@ -554,7 +541,7 @@ void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _x
 {
     OSL_ENSURE(_xReportElement.is(),"_xReportElement is NULL -> GPF");
     ::rtl::OUString sDataField = convertFormula(_xReportElement->getDataField());
-    sal_Int32 nCount = _xReportElement->getCount();
+    const sal_Int32 nCount = _xReportElement->getCount();
     try
     {
         for (sal_Int32 i = 0; i < nCount ; ++i)
@@ -584,7 +571,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     if ( !_xReportElement->getPrintRepeatedValues() )
         AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES,XML_FALSE);
 
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT, sal_False, sal_False);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT, sal_True, sal_True);
     if ( _xReportElement->getCount() )
     {
         exportFormatConditions(_xReportElement);
@@ -594,7 +581,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     if ( sExpr.getLength() )
     {
         exportFormula(XML_FORMULA,sExpr);
-        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_False, sal_False);
+        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_True);
     } // if ( sExpr.getLength() )
 
     // only export when parent exists
@@ -1050,9 +1037,8 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 
                                 if ( eToken == XML_GROUP && xSection.is() )
                                     exportContainer(xSection);
-                                else if ( eToken == XML_SUB_DOCUMENT )
+                                else if ( eToken == XML_SUB_DOCUMENT && xReportDefinition.is() )
                                 {
-                                    exportMasterDetailFields(xReportDefinition);
                                     SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY,sal_True, sal_True );
                                     SvXMLElementExport aElem( *this, sal_True,
                                                             XML_NAMESPACE_OFFICE, XML_REPORT,
@@ -1689,16 +1675,26 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
     UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
     xShapeExport->seekShapes(_xSection.get());
     const sal_Int32 nCount = _xSection->getCount();
-    awt::Point aRefPoint;
     ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
     if ( _bAddParagraph )
         pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False));
+
+    awt::Point aRefPoint;
     aRefPoint.X = rptui::getStyleProperty<sal_Int32>(_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference< XShape > xShape(_xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xShape.is() )
         {
+            ::std::auto_ptr<SvXMLElementExport> pSubDocument;
+            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"))),uno::UNO_QUERY);
+            if ( xModel.is() ) // special handlingfor chart object
+            {
+                pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
+                exportMasterDetailFields(xShape.get());
+                exportReportElement(xShape.get());
+            }
+
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
             xShapeExport->exportShape(xShape.get(),SEF_DEFAULT|SEF_EXPORT_NO_WS,&aRefPoint);
         }
