@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:53:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bCanceled(sal_False)
         ,m_bTitleAmbiguous(sal_True)
         ,m_xORB( _rxContext->getServiceManager(), UNO_QUERY_THROW )
+        ,m_xContext(_rxContext)
 {
     registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
