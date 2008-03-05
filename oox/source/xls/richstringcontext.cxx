@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richstringcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,11 @@ namespace xls {
 
 // ============================================================================
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxRichStringContext::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxRichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    sal_Int32 nCurrContext = getCurrentContext();
-    switch( nCurrContext )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( si ):
         case XLS_TOKEN( is ):
@@ -62,18 +61,18 @@ bool OoxRichStringContext::onCanCreateContext( sal_Int32 nElement ) const
         case XLS_TOKEN( rPh ):
             return  (nElement == XLS_TOKEN( t ));
         case XLS_TOKEN( rPr ):
-            return Font::isSupportedContext( nElement, nCurrContext );
+            return  Font::isSupportedContext( nElement, getCurrentElement() );
     }
     return false;
 }
 
 void OoxRichStringContext::onStartElement( const AttributeList& rAttribs )
 {
-    sal_Int32 nCurrContext = getCurrentContext();
+    sal_Int32 nCurrContext = getCurrentElement();
     switch( nCurrContext )
     {
         case XLS_TOKEN( t ):
-            if( !isPreviousContext( XLS_TOKEN( r ) ) && !isPreviousContext( XLS_TOKEN( rPh ) ) )
+            if( !isPreviousElement( XLS_TOKEN( r ) ) && !isPreviousElement( XLS_TOKEN( rPh ) ) )
                 mxPortion = mxString->importText( rAttribs );
         break;
         case XLS_TOKEN( r ):
@@ -89,17 +88,17 @@ void OoxRichStringContext::onStartElement( const AttributeList& rAttribs )
             mxString->importPhoneticPr( rAttribs );
         break;
         default:
-            if( isPreviousContext( XLS_TOKEN( rPr ) ) && mxFont.get() )
+            if( isPreviousElement( XLS_TOKEN( rPr ) ) && mxFont.get() )
                 mxFont->importAttribs( nCurrContext, rAttribs );
     }
 }
 
 void OoxRichStringContext::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( t ):
-            switch( getPreviousContext() )
+            switch( getPreviousElement() )
             {
                 case XLS_TOKEN( rPh ):
                     if( mxPhonetic.get() ) mxPhonetic->setText( rChars );
