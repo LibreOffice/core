@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:51 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:35:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,14 @@ AFLAGS=/c /Cp /coff
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=
 
-CC*:=$(WRAPCMD) cl
+CC*:=cl
 .IF "$(bndchk)" != ""
 CXX*=nmcl
 .ELSE
 .IF "$(truetime)" != ""
 CXX*=nmcl /NMttOn
 .ELSE
-CXX*:=$(WRAPCMD) cl
+CXX*:=cl
 .ENDIF
 .ENDIF # "$(bndchk)" != ""
 
@@ -226,7 +226,7 @@ CDEFS+=-D_MT
 
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 
-LINK=$(WRAPCMD) link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
@@ -304,8 +304,8 @@ LIBSTLPORTST=stlport_vc71_static.lib
 ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
 ATL_LIB*=$(COMPATH)$/atlmfc$/lib
 
-LIBMGR=$(WRAPCMD) lib $(NOLOGO)
-IMPLIB=$(WRAPCMD) lib
+LIBMGR=lib $(NOLOGO)
+IMPLIB=lib
 LIBFLAGS=
 
 IMPLIBFLAGS=-machine:IX86
@@ -313,7 +313,7 @@ IMPLIBFLAGS=-machine:IX86
 MAPSYM=
 MAPSYMFLAGS=
 
-RC=$(WRAPCMD) rc
+RC=rc
 RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
 RCLINKFLAGS=
@@ -324,7 +324,7 @@ DLLPOSTFIX=mi
 PCHPOST=.pch
 
 CSC*=$(FLIPCMD) csc
-VBC*=$(WRAPCMD) vbc
+VBC*=vbc
 
 ADVAPI32LIB=advapi32.lib
 SHELL32LIB=shell32.lib
