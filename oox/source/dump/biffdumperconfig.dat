@@ -1,8 +1,21 @@
 ﻿
 # dumper settings ============================================================
 
-# Path to base configuration data, relative to this file.
+# Path to additional configuration data, relative to this file.
 include-config-file=dumperconfig.dat
+include-config-file=dffdumperconfig.dat
+include-config-file=olestoragedumperconfig.dat
+
+# Enable entire dumper (default=off). This option does not affect the option
+# 'enable-import'.
+#   0=off, 1=on
+enable-dumper=1
+
+# Enable import after dumping (default=on). Disabling this option allows
+# to dump a file without loading it. This option is independent from the
+# 'enable-dumper' option.
+#   0=off, 1=on
+enable-import=1
 
 # BIFF record settings -------------------------------------------------------
 
@@ -377,7 +390,7 @@ multilist=RECORD-NAMES-BIFF8
   include=RECORD-NAMES-BIFF5
   # worksheet/workbook records
   0x00E0=,,,,,CELLMERGING,,
-  0x00E8=,BITMAP,,MSODRAWINGGROUP,MSODRAWING,MSODRAWINGSELECTION,,PHONETICPR
+  0x00E8=,PICTURE,,MSODRAWINGGROUP,MSODRAWING,MSODRAWINGSELECTION,,PHONETICPR
   0x00F0=SXRULE,SXEX,SXFILT,,,,SXNAME,SXSELECT
   0x00F8=SXPAIR,SXFMLA,,SXFORMAT,SST,LABELSST,,EXTSST
   0x0100=SXVDEX,,,SXFORMULA,,,,
@@ -981,6 +994,7 @@ combilist=COLINFO-FLAGS
   0x0001=hidden
   0x0002=custom-width
   0x0004=best-fit
+  0x0008=show-phonetic
   0x0700=uint8,dec,outline-level
   0x1000=outline-collapsed
 end
@@ -1340,7 +1354,7 @@ end
 # SHEET ----------------------------------------------------------------------
 
 shortlist=SHEET-STATE,0,visible,hidden,very-hidden
-shortlist=SHEET-TYPE,0,worksheet,,chart,,,,vb-module
+shortlist=SHEET-TYPE,0,worksheet,macrosheet,chartsheet,,,,vb-module
 
 # SHEETPR --------------------------------------------------------------------
 
@@ -1348,7 +1362,6 @@ shortlist=SHEETPR-WINDOWPOS,0,tiled,horizontal,vertical,cascaded
 
 flagslist=SHEETPR-FLAGS-BIFF3
   0x0001=show-autopagebreaks
-  0x0010=dialog-sheet
   0x0020=outline-auto-style
   0x0040=outline-symbols-below
   0x0080=outline-symbols-right
@@ -1368,6 +1381,7 @@ end
 flagslist=SHEETPR-FLAGS-BIFF5
   include=SHEETPR-FLAGS-BIFF4
   exclude=0x0200,0x3000
+  0x0010=dialog-sheet
 end
 
 # SHEETPROTECTION ------------------------------------------------------------
