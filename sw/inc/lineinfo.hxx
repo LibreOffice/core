@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineinfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:26:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,11 @@
 #ifndef _CALBCK_HXX
 #include "calbck.hxx"
 #endif
-#ifndef _NUMRULE_HXX
-#include "numrule.hxx"
+//#ifndef _NUMRULE_HXX
+//#include <numrule.hxx>
+//#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
