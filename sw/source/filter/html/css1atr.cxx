@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:45:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,10 @@
 #include "htmlnum.hxx"
 
 #include <IDocumentStylePoolAccess.hxx>
+
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
