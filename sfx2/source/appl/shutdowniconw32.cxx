@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:25:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,13 +113,6 @@ using namespace ::osl;
 #define IDM_INSTALL                 10
 #define IDM_UNINSTALL               11
 
-
-#if defined(USE_APP_SHORTCUTS)
-#ifdef IMPRESS_WIZARD_URL
-#undef IMPRESS_WIZARD_URL
-#endif
-#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
-#endif
 
 #define ICON_SO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
