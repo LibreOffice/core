@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:41:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -891,26 +891,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
                                                                 ::rtl::OUString* pMediaType )
     throw()
 {
-    uno::Reference< io::XInputStream > xInStream;
-    if ( xObj.is() )
-    {
-        try
-        {
-            // retrieving of the visual representation can switch object to running state
-            embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
-            if ( pMediaType )
-                *pMediaType = aRep.Flavor.MimeType;
-
-            uno::Sequence < sal_Int8 > aSeq;
-            aRep.Data >>= aSeq;
-            xInStream = new ::comphelper::SequenceInputStream( aSeq );
-        }
-        catch ( uno::Exception& )
-        {
-        }
-    }
-
-    return xInStream;
+    return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
