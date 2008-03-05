@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagramfragmenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ namespace oox { namespace drawingml {
 class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramDataFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
+    DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
     virtual ~DiagramDataFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -62,7 +62,7 @@ private:
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramLayoutFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();
+    DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();
     virtual ~DiagramLayoutFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -76,7 +76,7 @@ private:
 class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramQStylesFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, const DiagramQStylesPtr pDataPtr ) throw();
+    DiagramQStylesFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramQStylesPtr pDataPtr ) throw();
     virtual ~DiagramQStylesFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -91,7 +91,7 @@ private:
 class DiagramColorsFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramColorsFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, const DiagramColorsPtr pDataPtr ) throw();
+    DiagramColorsFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramColorsPtr pDataPtr ) throw();
     virtual ~DiagramColorsFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
