@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:16:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,10 @@ struct ImplSVNWFData
     bool                    mbProgressNeedsErase;         // set true for platforms that should draw the
                                                           // window background before drawing the native
                                                           // progress bar
+    bool                    mbCheckBoxNeedsErase;         // set true for platforms that should draw the
+                                                          // window background before drawing the native
+                                                          // checkbox
+    bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
 };
 
 
