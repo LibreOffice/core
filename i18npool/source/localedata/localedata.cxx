@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:35:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,8 @@ static const struct {
     { "hy_AM",  lcl_DATA_OTHERS },
     { "hil_PH", lcl_DATA_OTHERS },
     { "so_SO",  lcl_DATA_OTHERS },
+    { "gug_PY", lcl_DATA_OTHERS },
+    { "tk_TM",  lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
@@ -706,6 +708,11 @@ LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
     return seq;
 }
 
+#define COLLATOR_OFFSET_ALGO    0
+#define COLLATOR_OFFSET_DEFAULT 1
+#define COLLATOR_OFFSET_RULE    2
+#define COLLATOR_ELEMENTS       3
+
 OUString SAL_CALL
 LocaleData::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
@@ -714,8 +721,8 @@ LocaleData::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& a
             sal_Int16 collatorCount = 0;
             sal_Unicode **collatorArray = func(collatorCount);
             for(sal_Int16 i = 0; i < collatorCount; i++)
-                if (algorithm.equals(collatorArray[i*3]))
-                    return OUString(collatorArray[i*3 + 2]);
+                if (algorithm.equals(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO]))
+                    return OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_RULE]);
         }
         return OUString();
 }
@@ -733,8 +740,9 @@ LocaleData::getCollatorImplementations( const Locale& rLocale ) throw(RuntimeExc
             collatorArray = func(collatorCount);
             Sequence< Implementation > seq(collatorCount);
             for(sal_Int16 i = 0; i < collatorCount; i++) {
-              Implementation impl(collatorArray[i*2],
-                                  sal::static_int_cast<sal_Bool>(collatorArray[i*2 + 1][0]));
+              Implementation impl(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO],
+                      sal::static_int_cast<sal_Bool>(
+                          collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0]));
               seq[i] = impl;
             }
             return seq;
