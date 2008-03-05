@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PentahoReportEngine.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho;
 
 import com.sun.star.report.JobDefinitionException;
@@ -47,35 +45,36 @@ import org.jfree.report.JFreeReportBoot;
 
 public class PentahoReportEngine implements ReportEngine
 {
-  private ReportEngineMetaData metaData;
 
-  public PentahoReportEngine ()
-  {
-    JFreeReportBoot.getInstance().start();
-    this.metaData = new PentahoReportEngineMetaData();
-  }
+    private ReportEngineMetaData metaData;
 
-  public ReportEngineMetaData getMetaData ()
-  {
-    return metaData;
-  }
+    public PentahoReportEngine()
+    {
+        JFreeReportBoot.getInstance().start();
+        this.metaData = new PentahoReportEngineMetaData();
+    }
 
-  public ReportJobDefinition createJobDefinition ()
-  {
-    return new DefaultReportJobDefinition(metaData);
-  }
+    public ReportEngineMetaData getMetaData()
+    {
+        return metaData;
+    }
 
-  /**
-   * Open points: How to define scheduling?
-   *
-   * @return the report job definition for the job description.
-   *
-   * @throws com.sun.star.report.JobDefinitionException
-   *
-   */
-  public ReportJob createJob (final ReportJobDefinition definition)
-          throws JobDefinitionException
-  {
-    return new PentahoReportJob(definition);
-  }
+    public ReportJobDefinition createJobDefinition()
+    {
+        return new DefaultReportJobDefinition(metaData);
+    }
+
+    /**
+     * Open points: How to define scheduling?
+     *
+     * @return the report job definition for the job description.
+     *
+     * @throws com.sun.star.report.JobDefinitionException
+     *
+     */
+    public ReportJob createJob(final ReportJobDefinition definition)
+            throws JobDefinitionException
+    {
+        return new PentahoReportJob(definition);
+    }
 }
