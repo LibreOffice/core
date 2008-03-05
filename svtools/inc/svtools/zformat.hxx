@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:56:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,10 @@
 
 // If comment field is also in format code string, was used for SUPD versions 371-372
 #define NF_COMMENT_IN_FORMATSTRING 0
+
+namespace utl {
+    class DigitGroupingIterator;
+}
 
 class SvStream;
 class Color;
@@ -545,7 +549,8 @@ private:
                     xub_StrLen nStart,
                     xub_StrLen& k,
                     USHORT nIx,
-                    USHORT nThousandCnt );
+                    xub_StrLen & nDigitCount,
+                    utl::DigitGroupingIterator & );
 
     SVT_DLLPRIVATE BOOL ImpGetDateOutput( double fNumber,
                        USHORT nIx,
