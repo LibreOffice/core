@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:13:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,12 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     {
         Pos = MAP_APPFONT ( 0, 78 );
         Size = MAP_APPFONT ( 260, 2 );
+    };
+    PushButton BTN_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 5 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Options..." ;
     };
     OKButton BTN_OK
     {
