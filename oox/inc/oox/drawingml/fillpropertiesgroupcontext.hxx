@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillpropertiesgroupcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,8 @@
 #ifndef OOX_DRAWINGML_FILLPROPERTIESGROUPCONTEXT_HPP
 #define OOX_DRAWINGML_FILLPROPERTIESGROUPCONTEXT_HPP
 
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
-#include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/fillproperties.hxx"
-#include <com/sun/star/drawing/BitmapMode.hpp>
 
 namespace oox { namespace core {
     class PropertyMap;
@@ -55,13 +48,13 @@ namespace oox { namespace drawingml {
 
 // ---------------------------------------------------------------------
 
-class FillPropertiesGroupContext : public ::oox::core::Context
+class FillPropertiesGroupContext : public ::oox::core::ContextHandler
 {
 public:
-    FillPropertiesGroupContext( const oox::core::FragmentHandlerRef& xHandler, ::com::sun::star::drawing::FillStyle eFillStyle, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    FillPropertiesGroupContext( oox::core::ContextHandler& rParent, ::com::sun::star::drawing::FillStyle eFillStyle, FillProperties& rFillProperties ) throw();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > StaticCreateContext( const oox::core::FragmentHandlerRef& xHandler,
-        ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs, ::oox::drawingml::FillProperties& rFillProperties )
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > StaticCreateContext( oox::core::ContextHandler& rParent,
+        ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs, FillProperties& rFillProperties )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
 protected:
@@ -73,9 +66,9 @@ protected:
 class BlipFillPropertiesContext : public FillPropertiesGroupContext
 {
 public:
-    BlipFillPropertiesContext( const oox::core::FragmentHandlerRef& xHandler,
+    BlipFillPropertiesContext( oox::core::ContextHandler& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-            ::oox::drawingml::FillProperties& rFillProperties ) throw();
+            FillProperties& rFillProperties ) throw();
 
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -85,7 +78,6 @@ public:
 
 private:
     ::com::sun::star::drawing::BitmapMode   meBitmapMode;
-    sal_Int32       mnWidth, mnHeight;
     rtl::OUString   msEmbed;
     rtl::OUString   msLink;
 };
