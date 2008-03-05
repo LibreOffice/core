@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:51:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1601,12 +1601,5 @@ void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColum
 
     OSQLMessageBox aMsg(this,sTitle,sMessage);
     aMsg.Execute();
-}
-// -----------------------------------------------------------------------------
-void OCopyTableWizard::SetTableName( const ::rtl::OUString& _rName )
-{
-    if ( _rName.getLength() != 0 )
-        m_sName = _rName;
-
 }
 //-------------------------------------------------------------------------------
