@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.226 $
+#   $Revision: 1.227 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:42:15 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:31:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -904,10 +904,10 @@ MKDEPFLAGS+=$(MKDEPLOCAL)
 BISON=bison
 YACCFLAGS*=-d 
 
-SVIDL=$(WRAPCMD) svidl
+SVIDL=svidl
 
-LDUMP=$(WRAPCMD) ldump4
-LDUMP2=$(WRAPCMD) ldump4
+LDUMP=ldump4
+LDUMP2=ldump4
 
 ZIPUPDATE=-u -j
 ZIPFLAGS=$(ZIPUPDATE)
@@ -921,7 +921,7 @@ SCPLINKFLAGS+=-v $(SCPLINKVERSION)
 .ENDIF			# "$(SCPLINKVERSION)"!=""
 
 .IF "$(make_srs_deps)"!=""
-RSC=$(WRAPCMD) rscdep
+RSC=rscdep
 .ELSE # "$(make_srs_deps)"!=""
 RSC=$(FLIPCMD) rsc
 .ENDIF # "$(make_srs_deps)"!=""
@@ -974,13 +974,13 @@ LNTFLAGSOUTOBJ=-os
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
-IDLC*=$(WRAPCMD) idlc
-REGMERGE*=$(WRAPCMD) regmerge
-REGCOMPARE*=$(WRAPCMD) regcompare
-REGCOMP*=$(WRAPCMD_ENV) regcomp
-CPPUMAKER*=$(WRAPCMD) cppumaker
-JAVAMAKER*=$(WRAPCMD) javamaker
-RDBMAKER*=$(WRAPCMD) rdbmaker
+IDLC*=idlc
+REGMERGE*=regmerge
+REGCOMPARE*=regcompare
+REGCOMP*=regcomp
+CPPUMAKER*=cppumaker
+JAVAMAKER*=javamaker
+RDBMAKER*=rdbmaker
 .IF "$(JAVAINTERPRETER)" == ""
 JAVA*:=java
 .ELSE
@@ -991,9 +991,9 @@ JAVA*:=$(JAVAINTERPRETER)
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
 # pathes. (See iz57443)
 SCPCOMP=$(PERL) $(SOLARENV)$/bin$/pre2par.pl
-SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin$/par2script.pl
+SCPLINK=$(PERL) $(SOLARENV)$/bin$/par2script.pl
 LZIP*=lzip
-CPPLCC*=$(WRAPCMD) cpplcc
+CPPLCC*=cpplcc
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk
