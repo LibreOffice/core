@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 15:01:49 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:33:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,9 @@
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
-.IF "$(WRAPCMD)"==""
 INCLUDE!:=$(subst,$/stl, $(SOLARINC))
-.ELSE
-INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(subst,$/stl, $(SOLARINC)))
-.ENDIF                  # "$(WRAPCMD)"==""
 .ELSE			# "$(EXT_USE_STLPORT)"==""
-.IF "$(WRAPCMD)"==""
 INCLUDE!:=$(SOLARINC)
-.ELSE
-INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(SOLARINC))
-.ENDIF                  # "$(WRAPCMD)"==""
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
@@ -144,21 +136,13 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @-$(RM) $@
-.IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
-.ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
-.ENDIF			# "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @-$(RM) $@
-.IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
-.ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
-.ENDIF			# "$(GUI)"=="UNX"
+    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
