@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptModel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #endif
 #include "UndoEnv.hxx"
 #include "ReportUndoFactory.hxx"
+#include "ReportDefinition.hxx"
 #define ITEMID_COLOR        1
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
@@ -71,9 +72,10 @@ TYPEINIT1(OReportModel,SdrModel);
 
 //----------------------------------------------------------------------------
 
-OReportModel::OReportModel() :
-    SdrModel(NULL,NULL)
-        ,m_pController(NULL)
+OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
+    SdrModel(NULL,_pReportDefinition)
+    ,m_pController(NULL)
+    ,m_pReportDefinition(_pReportDefinition)
 {
     DBG_CTOR( rpt_OReportModel,0);
     SetAllowShapePropertyChangeListener(true);
@@ -99,6 +101,7 @@ OReportModel::~OReportModel()
 // -----------------------------------------------------------------------------
 void OReportModel::detachController()
 {
+    m_pReportDefinition = NULL;
     m_pController = NULL;
     m_pUndoEnv->EndListening( *this );
     ClearUndoBuffer();
@@ -149,7 +152,7 @@ SdrPage* OReportModel::RemovePage(USHORT nPgNum)
     return pPage;
 }
 // -----------------------------------------------------------------------------
-OReportPage* OReportModel::createNewPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection)
+OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection >& _xSection)
 {
     OReportPage* pPage = new OReportPage( *this ,_xSection);
     InsertPage(pPage);
@@ -157,7 +160,7 @@ OReportPage* OReportModel::createNewPage(const ::com::sun::star::uno::Reference<
     return pPage;
 }
 // -----------------------------------------------------------------------------
-OReportPage* OReportModel::getPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection)
+OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)
 {
     OReportPage* pPage = NULL;
     USHORT nCount = GetPageCount();
@@ -181,14 +184,15 @@ SvxNumType OReportModel::GetPageNumType() const
 // -----------------------------------------------------------------------------
 uno::Reference< report::XReportDefinition > OReportModel::getReportDefinition() const
 {
-    if ( !m_pController )
-        return NULL;
-
-    uno::Reference< report::XReportDefinition > xReportDefinition( m_pController->getModel(), uno::UNO_QUERY );
+    uno::Reference< report::XReportDefinition > xReportDefinition = m_pReportDefinition;
     OSL_ENSURE( xReportDefinition.is(), "OReportModel::getReportDefinition: invalid model at our controller!" );
     return xReportDefinition;
 }
-
+// -----------------------------------------------------------------------------
+uno::Reference< uno::XInterface > OReportModel::createUnoModel()
+{
+    return uno::Reference< uno::XInterface >(getReportDefinition(),uno::UNO_QUERY);
+}
 //==================================================================
 }   //rptui
 //==================================================================
