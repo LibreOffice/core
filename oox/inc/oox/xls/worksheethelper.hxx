@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #include "oox/xls/formulabase.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace awt { struct Point; }
+    namespace awt { struct Size; }
     namespace table { class XTableColumns; }
     namespace table { class XTableRows; }
     namespace table { class XCell; }
@@ -68,8 +70,10 @@ class SheetViewSettings;
 enum WorksheetType
 {
     SHEETTYPE_WORKSHEET,            /// Worksheet.
-    SHEETTYPE_CHART,                /// Chart sheet.
-    SHEETTYPE_MACRO                 /// BIFF4 macro sheet.
+    SHEETTYPE_CHARTSHEET,           /// Chart sheet.
+    SHEETTYPE_MACROSHEET,           /// Macro sheet.
+    SHEETTYPE_DIALOGSHEET,          /// Dialog sheet (BIFF5+).
+    SHEETTYPE_MODULESHEET           /// VB module sheet (BIFF5 only).
 };
 
 // ============================================================================
@@ -117,6 +121,7 @@ struct OoxColumnData
     double              mfWidth;            /// Column width in number of characters.
     sal_Int32           mnXfId;             /// Column default formatting.
     sal_Int32           mnLevel;            /// Column outline level.
+    bool                mbShowPhonetic;     /// True = cells in column show phonetic settings.
     bool                mbHidden;           /// True = column is hidden.
     bool                mbCollapsed;        /// True = column outline is collapsed.
 
@@ -215,7 +220,7 @@ class WorksheetData;
 class WorksheetHelper : public WorkbookHelper
 {
 public:
-    explicit            WorksheetHelper( WorksheetData& rSheetData );
+    /*implicit*/        WorksheetHelper( WorksheetData& rSheetData );
 
     /** Returns the type of this sheet. */
     WorksheetType       getSheetType() const;
@@ -292,6 +297,13 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows >
                         getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
 
+    /** Returns the absolute cell position in 1/100 mm. */
+    ::com::sun::star::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
+    /** Returns the cell size in 1/100 mm. */
+    ::com::sun::star::awt::Size getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
+    /** Returns the size of the entire drawing page in 1/100 mm. */
+    ::com::sun::star::awt::Size getDrawPageSize() const;
+
     /** Returns the worksheet settings object. */
     WorksheetSettings&  getWorksheetSettings() const;
     /** Returns the buffer containing all shared formulas in this sheet. */
@@ -331,6 +343,8 @@ public:
     /** Sets cell contents to the cell specified in the passed cell data object. */
     void                setOoxCell( OoxCellData& orCellData, bool bEmptyStringAsFormula = false ) const;
 
+    /** Changes the current sheet type. */
+    void                setSheetType( WorksheetType eSheetType );
     /** Sets the dimension (used area) of the sheet. */
     void                setDimension( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Stores the cell formatting data of the current cell. */
@@ -351,6 +365,8 @@ public:
     void                setLabelRanges(
                             const ApiCellRangeList& rColRanges,
                             const ApiCellRangeList& rRowRanges );
+    /** Sets the path to the DrawingML fragment of this sheet. */
+    void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */
