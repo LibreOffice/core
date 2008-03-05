@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@ class Shape;
 
 typedef boost::shared_ptr< Shape > ShapePtr;
 
+typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
+
 enum ShapeStyle
 {
     SHAPESTYLE_ln,
@@ -64,7 +66,7 @@ enum ShapeStyle
     SHAPESTYLE_effect,
     SHAPESTYLE_font
 };
-typedef std::map< ShapeStyle, oox::drawingml::ColorPtr > ShapeStylesColorMap;
+typedef std::map< ShapeStyle, ColorPtr > ShapeStylesColorMap;
 typedef std::map< ShapeStyle, rtl::OUString > ShapeStylesIndexMap;
 
 class Shape
@@ -110,24 +112,35 @@ public:
     ShapeStylesIndexMap&    getShapeStylesIndex(){ return maShapeStylesIndexMap; };
 
     // addShape is creating and inserting the corresponding XShape.
-    void        addShape( const oox::core::XmlFilterBase& rFilterBase, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                                                        const oox::drawingml::ThemePtr, std::map< ::rtl::OUString, ShapePtr > &,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                                                        const ::com::sun::star::awt::Rectangle* pShapeRect );
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & getXShape() const { return mxShape; }
+    void                addShape(
+                            const oox::core::XmlFilterBase& rFilterBase,
+                            const ThemePtr& rxTheme,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
+                            ShapeIdMap* pShapeMap = 0 );
 
-    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
+                        getXShape() const { return mxShape; }
+
+    virtual void        applyShapeReference( const oox::drawingml::Shape& rReferencedShape );
 
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        createAndInsert( const oox::core::XmlFilterBase& rFilterBase, const rtl::OUString& rServiceName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                                            const oox::drawingml::ThemePtr pThemePtr, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                                            const ::com::sun::star::awt::Rectangle* pShapeRect );
-    void addChilds(  const oox::core::XmlFilterBase& rFilterBase, Shape& rMaster, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                                                        const oox::drawingml::ThemePtr, std::map< ::rtl::OUString, ShapePtr > &,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                                                        const ::com::sun::star::awt::Rectangle& rClientRect );
+                        createAndInsert(
+                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            const ::rtl::OUString& rServiceName,
+                            const ThemePtr& rxTheme,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle* pShapeRect );
+
+    void                addChilds(
+                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            Shape& rMaster,
+                            const ThemePtr& rxTheme,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rClientRect,
+                            ShapeIdMap* pShapeMap );
 
     std::vector< ShapePtr >     maChilds;               // only used for group shapes
     TextBodyPtr                 mpTextBody;
@@ -153,12 +166,16 @@ protected:
 
 private:
 
-    void setShapeStyles( const oox::drawingml::ThemePtr pThemePtr, const oox::core::XmlFilterBase& rFilterBase );
+    void setShapeStyles( const ThemePtr& rxTheme, LineProperties& rLineProperties, FillProperties& rFillProperties );
+    void setShapeStyleColors( const ::oox::core::XmlFilterBase& rFilterBase,
+            LineProperties& rLineProperties, FillProperties& rFillProperties, PropertyMap& rShapeProperties );
 
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
 };
+
+::rtl::OUString GetShapeType( sal_Int32 nType );
 
 } }
 
