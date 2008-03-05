@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:53:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,7 @@ namespace dbaui
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
+            case DST_MYSQL_NATIVE:
             case DST_MYSQL_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MYSQL_DATABASE_NAME)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_MYSQL_DATABASE);
