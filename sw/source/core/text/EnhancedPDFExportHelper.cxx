@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:40:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
+#include <SwNodeNum.hxx>
 
 #include <stack>
 
