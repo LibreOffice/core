@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datamodelcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,17 @@ namespace oox { namespace drawingml {
 
 // CL_Cxn
 class CxnContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    CxnContext( const FragmentHandlerRef& xParent,
+    CxnContext( ContextHandler& rParent,
                 const Reference< XFastAttributeList >& xAttribs,
                 const dgm::ConnectionPtr & pConnection )
-        : Context( xParent )
+        : ContextHandler( rParent )
         , mpConnection( pConnection )
         {
+            sal_Int32 nType = xAttribs->getOptionalValueToken( XML_type, XML_parOf );
+            pConnection->mnType = nType;
             pConnection->msModelId = xAttribs->getOptionalValue( XML_modelId );
             pConnection->msSourceId = xAttribs->getOptionalValue( XML_srcId );
             pConnection->msDestId  = xAttribs->getOptionalValue( XML_destId );
@@ -80,7 +82,7 @@ public:
             switch( aElementToken )
             {
             case NMSP_DIAGRAM|XML_extLst:
-                xRet.set( new SkipContext( getHandler() ) );
+                xRet.set( new SkipContext( *this ) );
                 break;
             default:
                 break;
@@ -96,11 +98,11 @@ private:
 
 // CT_CxnList
 class CxnListContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    CxnListContext( const FragmentHandlerRef& xParent,  dgm::Connections & aConnections )
-        : Context( xParent )
+    CxnListContext( ContextHandler& rParent,  dgm::Connections & aConnections )
+        : ContextHandler( rParent )
         , maConnections( aConnections )
         {
         }
@@ -117,7 +119,7 @@ public:
             {
                 dgm::ConnectionPtr pConnection( new dgm::Connection() );
                 maConnections.push_back( pConnection );
-                xRet.set( new CxnContext( getHandler( ), xAttribs, pConnection ) );
+                xRet.set( new CxnContext( *this, xAttribs, pConnection ) );
                 break;
             }
             default:
@@ -136,21 +138,28 @@ private:
 
 // CL_Pt
 class PtContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    PtContext( const FragmentHandlerRef& xParent,
+    PtContext( ContextHandler& rParent,
                const Reference< XFastAttributeList >& xAttribs,
                const dgm::PointPtr & pPoint)
-        : Context( xParent )
+        : ContextHandler( rParent )
         , mpPoint( pPoint )
         {
-            // both can be either an int or a uuid
-            mpPoint->setCnxId( xAttribs->getOptionalValue( XML_cxnId ) );
             mpPoint->setModelId( xAttribs->getOptionalValue( XML_modelId ) );
             //
-            mpPoint->setType( xAttribs->getOptionalValueToken( XML_type, 0 ) );
+            // the default type is XML_node
+            sal_Int32 nType  = xAttribs->getOptionalValueToken( XML_type, XML_node );
+            mpPoint->setType( nType );
+
+            // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
+            if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
+            {
+                mpPoint->setCnxId( xAttribs->getOptionalValue( XML_cxnId ) );
+            }
         }
+
 
     virtual Reference< XFastContextHandler > SAL_CALL
     createFastChildContext( sal_Int32 aElementToken,
@@ -162,17 +171,19 @@ public:
             switch( aElementToken )
             {
             case NMSP_DIAGRAM|XML_extLst:
-                xRet.set( new SkipContext( getHandler() ) );
+                xRet.set( new SkipContext( *this ) );
                 break;
             case NMSP_DIAGRAM|XML_prSet:
                 // TODO
                 // CT_ElemPropSet
                 break;
             case NMSP_DIAGRAM|XML_spPr:
-                xRet = new ShapePropertiesContext( this, *(mpPoint->getShape().get()) );
+                OSL_TRACE( "shape props for point");
+                xRet = new ShapePropertiesContext( *this, *mpPoint->getShape() );
                 break;
             case NMSP_DIAGRAM|XML_t:
-                xRet = new TextBodyContext( getHandler(), *(mpPoint->getShape().get()) );
+                OSL_TRACE( "shape text body for point");
+                xRet = new TextBodyContext( *this, *mpPoint->getShape() );
                 break;
             default:
                 break;
@@ -190,11 +201,11 @@ private:
 
 // CT_PtList
 class PtListContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    PtListContext( const FragmentHandlerRef& xParent,  dgm::Points & aPoints)
-        : Context( xParent )
+    PtListContext( ContextHandler& rParent,  dgm::Points & aPoints)
+        : ContextHandler( rParent )
         , maPoints( aPoints )
         {
         }
@@ -212,7 +223,7 @@ public:
                 // CT_Pt
                 dgm::PointPtr pPoint( new dgm::Point() );
                 maPoints.push_back( pPoint );
-                xRet.set( new PtContext( getHandler( ), xAttribs, pPoint ) );
+                xRet.set( new PtContext( *this, xAttribs, pPoint ) );
                 break;
             }
             default:
@@ -229,11 +240,11 @@ private:
 
 // CT_BackgroundFormatting
 class BackgroundFormattingContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    BackgroundFormattingContext( const FragmentHandlerRef& xParent, DiagramDataPtr & pModel )
-        : Context( xParent )
+    BackgroundFormattingContext( ContextHandler& rParent, DiagramDataPtr & pModel )
+        : ContextHandler( rParent )
         , mpDataModel( pModel )
         {
             OSL_ENSURE( pModel, "the data model MUST NOT be NULL" );
@@ -255,10 +266,8 @@ public:
             case NMSP_DRAWINGML|XML_pattFill:
             case NMSP_DRAWINGML|XML_solidFill:
                 // EG_FillProperties
-                xRet.set( FillPropertiesGroupContext::StaticCreateContext( getHandler( ),
-                                                                           aElementToken,
-                                                                           xAttribs,
-                                                                           *(mpDataModel->getFillProperties().get()) ) );
+                xRet.set( FillPropertiesGroupContext::StaticCreateContext(
+                    *this, aElementToken, xAttribs, *mpDataModel->getFillProperties() ) );
                 break;
             case NMSP_DRAWINGML|XML_effectDag:
             case NMSP_DRAWINGML|XML_effectLst:
@@ -278,9 +287,9 @@ private:
 
 
 
-DataModelContext::DataModelContext( const FragmentHandlerRef& xHandler,
+DataModelContext::DataModelContext( ContextHandler& rParent,
                                     const DiagramDataPtr & pDataModel )
-    : Context( xHandler )
+    : ContextHandler( rParent )
     , mpDataModel( pDataModel )
 {
     OSL_ENSURE( pDataModel, "Data Model must not be NULL" );
@@ -305,23 +314,23 @@ DataModelContext::createFastChildContext( ::sal_Int32 aElement,
     {
     case NMSP_DIAGRAM|XML_cxnLst:
         // CT_CxnList
-        xRet.set( new CxnListContext( getHandler( ), mpDataModel->getConnections() ) );
+        xRet.set( new CxnListContext( *this, mpDataModel->getConnections() ) );
         break;
     case NMSP_DIAGRAM|XML_ptLst:
         // CT_PtList
-        xRet.set( new PtListContext( getHandler( ), mpDataModel->getPoints() ) );
+        xRet.set( new PtListContext( *this, mpDataModel->getPoints() ) );
         break;
     case NMSP_DIAGRAM|XML_bg:
         // CT_BackgroundFormatting
-        xRet.set( new BackgroundFormattingContext( getHandler(), mpDataModel ) );
+        xRet.set( new BackgroundFormattingContext( *this, mpDataModel ) );
         break;
     case NMSP_DIAGRAM|XML_whole:
         // CT_WholeE2oFormatting
         // TODO
-        xRet.set( new SkipContext( getHandler() ) );
+        xRet.set( new SkipContext( *this ) );
         break;
     case NMSP_DIAGRAM|XML_extLst:
-        xRet.set( new SkipContext( getHandler() ) );
+        xRet.set( new SkipContext( *this ) );
         break;
     default:
         break;
