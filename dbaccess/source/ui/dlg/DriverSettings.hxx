@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:07:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,10 @@ namespace dbaui
         /** Creates the detail page for MySQLJDBC
         */
         static  SfxTabPage* CreateMySQLJDBC( Window* _pParent, const SfxItemSet& _rAttrSet );
+
+        /** Creates the detail page for MySQLNATIVE
+        */
+        static  SfxTabPage* CreateMySQLNATIVE( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
