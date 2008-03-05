@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:24:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2709,6 +2709,23 @@ BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, U
                                                 pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
     DBG_ERROR("Falsche Tabellennummer");
     return FALSE;
+}
+
+
+void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double nPPTY,
+                                    const Fraction& rZoomX, const Fraction& rZoomY )
+{
+    // one progress across all sheets
+    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
+
+    ULONG nProgressStart = 0;
+    for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
+        if ( pTab[nTab] )
+        {
+            pTab[nTab]->SetOptimalHeight( 0, MAXROW, 0,
+                        pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE, &aProgress, nProgressStart );
+            nProgressStart += pTab[nTab]->GetWeightedCount();
+        }
 }
 
 
