@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langtab.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 16:51:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Nyanja" ; LANGUAGE_USER_NYANJA ; > ;
         < "Kashubian" ; LANGUAGE_USER_KASHUBIAN ; > ;
         < "Spanish (Cuba)" ; LANGUAGE_USER_SPANISH_CUBA ; > ;
-        < "Tetun" ; LANGUAGE_USER_TETUN ; > ;
+        < "Tetun (Indonesia)" ; LANGUAGE_USER_TETUN ; > ;
         < "Quechua (Bolivia, North)" ; LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA ; > ;
         < "Quechua (Bolivia, South)" ; LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA ; > ;
         < "Somali" ; LANGUAGE_SOMALI ; > ;
@@ -287,6 +287,14 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sami, Skolt (Finland)" ; LANGUAGE_SAMI_SKOLT ; > ;
         < "Sami, Southern (Norway)" ; LANGUAGE_SAMI_SOUTHERN_NORWAY ; > ;
         < "Sami, Southern (Sweden)" ; LANGUAGE_SAMI_SOUTHERN_SWEDEN ; > ;
+        < "Sami, Kildin (Russia)" ; LANGUAGE_USER_SAMI_KILDIN_RUSSIA ; > ;
+        < "Guaraní, Paraguayan" ; LANGUAGE_GUARANI_PARAGUAY ; > ;
+        < "Bodo" ; LANGUAGE_USER_BODO_INDIA ; > ;
+        < "Dogri" ; LANGUAGE_USER_DOGRI_INDIA ; > ;
+        < "Maithili" ; LANGUAGE_USER_MAITHILI_INDIA ; > ;
+        < "Santali" ; LANGUAGE_USER_SANTALI_INDIA ; > ;
+        < "Tetun (Timor-Leste)" ; LANGUAGE_USER_TETUN_TIMOR_LESTE ; > ;
+        < "Turkmen" ; LANGUAGE_TURKMEN ; > ;
     };
 };
 
