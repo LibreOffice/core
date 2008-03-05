@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:20:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
         {
             rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-            rSh.GetAttr( aSet );
+            rSh.GetCurAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
             SvxFontItem aFont( rFont.GetFamily(), aFontName,
                                rFont.GetStyleName(), rFont.GetPitch(),
@@ -208,7 +208,7 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     aNumberCharBtn.Check( TRUE );
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-    rSh.GetAttr( aSet );
+    rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -340,7 +340,7 @@ void SwInsFootNoteDlg::Init()
 
             rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-            rSh.GetAttr( aSet );
+            rSh.GetCurAttr( aSet );
             const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
             aFont = aNumberCharEdit.GetFont();
