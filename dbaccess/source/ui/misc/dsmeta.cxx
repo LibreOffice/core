@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:53:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ namespace dbaui
             s_aSupport[ DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
+            s_aSupport[ DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_CALC                ] = InitAdvanced( InitAdvanced::None );
@@ -169,6 +170,7 @@ namespace dbaui
         if ( s_aSupport.empty() )
         {
             s_aSupport[ DST_MSACCESS            ] = FeatureSupport( AuthNone    );
+            s_aSupport[ DST_MYSQL_NATIVE        ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_MYSQL_ODBC          ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_MYSQL_JDBC          ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_ORACLE_JDBC         ] = FeatureSupport( AuthUserPwd );
@@ -236,12 +238,6 @@ namespace dbaui
     //--------------------------------------------------------------------
     DataSourceMetaData::~DataSourceMetaData()
     {
-    }
-
-    //--------------------------------------------------------------------
-    DATASOURCE_TYPE DataSourceMetaData::getType() const
-    {
-        return m_pImpl->getType();
     }
 
     //--------------------------------------------------------------------
