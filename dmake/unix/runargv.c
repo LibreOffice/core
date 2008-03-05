@@ -1,6 +1,6 @@
 /* $RCSfile: runargv.c,v $
--- $Revision: 1.13 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:53:26 $
+-- $Revision: 1.14 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:39:41 $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -148,9 +148,17 @@ typedef struct prp {
    struct prp *prp_next;
 } RCP, *RCPPTR;
 
+#if defined(USE_CREATEPROCESS)
+   /* MS's HANDLE is basically a (void *) (winnt.h). */
+typedef HANDLE DMHANDLE;
+#else
+typedef int DMHANDLE;
+#endif
+
 typedef struct pr {
    int      pr_valid;
-   int      pr_pid;
+   DMHANDLE pr_pid;
+   DMHANDLE pr_tid;
    CELLPTR  pr_target;
    int      pr_ignore;
    int      pr_last;
@@ -160,16 +168,269 @@ typedef struct pr {
    char        *pr_dir;
 } PR;
 
+typedef struct tpid {
+   DMHANDLE pid;
+   DMHANDLE tid;
+} TPID;
+
+const TPID DMNOPID = { (DMHANDLE)-1, (DMHANDLE)0 };
+
 static PR  *_procs    = NIL(PR); /* Array to hold concurrent processes. */
 static int  _procs_size = 0;     /* Savegard to find MAXPROCESS changes. */
 static int  _proc_cnt = 0;       /* Number of running processes. */
 static int  _abort_flg= FALSE;
 static int  _use_i    = -1;
+#if defined(USE_CREATEPROCESS)
+static HANDLE *_wpList = NIL(HANDLE); /* Array to hold pids to wait for. */
+#endif
 
-static  int _add_child ANSI((int, CELLPTR, int, int, int));
+static  int _add_child ANSI((TPID, CELLPTR, int, int, int));
 static  void    _attach_cmd ANSI((char *, int, CELLPTR, t_attr, int));
-static  void    _finished_child ANSI((int, int));
+static  void    _finished_child ANSI((DMHANDLE, int));
 static  int     _running ANSI((CELLPTR));
+
+/* Machine/OS dependent helpers. */
+static  int dmwaitnext ANSI((DMHANDLE *, int *));
+static  int dmwaitpid ANSI((int, DMHANDLE *, int *));
+
+#if defined( USE_SPAWN )
+
+int terrno; /* Temporarily store errno. */
+
+static  TPID    dmspawn ANSI((char **));
+
+static TPID
+dmspawn( argv )
+   char **argv;
+{
+   TPID pid;
+
+   /* No error output is done here as stdout/stderr might be redirected. */
+#if defined( __CYGWIN__) || defined( __EMX__)
+   pid.pid = spawnvp(_P_NOWAIT, argv[0], (const char**) argv);
+   pid.tid = 0;
+#elif defined(USE_CREATEPROCESS)
+   static STARTUPINFO si;
+   static int initSTARTUPINFO = FALSE;
+   PROCESS_INFORMATION pi;
+
+   /* si can be reused. */
+   if( initSTARTUPINFO == FALSE ) {
+      initSTARTUPINFO = TRUE;
+      ZeroMemory( &si, sizeof(si) );
+      si.cb = sizeof(si);
+   }
+   ZeroMemory( &pi, sizeof(pi) );
+
+   /* Start the child process. CreateProcess() parameters:
+    * No module name (use command line).
+    * Command line. This fails if the path to the program contains spaces.
+    * Process handle not inheritable.
+    * Thread handle not inheritable.
+    * Set handle inheritance (stdout, stderr, etc.) to TRUE.
+    * No creation flags.
+    * Use parent's environment block.
+    * Use parent's starting directory.
+    * Pointer to STARTUPINFO structure.
+    * Pointer to PROCESS_INFORMATION structure. */
+   if( CreateProcess(NULL, argv[0], NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi) ) {
+      pid.pid = pi.hProcess;
+      pid.tid = pi.hThread;
+   } else {
+      fprintf(stderr, "CreateProcess failed (%d).\n", GetLastError() );
+      pid.pid = (DMHANDLE)-1;
+   }
+#else   /* Non cygwin, OS/2, MinGW and MSC */
+   int tpid;
+   if (posix_spawnp (&tpid, argv[0], NULL, NULL, argv, (char *)NULL))
+      tpid = -1; /* posix_spawn failed */
+
+   pid.pid = tpid;
+   pid.tid = 0;
+#endif  /* __CYGWIN__ */
+   return pid;
+}
+
+#endif /* USE_SPAWN */
+
+static int
+dmwaitnext( wid, status )
+     DMHANDLE *wid; /* Id we waited for. */
+     int *status;   /* status of the finished process. */
+     /* return 1 if a process finished, -1 if there
+      * was nothing to wait for (ECHILD) and -2 for other errors. */
+{
+
+#if !defined(USE_CREATEPROCESS)
+   /* Here might be the culprit for the famous OOo build hang. If
+    * cygwin manages to "loose" a process and none else is left the
+    * wait() will wait forever. */
+   *wid = wait(status);
+
+   /* If ECHILD is set from waitpid/wait then no child was left. */
+   if( *wid  == -1 ) {
+      fprintf(stderr, "%s:  Internal Error: wait() failed: %d -  %s\n",
+          Pname, errno, strerror(errno) );
+      if(errno != ECHILD) {
+     /* Wait was interrupted or a child was terminated (SIGCHLD) */
+     return -2;
+      } else {
+     return -1;
+      }
+   }
+#else
+   DWORD pEvent;
+   DWORD dwExitCode;
+   int i;
+   int numProc = 0;
+
+   *status = 0;
+
+   /* Create a list of possible objects to wait for. */
+   for( i=0; i<Max_proc; i++ ) {
+      if(_procs[i].pr_valid) {
+     _wpList[numProc++] = _procs[i].pr_pid;
+      }
+   }
+   if( numProc == 0 ) {
+      fprintf(stderr, "%s:  Internal Error: dmwaitnext() failed: "
+          "Nothing to wait for.\n", Pname );
+      return -1;
+   }
+
+   /* Wait ... */
+   /* number of objects in array, array of objects,
+    * wait for any object, wait for the next child to finish */
+   pEvent = WaitForMultipleObjects( numProc, _wpList, FALSE, INFINITE);
+
+   if( pEvent >= 0 && pEvent < WAIT_OBJECT_0 + numProc ) {
+      *wid = _wpList[pEvent - WAIT_OBJECT_0];
+      for( i=0; i<Max_proc && _procs[i].pr_pid != *wid; i++ )
+     ;
+      if( i == Max_proc )
+     Fatal("Internal Error: Process not in pq !");
+
+      GetExitCodeProcess(*wid, &dwExitCode);
+      if(dwExitCode == STILL_ACTIVE) {
+     /* Process did not terminate -> force it, with exit code 1. */
+     TerminateProcess(*wid, 1);
+     dwExitCode = 1;
+     fprintf(stderr, "%s:  Internal Error: Process still running - "
+         "terminate it!\n", Pname );
+      }
+
+      /* Close process and thread handles. */
+      CloseHandle( *wid );
+      CloseHandle( _procs[i].pr_tid );
+      *status = dwExitCode;
+   }
+   else {
+      int err = GetLastError();
+      LPVOID lpMsgBuf;
+
+      FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+             FORMAT_MESSAGE_FROM_SYSTEM |
+             FORMAT_MESSAGE_IGNORE_INSERTS,
+             NULL,
+             err,
+             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+             (LPTSTR) &lpMsgBuf,
+             0, NULL );
+
+      fprintf(stderr, "%s:  Internal Error: WaitForMultipleObjects() (%d) failed:"
+          " %d -  %s\n", Pname, numProc, err, lpMsgBuf);
+      LocalFree(lpMsgBuf);
+
+      /* No way to identify something comparable to ECHILD, always return -2.*/
+      return -2;
+   }
+
+#endif
+   return 1;
+}
+
+
+static int
+dmwaitpid( pqid, wid, status )
+     int pqid;      /* Process queue to wait for. */
+     DMHANDLE *wid; /* Id we waited for. */
+     int *status;   /* status of the finished process. */
+     /* return 1 if the process finished, 0 if it didn't finish yet, -1 if there
+      * was nothing to wait for (ECHILD) and -2 for other errors. */
+{
+
+#if !defined(USE_CREATEPROCESS)
+   *wid = waitpid(_procs[pqid].pr_pid, status, WNOHANG);
+
+   /* Process still running. */
+   if( *wid  == 0 ) {
+      *status = 0;
+      return 0;
+   }
+   /* If ECHILD is set from waitpid/wait then no child was left. */
+   if( *wid  == -1 ) {
+      fprintf(stderr, "%s:  Internal Error: waitpid() failed: %d -  %s\n",
+          Pname, errno, strerror(errno) );
+      if(errno != ECHILD) {
+     /* Wait was interrupted or a child was terminated (SIGCHLD) */
+     return -2;
+      } else {
+     return -1;
+      }
+   }
+#else
+   DWORD pEvent;
+   DWORD dwExitCode;
+
+   *wid = _procs[pqid].pr_pid;
+   *status = 0;
+
+   /* Wait ... (Check status and return) */
+   pEvent = WaitForSingleObject(*wid, 0);
+
+   if( pEvent == WAIT_OBJECT_0 ) {
+      GetExitCodeProcess(*wid, &dwExitCode);
+      if(dwExitCode == STILL_ACTIVE) {
+     /* Process did not terminate -> force it, with exit code 1. */
+     TerminateProcess(*wid, 1);
+     dwExitCode = 1;
+     fprintf(stderr, "%s:  Internal Error: Process still running - "
+         "terminate it!\n", Pname );
+      }
+
+      /* Close process and thread handles. */
+      CloseHandle( *wid );
+      CloseHandle( _procs[pqid].pr_tid );
+      *status = dwExitCode;
+   }
+   else if( pEvent == WAIT_TIMEOUT ) {
+      return 0;
+   }
+   else {
+      int err = GetLastError();
+      LPVOID lpMsgBuf;
+
+      FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+             FORMAT_MESSAGE_FROM_SYSTEM |
+             FORMAT_MESSAGE_IGNORE_INSERTS,
+             NULL,
+             err,
+             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+             (LPTSTR) &lpMsgBuf,
+             0, NULL );
+
+      fprintf(stderr, "%s:  Internal Error: WaitForSingleObject() failed:"
+          " %d -  %s\n", Pname, err, lpMsgBuf);
+      LocalFree(lpMsgBuf);
+
+      /* No way to identify something comparable to ECHILD, always return -2.*/
+      return -2;
+   }
+#endif
+
+   return 1;
+}
+
 
 #if ! HAVE_STRERROR
 static char *
@@ -177,15 +438,11 @@ private_strerror (errnum)
      int errnum;
 {
 #ifndef __APPLE__
-#ifdef arm32
+# if defined(arm32) || defined(linux) || defined(__FreeBSD__) || defined(__OpenBSD__)
   extern  const char * const sys_errlist[];
-#else
-#if defined(linux) || defined(__FreeBSD__) || defined(__OpenBSD__)
-  extern  const char * const sys_errlist[];
-#else
+# else
   extern  char *sys_errlist[];
-#endif
- #endif
+# endif
 #endif
   extern int sys_nerr;
 
@@ -215,7 +472,7 @@ char  **cmd; /* Simulate a reference to *cmd. */
    int  mute = (cmnd_attr & A_MUTE) != 0; /* Mute output ('@@'). */
    int  wfc = (cmnd_attr & A_WFC) != 0; /* Wait for completion. */
 
-   int  pid;
+   TPID  pid;
    int  st_pq = 0; /* Current _exec_shell target process index */
    char *tcmd = *cmd; /* For saver/easier string arithmetic on *cmd. */
    char         **argv;
@@ -304,8 +561,8 @@ char  **cmd; /* Simulate a reference to *cmd. */
    }
    if ( internal ) {
       /* Use _add_child() / _finished_child() with internal command. */
-      int cur_proc = _add_child(-1, target, ignore, last, FALSE);
-      _finished_child(-cur_proc, 0);
+      int cur_proc = _add_child(DMNOPID, target, ignore, last, FALSE);
+      _finished_child( (DMHANDLE)-cur_proc, 0 );
       DB_RETURN( 0 );
    }
 
@@ -313,7 +570,7 @@ char  **cmd; /* Simulate a reference to *cmd. */
    argv = Pack_argv( group, shell, cmd );
 
    /* Really spawn or fork a child. */
-#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ || __EMX__)
+#if defined( USE_SPAWN )
    /* As no other childs are started while the output is redirected this
     * is save. */
    if( Is_exec_shell ) {
@@ -330,23 +587,21 @@ char  **cmd; /* Simulate a reference to *cmd. */
      dup2( zerofd, 1 );
       }
    }
-#if defined( __CYGWIN__) || defined( __EMX__)
-   pid = spawnvp(_P_NOWAIT, argv[0], (const char**) argv);
-#else   /* __CYGWIN__ */
-   if (posix_spawnp (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
-      pid = -1; /* posix_spawn failed */
-#endif  /* __CYGWIN__ */
+
+   pid = dmspawn( argv );
+   terrno = errno;
+
    if( old_stdout != -1 ) {
       dup2(old_stdout, 1);
       if( old_stderr != -1 )
      dup2(old_stderr, 2);
    }
-   if(pid == -1) {
+   if(pid.pid == (DMHANDLE)-1) {
       /* spawn failed */
       int cur_proc;
 
       fprintf(stderr, "%s:  Error executing '%s': %s",
-          Pname, argv[0], strerror(errno) );
+          Pname, argv[0], strerror(terrno) );
       if( ignore||Continue ) {
      fprintf(stderr, " (Ignored)" );
       }
@@ -354,8 +609,8 @@ char  **cmd; /* Simulate a reference to *cmd. */
 
       /* Use _add_child() / _finished_child() to treat the failure
        * gracefully, if so requested. */
-      cur_proc = _add_child(-1, target, ignore, last, FALSE);
-      _finished_child(cur_proc, SIGTERM);
+      cur_proc = _add_child(DMNOPID, target, ignore, last, FALSE);
+      _finished_child((DMHANDLE)cur_proc, SIGTERM);
 
       /* _finished_child() aborts dmake if we are not told to
        * ignore errors. If we reach the this point return 0 as
@@ -365,10 +620,10 @@ char  **cmd; /* Simulate a reference to *cmd. */
    } else {
       _add_child(pid, target, ignore, last, wfc);
    }
-#else  /* ENABLE_SPAWN && ... */
+#else  /* USE_SPAWN */
 
    fflush(stdout);
-   switch( pid=fork() ){
+   switch( pid.pid = fork() ){
 
    case -1: /* fork failed */
       Fatal("fork failed: %s: %s", argv[0], strerror( errno ));
@@ -412,9 +667,14 @@ char  **cmd; /* Simulate a reference to *cmd. */
       _add_child(pid, target, ignore, last, wfc);
    }
 
-#endif  /* ENABLE_SPAWN && ... */
+#endif  /* USE_SPAWN */
 
-   DB_RETURN( 1 );
+   /* If wfc is set this command must have been finished. */
+   if( wfc ) {
+      DB_RETURN( 0 );
+   } else {
+      DB_RETURN( 1 );
+   }
 }
 
 
@@ -433,9 +693,10 @@ Wait_for_child( abort_flg, pqid )/*
 int abort_flg;
 int pqid;
 {
-   int pid;
-   int wid;
+   DMHANDLE pid;
+   DMHANDLE wid;
    int status;
+   int waitret; /* return value of the dmwait functions. */
    /* Never wait for internal commands. */
    int waitchild;
    int is_exec_shell_status = Is_exec_shell;
@@ -456,7 +717,7 @@ int pqid;
       if( i == Max_proc )
      return(-1);
 
-      pid = -1;
+      pid = (DMHANDLE)-1;
       waitchild = FALSE;
    }
    else {
@@ -481,34 +742,39 @@ int pqid;
 
    do {
       /* Wait for the next process to finish. */
-      if( (pid != -1) && (wid = waitpid(pid, &status, WNOHANG)) ) {
-     /* if wid is 0 this means that pid didn't finish yet. In this case
-      * just handle the next finished process in the following "else". */
+      if( (pid != (DMHANDLE)-1) && (waitret = dmwaitpid(pqid, &wid, &status)) != 0 ) {
+     /* if dmwaitpid returns 0 this means that pid didn't finish yet.
+      * In this case just handle the next finished process in the
+      * following "else". If an error is returned (waitret < 0) the else
+      * clause is not evaluated and the error is handled in the following
+      * lines. If a process was waited for (waitret == 0) also proceed to
+      * the following lines. */
      ;
       }
       else {
-     /* Here might be the culprit for the famous OOo build hang. If
-      * cygwin manages to "loose" a process and none else is left the
-      * wait() will wait forever. */
-     wid = wait(&status);
+     waitret = dmwaitnext(&wid, &status);
      /* If we get an error tell the error handling routine below that we
       * were not waiting for a specific pid. */
-     if( wid  == -1 )
-        pid = -1;
+     if( waitret < 0 ) {
+        pid = (DMHANDLE)-1;
+     }
       }
 
       /* If ECHILD is set from waitpid/wait then no child was left. */
-      if( wid  == -1 ) {
-     if(errno != ECHILD) {
+      if( waitret < 0 ) {
+     if(waitret == -2) {
         /* Wait was interrupted or a child was terminated (SIGCHLD) */
         if ( in_quit() ) {
            /* We're already terminating, just continue. */
            return 0;
         } else {
-           Fatal( "dmake was interrupted or a child terminated: %d : %s - stopping all childs ...", errno, strerror( errno ) );
+           Fatal( "dmake was interrupted or a child terminated. "
+              "Stopping all childs ..." );
         }
      } else {
-        if( pid != -1 ) {
+        /* The child we were waiting for is missing or no child is
+         * left to wait for. */
+        if( pid != (DMHANDLE)-1 ) {
            /* If we know the pid disable the pq entry. */
            if( _procs[pqid].pr_valid ) {
           _procs[pqid].pr_valid = 0;
@@ -568,11 +834,15 @@ Clean_up_processes()
    if( _procs != NIL(PR) ) {
       for( i=0; i<Max_proc; i++ )
      if( _procs[i].pr_valid ) {
+#if !defined(USE_CREATEPROCESS)
         if( (ret = kill(_procs[i].pr_pid, SIGTERM)) ) {
            fprintf(stderr, "Killing of pid %d from pq[%d] failed with: %s - %d ret: %d\n",
                _procs[i].pr_pid, i,
                strerror(errno), SIGTERM, ret );
         }
+#else
+     TerminateProcess(_procs[i].pr_pid, 1);
+#endif
      }
    }
 }
@@ -588,7 +858,7 @@ _add_child( pid, target, ignore, last, wfc )/*
   If wfc (wait for completion) is TRUE the function calls
   Wait_for_child to wait for the whole process queue to be finished.
 */
-int pid;
+TPID    pid;
 CELLPTR target;
 int ignore;
 int     last;
@@ -603,6 +873,14 @@ int     wfc;
       if( _procs == NIL(PR) ) {
      _procs_size = Max_proc;
      TALLOC( _procs, Max_proc, PR );
+#if defined(USE_CREATEPROCESS)
+     TALLOC( _wpList, Max_proc, HANDLE );
+
+     /* Signed int values are cast to DMHANDLE in various places, use this
+      * sanity check to verify that DMHANDLE is large enough. */
+     if( sizeof(int) > sizeof(DMHANDLE) )
+        Fatal( "Internal Error: Check type of DMHANDLE!" );
+#endif
       }
       else {
      Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!", _procs_size, Max_proc );
@@ -628,7 +906,8 @@ int     wfc;
    pp = _procs+i;
 
    pp->pr_valid  = 1;
-   pp->pr_pid    = pid;
+   pp->pr_pid    = pid.pid;
+   pp->pr_tid    = pid.tid;
    pp->pr_target = target;
    pp->pr_ignore = ignore;
    pp->pr_last   = last;
@@ -640,11 +919,12 @@ int     wfc;
 
    _proc_cnt++;
 
-   if( pid != -1 ) {
+   if( pid.pid != (DMHANDLE)-1 ) {
       /* Wait for each recipe to finish if wfc is TRUE. This
        * basically forces sequential execution. */
-      if( wfc )
+      if( wfc ) {
      Wait_for_child( FALSE, i );
+      }
 
       return -1;
    } else
@@ -661,15 +941,15 @@ _finished_child(cid, status)/*
   process and for cid < 1 -cid is used as the process array index of the
   internal command.
 */
-int cid;
+DMHANDLE cid;
 int status;
 {
    register int i;
    char     *dir;
 
-   if(cid < 1) {
+   if((int)cid < 1) { /* Force int. */
       /* internal command */
-      i = -cid;
+      i = -((int)cid);
    }
    else {
       for( i=0; i<Max_proc; i++ )
@@ -722,7 +1002,9 @@ int status;
 
       /* If all process queues are used wait for the next process to
        * finish. Is this really needed here? */
-      if( _proc_cnt == Max_proc ) Wait_for_child( FALSE, -1 );
+      if( _proc_cnt == Max_proc ) {
+     Wait_for_child( FALSE, -1 );
+      }
    }
    else {
       /* empty the queue on abort. */
