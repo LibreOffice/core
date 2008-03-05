@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:52:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
     SfxItemSet aSet( GetDoc()->GetAttrPool(), RES_TXTATR_CHARFMT,
                                                 RES_TXTATR_CHARFMT );
     const SfxPoolItem* pItem;
-    if( GetAttr( aSet ) && SFX_ITEM_SET ==
+    if( GetCurAttr( aSet ) && SFX_ITEM_SET ==
         aSet.GetItemState( RES_TXTATR_CHARFMT, FALSE, &pItem ) )
         pFmt = ((SwFmtCharFmt*)pItem)->GetCharFmt();
 
