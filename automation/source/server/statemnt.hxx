@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gh $ $Date: 2008-02-15 12:14:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ protected:
     static StatementList *pCurrentProfileStatement;
 
     static BOOL bIsInReschedule;
+        static USHORT nModalCount;
     static Window *pLastFocusWindow;        // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
     static BOOL bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
     static BOOL bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
@@ -225,6 +226,7 @@ public:
     static BOOL IsInReschedule() { return bIsInReschedule; }
     void SafeReschedule( BOOL bYield = FALSE )  // Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
     {
+        nModalCount = Application::GetModalModeCount();
         bIsInReschedule = TRUE;
         pLastFocusWindow = GetpApp()->GetFocusWindow();
         bWasDragManager = false /*!= DragManager::GetDragManager()*/;
@@ -241,6 +243,7 @@ public:
         bWasDragManager = FALSE;
         pLastFocusWindow = NULL;
         bIsInReschedule = FALSE;
+        nModalCount = 0;
     }
     static BOOL MaybeResetSafeReschedule()
     {       // Implementierung muß hier zwar nicht sein, ist aber übersichtlicher so
@@ -248,6 +251,7 @@ public:
             return FALSE;
 
         if ( pLastFocusWindow != GetpApp()->GetFocusWindow()
+            || ( Application::GetModalModeCount() > nModalCount )
 //          || ( DragManager::GetDragManager() && !bWasDragManager )
             || ( PopupMenu::GetActivePopupMenu() && !bWasPopupMenu )
             || ( StarBASIC::IsRunning() && !bBasicWasRunning ) )
