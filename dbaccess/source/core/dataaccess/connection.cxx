@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:32:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -819,7 +819,24 @@ Reference< tools::XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaD
 
     return m_xConnectionTools->getDataSourceMetaData();
 }
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const ::rtl::OUString& command, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& keepFieldsAlive ) throw (::com::sun::star::sdbc::SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    impl_loadConnectionTools_throw();
 
+    return m_xConnectionTools->getFieldsByCommandDescriptor(commandType,command,keepFieldsAlive);
+}
+//--------------------------------------------------------------------
+Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const ::rtl::OUString& command ) throw (::com::sun::star::uno::RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    impl_loadConnectionTools_throw();
+
+    return m_xConnectionTools->getComposer(commandType,command);
+}
 
 // -----------------------------------------------------------------------------
 void OConnection::impl_checkTableQueryNames_nothrow()
