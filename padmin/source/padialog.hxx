@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:16:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@ namespace padmin {
         FixedText                           m_aCommand;
         FixedText                           m_aCommentTxt;
         FixedText                           m_aComment;
+
+        FixedLine                           m_aCUPSFL;
+        CheckBox                            m_aCUPSCB;
 
         FixedLine                           m_aSepButtonFL;
         PushButton                          m_aAddPB;
