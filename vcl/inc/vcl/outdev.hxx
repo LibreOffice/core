@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:47:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,6 +484,10 @@ public:
     SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
+    SAL_DLLPRIVATE float            ImplFloatLogicWidthToDevicePixel( float ) const;
+    SAL_DLLPRIVATE float            ImplFloatLogicHeightToDevicePixel( float ) const;
+    SAL_DLLPRIVATE float            ImplFloatDevicePixelToLogicWidth( float ) const;
+    SAL_DLLPRIVATE float            ImplFloatDevicePixelToLogicHeight( float ) const;
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
     SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
     SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
