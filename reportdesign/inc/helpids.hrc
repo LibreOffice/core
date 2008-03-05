@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:43:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@
 #define HID_RPT_PROP_FORMULALIST                (HID_RPT_START + 34)
 #define HID_RPT_PROP_SCOPE                      (HID_RPT_START + 35)
 #define HID_RPT_PROP_TYPE                       (HID_RPT_START + 36)
-// free
-// free
+#define HID_RPT_PROP_MASTERFIELDS               (HID_RPT_START + 37)
+#define HID_RPT_PROP_DETAILFIELDS               (HID_RPT_START + 38)
 // free
 // free
 // free
@@ -93,6 +93,7 @@
 // free
 #define HID_RPT_PROP_MINHEIGHTNEWPAGE           (HID_RPT_START + 51)
 #define HID_RPT_PROP_PRINTWHENGROUPCHANGE       (HID_RPT_START + 52)
+#define HID_RPT_PROP_CHARTTYPE                  (HID_RPT_START + 53)
 // free
 // free
 #define HID_RPT_PROP_VISIBLE                    (HID_RPT_START + 55)
@@ -100,7 +101,7 @@
 #define HID_RPT_PROP_PAGEHEADEROPTION           (HID_RPT_START + 57)
 #define HID_RPT_PROP_PAGEFOOTEROPTION           (HID_RPT_START + 58)
 #define UID_RPT_PROP_DLG_LINE_STYLE             (HID_RPT_START + 59)
-// free
+#define HID_RPT_PROP_PREVIEW_COUNT              (HID_RPT_START + 60)
 #define HID_RPT_PROP_DATAFIELD                  (HID_RPT_START + 61)
 #define HID_RPT_PROP_BACKCOLOR                  (HID_RPT_START + 62)
 #define HID_RPT_PROP_RPT_POSITIONX              (HID_RPT_START + 63)
@@ -120,9 +121,11 @@
 #define HID_RPT_PROP_PRESERVEIRI                (HID_RPT_START + 77)
 #define HID_RPT_PROP_BACKTRANSPARENT            (HID_RPT_START + 78)
 #define HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT (HID_RPT_START + 79)
+#define UID_RPT_PROP_CHARTTYPE_DLG              (HID_RPT_START + 80)
+#define UID_RPT_PROP_DLG_LINKFIELDS             (HID_RPT_START + 81)
 
 
-#if HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT > HID_RPT_END
+#if UID_RPT_PROP_DLG_LINKFIELDS > HID_RPT_END
 #error Help-Id Ueberlauf in #file, #line
 #endif
 // don't forget to update the file util/hidother.src
