@@ -10,6 +10,9 @@
    <prop oor:name="OfficeBasic" oor:type="xs:int">
     <value>2</value>
    </prop>
+   <prop oor:name="MacroSecurityLevel" oor:type="xs:int">
+    <value>0</value>
+   </prop>
    </node>
  </node>
 </oor:component-data>
