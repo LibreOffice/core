@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include <rtl/ref.hxx>
 #include "oox/vml/drawing.hxx"
 #include "oox/core/filterbase.hxx"
-#include "oox/core/recordinfoprovider.hxx"
 #include "oox/core/relations.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -70,9 +69,6 @@ public:
 
     /** Has to be implemented by each filter to return drawings collection. */
     virtual const ::oox::vml::DrawingPtr getDrawings() = 0;
-
-    /** Has to be implemented by each filter that supports binary streams. */
-    virtual RecordInfoProviderRef getRecordInfoProvider();
 
     // ------------------------------------------------------------------------
 
