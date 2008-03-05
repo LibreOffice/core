@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:28:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1028,6 +1028,10 @@ String STR_QUICKSTART_PRELAUNCH_UNX
 String STR_QUICKSTART_LNKNAME
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+};
+String STR_QUICKSTART_FILE
+{
+    Text [ en-US ] = "File";
 };
 
 String STR_QUERY_UPDATE_LINKS
