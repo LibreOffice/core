@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:39:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
-
+#include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -703,12 +703,11 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 
 void SdrOle2Obj::BreakFileLink_Impl()
 {
+    uno::Reference<document::XStorageBasedDocument> xDoc( pModel ? pModel->getUnoModel() : uno::Reference<document::XStorageBasedDocument>(),uno::UNO_QUERY);
 
-    SfxObjectShell* pPers = pModel ? pModel->GetPersist() : NULL;
-
-    if ( pPers )
+    if ( xDoc.is() )
     {
-        uno::Reference< embed::XStorage > xStorage = pPers->GetStorage();
+        uno::Reference< embed::XStorage > xStorage = xDoc->getDocumentStorage();
         if ( xStorage.is() )
         {
             try
@@ -797,10 +796,10 @@ void SdrOle2Obj::Connect_Impl()
     {
         try
         {
-            SfxObjectShell* pPers=pModel->GetPersist();
+            ::comphelper::IEmbeddedHelper* pPers = pModel->GetPersist();
             if ( pPers )
             {
-                comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
+                comphelper::EmbeddedObjectContainer& rContainer = pPers->getEmbeddedObjectContainer();
                 if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName )
                   || ( xObjRef.is() && !rContainer.HasEmbeddedObject( xObjRef.GetObject() ) ) )
                 {
@@ -995,8 +994,7 @@ void SdrOle2Obj::Disconnect_Impl()
             }
             else if ( xObjRef.is() )
             {
-                SfxObjectShell* pPers = pModel->GetPersist();
-                if ( pPers )
+                if ( pModel->getUnoModel().is() )
                 {
                     // remove object, but don't close it (that's up to someone else)
                     comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();
@@ -1042,8 +1040,8 @@ void SdrOle2Obj::Disconnect_Impl()
 
 void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 {
-    SfxObjectShell* pDestPers = pNewModel ? pNewModel->GetPersist() : 0;
-    SfxObjectShell* pSrcPers  = pModel ? pModel->GetPersist() : 0;
+    ::comphelper::IEmbeddedHelper* pDestPers = pNewModel ? pNewModel->GetPersist() : 0;
+    ::comphelper::IEmbeddedHelper* pSrcPers  = pModel ? pModel->GetPersist() : 0;
 
     if ( pNewModel == pModel )
     {
@@ -1071,14 +1069,14 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         {
             // move the objects' storage; ObjectRef remains the same, but PersistName may change
             ::rtl::OUString aTmp;
-            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->GetEmbeddedObjectContainer();
+            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
             uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
             DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
             if ( xObj.is() )
             {
-                pDestPers->GetEmbeddedObjectContainer().MoveEmbeddedObject( rContainer, xObj, aTmp );
+                pDestPers->getEmbeddedObjectContainer().MoveEmbeddedObject( rContainer, xObj, aTmp );
                 mpImpl->aPersistName = aTmp;
-                xObjRef.AssignToContainer( &pDestPers->GetEmbeddedObjectContainer(), aTmp );
+                xObjRef.AssignToContainer( &pDestPers->getEmbeddedObjectContainer(), aTmp );
             }
             DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
         }
@@ -1462,17 +1460,17 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
         {
-            SfxObjectShell* pDestPers = pModel->GetPersist();
-            SfxObjectShell* pSrcPers = rObj.GetModel()->GetPersist();
+            ::comphelper::IEmbeddedHelper* pDestPers = pModel->GetPersist();
+            ::comphelper::IEmbeddedHelper* pSrcPers = rObj.GetModel()->GetPersist();
             if( pDestPers && pSrcPers )
             {
                 DBG_ASSERT( !xObjRef.is(), "Object already existing!" );
-                comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->GetEmbeddedObjectContainer();
+                comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
                 uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
                 if ( xObj.is() )
                 {
                     ::rtl::OUString aTmp;
-                    xObjRef.Assign( pDestPers->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject( rContainer, xObj, aTmp ), rOle2Obj.GetAspect() );
+                    xObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject( rContainer, xObj, aTmp ), rOle2Obj.GetAspect() );
                     mpImpl->aPersistName = aTmp;
                     CheckFileLink_Impl();
                 }
@@ -1531,7 +1529,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
 
         // the client is required to get access to scaling
-        SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( pModel->GetPersist(), xObjRef.GetObject() );
+        SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() );
         sal_Bool bHasOwnClient =
                         ( mpImpl->pLightClient
                         && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) );
@@ -1657,7 +1655,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             // if the object needs recompose on resize
             // the client site should be created before the resize will take place
             // check whether there is no client site and create it if necessary
-            if ( !SfxInPlaceClient::GetClient( pModel->GetPersist(), xObjRef.GetObject() )
+            if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() )
               && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
             {
                 AddOwnLightClient();
@@ -1809,13 +1807,6 @@ BOOL SdrOle2Obj::Unload()
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::CreatePersistName( SfxObjectShell* pPers )
-{
-    mpImpl->aPersistName = pPers->GetEmbeddedObjectContainer().CreateUniqueObjectName();
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrOle2Obj::GetObjRef_Impl()
 {
     if ( !xObjRef.is() && mpImpl->aPersistName.Len() && pModel && pModel->GetPersist() )
@@ -1824,7 +1815,7 @@ void SdrOle2Obj::GetObjRef_Impl()
         // Only try loading if it did not went wrong up to now
         if(!mpImpl->mbLoadingOLEObjectFailed)
         {
-            xObjRef.Assign( pModel->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( mpImpl->aPersistName ), GetAspect() );
+            xObjRef.Assign( pModel->GetPersist()->getEmbeddedObjectContainer().GetEmbeddedObject( mpImpl->aPersistName ), GetAspect() );
             CheckFileLink_Impl();
 
             // #107645#
@@ -1971,13 +1962,7 @@ sal_Bool SdrOle2Obj::IsCalc() const
 // -----------------------------------------------------------------------------
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel()
 {
-    uno::Reference< frame::XModel > xResult;
-
-    SfxObjectShell* pPers = pModel ? pModel->GetPersist() : NULL;
-    if ( pPers )
-        xResult = pPers->GetModel();
-
-    return xResult;
+    return uno::Reference< frame::XModel >(pModel ? pModel->getUnoModel() : uno::Reference< frame::XModel >(),uno::UNO_QUERY);
 }
 
 // -----------------------------------------------------------------------------
