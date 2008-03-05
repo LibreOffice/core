@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:00:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace pcr
         void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
         void                        SetHelpId( sal_uInt32 nHelpId );
-        sal_uInt16                  AppendPage( const String& r,sal_uInt32 nHelpId=0);
+        sal_uInt16                  AppendPage( const String& r, const SmartId& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);
         sal_uInt16                  GetCurPage();
