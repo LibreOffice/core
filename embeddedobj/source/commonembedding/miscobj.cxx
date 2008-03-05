@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:04:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
             aObjectProps[nInd].Value >>= m_aClassID;
         else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentServiceName" ) )
             aObjectProps[nInd].Value >>= m_aDocServiceName;
+        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentFilterName" ) )
+            aObjectProps[nInd].Value >>= m_aPresetFilterName;
         else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectMiscStatus" ) )
             aObjectProps[nInd].Value >>= m_nMiscStatus;
         else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectVerbs" ) )
