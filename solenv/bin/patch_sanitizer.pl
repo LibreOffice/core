@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: patch_sanitizer.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 14:54:31 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,29 @@ sub show_help {
 }
 sub parse_patch {
     my $patchfile = shift;
+    my $patchtype;
+    my $pfirst;
+    my $psecond;
+
     my %hunks = ();
     my $origfilename;
     open PATCHFILE, "< $patchfile" or die "Cannot open file $patchfile $!";
-    while (<PATCHFILE>) {
-        if ( $_ =~ /^\*\*\* [^\*]*$/ ) {
+    my @patchfile = <PATCHFILE>;
+    close PATCHFILE;
+    if ( $patchfile[0] =~ /^---/ ) {
+        $patchtype = "unified";
+        $pfirst = '^--- [^\*]*$';
+        $psecond = '^\+\+\+ [^\*]*$';
+    } elsif ( $patchfile[0] =~ /^\*\*\*/ ) {
+        $patchtype = "content";
+        $pfirst = '^\*\*\* [^\*]*$';
+        $psecond = '^--- .*\t.*$';
+    } else {
+        die "unknown patch format\n";
+    }
+
+    foreach (@patchfile) {
+        if ( /$pfirst/ ) {
             my $timestamp;
             # extract the filename, to be able to compare the old
             # with the new file...
@@ -100,7 +118,7 @@ sub parse_patch {
             # ideally convert the timestamp to iso-format...
             $hunks{$origfilename}{'origtimestamp'} = $timestamp;
             next;
-        } elsif ( $_ =~ /^--- .*\t.*$/ ) {
+        } elsif ( $_ =~ /$psecond/ ) {
             my ($filename, $timestamp) = split(/\t/, $_, 2);
             chomp $timestamp;
             # ideally convert the timestamp to iso-format...
@@ -111,6 +129,5 @@ sub parse_patch {
         push (@{$hunks{$origfilename}{'data'}}, $_);
 
     }
-    close PATCHFILE;
     return %hunks;
 }
