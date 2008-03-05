@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.174 $
-# Date:        $Date: 2008-02-27 10:03:23 $
+# Version:     $Revision: 1.175 $
+# Date:        $Date: 2008-03-05 16:37:05 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -40,8 +40,8 @@ use File::Basename;
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
      $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
-     $wps, $wps2, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
-     $USE_MINGW, $platform, $NOWRAPCMD,
+     $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
+     $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
@@ -62,7 +62,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD,
+      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS,
       $FLIPCMD );
 #
 #-------------------------------------------
@@ -103,7 +103,7 @@ my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
 # IIIa. Initialising constants.
 #-------------------------------------------------------------
 #
-# $platform and $NOWRAPCMD are needed for PathFormat()
+# $platform is needed for PathFormat()
 #
 if ('@LOCAL_SOLENV@' eq "DEFAULT")
 {  $platform          = `../solenv/bin/config.guess`;
@@ -112,11 +112,6 @@ else
 {  $platform           = `@LOCAL_SOLENV@/bin/config.guess`;
 }
 chomp( $platform );
-if( "@NOWRAPCMD@" eq "yes" or "@USE_SHELL@" eq "4nt" ) {
-    $NOWRAPCMD = 'yes';
-} else {
-    $NOWRAPCMD = '';
-}
 
 $UPD            = '@UPD@';          # the project's UPD
 $newline        = "\n";             # Perl newline character
@@ -127,7 +122,6 @@ $set            = "set";            # msdos batch file command
 $ds             = "/";              # directory separator
 $ps             = ":";              # path separator
 $wps            = ":";              # path separator, will be set to ';' for windows later.
-$wps2           = ":";              # A cludge while we use WRAPCMD.
 $cur_dir        = ".";              # current directory
 $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
@@ -152,7 +146,6 @@ else
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
-$WRAPCMD        = "";               # Wrapper (only for winnt)
 $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
@@ -644,26 +637,14 @@ elsif ( $platform =~ m/cygwin/ )
       $SET_EXCEPTIONS = "TRUE";
       $use_shl_versions = "TRUE";
       $wps = ';'; # Windows style path seperator
-      $wps2 = ';'; # Ditto, but set to ':' if WRAPCMD is used.
   if ( $MINGW eq "yes" )
   {   # At the moment this implies the use of tcsh
       print "Setting Windows NT cygwin MinGW specific values... ";
-      if ( "$NOWRAPCMD" ne "yes" ) {
-          $WRAPCMD        = "guw.exe";
-          $FLIPCMD        = "guw.exe";
-          $PATH_SEPERATOR = ':';
-          $wps2 = ':';
-      } else {
-          $FLIPCMD        = "slfl.pl";
-          $PATH_SEPERATOR = ';';
-      }
+      $FLIPCMD        = "slfl.pl";
+      $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
       $COMPATH        =~ s/\/bin$//i;
-      if ( $USE_MINGW ne "cygwin" and "$NOWRAPCMD" ne "yes" )
-      { $CC             = $WRAPCMD." ".$CC;
-        $CXX            = $WRAPCMD." ".$CXX;
-      }
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -701,18 +682,9 @@ elsif ( $platform =~ m/cygwin/ )
       }
   if ( "@USE_SHELL@" ne "4nt" )
   {   print "Setting W32 build with bash shell specific values... ";
-      if ( "$NOWRAPCMD" ne "yes" ) {
-          $WRAPCMD        = "guw.exe";
-          $FLIPCMD        = "guw.exe";
-          $CC             = $WRAPCMD." ".$CC;
-          $CXX            = $WRAPCMD." ".$CXX;
-          $PATH_SEPERATOR = ':';
-          $wps2 = ':';
-      } else {
-          # No speacial treatment for CC an CXX anymore.
-          $FLIPCMD        = "slfl.pl";
-          $PATH_SEPERATOR = ';';
-      }
+      # No speacial treatment for CC an CXX anymore.
+      $FLIPCMD        = "slfl.pl";
+      $PATH_SEPERATOR = ';';
   }
   else # "@USE_SHELL@" ne "4nt"
   {   print "Setting W32 build with 4NT shell specific values... ";
@@ -1064,10 +1036,10 @@ $STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
-$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps2.'.';
+$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 # Location of the JDK supported standard classes.zip file.
 # see above for why the change
-$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps2.'.';
+$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 
 # Paths to run time shared libraries.
 if ($platform =~ m/solaris/) 
@@ -1245,9 +1217,7 @@ elsif ($platform =~ m/cygwin|os2/)
    }
 
    # Add path to compiler
-   $tmppath = CygFormat($COMPATH).$BIN;
-   $tmppath =~ s/^\/\//\//;
-   $PATH .= $ps.$tmppath;
+   $PATH .= $ps.CygFormat($COMPATH).$BIN;
 
    if ( $COM eq "MSC" ) {
        $tmppath = CygFormat($MSPDB_PATH);
@@ -1809,7 +1779,6 @@ ToFile( "CDPATHx",           $CDPATHx,           "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
-ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
 #
 # Writing the variables to file.
@@ -1830,12 +1799,10 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
 
-   if ( "@NOWRAPCMD@" eq "yes" ) {
-       # Hack around dmake's mktmp not generating DOS paths.
-       my $tmpdir = qx{cygpath -m "/tmp"};
-       chomp($tmpdir);
-       ToFile( "TMPDIR",     $tmpdir,            "e" );
-   }
+   # Hack around dmake's mktmp not generating DOS paths.
+   my $tmpdir = qx{cygpath -m "/tmp"};
+   chomp($tmpdir);
+   ToFile( "TMPDIR",     $tmpdir,            "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
@@ -2046,8 +2013,8 @@ if ( $platform =~ m/cygwin/ )
    if ( $MINGW eq "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
       ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
-      ToFile( "USE_MINGW",         $USE_MINGW,              "e" ); }
-
+      ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
+   }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
    ToFile( "LS",                $WIN_LS,            "e" );
@@ -2478,13 +2445,8 @@ sub PathFormat
 
        # Replace absolute paths or DOS paths with ...
        if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
-           if ( "$NOWRAPCMD" eq "yes" ) {
-               # mixed mode paths
-               chomp( $variable = qx{cygpath -m "$variable"} );
-           } else {
-               # POSIX paths
-               chomp( $variable = qx{cygpath -u "$variable"} );
-           }
+           # mixed mode paths
+           chomp( $variable = qx{cygpath -m "$variable"} );
        }
    }
    return $variable;
