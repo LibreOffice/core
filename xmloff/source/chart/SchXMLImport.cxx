@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:31:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -929,7 +929,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
         uno::Reference< container::XChild > xChild( xChartDoc, uno::UNO_QUERY );
         uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
         bool bHasOwnData = true;
-        if( xChild.is() && xDataReceiver.is() )
+        if( xChild.is() && xDataReceiver.is())
         {
             Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
             if( xFact.is() )
@@ -938,20 +938,25 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
                 Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xFact, uno::UNO_QUERY );
                 xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-                OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
-                uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
-                const OUString * pBegin = aServiceNames.getConstArray();
-                const OUString * pEnd = pBegin + aServiceNames.getLength();
-                if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
+                if ( !xChartDoc->getDataProvider().is() )
                 {
-                    Reference< chart2::data::XDataProvider > xProvider(
-                        xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
-                    if( xProvider.is())
+                    const OUString aDataProviderServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"));
+                    const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
+                    const OUString * pBegin = aServiceNames.getConstArray();
+                    const OUString * pEnd = pBegin + aServiceNames.getLength();
+                    if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
                     {
-                        xDataReceiver->attachDataProvider( xProvider );
-                        bHasOwnData = false;
+                        Reference< chart2::data::XDataProvider > xProvider(
+                            xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
+                        if( xProvider.is())
+                        {
+                            xDataReceiver->attachDataProvider( xProvider );
+                            bHasOwnData = false;
+                        }
                     }
                 }
+                else
+                    bHasOwnData = false;
             }
 //             else we have no parent => we have our own data
 
