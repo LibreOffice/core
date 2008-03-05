@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:01:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ BOOL SwWrtShell::TryRemoveIndent()
     BOOL bResult = FALSE;
 
     SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
-    GetAttr(aAttrSet);
+    GetCurAttr(aAttrSet);
 
     SvxLRSpaceItem aItem = (const SvxLRSpaceItem &)aAttrSet.Get(RES_LR_SPACE);
     short aOldFirstLineOfst = aItem.GetTxtFirstLineOfst();
