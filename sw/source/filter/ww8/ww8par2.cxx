@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:21:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,9 @@
 #include <fmtfollowtextflow.hxx>
 #endif
 // <--
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 #ifndef WW_WWSTYLES_HXX
 #   include "../inc/wwstyles.hxx"
@@ -963,7 +966,11 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
         pAktColl->SetAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
-        SwNumRule aNR( rDoc.GetUniqueNumRuleName(&aName), OUTLINE_RULE );
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
+                       SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+                       OUTLINE_RULE );
+        // <--
         aNR = *rDoc.GetOutlineNumRule();
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
