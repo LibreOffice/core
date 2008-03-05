@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:50:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
         else
         {
-            pDoc->RstTxtAttr( *pPam, TRUE );
+            pDoc->RstTxtAttrs( *pPam, TRUE );
             if( bJoinNext && pTxtNode->CanJoinNext())
             {
                 {
