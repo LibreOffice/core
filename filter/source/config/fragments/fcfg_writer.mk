@@ -57,6 +57,7 @@ T4_WRITER = \
     writer8_template\
     writer8 \
     writer_MS_Word_2003_XML \
+    writer_MS_Word_2007_XML \
     MediaWiki_File \
     LaTeX \
     BibTeX
@@ -93,6 +94,7 @@ F4_WRITER = \
     writer_MediaWiki_File \
     writer_web_MediaWiki_File \
     MS_Word_2003_XML \
+    MS_Word_2007_XML \
     LaTeX_Writer \
     BibTeX_Writer
 
@@ -112,7 +114,8 @@ F4_UI_WRITER = \
     writer_StarOffice_XML_Writer_Template_ui \
     writer8_ui \
     writer8_template_ui \
-    MS_Word_2003_XML_ui
+    MS_Word_2003_XML_ui \
+    MS_Word_2007_XML_ui
 
 # -----------------------------------------------
 # count = 0
