@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uistrings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,5 +61,7 @@ namespace rptui
     IMPLEMENT_CONSTASCII_USTRING(DBOVERLAPPEDCONTROL            , "OverlappedControl");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMULALIST           , "FormulaList");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SCOPE                 , "Scope");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CHARTTYPE             , "ChartType");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PREVIEW_COUNT         , "RowLimit");
 }
 
