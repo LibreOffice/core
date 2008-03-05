@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:45:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_filter.hxx"
 
 #include "pdfexport.hxx"
+#include "impdialog.hxx"
 
 #include "pdf.hrc"
 #include <tools/urlobj.hxx>
@@ -419,6 +420,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
     INetURLObject   aURL( rFile );
     OUString        aFile;
     sal_Bool        bRet = sal_False;
+
+    std::set< PDFWriter::ErrorCode > aErrors;
 
     if( aURL.GetProtocol() != INET_PROT_FILE )
     {
@@ -912,6 +915,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 {
                     pPDFExtOutDevData->PlayGlobalActions( *pPDFWriter );
                     pPDFWriter->Emit();
+                    aErrors = pPDFWriter->GetErrors();
                 }
                 pOut->SetExtOutDevData( NULL );
             }
@@ -919,7 +923,27 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             delete pPDFWriter;
         }
     }
+
+    // show eventual errors during export
+    showErrors( aErrors );
+
     return bRet;
+}
+
+void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
+{
+    if( ! rErrors.empty() )
+    {
+        ByteString aResMgrName( "pdffilter" );
+        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
+        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        if ( pResMgr )
+        {
+            ImplErrorDialog aDlg( rErrors, *pResMgr );
+            aDlg.Execute();
+            delete pResMgr;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
