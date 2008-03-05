@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:30:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,24 @@
 #include <com/sun/star/style/TabAlign.hpp>
 
 #include <map>
+#include <vector>
 
 namespace com{ namespace sun {namespace star{
+    namespace beans{
+        struct PropertyValue;
+    }
     namespace uno{
         class XComponentContext;
     }
     namespace lang{
         class XMultiServiceFactory;
     }
+    namespace text{
+        class XTextRange;
+    }
 }}}
+
+typedef std::vector< com::sun::star::beans::PropertyValue > PropertyValueVector_t;
 
 namespace writerfilter {
 namespace dmapper
@@ -60,7 +69,6 @@ namespace dmapper
 using namespace std;
 
 class PropertyMap;
-
 class DomainMapper_Impl;
 
 // different context types require different sprm handling (e.g. names)
@@ -118,9 +126,15 @@ public:
     void PushStyleSheetProperties( ::boost::shared_ptr<PropertyMap> pStyleProperties );
     void PopStyleSheetProperties();
 
+    void PushListProperties( ::boost::shared_ptr<PropertyMap> pListProperties );
+    void PopListProperties();
+
     bool IsOOXMLImport() const;
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory() const;
     void  AddListIDToLFOTable( sal_Int32 nAbstractNumId );
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();
+
+    ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
 private:
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
