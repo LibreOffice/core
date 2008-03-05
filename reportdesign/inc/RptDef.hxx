@@ -6,9 +6,9 @@
  *
  *  $RCSfile: RptDef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 15:47:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ const UINT32 ReportInventor = UINT32('R')*0x00000001+
 #define OBJ_DLG_FORMATTEDFIELD  ((UINT16) OBJ_MAXI + 3)
 #define OBJ_DLG_HFIXEDLINE      ((UINT16) OBJ_MAXI + 4)
 #define OBJ_DLG_VFIXEDLINE      ((UINT16) OBJ_MAXI + 5)
+#define OBJ_DLG_SUBREPORT       ((UINT16) OBJ_MAXI + 6)
 
 // allows the alignment and resizing of controls
 namespace ControlModification
