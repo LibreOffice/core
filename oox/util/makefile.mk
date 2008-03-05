@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:29:42 $
+#   last change: $Author: kz $ $Date: 2008-03-05 19:10:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ LIB1FILES=	\
     $(SLB)$/vml.lib\
     $(SLB)$/drawingml.lib\
     $(SLB)$/diagram.lib\
+    $(SLB)$/chart.lib\
     $(SLB)$/shape.lib\
     $(SLB)$/dump.lib
 
