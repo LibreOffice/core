@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:25:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 SfxItemSet aTmpSet( rSh.GetAttrPool(),
                                 RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
 
-                rSh.GetAttr( aTmpSet );
+                rSh.GetCurAttr( aTmpSet );
                 aSet.Put( aTmpSet );
             }
 
@@ -419,7 +419,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case FN_GRAPHIC_MIRROR_ON_EVEN_PAGES:
         {
             SfxItemSet aSet(rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF);
-            rSh.GetAttr( aSet );
+            rSh.GetCurAttr( aSet );
             SwMirrorGrf aGrf((const SwMirrorGrf &)aSet.Get(RES_GRFATR_MIRRORGRF));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
             rSh.SetAttr(aGrf);
@@ -453,7 +453,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case FN_FLIP_VERT_GRAFIC:
         case FN_FLIP_HORZ_GRAFIC:
             {
-                GetShell().GetAttr( aGrfSet );
+                GetShell().GetCurAttr( aGrfSet );
                 SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get(
                                                     RES_GRFATR_MIRRORGRF ) );
                 USHORT nMirror = aMirror.GetValue();
@@ -584,7 +584,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
     SfxItemSet aCoreSet( GetPool(), aNoTxtNodeSetRange );
-    rSh.GetAttr( aCoreSet );
+    rSh.GetCurAttr( aCoreSet );
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
     // --> OD 2006-11-03 #i59688#
