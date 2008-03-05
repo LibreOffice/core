@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:24:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
-                                BOOL bForce )
+                                BOOL bForce, ScProgress* pOuterProgress, ULONG nProgressStart )
 {
     DBG_ASSERT( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
 
@@ -322,7 +322,9 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
     ScProgress* pProgress = NULL;
-    if ( nCount > 1 )
+    if ( pOuterProgress )
+        pProgress = pOuterProgress;
+    else if ( nCount > 1 )
         pProgress = new ScProgress( pDocument->GetDocumentShell(),
                             ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
 
@@ -344,7 +346,7 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
         --nPos;
     SCROW nMinStart = nStartRow + nPos;
 
-    long nWeightedCount = 0;
+    ULONG nWeightedCount = 0;
     for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL schon oben
     {
         aCol[nCol].GetOptimalHeight(
@@ -353,11 +355,11 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
 
         if (pProgress)
         {
-            long nWeight = aCol[nCol].GetWeightedCount();
+            ULONG nWeight = aCol[nCol].GetWeightedCount();
             if (nWeight)        // nochmal denselben Status muss auch nicht sein
             {
                 nWeightedCount += nWeight;
-                pProgress->SetState( nWeightedCount );
+                pProgress->SetState( nWeightedCount + nProgressStart );
             }
         }
     }
@@ -417,7 +419,8 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
         bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
 
     delete[] pHeight;
-    delete pProgress;
+    if ( pProgress != pOuterProgress )
+        delete pProgress;
 
     return bChanged;
 }
