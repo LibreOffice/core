@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:47:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #include "precompiled_sw.hxx"
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 #ifndef _SFX_PRINTER_HXX //autogen
@@ -180,7 +183,11 @@
 #include <fmtcntnt.hxx>     // SwFmtCntnt
 #endif
 // <--
-
+// --> OD 2008-01-31 #newlistlevelattrs#
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 
@@ -413,6 +420,9 @@ void SwTxtFrm::InitCtor()
     mnFtnLine = 0;
     // OD 2004-03-17 #i11860#
     mnHeightOfLastLine = 0;
+    // --> OD 2008-01-31 #newlistlevelattrs#
+    mnAdditionalFirstLineOffset = 0;
+    // <--
 
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
@@ -2225,6 +2235,79 @@ SwTwips SwTxtFrm::CalcFitToContent()
     SetPara( pOldPara );
 
     return nMax;
+}
+
+/** simulate format for a list item paragraph, whose list level attributes
+    are in LABEL_ALIGNMENT mode, in order to determine additional first
+    line offset for the real text formatting due to the value of label
+    adjustment attribute of the list level.
+
+    OD 2008-01-31 #newlistlevelattrs#
+
+    @author OD
+*/
+void SwTxtFrm::CalcAdditionalFirstLineOffset()
+{
+    if ( IsLocked() )
+        return;
+
+    // reset additional first line offset
+    mnAdditionalFirstLineOffset = 0;
+
+    const SwTxtNode* pTxtNode( GetTxtNode() );
+    if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->IsCounted() &&
+         pTxtNode->GetNumRule() )
+    {
+        const SwNumFmt& rNumFmt =
+                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetLevel()) );
+        if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            // keep current paragraph portion and apply dummy paragraph portion
+            SwParaPortion* pOldPara = GetPara();
+            SwParaPortion *pDummy = new SwParaPortion();
+            SetPara( pDummy, false );
+
+            // lock paragraph
+            SwTxtFrmLocker aLock( this );
+
+            // simulate text formatting
+            SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
+            aInf.SetIgnoreFly( sal_True );
+            SwTxtFormatter aLine( this, &aInf );
+            SwHookOut aHook( aInf );
+            aLine._CalcFitToContent();
+
+            // determine additional first line offset
+            const SwLinePortion* pFirstPortion = aLine.GetCurr()->GetFirstPortion();
+            if ( pFirstPortion->InNumberGrp() && !pFirstPortion->IsFtnNumPortion() )
+            {
+                SwTwips nNumberPortionWidth( pFirstPortion->Width() );
+
+                const SwLinePortion* pPortion = pFirstPortion->GetPortion();
+                while ( pPortion &&
+                        pPortion->InNumberGrp() && !pPortion->IsFtnNumPortion())
+                {
+                    nNumberPortionWidth += pPortion->Width();
+                    pPortion = pPortion->GetPortion();
+                }
+
+                if ( ( IsRightToLeft() &&
+                       rNumFmt.GetNumAdjust() == SVX_ADJUST_LEFT ) ||
+                     ( !IsRightToLeft() &&
+                       rNumFmt.GetNumAdjust() == SVX_ADJUST_RIGHT ) )
+                {
+                    mnAdditionalFirstLineOffset = -nNumberPortionWidth;
+                }
+                else if ( rNumFmt.GetNumAdjust() == SVX_ADJUST_CENTER )
+                {
+                    mnAdditionalFirstLineOffset = -(nNumberPortionWidth/2);
+                }
+            }
+
+            // restore paragraph portion
+            SetPara( pOldPara );
+        }
+    }
 }
 
 /** determine height of last line for the calculation of the proportional line
