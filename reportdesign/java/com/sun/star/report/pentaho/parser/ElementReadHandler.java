@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ElementReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser;
 
 import org.jfree.report.structure.Element;
@@ -48,53 +47,52 @@ import org.xml.sax.SAXException;
  */
 public abstract class ElementReadHandler extends AbstractXmlReadHandler
 {
-  public ElementReadHandler()
-  {
-  }
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    final Element element = getElement();
-    copyElementType(element);
-    copyAttributes(attrs, element);
-  }
-
-  protected void copyElementType(final Element element)
-  {
-    element.setType(getTagName());
-    element.setNamespace(getUri());
-  }
-
-  protected void copyAttributes(final Attributes attrs, final Element element)
-  {
-    final int length = attrs.getLength();
-    for (int i = 0; i < length; i++)
+    public ElementReadHandler()
     {
-      final String value = attrs.getValue(i);
-      final String namespace = attrs.getURI(i);
-      final String attr = attrs.getLocalName(i);
-      element.setAttribute(namespace, attr, value);
     }
-  }
 
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs) throws SAXException
+    {
+        final Element element = getElement();
+        copyElementType(element);
+        copyAttributes(attrs, element);
+    }
 
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject() throws SAXException
-  {
-    return getElement();
-  }
+    protected void copyElementType(final Element element)
+    {
+        element.setType(getTagName());
+        element.setNamespace(getUri());
+    }
 
-  public abstract Element getElement ();
+    protected void copyAttributes(final Attributes attrs, final Element element)
+    {
+        final int length = attrs.getLength();
+        for (int i = 0; i < length; i++)
+        {
+            final String value = attrs.getValue(i);
+            final String namespace = attrs.getURI(i);
+            final String attr = attrs.getLocalName(i);
+            element.setAttribute(namespace, attr, value);
+        }
+    }
 
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject() throws SAXException
+    {
+        return getElement();
+    }
+
+    public abstract Element getElement();
 }
