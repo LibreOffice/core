@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:41:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,9 @@ namespace dbaui
         void SetControlText( USHORT nControlId, const String& rText );
         String GetControlText( USHORT nControlId );
         void SetReadOnly( BOOL bReadOnly );
+#if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
-
+#endif
         //  short GetFormatCategory(OFieldDescription* pFieldDescr);
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
