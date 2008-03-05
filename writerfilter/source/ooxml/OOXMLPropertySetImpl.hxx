@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:59:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,20 @@ public:
 
     virtual uno::Any getAny() const;
     virtual rtl::OUString getString() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
+class OOXMLInputStreamValue : public OOXMLValue
+{
+protected:
+    uno::Reference<io::XInputStream> mxInputStream;
+
+public:
+    explicit OOXMLInputStreamValue(uno::Reference<io::XInputStream> xInputStream);
+    virtual ~OOXMLInputStreamValue();
+
+    virtual uno::Any getAny() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };
