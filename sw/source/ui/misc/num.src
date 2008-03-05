@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:20:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,13 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 53 , 16 ) ;
-        Size = MAP_APPFONT ( 132 , 10 ) ;
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "Indent" ;
     };
     MetricField MF_BORDERDIST
     {
-        Pos = MAP_APPFONT ( 188 , 14 ) ;
+        Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -101,19 +101,19 @@ TabPage TP_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 188 , 29 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 198 , 41 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "Relati~ve" ;
     };
     FixedText FT_INDENT
     {
-        Pos = MAP_APPFONT ( 53 , 44 ) ;
-        Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ en-US ] = "Space to te~xt" ;
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Width of numbering" ;
     };
     MetricField MF_INDENT
     {
-        Pos = MAP_APPFONT ( 188 , 42 ) ;
+        Pos = MAP_APPFONT ( 198 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -131,13 +131,13 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_NUMDIST
     {
-        Pos = MAP_APPFONT ( 53 , 60 ) ;
-        Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ en-US ] = "~Minimum space numbering <-> text" ;
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Minimum space numbering <-> text" ;
     };
     MetricField MF_NUMDIST
     {
-        Pos = MAP_APPFONT ( 188 , 58 ) ;
+        Pos = MAP_APPFONT ( 198 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -155,14 +155,14 @@ TabPage TP_NUM_POSITION
     };
     FixedText FT_ALIGN
     {
-        Pos = MAP_APPFONT ( 53 , 76 ) ;
-        Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ en-US ] = "Numbering ~alignment" ;
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "N~umbering alignment" ;
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 188 , 74 ) ;
-        Size = MAP_APPFONT ( 64 , 40 ) ;
+        Pos = MAP_APPFONT ( 198 , 89 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ en-US ] =
@@ -172,16 +172,121 @@ TabPage TP_NUM_POSITION
             < "Right" ; > ;
         };
     };
+    FixedText FT_LABEL_FOLLOWED_BY
+    {
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Numbering followed by" ;
+    };
+    ListBox LB_LABEL_FOLLOWED_BY
+    {
+        Pos = MAP_APPFONT ( 198 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Tab stop" ; > ;
+            < "Space" ; > ;
+            < "Nothing" ; > ;
+        };
+    };
+    FixedText FT_LISTTAB
+    {
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "at" ;
+    };
+    MetricField MF_LISTTAB
+    {
+        Pos = MAP_APPFONT ( 198 , 41 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_ALIGN_2
+    {
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+    };
+    ListBox LB_ALIGN_2
+    {
+        Pos = MAP_APPFONT ( 198 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_ALIGNED_AT
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Aligned at" ;
+    };
+    MetricField MF_ALIGNED_AT
+    {
+        Pos = MAP_APPFONT ( 198 , 73 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -1999 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_INDENT_AT
+    {
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Indent at" ;
+    };
+    MetricField MF_INDENT_AT
+    {
+        Pos = MAP_APPFONT ( 198 , 89 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -1999 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 53 , 90 ) ;
+        Pos = MAP_APPFONT ( 198 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Default" ;
+        Text [ en-US ] = "Default" ;
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 53 , 111 ) ;
-        Size = MAP_APPFONT ( 198 , 66 ) ;
+        Pos = MAP_APPFONT ( 50 , 113 ) ;
+        Size = MAP_APPFONT ( 143 , 67 ) ;
+        Border = TRUE ;
     };
 };
 
