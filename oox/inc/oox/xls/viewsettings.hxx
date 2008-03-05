@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ struct OoxSheetViewData
     bool                mbShowHeadings;                 /// True = show column/row headings.
     bool                mbShowZeros;                    /// True = show zero value zells.
     bool                mbShowOutline;                  /// True = show outlines.
+    bool                mbZoomToFit;                    /// True = zoom chart sheet to fit window.
 
     explicit            OoxSheetViewData();
 
@@ -120,6 +121,8 @@ public:
     void                importPane( const AttributeList& rAttribs );
     /** Imports the selection element containing selection settings for a pane. */
     void                importSelection( const AttributeList& rAttribs );
+    /** Imports the sheetView element containing view settings of a chart sheet. */
+    void                importChartSheetView( const AttributeList& rAttribs );
 
     /** Imports the SHEETVIEW record containing sheet view settings. */
     void                importSheetView( RecordInputStream& rStrm );
@@ -127,6 +130,8 @@ public:
     void                importPane( RecordInputStream& rStrm );
     /** Imports the SELECTION record containing selection settings for a pane. */
     void                importSelection( RecordInputStream& rStrm );
+    /** Imports the CHARTSHEETVIEW record containing view settings of a chart sheet. */
+    void                importChartSheetView( RecordInputStream& rStrm );
 
     /** Imports the WINDOW2 record containing sheet view settings. */
     void                importWindow2( BiffInputStream& rStrm );

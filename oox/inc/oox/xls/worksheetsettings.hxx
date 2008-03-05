@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheetsettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,17 @@ namespace xls {
 
 // ============================================================================
 
-/** Outline symbol settings. */
-struct OoxOutlinePrData
+/** Sheet and outline settings. */
+struct OoxSheetPrData
 {
+    ::rtl::OUString     maCodeName;             /// VBA module codename.
+    OoxColor            maTabColor;             /// Sheet tab color.
+    bool                mbFilterMode;           /// True = sheet contains active filter.
     bool                mbApplyStyles;          /// True = automatic styles when creating outlines.
     bool                mbSummaryBelow;         /// True = row outline symbols below group.
     bool                mbSummaryRight;         /// True = column outline symbols right of group.
 
-    explicit            OoxOutlinePrData();
+    explicit            OoxSheetPrData();
 };
 
 // ============================================================================
@@ -87,17 +90,29 @@ class WorksheetSettings : public WorksheetHelper
 public:
     explicit            WorksheetSettings( const WorksheetHelper& rHelper );
 
+    /** Imports sheet settings from the sheetPr element. */
+    void                importSheetPr( const AttributeList& rAttribs );
+    /** Imports chart sheet settings from the sheetPr element. */
+    void                importChartSheetPr( const AttributeList& rAttribs );
+    /** Imports the sheet tab color from the tabColor element. */
+    void                importTabColor( const AttributeList& rAttribs );
     /** Imports outline settings from the outlinePr element. */
     void                importOutlinePr( const AttributeList& rAttribs );
     /** Imports protection settings from the sheetProtection element. */
     void                importSheetProtection( const AttributeList& rAttribs );
+    /** Imports protection settings from the sheetProtection element of a chart sheet. */
+    void                importChartProtection( const AttributeList& rAttribs );
     /** Imports phonetic settings from the phoneticPr element. */
     void                importPhoneticPr( const AttributeList& rAttribs );
 
     /** Imports sheet properties from the SHEETPR record. */
     void                importSheetPr( RecordInputStream& rStrm );
-    /** Imports protection settings from the SHEETPROTECTION record. */
+    /** Imports sheet properties from the CHARTSHEETPR record. */
+    void                importChartSheetPr( RecordInputStream& rStrm );
+    /** Imports sheet protection settings from the SHEETPROTECTION record. */
     void                importSheetProtection( RecordInputStream& rStrm );
+    /** Imports chart sheet protection settings from the CHARTPROTECTION record. */
+    void                importChartProtection( RecordInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( RecordInputStream& rStrm );
 
@@ -121,7 +136,7 @@ public:
 
 private:
     PhoneticSettings    maPhoneticSett;
-    OoxOutlinePrData    maOoxOutlineData;
+    OoxSheetPrData      maOoxSheetData;
     OoxSheetProtectionData maOoxProtData;
 };
 
