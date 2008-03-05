@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:20:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,11 @@ namespace starutil      = ::com::sun::star::util;
 
 sdbcx::ObjectType OCalcTables::createObject(const ::rtl::OUString& _rName)
 {
-    return new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    OCalcTable* pTable = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
+    sdbcx::ObjectType xRet = pTable;
+    pTable->construct();
+    return xRet;
 }
 // -------------------------------------------------------------------------
 
