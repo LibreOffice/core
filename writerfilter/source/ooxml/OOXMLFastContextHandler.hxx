@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLFastContextHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:57:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ public:
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -91,7 +91,7 @@ public:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void SAL_CALL endFastElement(::sal_Int32 Element)
+    virtual void SAL_CALL endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void SAL_CALL endUnknownElement
@@ -100,7 +100,7 @@ public:
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -151,6 +151,7 @@ public:
     virtual OOXMLPropertySet::Pointer_t getPropertySet();
 
     void setToken(Token_t nToken);
+    Token_t getToken() const;
 
     void resolveFootnote(const rtl::OUString & rId);
     void resolveEndnote(const rtl::OUString & rId);
@@ -160,22 +161,27 @@ public:
                                 const rtl::OUString & rId);
     void resolveFooter(const sal_Int32 type,
                                 const rtl::OUString & rId);
+    void resolveOLE(const rtl::OUString & rId);
 
     ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
 
     uno::Reference < xml::sax::XFastContextHandler >
     createFromStart
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs);
 
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument();
-    void setXNoteId(const rtl::OUString & rId);
+    void setXNoteId(const ::rtl::OUString & rId);
     const rtl::OUString & getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
     virtual void setParent(OOXMLFastContextHandler * pParent);
     virtual void setId(Id nId);
+    virtual Id getId() const;
+
+    void setFallback(bool bFallbac);
+    bool isFallback() const;
 
 #ifdef DEBUG_MEMORY
     virtual void SAL_CALL acquire() throw();
@@ -201,24 +207,24 @@ protected:
     unsigned int mnTableDepth;
 
     virtual void lcl_startFastElement
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual uno::Reference< xml::sax::XFastContextHandler >
     lcl_createFastChildContext
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void lcl_characters(const ::rtl::OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void startAction();
-    virtual void endAction();
+    virtual void startAction(Token_t Element);
+    virtual void endAction(Token_t Element);
 
 
     // Returns string for resource of this context. (debug)
@@ -248,12 +254,13 @@ protected:
     void pgNum();
     void tab();
     void cr();
-    void noBreak();
+    void noBreakHyphen();
     void softHyphen();
     void endOfParagraph();
     void text(const ::rtl::OUString & sText);
-    void propagateCharacterProperties();
-    virtual bool propagatesCharacterProperties() const;
+    virtual void propagateCharacterProperties();
+    virtual bool propagatesProperties() const;
+    void propagateTableProperties();
     void clearProps();
 
     void sendPropertyToParent();
@@ -268,6 +275,8 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
 
     static sal_uInt32 mnInstanceCount;
+
+    bool mbFallback;
 };
 
 class OOXMLFastContextHandlerNoResource : public OOXMLFastContextHandler
@@ -289,6 +298,7 @@ public:
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     virtual void sendProperty(Id nId);
+    virtual OOXMLPropertySet::Pointer_t getPropertySet();
 
     virtual string toString() const;
 
@@ -321,6 +331,7 @@ public:
     void handleComment();
     void handlePicture();
     void handleBreak();
+    void handleOLE();
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet();
@@ -329,7 +340,7 @@ protected:
     /// the properties
     OOXMLPropertySet::Pointer_t mpPropertySet;
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void setParent(OOXMLFastContextHandler * pParent);
 
@@ -350,7 +361,7 @@ protected:
     Token_t mId;
     OOXMLTableImpl mTable;
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
  };
 
@@ -368,7 +379,7 @@ protected:
     virtual void attributes
     (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual OOXMLValue::Pointer_t getValue() const;
@@ -389,7 +400,7 @@ protected:
     void attributes
     (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual OOXMLValue::Pointer_t getValue() const;
@@ -409,7 +420,7 @@ protected:
     void attributes
     (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual OOXMLValue::Pointer_t getValue() const;
@@ -429,7 +440,7 @@ protected:
     void attributes
     (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual OOXMLValue::Pointer_t getValue() const;
@@ -446,7 +457,7 @@ public:
 protected:
     mutable OOXMLValue::Pointer_t mpValue;
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual OOXMLValue::Pointer_t getValue() const;
 };
@@ -459,7 +470,7 @@ public:
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -471,7 +482,7 @@ protected:
 
     RefAndPointer_t mCurrentChild;
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual ResourceEnum_t getResource() const { return TABLE; }
@@ -488,13 +499,14 @@ public:
     void checkId(const rtl::OUString & rId);
 private:
     bool mbForwardEventsSaved;
+    ::rtl::OUString msMyXNoteId;
 
     virtual void lcl_startFastElement
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual ResourceEnum_t getResource() const { return STREAM; }
@@ -532,11 +544,11 @@ public:
 
 protected:
     virtual void lcl_startFastElement
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 };
 
@@ -572,16 +584,16 @@ protected:
     ShapeContextRef mrShapeContext;
 
     virtual void lcl_startFastElement
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_endFastElement(::sal_Int32 Element)
+    virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual uno::Reference< xml::sax::XFastContextHandler >
     lcl_createFastChildContext
-    (::sal_Int32 Element,
+    (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
