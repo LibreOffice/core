@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sheetdatacontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_XLS_SHEETDATACONTEXT_HXX
 #define OOX_XLS_SHEETDATACONTEXT_HXX
 
-#include "oox/xls/ooxcontexthandler.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/richstring.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
@@ -57,21 +57,22 @@ namespace xls {
 class OoxSheetDataContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            OoxSheetDataContext( const OoxWorksheetFragmentBase& rFragment );
+    explicit            OoxSheetDataContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual bool        onCanCreateRecordContext( sal_Int32 nRecId );
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
+    /** Different types of cell records. */
+    enum CellType { CELLTYPE_VALUE, CELLTYPE_MULTI, CELLTYPE_FORMULA };
+
     /** Imports row settings from a row element. */
     void                importRow( const AttributeList& rAttribs );
     /** Imports cell settings from a c element. */
@@ -80,23 +81,23 @@ private:
     void                importFormula( const AttributeList& rAttribs );
 
     /** Imports a cell address and the following XF identifier. */
-    void                importCellHeader( RecordInputStream& rStrm );
-    /** Imports a boolean cell from a CELL_BOOL or FORMULA_BOOL record. */
-    void                importCellBool( RecordInputStream& rStrm, bool bFormula );
-    /** Imports an empty cell from a CELL_BLANK record. */
-    void                importCellBlank( RecordInputStream& rStrm );
-    /** Imports a numeric cell from a CELL_DOUBLE or FORMULA_DOUBLE record. */
-    void                importCellDouble( RecordInputStream& rStrm, bool bFormula );
-    /** Imports an error code cell from a CELL_ERROR or FORMULA_ERROR record. */
-    void                importCellError( RecordInputStream& rStrm, bool bFormula );
-    /** Imports an encoded numeric cell from a CELL_RK record. */
-    void                importCellRk( RecordInputStream& rStrm );
-    /** Imports a rich-string cell from a CELL_RSTRING record. */
-    void                importCellRString( RecordInputStream& rStrm );
-    /** Imports a string cell from a CELL_SI record. */
-    void                importCellSi( RecordInputStream& rStrm );
-    /** Imports a string cell from a CELL_STRING or FORMULA_STRING record. */
-    void                importCellString( RecordInputStream& rStrm, bool bFormula );
+    void                importCellHeader( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports an empty cell from a CELL_BLANK or MULTCELL_BLANK record. */
+    void                importCellBlank( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports a boolean cell from a CELL_BOOL, MULTCELL_BOOL, or FORMULA_BOOL record. */
+    void                importCellBool( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports a numeric cell from a CELL_DOUBLE, MULTCELL_DOUBLE, or FORMULA_DOUBLE record. */
+    void                importCellDouble( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports an error code cell from a CELL_ERROR, MULTCELL_ERROR, or FORMULA_ERROR record. */
+    void                importCellError( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports an encoded numeric cell from a CELL_RK or MULTCELL_RK record. */
+    void                importCellRk( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports a rich-string cell from a CELL_RSTRING or MULTCELL_RSTRING record. */
+    void                importCellRString( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports a string cell from a CELL_SI or MULTCELL_SI record. */
+    void                importCellSi( RecordInputStream& rStrm, CellType eCellType );
+    /** Imports a string cell from a CELL_STRING, MULTCELL_STRING, or FORMULA_STRING record. */
+    void                importCellString( RecordInputStream& rStrm, CellType eCellType );
 
     /** Imports a cell formula for the current cell. */
     void                importCellFormula( RecordInputStream& rStrm );
@@ -128,18 +129,18 @@ class OoxExternalSheetDataContext : public OoxWorksheetContextBase
 {
 public:
     explicit            OoxExternalSheetDataContext(
-                            const OoxWorkbookFragmentBase& rFragment,
+                            OoxWorkbookFragmentBase& rFragment,
                             WorksheetType eSheetType,
                             sal_Int32 nSheet );
 
 protected:
-    // oox.xls.ContextHelper interface ----------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual bool        onCanCreateRecordContext( sal_Int32 nRecId );
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
@@ -148,6 +149,8 @@ private:
 
     void                importCellHeader( RecordInputStream& rStrm );
 
+    /** Imports the EXTCELL_BLANK from the passed stream. */
+    void                importExtCellBlank( RecordInputStream& rStrm );
     /** Imports the EXTCELL_BOOL from the passed stream. */
     void                importExtCellBool( RecordInputStream& rStrm );
     /** Imports the EXTCELL_DOUBLE from the passed stream. */
