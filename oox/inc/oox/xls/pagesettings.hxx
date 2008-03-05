@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagesettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include "oox/xls/worksheethelper.hxx"
 #include "oox/xls/headerfooterparser.hxx"
 
+namespace oox { namespace core {
+    class Relations;
+} }
+
 namespace oox {
 namespace xls {
 
@@ -48,7 +52,8 @@ namespace xls {
 /** Holds page style data for a single sheet. */
 struct OoxPageData
 {
-    ::rtl::OUString     maRelId;                /// Relation identifier for binary printer settings.
+    ::rtl::OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
+    ::rtl::OUString     maPicturePath;          /// Relation identifier of background image.
     ::rtl::OUString     maOddHeader;            /// Header string for odd pages.
     ::rtl::OUString     maOddFooter;            /// Footer string for odd pages.
     ::rtl::OUString     maEvenHeader;           /// Header string for even pages.
@@ -98,25 +103,33 @@ class PageSettings : public WorksheetHelper
 public:
     explicit            PageSettings( const WorksheetHelper& rHelper );
 
-    /** Imports pageMarings context. */
-    void                importPageMargins( const AttributeList& rAttribs );
-    /** Imports pageSetup context. */
-    void                importPageSetup( const AttributeList& rAttribs );
     /** Imports printing options from a printOptions element. */
     void                importPrintOptions( const AttributeList& rAttribs );
+    /** Imports pageMarings element containing page margins. */
+    void                importPageMargins( const AttributeList& rAttribs );
+    /** Imports pageSetup element for worksheets. */
+    void                importPageSetup( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
+    /** Imports pageSetup element for chart sheets. */
+    void                importChartPageSetup( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
     /** Imports header and footer settings from a headerFooter element. */
     void                importHeaderFooter( const AttributeList& rAttribs );
     /** Imports header/footer characters from a headerFooter element. */
     void                importHeaderFooterCharacters( const ::rtl::OUString& rChars, sal_Int32 nElement );
+    /** Imports the picture element. */
+    void                importPicture( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
 
+    /** Imports the PRINTOPTIONS record from the passed stream. */
+    void                importPrintOptions( RecordInputStream& rStrm );
     /** Imports the PAGEMARGINS record from the passed stream. */
     void                importPageMargins( RecordInputStream& rStrm );
     /** Imports the PAGESETUP record from the passed stream. */
-    void                importPageSetup( RecordInputStream& rStrm );
-    /** Imports the PRINTOPTIONS record from the passed stream. */
-    void                importPrintOptions( RecordInputStream& rStrm );
+    void                importPageSetup( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
+    /** Imports the CHARTPAGESETUP record from the passed stream. */
+    void                importChartPageSetup( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
     /** Imports the HEADERFOOTER record from the passed stream. */
     void                importHeaderFooter( RecordInputStream& rStrm );
+    /** Imports the PICTURE record from the passed stream. */
+    void                importPicture( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
 
     /** Imports the LEFTMARGIN record from the passed BIFF stream. */
     void                importLeftMargin( BiffInputStream& rStrm );
@@ -140,6 +153,8 @@ public:
     void                importHeader( BiffInputStream& rStrm );
     /** Imports the FOOTER record from the passed BIFF stream. */
     void                importFooter( BiffInputStream& rStrm );
+    /** Imports the PICTURE record from the passed BIFF stream. */
+    void                importPicture( BiffInputStream& rStrm );
 
     /** Sets whether percentual scaling or fit to width/height scaling is used. */
     void                setFitToPagesMode( bool bFitToPages );
@@ -196,6 +211,7 @@ private:
 private:
     HeaderFooterParser  maHFParser;
     PropertySequence    maPageProps;
+    PropertySequence    maGraphicProps;
     HFHelperData        maHeaderData;
     HFHelperData        maFooterData;
 };
