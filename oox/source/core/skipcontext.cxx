@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skipcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,18 +33,17 @@
  *
  ************************************************************************/
 
-#include "oox/core/context.hxx"
 #include "oox/core/skipcontext.hxx"
 
+namespace oox {
+namespace core {
 
+SkipContext::SkipContext( ContextHandler& rParent )
+    : ContextHandler( rParent )
+{
+    OSL_TRACE( "OOX: Skipping Context" );
+}
 
-namespace oox { namespace core {
+} // namespace core
+} // namespace oox
 
-    SkipContext::SkipContext( const FragmentHandlerRef& xHandler )
-        : Context( xHandler )
-    {
-        OSL_TRACE( "OOX: Skipping Context" );
-    }
-
-
-} }
