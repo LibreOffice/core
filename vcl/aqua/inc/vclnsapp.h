@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclnsapp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:14:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app;
 -(void)systemColorsChanged: (NSNotification*) pNotification;
 -(void)screenParametersChanged: (NSNotification*) pNotification;
+-(void)scrollbarVariantChanged: (NSNotification*) pNotification;
+-(void)scrollbarSettingsChanged: (NSNotification*) pNotification;
+-(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
+-(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
 @end
 
 
