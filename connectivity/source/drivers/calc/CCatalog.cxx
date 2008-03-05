@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CCatalog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:18:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ void OCalcCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
+    OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
 
@@ -84,6 +85,10 @@ void OCalcCatalog::refreshTables()
         m_pTables->reFill(aVector);
     else
         m_pTables = new OCalcTables(m_xMetaData,*this,m_aMutex,aVector);
+
+    // this avoids that the document will be loaded a 2nd time when one table will be accessed.
+    if ( m_pTables && m_pTables->hasElements() )
+        m_pTables->getByIndex(0);
 }
 // -----------------------------------------------------------------------------
 
