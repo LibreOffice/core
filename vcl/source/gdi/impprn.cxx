@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:22:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,6 @@ struct QueuePage
 ImplQPrinter::ImplQPrinter( Printer* pParent ) :
     Printer( pParent->GetName() ),
     mpParent( pParent ),
-    mpQueue( new Queue( mpParent->GetPageQueueSize() ) ),
     mbAborted( false ),
     mbUserCopy( false ),
     mbDestroyAllowed( true ),
@@ -106,14 +105,9 @@ ImplQPrinter::ImplQPrinter( Printer* pParent ) :
 
 ImplQPrinter::~ImplQPrinter()
 {
-    QueuePage* pQueuePage = (QueuePage*)mpQueue->Get();
-    while ( pQueuePage )
-    {
-        delete pQueuePage;
-        pQueuePage = (QueuePage*)mpQueue->Get();
-    }
-
-    delete mpQueue;
+    for( std::vector< QueuePage* >::iterator it = maQueue.begin();
+         it != maQueue.end(); ++it )
+        delete (*it);
 }
 
 // -----------------------------------------------------------------------------
@@ -366,19 +360,15 @@ void ImplQPrinter::PostPrintPage()
 
 // -----------------------------------------------------------------------
 
-void ImplQPrinter::PrintNextPage()
+void ImplQPrinter::PrintPage( unsigned int nPage )
 {
-    if( mnCurCopyCount < 1 )
-    {
-        if( mpQueue->Count() == 0 )
-            return;
-        mnCurCopyCount = (mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1;
-        QueuePage* pActPage = reinterpret_cast<QueuePage*>(mpQueue->Get());
-        PrePrintPage( pActPage );
-        if ( pActPage->mpSetup )
-            SetJobSetup( *pActPage->mpSetup );
-        delete pActPage;
-    }
+    if( nPage >= maQueue.size() )
+        return;
+    mnCurCopyCount = (mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1;
+    QueuePage* pActPage = maQueue[nPage];
+    PrePrintPage( pActPage );
+    if ( pActPage->mpSetup )
+        SetJobSetup( *pActPage->mpSetup );
 
     StartPage();
     ImplPrintMtf( maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
@@ -393,7 +383,7 @@ void ImplQPrinter::PrintNextPage()
 
 ULONG ImplQPrinter::GetPrintPageCount()
 {
-    ULONG nPageCount = mpQueue->Count() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
+    ULONG nPageCount = maQueue.size() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
     return nPageCount;
 }
 
@@ -402,11 +392,12 @@ ULONG ImplQPrinter::GetPrintPageCount()
 IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 {
     // Ist Drucken abgebrochen wurden?
-    if( !IsPrinting() || ( mpParent->IsJobActive() && ( mpQueue->Count() < (ULONG)mpParent->GetPageQueueSize() ) ) )
+    if( !IsPrinting() || ( mpParent->IsJobActive() && ( maQueue.size() < (ULONG)mpParent->GetPageQueueSize() ) ) )
         return 0;
 
     // Druck-Job zuende?
-    QueuePage* pActPage = reinterpret_cast<QueuePage*>(mpQueue->Get());
+    QueuePage* pActPage = maQueue.front();
+    maQueue.erase( maQueue.begin() );
 
 
     vcl::DeletionListener aDel( this );
@@ -488,8 +479,7 @@ void ImplQPrinter::EndQueuePrint()
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
                                  this );
-            mpPrinter->EndJob();
-            mbJobActive = mbPrinting = FALSE;
+            EndJob();
             mpParent->ImplEndPrint();
         }
     }
@@ -497,7 +487,7 @@ void ImplQPrinter::EndQueuePrint()
     {
         QueuePage* pQueuePage   = new QueuePage;
         pQueuePage->mbEndJob    = TRUE;
-        mpQueue->Put( pQueuePage );
+        maQueue.push_back( pQueuePage );
     }
 }
 
@@ -520,5 +510,5 @@ void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobS
     pQueuePage->mbEndJob    = FALSE;
     if ( bNewJobSetup )
         pQueuePage->mpSetup = new JobSetup( mpParent->GetJobSetup() );
-    mpQueue->Put( pQueuePage );
+    maQueue.push_back( pQueuePage );
 }
