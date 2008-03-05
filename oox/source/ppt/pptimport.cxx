@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "oox/ppt/pptimport.hxx"
+#include "oox/dump/pptxdumper.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -71,8 +72,13 @@ PowerPointImport::~PowerPointImport()
 
 bool PowerPointImport::importDocument() throw()
 {
-    OUString aFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "officeDocument" ) );
-    return importFragment( new PresentationFragmentHandler( this, aFragmentPath ) );
+    /*  to activate the PPTX dumper, define the environment variable
+        OOO_PPTXDUMPER and insert the full path to the file
+        file:///<path-to-oox-module>/source/dump/pptxdumperconfig.dat. */
+    OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
+
+    OUString aFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
+    return importFragment( new PresentationFragmentHandler( *this, aFragmentPath ) );
 }
 
 bool PowerPointImport::exportDocument() throw()
