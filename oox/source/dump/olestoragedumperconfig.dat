@@ -1,0 +1,56 @@
+﻿
+# dumper settings ============================================================
+
+# Path to additional configuration data, relative to this file.
+include-config-file=dumperconfig.dat
+
+# name lists =================================================================
+
+F29F85E0-4FF9-1068-AB91-08002B27B3D9=GlobalDocProp
+D5CDD502-2E9C-101B-9397-08002B2CF9AE=BuiltinDocProp
+D5CDD505-2E9C-101B-9397-08002B2CF9AE=CustomDocProp
+
+constlist=OLEPROP-BYTE-ORDER
+  0xFEFF=big-endian
+  0xFFFE=little-endian
+end
+
+shortlist=OLEPROP-OSTYPE,0,dos,mac,win32,unix
+
+multilist=OLEPROP-BASEIDS
+  quote-names=1
+  default=
+  0=dictionary,codepage
+end
+
+multilist=OLEPROP-GLOBALIDS
+  include=OLEPROP-BASEIDS
+  2=title,subject,author,keywords,comments,template,last-author,rev-number
+  10=edit-time,last-printed,create-time,last-saved,page-count,word-count,char-count,thumbnail,appname,security
+end
+
+multilist=OLEPROP-BUILTINIDS
+  include=OLEPROP-BASEIDS
+  2=category,pres-target,byte-count,line-count,para-count,slide-count,note-count,hidden-slide-count
+  10=clips,scale-crop,heading-pairs,part-titles,manager,company,links-uptodate
+end
+
+multilist=OLEPROP-TYPE-SIMPLE
+  0=empty,null,int16,int32,float,double,fixed,date,string8,dispatch
+  10=error,bool,variant,unknown,decimal,int8,uint8,uint16,uint32
+  20=int64,uint64,int,uint,void,hresult,ptr,savearray,c-array,userdef
+  30=string8,string16
+  64=time-stamp,blob,stream,storage,stream-obj,storage-obj
+  70=blob-obj,clip-fmt,guid,vers-stream
+  0x0FFF=str8-blob
+end
+
+combilist=OLEPROP-TYPE
+  0x0FFF=int32,dec,base-type,OLEPROP-TYPE-SIMPLE
+  0x1000=vector
+  0x2000=array
+  0x4000=byref
+end
+
+# ============================================================================
+

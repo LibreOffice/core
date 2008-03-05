@@ -1,0 +1,19 @@
+﻿
+# dumper settings ============================================================
+
+# Path to additional configuration data, relative to this file.
+include-config-file=dumperconfig.dat
+
+# Enable entire dumper (default=off). This option does not affect the option
+# 'enable-import'.
+#   0=off, 1=on
+enable-dumper=1
+
+# Enable import after dumping (default=on). Disabling this option allows
+# to dump a file without loading it. This option is independent from the
+# 'enable-dumper' option.
+#   0=off, 1=on
+enable-import=1
+
+# ============================================================================
+
