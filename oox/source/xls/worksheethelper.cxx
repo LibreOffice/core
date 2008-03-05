@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheethelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #include <list>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -49,13 +51,14 @@
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/condformatbuffer.hxx"
+#include "oox/xls/drawingfragment.hxx"
 #include "oox/xls/formulaparser.hxx"
-#include "oox/xls/ooxtokens.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/sharedformulabuffer.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
@@ -74,6 +77,8 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::util::XMergeable;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::table::BorderLine;
@@ -144,6 +149,7 @@ OoxColumnData::OoxColumnData() :
     mfWidth( 0.0 ),
     mnXfId( -1 ),
     mnLevel( 0 ),
+    mbShowPhonetic( false ),
     mbHidden( false ),
     mbCollapsed( false )
 {
@@ -291,6 +297,13 @@ public:
     /** Returns the XTableRows interface for a range of rows. */
     Reference< XTableRows > getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
 
+    /** Returns the absolute cell position in 1/100 mm. */
+    Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
+    /** Returns the cell size in 1/100 mm. */
+    Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
+    /** Returns the size of the entire drawing page in 1/100 mm. */
+    Size                getDrawPageSize() const;
+
     /** Returns the worksheet settings object. */
     inline WorksheetSettings& getWorksheetSettings() { return maSheetSett; }
     /** Returns the buffer containing all shared formulas in this sheet. */
@@ -302,6 +315,8 @@ public:
     /** Returns the view settings for this sheet. */
     inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
 
+    /** Changes the current sheet type. */
+    inline void         setSheetType( WorksheetType eSheetType ) { meSheetType = eSheetType; }
     /** Sets the dimension (used area) of the sheet. */
     void                setDimension( const CellRangeAddress& rRange );
     /** Stores the cell format at the passed address. */
@@ -314,6 +329,8 @@ public:
     void                setHyperlink( const OoxHyperlinkData& rHyperlink );
     /** Inserts the data validation settings into the spreadsheet. */
     void                setValidation( const OoxValidationData& rValData );
+    /** Sets the path to the DrawingML fragment of this sheet. */
+    void                setDrawingPath( const OUString& rDrawingPath );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if base width has not been set with setDefaultColumnWidth(). */
@@ -395,6 +412,9 @@ private:
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const CellRangeAddress& rRange ) const;
 
+    /** Imports the drawing layer of the sheet. */
+    void                finalizeDrawing();
+
     /** Converts column properties for all columns in the sheet. */
     void                convertColumns();
     /** Converts column properties. */
@@ -419,6 +439,8 @@ private:
     const OUString      maBottomBorderProp; /// Property name of the bottom border of a cell.
     const OUString      maWidthProp;        /// Property name for column width.
     const OUString      maHeightProp;       /// Property name for row height.
+    const OUString      maPositionProp;     /// Property name for cell position.
+    const OUString      maSizeProp;         /// Property name for cell size.
     const OUString      maVisibleProp;      /// Property name for column/row visibility.
     const OUString      maPageBreakProp;    /// Property name of a page break.
     const OUString      maUrlTextField;     /// Service name for a URL text field.
@@ -440,10 +462,11 @@ private:
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formattings.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
+    OUString            maDrawingPath;      /// Path to DrawingML fragment.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
-    const WorksheetType meSheetType;        /// Type of thes sheet.
+    WorksheetType       meSheetType;        /// Type of this sheet.
     Reference< XSpreadsheet > mxSheet;      /// Reference to the current sheet.
     sal_Int16           mnSheet;            /// Index of the current sheet.
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
@@ -461,17 +484,19 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maBottomBorderProp( CREATE_OUSTRING( "BottomBorder" ) ),
     maWidthProp( CREATE_OUSTRING( "Width" ) ),
     maHeightProp( CREATE_OUSTRING( "Height" ) ),
+    maPositionProp( CREATE_OUSTRING( "Position" ) ),
+    maSizeProp( CREATE_OUSTRING( "Size" ) ),
     maVisibleProp( CREATE_OUSTRING( "IsVisible" ) ),
     maPageBreakProp( CREATE_OUSTRING( "IsStartOfNewPage" ) ),
     maUrlTextField( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ),
     maUrlProp( CREATE_OUSTRING( "URL" ) ),
     maReprProp( CREATE_OUSTRING( "Representation" ) ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
-    maSheetSett( WorksheetHelper( *this ) ),
-    maSharedFmlas( WorksheetHelper( *this ) ),
-    maCondFormats( WorksheetHelper( *this ) ),
-    maPageSett( WorksheetHelper( *this ) ),
-    maSheetViewSett( WorksheetHelper( *this ) ),
+    maSheetSett( *this ),
+    maSharedFmlas( *this ),
+    maCondFormats( *this ),
+    maPageSett( *this ),
+    maSheetViewSett( *this ),
     mxProgressBar( xProgressBar ),
     meSheetType( eSheetType ),
     mnSheet( static_cast< sal_Int16 >( nSheet ) ),
@@ -612,6 +637,30 @@ Reference< XTableRows > WorksheetData::getRows( sal_Int32 nFirstRow, sal_Int32 n
     return xRows;
 }
 
+Point WorksheetData::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
+{
+    Point aPoint;
+    PropertySet aCellProp( getCell( CellAddress( mnSheet, nCol, nRow ) ) );
+    aCellProp.getProperty( aPoint, maPositionProp );
+    return aPoint;
+}
+
+Size WorksheetData::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
+{
+    Size aSize;
+    PropertySet aCellProp( getCell( CellAddress( mnSheet, nCol, nRow ) ) );
+    aCellProp.getProperty( aSize, maSizeProp );
+    return aSize;
+}
+
+Size WorksheetData::getDrawPageSize() const
+{
+    Size aSize;
+    PropertySet aRangeProp( getCellRange( CellRangeAddress( mnSheet, 0, 0, mrMaxApiPos.Column, mrMaxApiPos.Row ) ) );
+    aRangeProp.getProperty( aSize, maSizeProp );
+    return aSize;
+}
+
 void WorksheetData::setDimension( const CellRangeAddress& rRange )
 {
     maDimension = rRange;
@@ -690,6 +739,11 @@ void WorksheetData::setValidation( const OoxValidationData& rValData )
     maValidations.push_back( rValData );
 }
 
+void WorksheetData::setDrawingPath( const OUString& rDrawingPath )
+{
+    maDrawingPath = rDrawingPath;
+}
+
 void WorksheetData::setBaseColumnWidth( sal_Int32 nWidth )
 {
     // do not modify width, if setDefaultColumnWidth() has been used
@@ -698,7 +752,7 @@ void WorksheetData::setBaseColumnWidth( sal_Int32 nWidth )
         /*  #i3006# add 5 pixels padding to the width, assuming 1 pixel =
             1/96 inch. => 5/96 inch == 1.32 mm. */
         const UnitConverter& rUnitConv = getUnitConverter();
-        maDefColData.mfWidth = rUnitConv.calcDigitsFromMm100( rUnitConv.calcMm100FromDigits( nWidth ) + 132 );
+        maDefColData.mfWidth = rUnitConv.scaleFromMm100( rUnitConv.scaleToMm100( nWidth, UNIT_DIGIT ) + 132, UNIT_DIGIT );
     }
 }
 
@@ -794,6 +848,7 @@ void WorksheetData::finalizeWorksheetImport()
     maSheetViewSett.finalizeImport();
     convertColumns();
     convertRows();
+    finalizeDrawing();
 }
 
 // private --------------------------------------------------------------------
@@ -906,7 +961,9 @@ void WorksheetData::finalizeHyperlinkRanges() const
 {
     for( OoxHyperlinkList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
     {
-        OUStringBuffer aUrlBuffer( getBaseFilter().getAbsoluteUrl( aIt->maTarget ) );
+        OUStringBuffer aUrlBuffer;
+        if( aIt->maTarget.getLength() > 0 )
+            aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( aIt->maTarget ) );
         if( aIt->maLocation.getLength() > 0 )
             aUrlBuffer.append( sal_Unicode( '#' ) ).append( aIt->maLocation );
         OUString aUrl = aUrlBuffer.makeStringAndClear();
@@ -920,7 +977,7 @@ void WorksheetData::finalizeHyperlinkRanges() const
                 {
                     // replace the exclamation mark with a period
                     aUrl = aUrl.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
-                    // #i66592# convert renamed sheets
+                    // #i66592# convert sheet names that have been renamed on import
                     bool bQuotedName = (nSepPos > 3) && (aUrl[ 1 ] == '\'') && (aUrl[ nSepPos - 1 ] == '\'');
                     sal_Int32 nNamePos = bQuotedName ? 2 : 1;
                     sal_Int32 nNameLen = nSepPos - (bQuotedName ? 3 : 1);
@@ -1027,6 +1084,14 @@ void WorksheetData::finalizeMergedRange( const CellRangeAddress& rRange ) const
     }
 }
 
+void WorksheetData::finalizeDrawing()
+{
+    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maDrawingPath.getLength() == 0),
+        "WorksheetData::finalizeDrawing - unexpected DrawingML path" );
+    if( (getFilterType() == FILTER_OOX) && (maDrawingPath.getLength() > 0) )
+        importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
+}
+
 void WorksheetData::convertColumns()
 {
     sal_Int32 nNextCol = 0;
@@ -1064,7 +1129,10 @@ void WorksheetData::convertColumns( OutlineLevelVec& orColLevels,
     {
         PropertySet aPropSet( xColumns );
         // column width: convert 'number of characters' to column width in 1/100 mm
-        sal_Int32 nWidth = getUnitConverter().calcMm100FromDigits( rData.mfWidth );
+        sal_Int32 nWidth = getUnitConverter().scaleToMm100( rData.mfWidth, UNIT_DIGIT );
+        // macro sheets have double width
+        if( meSheetType == SHEETTYPE_MACROSHEET )
+            nWidth *= 2;
         if( nWidth > 0 )
             aPropSet.setProperty( maWidthProp, nWidth );
         // hidden columns: TODO: #108683# hide columns later?
@@ -1117,7 +1185,7 @@ void WorksheetData::convertRows( OutlineLevelVec& orRowLevels,
                 correctly, if a merged cell contains multi-line text.
          */
         double fHeight = (rData.mfHeight >= 0.0) ? rData.mfHeight : fDefHeight;
-        sal_Int32 nHeight = getUnitConverter().calcMm100FromPoints( fHeight );
+        sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
         if( nHeight > 0 )
             aPropSet.setProperty( maHeightProp, nHeight );
         // hidden rows: TODO: #108683# hide rows later?
@@ -1323,6 +1391,21 @@ Reference< XTableRows > WorksheetHelper::getRows( sal_Int32 nFirstRow, sal_Int32
     return mrSheetData.getRows( nFirstRow, nLastRow );
 }
 
+Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
+{
+    return mrSheetData.getCellPosition( nCol, nRow );
+}
+
+Size WorksheetHelper::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
+{
+    return mrSheetData.getCellSize( nCol, nRow );
+}
+
+Size WorksheetHelper::getDrawPageSize() const
+{
+    return mrSheetData.getDrawPageSize();
+}
+
 WorksheetSettings& WorksheetHelper::getWorksheetSettings() const
 {
     return mrSheetData.getWorksheetSettings();
@@ -1420,6 +1503,11 @@ void WorksheetHelper::setOoxCell( OoxCellData& orCellData, bool bEmptyStringAsFo
             setSharedStringCell( orCellData.mxCell, orCellData.maValueStr.toInt32(), orCellData.mnXfId );
         break;
     }
+}
+
+void WorksheetHelper::setSheetType( WorksheetType eSheetType )
+{
+    mrSheetData.setSheetType( eSheetType );
 }
 
 void WorksheetHelper::setDimension( const CellRangeAddress& rRange )
@@ -1557,6 +1645,11 @@ void WorksheetHelper::setLabelRanges( const ApiCellRangeList& rColRanges, const 
             xLabelRanges->addNew( *aIt, aDataRange );
         }
     }
+}
+
+void WorksheetHelper::setDrawingPath( const OUString& rDrawingPath )
+{
+    mrSheetData.setDrawingPath( rDrawingPath );
 }
 
 void WorksheetHelper::setBaseColumnWidth( sal_Int32 nWidth )
