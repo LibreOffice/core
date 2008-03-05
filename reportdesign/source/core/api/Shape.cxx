@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Shape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:54:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,13 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 // -----------------------------------------------------------------------------
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
                ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
-               ,uno::Reference< drawing::XShape >& _xShape)
+               ,uno::Reference< drawing::XShape >& _xShape
+               ,const ::rtl::OUString& _sServiceName)
 :ShapeBase(m_aMutex)
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
+,m_sServiceName(_sServiceName)
 {
     DBG_CTOR( rpt_OShape,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -185,12 +187,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OShape::getSupportedServiceNames(  ) t
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OShape::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+
+    return m_sServiceName == ServiceName || ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL(OShape)
-REPORTCOMPONENT_IMPL2(OShape)
+REPORTCOMPONENT_IMPL(OShape,m_aProps.aComponent)
+REPORTCOMPONENT_IMPL2(OShape,m_aProps.aComponent)
+REPORTCOMPONENT_MASTERDETAIL(OShape,m_aProps.aComponent)
 REPORTCONTROLFORMAT_IMPL2(OShape,m_aProps.aFormatProperties)
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OShape::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
