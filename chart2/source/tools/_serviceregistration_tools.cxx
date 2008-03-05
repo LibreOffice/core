@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_tools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:08:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 #include "LabeledDataSequence.hxx"
+#include "CachedDataSequence.hxx"
 #include "DataSource.hxx"
 #include "ConfigColorScheme.hxx"
 #include "Scaling.hxx"
@@ -53,6 +54,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
           ::chart::LabeledDataSequence::create
         , ::chart::LabeledDataSequence::getImplementationName_Static
         , ::chart::LabeledDataSequence::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{
+          ::chart::CachedDataSequence::create
+        , ::chart::CachedDataSequence::getImplementationName_Static
+        , ::chart::CachedDataSequence::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
