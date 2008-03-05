@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:19:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,10 @@ const SfxItemPropertyMap* lcl_GetNamedRangeMap()
 {
     static SfxItemPropertyMap aNamedRangeMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),0, &getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),      0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),   0,  &getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ISSHAREDFMLA), 0,  &getBooleanCppuType(),                          0, 0 },
         {0,0,0,0,0,0}
     };
     return aNamedRangeMap_Impl;
@@ -273,8 +274,8 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
     {
-        //  interne RT_* Flags werden weggelassen
-
+        // do not return internal RT_* flags
+        // see property 'IsSharedFormula' for RT_SHARED
         if ( pData->HasType(RT_CRITERIA) )  nType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
         if ( pData->HasType(RT_PRINTAREA) ) nType |= sheet::NamedRangeFlag::PRINT_AREA;
         if ( pData->HasType(RT_COLHEADER) ) nType |= sheet::NamedRangeFlag::COLUMN_HEADER;
@@ -285,6 +286,7 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
 
 void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType ) throw(uno::RuntimeException)
 {
+    // see property 'IsSharedFormula' for RT_SHARED
     ScUnoGuard aGuard;
     sal_uInt16 nNewType = RT_NAME;
     if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
@@ -351,34 +353,47 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 }
 
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
-                        const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
+                        const rtl::OUString& rPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    //  everything is read-only
+    ScUnoGuard aGuard;
+    if ( rPropertyName.equalsAscii( SC_UNONAME_ISSHAREDFMLA ) )
+    {
+        bool bIsShared = false;
+        if( aValue >>= bIsShared )
+        {
+            sal_uInt16 nNewType = bIsShared ? RT_SHARED : RT_NAME;
+            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType );
+        }
+    }
 }
 
-uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& rPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     uno::Any aRet;
-    String aString(aPropertyName);
-    if ( aString.EqualsAscii( SC_UNO_LINKDISPBIT ) )
+    if ( rPropertyName.equalsAscii( SC_UNO_LINKDISPBIT ) )
     {
         //  no target bitmaps for individual entries (would be all equal)
         // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_RANGENAME );
     }
-    else if ( aString.EqualsAscii( SC_UNO_LINKDISPNAME ) )
+    else if ( rPropertyName.equalsAscii( SC_UNO_LINKDISPNAME ) )
         aRet <<= rtl::OUString( aName );
-    else if ( aString.EqualsAscii( SC_UNONAME_TOKENINDEX ) )
+    else if ( rPropertyName.equalsAscii( SC_UNONAME_TOKENINDEX ) )
     {
         // get index for use in formula tokens (read-only)
         ScRangeData* pData = GetRangeData_Impl();
         if (pData)
             aRet <<= static_cast<sal_Int32>(pData->GetIndex());
+    }
+    else if ( rPropertyName.equalsAscii( SC_UNONAME_ISSHAREDFMLA ) )
+    {
+        if( ScRangeData* pData = GetRangeData_Impl() )
+            aRet <<= static_cast< bool >( pData->HasType( RT_SHARED ) );
     }
     return aRet;
 }
@@ -389,24 +404,22 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangeObj )
 
 rtl::OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScNamedRangeObj" );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScNamedRangeObj" ) );
 }
 
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCNAMEDRANGEOBJ_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCLINKTARGET_SERVICE );
+    return rServiceName.equalsAscii( SCNAMEDRANGEOBJ_SERVICE ) ||
+           rServiceName.equalsAscii( SCLINKTARGET_SERVICE );
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
     uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCNAMEDRANGEOBJ_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCLINKTARGET_SERVICE );
+    aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) );
+    aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ) );
     return aRet;
 }
 
