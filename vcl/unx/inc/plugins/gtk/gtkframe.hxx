@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:21:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,7 @@ public:
     virtual void                SetPointerPos( long nX, long nY );
 
     // flush output buffer
+    using SalFrame::Flush;
     virtual void                Flush();
     // flush output buffer, wait till outstanding operations are done
     virtual void                Sync();
