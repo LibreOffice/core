@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:07:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,11 @@
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>
+//#ifndef _NUMRULE_HXX
+//#include <numrule.hxx>
+//#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 
 class SfxPoolItem;
