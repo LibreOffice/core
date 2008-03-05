@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:48:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:09:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,8 @@ namespace rptui
         sal_Bool                m_bShowProperties;
         sal_Bool                m_bGroupFloaterWasVisible;
         sal_Bool                m_bHelplinesMove;
+        bool                    m_bChartEnabled;
+        bool                    m_bChartEnabledAsked;
 
 
         /** creates a formatted field in the given section with the given formula as data field
@@ -285,6 +287,11 @@ namespace rptui
         * \param _bNext
         */
         void markSection(const bool _bNext);
+
+        /** fills the member that chart is enabled or not
+        *
+        */
+        void checkChartEnabled();
 
         OReportController(OReportController const&);
         OReportController& operator =(OReportController const&);
@@ -421,6 +428,8 @@ namespace rptui
         * \return
         */
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel();
+
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
 
     protected:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
