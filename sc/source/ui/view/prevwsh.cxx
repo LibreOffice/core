@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:12:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
     pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
     pDlg->EnableSheetRange( false, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets() || GetPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG );
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     if ( nDocPageMax > 0 )
