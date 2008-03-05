@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntgcci6.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:16:57 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:35:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ AFLAGS=/c /Cp /coff
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
 ARCH_FLAGS*=-march=pentium
 
-CXX*=$(WRAPCMD) gcc
+CXX*=gcc
 ### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
 # old:
 #CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
@@ -160,16 +160,16 @@ STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -l
 LIBSTLPORT=-lstlport_gcc
 LIBSTLPORTST=-lstlport_gcc_static
 
-LIBMGR=$(WRAPCMD) ar
+LIBMGR=ar
 LIBFLAGS=-rsu
 
-IMPLIB=$(WRAPCMD) ld
+IMPLIB=ld
 IMPLIBFLAGS=
 
 MAPSYM=tmapsym
 MAPSYMFLAGS=
 
-RC=$(WRAPCMD) rc
+RC=rc
 RCFLAGS=-D__MINGW32__ -DWIN32 -D_WIN32_IE=0x400 -fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
