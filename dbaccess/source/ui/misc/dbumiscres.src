@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:09:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,10 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:thunderbird:";
     };
+    String STR_MYSQL_NATIVE
+    {
+        Text  ="sdbc:mysqlc:";
+    };
 };
 Resource RSC_DATASOURCE_TYPE_UINAMES
 {
@@ -230,6 +234,10 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
      String STR_THUNDERBIRD
      {
          Text[ en-US ] = "Thunderbird Address Book";
+    };
+    String STR_MYSQL_NATIVE
+     {
+         Text[ en-US ] = "MySQL (Native)";
     };
 };
 
