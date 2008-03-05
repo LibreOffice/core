@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,10 +141,11 @@ namespace oox { namespace drawingml {
         }
     }
 
-    void TextField::insertAt( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < XText > & xText,
-                                                        const Reference < XTextCursor > &xAt,
-                                                        const Reference< XModel > &xModel,
-                                                        const TextCharacterPropertiesPtr& rTextCharacterStyle )
+    void TextField::insertAt(
+            const ::oox::core::XmlFilterBase& rFilterBase,
+            const Reference < XText > & xText,
+            const Reference < XTextCursor > &xAt,
+            const TextCharacterPropertiesPtr& rTextCharacterStyle )
     {
         try {
 
@@ -159,7 +160,7 @@ namespace oox { namespace drawingml {
             maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xProps );
 
             std::list< Reference< XTextField > > fields;
-            createTextFields( fields, xModel, msType );
+            createTextFields( fields, rFilterBase.getModel(), msType );
             if( !fields.empty() )
             {
                 bool bFirst = true;

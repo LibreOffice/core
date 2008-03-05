@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textparagraph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,15 +65,18 @@ namespace oox { namespace drawingml {
     }
 
 
-    void TextParagraph::insertAt( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < XText > &xText, const Reference < XTextCursor > &xAt, const Reference < XModel > &xModel,
-                                    const TextListStylePtr& rTextStyleList, bool bFirst)
+    void TextParagraph::insertAt(
+            const ::oox::core::XmlFilterBase& rFilterBase,
+            const Reference < XText > &xText,
+            const Reference < XTextCursor > &xAt,
+            const TextListStylePtr& rTextStyleList, bool bFirst)
     {
         try {
             sal_Int32 nParagraphSize = 0;
             Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
             sal_Int16 nLevel = mpProperties->getLevel();
-            std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >& rListStyle = rTextStyleList->getListStyle();
+            std::vector< TextParagraphPropertiesPtr >& rListStyle = rTextStyleList->getListStyle();
             if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
                 nLevel = 0;
             TextParagraphPropertiesPtr pTextParagraphStyle;
@@ -92,7 +95,7 @@ namespace oox { namespace drawingml {
             std::vector< TextRunPtr >::iterator begin( maRuns.begin() );
             while( begin != maRuns.end() )
             {
-                (*begin)->insertAt( rFilterBase, xText, xAt, xModel, pTextCharacterStyle );
+                (*begin)->insertAt( rFilterBase, xText, xAt, pTextCharacterStyle );
                 nParagraphSize += (*begin++)->text().getLength();
             }
             xAt->gotoEnd(true);
