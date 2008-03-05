@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:00:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ void OOXMLStreamImpl::init()
     }
 }
 
-uno::Reference<io::XInputStream> OOXMLStreamImpl::getInputStream()
+uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
 {
     uno::Reference<io::XInputStream> xResult;
 
@@ -257,6 +257,17 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getInputStream()
         xResult = mxDocumentStream->getInputStream();
 
     return xResult;
+}
+
+uno::Reference<io::XInputStream> OOXMLStreamImpl::getInputStream()
+{
+    return mxInputStream;
+}
+
+void OOXMLStreamImpl::setInputStream
+(uno::Reference<io::XInputStream> rxInputStream)
+{
+    mxInputStream = rxInputStream;
 }
 
 uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
@@ -299,8 +310,11 @@ OOXMLDocumentFactory::createStream
         comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
         (OFOPXML_STORAGE_FORMAT_STRING, rStream);
 
-    return OOXMLStream::Pointer_t(new OOXMLStreamImpl(xContext, xStorage,
-                                                      nStreamType));
+    OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, xStorage,
+                                                    nStreamType);
+    pStream->setInputStream(rStream);
+
+    return OOXMLStream::Pointer_t(pStream);
 }
 
 OOXMLStream::Pointer_t
