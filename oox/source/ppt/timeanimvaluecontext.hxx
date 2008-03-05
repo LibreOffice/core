@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timeanimvaluecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,19 +38,19 @@
 #ifndef OOX_PPT_TIMEANIMVALUELISTCONTEXT
 #define OOX_PPT_TIMEANIMVALUELISTCONTEXT
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/animationspersist.hxx"
 
 namespace oox { namespace ppt {
 
     /** CT_TLTimeAnimateValueList */
     class TimeAnimValueListContext
-        : public ::oox::core::Context
+        : public ::oox::core::ContextHandler
     {
     public:
-        TimeAnimValueListContext( const ::oox::core::FragmentHandlerRef& xHandler,
-                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-                                                            TimeAnimationValueList & aTavList );
+        TimeAnimValueListContext( ::oox::core::ContextHandler& rParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+            TimeAnimationValueList & aTavList );
 
         ~TimeAnimValueListContext( );
 

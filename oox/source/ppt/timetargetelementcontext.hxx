@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timetargetelementcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,20 @@
  *
  ************************************************************************/
 
-
-
 #ifndef OOX_PPT_TIMETARGETELEMENTCONTEXT
 #define OOX_PPT_TIMETARGETELEMENTCONTEXT
 
-
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/animationspersist.hxx"
 
 namespace oox { namespace ppt {
 
     /** context CT_TLTimeTargetElement */
     class TimeTargetElementContext
-        : public ::oox::core::Context
+        : public ::oox::core::ContextHandler
     {
     public:
-        TimeTargetElementContext( const ::oox::core::FragmentHandlerRef & xHandler, const AnimTargetElementPtr & aValue );
+        TimeTargetElementContext( ::oox::core::ContextHandler& rParent, const AnimTargetElementPtr & aValue );
         ~TimeTargetElementContext( ) throw( );
         virtual void SAL_CALL endFastElement( sal_Int32 /*aElement*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );

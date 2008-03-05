@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timeanimvaluecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "timeanimvaluecontext.hxx"
 
 #include "oox/core/namespaces.hxx"
@@ -50,10 +47,10 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    TimeAnimValueListContext::TimeAnimValueListContext( const FragmentHandlerRef& xHandler,
+    TimeAnimValueListContext::TimeAnimValueListContext( ContextHandler& rParent,
                 const Reference< XFastAttributeList >& /*xAttribs*/,
                 TimeAnimationValueList & aTavList )
-        : Context( xHandler )
+        : ContextHandler( rParent )
             , maTavList( aTavList )
             , mbInValue( false )
     {
@@ -96,7 +93,7 @@ namespace oox { namespace ppt {
             if( mbInValue )
             {
                 // CT_TLAnimVariant
-                xRet.set( new AnimVariantContext( getHandler(), aElementToken, maTavList.back().maValue ) );
+                xRet.set( new AnimVariantContext( *this, aElementToken, maTavList.back().maValue ) );
             }
             break;
         default:

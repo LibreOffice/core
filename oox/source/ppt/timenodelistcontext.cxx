@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timenodelistcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,10 +126,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        MediaNodeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                            const Reference< XFastAttributeList >& xAttribs,
-                                            const TimeNodePtr & pNode )
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        MediaNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+                            const Reference< XFastAttributeList >& xAttribs,
+                            const TimeNodePtr & pNode )
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
                 , mbIsNarration( false )
                 , mbFullScrn( false )
             {
@@ -170,7 +170,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
                     break;
@@ -194,10 +194,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SetTimeNodeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                                const Reference< XFastAttributeList >& xAttribs,
-                                                const TimeNodePtr & pNode )
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        SetTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+                            const Reference< XFastAttributeList >& xAttribs,
+                            const TimeNodePtr & pNode )
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
 
             }
@@ -236,11 +236,11 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_to:
                     // CT_TLAnimVariant
-                    xRet.set( new AnimVariantContext( getHandler(), aElementToken, maTo ) );
+                    xRet.set( new AnimVariantContext( *this, aElementToken, maTo ) );
                     break;
                 default:
                     break;
@@ -261,10 +261,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CmdTimeNodeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                                const Reference< XFastAttributeList >& xAttribs,
-                                                const TimeNodePtr & pNode )
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        CmdTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+                            const Reference< XFastAttributeList >& xAttribs,
+                            const TimeNodePtr & pNode )
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
                 , maType(0)
             {
                 switch ( aElement )
@@ -365,7 +365,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
                     break;
@@ -389,10 +389,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SequenceTimeNodeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                                                 const Reference< XFastAttributeList >& xAttribs,
-                                                                 const TimeNodePtr & pNode )
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        SequenceTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+                                 const Reference< XFastAttributeList >& xAttribs,
+                                 const TimeNodePtr & pNode )
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
                 , mnNextAc(0)
                 , mnPrevAc(0)
             {
@@ -418,14 +418,14 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cTn:
-                    xRet.set( new CommonTimeNodeContext( getHandler(), aElementToken, xAttribs, mpNode ) );
+                    xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_nextCondLst:
-                    xRet.set( new CondListContext( getHandler(), aElementToken, xAttribs, mpNode,
+                    xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
                                                    mpNode->getNextCondition() ) );
                     break;
                 case NMSP_PPT|XML_prevCondLst:
-                    xRet.set( new CondListContext( getHandler(), aElementToken, xAttribs, mpNode,
+                    xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
                                                    mpNode->getPrevCondition() ) );
                     break;
                 default:
@@ -450,10 +450,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        ParallelExclTimeNodeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                                                 const Reference< XFastAttributeList >& xAttribs,
-                                                                 const TimeNodePtr & pNode )
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        ParallelExclTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+                                     const Reference< XFastAttributeList >& xAttribs,
+                                     const TimeNodePtr & pNode )
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
             }
 
@@ -466,7 +466,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cTn:
-                    xRet.set( new CommonTimeNodeContext( getHandler(), aElementToken, xAttribs, mpNode ) );
+                    xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
                     break;
                 default:
                     break;
@@ -488,10 +488,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimColorContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                            const Reference< XFastAttributeList >& xAttribs,
-                                             const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimColorContext( ContextHandler& rParent, sal_Int32  aElement,
+                            const Reference< XFastAttributeList >& xAttribs,
+                            const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
                 // ST_TLAnimateColorSpace ( XML_rgb, XML_hsl }
             , mnColorSpace( xAttribs->getOptionalValueToken( XML_clrSpc, 0 ) )
                 // ST_TLAnimateColorDirection { XML_cw, XML_ccw }
@@ -514,11 +514,11 @@ namespace oox { namespace ppt {
                     pProps[ NP_COLORINTERPOLATION ] = makeAny( mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB );
                     if( maToClr.isUsed() )
                     {
-                        mpNode->setTo( Any( maToClr.getColor( *getHandler()->getFilter().get() ) ) );
+                        mpNode->setTo( Any( maToClr.getColor( getFilter() ) ) );
                     }
                     if( maFromClr.isUsed() )
                     {
-                        mpNode->setFrom( Any( maFromClr.getColor( *getHandler()->getFilter().get() ) ) );
+                        mpNode->setFrom( Any( maFromClr.getColor( getFilter() ) ) );
                     }
                     if( mbHasByColor )
                     {
@@ -567,15 +567,15 @@ namespace oox { namespace ppt {
                     xRet.set(this);
                     break;
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_to:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( getHandler(), maToClr ) );
+                    xRet.set( new colorChoiceContext( *this, maToClr ) );
                     break;
                 case NMSP_PPT|XML_from:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( getHandler(), maFromClr ) );
+                    xRet.set( new colorChoiceContext( *this, maFromClr ) );
                     break;
 
                 default:
@@ -604,10 +604,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                 const Reference< XFastAttributeList >& xAttribs,
-                                  const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimContext( ContextHandler& rParent, sal_Int32  aElement,
+                     const Reference< XFastAttributeList >& xAttribs,
+                      const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
                 NodePropertyMap & aProps( pNode->getNodeProperties() );
                 sal_Int32 nCalcMode = xAttribs->getOptionalValueToken( XML_calcmode, 0 );
@@ -693,10 +693,10 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_tavLst:
-                    xRet.set( new TimeAnimValueListContext ( getHandler(), xAttribs, maTavList ) );
+                    xRet.set( new TimeAnimValueListContext ( *this, xAttribs, maTavList ) );
                     break;
                 default:
                     break;
@@ -718,10 +718,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimScaleContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                            const Reference< XFastAttributeList >& xAttribs,
-                                            const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimScaleContext( ContextHandler& rParent, sal_Int32  aElement,
+                            const Reference< XFastAttributeList >& xAttribs,
+                            const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
                 , mbZoomContents( false )
             {
                 AttributeList attribs( xAttribs );
@@ -763,7 +763,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_to:
                 {
@@ -811,10 +811,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimRotContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                        const Reference< XFastAttributeList >& xAttribs,
-                                         const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimRotContext( ContextHandler& rParent, sal_Int32  aElement,
+                        const Reference< XFastAttributeList >& xAttribs,
+                         const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
                 AttributeList attribs( xAttribs );
 
@@ -849,7 +849,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
                     break;
@@ -869,10 +869,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimMotionContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                             const Reference< XFastAttributeList >& xAttribs,
-                                              const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimMotionContext( ContextHandler& rParent, sal_Int32  aElement,
+                         const Reference< XFastAttributeList >& xAttribs,
+                          const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
                     = makeAny((sal_Int16)AnimationTransformType::TRANSLATE);
@@ -917,7 +917,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_to:
                 {
@@ -977,10 +977,10 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimEffectContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                             const Reference< XFastAttributeList >& xAttribs,
-                                             const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( xHandler, aElement, xAttribs, pNode )
+        AnimEffectContext( ContextHandler& rParent, sal_Int32  aElement,
+                             const Reference< XFastAttributeList >& xAttribs,
+                             const TimeNodePtr & pNode ) throw()
+            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
                 OUString sFilter = xAttribs->getOptionalValue( XML_filter );
@@ -1008,10 +1008,10 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case NMSP_PPT|XML_cBhvr:
-                    xRet.set( new CommonBehaviorContext ( getHandler(), xAttribs, mpNode ) );
+                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 case NMSP_PPT|XML_progress:
-                    xRet.set( new AnimVariantContext( getHandler(), aElementToken, maProgress ) );
+                    xRet.set( new AnimVariantContext( *this, aElementToken, maProgress ) );
                     // TODO handle it.
                     break;
                 default:
@@ -1031,49 +1031,50 @@ namespace oox { namespace ppt {
 
 
 
-    TimeNodeContext * TimeNodeContext::makeContext( const FragmentHandlerRef& xHandler, sal_Int32  aElement,
-                                                                                                    const Reference< XFastAttributeList >& xAttribs,
-                                                                                                    const TimeNodePtr & pNode )
+    TimeNodeContext * TimeNodeContext::makeContext(
+            ContextHandler& rParent, sal_Int32  aElement,
+            const Reference< XFastAttributeList >& xAttribs,
+            const TimeNodePtr & pNode )
     {
         TimeNodeContext *pCtx = NULL;
         switch( aElement )
         {
         case NMSP_PPT|XML_animClr:
-            pCtx = new AnimColorContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimColorContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_par:
-            pCtx = new ParallelExclTimeNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_seq:
-            pCtx = new SequenceTimeNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new SequenceTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_excl:
-            pCtx = new ParallelExclTimeNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_anim:
-            pCtx = new AnimContext ( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimContext ( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_animEffect:
-            pCtx = new AnimEffectContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimEffectContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_animMotion:
-            pCtx = new AnimMotionContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimMotionContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_animRot:
-            pCtx = new AnimRotContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimRotContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_animScale:
-            pCtx = new AnimScaleContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new AnimScaleContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_cmd:
-            pCtx = new CmdTimeNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new CmdTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_set:
-            pCtx = new SetTimeNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new SetTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case NMSP_PPT|XML_audio:
         case NMSP_PPT|XML_video:
-            pCtx = new MediaNodeContext( xHandler, aElement, xAttribs, pNode );
+            pCtx = new MediaNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         default:
             break;
@@ -1082,10 +1083,10 @@ namespace oox { namespace ppt {
     }
 
 
-    TimeNodeContext::TimeNodeContext( const FragmentHandlerRef& xHandler, sal_Int32 aElement,
-                                                                            const Reference< XFastAttributeList >& /*xAttribs*/,
-                                                                            const TimeNodePtr & pNode ) throw()
-        : Context( xHandler )
+    TimeNodeContext::TimeNodeContext( ContextHandler& rParent, sal_Int32 aElement,
+            const Reference< XFastAttributeList >& /*xAttribs*/,
+            const TimeNodePtr & pNode ) throw()
+        : ContextHandler( rParent )
         , mnElement( aElement )
         , mpNode( pNode )
     {
@@ -1098,9 +1099,9 @@ namespace oox { namespace ppt {
     }
 
 
-    TimeNodeListContext::TimeNodeListContext( const FragmentHandlerRef& xHandler, TimeNodePtrList & aList )
+    TimeNodeListContext::TimeNodeListContext( ContextHandler& rParent, TimeNodePtrList & aList )
         throw()
-        : Context( xHandler )
+        : ContextHandler( rParent )
             , maList( aList )
     {
     }
@@ -1168,11 +1169,8 @@ namespace oox { namespace ppt {
 
         TimeNodePtr pNode(new TimeNode(nNodeType));
         maList.push_back( pNode );
-        Context * pContext = TimeNodeContext::makeContext( getHandler(), aElementToken, xAttribs, pNode );
-        xRet.set( ( pContext != NULL ? pContext : this ) );
-
-        if( !xRet.is() )
-            xRet.set(this);
+        ContextHandler * pContext = TimeNodeContext::makeContext( *this, aElementToken, xAttribs, pNode );
+        xRet.set( pContext ? pContext : this );
 
         return xRet;
     }
