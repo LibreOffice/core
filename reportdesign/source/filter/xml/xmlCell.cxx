@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlCell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,10 @@
 #ifndef RPT_XMLIMAGE_HXX
 #include "xmlImage.hxx"
 #endif
-#ifndef RPT_XMLSUBDOCUMENT_HXX
-#include "xmlSubDocument.hxx"
-#endif
 #ifndef RPT_XMLFIXEDCONTENT_HXX
 #include "xmlFixedContent.hxx"
 #endif
+#include "xmlSubDocument.hxx"
 
 namespace rptxml
 {
@@ -210,12 +208,11 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
         case XML_TOK_SUB_DOCUMENT:
             {
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference< XReportDefinition > xControl(xFactor->createInstance(SERVICE_REPORTDEFINITION),uno::UNO_QUERY);
-
-                OSL_ENSURE(xControl.is(),"Could not create ReportDefinition!");
-                setComponent(xControl.get());
-                if ( xControl.is() )
-                    pContext = new OXMLSubDocument( rImport, _nPrefix, _rLocalName,xControl.get(),m_pContainer);
+                if ( !m_bContainsShape )
+                    m_nCurrentCount = m_pContainer->getSection()->getCount();
+                uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
+                Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
+                pContext = new OXMLSubDocument( rImport, _nPrefix, _rLocalName,xControl.get(),m_pContainer);
             }
             break;
 
@@ -223,6 +220,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             pContext = new OXMLCell( rImport, _nPrefix, _rLocalName,xAttrList ,m_pContainer,this);
             break;
         case XML_TOK_CUSTOM_SHAPE:
+        case XML_TOK_FRAME:
             {
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
@@ -256,9 +254,6 @@ void OXMLCell::EndElement()
             if ( xShape.is() )
                 m_pContainer->addCell(xShape.get());
         }
-        //m_xComponent.set(,uno::UNO_QUERY);
-
-        //m_pCell->setComponent(m_xComponent);
     }
     if ( m_pCell != this && m_sText.getLength() )
     {
