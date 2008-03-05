@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:04:43 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:26:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,6 @@ BEGIN
         $isunix = 0;
         $iswin = 1;
                 $archiveformat = ".zip";
-        $wrapcmd = "";
         %savedmapping = ();
         %savedrevmapping = ();
         %savedrev83mapping = ();
@@ -362,12 +361,6 @@ BEGIN
         $quote = "\'";
         $isunix = 0;
         $iswin = 1;
-        if ( defined $ENV{'WRAPCMD'} && "$ENV{'WRAPCMD'}" ne "" )
-        {
-            $wrapcmd = "guw.exe -env";
-        } else {
-            $wrapcmd = "";
-        }
                 $archiveformat = ".zip";
         %savedmapping = ();
         %savedrevmapping = ();
@@ -395,8 +388,10 @@ BEGIN
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
-        $wrapcmd = "";
     }
+    # WRAPCMD is gone - remove this and all related
+    # $installer::globals::wrapcmd entries
+    $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
