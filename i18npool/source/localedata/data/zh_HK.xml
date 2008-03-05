@@ -217,7 +217,7 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
-<FormatCode>MM"分"SS"秒"00"毫秒"</FormatCode>
+<FormatCode>MM"分"SS"秒"00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <!-- DateTime formats. Index range is 46-47. -->
