@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:34:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#endif
+#ifndef INCLUDED_UNOTOOLS_DIGITGROUPINGITERATOR_HXX
+#include <unotools/digitgroupingiterator.hxx>
 #endif
 
 #include <svtools/zforlist.hxx>         // NUMBERFORMAT_XXX
@@ -330,6 +333,9 @@ BOOL ImpSvNumberInputScan::NextNumberStringSymbol(
 //---------------------------------------------------------------------------
 //      SkipThousands
 
+// FIXME: should be grouping; it is only used though in case nAnzStrings is
+// near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
+
 BOOL ImpSvNumberInputScan::SkipThousands(
         const sal_Unicode*& pStr,
         String& rSymbol )
@@ -512,7 +518,7 @@ inline BOOL ImpSvNumberInputScan::SkipString( const String& rWhat,
 //---------------------------------------------------------------------------
 //      GetThousandSep
 //
-// erkennt genau .111 als Tausenderpunkt
+// recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
 
 inline BOOL ImpSvNumberInputScan::GetThousandSep(
         const String& rString,
@@ -523,11 +529,24 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
     // Is it an ordinary space instead of a non-breaking space?
     bool bSpaceBreak = rSep.GetChar(0) == 0xa0 && rString.GetChar(0) == 0x20 &&
         rSep.Len() == 1 && rString.Len() == 1;
-    if ( (rString == rSep || bSpaceBreak)                   // nothing else
-        && nStringPos < nAnzStrings - 1                     // safety first!
-        && IsNum[nStringPos+1]                              // number follows
-        && (   sStrArray[nStringPos+1].Len() == 3           // with 3 digits
-            || nPosThousandString == nStringPos+1 ) )       // or concatenated
+    if (!( (rString == rSep || bSpaceBreak)             // nothing else
+                && nStringPos < nAnzStrings - 1         // safety first!
+                && IsNum[nStringPos+1] ))               // number follows
+        return FALSE;                                   // no? => out
+
+    utl::DigitGroupingIterator aGrouping(
+            pFormatter->GetLocaleData()->getDigitGrouping());
+    // Match ,### in {3} or ,## in {3,2}
+    /* FIXME: this could be refined to match ,## in {3,2} only if ,##,## or
+     * ,##,### and to match ,### in {3,2} only if it's the last. However,
+     * currently there is no track kept where group separators occur. In {3,2}
+     * #,###,### and #,##,## would be valid input, which maybe isn't even bad
+     * for #,###,###. Other combinations such as #,###,## maybe not. */
+    xub_StrLen nLen = sStrArray[nStringPos+1].Len();
+    if (nLen == aGrouping.get()                         // with 3 (or so) digits
+            || nLen == aGrouping.advance().get()        // or with 2 (or 3 or so) digits
+            || nPosThousandString == nStringPos+1       // or concatenated
+       )
     {
         nPos = nPos + rSep.Len();
         return TRUE;
