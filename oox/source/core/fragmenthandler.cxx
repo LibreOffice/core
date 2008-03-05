@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,112 +34,105 @@
  ************************************************************************/
 
 #include "oox/core/fragmenthandler.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 using ::rtl::OUString;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::io;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::xml::sax::SAXException;
+using ::com::sun::star::xml::sax::XFastAttributeList;
+using ::com::sun::star::xml::sax::XFastContextHandler;
+using ::com::sun::star::xml::sax::XLocator;
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-FragmentHandler::FragmentHandler( const XmlFilterRef& rxFilter, const OUString& rFragmentPath ) :
-    mxFilter( rxFilter ),
-    mxRelations( rxFilter->importRelations( rFragmentPath ) ),
+FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
+    mrFilter( rFilter ),
     maFragmentPath( rFragmentPath ),
-    mpParser( 0 )
+    mxRelations( xRelations )
 {
 }
 
-FragmentHandler::FragmentHandler( const XmlFilterRef& rxFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
-    mxFilter( rxFilter ),
-    mxRelations( xRelations ),
-    maFragmentPath( rFragmentPath ),
-    mpParser( 0 )
+// ============================================================================
+
+FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
+    FragmentHandlerImplBase( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, rFilter.importRelations( rFragmentPath ) ) ) )
 {
 }
 
-OUString FragmentHandler::getFragmentPathFromTarget( const OUString& rTarget ) const
+FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
+    FragmentHandlerImplBase( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, xRelations ) ) )
 {
-    return Relations::getFragmentPathFromTarget( maFragmentPath, rTarget );
 }
 
-OUString FragmentHandler::getFragmentPathFromRelId( const OUString& rRelId ) const
+FragmentHandler::~FragmentHandler()
 {
-    return mxRelations->getFragmentPathFromRelId( maFragmentPath, rRelId );
-}
-
-OUString FragmentHandler::getFragmentPathFromType( const OUString& rType ) const
-{
-    return mxRelations->getFragmentPathFromType( maFragmentPath, rType );
-}
-
-void FragmentHandler::setRecordParser( RecordParser& rParser )
-{
-    mpParser = &rParser;
-}
-
-RecordParser& FragmentHandler::getRecordParser()
-{
-    OSL_ENSURE( mpParser, "FragmentHandler::getRecordParser - not in binary import mode" );
-    return *mpParser;
 }
 
 // com.sun.star.xml.sax.XFastDocumentHandler interface ------------------------
 
-void FragmentHandler::startDocument(  ) throw (SAXException, RuntimeException)
+void FragmentHandler::startDocument() throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::endDocument(  ) throw (SAXException, RuntimeException)
+void FragmentHandler::endDocument() throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException)
+void FragmentHandler::setDocumentLocator( const Reference< XLocator >& rxLocator ) throw( SAXException, RuntimeException )
 {
-    mxLocator = xLocator;
+    implSetLocator( rxLocator );
 }
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 
-void FragmentHandler::startFastElement( ::sal_Int32, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+void FragmentHandler::startFastElement( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::startUnknownElement( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+void FragmentHandler::startUnknownElement( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::endFastElement( ::sal_Int32 ) throw (SAXException, RuntimeException)
+void FragmentHandler::endFastElement( sal_Int32 ) throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::endUnknownElement( const OUString&, const OUString& ) throw (SAXException, RuntimeException)
+void FragmentHandler::endUnknownElement( const OUString&, const OUString& ) throw( SAXException, RuntimeException )
 {
 }
 
-Reference< XFastContextHandler > FragmentHandler::createFastChildContext( ::sal_Int32, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > FragmentHandler::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
 {
-    return Reference< XFastContextHandler >();
+    return 0;
 }
 
-Reference< XFastContextHandler > FragmentHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > FragmentHandler::createUnknownChildContext( const OUString&, const OUString&, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
 {
-    return Reference< XFastContextHandler >();
+    return 0;
 }
 
-void FragmentHandler::characters( const OUString& ) throw (SAXException, RuntimeException)
-{
-}
-
-void FragmentHandler::ignorableWhitespace( const OUString& ) throw (SAXException, RuntimeException)
+void FragmentHandler::characters( const OUString& ) throw( SAXException, RuntimeException )
 {
 }
 
-void FragmentHandler::processingInstruction( const OUString&, const OUString& ) throw (SAXException, RuntimeException)
+void FragmentHandler::ignorableWhitespace( const OUString& ) throw( SAXException, RuntimeException )
 {
+}
+
+void FragmentHandler::processingInstruction( const OUString&, const OUString& ) throw( SAXException, RuntimeException )
+{
+}
+
+// binary records -------------------------------------------------------------
+
+const RecordInfo* FragmentHandler::getRecordInfos() const
+{
+    // default: no support for binary records
+    return 0;
 }
 
 // ============================================================================
