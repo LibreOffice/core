@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:15:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
         m_aTabControl.RemovePage( RID_RTS_FONTSUBSTPAGE );
         m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
     }
-    else if( m_aJobData.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 )
+    else if( m_aJobData.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 && ! PrinterInfoManager::get().isCUPSDisabled() )
     {
         // command page makes no sense for CUPS printers
         m_aTabControl.RemovePage( RID_RTS_COMMANDPAGE );
