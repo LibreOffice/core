@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:10:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2061,6 +2061,14 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
     else
         nRight += rLR.GetRight();
 
+    // --> OD 2008-01-21 #newlistlevelattrs#
+    // correction: retrieve left margin for numbering in R2L-layout
+    if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
+    {
+        nRight += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
+    }
+    // <--
+
     return nRight;
 }
 
@@ -2081,8 +2089,14 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
     else
         nLeft += rLR.GetLeft();
 
-    if ( pCaller->IsTxtFrm() )
+    // --> OD 2008-01-21 #newlistlevelattrs#
+    // correction: do not retrieve left margin for numbering in R2L-layout
+//    if ( pCaller->IsTxtFrm() )
+    if ( pCaller->IsTxtFrm() && !pCaller->IsRightToLeft() )
+    // <--
+    {
         nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
+    }
 
     return nLeft;
 }
