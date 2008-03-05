@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:32:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@ public:
      */
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
 
+    virtual uno::Reference<io::XInputStream> getDocumentStream() = 0;
+
     /**
        Returns component context for this stream.
      */
@@ -230,6 +232,7 @@ public:
                                const sal_Int32 type,
                                const rtl::OUString & rId) = 0;
 
+
     /**
        Returns target URL from relationships for a given id.
 
@@ -243,6 +246,11 @@ public:
     virtual uno::Reference<frame::XModel> getModel() = 0;
     virtual void setShapes(uno::Reference<drawing::XShapes> xShapes) = 0;
     virtual uno::Reference<drawing::XShapes> getShapes() = 0;
+    virtual uno::Reference<io::XInputStream> getInputStream() = 0;
+    virtual uno::Reference<io::XInputStream> getInputStreamForId
+    (const ::rtl::OUString & rId) = 0;
+    virtual void setXNoteId(const rtl::OUString & rId) = 0;
+    virtual const ::rtl::OUString & getXNoteId() const = 0;
 };
 
 
