@@ -5,9 +5,9 @@
  *
  *  $RCSfile: MeasureHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:40:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
         }
         break;
         default:
-            OSL_ASSERT("unknown attribute");
+            OSL_ENSURE( false, "unknown attribute");
     }
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
