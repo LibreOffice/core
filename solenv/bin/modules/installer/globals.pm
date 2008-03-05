@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:25:17 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:39:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -303,6 +303,8 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis.mlf";
+    $nsis204 = 0;
+    $nsis231 = 0;
     $linuxlinkrpms = "";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
