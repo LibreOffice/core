@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:41:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,9 @@ class SVT_DLLPUBLIC SvtMiscOptions: public svt::detail::Options
 
         sal_Bool    IsModifyByPrinting() const;
         void        SetModifyByPrinting(sal_Bool bSet );
+
+        sal_Bool    UseSystemPrintDialog() const;
+        void        SetUseSystemPrintDialog( sal_Bool bSet );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
