@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:41:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
 #endif
+#include <ooxml/resourceids.hxx>
 #ifndef INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
 #include <DomainMapper_Impl.hxx>
 #endif
@@ -520,6 +521,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     }
     catch( const uno::Exception& )
     {
+        OSL_ENSURE( false, "Exception in SectionPropertyMap::ApplyColumnProperties");
     }
     return xColumns;
 }
@@ -660,6 +662,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             }
             catch( const uno::Exception& )
             {
+                OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup");
             }
         }
     }
@@ -785,31 +788,35 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         try
         {
-            //now apply this break at the first paragraph of this section
-            uno::Reference< beans::XPropertySet > xRangeProperties( m_xStartingRange, uno::UNO_QUERY_THROW );
-        /* break type
-          0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
-            if( m_nBreakType == 2 || m_nBreakType == 3)
+//            if( m_xStartingRange.is() )
             {
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BREAK_TYPE),
-                    uno::makeAny( m_nBreakType == 2 ? style::BreakType_COLUMN_AFTER : style::BreakType_PAGE_AFTER  ) );
-            }
-            else
-            {
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
-//  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number
-//  or add even/odd page break types
-                if(m_bPageNoRestart || m_nPageNumber >= 0)
+                //now apply this break at the first paragraph of this section
+                uno::Reference< beans::XPropertySet > xRangeProperties( m_xStartingRange, uno::UNO_QUERY_THROW );
+            /* break type
+            0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
+                if( m_nBreakType == 2 || m_nBreakType == 3)
                 {
-                    sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
-                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_NUMBER_OFFSET ),
-                        uno::makeAny( nPageNumber ));
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BREAK_TYPE),
+                        uno::makeAny( m_nBreakType == 2 ? style::BreakType_COLUMN_AFTER : style::BreakType_PAGE_AFTER  ) );
+                }
+                else
+                {
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                        uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+    //  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number
+    //  or add even/odd page break types
+                    if(m_bPageNoRestart || m_nPageNumber >= 0)
+                    {
+                        sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
+                        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_NUMBER_OFFSET ),
+                            uno::makeAny( nPageNumber ));
+                    }
                 }
             }
         }
         catch( const uno::Exception& rEx)
         {
+            OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup");
             (void)rEx;
        }
     }
@@ -821,17 +828,17 @@ void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet >
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     PropertyMap::iterator aMapIter = begin();
-    try
+    while( aMapIter != end())
     {
-        while( aMapIter != end())
+        try
         {
             xStyle->setPropertyValue( rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second );
-            ++aMapIter;
         }
-    }
-    catch( const uno::Exception& )
-    {
-        OSL_ASSERT("Exception in <PageStyle>::setPropertyValue");
+        catch( const uno::Exception& )
+        {
+            OSL_ENSURE( false, "Exception in <PageStyle>::setPropertyValue");
+        }
+        ++aMapIter;
     }
 }
 sal_Int32 lcl_AlignPaperBin( sal_Int32 nSet )
@@ -888,6 +895,103 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
 StyleSheetPropertyMap::~StyleSheetPropertyMap()
 {
 }
+/*-- 28.12.2007 08:19:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ParagraphProperties::ParagraphProperties() :
+    m_bFrameMode( false ),
+    m_nDropCap(NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none),
+    m_nLines(0),
+    m_w(-1),
+    m_h(-1),
+    m_nWrap(-1),
+    m_hAnchor(-1),
+    m_vAnchor(-1),
+    m_x(-1),
+    m_bxValid( false ),
+    m_y(-1),
+    m_byValid( false ),
+    m_hSpace(-1),
+    m_vSpace(-1),
+    m_hRule(-1),
+    m_xAlign(-1),
+    m_yAlign(-1),
+    m_bAnchorLock(false),
+    m_nDropCapLength(0)
+{
+}
+/*-- 28.12.2007 08:28:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ParagraphProperties::ParagraphProperties(const ParagraphProperties& rCopy) :
+    m_bFrameMode ( rCopy.m_bFrameMode),
+    m_nDropCap   ( rCopy.m_nDropCap),
+    m_nLines     ( rCopy.m_nLines),
+    m_w          ( rCopy.m_w),
+    m_h          ( rCopy.m_h),
+    m_nWrap      ( rCopy.m_nWrap),
+    m_hAnchor    ( rCopy.m_hAnchor),
+    m_vAnchor    ( rCopy.m_vAnchor),
+    m_x          ( rCopy.m_x),
+    m_bxValid    ( rCopy.m_bxValid),
+    m_y          ( rCopy.m_y),
+    m_byValid    ( rCopy.m_byValid),
+    m_hSpace     ( rCopy.m_hSpace),
+    m_vSpace     ( rCopy.m_vSpace),
+    m_hRule      ( rCopy.m_hRule),
+    m_xAlign     ( rCopy.m_xAlign),
+    m_yAlign     ( rCopy.m_yAlign),
+    m_bAnchorLock( rCopy.m_bAnchorLock),
+    m_nDropCapLength( rCopy.m_nDropCapLength ),
+    m_sParaStyleName( rCopy.m_sParaStyleName),
+    m_xStartingRange( rCopy.m_xStartingRange ),
+    m_xEndingRange( rCopy.m_xEndingRange)
+{
+}
+/*-- 28.12.2007 11:29:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ParagraphProperties::~ParagraphProperties()
+{
+}
+/*-- 28.12.2007 09:05:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
+{
+    return
+        m_bFrameMode == rCompare.m_bFrameMode &&
+        m_nDropCap   == rCompare.m_nDropCap &&
+        m_nLines     == rCompare.m_nLines &&
+        m_w          == rCompare.m_w &&
+        m_h          == rCompare.m_h &&
+        m_nWrap      == rCompare.m_nWrap &&
+        m_hAnchor    == rCompare.m_hAnchor &&
+        m_vAnchor    == rCompare.m_vAnchor &&
+        m_x          == rCompare.m_x &&
+        m_bxValid    == rCompare.m_bxValid &&
+        m_y          == rCompare.m_y &&
+        m_byValid    == rCompare.m_byValid &&
+        m_hSpace     == rCompare.m_hSpace &&
+        m_vSpace     == rCompare.m_vSpace &&
+        m_hRule      == rCompare.m_hRule &&
+        m_xAlign     == rCompare.m_xAlign &&
+        m_yAlign     == rCompare.m_yAlign &&
+        m_bAnchorLock== rCompare.m_bAnchorLock;
+}
+/*-- 27.12.2007 13:32:36---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ParagraphPropertyMap::ParagraphPropertyMap()
+{
+}
+/*-- 27.12.2007 13:32:36---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ParagraphPropertyMap::~ParagraphPropertyMap()
+{
+}
+
 
 }//namespace dmapper
 }//namespace writerfilter
