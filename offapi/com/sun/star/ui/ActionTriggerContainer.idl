@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ActionTriggerContainer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:17:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,16 +57,16 @@ module com {  module sun {  module star {  module ui {
     You could have a menu or a toolbox working with the same container
     describing their entries.</p>
 
-    <p>Possible elements of the <service>ActionTriggerContainer</service> are
+    <p>Possible elements of the <type>ActionTriggerContainer</type> are
         <ul>
-            <li><service>ActionTrigger</service> -
+            <li><type>ActionTrigger</type> -
                         represents a simply clickable menu entry</li>
-            <li><service>ActionTriggerSeparator</service> -
+            <li><type>ActionTriggerSeparator</type> -
                         represents a separator between two entries<br/>
                  This entry type is of interest for components rendering a an
-                 <service>ActionTriggerContainer</service>
+                 <type>ActionTriggerContainer</type>
              </li>
-            <li><service>ActionTriggerContainer</service> -
+            <li><type>ActionTriggerContainer</type> -
                 represents a sub container</li>
         </ul>
     </p>
@@ -84,9 +84,9 @@ published service ActionTriggerContainer
 
     /** creates elements to be inserted into the container.
         <p>Usually, the <method>XMultiServiceFactory::getSupportedServiceNames</method>
-        gives you a <service>ActionTrigger</service> and
-        optionally <service>ActionTriggerContainer</service> and
-        <service>ActionTriggerSeparator</service>
+        gives you a <type>ActionTrigger</type> and
+        optionally <type>ActionTriggerContainer</type> and
+        <type>ActionTriggerSeparator</type>
 
      .</p>
      */
