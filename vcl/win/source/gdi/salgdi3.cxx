@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:37:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2546,7 +2546,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
     // use height=1000 for easier debugging (to match psprint's font units)
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -2667,7 +2667,7 @@ const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont,
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
@@ -2771,7 +2771,7 @@ void WinSalGraphics::GetGlyphWidths( ImplFontData* pFont,
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
-    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
