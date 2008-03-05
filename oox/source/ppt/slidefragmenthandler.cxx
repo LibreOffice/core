@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidefragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,15 +62,15 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-SlideFragmentHandler::SlideFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, oox::ppt::SlidePersistPtr pPersistPtr, const oox::ppt::ShapeLocation eShapeLocation ) throw()
-: FragmentHandler( xFilter, rFragmentPath )
+SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw()
+: FragmentHandler( rFilter, rFragmentPath )
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "vmlDrawing" ) );
+    OUString aVMLDrawingFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "vmlDrawing" ) );
     if( aVMLDrawingFragmentPath.getLength() > 0 )
     {
-        getFilter()->importFragment( new oox::vml::DrawingFragmentHandler(
+        getFilter().importFragment( new oox::vml::DrawingFragmentHandler(
             getFilter(), aVMLDrawingFragmentPath, pPersistPtr->getDrawing() ) );
     }
 }
@@ -97,23 +97,24 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
     case NMSP_PPT|XML_spTree:           // CT_GroupShape
         {
-            xRet.set( new PPTShapeGroupContext( mpSlidePersistPtr, meShapeLocation, this, aElementToken, mpSlidePersistPtr->getShapes(),
-            oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
+            xRet.set( new PPTShapeGroupContext(
+                *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
+                oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
         }
         break;
 
     case NMSP_PPT|XML_timing: // CT_SlideTiming
-        xRet.set( new SlideTimingContext( this, mpSlidePersistPtr->getTimeNodeList() ) );
+        xRet.set( new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() ) );
         break;
     case NMSP_PPT|XML_transition: // CT_SlideTransition
-        xRet.set( new SlideTransitionContext( this, xAttribs, maSlideProperties ) );
+        xRet.set( new SlideTransitionContext( *this, xAttribs, maSlideProperties ) );
         break;
 
     // BackgroundGroup
     case NMSP_PPT|XML_bgPr:             // CT_BackgroundProperties
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties() );
-            xRet.set( new BackgroundPropertiesContext( this, pFillPropertiesPtr ) );
+            xRet.set( new BackgroundPropertiesContext( *this, pFillPropertiesPtr ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;
@@ -123,7 +124,7 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
     case NMSP_PPT|XML_clrMap:           // CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( new oox::drawingml::ClrMap() );
-            xRet.set( new oox::drawingml::clrMapContext( this, xAttribs, *pClrMapPtr.get() ) );
+            xRet.set( new oox::drawingml::clrMapContext( *this, xAttribs, *pClrMapPtr ) );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
         }
         break;
@@ -131,7 +132,7 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
     case NMSP_PPT|XML_sldLayoutIdLst:   // CT_SlideLayoutIdList
         break;
     case NMSP_PPT|XML_txStyles:         // CT_SlideMasterTextStyles
-        xRet.set( new SlideMasterTextStylesContext( this, mpSlidePersistPtr ) );
+        xRet.set( new SlideMasterTextStylesContext( *this, mpSlidePersistPtr ) );
         break;
     case NMSP_PPT|XML_custDataLst:      // CT_CustomerDataList
     case NMSP_PPT|XML_tagLst:           // CT_TagList
@@ -139,7 +140,7 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
     }
 
     if( !xRet.is() )
-        xRet.set(this);
+        xRet = getFastContextHandler();
 
     return xRet;
 }
