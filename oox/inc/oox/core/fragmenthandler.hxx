@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fragmenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,58 +38,70 @@
 
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "oox/core/recordcontext.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/core/relations.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 
 namespace oox {
 namespace core {
 
-class RecordParser;
+// ============================================================================
+
+/** Base data of a fragment.
+
+    This data is stored in a separate struct to make it accessible in every
+    child context handler of the fragment.
+ */
+struct FragmentBaseData
+{
+    XmlFilterBase&      mrFilter;
+    const ::rtl::OUString maFragmentPath;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >
+                        mxLocator;
+    RelationsRef        mxRelations;
+
+    explicit            FragmentBaseData(
+                            XmlFilterBase& rFilter,
+                            const ::rtl::OUString& rFragmentPath,
+                            RelationsRef xRelations );
+};
 
 // ============================================================================
 
-class FragmentHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >, public RecordContext
+/** Describes record identifiers used to create contexts in a binary stream.
+
+    If a record is used to start a new context, usually the record identifier
+    increased by 1 is used to mark the end of this context, e.g. the Excel
+    record SHEETDATA == 0x0091 starts the <sheetData> context, and the record
+    SHEETDATA_END == 0x0092 ends this context. But some records are used to
+    start a new context, though there is no identifier to end this context,
+    e.g. the ROW or EXTROW records. These record identifiers can be marked by
+    setting the mnEndRecId member of this struct to -1.
+ */
+struct RecordInfo
+{
+    sal_Int32           mnStartRecId;       /// Record identifier for context start.
+    sal_Int32           mnEndRecId;         /// Record identifier for context end, -1 = no record.
+};
+
+// ============================================================================
+
+typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandlerImplBase;
+
+class FragmentHandler : public FragmentHandlerImplBase
 {
 public:
-    explicit            FragmentHandler( const XmlFilterRef& rxFilter, const ::rtl::OUString& rFragmentPath );
-    explicit            FragmentHandler( const XmlFilterRef& rxFilter, const ::rtl::OUString& rFragmentPath, RelationsRef xRelations );
+    explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath );
+    virtual             ~FragmentHandler();
 
-    /** Returns the filter instance. */
-    inline const XmlFilterRef& getFilter() const { return mxFilter; }
-    /** Returns the full fragment path containing these relations. */
-    inline const Relations& getRelations() const { return *mxRelations; }
-    /** Returns the full fragment path containing these relations. */
-    inline const ::rtl::OUString& getFragmentPath() const { return maFragmentPath; }
-
-    /** Returns the full fragment path for the passed relative target. */
-    ::rtl::OUString     getFragmentPathFromTarget( const ::rtl::OUString& rTarget ) const;
-    /** Returns the full fragment path for the passed relation identifier. */
-    ::rtl::OUString     getFragmentPathFromRelId( const ::rtl::OUString& rRelId ) const;
-    /** Returns the full fragment path for the passed type. */
-    ::rtl::OUString     getFragmentPathFromType( const ::rtl::OUString& rType ) const;
-
-    /** Sets the record parser used to import binary streams. */
-    void                setRecordParser( RecordParser& rParser );
-
-    /** Returns access to the record parser used to import binary streams.
-
-        Needed for direct manipulation of the parser context stack via
-        RecordParser::pushContext() and RecordParser::popContext().
-
-        Must not be called while loading XML fragments.
-     */
-    RecordParser&       getRecordParser();
-
-    // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() throw() { ::cppu::OWeakObject::acquire(); }
-    virtual void SAL_CALL release() throw() { ::cppu::OWeakObject::release(); }
+    /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
+                        getFastContextHandler() { return static_cast< ContextHandler* >( this ); }
 
     // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------
 
-    virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& rxLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
@@ -103,12 +115,12 @@ public:
     virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-private:
-    XmlFilterRef        mxFilter;
-    RelationsRef        mxRelations;
-    ::rtl::OUString     maFragmentPath;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > mxLocator;
-    RecordParser*       mpParser;           /// Pointer to record parser for binary import.
+    // binary records ---------------------------------------------------------
+
+    virtual const RecordInfo* getRecordInfos() const;
+
+protected:
+    explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, RelationsRef xRelations );
 };
 
 typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
@@ -118,5 +130,5 @@ typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
 } // namespace core
 } // namespace oox
 
-#endif // OOX_CORE_FRAGMENTHANDLER_HXX
+#endif
 
