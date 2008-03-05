@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:15:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1242,6 +1242,9 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                         double nPPTX, double nPPTY,
                                         const Fraction& rZoomX, const Fraction& rZoomY,
                                         BOOL bShrink );
+    void            UpdateAllRowHeights( OutputDevice* pDev,
+                                        double nPPTX, double nPPTY,
+                                        const Fraction& rZoomX, const Fraction& rZoomY );
     long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
