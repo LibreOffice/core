@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributelist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,12 @@ sal_uInt32 AttributeList::getUnsignedInteger( sal_Int32 nElement, sal_uInt32 nDe
         return nDefault;
     sal_Int64 nValue = aValue.toInt64();
     return static_cast< sal_uInt32 >( ((nValue < 0) || (nValue > SAL_MAX_UINT32)) ? 0 : nValue );
+}
+
+sal_Int64 AttributeList::getInteger64( sal_Int32 nElement, sal_Int64 nDefault ) const
+{
+    OUString aValue = getString( nElement );
+    return (aValue.getLength() == 0) ? nDefault : aValue.toInt64();
 }
 
 sal_Int32 AttributeList::getHex( sal_Int32 nElement, sal_Int32 nDefault ) const
