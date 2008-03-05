@@ -4,9 +4,9 @@
  *
  *  $RCSfile: theme.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,15 +59,20 @@ public:
 
     oox::drawingml::ClrSchemePtr            getClrScheme() const { return mpClrSchemePtr; };
 
-    rtl::OUString&                          getStyleName(){ return maStyleName; };
-    std::vector< FillPropertiesPtr >&       getFillStyleList(){ return maFillStyleList; };
-    std::vector< LinePropertiesPtr >&       getLineStyleList(){ return maLineStyleList; };
-    std::vector< PropertyMap >&             getEffectStyleList(){ return maEffectStyleList; };
-    std::vector< FillPropertiesPtr >&       getBgFillStyleList(){ return maBgFillStyleList; };
+    rtl::OUString&                          getStyleName() { return maStyleName; };
+    const rtl::OUString&                    getStyleName() const { return maStyleName; };
+    std::vector< FillPropertiesPtr >&       getFillStyleList() { return maFillStyleList; };
+    const std::vector< FillPropertiesPtr >& getFillStyleList() const { return maFillStyleList; };
+    std::vector< LinePropertiesPtr >&       getLineStyleList() { return maLineStyleList; };
+    const std::vector< LinePropertiesPtr >& getLineStyleList() const { return maLineStyleList; };
+    std::vector< PropertyMap >&             getEffectStyleList() { return maEffectStyleList; };
+    const std::vector< PropertyMap >&       getEffectStyleList() const { return maEffectStyleList; };
+    std::vector< FillPropertiesPtr >&       getBgFillStyleList() { return maBgFillStyleList; };
+    const std::vector< FillPropertiesPtr >& getBgFillStyleList() const { return maBgFillStyleList; };
 
-    oox::drawingml::ShapePtr                getspDef() const { return mpspDefPtr; };
-    oox::drawingml::ShapePtr                getlnDef() const { return mplnDefPtr; };
-    oox::drawingml::ShapePtr                gettxDef() const { return mptxDefPtr; };
+    ShapePtr                                getspDef() const { return mpspDefPtr; };
+    ShapePtr                                getlnDef() const { return mplnDefPtr; };
+    ShapePtr                                gettxDef() const { return mptxDefPtr; };
 
 private:
 
@@ -77,10 +82,10 @@ private:
     std::vector< PropertyMap >              maEffectStyleList;
     std::vector< FillPropertiesPtr >        maBgFillStyleList;
 
-    oox::drawingml::ClrSchemePtr            mpClrSchemePtr;
-    oox::drawingml::ShapePtr                mpspDefPtr;
-    oox::drawingml::ShapePtr                mplnDefPtr;
-    oox::drawingml::ShapePtr                mptxDefPtr;
+    ClrSchemePtr                            mpClrSchemePtr;
+    ShapePtr                                mpspDefPtr;
+    ShapePtr                                mplnDefPtr;
+    ShapePtr                                mptxDefPtr;
 };
 
 typedef boost::shared_ptr< Theme > ThemePtr;

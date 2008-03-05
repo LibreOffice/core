@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textbody.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,14 @@ public:
 
     void                              addParagraph( const TextParagraphPtr & pPara ) { maParagraphs.push_back( pPara ); }
     /** insert the text body at the text cursor */
-    void                              insertAt( const ::oox::core::XmlFilterBase& rFilterBase, const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
-                                        const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > & xAt,
-                                            const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel > &xModel,
-                                                const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle );
+    void                insertAt(
+                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
+                            const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > & xAt,
+                            const TextListStylePtr& pMasterTextListStyle );
 protected:
-    std::vector< TextParagraphPtr >     maParagraphs;
-    ::oox::drawingml::TextListStylePtr  mpTextListStyle;
+    std::vector< TextParagraphPtr > maParagraphs;
+    TextListStylePtr    mpTextListStyle;
 };
 
 typedef boost::shared_ptr< TextBody > TextBodyPtr;
