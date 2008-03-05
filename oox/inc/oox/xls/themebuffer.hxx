@@ -4,9 +4,9 @@
  *
  *  $RCSfile: themebuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,11 @@ public:
     explicit            ThemeBuffer( const WorkbookHelper& rHelper );
     virtual             ~ThemeBuffer();
 
+    /** Returns the pointer to the core drawingml theme. */
+    inline const ::oox::drawingml::ThemePtr& getCoreThemePtr() const { return mxTheme; }
+
     /** Returns the core drawingml theme needed by the theme fragment importer. */
-    ::oox::drawingml::Theme& getCoreTheme() const;
+    ::oox::drawingml::Theme& getOrCreateCoreTheme();
 
     /** Returns the theme color with the specified token identifier. */
     sal_Int32           getColorByToken( sal_Int32 nToken ) const;
@@ -73,7 +76,7 @@ public:
 private:
     typedef ::std::auto_ptr< OoxFontData > OoxFontDataPtr;
 
-    mutable ::oox::drawingml::ThemePtr mxTheme;
+    ::oox::drawingml::ThemePtr mxTheme;
     OoxFontDataPtr      mxDefFontData;
 };
 
