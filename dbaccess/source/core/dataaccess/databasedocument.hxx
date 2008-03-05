@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:33:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,8 +125,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
-
-    void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
 
     /** stores the model
         @param  sURL
