@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:42:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2131,7 +2131,7 @@ void lcl_SelectParaAndReset ( SwPaM &rPaM, SwDoc* pDoc, const SvUShortsSort* pWh
     SwXTextCursor::SelectPam(*pTemp, sal_True);
     if(!SwUnoCursorHelper::IsEndOfPara(*pTemp))
         pTemp->MovePara(fnParaCurr, fnParaEnd);
-    pDoc->ResetAttr(*pTemp, sal_True, pWhichIds);
+    pDoc->ResetAttrs(*pTemp, sal_True, pWhichIds);
 }
 
 
@@ -2153,7 +2153,7 @@ void SwXTextCursor::SetPropertyToDefault(
             SvUShortsSort aWhichIds;
             aWhichIds.Insert(pMap->nWID);
             if(pMap->nWID < RES_PARATR_BEGIN)
-                pDoc->ResetAttr(rPaM, sal_True, &aWhichIds);
+                pDoc->ResetAttrs(rPaM, sal_True, &aWhichIds);
             else
                 lcl_SelectParaAndReset ( rPaM, pDoc, &aWhichIds );
         }
@@ -2384,7 +2384,7 @@ void SAL_CALL SwXTextCursor::setAllPropertiesToDefault()
         if (aParaWhichIds.Count())
             lcl_SelectParaAndReset( *pUnoCrsr, pUnoCrsr->GetDoc(), &aParaWhichIds );
         if (aWhichIds.Count() )
-            pUnoCrsr->GetDoc()->ResetAttr( *pUnoCrsr, sal_True, &aWhichIds );
+            pUnoCrsr->GetDoc()->ResetAttrs( *pUnoCrsr, sal_True, &aWhichIds );
     }
     else
         throw uno::RuntimeException();
@@ -2436,7 +2436,7 @@ void SAL_CALL SwXTextCursor::setPropertiesToDefault( const Sequence< OUString >&
             if ( aParaWhichIds.Count() )
                 lcl_SelectParaAndReset ( *pUnoCrsr, pDoc, &aParaWhichIds );
             if (aWhichIds.Count() )
-                pDoc->ResetAttr(*pUnoCrsr, sal_True, &aWhichIds);
+                pDoc->ResetAttrs(*pUnoCrsr, sal_True, &aWhichIds);
         }
         else
             throw uno::RuntimeException();
