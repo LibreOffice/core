@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:56:00 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:25:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ sub check_system_path
 
     if( $^O =~ /cygwin/i )
     {   # When using cygwin's perl the PATH variable is POSIX style and ...
-        $pathvariable = qx{guw.exe echo "$pathvariable"} ;
+        $pathvariable = qx{cygpath -dp "$pathvariable"} ;
         # has to be converted to DOS style for further use.
         $local_pathseparator = ';';
     }
