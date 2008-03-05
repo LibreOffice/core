@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:26:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,7 +851,7 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
             pDocSh->SetModified();
     }
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
-        ::SetPrinter( pNew, TRUE );
+        ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, TRUE );
 
     const BOOL bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? TRUE : FALSE;
     const BOOL bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? TRUE : FALSE;
