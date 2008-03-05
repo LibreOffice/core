@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLParserState.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:58:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ class OOXMLParserState
     OOXMLDocument * mpDocument;
     rtl::OUString msXNoteId;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
+    OOXMLPropertySet::Pointer_t mpTableProps;
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -90,6 +91,8 @@ public:
     void newCharacterProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     void resolveCharacterProperties(Stream & rStream);
     void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);
+    void resolveTableProperties(Stream & rStream);
+    void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
 
     string toString() const;
 };
