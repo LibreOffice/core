@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportComponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >   m_xTypeProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel >      m_xUnoTunnel;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >    m_xServiceInfo;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aMasterFields;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aDetailFields;
         ::rtl::OUString                                                             m_sName;
         ::sal_Int32                                                                 m_nHeight;
         ::sal_Int32                                                                 m_nWidth;
