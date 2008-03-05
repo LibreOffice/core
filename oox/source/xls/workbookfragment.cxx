@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workbookfragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/xls/biffinputstream.hxx"
+#include "oox/xls/chartsheetfragment.hxx"
 #include "oox/xls/connectionsfragment.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/externallinkfragment.hxx"
@@ -62,6 +63,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::table::CellAddress;
 using ::oox::core::FragmentHandlerRef;
+using ::oox::core::RecordInfo;
 using ::oox::core::Relation;
 using ::oox::drawingml::ThemeFragmentHandler;
 
@@ -89,11 +91,11 @@ OoxWorkbookFragment::OoxWorkbookFragment(
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxWorkbookFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nElement == XLS_TOKEN( workbook ));
@@ -121,7 +123,7 @@ bool OoxWorkbookFragment::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxWorkbookFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs ); break;
         case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );     break;
@@ -135,7 +137,7 @@ void OoxWorkbookFragment::onStartElement( const AttributeList& rAttribs )
 
 void OoxWorkbookFragment::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( definedName ):
             if( mxCurrName.get() ) mxCurrName->setFormula( rChars );
@@ -143,9 +145,9 @@ void OoxWorkbookFragment::onEndElement( const OUString& rChars )
     }
 }
 
-bool OoxWorkbookFragment::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxWorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nRecId == OOBIN_ID_WORKBOOK);
@@ -163,6 +165,8 @@ bool OoxWorkbookFragment::onCanCreateRecordContext( sal_Int32 nRecId )
         case OOBIN_ID_EXTERNALREFS:
             return  (nRecId == OOBIN_ID_EXTERNALREF) ||
                     (nRecId == OOBIN_ID_EXTERNALSELF) ||
+                    (nRecId == OOBIN_ID_EXTERNALSAME) ||
+                    (nRecId == OOBIN_ID_EXTERNALADDIN) ||
                     (nRecId == OOBIN_ID_EXTERNALSHEETS);
     }
     return false;
@@ -170,7 +174,7 @@ bool OoxWorkbookFragment::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxWorkbookFragment::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_WORKBOOKPR:       getWorkbookSettings().importWorkbookPr( rStrm );    break;
         case OOBIN_ID_CALCPR:           getWorkbookSettings().importCalcPr( rStrm );        break;
@@ -178,37 +182,53 @@ void OoxWorkbookFragment::onStartRecord( RecordInputStream& rStrm )
         case OOBIN_ID_WORKBOOKVIEW:     getViewSettings().importWorkbookView( rStrm );      break;
         case OOBIN_ID_EXTERNALREF:      importExternalRef( rStrm );                         break;
         case OOBIN_ID_EXTERNALSELF:     getExternalLinks().importExternalSelf( rStrm );     break;
+        case OOBIN_ID_EXTERNALSAME:     getExternalLinks().importExternalSame( rStrm );     break;
+        case OOBIN_ID_EXTERNALADDIN:    getExternalLinks().importExternalAddin( rStrm );    break;
         case OOBIN_ID_EXTERNALSHEETS:   getExternalLinks().importExternalSheets( rStrm );   break;
         case OOBIN_ID_DEFINEDNAME:      getDefinedNames().importDefinedName( rStrm );       break;
     }
 }
 
-// oox.xls.OoxFragmentHandler interface ---------------------------------------
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxWorkbookFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { OOBIN_ID_BOOKVIEWS,       OOBIN_ID_BOOKVIEWS + 1      },
+        { OOBIN_ID_EXTERNALREFS,    OOBIN_ID_EXTERNALREFS + 1   },
+        { OOBIN_ID_FUNCTIONGROUPS,  OOBIN_ID_FUNCTIONGROUPS + 2 },
+        { OOBIN_ID_SHEETS,          OOBIN_ID_SHEETS + 1         },
+        { OOBIN_ID_WORKBOOK,        OOBIN_ID_WORKBOOK + 1       },
+        { -1,                       -1                          }
+    };
+    return spRecInfos;
+}
 
 void OoxWorkbookFragment::finalizeImport()
 {
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "theme" ) );
+    OUString aThemeFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
     if( aThemeFragmentPath.getLength() > 0 )
-        importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme().getCoreTheme() ) );
+        importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme().getOrCreateCoreTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "styles" ) );
+    OUString aStylesFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "styles" ) );
     if( aStylesFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxStylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "sharedStrings" ) );
+    OUString aSstFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "sharedStrings" ) );
     if( aSstFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxSharedStringsFragment( *this, aSstFragmentPath ) );
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromType( CREATE_RELATIONS_TYPE( "connections" ) );
+    OUString aConnFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "connections" ) );
     if( aConnFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
@@ -233,9 +253,26 @@ void OoxWorkbookFragment::finalizeImport()
                 ::rtl::Reference< OoxWorksheetFragmentBase > xFragment;
                 double fSegmentLength = getProgressBar().getFreeLength() / (nSheetCount - nSheet);
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
+
                 // create the fragment according to the sheet type
-                if( pRelation->maType == CREATE_RELATIONS_TYPE( "worksheet" ) )
+                if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "worksheet" ) )
+                {
                     xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_WORKSHEET, nSheet ) );
+                }
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "chartsheet" ) )
+                {
+                    xFragment.set( new OoxChartsheetFragment( *this, aFragmentPath, xSheetSegment, nSheet ) );
+                }
+                else if( (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlMacrosheet" )) ||
+                         (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlIntlMacrosheet" )) )
+                {
+                    xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nSheet ) );
+                }
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "dialogsheet" ) )
+                {
+                    xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_DIALOGSHEET, nSheet ) );
+                }
+
                 // insert the fragment into the map
                 OSL_ENSURE( xFragment.is(), "OoxWorkbookFragment::finalizeImport - unknown sheet type" );
                 OSL_ENSURE( !xFragment.is() || xFragment->isValidSheet(), "OoxWorkbookFragment::finalizeImport - missing sheet in document" );
@@ -423,8 +460,8 @@ bool BiffWorkbookFragment::importFragment( BiffInputStream& rStrm )
         break;
 
         case BIFF_FRAGMENT_WORKSHEET:
-        case BIFF_FRAGMENT_CHART:
-        case BIFF_FRAGMENT_MACRO:
+        case BIFF_FRAGMENT_CHARTSHEET:
+        case BIFF_FRAGMENT_MACROSHEET:
         {
             /*  Single sheet without globals
                 - #i62752# possible in all BIFF versions
@@ -662,8 +699,9 @@ bool BiffWorkbookFragment::importSheetFragment( BiffInputStream& rStrm, ISegment
     switch( eFragment )
     {
         case BIFF_FRAGMENT_WORKSHEET:   eSheetType = SHEETTYPE_WORKSHEET;   break;
-        case BIFF_FRAGMENT_CHART:       eSheetType = SHEETTYPE_CHART;       break;
-        case BIFF_FRAGMENT_MACRO:       eSheetType = SHEETTYPE_MACRO;       break;
+        case BIFF_FRAGMENT_CHARTSHEET:  eSheetType = SHEETTYPE_CHARTSHEET;  break;
+        case BIFF_FRAGMENT_MACROSHEET:  eSheetType = SHEETTYPE_MACROSHEET;  break;
+        case BIFF_FRAGMENT_MODULESHEET: eSheetType = SHEETTYPE_MODULESHEET; break;
         case BIFF_FRAGMENT_EMPTYSHEET:  bSkipSheet = true;                  break;
         default:                        return false;
     }
@@ -724,10 +762,14 @@ bool BiffWorkbookFragment::importSheetFragment( BiffInputStream& rStrm, ISegment
     switch( eSheetType )
     {
         case SHEETTYPE_WORKSHEET:
-        case SHEETTYPE_MACRO:
+        case SHEETTYPE_MACROSHEET:
             xFragment.reset( new BiffWorksheetFragment( *this, xSheetProgress, eSheetType, nSheet ) );
         break;
-        case SHEETTYPE_CHART:
+        case SHEETTYPE_CHARTSHEET:
+            xFragment.reset( new BiffChartsheetFragment( *this, xSheetProgress, nSheet ) );
+        break;
+        case SHEETTYPE_DIALOGSHEET:
+        case SHEETTYPE_MODULESHEET:
             xFragment.reset( new BiffWorksheetFragmentBase( *this, xSheetProgress, eSheetType, nSheet ) );
         break;
     }
