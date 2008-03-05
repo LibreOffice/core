@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:30:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+
 
 /*************************************************************************
  *                    SwLineInfo::GetTabStop()
@@ -74,7 +78,6 @@
 const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
                                          const SwTwips nRight ) const
 {
-    // Mit den KSHORTs aufpassen, falls nLinePos < nLeft
     for( MSHORT i = 0; i < pRuler->Count(); ++i )
     {
         const SvxTabStop &rTabStop = pRuler->operator[](i);
@@ -118,14 +121,28 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // #i24363# tab stops relative to indent
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
         //
-        const SwTwips nTmpIndent = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
-                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() : 0;
-
-        const SwTwips nTabLeft = bRTL ?
-                                 pFrm->Frm().Right() -
-                                 nTmpIndent :
-                                 pFrm->Frm().Left() +
-                                 nTmpIndent;
+        // --> OD 2008-02-07 #newlistlevelattrs#
+//        const SwTwips nTmpIndent = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
+//                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() : 0;
+//        const SwTwips nTabLeft = bRTL ?
+//                                 pFrm->Frm().Right() - nTmpIndent :
+//                                 pFrm->Frm().Left() + nTmpIndent;
+        SwTwips nTabLeft( 0 );
+        if ( pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+        {
+            nTabLeft = Left();
+            if ( bRTL )
+            {
+                Point aPoint( nTabLeft, 0 );
+                pFrm->SwitchLTRtoRTL( aPoint );
+                nTabLeft = aPoint.X();
+            }
+        }
+        else
+        {
+            nTabLeft = bRTL ? pFrm->Frm().Right() : pFrm->Frm().Left();
+        }
+        // <--
 
         //
         // nLinePos: The absolute position, where we started the line formatting.
@@ -142,8 +159,10 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // nTabPos: The current position, relative to the line start.
         //
         SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
-       if( nTabPos < rInf.X() )
-           nTabPos = rInf.X();
+        if( nTabPos < rInf.X() )
+        {
+            nTabPos = rInf.X();
+        }
 
         //
         // nCurrentAbsPos: The current position in absolute coordinates.
@@ -166,7 +185,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin.
         //
-       const SwTwips nSearchPos = bRTL ?
+        const SwTwips nSearchPos = bRTL ?
                                    nTabLeft - nCurrentAbsPos :
                                    nCurrentAbsPos - nTabLeft;
 
@@ -211,25 +230,52 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             // <--
-           if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
-                ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
+            if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
+                 ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
+            {
                 nNextPos += nDefTabDist;
+            }
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
         }
+        // --> OD 2008-02-07 #newlistlevelattrs#
         long nForced = 0;
+        if ( !pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+        {
+            if ( bRTL )
+            {
+                Point aPoint( Left(), 0 );
+                pFrm->SwitchLTRtoRTL( aPoint );
+                nForced = pFrm->Frm().Right() - aPoint.X();
+            }
+            else
+            {
+                nForced = Left() - pFrm->Frm().Left();
+            }
+        }
         if( pCurr->HasForcedLeftMargin() )
         {
             SwLinePortion* pPor = pCurr->GetPortion();
             while( pPor && !pPor->IsFlyPortion() )
                 pPor = pPor->GetPortion();
             if( pPor )
-                nForced = pPor->Width();
+                nForced += pPor->Width();
         }
-
-        if( nNextPos > 0 &&
-             (  bRTL && nTabLeft - nForced < nCurrentAbsPos ||
-               !bRTL && nTabLeft + nForced > nCurrentAbsPos ) )
+        // <--
+        // --> OD 2008-02-07 #newlistlevelattrs#
+        // In case that the proposed new tab stop position is the list tab stop
+        // position, do not force a tab stop at left margin.
+//        if( nNextPos > 0 &&
+//             (  bRTL && nTabLeft - nForced < nCurrentAbsPos ||
+//               !bRTL && nTabLeft + nForced > nCurrentAbsPos ) )
+        const bool bIsListTabStopPosition( pTabStop &&
+                                aLineInf.IsListTabStopIncluded() &&
+                                nNextPos == aLineInf.GetListTabStopPosition() );
+        if ( !bIsListTabStopPosition &&
+             ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
+               ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
+             nNextPos > nForced )
+        // <--
         {
             eAdj = SVX_TAB_ADJUST_DEFAULT;
             cFill = 0;
