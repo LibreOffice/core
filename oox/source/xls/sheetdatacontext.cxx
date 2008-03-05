@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sheetdatacontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ using ::com::sun::star::table::XCellRange;
 using ::com::sun::star::sheet::XFormulaTokens;
 using ::com::sun::star::sheet::XArrayFormulaTokens;
 using ::com::sun::star::text::XText;
-using ::com::sun::star::xml::sax::XFastContextHandler;
 
 namespace oox {
 namespace xls {
@@ -75,7 +74,7 @@ namespace {
 
 // record constants -----------------------------------------------------------
 
-const sal_uInt16 OOBIN_CELL_SHOWPHONETIC    = 0x0100;
+const sal_uInt32 OOBIN_CELL_SHOWPHONETIC    = 0x01000000;
 
 const sal_uInt8 OOBIN_DATATABLE_ROW         = 0x01;
 const sal_uInt8 OOBIN_DATATABLE_2D          = 0x02;
@@ -88,6 +87,7 @@ const sal_uInt16 OOBIN_ROW_COLLAPSED        = 0x0800;
 const sal_uInt16 OOBIN_ROW_HIDDEN           = 0x1000;
 const sal_uInt16 OOBIN_ROW_CUSTOMHEIGHT     = 0x2000;
 const sal_uInt16 OOBIN_ROW_CUSTOMFORMAT     = 0x4000;
+const sal_uInt8 OOBIN_ROW_SHOWPHONETIC      = 0x01;
 
 const sal_uInt8 BIFF_BOOLERR_BOOL           = 0;
 const sal_uInt8 BIFF_BOOLERR_ERROR          = 1;
@@ -170,44 +170,40 @@ void ArrayFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 
 // ============================================================================
 
-OoxSheetDataContext::OoxSheetDataContext( const OoxWorksheetFragmentBase& rFragment ) :
+OoxSheetDataContext::OoxSheetDataContext( OoxWorksheetFragmentBase& rFragment ) :
     OoxWorksheetContextBase( rFragment )
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxSheetDataContext::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( sheetData ):
             return  (nElement == XLS_TOKEN( row ));
         case XLS_TOKEN( row ):
             return  (nElement == XLS_TOKEN( c ));
         case XLS_TOKEN( c ):
-            return  maCurrCell.mxCell.is() &&
-                   ((nElement == XLS_TOKEN( v )) ||
-                    (nElement == XLS_TOKEN( is )) ||
-                    (nElement == XLS_TOKEN( f )));
+            if( maCurrCell.mxCell.is() )
+            {
+                if( nElement == XLS_TOKEN( is ) )
+                {
+                    mxInlineStr.reset( new RichString( *this ) );
+                    return new OoxRichStringContext( *this, mxInlineStr );
+                }
+                return  (nElement == XLS_TOKEN( v )) ||
+                        (nElement == XLS_TOKEN( f ));
+            }
+        break;
     }
     return false;
 }
 
-Reference< XFastContextHandler > OoxSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
-{
-    switch( nElement )
-    {
-        case XLS_TOKEN( is ):
-            mxInlineStr.reset( new RichString( *this ) );
-            return new OoxRichStringContext( *this, mxInlineStr );
-    }
-    return this;
-}
-
 void OoxSheetDataContext::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( row ):  importRow( rAttribs );      break;
         case XLS_TOKEN( c ):    importCell( rAttribs );     break;
@@ -217,7 +213,7 @@ void OoxSheetDataContext::onStartElement( const AttributeList& rAttribs )
 
 void OoxSheetDataContext::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( v ):
             maCurrCell.maValueStr = rChars;
@@ -310,9 +306,9 @@ void OoxSheetDataContext::onEndElement( const OUString& rChars )
     }
 }
 
-bool OoxSheetDataContext::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_SHEETDATA:
             return  (nRecId == OOBIN_ID_ROW);
@@ -331,6 +327,14 @@ bool OoxSheetDataContext::onCanCreateRecordContext( sal_Int32 nRecId )
                     (nRecId == OOBIN_ID_FORMULA_DOUBLE) ||
                     (nRecId == OOBIN_ID_FORMULA_ERROR) ||
                     (nRecId == OOBIN_ID_FORMULA_STRING) ||
+                    (nRecId == OOBIN_ID_MULTCELL_BOOL) ||
+                    (nRecId == OOBIN_ID_MULTCELL_BLANK) ||
+                    (nRecId == OOBIN_ID_MULTCELL_DOUBLE) ||
+                    (nRecId == OOBIN_ID_MULTCELL_ERROR) ||
+                    (nRecId == OOBIN_ID_MULTCELL_RK) ||
+                    (nRecId == OOBIN_ID_MULTCELL_RSTRING) ||
+                    (nRecId == OOBIN_ID_MULTCELL_SI) ||
+                    (nRecId == OOBIN_ID_MULTCELL_STRING) ||
                     (nRecId == OOBIN_ID_SHAREDFMLA);
     }
     return false;
@@ -338,24 +342,32 @@ bool OoxSheetDataContext::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxSheetDataContext::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
-        case OOBIN_ID_ARRAY:            importArray( rStrm );               break;
-        case OOBIN_ID_CELL_BOOL:        importCellBool( rStrm, false );     break;
-        case OOBIN_ID_CELL_BLANK:       importCellBlank( rStrm );           break;
-        case OOBIN_ID_CELL_DOUBLE:      importCellDouble( rStrm, false );   break;
-        case OOBIN_ID_CELL_ERROR:       importCellError( rStrm, false );    break;
-        case OOBIN_ID_CELL_RK:          importCellRk( rStrm );              break;
-        case OOBIN_ID_CELL_RSTRING:     importCellRString( rStrm );         break;
-        case OOBIN_ID_CELL_SI:          importCellSi( rStrm );              break;
-        case OOBIN_ID_CELL_STRING:      importCellString( rStrm, false );   break;
-        case OOBIN_ID_DATATABLE:        importDataTable( rStrm );           break;
-        case OOBIN_ID_FORMULA_BOOL:     importCellBool( rStrm, true );      break;
-        case OOBIN_ID_FORMULA_DOUBLE:   importCellDouble( rStrm, true );    break;
-        case OOBIN_ID_FORMULA_ERROR:    importCellError( rStrm, true );     break;
-        case OOBIN_ID_FORMULA_STRING:   importCellString( rStrm, true );    break;
-        case OOBIN_ID_ROW:              importRow( rStrm );                 break;
-        case OOBIN_ID_SHAREDFMLA:       importSharedFmla( rStrm );          break;
+        case OOBIN_ID_ARRAY:            importArray( rStrm );                           break;
+        case OOBIN_ID_CELL_BOOL:        importCellBool( rStrm, CELLTYPE_VALUE );        break;
+        case OOBIN_ID_CELL_BLANK:       importCellBlank( rStrm, CELLTYPE_VALUE );       break;
+        case OOBIN_ID_CELL_DOUBLE:      importCellDouble( rStrm, CELLTYPE_VALUE );      break;
+        case OOBIN_ID_CELL_ERROR:       importCellError( rStrm, CELLTYPE_VALUE );       break;
+        case OOBIN_ID_CELL_RK:          importCellRk( rStrm, CELLTYPE_VALUE );          break;
+        case OOBIN_ID_CELL_RSTRING:     importCellRString( rStrm, CELLTYPE_VALUE );     break;
+        case OOBIN_ID_CELL_SI:          importCellSi( rStrm, CELLTYPE_VALUE );          break;
+        case OOBIN_ID_CELL_STRING:      importCellString( rStrm, CELLTYPE_VALUE );      break;
+        case OOBIN_ID_DATATABLE:        importDataTable( rStrm );                       break;
+        case OOBIN_ID_FORMULA_BOOL:     importCellBool( rStrm, CELLTYPE_FORMULA );      break;
+        case OOBIN_ID_FORMULA_DOUBLE:   importCellDouble( rStrm, CELLTYPE_FORMULA );    break;
+        case OOBIN_ID_FORMULA_ERROR:    importCellError( rStrm, CELLTYPE_FORMULA );     break;
+        case OOBIN_ID_FORMULA_STRING:   importCellString( rStrm, CELLTYPE_FORMULA );    break;
+        case OOBIN_ID_MULTCELL_BOOL:    importCellBool( rStrm, CELLTYPE_MULTI );        break;
+        case OOBIN_ID_MULTCELL_BLANK:   importCellBlank( rStrm, CELLTYPE_MULTI );       break;
+        case OOBIN_ID_MULTCELL_DOUBLE:  importCellDouble( rStrm, CELLTYPE_MULTI );      break;
+        case OOBIN_ID_MULTCELL_ERROR:   importCellError( rStrm, CELLTYPE_MULTI );       break;
+        case OOBIN_ID_MULTCELL_RK:      importCellRk( rStrm, CELLTYPE_MULTI );          break;
+        case OOBIN_ID_MULTCELL_RSTRING: importCellRString( rStrm, CELLTYPE_MULTI );     break;
+        case OOBIN_ID_MULTCELL_SI:      importCellSi( rStrm, CELLTYPE_MULTI );          break;
+        case OOBIN_ID_MULTCELL_STRING:  importCellString( rStrm, CELLTYPE_MULTI );      break;
+        case OOBIN_ID_ROW:              importRow( rStrm );                             break;
+        case OOBIN_ID_SHAREDFMLA:       importSharedFmla( rStrm );                      break;
     }
 }
 
@@ -406,25 +418,33 @@ void OoxSheetDataContext::importFormula( const AttributeList& rAttribs )
     maTableData.mbRef2Deleted = rAttribs.getBool( XML_del2, false );
 }
 
-void OoxSheetDataContext::importCellHeader( RecordInputStream& rStrm )
+void OoxSheetDataContext::importCellHeader( RecordInputStream& rStrm, CellType eCellType )
 {
     maCurrCell.reset();
-    sal_uInt16 nXfId, nFlags;
-    rStrm >> maCurrPos.mnCol >> nXfId >> nFlags;
+
+    switch( eCellType )
+    {
+        case CELLTYPE_VALUE:
+        case CELLTYPE_FORMULA:  rStrm >> maCurrPos.mnCol;   break;
+        case CELLTYPE_MULTI:    ++maCurrPos.mnCol;          break;
+    }
+
+    sal_uInt32 nXfId;
+    rStrm >> nXfId;
 
     maCurrCell.mxCell         = getCell( maCurrPos, &maCurrCell.maAddress );
-    maCurrCell.mnXfId         = nXfId;
-    maCurrCell.mbShowPhonetic = getFlag( nFlags, OOBIN_CELL_SHOWPHONETIC );
+    maCurrCell.mnXfId         = extractValue< sal_Int32 >( nXfId, 0, 24 );
+    maCurrCell.mbShowPhonetic = getFlag( nXfId, OOBIN_CELL_SHOWPHONETIC );
 }
 
-void OoxSheetDataContext::importCellBool( RecordInputStream& rStrm, bool bFormula )
+void OoxSheetDataContext::importCellBool( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_b;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
     {
         bool bValue = rStrm.readuInt8() != 0;
-        if( bFormula )
+        if( eCellType == CELLTYPE_FORMULA )
         {
             importCellFormula( rStrm );
         }
@@ -438,20 +458,21 @@ void OoxSheetDataContext::importCellBool( RecordInputStream& rStrm, bool bFormul
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellBlank( RecordInputStream& rStrm )
+void OoxSheetDataContext::importCellBlank( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "OoxSheetDataContext::importCellBlank - no formula cells supported" );
+    importCellHeader( rStrm, eCellType );
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellDouble( RecordInputStream& rStrm, bool bFormula )
+void OoxSheetDataContext::importCellDouble( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
     {
         double fValue = rStrm.readDouble();
-        if( bFormula )
+        if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
             maCurrCell.mxCell->setValue( fValue );
@@ -459,14 +480,14 @@ void OoxSheetDataContext::importCellDouble( RecordInputStream& rStrm, bool bForm
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellError( RecordInputStream& rStrm, bool bFormula )
+void OoxSheetDataContext::importCellError( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_e;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
     {
         sal_uInt8 nErrorCode = rStrm.readuInt8();
-        if( bFormula )
+        if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
             setErrorCell( maCurrCell.mxCell, nErrorCode );
@@ -474,18 +495,20 @@ void OoxSheetDataContext::importCellError( RecordInputStream& rStrm, bool bFormu
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellRk( RecordInputStream& rStrm )
+void OoxSheetDataContext::importCellRk( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "OoxSheetDataContext::importCellRk - no formula cells supported" );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
         maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellRString( RecordInputStream& rStrm )
+void OoxSheetDataContext::importCellRString( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "OoxSheetDataContext::importCellRString - no formula cells supported" );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_inlineStr;
     Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
     if( xText.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
@@ -498,18 +521,19 @@ void OoxSheetDataContext::importCellRString( RecordInputStream& rStrm )
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellSi( RecordInputStream& rStrm )
+void OoxSheetDataContext::importCellSi( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "OoxSheetDataContext::importCellSi - no formula cells supported" );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_s;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
         setSharedStringCell( maCurrCell.mxCell, rStrm.readInt32(), maCurrCell.mnXfId );
     setCellFormat( maCurrCell );
 }
 
-void OoxSheetDataContext::importCellString( RecordInputStream& rStrm, bool bFormula )
+void OoxSheetDataContext::importCellString( RecordInputStream& rStrm, CellType eCellType )
 {
-    importCellHeader( rStrm );
+    importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_inlineStr;
     Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
     if( xText.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
@@ -517,7 +541,7 @@ void OoxSheetDataContext::importCellString( RecordInputStream& rStrm, bool bForm
         RichString aString( *this );
         aString.importString( rStrm, false );
         aString.finalizeImport();
-        if( bFormula )
+        if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
             aString.convert( xText, maCurrCell.mnXfId );
@@ -540,21 +564,22 @@ void OoxSheetDataContext::importRow( RecordInputStream& rStrm )
 {
     OoxRowData aData;
 
-    sal_uInt16 nHeight, nFlags;
-    rStrm >> maCurrPos.mnRow >> aData.mnXfId >> nHeight >> nFlags;
+    sal_uInt16 nHeight, nFlags1;
+    sal_uInt8 nFlags2;
+    rStrm >> maCurrPos.mnRow >> aData.mnXfId >> nHeight >> nFlags1 >> nFlags2;
 
     // row index is 0-based in OOBIN, but OoxRowData expects 1-based
     aData.mnFirstRow = aData.mnLastRow = maCurrPos.mnRow + 1;
     // row height is in twips in OOBIN, convert to points
     aData.mfHeight = nHeight / 20.0;
-    aData.mnLevel = extractValue< sal_Int32 >( nFlags, 8, 3 );
-    aData.mbCustomHeight = getFlag( nFlags, OOBIN_ROW_CUSTOMHEIGHT );
-    aData.mbCustomFormat = getFlag( nFlags, OOBIN_ROW_CUSTOMFORMAT );
-    // 'show phonetic' missing in OOBIN (bug in Excel 2007)
-    aData.mbHidden = getFlag( nFlags, OOBIN_ROW_HIDDEN );
-    aData.mbCollapsed = getFlag( nFlags, OOBIN_ROW_COLLAPSED );
-    aData.mbThickTop = getFlag( nFlags, OOBIN_ROW_THICKTOP );
-    aData.mbThickBottom = getFlag( nFlags, OOBIN_ROW_THICKBOTTOM );
+    aData.mnLevel = extractValue< sal_Int32 >( nFlags1, 8, 3 );
+    aData.mbCustomHeight = getFlag( nFlags1, OOBIN_ROW_CUSTOMHEIGHT );
+    aData.mbCustomFormat = getFlag( nFlags1, OOBIN_ROW_CUSTOMFORMAT );
+    aData.mbShowPhonetic = getFlag( nFlags2, OOBIN_ROW_SHOWPHONETIC );
+    aData.mbHidden = getFlag( nFlags1, OOBIN_ROW_HIDDEN );
+    aData.mbCollapsed = getFlag( nFlags1, OOBIN_ROW_COLLAPSED );
+    aData.mbThickTop = getFlag( nFlags1, OOBIN_ROW_THICKTOP );
+    aData.mbThickBottom = getFlag( nFlags1, OOBIN_ROW_THICKBOTTOM );
     // set row properties in the current sheet
     setRowData( aData );
 }
@@ -603,16 +628,16 @@ void OoxSheetDataContext::importDataTable( RecordInputStream& rStrm )
 // ============================================================================
 
 OoxExternalSheetDataContext::OoxExternalSheetDataContext(
-        const OoxWorkbookFragmentBase& rFragment, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        OoxWorkbookFragmentBase& rFragment, WorksheetType eSheetType, sal_Int32 nSheet ) :
     OoxWorksheetContextBase( rFragment, ISegmentProgressBarRef(), eSheetType, nSheet )
 {
 }
 
-// oox.xls.ContextHelper interface --------------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxExternalSheetDataContext::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxExternalSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( sheetData ):
             return  (nElement == XLS_TOKEN( row ));
@@ -626,7 +651,7 @@ bool OoxExternalSheetDataContext::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxExternalSheetDataContext::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( cell ):
             importCell( rAttribs );
@@ -636,7 +661,7 @@ void OoxExternalSheetDataContext::onStartElement( const AttributeList& rAttribs 
 
 void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( v ):
             maCurrCell.maValueStr = rChars;
@@ -650,14 +675,15 @@ void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
     }
 }
 
-bool OoxExternalSheetDataContext::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_EXTSHEETDATA:
             return  (nRecId == OOBIN_ID_EXTROW);
         case OOBIN_ID_EXTROW:
-            return  (nRecId == OOBIN_ID_EXTCELL_BOOL) ||
+            return  (nRecId == OOBIN_ID_EXTCELL_BLANK) ||
+                    (nRecId == OOBIN_ID_EXTCELL_BOOL) ||
                     (nRecId == OOBIN_ID_EXTCELL_DOUBLE) ||
                     (nRecId == OOBIN_ID_EXTCELL_ERROR) ||
                     (nRecId == OOBIN_ID_EXTCELL_STRING);
@@ -667,8 +693,9 @@ bool OoxExternalSheetDataContext::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxExternalSheetDataContext::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
+        case OOBIN_ID_EXTCELL_BLANK:    importExtCellBlank( rStrm );    break;
         case OOBIN_ID_EXTCELL_BOOL:     importExtCellBool( rStrm );     break;
         case OOBIN_ID_EXTCELL_DOUBLE:   importExtCellDouble( rStrm );   break;
         case OOBIN_ID_EXTCELL_ERROR:    importExtCellError( rStrm );    break;
@@ -691,6 +718,13 @@ void OoxExternalSheetDataContext::importCellHeader( RecordInputStream& rStrm )
     maCurrCell.reset();
     rStrm >> maCurrPos.mnCol;
     maCurrCell.mxCell = getCell( maCurrPos, &maCurrCell.maAddress );
+}
+
+void OoxExternalSheetDataContext::importExtCellBlank( RecordInputStream& rStrm )
+{
+    importCellHeader( rStrm );
+    if( maCurrCell.mxCell.is() )
+        setEmptyStringCell( maCurrCell.mxCell );
 }
 
 void OoxExternalSheetDataContext::importExtCellBool( RecordInputStream& rStrm )
