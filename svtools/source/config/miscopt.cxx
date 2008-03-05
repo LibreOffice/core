@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:45:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG  3
 #define PROPERTYNAME_SYMBOLSTYLE            ASCII_STR("SymbolStyle")
 #define PROPERTYHANDLE_SYMBOLSTYLE          4
+#define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
+#define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
 
-#define PROPERTYCOUNT                       5
+#define PROPERTYCOUNT                       6
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -140,6 +142,8 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     sal_Bool    m_bIsToolboxStyleRO;
+    sal_Bool    m_bUseSystemPrintDialog;
+    sal_Bool    m_bIsUseSystemPrintDialogRO;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -247,6 +251,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsGetToolboxStyleReadOnly()
         { return m_bIsToolboxStyleRO; }
 
+        inline sal_Bool UseSystemPrintDialog() const
+        { return m_bUseSystemPrintDialog; }
+
+        inline void SetUseSystemPrintDialog( sal_Bool bSet )
+        {  m_bUseSystemPrintDialog = bSet; SetModified(); }
+
+        inline sal_Bool IsUseSystemPrintDialogReadOnly() const
+        { return m_bIsUseSystemPrintDialogRO; }
+
         void AddListener( const Link& rLink );
         void RemoveListener( const Link& rLink );
         void CallListeners();
@@ -326,6 +339,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsSymbolsStyleRO( sal_False )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( sal_False )
+    , m_bUseSystemPrintDialog( sal_False )
+    , m_bIsUseSystemPrintDialogRO( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -385,6 +400,16 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                 }
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
+                {
+                    DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                }
+                m_bIsUseSystemPrintDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -479,6 +504,13 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                                                             {
                                                                 DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                                                            }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG     :   {
+                                                            if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
+                                                            {
+                                                                DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -632,6 +664,13 @@ void SvtMiscOptions_Impl::Commit()
                     seqValues[nProperty] <<= GetSymbolsStyleName();
                 break;
             }
+
+            case PROPERTYHANDLE_USESYSTEMPRINTDIALOG :
+            {
+                if ( !m_bIsUseSystemPrintDialogRO )
+                    seqValues[nProperty] <<= m_bUseSystemPrintDialog;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -650,7 +689,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_USESYSTEMFILEDIALOG,
-        PROPERTYNAME_SYMBOLSTYLE
+        PROPERTYNAME_SYMBOLSTYLE,
+        PROPERTYNAME_USESYSTEMPRINTDIALOG
     };
 
     // Initialize return sequence with these list ...
@@ -809,6 +849,16 @@ void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 sal_Bool SvtMiscOptions::IsGetToolboxStyleReadOnly() const
 {
     return m_pDataContainer->IsGetToolboxStyleReadOnly();
+}
+
+sal_Bool SvtMiscOptions::UseSystemPrintDialog() const
+{
+    return m_pDataContainer->UseSystemPrintDialog();
+}
+
+void SvtMiscOptions::SetUseSystemPrintDialog( sal_Bool bEnable )
+{
+    m_pDataContainer->SetUseSystemPrintDialog( bEnable );
 }
 
 //*****************************************************************************************************************
