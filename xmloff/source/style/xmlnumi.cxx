@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:48:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,15 @@
 #ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
 #endif
+// --> OD 2008-01-16 #newlistlevelattrs#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONANDSPACEMODE_HPP_
+#include <com/sun/star/text/PositionAndSpaceMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_LABELFOLLOW_HPP_
+#include <com/sun/star/text/LabelFollow.hpp>
+#endif
+// <--
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -147,6 +156,13 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
+// --> OD 2008-01-15 #newlistlevelattrs#
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
+// <--
 
 // ---------------------------------------------------------------------
 
@@ -164,7 +180,31 @@ public:
               const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
     virtual ~SvxXMLListLevelStyleAttrContext_Impl();
+
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix, const OUString& rLocalName,
+            const Reference< xml::sax::XAttributeList > & xAttrList );
+    // <--
 };
+
+// ---------------------------------------------------------------------
+
+// --> OD 2008-01-16 #newlistlevelattrs#
+class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
+{
+    SvxXMLListLevelStyleContext_Impl&   rListLevel;
+
+public:
+
+    SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
+            SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const Reference< xml::sax::XAttributeList >& xAttrList,
+            SvxXMLListLevelStyleContext_Impl& rLLevel   );
+    virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl();
+};
+// <--
 
 // ---------------------------------------------------------------------
 
@@ -244,6 +284,14 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Int16           nRelSize;
     Color               aColor;
 
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    sal_Int16           ePosAndSpaceMode;
+    sal_Int16           eLabelFollowedBy;
+    sal_Int32           nListtabStopPosition;
+    sal_Int32           nFirstLineIndent;
+    sal_Int32           nIndentAt;
+    // <--
+
     sal_Bool            bBullet : 1;
     sal_Bool            bImage : 1;
     sal_Bool            bNum : 1;
@@ -284,6 +332,29 @@ public:
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties(
             const SvI18NMap *pI18NMap=0 );
+
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    inline void SetPosAndSpaceMode( sal_Int16 eValue )
+    {
+        ePosAndSpaceMode = eValue;
+    }
+    inline void SetLabelFollowedBy( sal_Int16 eValue )
+    {
+        eLabelFollowedBy = eValue;
+    }
+    inline void SetListtabStopPosition( sal_Int32 nValue )
+    {
+        nListtabStopPosition = nValue;
+    }
+    inline void SetFirstLineIndent( sal_Int32 nValue )
+    {
+        nFirstLineIndent = nValue;
+    }
+    inline void SetIndentAt( sal_Int32 nValue )
+    {
+        nIndentAt = nValue;
+    }
+    // <--
 };
 
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
@@ -311,6 +382,13 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   cBullet( 0 )
 ,   nRelSize(0)
 ,   aColor( 0 )
+// --> OD 2008-01-16 #newlistelevelattrs#
+,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
+,   eLabelFollowedBy( LabelFollow::LISTTAB )
+,   nListtabStopPosition( 0 )
+,   nFirstLineIndent( 0 )
+,   nIndentAt( 0 )
+// <--
 ,   bBullet( sal_False )
 ,   bImage( sal_False )
 ,   bNum( sal_False )
@@ -443,12 +521,12 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = cBullet ? 10 : 9;
+        nCount = cBullet ? 15 : 14;
     }
     if( bImage )
     {
         eType = NumberingType::BITMAP;
-        nCount = 10L;
+        nCount = 15L;
 
         if( (sImageURL.getLength() > 0L) || xBase64Stream.is() )
             nCount++;
@@ -458,7 +536,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         eType = NumberingType::ARABIC;
         GetImport().GetMM100UnitConverter().convertNumFormat(
                 eType, sNumFormat, sNumLetterSync, sal_True );
-        nCount = 10L;
+        nCount = 15L;
     }
 
     if( ( bBullet || bNum ) && nRelSize )
@@ -501,6 +579,24 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         pProps[nPos].Name =
             OUString::createFromAscii(XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE);
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
+
+        // --> OD 2008-01-16 #newlistlevelattrs#
+        pProps[nPos].Name =
+            OUString::createFromAscii(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE);
+        pProps[nPos++].Value <<= (sal_Int16)ePosAndSpaceMode;
+        pProps[nPos].Name =
+            OUString::createFromAscii(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY);
+        pProps[nPos++].Value <<= (sal_Int16)eLabelFollowedBy;
+        pProps[nPos].Name =
+            OUString::createFromAscii(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION);
+        pProps[nPos++].Value <<= (sal_Int32)nListtabStopPosition;
+        pProps[nPos].Name =
+            OUString::createFromAscii(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT);
+        pProps[nPos++].Value <<= (sal_Int32)nFirstLineIndent;
+        pProps[nPos].Name =
+            OUString::createFromAscii(XML_UNO_NAME_NRULE_INDENT_AT);
+        pProps[nPos++].Value <<= (sal_Int32)nIndentAt;
+        // <--
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
@@ -636,6 +732,9 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE,
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE,
+    // <--
 
     XML_TOK_STYLE_ATTRIBUTES_ATTR_END=XML_TOK_UNKNOWN
 };
@@ -676,6 +775,10 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
             XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR },
     { XML_NAMESPACE_FO, XML_FONT_SIZE,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE },
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    { XML_NAMESPACE_TEXT, XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE },
+    // <--
 
     XML_TOKEN_MAP_END
 };
@@ -779,6 +882,16 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             if(SvXMLUnitConverter::convertPercent( nVal, rValue ) )
                 rListLevel.SetRelSize( (sal_Int16)nVal );
             break;
+        // --> OD 2008-01-16 #newlistlevelattrs#
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE:
+            {
+                sal_Int16 ePosAndSpaceMode = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
+                if( IsXMLToken( rValue, XML_LABEL_ALIGNMENT ) )
+                    ePosAndSpaceMode = PositionAndSpaceMode::LABEL_ALIGNMENT;
+                rListLevel.SetPosAndSpaceMode( ePosAndSpaceMode );
+            }
+            break;
+        // <--
         }
     }
 
@@ -915,6 +1028,111 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 SvxXMLListLevelStyleAttrContext_Impl::~SvxXMLListLevelStyleAttrContext_Impl()
 {
 }
+
+// --> OD 2008-01-16 #newlistlevelattrs#
+SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+    if ( XML_NAMESPACE_STYLE == nPrefix &&
+         IsXMLToken( rLocalName, XML_LABEL_ALIGNMENT ) )
+    {
+        pContext = new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl( GetImport(),
+                                                             nPrefix,
+                                                             rLocalName,
+                                                             xAttrList,
+                                                             rListLevel );
+    }
+    if( !pContext )
+    {
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return pContext;
+}
+// <--
+
+// ---------------------------------------------------------------------
+
+// --> OD 2008-01-16 #newlistlevelattrs#
+enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
+{
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT,
+
+    XML_TOK_STYLE_ATTRIBUTES_LABEL_ALIGNMENT_ATTR_END=XML_TOK_UNKNOWN
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, XML_LABEL_FOLLOWED_BY,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
+    { XML_NAMESPACE_TEXT, XML_LIST_TAB_STOP_POSITION,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION },
+    { XML_NAMESPACE_FO, XML_TEXT_INDENT,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT },
+    { XML_NAMESPACE_FO, XML_MARGIN_LEFT,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT },
+
+    XML_TOKEN_MAP_END
+};
+SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
+        SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SvxXMLListLevelStyleContext_Impl& rLLevel ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    rListLevel( rLLevel )
+{
+    SvXMLTokenMap aTokenMap( aStyleAlignmentAttributesAttrTokenMap );
+    SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        sal_Int32 nVal;
+        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        {
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY:
+            {
+                sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
+                if( IsXMLToken( rValue, XML_SPACE ) )
+                    eLabelFollowedBy = LabelFollow::SPACE;
+                else if( IsXMLToken( rValue, XML_NOTHING ) )
+                    eLabelFollowedBy = LabelFollow::NOTHING;
+                rListLevel.SetLabelFollowedBy( eLabelFollowedBy );
+            }
+            break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION:
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, SHRT_MAX ) )
+                rListLevel.SetListtabStopPosition( nVal );
+            break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT:
+            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
+                rListLevel.SetFirstLineIndent( nVal );
+            break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT:
+            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
+                rListLevel.SetIndentAt( nVal );
+            break;
+        }
+    }
+}
+
+SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl()
+{
+}
+// <--
 
 // ---------------------------------------------------------------------
 
