@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:41:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,12 +122,14 @@ void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
     m_pFieldControl->DisplayData(pFieldDescr);
 }
 //------------------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 0
 OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
     OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent());
     return pDesignWin->GetEditorCtrl();
 }
+#endif
 //------------------------------------------------------------------------------
 //short OFieldDescGenWin::GetFormatCategory(OFieldDescription* pFieldDescr)
 //{
