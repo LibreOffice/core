@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:24:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,3 +239,4 @@ String STR_BOOSTRAP_ERR_NOACCESSRIGHTS
 {
     Text [ en-US ] = "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n";
 };
+
