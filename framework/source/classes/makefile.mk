@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:38:26 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:21:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,6 @@ SLOFILES=           \
 SRS1NAME=$(TARGET)
 SRC1FILES =\
     resource.src
-
-RESLIB1NAME=		fwe
-RESLIB1IMAGES=		$(PRJ)$/res
-RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
-RESLIB1DEPN=		resource.src	\
-                    resource.hrc	\
 
 # --- Targets ------------------------------------------------------
 
