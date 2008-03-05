@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeTableTemplateLayoutController.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:34:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import java.util.ArrayList;
@@ -59,126 +57,143 @@ import org.jfree.report.structure.Section;
  */
 public class OfficeTableTemplateLayoutController extends SectionLayoutController
 {
-  private Node[] nodes;
 
-  public OfficeTableTemplateLayoutController()
-  {
-  }
+    private Node[] nodes;
 
-  /**
-   * Initializes the layout controller. This method is called exactly once. It is the creators responsibility to call
-   * this method.
-   * <p/>
-   * Calling initialize after the first advance must result in a IllegalStateException.
-   *
-   * @param node           the currently processed object or layout node.
-   * @param flowController the current flow controller.
-   * @param parent         the parent layout controller that was responsible for instantiating this controller.
-   * @throws org.jfree.report.DataSourceException
-   *          if there was a problem reading data from the datasource.
-   * @throws org.jfree.report.ReportProcessingException
-   *          if there was a general problem during the report processing.
-   * @throws org.jfree.report.ReportDataFactoryException
-   *          if a query failed.
-   */
-  public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
-      throws DataSourceException, ReportDataFactoryException, ReportProcessingException
-  {
-    final Section section = new Section();
-    section.setNamespace(OfficeNamespaces.INTERNAL_NS);
-    section.setType("template");
-    super.initialize(section, flowController, parent);
-
-    final OfficeReport report = (OfficeReport) node;
-    final ArrayList tables = new ArrayList();
-    if (report.getPageHeader() != null)
+    public OfficeTableTemplateLayoutController()
     {
-      addFromSection(tables, (Section) report.getPageHeader());
-    }
-    if (report.getReportHeader() != null)
-    {
-      addFromSection(tables, (Section) report.getReportHeader());
-    }
-    addFromBody(tables, (Section) report.getBodySection());
-    if (report.getReportFooter() != null)
-    {
-      addFromSection(tables, (Section) report.getReportFooter());
-    }
-    if (report.getPageFooter() != null)
-    {
-      addFromSection(tables, (Section) report.getPageFooter());
     }
 
-    this.nodes = (Node[]) tables.toArray(new Node[tables.size()]);
-  }
-
-  private void addFromBody(final ArrayList tables, final Section section)
-  {
-    final Node[] nodeArray = section.getNodeArray();
-    for (int i = 0; i < nodeArray.length; i++)
+    /**
+     * Initializes the layout controller. This method is called exactly once. It is the creators responsibility to call
+     * this method.
+     * <p/>
+     * Calling initialize after the first advance must result in a IllegalStateException.
+     *
+     * @param node           the currently processed object or layout node.
+     * @param flowController the current flow controller.
+     * @param parent         the parent layout controller that was responsible for instantiating this controller.
+     * @throws org.jfree.report.DataSourceException
+     *          if there was a problem reading data from the datasource.
+     * @throws org.jfree.report.ReportProcessingException
+     *          if there was a general problem during the report processing.
+     * @throws org.jfree.report.ReportDataFactoryException
+     *          if a query failed.
+     */
+    public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
+            throws DataSourceException, ReportDataFactoryException, ReportProcessingException
     {
-      final Node node = nodeArray[i];
-      if (node instanceof Section == false)
-      {
-        continue;
-      }
-      final Section child = (Section) node;
-      if (node instanceof OfficeGroup)
-      {
-        addFromGroup(tables, child);
-      }
-      else
-      {
-        addFromSection(tables, child);
-      }
-    }
-  }
+        final Section section = new Section();
+        section.setNamespace(OfficeNamespaces.INTERNAL_NS);
+        section.setType("template");
+        super.initialize(section, flowController, parent);
 
-  private void addFromGroup(final ArrayList tables, final Section section)
-  {
-    final Node[] nodeArray = section.getNodeArray();
-    for (int i = 0; i < nodeArray.length; i++)
+        final OfficeReport report = (OfficeReport) node;
+        final ArrayList tables = new ArrayList();
+        if (report.getPageHeader() != null)
+        {
+            addFromSection(tables, (Section) report.getPageHeader());
+        }
+        if (report.getReportHeader() != null)
+        {
+            addFromSection(tables, (Section) report.getReportHeader());
+        }
+        addPBody(tables, (Section) report.getPreBodySection());
+        addFromBody(tables, (Section) report.getBodySection());
+        addPBody(tables, (Section) report.getPostBodySection());
+        if (report.getReportFooter() != null)
+        {
+            addFromSection(tables, (Section) report.getReportFooter());
+        }
+        if (report.getPageFooter() != null)
+        {
+            addFromSection(tables, (Section) report.getPageFooter());
+        }
+
+        this.nodes = (Node[]) tables.toArray(new Node[tables.size()]);
+    }
+
+    private void addPBody(final ArrayList tables, final Section section)
     {
-      final Node node = nodeArray[i];
-      if (node instanceof Section == false)
-      {
-        continue;
-      }
-
-      final Section element = (Section) node;
-      if (OfficeNamespaces.INTERNAL_NS.equals(element.getNamespace()) && "group-body".equals(element.getType()))
-      {
-        addFromBody(tables, element);
-      }
-      else
-      {
-        addFromSection(tables, element);
-      }
+        if (section != null)
+        {
+            tables.add(section);
+        }
+//      final Node[] nodeArray = section.getNodeArray();
+//    for (int i = 0; i < nodeArray.length; i++)
+//    {
+//      final Node node = nodeArray[i];
+//      tables.add(node);
+//    }
     }
-  }
 
-  private void addFromSection(final ArrayList tables, final Section section)
-  {
-    final Node[] nodeArray = section.getNodeArray();
-    for (int i = 0; i < nodeArray.length; i++)
+    private void addFromBody(final ArrayList tables, final Section section)
     {
-      final Node node = nodeArray[i];
-      if (node instanceof Element == false)
-      {
-        continue;
-      }
-
-      final Element element = (Element) node;
-      if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) &&
-          "table".equals(element.getType()))
-      {
-        tables.add(element);
-      }
+        final Node[] nodeArray = section.getNodeArray();
+        for (int i = 0; i < nodeArray.length; i++)
+        {
+            final Node node = nodeArray[i];
+            if (node instanceof Section == false)
+            {
+                continue;
+            }
+            final Section child = (Section) node;
+            if (node instanceof OfficeGroup)
+            {
+                addFromGroup(tables, child);
+            }
+            else
+            {
+                addFromSection(tables, child);
+            }
+        }
     }
-  }
 
-  public Node[] getNodes()
-  {
-    return nodes;
-  }
+    private void addFromGroup(final ArrayList tables, final Section section)
+    {
+        final Node[] nodeArray = section.getNodeArray();
+        for (int i = 0; i < nodeArray.length; i++)
+        {
+            final Node node = nodeArray[i];
+            if (node instanceof Section == false)
+            {
+                continue;
+            }
+
+            final Section element = (Section) node;
+            if (OfficeNamespaces.INTERNAL_NS.equals(element.getNamespace()) && "group-body".equals(element.getType()))
+            {
+                addFromBody(tables, element);
+            }
+            else
+            {
+                addFromSection(tables, element);
+            }
+        }
+    }
+
+    private void addFromSection(final ArrayList tables, final Section section)
+    {
+        final Node[] nodeArray = section.getNodeArray();
+        for (int i = 0; i < nodeArray.length; i++)
+        {
+            final Node node = nodeArray[i];
+            if (node instanceof Element == false)
+            {
+                continue;
+            }
+
+            final Element element = (Element) node;
+            if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) &&
+                    "table".equals(element.getType()))
+            {
+                tables.add(element);
+            }
+        }
+    }
+
+    public Node[] getNodes()
+    {
+        return nodes;
+    }
 }
