@@ -25,5 +25,9 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:helpid="helpid:10711" toolbar:text="" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertColumns" toolbar:helpid="helpid:12202" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertContent" toolbar:helpid="helpid:12201" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter" toolbar:helpid="helpid:12203" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource" toolbar:helpid="helpid:12252" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer" toolbar:helpid="helpid:10764" toolbar:text="" toolbar:style="" />
 </toolbar:toolbar>
