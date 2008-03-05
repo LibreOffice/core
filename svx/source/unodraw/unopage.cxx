@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:21:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -821,10 +821,10 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                                 SdrModel* pSdrModel = pSdrPage->GetModel();
                                 if( pSdrModel )
                                 {
-                                    SfxObjectShell *pPersist = pSdrModel->GetPersist();
+                                    ::comphelper::IEmbeddedHelper *pPersist = pSdrModel->GetPersist();
                                     if( pPersist )
                                     {
-                                        uno::Reference < embed::XEmbeddedObject > xObject = pPersist->GetEmbeddedObjectContainer().
+                                        uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
                                                 GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
                                         // TODO CL->KA: Why is this not working anymore?
