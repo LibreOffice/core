@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 10:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include <svtools/syslocaleoptions.hxx>
 #include "listener.hxx"
 #include <svtools/smplhint.hxx>
+#include <unotools/digitgroupingiterator.hxx>
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -2702,6 +2703,8 @@ void SvNumberFormatter::GenerateFormat(String& sString,
                                     // formate anlegen
     sString.Erase();
 
+    utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
+    const xub_StrLen nDigitsInFirstGroup = static_cast<xub_StrLen>(aGrouping.get());
     const String& rThSep = GetNumThousandSep();
     if (nAnzLeading == 0)
     {
@@ -2711,22 +2714,25 @@ void SvNumberFormatter::GenerateFormat(String& sString,
         {
             sString += '#';
             sString += rThSep;
-            sString.Expand( sString.Len() + 3, '#' );
+            sString.Expand( sString.Len() + nDigitsInFirstGroup, '#' );
         }
     }
     else
     {
         for (i = 0; i < nAnzLeading; i++)
         {
-            if (bThousand && i%3 == 0 && i > 0)
+            if (bThousand && i > 0 && i == aGrouping.getPos())
+            {
                 sString.Insert( rThSep, 0 );
+                aGrouping.advance();
+            }
             sString.Insert('0',0);
         }
-        if (bThousand && nAnzLeading < 4)
+        if (bThousand && nAnzLeading < nDigitsInFirstGroup + 1)
         {
-            for (i = nAnzLeading; i < 4; i++)
+            for (i = nAnzLeading; i < nDigitsInFirstGroup + 1; i++)
             {
-                if (bThousand && i%3 == 0)
+                if (bThousand && i % nDigitsInFirstGroup == 0)
                     sString.Insert( rThSep, 0 );
                 sString.Insert('#',0);
             }
