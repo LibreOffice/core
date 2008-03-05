@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.204 $
+#   $Revision: 1.205 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:42:29 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:32:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1494,7 +1494,7 @@ $(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) localize.sdf
 .ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
+    $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
     $(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
 .ENDIF			# "$(WITH_LANG)"==""
@@ -1510,7 +1510,7 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
 $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(WITH_LANG)"!=""
     @@-$(RM) $(MISC)$/$(<:b).interm$(TARGET)
-    $(WRAPCMD) native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @@$(RM)  $(MISC)$/$(<:b).interm$(TARGET)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
