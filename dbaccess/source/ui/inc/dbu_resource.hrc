@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:49:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@
 #define PAGE_DBWIZARD_MYSQL_JDBC                RID_PAGE_START + 54
 #define PAGE_DBWIZARD_FINAL                     RID_PAGE_START + 55
 #define PAGE_DBWIZARD_USERDEFINED               RID_PAGE_START + 56
+#define PAGE_DBWIZARD_MYSQL_NATIVE              RID_PAGE_START + 57
 
 //========================================================================
 // error boxes
