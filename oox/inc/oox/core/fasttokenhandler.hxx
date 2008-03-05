@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fasttokenhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@ namespace oox {
 class FastTokenHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastTokenHandler >
 {
 public:
+    explicit            FastTokenHandler();
+    virtual             ~FastTokenHandler();
+
     virtual ::sal_Int32 SAL_CALL getToken( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getIdentifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
