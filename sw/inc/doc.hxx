@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:59:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,9 @@
 #endif
 #ifndef _SFXSTYLE_HXX //autogen // #116530#
 #include <svtools/style.hxx>
+#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
@@ -1220,14 +1223,20 @@ public:
 
         //Zuruecksetzen der Attribute; es werden alle TxtHints und bei
         //vollstaendiger Selektion harte Formatierung (AUTO-Formate) entfernt
-    void ResetAttr(const SwPaM &rRg, sal_Bool bTxtAttr = sal_True,
+    void ResetAttrs(const SwPaM &rRg, sal_Bool bTxtAttr = sal_True,
                         const SvUShortsSort* = 0 );
-    void RstTxtAttr(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
+    void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
 
         // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
         // das alte in die Undo-History aufgenommen
     void SetAttr( const SfxPoolItem&, SwFmt& );
     void SetAttr( const SfxItemSet&, SwFmt& );
+
+    // --> OD 2008-02-12 #newlistlevelattrs#
+    // method to reset a certain attribute at the given format
+    void ResetAttrAtFormat( const USHORT nWhichId,
+                            SwFmt& rChangedFormat );
+    // <--
 
         // Setze das Attribut als neues default Attribut in diesem Dokument.
         // Ist Undo aktiv, wird das alte in die Undo-History aufgenommen
@@ -1512,8 +1521,14 @@ public:
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
     // --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter
+    // --> OD 2008-02-08 #newlistlevelattrs#
+    // Add optional parameter <bResetIndentAttrs> - default value FALSE.
+    // If <bResetIndentAttrs> equals true, the indent attributes "before text"
+    // and "first line indent" are additionally reset at the provided PaM, if
+    // the list style makes use of the new list level attributes.
     void SetNumRule( const SwPaM&, const SwNumRule&,
-                     sal_Bool bSetItem = sal_True );
+                     sal_Bool bSetItem = sal_True,
+                     const bool bResetIndentAttrs = false );
     // <--
     void SetCounted( const SwPaM&, bool bCounted);
 
@@ -1542,8 +1557,14 @@ public:
     */
     void AddNumRule(SwNumRule * pRule);
 
-    sal_uInt16 MakeNumRule( const String &rName, const SwNumRule* pCpy = 0,
-                            BOOL bBroadcast = FALSE);
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
+    sal_uInt16 MakeNumRule( const String &rName,
+        const SwNumRule* pCpy = 0,
+        BOOL bBroadcast = FALSE,
+        const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
+            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+    // <--
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
 
