@@ -1,4 +1,4 @@
-/* RCS  $Id: path.c,v 1.5 2007-10-15 15:40:58 ihi Exp $
+/* RCS  $Id: path.c,v 1.6 2008-03-05 18:29:34 kz Exp $
 --
 -- SYNOPSIS
 --      Pathname manipulation code
@@ -171,6 +171,7 @@ char *path;
    register char *q;
    char *tpath;
    int hasdriveletter = 0;
+   int delentry;
 
    DB_ENTER( "Clean_path" );
 
@@ -218,6 +219,7 @@ char *path;
    while( *q ) {
       char *t;
 
+      /* p is NULL or greater than q. */
       p=strchr(q, *DirSepStr);
       if( !p ) break;
 
@@ -245,7 +247,20 @@ char *path;
       t=strchr(p+1, *DirSepStr);
       if( !t ) break;
 
-      if ( !(p-q == 2 && strncmp(q,"..",2) == 0)
+      /* Collaps this only if foo is neither '.' nor '..'. */
+      switch( p-q ) {
+     case 2:
+        delentry = !((q[0] == '.') && (q[1] == '.'));
+        break;
+     case 1:
+        delentry = !(q[0] == '.');
+        break;
+     default:
+        delentry = TRUE;
+        break;
+      }
+
+      if ( delentry
        && (t-p-1 == 2 && strncmp(p+1,"..",2) == 0) ) {
      /* Skip one (or possible more) DirSepStr. */
      do {
