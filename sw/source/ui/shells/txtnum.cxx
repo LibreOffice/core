@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:31:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen wg. SvxBrushItem
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 #include "cmdid.h"
@@ -154,7 +157,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         else
         {
-            SwNumRule aRule( GetShell().GetUniqueNumRuleName() );
+            // --> OD 2008-02-11 #newlistlevelattrs#
+            SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
+                             SvxNumberFormat::LABEL_ALIGNMENT );
+            // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
 
@@ -204,9 +210,12 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 pSetRule->UnLinkGraphics();
+                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
-                                        : GetShell().GetUniqueNumRuleName());
+                                        : GetShell().GetUniqueNumRuleName(),
+                                    SvxNumberFormat::LABEL_ALIGNMENT );
+                // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
                 GetShell().SetCurNumRule( aSetRule );
@@ -219,7 +228,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.AppendItem( *pItem );
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
-                SwNumRule aSetRule(GetShell().GetUniqueNumRuleName());
+                // --> OD 2008-02-11 #newlistlevelattrs#
+                SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
+                                    SvxNumberFormat::LABEL_ALIGNMENT );
+                // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
                 GetShell().SetCurNumRule( aSetRule );
