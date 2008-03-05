@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdumper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,7 @@
 
 #include "oox/dump/dumperbase.hxx"
 #include "oox/dump/dffdumper.hxx"
-#include "oox/dump/olestoragedumper.hxx"
-#include "oox/xls/biffhelper.hxx"
+#include "oox/xls/richstring.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -188,7 +187,7 @@ protected:
     void                dumpRangeList( const sal_Char* pcName = 0, bool bCol16Bit = true, bool bRow32Bit = false );
 
     void                dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRows );
-    ::rtl::OUString     dumpConstValue();
+    ::rtl::OUString     dumpConstValue( sal_Unicode cStrQuote = OOX_DUMP_STRQUOTE );
 
     template< typename Type >
     void                dumpRect( const sal_Char* pcName,
