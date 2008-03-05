@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apptypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:47:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,8 +75,9 @@ public:
 #define INPUT_PAINT                 0x0004
 #define INPUT_TIMER                 0x0008
 #define INPUT_OTHER                 0x0010
+#define INPUT_APPEVENT              0x0020
 #define INPUT_MOUSEANDKEYBOARD      (INPUT_MOUSE | INPUT_KEYBOARD)
-#define INPUT_ANY                   (INPUT_MOUSEANDKEYBOARD | INPUT_PAINT | INPUT_TIMER | INPUT_OTHER)
+#define INPUT_ANY                   (INPUT_MOUSEANDKEYBOARD | INPUT_PAINT | INPUT_TIMER | INPUT_OTHER | INPUT_APPEVENT)
 
 #define DISPATCH_OPEN               0x0001
 #define DISPATCH_PRINT              0x0002
