@@ -6,9 +6,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ public:
     void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
     inline OSectionView*    GetCurView() const { return m_pView; }
     ::rtl::OUString         getCurrentPage() const;
-    inline void             setCurrentPage(const ::rtl::OUString& _sLastActivePage) { m_sLastActivePage = _sLastActivePage; }
+    void                    setCurrentPage(const ::rtl::OUString& _sLastActivePage);
 
     ::Size getMinimumSize() const;
 private:

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:52:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,11 @@ PropBrw::~PropBrw()
 
     DBG_DTOR( rpt_PropBrw,NULL);
 }
-
+// -----------------------------------------------------------------------------
+void PropBrw::setCurrentPage(const ::rtl::OUString& _sLastActivePage)
+{
+    m_sLastActivePage = _sLastActivePage;
+}
 //----------------------------------------------------------------------------
 
 void PropBrw::implDetachController()
@@ -423,6 +427,18 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     {
         m_xBrowserController->inspect(uno::Sequence< Reference<uno::XInterface> >());
         m_xBrowserController->inspect(_aObjects);
+
+        if ( m_sLastActivePage.getLength() )
+        {
+            try
+            {
+                m_xBrowserController->restoreViewData( makeAny( m_sLastActivePage ) );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+            }
+        }
 
         //Resize();
     }
@@ -618,29 +634,6 @@ void PropBrw::Update( OSectionView* pNewView )
             }
         }
 
-  //      if ( nMarkCount == 1 )
-  //      {
-  //          m_xLastSection.clear();
-        //  SdrObject* pDlgEdObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        //  OObjectBase* pObj = dynamic_cast<OObjectBase*>(pDlgEdObj);
-        //  if ( pObj )
-        //  {
-        //      if ( pDlgEdObj && pDlgEdObj->IsGroupObject() )
-        //      {
-        //          implSetNewObject( CreateCompPropSet( rMarkList ) );
-        //      }
-        //      else // single selection
-        //      {
-  //                  uno::Reference< uno::XInterface > xTemp = CreateComponentPair(pObj);
-        //          implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
-        //      }
-        //  }
-  //          else
-  //          {
-  //              implSetNewObject( );
-  //          }
-        //}
-  //      else
         if ( aMarkedObjects.getLength() ) // multiple selection
         {
             m_xLastSection.clear();
