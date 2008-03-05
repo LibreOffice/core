@@ -130,12 +130,7 @@
     <menu:menu menu:id=".uno:HelpMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
-            <menu:menuitem menu:id=".uno:HelpTip"/>
-            <menu:menuitem menu:id=".uno:ActiveHelp"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelperDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport"/>
             <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
