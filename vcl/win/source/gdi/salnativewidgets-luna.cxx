@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:41:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,21 +38,13 @@
 
 #define _SV_SALNATIVEWIDGETS_CXX
 
-#ifndef _SV_SVSYS_H
-#include <svsys.h>
-#endif
+#include "svsys.h"
+#include "salgdi.h"
+#include "saldata.hxx"
+#include "vcl/svapp.hxx"
 
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.h>
-#endif
-#include <osl/module.h>
+#include "rtl/ustring.h"
+#include "osl/module.h"
 
 #include "uxtheme.h"
 #include "tmschema.h"
@@ -308,6 +300,10 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_MENUBAR:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
+            break;
+        case CTRL_PROGRESS:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
         default:
             hTheme = NULL;
@@ -886,6 +882,28 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
+    if( nType == CTRL_PROGRESS )
+    {
+        if( nPart != PART_ENTIRE_CONTROL )
+            return FALSE;
+
+        if( ! ImplDrawTheme( hTheme, hDC, PP_BAR, iState, rc, aCaption) )
+            return false;
+        RECT aProgressRect = rc;
+        if( vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, PP_BAR, iState, &rc, &aProgressRect) != S_OK )
+            return false;
+
+        long nProgressWidth = aValue.getNumericVal();
+        nProgressWidth *= (aProgressRect.right - aProgressRect.left);
+        nProgressWidth /= (rc.right - rc.left);
+        if( Application::GetSettings().GetLayoutRTL() )
+            aProgressRect.left = aProgressRect.right - nProgressWidth;
+        else
+            aProgressRect.right = aProgressRect.left + nProgressWidth;
+
+        return ImplDrawTheme( hTheme, hDC, PP_CHUNK, iState, aProgressRect, aCaption );
+    }
+
     return false;
 }
 
@@ -961,6 +979,10 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_MENUBAR:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
+            break;
+        case CTRL_PROGRESS:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
         default:
             hTheme = NULL;
@@ -1083,6 +1105,19 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 if( !rNativeContentRegion.IsEmpty() )
                     bRet = TRUE;
             }
+        }
+    }
+    if( nType == CTRL_PROGRESS && nPart == PART_ENTIRE_CONTROL )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Progress");
+        if( hTheme )
+        {
+            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, PP_BAR,
+                0, rControlRegion.GetBoundRect() ) );
+            rNativeContentRegion = aRect;
+            rNativeBoundingRegion = rNativeContentRegion;
+            if( !rNativeContentRegion.IsEmpty() )
+                bRet = TRUE;
         }
     }
     ReleaseDC( mhWnd, hDC );
