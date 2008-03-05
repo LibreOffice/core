@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ class AquaSalFrame;
 class AquaSalTimer;
 class AquaSalInstance;
 class AquaSalMenu;
+class AquaBlinker;
 
 typedef struct SalFrame::SalPointerState SalPointerState;
 
@@ -76,12 +77,12 @@ public:
     int                     mnMaxWidth;             // max. client width in pixels
     int                     mnMaxHeight;            // max. client height in pixels
     NSRect                  maFullScreenRect;       // old window size when in FullScreen
-    bool                    mbGraphics;             // is Graphics used?
-    bool                    mbFullScreen;           // is Window in FullScreen?
-    bool                    mbShown;
-    bool                    mbInitShow;
-    bool                    mbPositioned;
-    bool                    mbSized;
+    bool                    mbGraphics:1;           // is Graphics used?
+    bool                    mbFullScreen:1;         // is Window in FullScreen?
+    bool                    mbShown:1;
+    bool                    mbInitShow:1;
+    bool                    mbPositioned:1;
+    bool                    mbSized:1;
 
     ULONG                   mnStyle;
     unsigned int            mnStyleMask;            // our style mask from NSWindow creation
@@ -98,6 +99,10 @@ public:
 
     CGMutablePathRef        mrClippingPath;         // used for "shaping"
     std::vector< CGRect >   maClippingRects;
+
+    std::list<AquaBlinker*> maBlinkers;
+
+    Rectangle               maInvalidRect;
 public:
     /** Constructor
 
@@ -133,7 +138,8 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle );
     virtual void                CaptureMouse( BOOL bMouse );
     virtual void                SetPointerPos( long nX, long nY );
-    virtual void                Flush();
+    virtual void                Flush( void);
+    virtual void                Flush( const Rectangle& );
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( USHORT nFlags );
