@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelEventListener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:40:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,10 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         try
         {
             uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( rEvent.Source, uno::UNO_QUERY );
+            //remove listener
+            uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
+            uno::Reference<document::XEventListener>(this));
+
             uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
 
             sal_Int32 nIndexes = xIndexes->getCount();
@@ -73,14 +77,11 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
                 uno::Reference< text::XDocumentIndex> xIndex( xIndexes->getByIndex( nIndex ), uno::UNO_QUERY );
                 xIndex->update();
             }
-            //update is done - remove listener
-            uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
-            uno::Reference<document::XEventListener>(this));
         }
         catch( const uno::Exception& rEx )
         {
             (void)rEx;
-            OSL_ASSERT("exception while updating indexes" );
+            OSL_ENSURE( false, "exception while updating indexes" );
         }
     }
 }
