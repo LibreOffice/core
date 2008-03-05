@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:53:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,8 +252,8 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
             aPersistName = pOle->GetPersistName();
             if( aPersistName.getLength() )
             {
-                SfxObjectShell *pPersist = mpObj->GetModel()->GetPersist();
-                if( (NULL == pPersist) || !pPersist->GetEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
+                ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
+                if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
                     aPersistName = OUString();
             }
         }
@@ -308,7 +308,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         return sal_False;
 
     // create storage and inplace object
-    SfxObjectShell*     pPersist = mpModel->GetPersist();
+    ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
     Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
@@ -316,7 +316,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
-    uno::Reference < embed::XEmbeddedObject > xObj( pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName ) );
+    uno::Reference < embed::XEmbeddedObject > xObj( pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName ) );
     if( xObj.is() )
     {
         Rectangle aRect = pOle2Obj->GetLogicRect();
@@ -364,26 +364,23 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
 
     ::rtl::OUString aPersistName;
 
-    SfxObjectShell* pPersist = mpModel->GetPersist();
+    ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
     aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
     aMediaDescr[0].Value <<= aLinkURL;
 
-    if ( pPersist->GetMedium() )
+    uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
+    if ( xInteraction.is() )
     {
-        uno::Reference< task::XInteractionHandler > xInteraction = pPersist->GetMedium()->GetInteractionHandler();
-        if ( xInteraction.is() )
-        {
-            aMediaDescr.realloc( 2 );
-            aMediaDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
-            aMediaDescr[1].Value <<= xInteraction;
-        }
+        aMediaDescr.realloc( 2 );
+        aMediaDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+        aMediaDescr[1].Value <<= xInteraction;
     }
 
     //TODO/LATER: how to cope with creation failure?!
     uno::Reference< embed::XEmbeddedObject > xObj =
-            pPersist->GetEmbeddedObjectContainer().InsertEmbeddedLink( aMediaDescr , aPersistName );
+            pPersist->getEmbeddedObjectContainer().InsertEmbeddedLink( aMediaDescr , aPersistName );
 
     if( xObj.is() )
     {
@@ -483,8 +480,8 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 
     if( mpModel )
     {
-        SfxObjectShell* pPersist = mpModel->GetPersist();
-        if( pPersist && !pPersist->IsEnableSetModified() )
+        ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
+        if( pPersist && !pPersist->isEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle && !pOle->IsEmpty() )
@@ -591,10 +588,11 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     if( !bOwn )
         SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
 
+
     if( mpModel )
     {
-        SfxObjectShell* pPersist = mpModel->GetPersist();
-        if( pPersist && !pPersist->IsEnableSetModified() )
+        ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
+        if( pPersist && !pPersist->isEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle && !pOle->IsEmpty() )
@@ -706,16 +704,16 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 
     if( mpModel )
     {
-        SfxObjectShell* pPersist = mpModel->GetPersist();
-        if( pPersist && !pPersist->IsEnableSetModified() )
+        ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
+        if( pPersist && !pPersist->isEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( mpObj.get() );
-            if( pOle && !pOle->IsEmpty() )
+               if( pOle && !pOle->IsEmpty() )
             {
-                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)mpObj.get())->GetObjRef(), uno::UNO_QUERY );
-                if( xMod.is() )
-                    // TODO/MBA: what's this?!
-                    xMod->setModified( sal_False );
+                   uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)mpObj.get())->GetObjRef(), uno::UNO_QUERY );
+                   if( xMod.is() )
+                       // TODO/MBA: what's this?!
+                       xMod->setModified( sal_False );
             }
         }
     }
