@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:25:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,10 @@
 #include <vcl/svapp.hxx>
 #endif
 
+
+#include "swmodule.hxx"
+#include "cfgitems.hxx"
+#include "prtopt.hxx"
 
 using namespace rtl;
 using namespace comphelper;
@@ -701,7 +705,21 @@ void SwXDocumentSettings::_postSetValues ()
 {
     // set printer only once, namely here!
     if( mpPrinter != NULL )
+    {
+        // #i86352# the printer is also used as container for options by sfx
+        // when setting a printer it should have decent default options
+        SfxItemSet aOptions( mpPrinter->GetOptions() );
+        SwPrintData aPrtData;
+        if( mpDoc->getPrintData() )
+            aPrtData = *mpDoc->getPrintData();
+        else
+            aPrtData = *SW_MOD()->GetPrtOptions(false);
+        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
+        aOptions.Put(aAddPrinterItem);
+        mpPrinter->SetOptions( aOptions );
+
         mpDoc->setPrinter( mpPrinter, true, true );
+    }
 
     mpPrinter = 0;
     mpDocSh = 0;
