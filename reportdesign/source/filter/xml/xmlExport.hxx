@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:45:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ private:
     void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
     void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
     void                    exportFunction(const Reference< XFunction>& _xFunction);
-    void                    exportMasterDetailFields(const Reference<XReportDefinition>& _xReportDefinition);
+    void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
     void                    exportImagePosition(sal_Int16 _nImagePosition);
     sal_Bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
