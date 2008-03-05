@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,6 +317,7 @@ public:
     static BOOL                 IsInExecute();
     static BOOL                 IsShutDown();
     static BOOL                 IsInModalMode();
+    static USHORT               GetModalModeCount();
 
     static USHORT               GetDispatchLevel();
     static BOOL                 AnyInput( USHORT nType = INPUT_ANY );
