@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:41:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ namespace com{namespace sun{namespace star{
 namespace writerfilter {
 namespace dmapper{
 class DomainMapper_Impl;
+
 enum BorderPosition
 {
     BORDER_LEFT,
@@ -280,10 +281,112 @@ public:
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
 };
 
+/*-- 28.12.2007 08:17:34---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+class ParagraphProperties
+{
+    bool                    m_bFrameMode;
+    sal_Int32               m_nDropCap; //drop, margin ST_DropCap
+    sal_Int32               m_nLines; //number of lines of the drop cap
+    sal_Int32               m_w;    //width
+    sal_Int32               m_h;    //height
+    sal_Int32               m_nWrap;   // from ST_Wrap around, auto, none, notBeside, through, tight
+    sal_Int32               m_hAnchor; // page, from ST_HAnchor  margin, page, text
+    sal_Int32               m_vAnchor; // around from ST_VAnchor margin, page, text
+    sal_Int32               m_x; //x-position
+    bool                    m_bxValid;
+    sal_Int32               m_y; //y-position
+    bool                    m_byValid;
+    sal_Int32               m_hSpace; //frame padding h
+    sal_Int32               m_vSpace; //frame padding v
+    sal_Int32               m_hRule; //  from ST_HeightRule exact, atLeast, auto
+    sal_Int32               m_xAlign; // from ST_XAlign center, inside, left, outside, right
+    sal_Int32               m_yAlign; // from ST_YAlign bottom, center, inline, inside, outside, top
+    bool                    m_bAnchorLock;
+
+    sal_Int8                m_nDropCapLength; //number of characters
+
+    ::rtl::OUString         m_sParaStyleName;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange; //start of a frame
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xEndingRange; //end of the frame
+
+public:
+    ParagraphProperties();
+    ParagraphProperties(const ParagraphProperties&);
+    ~ParagraphProperties();
+
+    int operator==(const ParagraphProperties&); //does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
+
+    void    SetFrameMode() { m_bFrameMode = true; }
+    bool    IsFrameMode()const { return m_bFrameMode; }
+
+    void SetDropCap( sal_Int32 nSet ) { m_nDropCap = nSet; }
+    sal_Int32 GetDropCap()const { return m_nDropCap; }
+
+    void SetLines( sal_Int32 nSet ) { m_nLines = nSet; }
+    sal_Int32 GetLines() const { return m_nLines; }
+
+    void Setw( sal_Int32 nSet ) { m_w = nSet; }
+    sal_Int32 Getw() const { return m_w; }
+
+    void Seth( sal_Int32 nSet ) { m_h = nSet; }
+    sal_Int32 Geth() const { return m_h; }
+
+    void SetWrap( sal_Int32 nSet ) { m_nWrap = nSet; }
+    sal_Int32 GetWrap() const { return m_nWrap; }
+
+    void SethAnchor( sal_Int32 nSet ) { m_hAnchor = nSet; }
+    sal_Int32 GethAnchor() const { return m_hAnchor;}
+
+    void SetvAnchor( sal_Int32 nSet ) { m_vAnchor = nSet; }
+    sal_Int32 GetvAnchor() const { return m_vAnchor; }
+
+    void Setx( sal_Int32 nSet ) { m_x = nSet; m_bxValid = true;}
+    sal_Int32 Getx() const { return m_x; }
+    bool IsxValid() const {return m_bxValid;}
+
+    void Sety( sal_Int32 nSet ) { m_y = nSet; m_byValid = true;}
+    sal_Int32 Gety()const { return m_y; }
+    bool IsyValid() const {return m_byValid;}
+
+    void SethSpace( sal_Int32 nSet ) { m_hSpace = nSet; }
+    sal_Int32 GethSpace()const { return m_hSpace; }
+
+    void SetvSpace( sal_Int32 nSet ) { m_vSpace = nSet; }
+    sal_Int32 GetvSpace()const { return m_vSpace; }
+
+    void SethRule( sal_Int32 nSet ) { m_hRule = nSet; }
+    sal_Int32 GethRule() const  { return m_hRule; }
+
+    void SetxAlign( sal_Int32 nSet ) { m_xAlign = nSet; }
+    sal_Int32 GetxAlign()const { return m_xAlign; }
+
+    void SetyAlign( sal_Int32 nSet ) { m_yAlign = nSet; }
+    sal_Int32 GetyAlign()const { return m_yAlign; }
+
+    void SetAnchorLock( bool bSet ) {m_bAnchorLock = bSet; }
+
+    sal_Int8    GetDropCapLength() const { return m_nDropCapLength;}
+    void        SetDropCapLength(sal_Int8 nSet) { m_nDropCapLength = nSet;}
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartingRange() const { return m_xStartingRange; }
+    void SetStartingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xSet ) { m_xStartingRange = xSet; }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetEndingRange() const { return m_xEndingRange; }
+    void SetEndingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xSet ) { m_xEndingRange = xSet; }
+
+    void                    SetParaStyleName( const ::rtl::OUString& rSet ) { m_sParaStyleName = rSet;}
+    const ::rtl::OUString&  GetParaStyleName() const { return m_sParaStyleName;}
+
+
+};
+typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 /*-- 14.06.2007 12:12:34---------------------------------------------------
     property map of a stylesheet
   -----------------------------------------------------------------------*/
-class StyleSheetPropertyMap : public PropertyMap
+class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
     //special table style properties
@@ -387,6 +490,17 @@ public:
     void        SetListLevel(sal_Int16 nLevel)  { mnListLevel = nLevel; }
 
 };
+/*-- 27.12.2007 12:38:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
+{
+public:
+    explicit ParagraphPropertyMap();
+    ~ParagraphPropertyMap();
+
+};
+
 } //namespace dmapper
 } //namespace writerfilter
 #endif
