@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:41:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,19 +35,12 @@
 #ifndef INCLUDED_STYLESHEETTABLE_HXX
 #define INCLUDED_STYLESHEETTABLE_HXX
 
-#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
-#endif
+#include <dmapper/DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_FONTTABLE_HXX
 #include <FontTable.hxx>
-#endif
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
@@ -81,6 +74,7 @@ struct StyleSheetEntry
     ::rtl::OUString sStyleName;
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
+    ::rtl::OUString sConvertedStyleName;
     StyleSheetEntry();
 };
 class DomainMapper;
@@ -91,7 +85,8 @@ class WRITERFILTER_DLLPRIVATE StyleSheetTable :
     StyleSheetTable_Impl   *m_pImpl;
 
 public:
-    StyleSheetTable( DomainMapper& rDMapper );
+    StyleSheetTable( DomainMapper& rDMapper,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument );
     virtual ~StyleSheetTable();
 
     // Properties
@@ -101,13 +96,18 @@ public:
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
-    void ApplyStyleSheets(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument, FontTablePtr rFontTable);
+    void ApplyStyleSheets( FontTablePtr rFontTable );
     const StyleSheetEntry* FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
+    const StyleSheetEntry* FindStyleSheetByStyleName(const ::rtl::OUString& rIndex);
+    const StyleSheetEntry* FindStyleSheetByConvertedStyleName(const ::rtl::OUString& rIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
     const StyleSheetEntry* FindParentStyleSheet(::rtl::OUString sBaseStyle);
 
     ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName, bool bExtendedSearch = false );
     ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);
+
+    ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
+
 private:
     void resolveAttributeProperties(Value & val);
     void resolveSprmProps(Sprm & sprm_);
