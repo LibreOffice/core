@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:32:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,7 +483,7 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
         SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
-        pSh->GetAttr(aLangSet);
+        pSh->GetCurAttr(aLangSet);
         nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
     }
 
