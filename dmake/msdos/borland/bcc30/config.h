@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:28 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2008-03-05 18:36:08 kz Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -42,7 +42,7 @@ extern unsigned int coreleft();
 #endif
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 /* Have to pull this in for the standard lib defines */
 #include <io.h>
