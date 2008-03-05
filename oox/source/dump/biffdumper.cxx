@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdumper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include "oox/dump/olestoragedumper.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulabase.hxx"
-#include "oox/xls/richstring.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -453,14 +453,14 @@ OUString BiffObjectBase::dumpUniString( const sal_Char* pcName, BiffStringFlags 
     sal_uInt8 nFlagField = 0;
     if( (nChars > 0) || !getFlag( nFlags, BIFF_STR_SMARTFLAGS ) )
         *mxStrm >> nFlagField;
-
-    bool b16Bit, bFonts, bPhonetic;
-    sal_uInt16 nFontCount;
-    sal_uInt32 nPhoneticSize;
-    mxStrm->readExtendedUniStringHeader( b16Bit, bFonts, bPhonetic, nFontCount, nPhoneticSize, nFlagField );
+    bool b16Bit    = getFlag( nFlagField, BIFF_STRF_16BIT );
+    bool bFonts    = getFlag( nFlagField, BIFF_STRF_RICH );
+    bool bPhonetic = getFlag( nFlagField, BIFF_STRF_PHONETIC );
+    sal_uInt16 nFontCount = bFonts ? mxStrm->readuInt16() : 0;
+    sal_uInt32 nPhoneticSize = bPhonetic ? mxStrm->readuInt32() : 0;
 
     // --- character array ---
-    OUString aString = mxStrm->readRawUniString( nChars, b16Bit );
+    OUString aString = mxStrm->readUniStringChars( nChars, b16Bit );
     writeStringItem( pcName ? pcName : "text", aString );
 
     // --- formatting ---
@@ -673,7 +673,7 @@ void BiffObjectBase::dumpConstArrayHeader( sal_uInt32& rnCols, sal_uInt32& rnRow
     rOut.writeDec( rnCols * rnRows );
 }
 
-OUString BiffObjectBase::dumpConstValue()
+OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
 {
     Output& rOut = out();
     MultiItemsGuard aMultiGuard( rOut );
@@ -690,7 +690,7 @@ OUString BiffObjectBase::dumpConstValue()
         break;
         case BIFF_DATATYPE_STRING:
             aValue.append( dumpString( "value", BIFF_STR_8BITLENGTH ) );
-            StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
+            StringHelper::enclose( aValue, cStrQuote );
         break;
         case BIFF_DATATYPE_BOOL:
             dumpBoolean( "value" );
@@ -1489,7 +1489,7 @@ void FormulaObject::dumpAddDataArray( size_t nIdx )
     {
         OUStringBuffer aArrayLine;
         for( sal_uInt32 nCol = 0; nCol < nCols; ++nCol )
-            StringHelper::appendToken( aArrayLine, dumpConstValue(), OOX_DUMP_LISTSEP );
+            StringHelper::appendToken( aArrayLine, dumpConstValue( OOX_DUMP_FMLASTRQUOTE ), OOX_DUMP_LISTSEP );
         StringHelper::appendToken( aOp, aArrayLine.makeStringAndClear(), OOX_DUMP_ARRAYSEP );
     }
     StringHelper::enclose( aOp, '{', '}' );
@@ -1619,6 +1619,7 @@ void RecordStreamObject::dumpRecordBody()
 {
     BiffInputStream& rStrm = getBiffStream();
     sal_uInt16 nRecId = rStrm.getRecId();
+    rStrm.enableNulChars( true );
     if( cfg().hasName( mxSimpleRecs, nRecId ) )
         dumpSimpleRecord( cfg().getName( mxSimpleRecs, nRecId ) );
     else
