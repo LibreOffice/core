@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:26:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@
 #define ID_QUERY_ALIASNAME                  (SID_SBA_START + 43) // Aliasnamen anzeigen
 #define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // Distinct anzeigen
 #define ID_QUERY_EDIT_JOINCONNECTION        (SID_SBA_START + 45) // show-edit Join
+#define ID_BROWSER_INSERT_ROW               (SID_SBA_START + 46) // insert row
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
 
