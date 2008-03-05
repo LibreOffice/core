@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:34:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 #include "zforfind.hxx"
 #include <svtools/zforlist.hxx>
 #include "numhead.hxx"
+#include <unotools/digitgroupingiterator.hxx>
 
 #ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
 #include "nfsymbol.hxx"
@@ -3522,21 +3523,19 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                                 String& sStr,       // number string
                                 double& rNumber,    // number
                                 xub_StrLen k,       // position within string
-                                USHORT j,           // position of format code string
+                                USHORT j,           // symbol index within format code
                                 USHORT nIx,         // subformat index
-                                USHORT nDigCnt)     // count of digits in format
+                                USHORT nDigCnt)     // count of integer digits in format
 {
     BOOL bRes = FALSE;
-    BOOL bLeading = FALSE;              // leading characters
-    xub_StrLen nAnzLeadingChars = 0;    // count of leading zeros or blanks
-    USHORT nThousandCnt = 0;            // count of digits before leftmost separator
     xub_StrLen nLeadingStringChars = 0; // inserted StringChars before number
-    USHORT nDigitCount = 0;             // count of integer digits
+    xub_StrLen nDigitCount = 0;         // count of integer digits from the right
     BOOL bStop = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     // no normal thousands separators if number divided by thousands
     BOOL bDoThousands = (rInfo.nThousand == 0);
-    const String& rThousandSep = GetFormatter().GetNumThousandSep();
+    utl::DigitGroupingIterator aGrouping(
+            GetFormatter().GetLocaleData()->getDigitGrouping());
     while (!bStop)                                      // backwards
     {
         if (j == 0)
@@ -3544,6 +3543,8 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
         switch (rInfo.nTypeArray[j])
         {
             case NF_SYMBOLTYPE_DECSEP:
+                aGrouping.reset();
+                // fall thru
             case NF_SYMBOLTYPE_STRING:
             case NF_SYMBOLTYPE_CURRENCY:
             case NF_SYMBOLTYPE_PERCENT:
@@ -3570,18 +3571,19 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 // between and not only at the end.
                 // #i12596# But do not insert if it's a parenthesized negative
                 // format like (#,)
-                // In fact, do not insert if divided and regex [0#],[^0#] and
+                // In fact, do not insert if divided and regex [0#,],[^0#] and
                 // no other digit symbol follows (which was already detected
                 // during scan of format code, otherwise there would be no
-                // division), else do insert.
+                // division), else do insert. Same in ImpNumberFill() below.
                 if ( !bDoThousands && j < NumFor[nIx].GetnAnz()-1 )
                     bDoThousands = ((j == 0) ||
-                            (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT) ||
+                            (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT &&
+                             rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_THSEP) ||
                             (rInfo.nTypeArray[j+1] == NF_SYMBOLTYPE_DIGIT));
-                if ( bDoThousands && k > 0 )
+                if ( bDoThousands && (k > 0 || nDigitCount < nDigCnt) )
                 {
                     sStr.Insert(rInfo.sStrArray[j],k);
-                    nThousandCnt = 0;
+                    aGrouping.advance();
                 }
             }
             break;
@@ -3593,40 +3595,23 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 while ( p1 < p-- )
                 {
                     nDigitCount++;
-                    const sal_Unicode c = *p;
-//! TODO: what if rThousandSep is more than one charater? => change this damned backward loop
-                    if ( c == rThousandSep.GetChar(0) && rThousandSep.Len() == 1 )
-                    {
-                        nDigitCount--;
-                        if (k > 0)
-                        {
-                            sStr.Insert(c,k);
-                            nThousandCnt = 0;
-                        }
-                    }
-                    else if (k > 0)
-                    {
+                    if (k > 0)
                         k--;
-                        nThousandCnt++;
-                    }
                     else
-                        bLeading = TRUE;
-                    if (bLeading)
                     {
-                        if (c == '?')
+                        switch (*p)
                         {
-                            sStr.Insert(' ',0);
-                            nAnzLeadingChars++;
-                        }
-                        else if (c == '0')
-                        {
-                            sStr.Insert('0',0);
-                            nAnzLeadingChars++;
+                            case '0':
+                                sStr.Insert('0',0);
+                                break;
+                            case '?':
+                                sStr.Insert(' ',0);
+                                break;
                         }
                     }
                     if (nDigitCount == nDigCnt && k > 0)
                     {   // more digits than specified
-                        ImpDigitFill(sStr, 0, k, nIx, nThousandCnt);
+                        ImpDigitFill(sStr, 0, k, nIx, nDigitCount, aGrouping);
                     }
                 }
             }
@@ -3648,9 +3633,9 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
         } // switch
         j--;        // next format code string
     } // while
-    k += nLeadingStringChars + nAnzLeadingChars;
+    k = k + nLeadingStringChars;    // MSC converts += to int and then warns, so ...
     if (k > nLeadingStringChars)
-        ImpDigitFill(sStr, nLeadingStringChars, k, nIx, nThousandCnt);
+        ImpDigitFill(sStr, nLeadingStringChars, k, nIx, nDigitCount, aGrouping);
     return bRes;
 }
 
@@ -3659,39 +3644,39 @@ void SvNumberformat::ImpDigitFill(
         xub_StrLen nStart,              // start of digits
         xub_StrLen& k,                  // position within string
         USHORT nIx,                     // subformat index
-        USHORT nThousandCnt )           // count of digits before leftmost separator
+        xub_StrLen & nDigitCount,       // count of integer digits from the right so far
+        utl::DigitGroupingIterator & rGrouping )    // current grouping
 {
-    if (NumFor[nIx].Info().bThousand)                       // noch Ziffern da
-    {                                                       // Aufuellen mit .
+    if (NumFor[nIx].Info().bThousand)               // only if grouping
+    {                                               // fill in separators
         const String& rThousandSep = GetFormatter().GetNumThousandSep();
         while (k > nStart)
         {
-            if (nThousandCnt == 3)
-            {                                       // hier muss . dazwischen
+            if (nDigitCount == rGrouping.getPos())
+            {
                 sStr.Insert( rThousandSep, k );
-                nThousandCnt = 1;
+                rGrouping.advance();
             }
-            else
-                nThousandCnt++;
+            nDigitCount++;
             k--;
         }
     }
-    else                                           // einfach ueberspringen
+    else                                            // simply skip
         k = nStart;
 }
 
-BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
-                                double& rNumber,            // Zahl fuer Standard
-                                xub_StrLen& k,              // Zeigen darin
-                                USHORT& j,                  // Symbolzeiger
-                                USHORT nIx,                 // Teilformatstring
-                                short eSymbolType )         // Abbruchtyp
+BOOL SvNumberformat::ImpNumberFill( String& sStr,       // number string
+                                double& rNumber,        // number for "General" format
+                                xub_StrLen& k,          // position within string
+                                USHORT& j,              // symbol index within format code
+                                USHORT nIx,             // subformat index
+                                short eSymbolType )     // type of stop condition
 {
     BOOL bRes = FALSE;
-    k = sStr.Len();                         // hinter letzter Ziffer
-    BOOL bLeading = FALSE;                  // fuehrende ? oder 0
+    k = sStr.Len();                         // behind last digit
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const String& rThousandSep = GetFormatter().GetNumThousandSep();
+    // no normal thousands separators if number divided by thousands
+    BOOL bDoThousands = (rInfo.nThousand == 0);
     short nType;
     while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType )
     {                                       // rueckwaerts:
@@ -3708,6 +3693,23 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
             case NF_SYMBOLTYPE_BLANK:
                 k = InsertBlanks( sStr,k,rInfo.sStrArray[j].GetChar(1) );
                 break;
+            case NF_SYMBOLTYPE_THSEP:
+            {
+                // Same as in ImpNumberFillWithThousands() above, do not insert
+                // if divided and regex [0#,],[^0#] and no other digit symbol
+                // follows (which was already detected during scan of format
+                // code, otherwise there would be no division), else do insert.
+                if ( !bDoThousands && j < NumFor[nIx].GetnAnz()-1 )
+                    bDoThousands = ((j == 0) ||
+                            (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT &&
+                             rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_THSEP) ||
+                            (rInfo.nTypeArray[j+1] == NF_SYMBOLTYPE_DIGIT));
+                if ( bDoThousands && k > 0 )
+                {
+                    sStr.Insert(rInfo.sStrArray[j],k);
+                }
+            }
+            break;
             case NF_SYMBOLTYPE_DIGIT:
             {
                 const String& rStr = rInfo.sStrArray[j];
@@ -3715,26 +3717,22 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
                 register const sal_Unicode* p = p1 + rStr.Len();
                 while ( p1 < p-- )
                 {
-                    const sal_Unicode c = *p;
-//! TODO: what if rThousandSep is more than one charater? => change this damned backward loop
-                    if ( c == rThousandSep.GetChar(0) && rThousandSep.Len() == 1 )
-                    {
-                        if (k > 0)
-                            sStr.Insert(c,k);
-                    }
-                    else if (k > 0)
+                    if (k > 0)
                         k--;
                     else
-                        bLeading = TRUE;
-                    if (bLeading)
                     {
-                        if (c == '?')
-                            sStr.Insert(' ',0);
-                        else if (c == '0')
-                            sStr.Insert('0',0);
-                    }                           // of if
-                }                               // of for
-            }                                   // of case digi
+                        switch (*p)
+                        {
+                            case '0':
+                                sStr.Insert('0',0);
+                                break;
+                            case '?':
+                                sStr.Insert(' ',0);
+                                break;
+                        }
+                    }
+                }
+            }
             break;
             case NF_KEY_CCC:                // CCC-Waehrung
                 sStr.Insert(rScan.GetCurAbbrev(), k);
