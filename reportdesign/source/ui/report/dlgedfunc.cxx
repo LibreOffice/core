@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:52:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,11 +92,12 @@
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
 #endif
-
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <uistrings.hrc>
 #include "UndoEnv.hxx"
 #include <RptModel.hxx>
+#include "InsertFunctions.hxx"
 
 #define DEFAUL_MOVE_SIZE    100
 namespace rptui
@@ -641,6 +642,21 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         }
 
         bReturn = m_pView->AreObjectsMarked();
+        if ( bReturn )
+        {
+            OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+            const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+            for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+            {
+                SdrMark* pMark = rMarkList.GetMark(i);
+                // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
+                if ( pObj && !pObj->IsEmpty() )
+                {
+                    InitializeChart(pController->getModel(),pObj->GetObjRef());
+                }
+            }
+        }
     }
     else
         checkMovementAllowed(rMEvt);
