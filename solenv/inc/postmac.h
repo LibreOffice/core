@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postmac.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:03:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #undef Boolean
+#undef BOOL
 #undef Button
 #undef Byte
 #undef Control
@@ -53,7 +54,6 @@
 //#undef ShowWindow
 #undef StringPtr
 #undef DirInfo
-#undef BOOL
 #undef ULONG
 #undef Line
 #undef TimeValue
