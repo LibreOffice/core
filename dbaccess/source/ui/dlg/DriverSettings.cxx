@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:43:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             _out_rDetailsIds.push_back(DSID_USECATALOG);
             break;
 
+        case DST_MYSQL_NATIVE:
+            _out_rDetailsIds.push_back(DSID_CHARSET);
+            break;
         case DST_MYSQL_JDBC:
             _out_rDetailsIds.push_back(DSID_CHARSET);
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
