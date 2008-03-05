@@ -1,4 +1,4 @@
-DMAKE 4.11
+DMAKE 4.12
 ==========
 
 This directory tree contains a number of files.  Here is a short
