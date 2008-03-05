@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:33:54 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:11:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ SLOFILES=           $(SLO)$/controlfontdialog.obj \
                     $(SLO)$/objectinspectormodel.obj \
                     $(SLO)$/inspectorhelpwindow.obj \
                     $(SLO)$/defaulthelpprovider.obj \
+                    $(SLO)$/MasterDetailLinkDialog.obj \
                     $(SLO)$/inspectormodelbase.obj
 
 SRS1NAME=$(TARGET)
