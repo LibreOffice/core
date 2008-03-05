@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dumperbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,10 @@
 #define OOX_DUMP_DUMPERBASE_HXX
 
 #include <math.h>
-#include <map>
 #include <vector>
 #include <stack>
+#include <set>
+#include <map>
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -117,6 +118,7 @@ public:
 
     static ::rtl::OUString convertFileNameToUrl( const ::rtl::OUString& rFileName );
     static sal_Int32    getFileNamePos( const ::rtl::OUString& rFileUrl );
+    static ::rtl::OUString getFileNameExtension( const ::rtl::OUString& rFileUrl );
 
     // input streams ----------------------------------------------------------
 
@@ -858,9 +860,11 @@ private:
     void                createUnitConverter( const ::rtl::OUString& rData );
 
 private:
+    typedef ::std::set< ::rtl::OUString >                   ConfigFileSet;
     typedef ::std::map< ::rtl::OUString, ::rtl::OUString >  ConfigDataMap;
     typedef ::std::map< ::rtl::OUString, NameListRef >      NameListMap;
 
+    ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
     ::rtl::OUString     maConfigPath;
@@ -1673,16 +1677,36 @@ private:
 typedef ::boost::shared_ptr< InputStreamObject > InputStreamObjectRef;
 
 // ============================================================================
+// ============================================================================
 
 class TextStreamObject : public InputStreamObject
 {
 public:
-    explicit            TextStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
+    explicit            TextStreamObject( const ObjectBase& rParent,
+                            const ::rtl::OUString& rOutFileName,
+                            BinaryInputStreamRef xStrm, rtl_TextEncoding eTextEnc );
 
 protected:
     virtual void        implDump();
+    virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
 
-    void                dumpTextStream( rtl_TextEncoding eTextEnc, bool bShowLines = true );
+private:
+    rtl_TextEncoding    meTextEnc;
+};
+
+// ============================================================================
+
+class XmlStreamObject : public TextStreamObject
+{
+public:
+    explicit            XmlStreamObject( const ObjectBase& rParent, const ::rtl::OUString& rOutFileName, BinaryInputStreamRef xStrm );
+
+protected:
+    virtual void        implDump();
+    virtual void        implDumpLine( const ::rtl::OUString& rLine, sal_uInt32 nLine );
+
+private:
+    ::rtl::OUString     maIncompleteLine;
 };
 
 // ============================================================================
@@ -1834,6 +1858,18 @@ protected:
 } // namespace dump
 } // namespace oox
 
-#endif
+#define OOX_DUMP_FILE( DumperClassName )    \
+do {                                        \
+    DumperClassName aDumper( *this );       \
+    aDumper.dump();                         \
+    if( !aDumper.isImportEnabled() )        \
+        return aDumper.isValid();           \
+} while( false )
+
+#else   // OOX_INCLUDE_DUMPER
+
+#define OOX_DUMP_FILE( DumperClassName ) (void)0
+
+#endif  // OOX_INCLUDE_DUMPER
 #endif
 
