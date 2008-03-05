@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:09:49 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:53:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,8 @@ IDLFILES= \
     XNumericalDataSequence.idl \
     XRangeHighlighter.idl \
     XRangeXMLConversion.idl \
-    XTextualDataSequence.idl
+    XTextualDataSequence.idl \
+    XDatabaseDataProvider.idl
 
 # --- Targets ------------------------------------------------------
 
