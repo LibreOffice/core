@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlMasterFields.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 namespace rptxml
 {
     class ORptFilter;
-    class OXMLSubDocument;
+    class IMasterDetailFieds;
     class OXMLMasterFields : public SvXMLImportContext
     {
-        OXMLSubDocument* m_pSubDocument;
+        IMasterDetailFieds* m_pReport;
         OXMLMasterFields(const OXMLMasterFields&);
         void operator =(const OXMLMasterFields&);
     public:
@@ -52,7 +52,7 @@ namespace rptxml
         OXMLMasterFields( ORptFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,OXMLSubDocument* _pSubDocument);
+                    ,IMasterDetailFieds* _pReport);
         virtual ~OXMLMasterFields();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
