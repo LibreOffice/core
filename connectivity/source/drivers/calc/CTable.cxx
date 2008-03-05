@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:27:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
 #endif
+#include <comphelper/types.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;
@@ -582,21 +583,25 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
+                ,m_pConnection(_pConnection)
                 ,m_nStartCol(0)
                 ,m_nStartRow(0)
                 ,m_nDataCols(0)
                 ,m_nDataRows(0)
                 ,m_bHasHeaders(sal_False)
 {
+}
+// -----------------------------------------------------------------------------
+void OCalcTable::construct()
+{
     //  get sheet object
-
-    Reference<XSpreadsheetDocument> xDoc = _pConnection->getDoc();
+    Reference< XSpreadsheetDocument> xDoc = m_pConnection->acquireDoc();
     if (xDoc.is())
     {
         Reference<XSpreadsheets> xSheets = xDoc->getSheets();
-        if ( xSheets.is() && xSheets->hasByName( _Name ) )
+        if ( xSheets.is() && xSheets->hasByName( m_Name ) )
         {
-            m_xSheet.set(xSheets->getByName( _Name ),UNO_QUERY);
+            m_xSheet.set(xSheets->getByName( m_Name ),UNO_QUERY);
             if ( m_xSheet.is() )
             {
                 lcl_GetDataArea( m_xSheet, m_nDataCols, m_nDataRows );
@@ -611,9 +616,9 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
             {
                 Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges")) ),UNO_QUERY);
 
-                if ( xRanges.is() && xRanges->hasByName( _Name ) )
+                if ( xRanges.is() && xRanges->hasByName( m_Name ) )
                 {
-                    Reference<XDatabaseRange> xDBRange(xRanges->getByName( _Name ),UNO_QUERY);
+                    Reference<XDatabaseRange> xDBRange(xRanges->getByName( m_Name ),UNO_QUERY);
                     Reference<XCellRangeReferrer> xRefer( xDBRange, UNO_QUERY );
                     if ( xRefer.is() )
                     {
@@ -696,6 +701,10 @@ void SAL_CALL OCalcTable::disposing(void)
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
+    if ( m_pConnection )
+        m_pConnection->releaseDoc();
+    m_pConnection = NULL;
+
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
