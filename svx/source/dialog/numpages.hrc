@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:19:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,5 +127,14 @@
 #define MN_GALLERY         2
 #define MN_GALLERY_ENTRY 100
 
-
+#define FT_LABEL_FOLLOWED_BY    250
+#define LB_LABEL_FOLLOWED_BY    251
+#define FT_LISTTAB              252
+#define MF_LISTTAB              253
+#define FT_ALIGN_2              254
+#define LB_ALIGN_2              255
+#define FT_ALIGNED_AT           256
+#define MF_ALIGNED_AT           257
+#define FT_INDENT_AT            258
+#define MF_INDENT_AT            259
 
