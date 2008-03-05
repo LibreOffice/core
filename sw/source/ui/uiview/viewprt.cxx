@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:44:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
     Beschreibung:   Druckerwechsel weitermelden
  --------------------------------------------------------------------*/
 
-void SetPrinter( SfxPrinter* pNew, BOOL bWeb )
+void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
     if( !pOpt)
@@ -209,8 +209,8 @@ void SetPrinter( SfxPrinter* pNew, BOOL bWeb )
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, FALSE,
         (const SfxPoolItem**)&pAddPrinterAttr ) )
     {
-//      Wir lassen die Druckoptionen so, wie sie sind.
-//      pAddPrinterAttr->SetPrintOptions( pOpt );
+        if( pIDDA )
+            pIDDA->setPrintData( *pAddPrinterAttr );
         if( pAddPrinterAttr->GetFax().getLength() )
             pOpt->SetFaxName(pAddPrinterAttr->GetFax());
     }
@@ -228,7 +228,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
     }
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
-        ::SetPrinter( pNew, bWeb );
+        ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
     const BOOL bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? TRUE : FALSE;
     const BOOL bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? TRUE : FALSE;
