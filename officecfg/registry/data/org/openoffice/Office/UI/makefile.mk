@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 06:51:30 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:38:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ LOCALIZEDFILES= \
     DbTableWindowState.xcu \
     DbRelationWindowState.xcu \
     DbBrowserWindowState.xcu \
+    DbTableDataWindowState.xcu \
     DrawImpressCommands.xcu \
     Effects.xcu \
     GenericCommands.xcu \
