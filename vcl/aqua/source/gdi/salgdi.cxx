@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:46:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,9 +360,7 @@ static void GetDisplayResolution( long& rDPIX, long& rDPIY )
     if( (rDPIX != rDPIY)
     &&  (10*rDPIX < 13*rDPIY) && (13*rDPIX > 10*rDPIY) )
     {
-        // also adjust to the next common resolution 72,96,120,144,...
-        const long nCommonDPI = (rDPIX >= rDPIY) ? rDPIX : rDPIY;
-        rDPIX = rDPIY = ((nCommonDPI + 12) / 24) * 24;
+        rDPIX = rDPIY = (rDPIX + rDPIY + 1) / 2;
     }
 }
 
@@ -978,7 +976,6 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
 
 sal_Bool AquaSalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return sal_False;
 }
 
@@ -986,7 +983,6 @@ sal_Bool AquaSalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPt
 
 sal_Bool AquaSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return sal_False;
 }
 
@@ -995,7 +991,6 @@ sal_Bool AquaSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtA
 sal_Bool AquaSalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return sal_False;
 }
 
@@ -1013,7 +1008,6 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         || pPosAry->mnDestWidth <= 0
         || pPosAry->mnDestHeight <= 0 )
     {
-    AquaLog( ">>>AquaSalGraphics::copyBits: WARNING negative width and/or height\n");
         return;
     }
 
@@ -1154,9 +1148,6 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
         }
     }
 
-    if( !pBitmap )
-        AquaLog( "<<WARNING>> AquaSalGraphics::getBitmap() failed!\n" );
-
     return pBitmap;
 }
 
@@ -1164,7 +1155,6 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
 
 SalColor AquaSalGraphics::getPixel( long nX, long nY )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     SalColor  nSalColor = 0;
     return nSalColor;
 }
@@ -1244,17 +1234,12 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
         delete []  CGpoints;
         RefreshRect(pRect.origin.x, pRect.origin.y, pRect.size.width, pRect.size.height);
     }
-    else
-    {
-        AquaLog( ">>>>> AquaSalGraphics::invert - failed BeginGraphics\n" );
-    }
 }
 
 // -----------------------------------------------------------------------
 
 BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*  pPtr, ULONG nSize )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return FALSE;
 }
 
@@ -1262,10 +1247,6 @@ BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void
 bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {
-
-    AquaLog( ">>> AquaSalGraphics::drawAlphaBitmap\n" );
-
-//    AquaLog( "\t bitcount: %d rTR.mnDestWidth: %d rTR.mnDestHeight: %d rTR.mnSrcHeight:%d rTR.mnSrcWidth : %d \n",  rAlphaBmp.GetBitCount(), rTR.mnDestWidth, rTR.mnDestHeight, rTR.mnSrcHeight, rTR.mnSrcWidth  );
 
     // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
     if( rAlphaBmp.GetBitCount() > 8 )
@@ -1356,10 +1337,7 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         return TRUE;
     }
     else
-    {
-        AquaLog( ">>>> AquaSalGraphics::drawAlphaRect failed BeginGraphics\n" );
         return FALSE;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1414,10 +1392,10 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // convert quartz units to pixel units
     // please see the comment in AquaSalGraphics::SetFont() for details
     const double fPixelSize = (mfFontScale * mfFakeDPIScale * fPointSize);
-    pMetric->mnAscent       = + static_cast<long>(aMetrics.ascent  * fPixelSize + 0.5);
-    pMetric->mnDescent      = - static_cast<long>(aMetrics.descent * fPixelSize + 0.5);
-    pMetric->mnExtLeading   = + static_cast<long>(aMetrics.leading * fPixelSize + 0.5);
+    pMetric->mnAscent       = static_cast<long>(+aMetrics.ascent  * fPixelSize + 0.5);
+    pMetric->mnDescent      = static_cast<long>((-aMetrics.descent + aMetrics.leading) * fPixelSize + 0.5);
     pMetric->mnIntLeading   = 0;
+    pMetric->mnExtLeading   = 0;
     // ATSFontMetrics.avgAdvanceWidth is obsolete, so it is usually set to zero
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
@@ -1425,6 +1403,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     pMetric->mnWidth        = static_cast<long>(mfFontStretch * fPixelSize + 0.5);
 
     // apply the "CJK needs extra leading" heuristic if needed
+#if 0 // #i85422# on MacOSX the CJK fonts have good metrics even without the heuristics below
     if( mpMacFontData->HasCJKSupport() )
     {
         pMetric->mnIntLeading   += pMetric->mnExtLeading;
@@ -1439,13 +1418,13 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
         pMetric->mnAscent   += nHalfTmpExtLeading;
         pMetric->mnDescent  += nOtherHalfTmpExtLeading;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 ULONG AquaSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData*  pKernPairs )
 {
-    AquaLog("-->%s not implemented! (no sensible use case)\n",__func__);
     return 0;
 }
 
@@ -1558,7 +1537,6 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 BOOL AquaSalGraphics::GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return sal_False;
 }
 
@@ -1578,7 +1556,6 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 BOOL AquaSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& )
 {
-    AquaLog("-->%s not implemented yet!\n",__func__);
     return sal_False;
 }
 
@@ -1593,7 +1570,6 @@ void AquaSalGraphics::GetDevFontSubstList( OutputDevice* )
 
 void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
-    AquaLog("-->%s not implemented! (no known use case yet)\n",__func__);
 }
 
 // -----------------------------------------------------------------------
@@ -1612,9 +1588,9 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     mpMacFontData = pMacFont;
 
     // convert pixel units (as seen by upper layers) to typographic point units
-    double fScaledAtsHeight = pReqFont->mnHeight;
+    double fScaledAtsHeight = pReqFont->mfExactHeight;
     // avoid Fixed16.16 overflows by limiting the ATS font size
-    static const double fMaxAtsHeight = 144.0;
+    static const float fMaxAtsHeight = 144.0;
     if( fScaledAtsHeight <= fMaxAtsHeight )
         mfFontScale = 1.0;
     else
@@ -1687,7 +1663,6 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     else
     {
         mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
-        AquaLog("font stretching by %d/%d => %f\n", pReqFont->mnWidth, pReqFont->mnHeight, mfFontStretch);
         CGAffineTransform aMatrix = CGAffineTransformMakeScale( mfFontStretch, 1.0F );
         const ATSUAttributeValuePtr aAttr = &aMatrix;
         const ByteCount aMatrixBytes = sizeof(aMatrix);
@@ -1698,8 +1673,8 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     // prepare font rotation
     mnATSUIRotation = FloatToFixed( pReqFont->mnOrientation / 10.0 );
 
-#ifdef DEBUG
-    AquaLog( "SetFont to (\"%s\", \"%s\", fontid=%d) for (\"%s\" \"%s\" weight=%d, slant=%d size=%dx%d orientation=%d)\n",
+#if OSL_DEBUG_LEVEL > 3
+    fprintf( stderr, "SetFont to (\"%s\", \"%s\", fontid=%d) for (\"%s\" \"%s\" weight=%d, slant=%d size=%dx%d orientation=%d)\n",
              ::rtl::OUStringToOString( pMacFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
              ::rtl::OUStringToOString( pMacFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
              (int)nFontID,
@@ -1710,7 +1685,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
              pReqFont->mnHeight,
              pReqFont->mnWidth,
              pReqFont->mnOrientation);
-#endif // DEBUG
+#endif
 
     return 0;
 }
@@ -2044,7 +2019,7 @@ void AquaSalGraphics::GetGlyphWidths( ImplFontData* pFontData, bool bVertical,
             }
         }
 #else
-        AquaLog("-->%s not implemented for non-subsettable fonts!\n",__func__);
+        DBG_ERROR("not implemented for non-subsettable fonts!\n");
 #endif
     }
 }
@@ -2054,7 +2029,6 @@ void AquaSalGraphics::GetGlyphWidths( ImplFontData* pFontData, bool bVertical,
 const Uni2SIntMap* AquaSalGraphics::GetFontEncodingVector(
     ImplFontData* pFontData, const Uni2OStrMap** ppNonEncoded )
 {
-    AquaLog("-->%s not implemented! (no known use case yet)\n",__func__);
     return NULL;
 }
 
@@ -2067,7 +2041,6 @@ const void* AquaSalGraphics::GetEmbedFontData( ImplFontData* pFontData,
                               long* pDataLen )
 {
     // TODO: are the non-subsettable fonts on OSX that are embeddable?
-    AquaLog("-->%s not implemented! (no known use case yet)\n",__func__);
     return NULL;
 }
 
