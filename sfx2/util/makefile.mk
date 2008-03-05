@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 15:13:02 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:42:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,10 @@ SHL1STDLIBS+=\
         $(GDI32LIB) \
         $(OLE32LIB) \
         $(UUIDLIB)
-
+.ELSE # WNT
+.IF "$(OS)" == "MACOSX"
+SHL1STDLIBS+= -framework Cocoa
+.ENDIF # MACOSX
 .ENDIF # WNT
 
 
