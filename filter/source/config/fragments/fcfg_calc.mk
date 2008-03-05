@@ -47,7 +47,11 @@ T4_CALC = \
     calc_dBase\
     calc8\
     calc8_template \
-    calc_MS_Excel_2003_XML
+    calc_MS_Excel_2003_XML \
+    MS_Excel_2007_XML \
+    MS_Excel_2007_XML_Template \
+    MS_Excel_2007_Binary \
+    MS_Excel_2007_Binary_Template
 
 # -----------------------------------------------
 # count = 28
@@ -75,7 +79,11 @@ F4_CALC = \
     dBase \
     calc8 \
     calc8_template \
-    MS_Excel_2003_XML
+    MS_Excel_2003_XML \
+    calc_MS_Excel_2007_XML \
+    calc_MS_Excel_2007_XML_Template \
+    calc_MS_Excel_2007_Binary \
+    calc_MS_Excel_2007_Binary_Template
 
 # -----------------------------------------------
 # count = 14
@@ -94,7 +102,11 @@ F4_UI_CALC = \
     calc_StarOffice_XML_Calc_Template_ui \
     calc8_ui \
     calc8_template_ui \
-    MS_Excel_2003_XML_ui
+    MS_Excel_2003_XML_ui \
+    calc_MS_Excel_2007_XML_ui \
+    calc_MS_Excel_2007_XML_Template_ui \
+    calc_MS_Excel_2007_Binary_ui \
+    calc_MS_Excel_2007_Binary_Template_ui
 
 # -----------------------------------------------
 # count = 0
