@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:05:07 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:39:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -661,9 +661,33 @@ sub replace_one_variable
 
     for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
     {
-        ${$templatefile}[$i] =~ s/$placeholder/$value/;
+        ${$templatefile}[$i] =~ s/$placeholder/$value/g;
     }
 
+}
+
+##################################################################
+# Windows: Setting nsis version is necessary because of small
+# changes in nsis from version 2.0.4 to 2.3.1
+##################################################################
+
+sub set_nsis_version
+{
+    my ($nshfile) = @_;
+
+    my $searchstring = "\$\{LangFileString\}"; # occurs only in nsis 2.3.1 or similar
+
+    for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
+    {
+        if ( ${$nshfile}[$i] =~ /\Q$searchstring\E/ )
+        {
+            # this is nsis 2.3.1 or similar
+            $installer::globals::nsis231 = 1;
+            last;
+        }
+    }
+
+    if ( ! $installer::globals::nsis231 ) { $installer::globals::nsis204 = 1; }
 }
 
 ##################################################################
@@ -1098,9 +1122,15 @@ sub replace_identifier_in_nshfile
 {
     my ( $nshfile, $identifier, $newstring, $nshfilename, $onelanguage ) = @_;
 
+    if ( $installer::globals::nsis231 )
+    {
+        $newstring =~ s/\\r/\$\\r/g;    # \r -> $\r  in modern nsis versions
+        $newstring =~ s/\\n/\$\\n/g;    # \n -> $\n  in modern nsis versions
+    }
+
     for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
     {
-        if ( ${$nshfile}[$i] =~ /^\s*\!define\s+\Q$identifier\E\s+\"(.+)\"\s*$/ )
+        if ( ${$nshfile}[$i] =~ /\s+\Q$identifier\E\s+\"(.+)\"\s*$/ )
         {
             my $oldstring = $1;
             ${$nshfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
@@ -1184,8 +1214,17 @@ sub copy_and_translate_nsis_language_files
         installer::systemactions::copy_one_file($sourcepath, $nlffilename);
 
         # Copying the nsh file
+        # In newer nsis versions, the nsh file is located next to the nlf file
         $sourcepath = $nshfilepath . $nsislanguage . "\.nsh";
-        if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
+        if ( ! -f $sourcepath )
+        {
+            # trying to find the nsh file next to the nlf file
+            $sourcepath = $nlffilepath . $nsislanguage . "\.nsh";
+            if ( ! -f $sourcepath )
+            {
+                installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files");
+            }
+        }
         my $nshfilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nsh";
         if ( $^O =~ /cygwin/i ) { $nshfilename =~ s/\//\\/g; }
         installer::systemactions::copy_one_file($sourcepath, $nshfilename);
@@ -1193,6 +1232,7 @@ sub copy_and_translate_nsis_language_files
         # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
         my $nshfile = installer::files::read_file($nshfilename);
         replace_one_variable($nshfile, "MUI_LANGUAGEFILE_BEGIN", "MUI_LANGUAGEFILE_PACK_BEGIN");
+        set_nsis_version($nshfile);
 
         # Translate the files
         my $nlffile = installer::files::read_file($nlffilename);
@@ -1226,6 +1266,30 @@ sub put_output_path_into_template
     if ( $^O =~ /cygwin/i ) { $downloaddir =~ s/\//\\/g; }
 
     replace_one_variable($templatefile, "OUTPUTDIRPLACEHOLDER", $downloaddir);
+}
+
+##################################################################
+# Windows: Only allow specific code for nsis 2.0.4 or nsis 2.3.1
+##################################################################
+
+sub put_version_specific_code_into_template
+{
+    my ($templatefile) = @_;
+
+    my $subst204 = "";
+    my $subst231 = "";
+
+    if ( $installer::globals::nsis204 )
+    {
+        $subst231 = ";";
+    }
+    else
+    {
+        $subst204 = ";";
+    }
+
+    replace_one_variable($templatefile, "\#204\#", $subst204);
+    replace_one_variable($templatefile, "\#231\#", $subst231);
 }
 
 ##################################################################
@@ -1570,6 +1634,7 @@ sub create_download_sets
         put_language_list_into_template($templatefile, $languagesarrayref);
         put_nsis_path_into_template($templatefile, $localnsisdir);
         put_output_path_into_template($templatefile, $downloaddir);
+        put_version_specific_code_into_template($templatefile);
 
         my $nsifilename = save_script_file($localnsisdir, $templatefilename, $templatefile);
 
