@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relationshandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,9 @@ namespace core {
 class RelationsFragmentHandler : public FragmentHandler
 {
 public:
-    explicit            RelationsFragmentHandler( const XmlFilterRef& rxFilter, const ::rtl::OUString& rFragmentPath, RelationsRef xRelations );
+    explicit            RelationsFragmentHandler(
+                            XmlFilterBase& rFilter,
+                            RelationsRef xRelations );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
@@ -55,7 +57,7 @@ public:
                         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    Relations&          mrRelations;
+    RelationsRef        mxRelations;
 };
 
 // ============================================================================
