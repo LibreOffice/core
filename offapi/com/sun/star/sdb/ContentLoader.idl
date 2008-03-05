@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentLoader.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:13:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,12 @@ module com {  module sun {  module star {  module sdb {
 //=============================================================================
 /** implements a loader for various datasource-related user interface components.
 
-    <p>
-    Usually, you don't deal with this loader directly. Instead it is registered for
-    a particular URL scheme, and you use the dispatch mechanism provided by the application
-    framework, dispatching URLs the loader is registered for.
-    </p>
+    <p>Usually, you don't deal with this loader directly. Instead, use an instance with
+    the <type scope="com::sun::star::frame">XComponentLoader</type> interface, and pass
+    one of the below-mentioned URLs to it.</p>
 
-    @see com::sun::star::frame::XDispatch
-    @see com::sun::star::frame::XDispatchProvider
+    @see com::sun::star::frame::XComponentLoader
+    @see com::sun::star::frame::Desktop
 */
 published service ContentLoader
 {
@@ -72,29 +70,27 @@ published service ContentLoader
         <ul>
             <li><b>.component:DB/DataSourceBrowser</b><br/>
                 Using this URL creates an instance of the
-                <service scope="com::sun::star::sdb">
-                    DataSourceBrowser
-                </service>
+                <type scope="com::sun::star::sdb">DataSourceBrowser</type>
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/FormGridView</b><br/>
                 Using this URL creates an instance of the
-                <service scope="com::sun::star::sdb">ExternalSourceBrowser</service>
+                <type scope="com::sun::star::sdb">ExternalSourceBrowser</type>
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/QueryDesign</b><br/>
                 Using this URL creates an instance of the
-                <service scope="com::sun::star::sdb">QueryDesign</service>
+                <type scope="com::sun::star::sdb">QueryDesign</type>
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/TableDesign</b><br/>
                 Using this URL creates an instance of the
-                <service scope="com::sun::star::sdb">TableDesign</service>
+                <type scope="com::sun::star::sdb">TableDesign</type>
                 service and plugs it into the frame passed to the loader.
             </li>
             <li><b>.component:DB/RelationDesign</b><br/>
                 Using this URL creates an instance of the
-                <service scope="com::sun::star::sdb">RelationDesign</service>
+                <type scope="com::sun::star::sdb">RelationDesign</type>
                 service and plugs it into the frame passed to the loader.
             </li>
         </ul>
