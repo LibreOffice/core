@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,13 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
 #include "tokens.hxx"
 #include <vector>
 #include <map>
@@ -48,6 +53,13 @@ namespace oox { namespace drawingml {
 
 class FillProperties;
 class BlipFillPropertiesContext;
+
+struct GradientStop
+{
+    ::oox::drawingml::ColorPtr  maColor;
+    double                      mnPosition; // ST_PositiveFixedPercentage
+    GradientStop() : maColor( new Color ), mnPosition( 0 ) {};
+};
 
 typedef boost::shared_ptr< FillProperties > FillPropertiesPtr;
 
@@ -62,12 +74,26 @@ public:
 
     void apply( const FillPropertiesPtr& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
+            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet, sal_Int32 nShapeRotation ) const;
 
-    PropertyMap&                getFillPropertyMap(){ return maFillProperties; };
-    ::oox::drawingml::ColorPtr& getFillColor(){ return maFillColor; };
-    ::oox::drawingml::ColorPtr& getColorChangeFrom(){ return maColorChangeFrom; };
-    ::oox::drawingml::ColorPtr& getColorChangeTo(){ return maColorChangeTo; };
+    ::boost::optional< ::com::sun::star::drawing::FillStyle >&          getFillStyle(){ return moFillStyle; };
+    ::boost::optional< ::com::sun::star::drawing::BitmapMode >&         getBitmapMode(){ return moBitmapMode; };
+    ::boost::optional< sal_Bool >&                                      getRotateWithShape(){ return moRotateWithShape; };
+    ::boost::optional< sal_Bool >&                                      getShadeScaled(){ return moShadeScaled; };
+    ::boost::optional< sal_Int32 >&                                     getShadeAngle(){ return moShadeAngle; };
+    ::boost::optional< sal_Int32 >&                                     getShadeTypeToken(){ return moShadeTypeToken; };
+    ::boost::optional< sal_Int32 >&                                     getFlipModeToken(){ return moFlipModeToken; };
+    ::boost::optional< com::sun::star::geometry::IntegerRectangle2D >&  getFillToRect(){ return moFillToRect; };
+    ::boost::optional< com::sun::star::geometry::IntegerRectangle2D >&  getTileRect(){ return moTileRect; };
+    ::boost::optional< sal_Int32 >&                                     getTileAlign(){ return moTileAlign; };
+    ::boost::optional< sal_Int32 >&                                     getTileX(){ return moTileX; };
+    ::boost::optional< sal_Int32 >&                                     getTileY(){ return moTileY; };
+    ::boost::optional< sal_Int32 >&                                     getTileSX(){ return moTileSX; };
+    ::boost::optional< sal_Int32 >&                                     getTileSY(){ return moTileSY; };
+    std::vector< GradientStop >&                                        getGradientStops(){ return mvGradientStops; };
+    ::oox::drawingml::ColorPtr&                                         getFillColor(){ return maFillColor; };
+    ::oox::drawingml::ColorPtr&                                         getColorChangeFrom(){ return maColorChangeFrom; };
+    ::oox::drawingml::ColorPtr&                                         getColorChangeTo(){ return maColorChangeTo; };
 
 private:
 
@@ -76,7 +102,21 @@ private:
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
 
     sal_Int32                                                               mnContext;
-    PropertyMap                                                             maFillProperties;
+    ::boost::optional< ::com::sun::star::drawing::FillStyle >               moFillStyle;
+    ::boost::optional< ::com::sun::star::drawing::BitmapMode >              moBitmapMode;
+    ::boost::optional< sal_Bool >                                           moRotateWithShape;
+    ::boost::optional< sal_Bool >                                           moShadeScaled;
+    ::boost::optional< sal_Int32 >                                          moShadeAngle;
+    ::boost::optional< sal_Int32 >                                          moShadeTypeToken;
+    ::boost::optional< sal_Int32 >                                          moFlipModeToken;
+    ::boost::optional< com::sun::star::geometry::IntegerRectangle2D >       moFillToRect;
+    ::boost::optional< com::sun::star::geometry::IntegerRectangle2D >       moTileRect;
+    ::boost::optional< sal_Int32 >                                          moTileAlign;
+    ::boost::optional< sal_Int32 >                                          moTileX;
+    ::boost::optional< sal_Int32 >                                          moTileY;
+    ::boost::optional< sal_Int32 >                                          moTileSX;
+    ::boost::optional< sal_Int32 >                                          moTileSY;
+    std::vector< GradientStop >                                             mvGradientStops;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > mxGraphic;
     ::oox::drawingml::ColorPtr                                              maFillColor;
     ::oox::drawingml::ColorPtr                                              maColorChangeFrom;
