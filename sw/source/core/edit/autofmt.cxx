@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:24:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,9 @@
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1556,7 +1559,10 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     xub_StrLen nAutoCorrPos = 0;
 
     // falls die Numerierung gesetzt werden, die akt. besorgen
-    SwNumRule aRule( pDoc->GetUniqueNumRuleName() );
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
+                     SvxNumberFormat::LABEL_ALIGNMENT );
+    // <--
     const SwNumRule* pCur = 0;
     if( aFlags.bSetNumRule && 0 != (pCur = pAktTxtNd->GetNumRule()) )
         aRule = *pCur;
