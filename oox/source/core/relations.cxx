@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relations.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,11 @@ namespace core {
 
 // ============================================================================
 
+Relations::Relations( const OUString& rBasePath ) :
+    maBasePath( rBasePath )
+{
+}
+
 const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
 {
     const_iterator aIt = find( rId );
@@ -59,7 +64,7 @@ const Relation* Relations::getRelationFromType( const OUString& rType ) const
 
 RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
 {
-    RelationsRef xRelations( new Relations );
+    RelationsRef xRelations( new Relations( maBasePath ) );
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType == rType )
             (*xRelations)[ aIt->first ] = aIt->second;
@@ -80,7 +85,7 @@ OUString Relations::getTargetFromType( const OUString& rType ) const
     return OUString();
 }
 
-OUString Relations::getFragmentPathFromTarget( const OUString& rParentFragment, const OUString& rTarget )
+OUString Relations::getFragmentPathFromTarget( const OUString& rTarget ) const
 {
     const sal_Unicode cDirSep = '/';
 
@@ -89,11 +94,11 @@ OUString Relations::getFragmentPathFromTarget( const OUString& rParentFragment, 
         return OUString();
 
     // absolute target, or empty fragment path -> return target
-    if( (rTarget[ 0 ] == cDirSep) || (rParentFragment.getLength() == 0) )
+    if( (rTarget[ 0 ] == cDirSep) || (maBasePath.getLength() == 0) )
         return rTarget;
 
-    sal_Int32 nLastSepPos = rParentFragment.lastIndexOf( cDirSep );
-    OUString aPath = (nLastSepPos < 0) ? rParentFragment : rParentFragment.copy( 0, nLastSepPos );
+    sal_Int32 nLastSepPos = maBasePath.lastIndexOf( cDirSep );
+    OUString aPath = (nLastSepPos < 0) ? maBasePath : maBasePath.copy( 0, nLastSepPos );
 
     const OUString sBack = CREATE_OUSTRING( "../" );
 
@@ -122,14 +127,14 @@ OUString Relations::getFragmentPathFromTarget( const OUString& rParentFragment, 
     return aPath;
 }
 
-OUString Relations::getFragmentPathFromRelId( const OUString& rParentFragment, const OUString& rRelId ) const
+OUString Relations::getFragmentPathFromRelId( const OUString& rRelId ) const
 {
-    return getFragmentPathFromTarget( rParentFragment, getTargetFromRelId( rRelId ) );
+    return getFragmentPathFromTarget( getTargetFromRelId( rRelId ) );
 }
 
-OUString Relations::getFragmentPathFromType( const OUString& rParentFragment, const OUString& rType ) const
+OUString Relations::getFragmentPathFromType( const OUString& rType ) const
 {
-    return getFragmentPathFromTarget( rParentFragment, getTargetFromType( rType ) );
+    return getFragmentPathFromTarget( getTargetFromType( rType ) );
 }
 
 // ============================================================================
