@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:52:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1179,14 +1179,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WINDOW_LONGCURRENCYFIELD:
                     case WINDOW_NUMERICFIELD:
                     case WINDOW_SPINFIELD:
-                        if( pCtrl->GetStyle() & WB_SPIN )
-                            aCtrlType = CTRL_SPINBOX;
-                        // FIXME: suppoort spin buttons correctly in salnativewidgets.cxx
-                        else
-                        {
-                            aCtrlType = CTRL_EDITBOX;
-                            mbNWFBorder = true;
-                        }
+                        mbNWFBorder = true;
+                        aCtrlType = (pCtrl->GetStyle() & WB_SPIN) ? CTRL_SPINBOX : CTRL_EDITBOX;
                         break;
                     default:
                         break;
