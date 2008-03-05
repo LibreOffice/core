@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:12:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@ namespace dbaui
     public:
         DataSourceMetaData( DATASOURCE_TYPE _eType );
         ~DataSourceMetaData();
-
-        /// returns the data source type for this instance
-        DATASOURCE_TYPE getType() const;
 
         /// returns a struct describing this data source type's support for our known advanced settings
         const AdvancedSettingsSupport&  getAdvancedSettingsSupport() const;
