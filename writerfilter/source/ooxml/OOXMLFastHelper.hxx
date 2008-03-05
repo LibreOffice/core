@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLFastHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:58:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@ public:
                             Id nId,
                             const ::rtl::OUString & rValue);
 
+    static void newProperty(OOXMLFastContextHandler * pHandler,
+                            Id nId, sal_Int32 nValue);
+
     static void attributes
     (OOXMLFastContextHandler * pContext,
      const uno::Reference < xml::sax::XFastAttributeList > & Attribs);
@@ -77,6 +80,22 @@ OOXMLFastHelper<T>::createAndSetParent
     pTmp->setToken(nToken);
     pTmp->setId(nId);
 
+#ifdef DEBUG_CREATE
+    logger("DEBUG", "<createAndSetParent>");
+    logger("DEBUG", "<context>");
+    logger("DEBUG", pHandler->getType());
+    logger("DEBUG", "</context>");
+    logger("DEBUG", "<token>");
+    logger("DEBUG", fastTokenToId(nToken));
+    logger("DEBUG", "</token>");
+    logger("DEBUG", "<created>");
+    logger("DEBUG", pTmp->getType());
+    logger("DEBUG", "</created>");
+    if (pTmp->isFallback())
+        logger("DEBUG", "<fallback/>");
+    logger("DEBUG", "</createAndSetParent>");
+#endif
+
     return aResult;
 }
 
@@ -91,13 +110,32 @@ OOXMLFastHelper<T>::createAndSetParentRef
     uno::Reference<XFastContextHandler> xChild =
         pTmp->createFastChildContext(nToken, Attribs);
 
+    OOXMLFastContextHandler * pResult = NULL;
     if (xChild.is())
     {
-        OOXMLFastContextHandler * pResult =
-            dynamic_cast<OOXMLFastContextHandler *>(xChild.get());
+        pResult = dynamic_cast<OOXMLFastContextHandler *>(xChild.get());
         pResult->setToken(nToken);
         pResult->setParent(pHandler);
     }
+
+#ifdef DEBUG_CREATE
+    logger("DEBUG", "<createAndSetParentRef>");
+    logger("DEBUG", "<context>");
+    logger("DEBUG", pHandler->getType());
+    logger("DEBUG", "</context>");
+    logger("DEBUG", "<token>");
+    logger("DEBUG", fastTokenToId(nToken));
+    logger("DEBUG", "</token>");
+    if (pResult != NULL)
+    {
+        logger("DEBUG", "<created>");
+        logger("DEBUG", pResult->getType());
+        logger("DEBUG", "</created>");
+        if (pResult->isFallback())
+            logger("DEBUG", "<fallback/>");
+    }
+    logger("DEBUG", "</createAndSetParentRef>");
+#endif
 
     return xChild;
 }
@@ -113,6 +151,43 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 
     if (aStr.size() == 0)
         logger("DEBUG", "unknown QName");
+
+#ifdef DEBUG_PROPERTIES
+    logger("DEBUG", "<newProperty>");
+    logger("DEBUG", "<name>");
+    logger("DEBUG", aStr);
+    logger("DEBUG", "</name>");
+    logger("DEBUG", "<value>");
+    logger("DEBUG", ::rtl::OUStringToOString(rValue, RTL_TEXTENCODING_ASCII_US).getStr());
+    logger("DEBUG", "</value>");
+    logger("DEBUG", "</newProperty>");
+#endif
+
+    pHandler->newProperty(nId, pVal);
+}
+
+template <class T>
+void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
+                                     Id nId,
+                                     sal_Int32 nVal)
+{
+    OOXMLValue::Pointer_t pVal(new T(nVal));
+
+    string aStr = (*QNameToString::Instance())(nId);
+
+    if (aStr.size() == 0)
+        logger("DEBUG", "unknown QName");
+
+#ifdef DEBUG_PROPERTIES
+    logger("DEBUG", "<newProperty>");
+    logger("DEBUG", "<name>");
+    logger("DEBUG", aStr);
+    logger("DEBUG", "</name>");
+    logger("DEBUG", "<value>");
+    logger("DEBUG", pVal->toString());
+    logger("DEBUG", "</value>");
+    logger("DEBUG", "</newProperty>");
+#endif
 
     pHandler->newProperty(nId, pVal);
 }
