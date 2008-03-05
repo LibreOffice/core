@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: fwk_services.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "framework.hrc"
+
+Window DLG_BACKING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Border = TRUE;
+
+    String STR_BACKING_WELCOME
+    {
+        Text [ en-US ] = "Welcome to";
+    };
+    String STR_BACKING_WELCOMEPRODUCT
+    {
+        Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
+    };
+    String STR_BACKING_CREATE
+    {
+        Text [ en-US ] = "New %s";
+    };
+    String STR_BACKING_TEMPLATE
+    {
+        Text [ en-US ] = "~New document from template";
+    };
+    String STR_BACKING_FILE
+    {
+        Text [ en-US ] = "~Open an existing document";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_LEFT
+    {
+        File = "backing.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_MIDDLE
+    {
+        File = "backing_space.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RIGHT
+    {
+        File = "backing_right.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_LEFT
+    {
+        File = "backing_rtl_left.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
+    {
+        File = "backing_rtl_right.png";
+    };
+    Bitmap BMP_BACKING_WRITER
+    {
+        File = "odt_32.png";
+    };
+    Bitmap BMP_BACKING_CALC
+    {
+        File = "ods_32.png";
+    };
+    Bitmap BMP_BACKING_IMPRESS
+    {
+        File = "odp_32.png";
+    };
+    Bitmap BMP_BACKING_DRAW
+    {
+        File = "odg_32.png";
+    };
+    Bitmap BMP_BACKING_DATABASE
+    {
+        File = "odb_32.png";
+    };
+    Bitmap BMP_BACKING_OPENFILE
+    {
+        File = "open_32.png";
+    };
+    Bitmap BMP_BACKING_OPENTEMPLATE
+    {
+        File = "template_32.png";
+    };
+    Bitmap BMP_BACKING_EXT
+    {
+        File = "extension_plus_26.png";
+    };
+    String STR_BACKING_EXTHELP
+    {
+        Text [ en-US ] = "Add new features to %PRODUCTNAME";
+    };
+    Bitmap BMP_BACKING_REG
+    {
+        File = "register_32.png";
+    };
+    String STR_BACKING_REGHELP
+    {
+        Text [ en-US ] = "Register your %PRODUCTNAME";
+    };
+    Bitmap BMP_BACKING_INFO
+    {
+        File = "info_26.png";
+    };
+    String STR_BACKING_INFOHELP
+    {
+        Text [ en-US ] = "Get more information about %PRODUCTNAME";
+    };
+};
+
+
