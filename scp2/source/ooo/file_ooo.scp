@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.230 $
+ *  $Revision: 1.231 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1815,6 +1815,21 @@ File gid_File_Oo_Office_Ui_Dbbrowserwindowstate_xcu
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbBrowserWindowState.xcu";
+End
+
+
+File gid_File_Oo_Office_Ui_Dbtabledatawindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbTableDataWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Dbtabledatawindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbTableDataWindowState.xcu";
 End
 
 
