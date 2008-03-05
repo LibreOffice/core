@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:35:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,9 +100,9 @@ void BorderHandler::attribute(Id rName, Value & rVal)
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
-        case NS_rtf::LN_DPTSPACE:   // 0x2874
-            m_nLineDistance = nIntValue;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_rtf::LN_DPTSPACE:   // border distance in points
+            m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
         break;
         case NS_rtf::LN_FSHADOW:    // 0x2875
             //if 1 then line has shadow - unsupported
@@ -113,7 +113,7 @@ void BorderHandler::attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Border_themeTint: break;
         case NS_ooxml::LN_CT_Border_themeColor: break;
         default:
-            OSL_ASSERT("unknown attribute");
+            OSL_ENSURE( false, "unknown attribute");
     }
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
