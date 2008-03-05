@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,10 @@ class SvNumberFormatter;
 class SotStorage;
 class SdrOutlinerCache;
 class SotStorageRef;
-class SfxObjectShell;
 class SdrUndoFactory;
-
+namespace comphelper{
+    class IEmbeddedHelper;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
@@ -237,7 +238,8 @@ protected:
     SdrLayerAdmin*  pLayerAdmin;
     SfxItemPool*    pItemPool;
     FASTBOOL        bMyPool;        // zum Aufraeumen von pMyPool ab 303a
-    SfxObjectShell* pPersist;
+    comphelper::IEmbeddedHelper*
+                    m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
     SdrOutliner*    pHitTestOutliner;// ein Outliner fuer den HitTest
     ULONG           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
@@ -349,7 +351,7 @@ private:
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
-    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers, bool bUseExtColorTable,
+    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
         bool bLoadRefCounts = true);
 
 //#endif // __PRIVATE
@@ -374,10 +376,10 @@ public:
     // Zeichenobjekte verwenden moechte. Setzt man degegen nur vom abstrakten
     // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
     // Wahl des Pools.
-    SdrModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     virtual ~SdrModel();
     void ClearModel(sal_Bool bCalledFromDestructor);
 
@@ -432,9 +434,9 @@ public:
     SvxLinkManager*      GetLinkManager()                         { return pLinkManager; }
     void                 SetLinkManager(SvxLinkManager* pLinkMgr) { pLinkManager = pLinkMgr; }
 
-    SfxObjectShell*           GetPersist() const                       { return pPersist; }
-    void                 ClearPersist()                       { pPersist = 0; }
-    void                 SetPersist( SfxObjectShell *p )           { pPersist = p; }
+    ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
+    void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
+    void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
     // Masseinheit fuer die Zeichenkoordinaten.
     // Default ist 1 logische Einheit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
