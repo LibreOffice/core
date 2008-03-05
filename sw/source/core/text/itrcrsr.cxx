@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:38:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,27 +202,26 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const int nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
     if ( pFrm->IsRightToLeft() )
     {
+        // --> OD 2008-01-23 #newlistlevelattrs#
+        // this calculation is identical this the calculation for L2R layout - see below
         nLeft = pFrm->Frm().Left() +
                 pFrm->Prt().Left() +
                 nLMWithNum -
-                ( rSpace.GetTxtFirstLineOfst() < 0 ?
-                  rSpace.GetTxtFirstLineOfst() :
-                  0 );
+                pNode->GetLeftMarginWithNum( sal_False ) -
+                rSpace.GetLeft() +
+                rSpace.GetTxtLeft();
     }
     else
     {
         if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
-            // --> FME 2004-07-29 #i32267# Do not forget paragraph border
-            // I'm quite sure this can be optimized. But how?
-            // Not enough time to figure out.
+            // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
                     rSpace.GetLeft() +
                     rSpace.GetTxtLeft();
-            // <--
         }
         else
         {
@@ -317,6 +316,14 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                      Max( rSpace.GetTxtLeft() + nLMWithNum+ nFirstLineOfs,
                           pFrm->Prt().Left() );
         }
+
+        // --> OD 2008-01-31 #newlistlevelattrs#
+        // Note: <SwTxtFrm::GetAdditionalFirstLineOffset()> returns a negative
+        //       value for the new list label postion and space mode LABEL_ALIGNMENT
+        //       and label alignment CENTER and RIGHT in L2R layout respectively
+        //       label alignment LEFT and CENTER in R2L layout
+        nFirst += pFrm->GetAdditionalFirstLineOffset();
+        // <--
 
         if( nFirst >= nRight )
             nFirst = nRight - 1;
@@ -533,7 +540,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         // Num, ErgoSum, FtnNum, FeldReste
         // 8477: aber auch die einzige Textportion einer leeren Zeile mit
         // Right/Center-Adjustment! Also nicht nur pPor->GetExpandPortion() ...
-
         while( pPor && !pPor->GetLen() && ! bInsideFirstField )
         {
             nX += pPor->Width();
@@ -542,7 +548,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if( bNoTxt )
                 nTmpFirst = nX;
             // 8670: EndPortions zaehlen hier einmal als TxtPortions.
-            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
+            // --> OD 2008-01-28 #newlistlevelattrs#
+//            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
+            if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
+            // <--
             {
                 bNoTxt = sal_False;
                 nTmpFirst = nX;
