@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:46:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,15 +109,26 @@ class SwLineInfo
 {
     friend class SwTxtIter;
 
-    const SvxTabStopItem    *pRuler;
+    SvxTabStopItem* pRuler;
     const SvxLineSpacingItem *pSpace;
     USHORT nVertAlign;
     KSHORT nDefTabStop;
-    void CtorInitLineInfo( const SwAttrSet& rAttrSet );
-    inline SwLineInfo() {}
+    // --> OD 2008-02-04 #newlistlevelattrs#
+    bool bListTabStopIncluded;
+    long nListTabStopPosition;
+    // <--
+
+    // --> OD 2008-01-17 #newlistlevelattrs#
+    void CtorInitLineInfo( const SwAttrSet& rAttrSet,
+                           const SwTxtNode& rTxtNode );
+    // <--
+
+    // --> OD 2008-01-17 #newlistlevelattrs#
+    SwLineInfo();
+    ~SwLineInfo();
 public:
-    inline SwLineInfo( const SwAttrSet& rAttrSet )
-           { CtorInitLineInfo( rAttrSet ); }
+//        const SvxTabStop *GetTabStop( const SwTwips nLinePos,
+//                                        const SwTwips nLeft,
     // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
     const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
                                  const SwTwips nRight ) const;
@@ -135,6 +146,18 @@ public:
                    SvxParaVertAlignItem::AUTOMATIC != nVertAlign ); }
 
     USHORT NumberOfTabStops() const;
+
+    // --> OD 2008-02-04 #newlistlevelattrs#
+    inline bool IsListTabStopIncluded() const
+    {
+        return bListTabStopIncluded;
+    }
+    inline long GetListTabStopPosition() const
+    {
+        return nListTabStopPosition;
+    }
+    // <--
+
 
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
