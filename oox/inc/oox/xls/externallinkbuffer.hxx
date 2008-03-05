@@ -4,9 +4,9 @@
  *
  *  $RCSfile: externallinkbuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,20 +57,21 @@ struct LinkSheetRange
 {
     sal_Int32           mnFirst;        /// Index of the first sheet.
     sal_Int32           mnLast;         /// Index of the last sheet.
+    bool                mbRel;          /// True = relative indexes.
 
     inline explicit     LinkSheetRange() { setDeleted(); }
-    inline explicit     LinkSheetRange( sal_Int32 nFirst, sal_Int32 nLast ) { set( nFirst, nLast ); }
+    inline explicit     LinkSheetRange( sal_Int32 nFirst, sal_Int32 nLast ) { setRange( nFirst, nLast ); }
 
     /** Sets this struct to deleted state. */
-    inline void         setDeleted() { mnFirst = mnLast = -1; }
-    /** Sets the passed sheet range to the memebers of this struct. */
-    inline void         set( sal_Int32 nFirst, sal_Int32 nLast )
-                            { mnFirst = ::std::min( nFirst, nLast ); mnLast = ::std::max( nFirst, nLast ); }
+    inline void         setDeleted() { mnFirst = mnLast = -1; mbRel = false; }
+    /** Sets this struct to use current sheet state. */
+    inline void         setRelative() { mnFirst = mnLast = 0; mbRel = true; }
+    /** Sets the passed absolute sheet range to the memebers of this struct. */
+    inline void         setRange( sal_Int32 nFirst, sal_Int32 nLast )
+                            { mnFirst = ::std::min( nFirst, nLast ); mnLast = ::std::max( nFirst, nLast ); mbRel = false; }
 
-    /** Returns true, if one of the sheet indexes in invalid (negative). */
-    inline bool         isDeleted() const { return (mnFirst < 0) || (mnLast < 0); }
     /** Returns true, if the sheet indexes are valid and different. */
-    inline bool         is3dRange() const { return !isDeleted() && (mnFirst < mnLast); }
+    inline bool         is3dRange() const { return (0 <= mnFirst) && (mnFirst < mnLast); }
 };
 
 // ============================================================================
@@ -162,7 +163,8 @@ typedef ::boost::shared_ptr< ExternalName > ExternalNameRef;
 
 enum ExternalLinkType
 {
-    LINKTYPE_SELF,          /// Link refers to the current workbook or sheet.
+    LINKTYPE_SELF,          /// Link refers to the current workbook.
+    LINKTYPE_SAME,          /// Link refers to the current sheet.
     LINKTYPE_INTERNAL,      /// Link refers to a sheet in the own workbook.
     LINKTYPE_EXTERNAL,      /// Link refers to an external spreadsheet document.
     LINKTYPE_ANALYSIS,      /// Link refers to Analysis add-in.
@@ -206,6 +208,10 @@ public:
     void                importExternalRef( RecordInputStream& rStrm );
     /** Imports the EXTERNALSELF record from the passed stream. */
     void                importExternalSelf( RecordInputStream& rStrm );
+    /** Imports the EXTERNALSAME record from the passed stream. */
+    void                importExternalSame( RecordInputStream& rStrm );
+    /** Imports the EXTERNALADDIN record from the passed stream. */
+    void                importExternalAddin( RecordInputStream& rStrm );
 
     /** Imports the EXTERNSHEET record from the passed stream. */
     void                importExternSheet( BiffInputStream& rStrm );
@@ -288,6 +294,10 @@ public:
     ExternalLinkRef     importExternalRef( RecordInputStream& rStrm );
     /** Imports the EXTERNALSELF record from the passed stream. */
     void                importExternalSelf( RecordInputStream& rStrm );
+    /** Imports the EXTERNALSAME record from the passed stream. */
+    void                importExternalSame( RecordInputStream& rStrm );
+    /** Imports the EXTERNALADDIN record from the passed stream. */
+    void                importExternalAddin( RecordInputStream& rStrm );
     /** Imports the EXTERNALSHEETS record from the passed stream. */
     void                importExternalSheets( RecordInputStream& rStrm );
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formulabase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,7 @@ public:
 
     inline const ::com::sun::star::table::CellAddress& getBaseAddress() const { return maBaseAddress; }
     inline bool         isRelativeAsOffset() const { return mbRelativeAsOffset; }
-    inline bool         isAlways3dRefs() const { return mbAlways3dRefs; }
+    inline bool         is2dRefsAs3dRefs() const { return mb2dRefsAs3dRefs; }
 
     virtual void        setTokens( const ApiTokenSequence& rTokens ) = 0;
     virtual void        setSharedFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
@@ -465,13 +465,13 @@ public:
 protected:
     explicit            FormulaContext(
                             bool bRelativeAsOffset,
-                            bool bAlways3dRefs );
+                            bool b2dRefsAs3dRefs );
     virtual             ~FormulaContext();
 
 private:
     ::com::sun::star::table::CellAddress maBaseAddress;
     bool                mbRelativeAsOffset;
-    bool                mbAlways3dRefs;
+    bool                mb2dRefsAs3dRefs;
 };
 
 // ----------------------------------------------------------------------------
@@ -482,7 +482,7 @@ class TokensFormulaContext : public FormulaContext
 public:
     explicit            TokensFormulaContext(
                             bool bRelativeAsOffset,
-                            bool bAlways3dRefs );
+                            bool b2dRefsAs3dRefs );
 
     inline const ApiTokenSequence& getTokens() const { return maTokens; }
 
@@ -501,7 +501,7 @@ public:
     explicit            SimpleFormulaContext(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens >& rxTokens,
                             bool bRelativeAsOffset,
-                            bool bAlways3dRefs );
+                            bool b2dRefsAs3dRefs );
 
     virtual void        setTokens( const ApiTokenSequence& rTokens );
 
