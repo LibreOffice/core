@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:22:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ namespace dbaui
                                         , USHORT _nHeaderTextResId
                                         , USHORT _nDriverClassId );
     static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+    static  OGenericAdministrationPage* CreateMySQLNATIVETabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     virtual Link getControlModifiedLink() { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
 
@@ -192,6 +193,7 @@ namespace dbaui
 
         String              m_sDefaultJdbcDriverName;
         USHORT              m_nPortId;
+        bool                m_bUseClass;
     };
 
 
@@ -227,14 +229,22 @@ namespace dbaui
     class OMySQLIntroPageSetup : public OGenericAdministrationPage
     {
     public:
+        enum ConnectionType
+        {
+            VIA_ODBC,
+            VIA_JDBC,
+            VIA_NATIVE
+        };
+
         OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs);
 
         static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-        int getMySQLMode();
+        ConnectionType      getMySQLMode();
         Link                maClickHdl;
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
         const Link&         GetClickHdl() const { return maClickHdl; }
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
+
 
 
 
@@ -248,6 +258,7 @@ namespace dbaui
     private:
         RadioButton         m_aRB_ODBCDatabase;
         RadioButton         m_aRB_JDBCDatabase;
+        RadioButton         m_aRB_NATIVEDatabase;
         FixedText           m_aFT_ConnectionMode;
         FixedText           m_aFT_Helptext;
         FixedText           m_aFT_Headertext;
