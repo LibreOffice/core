@@ -2,6 +2,14 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.12
+============
+
+Volker Quetschke (vq@openoffice.org)
+#i83540# Add parallel building mode, see the MULTI PROCESSING section in
+the dmake man page, for native W32 dmake (MSVC 6, and newer and MinGW)
+versions.
+
 Version 4.11
 ============
 
