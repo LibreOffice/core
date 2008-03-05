@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:59:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@ namespace connectivity
         {
             // the spreadsheet document:
             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > m_xDoc;
+            ::rtl::OUString     m_sPassword;
+            String              m_aFileName;
+            oslInterlockedCount m_nDocCount;
 
         public:
             OCalcConnection(ODriver* _pDriver);
@@ -77,8 +80,25 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // no interface methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> getDoc() const
-                { return m_xDoc; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> acquireDoc();
+            void releaseDoc();
+
+            class ODocHolder
+            {
+                OCalcConnection* m_pConnection;
+                ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> m_xDoc;
+            public:
+                ODocHolder(OCalcConnection* _pConnection) : m_pConnection(_pConnection)
+                {
+                    m_xDoc = m_pConnection->acquireDoc();
+                }
+                ~ODocHolder()
+                {
+                    m_xDoc = NULL;
+                    m_pConnection->releaseDoc();
+                }
+                ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> getDoc() const { return m_xDoc; }
+            };
         };
     }
 }
