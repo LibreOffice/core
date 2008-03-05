@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:25:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ void lcl_SetLanguage( SwWrtShell& rWrtSh, const String &rLangText, bool bIsForSe
             if (bIsForSelection)
             {
                 // apply language to current selection
-                rWrtSh.GetAttr( rCoreSet );
+                rWrtSh.GetCurAttr( rCoreSet );
                 rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
                 rWrtSh.SetAttr( rCoreSet );
             }
@@ -365,7 +365,7 @@ void lcl_SetLanguage_None( SwWrtShell& rWrtSh, bool bIsForSelection, SfxItemSet 
 
     if (bIsForSelection)
     {
-        rWrtSh.GetAttr( rCoreSet );
+        rWrtSh.GetCurAttr( rCoreSet );
         // apply language to current selection
         for (sal_uInt16 i = 0; i < 3; ++i)
             rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId[i] ));
@@ -400,7 +400,7 @@ LanguageType lcl_GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId )
     LanguageType nLang = LANGUAGE_SYSTEM;
 
     SfxItemSet aSet( rSh.GetAttrPool(), nLangWhichId, nLangWhichId );
-    rSh.GetAttr( aSet );
+    rSh.GetCurAttr( aSet );
 
     const SfxPoolItem *pItem = 0;
     SfxItemState nState = aSet.GetItemState( nLangWhichId, TRUE, &pItem );
@@ -513,7 +513,7 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,
                         SID_HTML_MODE,         SID_HTML_MODE,
                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
                         0 );
-    rWrtSh.GetAttr( aCoreSet );
+    rWrtSh.GetCurAttr( aCoreSet );
     BOOL bSel = rWrtSh.HasSelection();
     BOOL bSelectionPut = FALSE;
     if(bSel || rWrtSh.IsInWord())
@@ -762,7 +762,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rWrtSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
                 SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-                rWrtSh.GetAttr( aSet );
+                rWrtSh.GetCurAttr( aSet );
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
@@ -1189,7 +1189,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
                             FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
                             0);
-            rWrtSh.GetAttr( aCoreSet );
+            // --> OD 2008-01-16 #newlistlevelattrs#
+            // get also the list level indent values merged as LR-SPACE item, if needed.
+            rWrtSh.GetCurAttr( aCoreSet, true );
+            // <--
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 
@@ -1545,7 +1548,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         SfxItemSet aSet(GetPool(),
                         RES_TXTATR_INETFMT,
                         RES_TXTATR_INETFMT);
-        rWrtSh.GetAttr(aSet);
+        rWrtSh.GetCurAttr(aSet);
         if(SFX_ITEM_SET <= aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ))
         {
             const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
@@ -1833,7 +1836,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SfxItemSet aSet(GetPool(),
                                 RES_TXTATR_INETFMT,
                                 RES_TXTATR_INETFMT);
-                rSh.GetAttr(aSet);
+                rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(FN_EDIT_HYPERLINK);
@@ -1872,7 +1875,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SfxItemSet aSet(GetPool(),
                                 RES_TXTATR_INETFMT,
                                 RES_TXTATR_INETFMT);
-                rSh.GetAttr(aSet);
+                rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, FALSE ))
                     rSet.DisableItem(nWhich);
             }
