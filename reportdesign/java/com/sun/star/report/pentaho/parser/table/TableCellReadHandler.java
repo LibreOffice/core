@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCellReadHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:51:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.table;
 
 import com.sun.star.report.pentaho.model.TableCellElement;
@@ -49,8 +47,9 @@ import com.sun.star.report.pentaho.parser.text.NoCDATATextContentReadHandler;
  */
 public class TableCellReadHandler extends NoCDATATextContentReadHandler
 {
-  public TableCellReadHandler()
-  {
-    super(new TableCellElement(), true);
-  }
+
+    public TableCellReadHandler()
+    {
+        super(new TableCellElement(), true);
+    }
 }
