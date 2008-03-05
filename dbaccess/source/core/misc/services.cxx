@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:38:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include "module_dba.hxx"
-
 #include <osl/diagnose.h>
+#include "DatabaseDataProvider.hxx"
 
 /********************************************************************************************/
 
@@ -56,6 +58,15 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
+
+namespace {
+//--------------------------------------------------------------------------
+    ::cppu::ImplementationEntry entries[] = {
+        { &::dbaccess::DatabaseDataProvider::Create, &::dbaccess::DatabaseDataProvider::getImplementationName_Static, &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
+            &cppu::createSingleComponentFactory, 0, 0 },
+        { 0, 0, 0, 0, 0, 0 }
+    };
+}
 
 //***************************************************************************************
 //
@@ -100,7 +111,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         return ::dba::DbaModule::getInstance().writeComponentInfos(
             static_cast< XMultiServiceFactory* >( pServiceManager ),
-            static_cast< XRegistryKey* >( pRegistryKey ) );
+            static_cast< XRegistryKey* >( pRegistryKey ) )
+            && cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, entries);
     }
     catch (InvalidRegistryException& )
     {
@@ -114,7 +126,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* /*pRegistryKey*/)
+                    void* pRegistryKey)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
@@ -126,5 +138,8 @@ extern "C" void* SAL_CALL component_getFactory(
 
     if (xRet.is())
         xRet->acquire();
+    else
+        return cppu::component_getFactoryHelper(
+            pImplementationName, pServiceManager, pRegistryKey, entries);
     return xRet.get();
 };
