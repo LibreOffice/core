@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPentry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:58:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,21 @@
 #include <com/sun/star/container/XSet.hpp>
 #endif
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+// #ifndef _OSL_DIAGNOSE_H_
+// #include <osl/diagnose.h>
+// #endif
 
 #ifndef _SALAQUAFILEPICKER_HXX_
 #include "SalAquaFilePicker.hxx"
 #endif
+
 #ifndef _SALAQUAFOLDERPICKER_HXX_
 #include "SalAquaFolderPicker.hxx"
 #endif
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
+// #ifndef _SV_SVAPP_HXX
+// #include <vcl/svapp.hxx>
+// #endif
 
 #ifndef _FPSERVICEINFO_HXX_
 #include "FPServiceInfo.hxx"
@@ -85,16 +86,14 @@ static Reference< XInterface > SAL_CALL createFileInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     return Reference< XInterface >(
-        static_cast< XFilePicker* >(
-            new SalAquaFilePicker( rServiceManager ) ) );
+        *new SalAquaFilePicker( rServiceManager ) );
 }
 
 static Reference< XInterface > SAL_CALL createFolderInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     return Reference< XInterface >(
-        static_cast< XFolderPicker* >(
-            new SalAquaFolderPicker( rServiceManager ) ) );
+        *new SalAquaFolderPicker( rServiceManager ) );
 }
 
 //------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:58:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,21 @@
 #ifndef _FILTERHELPER_HXX_
 #define _FILTERHELPER_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
-#include <com/sun/star/uno/Type.hxx>
-#endif
+// #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
+// #include <com/sun/star/uno/Type.hxx>
+// #endif
 
-#ifndef INCLUDED_CPPU_UNOTYPE_HXX
-#include <cppu/unotype.hxx>
-#endif
+// #ifndef INCLUDED_CPPU_UNOTYPE_HXX
+// #include <cppu/unotype.hxx>
+// #endif
 
-#ifndef _TYPELIB_TYPECLASS_H_
-#include "typelib/typeclass.h"
-#endif
+// #ifndef _TYPELIB_TYPECLASS_H_
+// #include "typelib/typeclass.h"
+// #endif
 
-#ifndef _TYPELIB_TYPEDESCRIPTION_H_
-#include "typelib/typedescription.h"
-#endif
+// #ifndef _TYPELIB_TYPEDESCRIPTION_H_
+// #include "typelib/typedescription.h"
+// #endif
 
 #ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
 #include <com/sun/star/beans/StringPair.hpp>
@@ -68,20 +68,20 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.hxx>
-#endif
+// #ifndef _RTL_USTRING_H_
+// #include <rtl/ustring.hxx>
+// #endif
 
 #include <list>
 #include <vector>
 
 #include <premac.h>
-#include <Carbon/Carbon.h>
+#include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
 typedef ::com::sun::star::beans::StringPair UnoFilterEntry;
 typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
-typedef ::std::list<CFStringRef> CFStringList;
+typedef ::std::list<NSString *> NSStringList;
 typedef ::std::list<rtl::OUString> OUStringList;
 
 struct FilterEntry
@@ -142,7 +142,7 @@ public:
 
     //accessor
     FilterList* getFilterList();
-    CFStringList* getFilterNames();
+    NSStringList* getFilterNames();
 
     //misc
     void SetCurFilter( const rtl::OUString& rFilter );
@@ -150,14 +150,12 @@ public:
     OUStringList getCurrentFilterSuffixList();
     int getCurrentFilterIndex();
     void SetFilters();
-    sal_Bool SAL_CALL implFilterHandler(AEDesc *theItem, void *info,
-                                                void *callBackUD,
-                                                NavFilterModes filterMode);
+    sal_Bool filenameMatchesFilter(NSString * sFilename);
 
 private:
     FilterList *m_pFilterList;
     rtl::OUString m_aCurrentFilter;
-    CFStringList *m_pFilterNames;
+    NSStringList *m_pFilterNames;
 
     int implAddFilter( const rtl::OUString rFilter, const OUStringList rSuffixList);
     int implAddFilterGroup( const rtl::OUString rFilter,

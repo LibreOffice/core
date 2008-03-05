@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:42:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,18 +39,24 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _FILTERHELPER_HXX_
-#include "FilterHelper.hxx"
-#endif
+
+// #ifndef _OSL_DIAGNOSE_H_
+// #include <osl/diagnose.h>
+// #endif
+
 #ifndef _CFSTRINGUTILITIES_HXX_
 #include "CFStringUtilities.hxx"
 #endif
+
+#ifndef _NSSTRING_OOOADDITIONS_HXX_
+#include "NSString_OOoAdditions.hxx"
+#endif
+
+#include "FilterHelper.hxx"
 
 #pragma mark DEFINES
 #define CLASS_NAME "FilterEntry"
@@ -209,13 +215,21 @@ FilterHelper::~FilterHelper()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
     if (NULL != m_pFilterList) {
         delete m_pFilterList;
     }
 
     if (NULL != m_pFilterNames) {
+        //we called retain when we added the strings to the list, so we should release them now
+        for (NSStringList::iterator iter = m_pFilterNames->begin(); iter != m_pFilterNames->end(); iter++) {
+            [*iter release];
+        }
         delete m_pFilterNames;
     }
+
+    [pool release];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
@@ -393,15 +407,9 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-sal_Bool FilterHelper::implFilterHandler(AEDesc *theItem, void *info,
-                           void *callBackUD,
-                           NavFilterModes filterMode)
+sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    OSStatus status;
-    NavFileOrFolderInfo *theInfo = (NavFileOrFolderInfo*)info;
-    FSRef               ref;
 
 //    OSL_TRACE("filter event handler called");
 
@@ -410,7 +418,9 @@ sal_Bool FilterHelper::implFilterHandler(AEDesc *theItem, void *info,
         return sal_True;
     }
 
-    if (theInfo->isFolder == true) {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    MacOSBOOL bDir = NO;
+    if ([manager fileExistsAtPath:sFilename isDirectory:&bDir] && bDir == YES) {
 //        OSL_TRACE(" folder");
         return sal_True;
     }
@@ -424,26 +434,13 @@ sal_Bool FilterHelper::implFilterHandler(AEDesc *theItem, void *info,
 
     OUStringList suffixList = filter->getFilterSuffixList();
 
-    AECoerceDesc (theItem, typeFSRef, theItem);
-
-    char fileName[1024];
-    if ( (status = AEGetDescData (theItem, &ref, sizeof (FSRef))) == noErr )
     {
 //        OSL_TRACE(" starting to work");
-        status = FSRefMakePath(&ref, (UInt8*)fileName, 1023);
-        OSL_TRACE("filter file name: %s", fileName);
-        if (status == noErr) {
-            int nameLength = strlen(fileName);
-            if (nameLength < 4) {
-                return sal_False;
-            } else {
-                rtl::OUString aName = rtl::OUString::createFromAscii(fileName);
-                rtl::OUString allMatcher = rtl::OUString::createFromAscii(".*");
-                for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
-                    if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
-                        return sal_True;
-                    }
-                }
+        rtl::OUString aName = [sFilename OUString];
+        rtl::OUString allMatcher = rtl::OUString::createFromAscii(".*");
+        for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
+            if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
+                return sal_True;
             }
         }
     }
@@ -460,16 +457,16 @@ FilterList* FilterHelper::getFilterList() {
     return m_pFilterList;
 }
 
-CFStringList* FilterHelper::getFilterNames() {
+NSStringList* FilterHelper::getFilterNames() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
     if (NULL == m_pFilterList)
         return NULL;
     if (NULL == m_pFilterNames) {
         //build filter names list
-        m_pFilterNames = new CFStringList;
+        m_pFilterNames = new NSStringList;
         for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++) {
-            m_pFilterNames->push_back(CFStringCreateWithOUString(iter->getTitle()));
+            m_pFilterNames->push_back([[NSString stringWithOUString:iter->getTitle()] retain]);
         }
     }
 
