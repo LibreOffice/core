@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:47:22 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:34:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 # --- Files --------------------------------------------------------
 
+.IF "$(OS)" != "MACOSX"
+
 LIB1OBJFILES=$(SLO)$/systemshell.obj
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1ARCHIV=$(SLB)$/lib$(TARGET).a
@@ -67,25 +69,22 @@ DEF1NAME=       $(SHL1TARGET)
 #SHL1IMPLIB=
 .ENDIF
 
-# static libs must come at end of linker list on MacOSX
-.IF "$(OS)" == "MACOSX"
-SHL1STDLIBS=$(SALLIB)\
-    $(EXPATASCII3RDLIB)\
-    $(CPPULIB)\
-    $(CPPUHELPERLIB)\
-    $(COMPHELPERLIB)
-.ELSE
 SHL1STDLIBS=$(EXPATASCII3RDLIB)\
     $(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(COMPHELPERLIB)
-.ENDIF # MACOSX
 
 SHL1LIBS=$(SLB)$/xmlparser.lib
 SHL1OBJS=$(SLOFILES)
 SHL1VERSIONMAP=recfile.map
 
+.ELSE
+
+dummy:
+    @echo "Nothing to build for MACOSX"
+
+.ENDIF # MACOSX
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
