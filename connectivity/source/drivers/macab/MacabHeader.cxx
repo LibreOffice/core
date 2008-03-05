@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabHeader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:52:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:38:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,14 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
 
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
+#endif
+
 using namespace connectivity::macab;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::util;
+using namespace ::dbtools;
 
 // -------------------------------------------------------------------------
 MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
@@ -75,7 +81,8 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
             fields[i] = new macabfield;
             fields[i]->type = _fields[i]->type;
             fields[i]->value = _fields[i]->value;
-            CFRetain(fields[i]->value);
+            if (fields[i]->value)
+                CFRetain(fields[i]->value);
         }
     }
 
@@ -169,14 +176,13 @@ void MacabHeader::operator+= (const MacabHeader *r)
 
     if(i < size)
     {
-        if(fields[i] == NULL)
+        if(fields[i] == NULL || fields[i]->value == NULL || CFGetTypeID(fields[i]->value) != CFStringGetTypeID())
             return ::rtl::OUString();
         try
         {
             nRet = CFStringToOUString( (CFStringRef) fields[i]->value);
         }
         catch(...){ }
-
     }
 
     return nRet;
