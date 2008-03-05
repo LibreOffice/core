@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlSubDocument.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,37 +38,38 @@
 #ifndef RPT_XMLREPORTELEMENTBASE_HXX
 #include "xmlReportElementBase.hxx"
 #endif
-#ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
-#include <com/sun/star/report/XReportDefinition.hpp>
-#endif
+#include <com/sun/star/report/XReportComponent.hpp>
 #include <vector>
 
 namespace rptxml
 {
     class ORptFilter;
-    class OXMLSubDocument : public OXMLReportElementBase
+    class OXMLSubDocument : public OXMLReportElementBase, public IMasterDetailFieds
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xFake;
         ::std::vector< ::rtl::OUString> m_aMasterFields;
         ::std::vector< ::rtl::OUString> m_aDetailFields;
+        sal_Int32       m_nCurrentCount;
+        bool            m_bContainsShape;
+
         OXMLSubDocument(const OXMLSubDocument&);
         void operator =(const OXMLSubDocument&);
+
+        virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
+                    const ::rtl::OUString& rLocalName,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     public:
 
         OXMLSubDocument( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
                     ,const ::rtl::OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xComponent
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer);
         virtual ~OXMLSubDocument();
 
-        virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-
         virtual void EndElement();
-
-        void addFieldPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair);
+        virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair);
     };
 // -----------------------------------------------------------------------------
 } // namespace rptxml
