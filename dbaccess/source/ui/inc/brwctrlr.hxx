@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:26:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,75 +36,35 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #define _SBA_BWRCTRLR_HXX
 
-#ifndef DBAUI_GENERICCONTROLLER_HXX
 #include "genericcontroller.hxx"
-#endif
-#ifndef _SBX_BRWVIEW_HXX
-#include "brwview.hxx"
-#endif
-#ifndef _SBA_GRID_HXX
-#include "sbagrid.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
-#include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XSQLERRORLISTENER_HPP_
-#include <com/sun/star/sdb/XSQLErrorListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESETLISTENER_HPP_
-#include <com/sun/star/form/XResetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERLISTENER_HPP_
-#include <com/sun/star/form/XDatabaseParameterListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XCONFIRMDELETELISTENER_HPP_
-#include <com/sun/star/form/XConfirmDeleteListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
-#include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-#ifndef _TRANSFER_HXX
-#include <svtools/transfer.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX_
-#include <vos/thread.hxx>
-#endif
-#ifndef _SFXCANCEL_HXX
-#include <svtools/cancel.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
-#endif
-#ifndef _CLIPLISTENER_HXX
-#include <svtools/cliplistener.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
+#include "brwview.hxx"
+#include "sbagrid.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/sdb/XSQLErrorListener.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/form/XResetListener.hpp>
+#include <com/sun/star/form/XDatabaseParameterListener.hpp>
+#include <com/sun/star/form/XConfirmDeleteListener.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/frame/XModule.hpp>
+/** === end UNO includes === **/
+
+#include <vcl/timer.hxx>
+#include <svtools/transfer.hxx>
+#include <osl/mutex.hxx>
+#include <vos/thread.hxx>
+#include <svtools/cancel.hxx>
+#include <cppuhelper/implbase9.hxx>
+#include <svtools/cliplistener.hxx>
+
 class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
@@ -114,7 +74,7 @@ namespace dbaui
 
     // =========================================================================
 
-    typedef ::cppu::ImplHelper8 <   ::com::sun::star::sdb::XSQLErrorListener
+    typedef ::cppu::ImplHelper9 <   ::com::sun::star::sdb::XSQLErrorListener
                                 ,   ::com::sun::star::form::XDatabaseParameterListener
                                 ,   ::com::sun::star::form::XConfirmDeleteListener
                                 ,   ::com::sun::star::form::XLoadListener
@@ -122,6 +82,7 @@ namespace dbaui
                                 ,   ::com::sun::star::awt::XFocusListener
                                 ,   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
+                                ,   ::com::sun::star::frame::XModule
                                 >   SbaXDataBrowserController_Base;
 
     class SbaXDataBrowserController
@@ -157,6 +118,7 @@ namespace dbaui
 
         String                  m_sStateSaveRecord;
         String                  m_sStateUndoRecord;
+        ::rtl::OUString         m_sModuleIdentifier;
 
         // members for asynchronous load operations
         ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
@@ -229,6 +191,10 @@ namespace dbaui
 
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XModule
+        virtual void SAL_CALL setIdentifier( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::awt::XFocusListener
         virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
@@ -346,8 +312,6 @@ namespace dbaui
             // commit the current column (i.e. cell)
         virtual sal_Bool SaveModified(sal_Bool bAskFor = sal_True);
             // save the modified record
-
-        virtual void            onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
             // a PropertySet corresponding to the cursor field a column is bound to
