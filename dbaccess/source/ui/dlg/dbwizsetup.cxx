@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:33:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,7 @@ using namespace ::cppu;
 #define PAGE_DBSETUPWIZARD_MOZILLA                   15
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
+#define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
 
 
 #define DBASE_PATH               1
@@ -269,6 +270,7 @@ using namespace ::cppu;
 #define USERDEFINED_PATH         23
 #define OPEN_DOC_PATH            24
 #define MSACCESS2007_PATH        25
+#define MYSQL_NATIVE_PATH        26
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -347,6 +349,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     declareAuthDepPath( DST_JDBC,               JDBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_MYSQL_ODBC,         MYSQL_ODBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_MYSQL_JDBC,         MYSQL_JDBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MYSQL_NATIVE,       MYSQL_NATIVE_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_NATIVE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_ORACLE_JDBC,        ORACLE_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_ADABAS,             ADABAS_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_LDAP,               LDAP_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
@@ -436,6 +439,9 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
             sRoadmapItem = m_sRM_JDBCText;
             break;
+        case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
+            sRoadmapItem = m_sRM_JDBCText;
+            break;
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
             sRoadmapItem = m_sRM_ODBCText;
             break;
@@ -507,6 +513,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_ODBC,         ODBC_PATH           },
             { DST_JDBC,         JDBC_PATH           },
             { DST_MYSQL_JDBC,   MYSQL_JDBC_PATH     },
+            { DST_MYSQL_NATIVE, MYSQL_NATIVE_PATH   },
             { DST_MYSQL_ODBC,   MYSQL_ODBC_PATH     },
             { DST_ORACLE_JDBC,  ORACLE_PATH         },
             { DST_ADABAS,       ADABAS_PATH         },
@@ -651,14 +658,19 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const
 {
     DATASOURCE_TYPE LocDatabaseType = _DatabaseType;
-    if ((LocDatabaseType == DST_MYSQL_JDBC) || (LocDatabaseType == DST_MYSQL_ODBC))
+    if ((LocDatabaseType == DST_MYSQL_JDBC) || (LocDatabaseType == DST_MYSQL_ODBC) || (LocDatabaseType == DST_MYSQL_NATIVE))
     {
         if (m_pMySQLIntroPage != NULL)
         {
-            if (m_pMySQLIntroPage->getMySQLMode() == 1)                 // TODO: use constant or Enum)
-                return DST_MYSQL_JDBC;
-            else
-                return DST_MYSQL_ODBC;
+            switch( m_pMySQLIntroPage->getMySQLMode() )
+            {
+                case OMySQLIntroPageSetup::VIA_JDBC:
+                    return DST_MYSQL_JDBC;
+                case OMySQLIntroPageSetup::VIA_NATIVE:
+                    return DST_MYSQL_NATIVE;
+                case OMySQLIntroPageSetup::VIA_ODBC:
+                    return DST_MYSQL_ODBC;
+            }
         }
     }
     return LocDatabaseType;
@@ -724,6 +736,10 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_MYSQL_JDBC)));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( this, *m_pOutSet);
+            break;
+        case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_MYSQL_NATIVE)));
+            pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLNATIVETabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ORACLE:
@@ -801,10 +817,21 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
 // -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, /*_pMySQLIntroPageSetup*/)
 {
-    if (getDatasourceType(*m_pOutSet) == DST_MYSQL_ODBC)
-        activatePath( MYSQL_ODBC_PATH, sal_True);
-    else
-        activatePath( MYSQL_JDBC_PATH, sal_True);
+    const DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
+    switch( eType )
+    {
+        case DST_MYSQL_ODBC:
+            activatePath( MYSQL_ODBC_PATH, sal_True);
+            break;
+        case DST_MYSQL_JDBC:
+            activatePath( MYSQL_JDBC_PATH, sal_True);
+            break;
+        case DST_MYSQL_NATIVE:
+            activatePath( MYSQL_NATIVE_PATH, sal_True);
+            break;
+        default:
+            ;
+    }
     return sal_True;
 }
 
