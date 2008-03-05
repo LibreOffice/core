@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:07:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,9 @@ using namespace ::com::sun::star;
 #include <pausethreadstarting.hxx>
 #endif
 // <--
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -457,9 +460,11 @@ SwDoc::SwDoc() :
     _InitFieldTypes();
 
     // lege (fuer die Filter) eine Default-OutlineNumRule an
-    pOutlineRule = new SwNumRule( String::CreateFromAscii(
-                                        SwNumRule::GetOutlineRuleName() ),
-                                        OUTLINE_RULE );
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
+                                  SvxNumberFormat::LABEL_ALIGNMENT,
+                                  OUTLINE_RULE );
+    // <--
     // #115901#
     AddNumRule(pOutlineRule);
     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
@@ -868,9 +873,11 @@ void SwDoc::ClearDoc()
     pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
     // creation of new outline numbering rule
-    pOutlineRule = new SwNumRule( String::CreateFromAscii(
-                                      SwNumRule::GetOutlineRuleName() ),
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
+                                  SvxNumberFormat::LABEL_ALIGNMENT,
                                   OUTLINE_RULE );
+    // <--
     AddNumRule(pOutlineRule);
     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
