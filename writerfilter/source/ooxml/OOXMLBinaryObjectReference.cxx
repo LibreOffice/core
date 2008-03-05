@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLBinaryObjectReference.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:49:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ void OOXMLBinaryObjectReference::read()
 {
     sal_uInt32 nMaxReadBytes = 1024*1024;
     uno::Sequence<sal_Int8> aSeq(nMaxReadBytes);
-    uno::Reference<io::XInputStream> xInputStream = mpStream->getInputStream();
+    uno::Reference<io::XInputStream> xInputStream =
+        mpStream->getDocumentStream();
 
     sal_uInt32 nSize = 0;
     sal_uInt32 nOldSize = 0;
