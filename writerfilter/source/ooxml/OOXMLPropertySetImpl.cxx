@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 16:02:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,9 @@ void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
     }
 
 #ifdef DEBUG_RESOLVE
-    clog << toString() << endl;
+    logger("DEBUG", "<resolve>");
+    logger("DEBUG", toString());
+    logger("DEBUG", "</resolve>");
 #endif
 }
 
@@ -360,6 +362,35 @@ OOXMLValue * OOXMLStringValue::clone() const
 }
 
 /*
+  class OOXMLInputStreamValue
+ */
+OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream> xInputStream)
+: mxInputStream(xInputStream)
+{
+}
+
+OOXMLInputStreamValue::~OOXMLInputStreamValue()
+{
+}
+
+uno::Any OOXMLInputStreamValue::getAny() const
+{
+    uno::Any aAny(mxInputStream);
+
+    return aAny;
+}
+
+string OOXMLInputStreamValue::toString() const
+{
+    return "InputStream";
+}
+
+OOXMLValue * OOXMLInputStreamValue::clone() const
+{
+    return new OOXMLInputStreamValue(mxInputStream);
+}
+
+/*
   struct OOXMLPropertySetImplCompare
  */
 
@@ -426,10 +457,10 @@ void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
 #ifdef DEBUG_RESOLVE
     if (pProperty->getId() == 0x0)
-        clog << "zero property" << endl;
+        logger("DEBUG", "<error>zero property</error>");
 #endif
 
-    if (pProperty.get() != NULL)
+    if (pProperty.get() != NULL && pProperty->getId() != 0x0)
         mProperties.push_back(pProperty);
 }
 
@@ -687,7 +718,8 @@ void OOXMLTableImpl::resolve(Table & rTable)
 
 void OOXMLTableImpl::add(ValuePointer_t pPropertySet)
 {
-    mPropertySets.push_back(pPropertySet);
+    if (pPropertySet.get() != NULL)
+        mPropertySets.push_back(pPropertySet);
 }
 
 string OOXMLTableImpl::getType() const
