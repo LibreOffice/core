@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:52:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ public:
     double                  GetOutputFactor() const;
 
     BOOL                    AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+    void                    UpdateAllRowHeights();
 
     ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();
