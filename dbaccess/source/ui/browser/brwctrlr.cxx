@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:42:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
+    ,m_sModuleIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
     ,m_pLoadThread(NULL)
     ,m_pFormControllerImpl(NULL)
     ,m_nPendingLoadFinished(0)
@@ -614,6 +615,9 @@ void SbaXDataBrowserController::initFormatter()
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::describeSupportedFeatures()
 {
+
+    implDescribeSupportedFeature( ".uno:FormSlots/deleteRecord",    SID_FM_DELETEROWS,      CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
     OGenericUnoController::describeSupportedFeatures();
     implDescribeSupportedFeature( ".uno:FormSlots/undoRecord",      ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:FormController/undoRecord", ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
@@ -991,6 +995,20 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
             disposingColumnModel(Source);
     }
     OGenericUnoController::disposing(Source);
+}
+
+// -----------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::setIdentifier( const ::rtl::OUString& _Identifier ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_sModuleIdentifier = _Identifier;
+}
+
+// -----------------------------------------------------------------------
+::rtl::OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return m_sModuleIdentifier;
 }
 
 // -----------------------------------------------------------------------
@@ -1455,6 +1473,26 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 aReturn.bEnabled = nCount != 0;
             }
             break;
+            case ID_BROWSER_INSERT_ROW:
+                {
+                    // check if it is available
+                    Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
+                    if (!xDataSourceSet.is())
+                        break;  // no datasource -> no edit mode
+
+                    sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
+                    aReturn.bEnabled = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowInserts")));
+                }
+                break;
+            case SID_FM_DELETEROWS:
+                {
+                    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+                    sal_Int32 nCount = ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT));
+                    sal_Bool bNew = sal_False;
+                    xFormSet->getPropertyValue(PROPERTY_ISNEW) >>= bNew;
+                    aReturn.bEnabled = nCount != 0 && !bNew;
+                }
+                break;
 
             case ID_BROWSER_PASTE:
             case ID_BROWSER_COPY:
@@ -1822,6 +1860,39 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
     switch (nId)
     {
+        case ID_BROWSER_INSERT_ROW:
+            try
+            {
+                if (SaveModified())
+                {
+                    getRowSet()->afterLast();
+                    // check if it is available
+                    Reference< XResultSetUpdate >  xUpdateCursor(getRowSet(), UNO_QUERY_THROW);
+                    xUpdateCursor->moveToInsertRow();
+                }
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(0,"Exception caught!");
+            }
+            break;
+        case SID_FM_DELETEROWS:
+
+            if (SaveModified())
+            {
+                SbaGridControl* pVclGrid = getBrowserView()->getVclControl();
+                if ( pVclGrid )
+                {
+                    if( !pVclGrid->GetSelectRowCount() )
+                    {
+                        pVclGrid->DeactivateCell();
+                        pVclGrid->SelectRow(pVclGrid->GetCurRow());
+                    }
+                    pVclGrid->DeleteSelectedRows();
+                }
+            }
+            break;
+
         case ID_BROWSER_FILTERED:
             if (SaveModified())
             {
@@ -2954,24 +3025,6 @@ void SbaXDataBrowserController::AfterDrop()
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
         xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
-}
-// -----------------------------------------------------------------------------
-void SbaXDataBrowserController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
-{
-    OGenericUnoController::onLoadedMenu( _xLayoutManager );
-
-    // for task frames, we have our own cut/copy/paste functionality
-    // 22.05.2002 - 99030 - fs@openoffice.org
-    if ( m_xCurrentFrame.is() && _xLayoutManager.is() )
-    {
-        if ( m_xCurrentFrame->isTop() )
-        {
-            _xLayoutManager->lock();
-            _xLayoutManager->createElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/copyobjectbar")) );
-            _xLayoutManager->unlock();
-            _xLayoutManager->doLayout();
-        }
-    }
 }
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
