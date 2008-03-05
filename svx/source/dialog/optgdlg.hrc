@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:06:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,8 @@
 #define FT_INTERPRET                41
 #define NF_YEARVALUE                42
 #define FT_TOYEAR                   43
+#define FL_PRINTDLG                 44
+#define CB_PRINTDLG                 45
 
 // tabpage view ----------------------------------------------------------
 
