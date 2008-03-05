@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:51:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,22 +568,6 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
         OSL_ENSURE(0,"Could not get element container!");
     }
     return xElements;
-}
-// -----------------------------------------------------------------------------
-void OApplicationController::getElements(ElementType _eType,::std::vector< ::rtl::OUString>& _rList)
-{
-    OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    // TODO get a list for all object
-    Reference< XNameAccess > xElements = getElements(_eType);
-    if ( xElements.is() )
-    {
-        Sequence< ::rtl::OUString> aSeq = xElements->getElementNames();
-        _rList.reserve(aSeq.getLength());
-
-        const ::rtl::OUString* pBegin = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        ::std::copy(pBegin,pEnd,::std::back_inserter(_rList));
-    }
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::impl_initialize()
