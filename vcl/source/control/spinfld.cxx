@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#ifndef _SV_EVENT_HXX
-#include <vcl/event.hxx>
-#endif
-#ifndef _SV_DECOVIEW_HXX
-#include <vcl/decoview.hxx>
-#endif
-#ifndef _SV_SPIN_H
-#include <vcl/spin.h>
-#endif
-#ifndef _SV_SPINFLD_HXX
-#include <vcl/spinfld.hxx>
-#endif
-#ifndef _VCL_CONTROLLAYOUT_HXX
-#include <vcl/controllayout.hxx>
-#endif
+#include "tools/rc.h"
+#include "vcl/event.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/spin.h"
+#include "vcl/spinfld.hxx"
+#include "vcl/controllayout.hxx"
+#include "vcl/svdata.hxx"
 
 // =======================================================================
 
@@ -929,18 +918,30 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
                 {
-                    Region aRgn( GetActiveClipRegion() );
-                    if( pLastRect )
+                    // FIXME: this is currently only on aqua
+                    // check for other platforms that need similar handling
+                    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+                        IsNativeWidgetEnabled() &&
+                        IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
                     {
-                        SetClipRegion( *pLastRect );
-                        Paint( *pLastRect );
-                        SetClipRegion( aRgn );
+                        ImplInvalidateOutermostBorder( this );
                     }
-                    if( pRect )
+                    else
                     {
-                        SetClipRegion( *pRect );
-                        Paint( *pRect );
-                        SetClipRegion( aRgn );
+                        // paint directly
+                        Region aRgn( GetActiveClipRegion() );
+                        if( pLastRect )
+                        {
+                            SetClipRegion( *pLastRect );
+                            Paint( *pLastRect );
+                            SetClipRegion( aRgn );
+                        }
+                        if( pRect )
+                        {
+                            SetClipRegion( *pRect );
+                            Paint( *pRect );
+                            SetClipRegion( aRgn );
+                        }
                     }
                 }
             }
