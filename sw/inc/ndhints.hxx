@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:36:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <tools/mempool.hxx>
 #endif
 
-#include "numrule.hxx"
+//#include "numrule.hxx"
 
 class SwTxtNode;
 class SwRegHistory;                 // steht im RolBck.hxx
