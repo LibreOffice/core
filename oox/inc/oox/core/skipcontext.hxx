@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skipcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,17 @@
 #ifndef OOX_CORE_SKIPCONTEXT_HXX
 #define OOX_CORE_SKIPCONTEXT_HXX
 
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace core {
 
 /** define a context whose purpose is to ignore what is inside.
  * It is basically a NO-OP
  */
-class SkipContext : public Context
+class SkipContext : public ContextHandler
 {
 public:
-    SkipContext( const FragmentHandlerRef& xHandler );
+    SkipContext( ContextHandler& rParent );
 
 };
 
