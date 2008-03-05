@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addressconverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,16 +280,18 @@ public:
         documents, e.g. from EXTERNSHEET, SUPBOOK, or DCONREF records.
 
         @param orClassName  (out-parameter) DDE server name or OLE class name.
-        @param orTargetUrl  (out-parameter) Traget URL, DDE topic or OLE object name.
+        @param orTargetUrl  (out-parameter) Target URL, DDE topic or OLE object name.
         @param orSheetName  (out-parameter) Sheet name in target document.
+        @param orbSameSheet  (out-parameter)  True = target for special '!A1' syntax.
         @param rBiffEncoded  Encoded name of the external link target.
 
-        @return  true = Parsed string was valid, returned strings can be used.
+        @return  true = Parsed string was valid, return values can be used.
       */
     bool                parseBiffTargetUrl(
                             ::rtl::OUString& orClassName,
                             ::rtl::OUString& orTargetUrl,
                             ::rtl::OUString& orSheetName,
+                            bool& orbSameSheet,
                             const ::rtl::OUString& rBiffTargetUrl );
 
     // ------------------------------------------------------------------------
@@ -619,7 +621,8 @@ private:
 
     void                initializeEncodedUrl(
                             sal_Unicode cUrlThisWorkbook, sal_Unicode cUrlExternal,
-                            sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal );
+                            sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal,
+                            sal_Unicode cUrlSameSheet );
 
 private:
     ::com::sun::star::table::CellAddress maMaxApiPos;   /// Maximum valid cell address in Calc.
@@ -629,6 +632,7 @@ private:
     sal_Unicode         mcUrlExternal;                  /// Control character: Link to external workbook/sheet.
     sal_Unicode         mcUrlThisSheet;                 /// Control character: Link to current sheet.
     sal_Unicode         mcUrlInternal;                  /// Control character: Link to internal sheet.
+    sal_Unicode         mcUrlSameSheet;                 /// Control character: Link to same sheet (special '!A1' syntax).
     bool                mbColOverflow;                  /// Flag for "columns overflow".
     bool                mbRowOverflow;                  /// Flag for "rows overflow".
     bool                mbTabOverflow;                  /// Flag for "tables overflow".
