@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 15:45:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE BOOL            LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE BOOL            SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     SC_DLLPRIVATE SCTAB         GetSaveTab();
-    SC_DLLPRIVATE void          UpdateAllRowHeights();
 
     SC_DLLPRIVATE void          RemoveUnknownObjects();
 
@@ -299,6 +298,7 @@ public:
     BOOL            IsEditable() const;
 
     BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+    void            UpdateAllRowHeights();
 
     void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
                                     BOOL bRecord = TRUE, BOOL bApi = FALSE );
