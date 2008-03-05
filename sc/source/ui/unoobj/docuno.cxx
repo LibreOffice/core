@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:45:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,12 @@ BOOL ScModelObj::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     if (pDocShell)
         return pDocShell->AdjustRowHeight( nStartRow, nEndRow, nTab );
     return FALSE;
+}
+
+void ScModelObj::UpdateAllRowHeights()
+{
+    if (pDocShell)
+        pDocShell->UpdateAllRowHeights();
 }
 
 ScDrawLayer* ScModelObj::MakeDrawLayer()
