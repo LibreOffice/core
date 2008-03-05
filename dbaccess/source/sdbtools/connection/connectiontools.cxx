@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectiontools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:45:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #include <comphelper/namedvaluecollection.hxx>
 #endif
 
+#include <connectivity/dbtools.hxx>
+#include <connectivity/statementcomposer.hxx>
+
 #include <algorithm>
 
 extern "C" void SAL_CALL createRegistryInfo_ConnectionTools()
@@ -70,6 +73,8 @@ namespace sdbtools
 //........................................................................
 
     /** === begin UNO using === **/
+    using namespace ::com::sun::star;
+    using namespace ::com::sun::star::uno;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::sdb::tools::XTableName;
@@ -117,6 +122,24 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
         return new DataSourceMetaData( getContext(), getConnection() );
+    }
+    //--------------------------------------------------------------------
+    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const ::rtl::OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException)
+    {
+        EntryGuard aGuard( *this );
+        ::dbtools::SQLExceptionInfo aErrorInfo;
+        Reference< container::XNameAccess > xRet = ::dbtools::getFieldsByCommandDescriptor(getConnection(),commandType,command,keepFieldsAlive,&aErrorInfo);
+        if ( aErrorInfo.isValid() )
+            aErrorInfo.doThrow();
+        return xRet;
+    }
+    //--------------------------------------------------------------------
+    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const ::rtl::OUString& command ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        EntryGuard aGuard( *this );
+        dbtools::StatementComposer aComposer(getConnection(), command, commandType, sal_True );
+        aComposer.setDisposeComposer(sal_False);
+        return aComposer.getComposer();
     }
 
     //--------------------------------------------------------------------
