@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:16:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,6 +769,9 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
 
     pTable->GetTabCols( aOldCols, pBox, sal_False, bRow );
     sal_uInt16 nOldCount = aOldCols.Count();
+    //there's no use in setting tab cols if there's only one column
+    if( !nOldCount )
+        return;
 
     const uno::Sequence< text::TableColumnSeparator>* pSepSeq =
                 (uno::Sequence< text::TableColumnSeparator>*) rVal.getValue();
