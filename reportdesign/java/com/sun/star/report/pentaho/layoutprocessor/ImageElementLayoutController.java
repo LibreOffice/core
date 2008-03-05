@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageElementLayoutController.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:43:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.util.TextUtilities;
-import org.jfree.report.data.DefaultDataFlags;
 import org.jfree.report.data.GlobalMasterRow;
 import org.jfree.report.data.ReportDataRow;
 import org.jfree.report.expressions.FormulaExpression;
