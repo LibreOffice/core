@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:20:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+#include <SwNodeNum.hxx>
 
 using namespace ::com::sun::star;
 
