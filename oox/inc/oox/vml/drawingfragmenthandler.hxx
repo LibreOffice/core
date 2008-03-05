@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawingfragmenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ namespace oox { namespace vml {
 class DrawingFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DrawingFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, const DrawingPtr pDrawingPtr ) throw();
+    DrawingFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DrawingPtr pDrawingPtr ) throw();
     virtual ~DrawingFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
