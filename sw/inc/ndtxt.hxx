@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:30:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
+#ifndef _SWERROR_H
+#include <error.h>
+#endif
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
@@ -53,6 +56,7 @@
 #ifndef _MODELTOVIEWHELPER_HXX
 #include <modeltoviewhelper.hxx>
 #endif
+#include <SwNodeNum.hxx>
 
 #include <vector>
 #include <set>
@@ -72,7 +76,6 @@ struct SwSpellArgs;             // for Spell(), splargs.hxx
 struct SwConversionArgs;        // for Convert(), splargs.hxx
 class SwInterHyphInfo;          // for Hyphenate(), splargs.hxx
 class SwWrongList;      // fuer OnlineSpelling
-class SwNodeNum;
 class OutputDevice;
 class SwScriptInfo;
 struct SwDocStat;
@@ -280,9 +283,18 @@ public:
     BOOL SetAttr( const SfxItemSet& rSet,
                   xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
     // erfrage die Attribute vom TextNode ueber den Bereich
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
+    // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
+    // the corresponding list level of an applied list style is merged into
+    // the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == FALSE,
+    // corresponding node has not its own indent attributes and the
+    // position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT.
     BOOL GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
-                    BOOL bOnlyTxtAttr  = FALSE,
-                    BOOL bGetFromChrFmt = TRUE ) const;
+                  BOOL bOnlyTxtAttr  = FALSE,
+                  BOOL bGetFromChrFmt = TRUE,
+                  const bool bMergeIndentValuesOfNumRule = false ) const;
+    // <--
 
     // uebertrage Attribute eines AttrSets ( AutoFmt ) in das SwpHintsArray
     void FmtToTxtAttr( SwTxtNode* pNd );
@@ -567,6 +579,50 @@ public:
        @return     TRUE if the paragraph has a visible numbering/bullet/outline
      */
     bool HasVisibleNumberingOrBullet() const;
+
+    /** Determines, if the list level indent attributes can be applied to the
+        paragraph.
+
+        OD 2008-01-17 #newlistlevelattrs#
+        The list level indents can be applied to the paragraph under the one
+        of following conditions:
+        - the list style is directly applied to the paragraph and the paragraph
+          has no own indent attributes.
+        - the list style is applied to the paragraph through one of its paragraph
+          styles, the paragraph has no own indent attributes and on the paragraph
+          style hierarchy from the paragraph to the paragraph style with the
+          list style no indent attributes are found.
+
+        @author OD
+
+        @return boolean
+    */
+    bool AreListLevelIndentsApplicable() const;
+
+    /** Retrieves the list tab stop position, if the paragraph's list level defines
+        one and this list tab stop has to merged into the tap stops of the paragraph
+
+        OD 2008-01-17 #newlistlevelattrs#
+
+        @author OD
+
+        @param nListTabStopPosition
+        output parameter - containing the list tab stop position
+
+        @return boolean - indicating, if a list tab stop position is provided
+    */
+    bool GetListTabStopPosition( long& nListTabStopPosition ) const;
+
+    /** Retrieves the character following the list label, if the paragraph's
+        list level defines one.
+
+        OD 2008-01-17 #newlistlevelattrs#
+
+        @author OD
+
+        @return XubString - the list tab stop position
+    */
+    XubString GetLabelFollowedBy() const;
 
     //
     // END OF BULLET/NUMBERING/OUTLINE STUFF:
