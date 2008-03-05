@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportHelperDefines.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,10 @@
     virtual void SAL_CALL setControlBorderColor(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual ::sal_Bool SAL_CALL getPrintRepeatedValues() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual void SAL_CALL setPrintRepeatedValues(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > SAL_CALL getSection() throw (::com::sun::star::uno::RuntimeException);
 
 #define REPORTCONTROLFORMAT_HEADER()  \
