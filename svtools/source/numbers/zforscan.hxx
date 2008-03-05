@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:57:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 
 #ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
 #include <svtools/nfkeytab.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
+#include "nfsymbol.hxx"
 #endif
 
 class SvNumberFormatter;
@@ -271,6 +274,11 @@ private:                            // ---- privater Teil
                                                 // des Typs
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
     int FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i, USHORT& nAnzResStrings );
+
+    /** Insert symbol into nTypeArray and sStrArray, e.g. grouping separator.
+        If at nPos-1 a symbol type NF_SYMBOLTYPE_EMPTY is present, that is
+        reused instead of shifting all one up and nPos is decremented! */
+    bool InsertSymbol( USHORT & nPos, svt::NfSymbolType eType, const String& rStr );
 
     static inline BOOL StringEqualsChar( const String& rStr, sal_Unicode ch )
         { return rStr.GetChar(0) == ch && rStr.Len() == 1; }
