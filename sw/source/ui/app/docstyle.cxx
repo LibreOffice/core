@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:42:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #ifndef _SVX_NUMITEM_HXX //autogen
 #include <svx/numitem.hxx>
 #endif
+// --> OD 2008-02-13 #newlistlevelattrs#
+#include <svx/lrspitem.hxx>
+// <--
 
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
@@ -124,8 +127,14 @@
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
 #endif
-
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 #include <fmthdft.hxx>
+// --> OD 2008-02-12 #newlistlevelattrs#
+#include <SwRewriter.hxx>
+#include <undobj.hxx>
+// <--
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -1140,12 +1149,47 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
     return aCoreSet;
 }
 
+// --> OD 2008-02-13 #newlistlevelattrs#
+void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
+{
+    if ( nFamily != SFX_STYLE_FAMILY_PARA )
+    {
+        return;
+    }
+
+    ASSERT( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
+    if ( pColl->AreListLevelIndentsApplicable() )
+    {
+        ASSERT( pColl->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET,
+                "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect -> please inform OD." );
+        const String sNumRule = pColl->GetNumRule().GetValue();
+        if( sNumRule.Len() )
+        {
+            const SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+            if( pRule )
+            {
+                const SwNumFmt& rFmt = pRule->Get( 0 );
+                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                {
+                    SvxLRSpaceItem aLR( RES_LR_SPACE );
+                    aLR.SetTxtLeft( rFmt.GetIndentAt() );
+                    aLR.SetTxtFirstLineOfst( static_cast<short>(rFmt.GetFirstLineIndent()) );
+                    rSet.Put( aLR );
+                }
+            }
+        }
+    }
+}
+// <--
+
 /*--------------------------------------------------------------------
     Beschreibung:   ItemSet setzen
  --------------------------------------------------------------------*/
 
-
-void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
+// --> OD 2008-02-12 #newlistlevelattrs#
+// handling of parameter <bResetIndentAttrsAtParagraphStyle>
+void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
+                                    const bool bResetIndentAttrsAtParagraphStyle )
 {
     // gegebenenfalls Format erst ermitteln
     if(!bPhysical)
@@ -1154,6 +1198,15 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
     SwImplShellAction aTmpSh( rDoc );
 
     ASSERT( &rSet != &aCoreSet, "SetItemSet mit eigenem Set ist nicht erlaubt" );
+
+    // --> OD 2008-02-12 #newlistlevelattrs#
+    if ( rDoc.DoesUndo() )
+    {
+        SwRewriter aRewriter;
+        aRewriter.AddRule( UNDO_ARG1, GetName() );
+        rDoc.StartUndo( UNDO_INSFMTATTR, &aRewriter );
+    }
+    // <--
 
     SwFmt* pFmt = 0;
     SwPageDesc* pNewDsc = 0;
@@ -1230,6 +1283,16 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                 rDoc.DelTxtFmtColl( pColl );
                 pColl = pCColl;
             }
+            // --> OD 2008-02-12 #newlistlevelattrs#
+            if ( bResetIndentAttrsAtParagraphStyle &&
+                 rSet.GetItemState( RES_PARATR_NUMRULE, FALSE, 0 ) == SFX_ITEM_SET &&
+                 rSet.GetItemState( RES_LR_SPACE, FALSE, 0 ) != SFX_ITEM_SET &&
+                 pColl->GetItemState( RES_LR_SPACE, FALSE, 0 ) == SFX_ITEM_SET )
+            {
+                rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
+            }
+            // <--
+
             pFmt = pColl;
 
             USHORT nId = pColl->GetPoolFmtId() &
@@ -1314,7 +1377,9 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                     // NumRule auf default Werte
                     // was sind die default Werte?
                     {
-                        SwNumRule aRule( pNumRule->GetName() );
+                        // --> OD 2008-02-11 #newlistlevelattrs#
+                        SwNumRule aRule( pNumRule->GetName(), SvxNumberFormat::LABEL_ALIGNMENT );
+                        // <--
                         rDoc.ChgNumRuleFmts( aRule );
                     }
                     break;
@@ -1333,7 +1398,14 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
         while( TRUE )
         {
             if( IsInvalidItem( pItem ) )            // Clearen
-                pFmt->ResetAttr( rSet.GetWhichByPos(aIter.GetCurPos()));
+            {
+                // --> OD 2008-02-12 #newlistlevelattrs#
+                // use method <SwDoc::ResetAttrAtFormat(..)> in order to
+                // create an Undo object for the attribute reset.
+//                pFmt->ResetAttr( rSet.GetWhichByPos(aIter.GetCurPos()));
+                rDoc.ResetAttrAtFormat( rSet.GetWhichByPos(aIter.GetCurPos()),
+                                        *pFmt );
+            }
 
             if( aIter.IsAtEnd() )
                 break;
@@ -1383,6 +1455,13 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
             delete pNewDsc;
         }
     }
+
+    // --> OD 2008-02-12 #newlistlevelattrs#
+    if ( rDoc.DoesUndo() )
+    {
+        rDoc.EndUndo( UNDO_INSFMTATTR, NULL );
+    }
+    // <--
 }
 
 void lcl_SaveStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
@@ -1770,8 +1849,11 @@ void SwDocStyleSheet::Create()
                 if( !aName.Len() )
                     sTmpNm = rDoc.GetUniqueNumRuleName();
 
+                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule* pRule = rDoc.GetNumRuleTbl()[
-                                        rDoc.MakeNumRule( sTmpNm ) ];
+                        rDoc.MakeNumRule( sTmpNm, 0, FALSE,
+                                          SvxNumberFormat::LABEL_ALIGNMENT ) ];
+                // <--
                 pRule->SetAutoRule( FALSE );
                 if( !aName.Len() )
                     pRule->SetName( aName );
