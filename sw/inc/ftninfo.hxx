@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftninfo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,20 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-#ifndef _NUMRULE_HXX
-#include "numrule.hxx"
+//#ifndef _NUMRULE_HXX
+//#include <numrule.hxx>
+//#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 
 class SwTxtFmtColl;
 class SwPageDesc;
+class SwCharFmt;
+class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
