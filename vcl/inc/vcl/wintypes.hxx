@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wintypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:14:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,7 @@ typedef sal_Int64 WinBits;
 #define WB_RECTSTYLE            ((WinBits)0x08000000)
 #define WB_SMALLSTYLE           ((WinBits)0x04000000)
 #define WB_TOGGLE               ((WinBits)SAL_CONST_INT64(0x1000000000))
+#define WB_BEVELBUTTON          ((WinBits)SAL_CONST_INT64(0x2000000000))
 
 // Window-Bits for FixedText
 #define WB_PATHELLIPSIS         ((WinBits)0x00100000)
@@ -287,6 +288,7 @@ typedef sal_Int64 WinBits;
 // - extended WinBits -
 // --------------------
 #define WB_EXT_DOCUMENT         ((WinBits)0x00000001)
+#define WB_EXT_DOCMODIFIED      ((WinBits)0x00000002)
 
 // ---------------
 // - WindowAlign -
