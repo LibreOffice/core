@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspection.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@ String RID_STR_STARTNEWPAGE
 String RID_STR_RESETPAGENUMBER
 {
     Text [ en-US ] = "Reset page number" ;
+};
+String RID_STR_CHARTTYPE
+{
+    Text [ en-US ] = "Chart type" ;
 };
 String RID_STR_PRINTWHENGROUPCHANGE
 {
@@ -223,4 +227,29 @@ String RID_STR_TYPE
 String RID_STR_TYPE_CONST
 {
     Text [ en-US ] = "Field or Formula;Function;Counter;User defined Function";
+};
+String RID_STR_MASTERFIELDS
+{
+    Text [ en-US ] = "Link master fields" ;
+};
+String RID_STR_DETAILFIELDS
+{
+    Text [ en-US ] = "Link slave fields" ;
+};
+String RID_STR_EXPLANATION
+{
+    Text [ en-US ] = "Charts can be used to display detailed data about the current record of the report. To do this, you can specify which columns in the chart match which columns in the report.";
+};
+String RID_STR_DETAILLABEL
+{
+    Text [ en-US ] = "Chart" ;
+};
+String RID_STR_MASTERLABEL
+{
+    Text [ en-US ] = "Report" ;
+};
+
+String RID_STR_PREVIEW_COUNT
+{
+    Text [ en-US ] = "Preview Row(s)" ;
 };
