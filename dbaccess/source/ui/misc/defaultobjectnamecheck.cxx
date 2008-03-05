@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultobjectnamecheck.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:16:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,44 +131,6 @@ namespace dbaui
             _out_rErrorToDisplay = aError;
         }
 
-        /** retrieves an container of queries or tables from a given SDB-level connection
-            @param  _rxSdbLevelConnection
-                the connection object. Must not be <NULL/>.
-            @param  _nCommandType
-                the CommandType specifying whether tables or queries should be obtained. Only
-                CommandType::TABLE and CommandType::QUERY are valid values, for all other values,
-                the behavior is undefined.
-            @throws RuntimeException
-                if the given connection does not provide the desired object container
-        */
-        Reference< XNameAccess > lcl_getObjectContainer( const Reference< XConnection >& _rxSdbLevelConnection, sal_Int32 _nCommandType )
-        {
-            OSL_ENSURE( _rxSdbLevelConnection.is(), "lcl_getObjectContainer: this will crash!" );
-
-            Reference< XNameAccess > xContainer;
-            switch ( _nCommandType )
-            {
-                case CommandType::TABLE:
-                {
-                    Reference< XTablesSupplier > xSupplier( _rxSdbLevelConnection, UNO_QUERY_THROW );
-                    xContainer = Reference< XNameAccess >( xSupplier->getTables(), UNO_QUERY_THROW );
-                }
-                break;
-
-                case CommandType::QUERY:
-                {
-                    Reference< XQueriesSupplier > xSupplier( _rxSdbLevelConnection, UNO_QUERY_THROW );
-                    xContainer = Reference< XNameAccess >( xSupplier->getQueries(), UNO_QUERY_THROW );
-                }
-                break;
-
-                default:
-                    OSL_ENSURE( false, "lcl_getObjectContainer: unsupported command type!" );
-                    break;
-            }
-
-            return xContainer;
-        }
     }
 
     //====================================================================
