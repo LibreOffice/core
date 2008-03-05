@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:30:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,17 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+// --> OD 2008-01-15 #newlistlevelattrs#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONANDSPACEMODE_HPP_
+#include <com/sun/star/text/PositionAndSpaceMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_LABELFOLLOW_HPP_
+#include <com/sun/star/text/LabelFollow.hpp>
+#endif
+// <--
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 using namespace ::rtl;
@@ -1388,7 +1399,9 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nIndex =
 #endif
-        rDoc.MakeNumRule( sCreatedNumRuleName, 0 );
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE, SvxNumberFormat::LABEL_ALIGNMENT );
+    // <--
 #if OSL_DEBUG_LEVEL > 1
     (void)nIndex;
 #endif
@@ -1590,22 +1603,79 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     pData = new PropValData((void*)&nINT16, "StartWith", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    //leftmargin
-    sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetAbsLSpace());
-    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN), ::getCppuType((const sal_Int32*)0));
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        //leftmargin
+        sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetAbsLSpace());
+        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN), ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
+
+        //chartextoffset
+        nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
+        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE), ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
+
+        //firstlineoffset
+        nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineOffset());
+        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
+    }
+    // <--
+
+    // --> OD 2008-01-15 #newlistlevelattrs#
+    // PositionAndSpaceMode
+    nINT16 = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
+    }
+    pData = new PropValData( (void*)&nINT16,
+                             SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE),
+                             ::getCppuType((const sal_Int16*)0) );
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    //chartextoffset
-    nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
-    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE), ::getCppuType((const sal_Int32*)0));
-    aPropertyValues.Insert(pData, aPropertyValues.Count());
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        // LabelFollowedBy
+        nINT16 = LabelFollow::LISTTAB;
+        if ( rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
+        {
+            nINT16 = LabelFollow::SPACE;
+        }
+        else if ( rFmt.GetLabelFollowedBy() == SvxNumberFormat::NOTHING )
+        {
+            nINT16 = LabelFollow::NOTHING;
+        }
+        pData = new PropValData( (void*)&nINT16,
+                                 SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),
+                                 ::getCppuType((const sal_Int16*)0) );
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    //firstlineoffset
-    nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineOffset());
-    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
-    aPropertyValues.Insert(pData, aPropertyValues.Count());
+        // ListtabStopPosition
+        sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetListtabPos());
+        pData = new PropValData( (void*)&nINT32,
+                                 SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),
+                                 ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    //
+        // FirstLineIndent
+        nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineIndent());
+        pData = new PropValData( (void*)&nINT32,
+                                 SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),
+                                 ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
+
+        // IndentAt
+        nINT32 = TWIP_TO_MM100(rFmt.GetIndentAt());
+        pData = new PropValData( (void*)&nINT32,
+                                 SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),
+                                 ::getCppuType((const sal_Int32*)0));
+        aPropertyValues.Insert(pData, aPropertyValues.Count());
+    }
+    // <--
+
+    //numberingtype
     nINT16 = rFmt.GetNumberingType();
     pData = new PropValData((void*)&nINT16, "NumberingType", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
@@ -1767,24 +1837,31 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN),                   //6
         SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE),          //7
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET),             //8
-        "NumberingType",                        //9
-        "BulletId",                             //10
-        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT),                   //11
-        "BulletFontName",                       //12
-        "BulletChar",                           //13
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),                   //14
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP),                //15
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),                  //16
-        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),                 //17
-        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME)             //18
+        // --> OD 2008-01-15 #newlistlevelattrs#
+        SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE), //9
+        SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),       //10
+        SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),   //11
+        SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
+        SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
+        // <--
+        "NumberingType",                        //14
+        "BulletId",                             //15
+        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //16
+        "BulletFontName",                       //17
+        "BulletChar",                           //18
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),    //19
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP), //20
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),   //21
+        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //22
+        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME) //23
     };
-    const sal_uInt16 nPropNameCount = 19;
-    const sal_uInt16 nNotInChapter = 10;
+    // --> OD 2008-01-15 #newlistlevelattrs#
+    const sal_uInt16 nPropNameCount = 24;
+    const sal_uInt16 nNotInChapter = 15;
+    // <--
 
-
-    SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
-    PropValDataArr  aPropertyValues;
+    PropValDataArr aPropertyValues;
     sal_Bool bExcept = sal_False;
     for(int i = 0; i < rProperties.getLength() && !bExcept; i++)
     {
@@ -1804,11 +1881,14 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         if(bExcept &&
             (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletRelSize")) ||
              rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BulletColor")) ) )
-
+        {
             bExcept = sal_False;
+        }
         PropValData* pData = new PropValData(rProp.Value, rProp.Name );
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
+
+    SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
     sal_Bool bWrongArg = sal_False;
     if(!bExcept)
        {
@@ -1946,7 +2026,80 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     aFmt.SetFirstLineOffset((short)nValue);
                 }
                 break;
-                case 9: //"NumberingType"
+                // --> OD 2008-01-15 #newlistlevelattrs#
+                case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
+                {
+                    sal_Int16 nValue = 0;
+                    pData->aVal >>= nValue;
+                    if ( nValue == 0 )
+                    {
+                        aFmt.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+                    }
+                    else if ( nValue == 1 )
+                    {
+                        aFmt.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
+                    }
+                    else
+                    {
+                        bWrongArg = sal_True;
+                    }
+                }
+                break;
+                case 10: // UNO_NAME_LABEL_FOLLOWED_BY
+                {
+                    sal_Int16 nValue = 0;
+                    pData->aVal >>= nValue;
+                    if ( nValue == 0 )
+                    {
+                        aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+                    }
+                    else if ( nValue == 1 )
+                    {
+                        aFmt.SetLabelFollowedBy( SvxNumberFormat::SPACE );
+                    }
+                    else if ( nValue == 2 )
+                    {
+                        aFmt.SetLabelFollowedBy( SvxNumberFormat::NOTHING );
+                    }
+                    else
+                    {
+                        bWrongArg = sal_True;
+                    }
+                }
+                break;
+                case 11: // UNO_NAME_LISTTAB_STOP_POSITION
+                {
+                    sal_Int32 nValue = 0;
+                    pData->aVal >>= nValue;
+                    nValue = MM100_TO_TWIP(nValue);
+                    if ( nValue >= 0 )
+                    {
+                        aFmt.SetListtabPos( nValue );
+                    }
+                    else
+                    {
+                        bWrongArg = sal_True;
+                    }
+                }
+                break;
+                case 12: // UNO_NAME_FIRST_LINE_INDENT
+                {
+                    sal_Int32 nValue = 0;
+                    pData->aVal >>= nValue;
+                    nValue = MM100_TO_TWIP(nValue);
+                    aFmt.SetFirstLineIndent( nValue );
+                }
+                break;
+                case 13: // UNO_NAME_INDENT_AT
+                {
+                    sal_Int32 nValue = 0;
+                    pData->aVal >>= nValue;
+                    nValue = MM100_TO_TWIP(nValue);
+                    aFmt.SetIndentAt( nValue );
+                }
+                break;
+                // <--
+                case 14: //"NumberingType"
                 {
                     sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
@@ -1956,7 +2109,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 10: //"BulletId",
+                case 15: //"BulletId",
                 {
                     sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
@@ -1966,7 +2119,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 11: //UNO_NAME_BULLET_FONT,
+                case 16: //UNO_NAME_BULLET_FONT,
                 {
                      awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
                     if(pDesc)
@@ -1979,7 +2132,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 12: //"BulletFontName",
+                case 17: //"BulletFontName",
                 {
                     OUString uTmp;
                     pData->aVal >>= uTmp;
@@ -2000,7 +2153,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         sNewBulletFontNames[(sal_uInt16)nIndex] = sBulletFontName;
                 }
                 break;
-                case 13: //"BulletChar",
+                case 18: //"BulletChar",
                 {
                     OUString aChar;
                     pData->aVal >>= aChar;
@@ -2012,7 +2165,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 14: //UNO_NAME_GRAPHIC_URL,
+                case 19: //UNO_NAME_GRAPHIC_URL,
                 {
                     OUString sBrushURL;
                     pData->aVal >>= sBrushURL;
@@ -2029,7 +2182,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     pSetBrush->PutValue( pData->aVal, MID_GRAPHIC_URL );
                 }
                 break;
-                case 15: //UNO_NAME_GRAPHIC_BITMAP,
+                case 20: //UNO_NAME_GRAPHIC_BITMAP,
                 {
                     uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pData->aVal.getValue();
                     if(pBitmap)
@@ -2053,7 +2206,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 16: //UNO_NAME_GRAPHIC_SIZE,
+                case 21: //UNO_NAME_GRAPHIC_SIZE,
                 {
                     if(!pSetSize)
                         pSetSize = new Size;
@@ -2069,7 +2222,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         bWrongArg = sal_True;
                 }
                 break;
-                case 17: //VertOrient
+                case 22: //VertOrient
                 {
                     if(!pSetVOrient)
                     {
@@ -2081,7 +2234,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     ((SfxPoolItem*)pSetVOrient)->PutValue(pData->aVal, MID_VERTORIENT_ORIENT);
                 }
                 break;
-                case 18: //"HeadingStyleName"
+                case 23: //"HeadingStyleName"
                 {
                     OUString uTmp;
                     pData->aVal >>= uTmp;
@@ -2102,7 +2255,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     }
                 }
                 break;
-                case 19: // BulletRelSize - unsupported - only available in Impress
+                case 24: // BulletRelSize - unsupported - only available in Impress
                 break;
             }
         }
