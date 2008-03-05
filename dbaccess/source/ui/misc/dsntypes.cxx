@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:27:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,6 +276,7 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatab
                 _rsHostname = sUrl.GetToken(0,':');
             _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
             break;
+        case DST_MYSQL_NATIVE:
         case DST_MYSQL_JDBC:
             {
                 lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
@@ -357,6 +358,7 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
             case DST_MYSQL_ODBC:
             case DST_ODBC:
             case DST_MYSQL_JDBC:
+            case DST_MYSQL_NATIVE:
             case DST_ORACLE_JDBC:
             case DST_LDAP:
             case DST_JDBC:
@@ -385,6 +387,7 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_THUNDERBIRD:
             bEnableBrowseButton = TRUE;
             break;
+        case DST_MYSQL_NATIVE:
         case DST_MYSQL_JDBC:
         case DST_ORACLE_JDBC:
         case DST_LDAP:
@@ -460,6 +463,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
         return DST_FLAT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
+    if ( ( 11 <= nSeparator) && _rDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
+        return DST_MYSQL_NATIVE;
 
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, _rDsn.Len()))
         return DST_EMBEDDED_HSQLDB;
@@ -501,8 +506,6 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
         return DST_MYSQL_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
         return DST_MYSQL_JDBC;
-
-
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
