@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:48:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@
 #include "unotools/unotoolsdllapi.h"
 #endif
 
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -85,12 +89,13 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >    xLD;
-    ::com::sun::star::lang::Locale          aLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar >  xDefaultCalendar;
-    ::com::sun::star::i18n::LocaleDataItem  aLocaleDataItem;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aReservedWordSeq;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >            xLD;
+    ::com::sun::star::lang::Locale                                                      aLocale;
+    ::boost::shared_ptr< ::com::sun::star::i18n::Calendar >                             xDefaultCalendar;
+    ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
+    ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
     // cached items
     String                      aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
     String                      aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
@@ -138,6 +143,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
                                     sal_Int64 nNumber, USHORT nDecimals,
                                     BOOL bUseThousandSep, BOOL bTrailingZeros ) const;
+
+            void                getDigitGroupingImpl();
 
 public:
                                 LocaleDataWrapper(
@@ -195,7 +202,7 @@ public:
             MeasurementSystem   mapMeasurementStringToEnum( const String& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::Calendar > getDefaultCalendar() const;
+    const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
     const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarDays() const;
@@ -203,6 +210,17 @@ public:
     /// Convenience method to obtain the month names of the default calendar.
     const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getDefaultCalendarMonths() const;
 
+    /** Obtain digit grouping. The usually known grouping by thousands (#,###)
+        is actually only one of possible groupings. Another one, for example,
+        used in India is group by 3 and then by 2 indefinitely (#,##,###). The
+        integer sequence returned here specifies grouping from right to left
+        (!), with a 0 entry designating the end of rules and the previous value
+        to be repeated indefinitely. Hence the sequence {3,0} specifies the
+        usual grouping by thousands, whereas the sequence {3,2,0} specifies
+        Indian grouping. The sal_Int32* getConstArray() can be passed directly
+        to the ::rtl::math::doubleToString() methods as argument for the
+        pGroups parameter. */
+    const ::com::sun::star::uno::Sequence< sal_Int32 > getDigitGrouping() const;
 
     // Functionality of class International methods, LocaleItem
 
