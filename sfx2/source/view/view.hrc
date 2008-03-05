@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:35:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #define FT_PRINTER                      3
 #define FT_PRINTINFO                    4
 #define PB_CANCELPRNMON                 5
+#define STR_FT_PREPARATION              6
 #define STR_PAGE                            (RID_SFX_VIEW_START+20)
 #define STR_ERROR_PRINT                     (RID_SFX_VIEW_START+21)
 #define STR_PRINT_NEWORI                    (RID_SFX_VIEW_START+22)
