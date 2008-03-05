@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:42:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5118,7 +5118,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
                                     <author>FME</author>
                                     <desc>Specifies that automatically inserted empty pages are suppressed. This option is active only if storing Writer documents.</desc>
                             </info>
-                            <value>false</value>
+                            <value>true</value>
                     </prop>
                     <prop oor:name="IsAddStream" oor:type="xs:boolean">
                             <info>
