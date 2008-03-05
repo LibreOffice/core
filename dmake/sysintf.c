@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.12 2007-10-15 15:41:51 ihi Exp $
+/* RCS  $Id: sysintf.c,v 1.13 2008-03-05 18:30:58 kz Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -59,14 +59,11 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
-/* The following two include files are only needed for GetModuleFileName() *
- * therefore they are not included in extern.h. Unfortunately they cannot  *
- * be loaded after extern.h because extern.h defines PVOID and this leads  *
- * to conflicts when including windows.h.                                  */
+#include "extern.h"
+
+/* The following definition controls the use of GetModuleFileName() */
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #   define HAVE_GETMODULEFILENAMEFUNC 1
-#   include <windows.h>
-#   include <winbase.h>
 
 /* this is needed for the _ftime call below. Only needed here. */
 #   include <sys/timeb.h>
@@ -77,7 +74,6 @@
 #   include <sys/cygwin.h>
 #endif
 
-#include "extern.h"
 #include "sysintf.h"
 #if HAVE_ERRNO_H
 #  include <errno.h>
@@ -331,6 +327,7 @@ char **cmd; /* Simulate a reference to *cmd. */
    static char **av = NIL(char *);
    static int   avs = 0;
    int i = 0;
+   char *s; /* Temporary string pointer. */
 
    if( av == NIL(char *) ) {
       TALLOC(av, MINARGV, char*);
@@ -348,12 +345,27 @@ char **cmd; /* Simulate a reference to *cmd. */
 
         if( shell && Shell_quote && *Shell_quote ) {
            /* Enclose the shell command with SHELLCMDQUOTE. */
-           char *s;
            s = DmStrJoin(Shell_quote, *cmd, -1, FALSE);
            FREE(*cmd);
            *cmd = DmStrJoin(s, Shell_quote, -1, TRUE);
         }
         av[i++] = *cmd;
+
+#if defined(USE_CREATEPROCESS)
+        /* CreateProcess() needs one long command line. */
+        av[0] = DmStrAdd(av[0], av[1], FALSE);
+        av[1] = NIL(char);
+        /* i == 3 means Shell_flags are given. */
+        if( i == 3 ) {
+           s = av[0];
+           av[0] = DmStrAdd(s, av[2], FALSE);
+           FREE(s);
+           av[2] = NIL(char);
+        }
+        /* The final free of cmd will free the concated command line. */
+        FREE(*cmd);
+        *cmd = av[0];
+#endif
         av[i]   = NIL(char);
      }
      else
@@ -362,6 +374,14 @@ char **cmd; /* Simulate a reference to *cmd. */
       else {
      char *tcmd = *cmd;
 
+#if defined(USE_CREATEPROCESS)
+     /* CreateProcess() needs one long command line, fill *cmd
+      * into av[0]. */
+     while( iswhite(*tcmd) ) ++tcmd;
+     if( *tcmd ) av[i++] = tcmd;
+#else
+     /* All other exec/spawn functions need the parameters separated
+      * in the argument vector. */
      do {
         /* Fill *cmd into av[]. Whitespace is converted into '\0' to
          * terminate each av[] member. */
@@ -377,6 +397,7 @@ char **cmd; /* Simulate a reference to *cmd. */
            av = (char **) realloc( av, avs*sizeof(char *) );
         }
      } while( *tcmd );
+#endif
 
      av[i] = NIL(char);
       }
@@ -681,6 +702,7 @@ char *mode;
 
    while( --tries )
    {
+      /* This sets path to the name of the created temp file. */
       if( (fd = Create_temp(tmpdir, path)) != -1)
          break;
 
@@ -689,7 +711,7 @@ char *mode;
 
    if( fd != -1)
    {
-      Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
+      Def_macro( "TMPFILE", DO_WINPATH(*path), M_MULTI|M_EXPANDED );
       /* associate stream with file descriptor */
       fp = fdopen(fd, mode);
    }
@@ -725,6 +747,7 @@ char    **fname;
 
    name = (cp != NIL(CELL))?cp->CE_NAME:"makefile text";
 
+   /* This sets tmpname to the name that was used. */
    if( (fp = Get_temp(&tmpname, "w")) == NIL(FILE) )
       Open_temp_error( tmpname, name );
 
@@ -747,7 +770,7 @@ char    **fname;
       fname_suff = DmStrJoin( tmpname, suffix, -1, FALSE );
 
       /* Overwrite macro, Get_temp didn't know of the suffix. */
-      Def_macro( "TMPFILE", fname_suff, M_MULTI|M_EXPANDED );
+      Def_macro( "TMPFILE", DO_WINPATH(fname_suff), M_MULTI|M_EXPANDED );
 
       if( (fp2 = fopen(fname_suff, "w" )) == NIL(FILE) )
          Open_temp_error( fname_suff, name );
