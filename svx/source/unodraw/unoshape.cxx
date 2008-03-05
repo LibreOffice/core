@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:38:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1972,13 +1972,13 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                         SvGlobalName aClassName;
                         if( aClassName.MakeId( aCLSID ) )
                         {
-                            SfxObjectShell* pPersist = mpModel->GetPersist();
+                            ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
                             ::rtl::OUString aPersistName;
                             Any aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
                             aAny >>= aPersistName;
 
                             //TODO/LATER: how to cope with creation failure?!
-                            xObj = pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
+                            xObj = pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
                             if( xObj.is() )
                             {
                                 aAny <<= aPersistName;
@@ -2447,11 +2447,11 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
         if( pOle2Obj->IsEmpty() )
         {
-            SfxObjectShell* pPersist = mpModel->GetPersist();
+            ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
             if( pPersist )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj =
-                        pPersist->GetEmbeddedObjectContainer().GetEmbeddedObject( pOle2Obj->GetPersistName() );
+                        pPersist->getEmbeddedObjectContainer().GetEmbeddedObject( pOle2Obj->GetPersistName() );
                 if ( xObj.is() )
                 {
                     aClassName = SvGlobalName( xObj->getClassID() );
