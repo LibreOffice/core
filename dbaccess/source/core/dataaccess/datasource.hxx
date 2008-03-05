@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:49:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XISOLATEDCONNECTION_HPP_
 #include <com/sun/star/sdbc/XIsolatedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
