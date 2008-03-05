@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,8 @@
 #include <vcl/impdel.hxx>
 #endif
 
-class Queue;
+#include <vector>
+
 struct QueuePage;
 
 // ----------------
@@ -73,19 +74,19 @@ struct QueuePage;
 class ImplQPrinter : public Printer, public vcl::DeletionNotifier
 {
 private:
-    Printer*    mpParent;
-    Queue*      mpQueue;
-    AutoTimer   maTimer;
-    bool        mbAborted;
-    bool        mbUserCopy;
-    bool        mbDestroyAllowed;
-    bool        mbDestroyed;
+    Printer*                        mpParent;
+    std::vector< QueuePage* >       maQueue;
+    AutoTimer                       maTimer;
+    bool                            mbAborted;
+    bool                            mbUserCopy;
+    bool                            mbDestroyAllowed;
+    bool                            mbDestroyed;
 
-    GDIMetaFile maCurPageMetaFile;
-    long        mnMaxBmpDPIX;
-    long        mnMaxBmpDPIY;
-    ULONG       mnRestoreDrawMode;
-    int         mnCurCopyCount;
+    GDIMetaFile                     maCurPageMetaFile;
+    long                            mnMaxBmpDPIX;
+    long                            mnMaxBmpDPIY;
+    ULONG                           mnRestoreDrawMode;
+    int                             mnCurCopyCount;
 
                 DECL_LINK( ImplPrintHdl, Timer* );
 
@@ -115,7 +116,8 @@ public:
     /**
     used by pull implementation to emit the next page
     */
-    void        PrintNextPage();
+    using Printer::PrintPage;
+    void        PrintPage( unsigned int nPage );
     /**
     used by pull implementation to get the number of physical pages
     (that is how often PrintNextPage should be called)
