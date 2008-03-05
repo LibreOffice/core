@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:06:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,10 @@
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
+#endif
+
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
     // No inline cause we need the function pointers
