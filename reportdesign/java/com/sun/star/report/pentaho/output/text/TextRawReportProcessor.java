@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextRawReportProcessor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.output.text;
 
+import com.sun.star.report.DataSourceFactory;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.ImageService;
@@ -53,45 +53,54 @@ import org.jfree.resourceloader.ResourceManager;
  */
 public class TextRawReportProcessor extends SinglePassReportProcessor
 {
-  private OutputRepository outputRepository;
-  private String targetName;
-  private InputRepository inputRepository;
-  private ImageService imageService;
 
-  public TextRawReportProcessor(final InputRepository inputRepository,
-                                final OutputRepository outputRepository,
-                                final String targetName,
-                                final ImageService imageService)
-  {
-    if (inputRepository == null)
-    {
-      throw new NullPointerException();
-    }
-    if (outputRepository == null)
-    {
-      throw new NullPointerException();
-    }
-    if (targetName == null)
-    {
-      throw new NullPointerException();
-    }
-    if (imageService == null)
-    {
-      throw new NullPointerException();
-    }
-    this.targetName = targetName;
-    this.inputRepository = inputRepository;
-    this.outputRepository = outputRepository;
-    this.imageService = imageService;
-  }
+    private OutputRepository outputRepository;
+    private String targetName;
+    private InputRepository inputRepository;
+    private ImageService imageService;
+    private DataSourceFactory dataSourceFactory;
 
-  protected ReportTarget createReportTarget(final ReportJob job)
-          throws ReportProcessingException
-  {
-    final ReportStructureRoot report = job.getReportStructureRoot();
-    final ResourceManager resourceManager = report.getResourceManager();
+    public TextRawReportProcessor(final InputRepository inputRepository,
+            final OutputRepository outputRepository,
+            final String targetName,
+            final ImageService imageService,
+            final DataSourceFactory dataSourceFactory)
+    {
+        if (inputRepository == null)
+        {
+            throw new NullPointerException();
+        }
+        if (outputRepository == null)
+        {
+            throw new NullPointerException();
+        }
+        if (targetName == null)
+        {
+            throw new NullPointerException();
+        }
+        if (imageService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (dataSourceFactory == null)
+        {
+            throw new NullPointerException();
+        }
 
-    return new TextRawReportTarget (job, resourceManager, report.getBaseResource(),
-                inputRepository, outputRepository, targetName, imageService);
-  }
+        this.targetName = targetName;
+        this.inputRepository = inputRepository;
+        this.outputRepository = outputRepository;
+        this.imageService = imageService;
+        this.dataSourceFactory = dataSourceFactory;
+    }
+
+    protected ReportTarget createReportTarget(final ReportJob job)
+            throws ReportProcessingException
+    {
+        final ReportStructureRoot report = job.getReportStructureRoot();
+        final ResourceManager resourceManager = report.getResourceManager();
+
+        return new TextRawReportTarget(job, resourceManager, report.getBaseResource(),
+                inputRepository, outputRepository, targetName, imageService, dataSourceFactory);
+    }
 }
