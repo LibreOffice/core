@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:52:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2058,7 +2058,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         CheckForConvertToSOObj( nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea );
                                     if( xObj.is() )
                                     {
-                                        pOe->pShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
+                                        pOe->pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
 
                                         svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
 
@@ -2076,7 +2076,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 }
                                 if ( !pRet )
                                 {
-                                    aNm = pOe->pShell->GetEmbeddedObjectContainer().CreateUniqueObjectName();
+                                    aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
                                     ErrCode aErrCode = 0;
 
                                     // object is not an own object
@@ -2092,7 +2092,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     xTarget.Clear();
 
                                     uno::Reference < embed::XEmbeddedObject > xObj =
-                                        pOe->pShell->GetEmbeddedObjectContainer().GetEmbeddedObject( aNm );
+                                        pOe->pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
                                     if ( xObj.is() )
                                     {
                                         if ( pOe->nAspect != embed::Aspects::MSOLE_ICON )
