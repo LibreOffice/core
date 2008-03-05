@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedContentReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.FixedTextElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.parser.text.TextContentReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import org.jfree.report.structure.Element;
@@ -54,56 +52,56 @@ import org.xml.sax.SAXException;
  */
 public class FixedContentReadHandler extends ElementReadHandler
 {
-  private FixedTextElement element;
 
-  public FixedContentReadHandler()
-  {
-    element = new FixedTextElement();
-  }
+    private FixedTextElement element;
 
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.TEXT_NS.equals(uri))
+    public FixedContentReadHandler()
     {
-      // expect a paragraph (which will be ignored; it is a structural
-      // component that needs not to be printed at all.
-      if ("p".equals(tagName))
-      {
-
-        return new TextContentReadHandler(element.getContent());
-      }
+        element = new FixedTextElement();
     }
 
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      // expect a report control. The control will modifiy the current
-      // element (as we do not separate the elements that strictly ..)
-      if ("report-control".equals(tagName))
-      {
-        return new IgnoreAnyChildReadHandler();
-      }
-      if ("report-element".equals(tagName))
-      {
-        return new ReportElementReadHandler(element);
-      }
+        if (OfficeNamespaces.TEXT_NS.equals(uri))
+        {
+            // expect a paragraph (which will be ignored; it is a structural
+            // component that needs not to be printed at all.
+            if ("p".equals(tagName))
+            {
+
+                return new TextContentReadHandler(element.getContent());
+            }
+        }
+
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            // expect a report control. The control will modifiy the current
+            // element (as we do not separate the elements that strictly ..)
+            if ("report-control".equals(tagName))
+            {
+                return new IgnoreAnyChildReadHandler();
+            }
+            if ("report-element".equals(tagName))
+            {
+                return new ReportElementReadHandler(element);
+            }
+        }
+        return null;
     }
-    return null;
-  }
 
-
-  public Element getElement()
-  {
-    return element;
-  }
+    public Element getElement()
+    {
+        return element;
+    }
 }

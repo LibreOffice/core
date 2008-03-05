@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportElementReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,11 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.ReportElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.OfficeNamespaces;
-import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.jfree.xmlns.parser.IgnoreAnyChildReadHandler;
@@ -50,71 +46,69 @@ import org.xml.sax.SAXException;
 
 public class ReportElementReadHandler extends ElementReadHandler
 {
-  private ReportElement element;
 
-  public ReportElementReadHandler(final ReportElement element)
-  {
-    if (element == null)
+    private ReportElement element;
+
+    public ReportElementReadHandler(final ReportElement element)
     {
-      throw new NullPointerException();
+        if (element == null)
+        {
+            throw new NullPointerException();
+        }
+
+        this.element = element;
     }
 
-    this.element = element;
-  }
+    public Element getElement()
+    {
+        return element;
+    }
 
-  public Element getElement()
-  {
-    return element;
-  }
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs)
+            throws SAXException
+    {
+        super.startParsing(attrs);
+        final String printWhenGroupChanges = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes");
+        element.setPrintWhenGroupChanges("true".equals(printWhenGroupChanges));
+        final String printRepeatingValues = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-repeated-values");
+        element.setPrintRepeatedValues(printRepeatingValues == null || "true".equals(printRepeatingValues));
+    }
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs)
-      throws SAXException
-  {
-    super.startParsing(attrs);
-    final String printWhenGroupChanges = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "print-when-group-changes");
-    element.setPrintWhenGroupChanges("true".equals(printWhenGroupChanges));
-    final String printRepeatingValues = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "print-repeated-values");
-    element.setPrintRepeatedValues
-        (printRepeatingValues == null || "true".equals(printRepeatingValues));
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (!OfficeNamespaces.OOREPORT_NS.equals(uri))
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      return null;
+        if (!OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            return null;
+        }
+        if ("conditional-print-expression".equals(tagName))
+        {
+            return new ConditionalPrintExpressionReadHandler(element);
+        }
+        if ("format-condition".equals(tagName))
+        {
+            return new FormatConditionReadHandler(element);
+        }
+        if ("report-component".equals(tagName))
+        {
+            return new IgnoreAnyChildReadHandler();
+        }
+        return null;
     }
-    if ("conditional-print-expression".equals(tagName))
-    {
-      return new ConditionalPrintExpressionReadHandler(element);
-    }
-    if ("format-condition".equals(tagName))
-    {
-      return new FormatConditionReadHandler(element);
-    }
-    if ("report-component".equals(tagName))
-    {
-      return new IgnoreAnyChildReadHandler();
-    }
-    return null;
-  }
 }

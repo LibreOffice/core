@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormatConditionReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.FormatCondition;
 import com.sun.star.report.pentaho.model.ReportElement;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.xmlns.parser.AbstractXmlReadHandler;
@@ -53,56 +51,54 @@ import org.xml.sax.SAXException;
  */
 public class FormatConditionReadHandler extends AbstractXmlReadHandler
 {
-  private ReportElement element;
 
-  public FormatConditionReadHandler(final ReportElement element)
-  {
-    if (element == null)
+    private ReportElement element;
+
+    public FormatConditionReadHandler(final ReportElement element)
     {
-      throw new NullPointerException();
+        if (element == null)
+        {
+            throw new NullPointerException();
+        }
+        this.element = element;
     }
-    this.element = element;
-  }
 
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    super.startParsing(attrs);
-    final String enabledText = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "enabled");
-    final boolean enabled = (enabledText == null || "true".equals(enabledText));
-
-    final String formula =
-        attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
-    if (formula == null)
+    protected void startParsing(final Attributes attrs) throws SAXException
     {
-      throw new ParseException
-          ("Required attribute 'formula' is missing.", getLocator());
+        super.startParsing(attrs);
+        final String enabledText = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "enabled");
+        final boolean enabled = (enabledText == null || "true".equals(enabledText));
+
+        final String formula =
+                attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
+        if (formula == null)
+        {
+            throw new ParseException("Required attribute 'formula' is missing.", getLocator());
+        }
+        final String stylename =
+                attrs.getValue(OfficeNamespaces.OOREPORT_NS, "style-name");
+        if (stylename == null)
+        {
+            throw new ParseException("Required attribute 'style-name' is missing.", getLocator());
+        }
+        final FormulaExpression valueExpression = new FormulaExpression();
+        valueExpression.setFormula(formula);
+
+        final FormatCondition formatCondition =
+                new FormatCondition(valueExpression, stylename, enabled);
+        element.addFormatCondition(formatCondition);
+
     }
-    final String stylename =
-        attrs.getValue(OfficeNamespaces.OOREPORT_NS, "style-name");
-    if (stylename == null)
+
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject()
+            throws SAXException
     {
-      throw new ParseException
-          ("Required attribute 'style-name' is missing.", getLocator());
+        return element;
     }
-    final FormulaExpression valueExpression = new FormulaExpression();
-    valueExpression.setFormula(formula);
-
-    final FormatCondition formatCondition =
-        new FormatCondition(valueExpression, stylename, enabled);
-    element.addFormatCondition(formatCondition);
-
-  }
-
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject()
-      throws SAXException
-  {
-    return element;
-  }
 }
