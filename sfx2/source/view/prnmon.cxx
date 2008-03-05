@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:34:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,12 @@ SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent, SfxViewShell* rpVie
     aPrintInfo  ( this, SfxResId( FT_PRINTINFO ) ),
     aCancel     ( this, SfxResId( PB_CANCELPRNMON ) )
 {
+    if( rpViewShell->GetPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) != 0 )
+    {
+        String aPrep( SfxResId( STR_FT_PREPARATION ) );
+        aPrinting.SetText( aPrep );
+        aPrinter.Show( FALSE );
+    }
     FreeResource();
 }
 
@@ -223,6 +229,7 @@ void SfxPrintProgress_Impl::CreateMonitor()
 {
     // mark monitor to been shown in first status indication
     bShow = TRUE;
+
     if ( !pMonitor )
     {
         Window* pParent = pViewShell->GetWindow();
