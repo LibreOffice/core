@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:53:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@
 #ifndef CONNECTIVITY_QUOTED_STRING_HXX
 #include "file/quotedstring.hxx"
 #endif
+#include <svtools/syslocale.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -374,10 +375,8 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
 // -----------------------------------------------------------------------------
 void OFlatTable::construct()
 {
-    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
-
-    ::com::sun::star::lang::Locale aAppLocale(MsLangId::convertLanguageToLocale(eLanguage));
+    SvtSysLocale aLocale;
+    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLocaleDataPtr()->getLocale());
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
