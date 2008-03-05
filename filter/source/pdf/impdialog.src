@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:45:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,5 +749,56 @@ TabDialog  RID_PDF_EXPORT_DLG
             };
 
         };
+    };
+};
+
+ModalDialog RID_PDF_ERROR_DLG
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Text [en-US] = "Problems during PDF export";
+    Size = MAP_APPFONT( 200, 150 );
+
+    FixedText FT_PROCESS
+    {
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 210, 24 );
+        Text [en-US] = "During PDF export the following problems occured:";
+    };
+
+    Bitmap IMG_WARN
+    {
+        File = "ballgreen_7.png";
+    };
+    Bitmap IMG_ERR
+    {
+        File = "ballred_7.png";
+    };
+
+    String STR_WARN_TRANSP_PDFA_SHORT
+    {
+        Text [en-US] = "PDF/A transparency";
+    };
+    String STR_WARN_TRANSP_PDFA
+    {
+        Text [en-US] = "PDF/A forbids transparency. A transparent object was painted opaque instead.";
+    };
+    String STR_WARN_TRANSP_VERSION_SHORT
+    {
+        Text [en-US] = "PDF version conflict";
+    };
+    String STR_WARN_TRANSP_VERSION
+    {
+        Text [en-US] = "Transparency is not supported in PDF versions earlier than PDF 1.4. A transparent object was painted opaque instead";
+    };
+    String STR_WARN_FORMACTION_PDFA_SHORT
+    {
+        Text [en-US] = "PDF/A form action";
+    };
+    String STR_WARN_FORMACTION_PDFA
+    {
+        Text [en-US] = "A form control contained an action not supported by the PDF/A standard. The action was skipped";
     };
 };
