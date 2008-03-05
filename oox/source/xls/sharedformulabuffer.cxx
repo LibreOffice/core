@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedformulabuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "oox/xls/sharedformulabuffer.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -95,7 +96,8 @@ void ExtCellFormulaContext::setSharedFormula( const CellAddress& rBaseAddr )
 // ============================================================================
 
 SharedFormulaBuffer::SharedFormulaBuffer( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper )
+    WorksheetHelper( rHelper ),
+    maIsSharedProp( CREATE_OUSTRING( "IsSharedFormula" ) )
 {
 }
 
@@ -188,6 +190,8 @@ Reference< XNamedRange > SharedFormulaBuffer::createDefinedName( const BinAddres
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
     Reference< XNamedRange > xNamedRange = getDefinedNames().createDefinedName( aName );
+    PropertySet aNameProps( xNamedRange );
+    aNameProps.setProperty( maIsSharedProp, true );
     sal_Int32 nTokenIndex = getDefinedNames().getTokenIndex( xNamedRange );
     if( nTokenIndex >= 0 )
         maIndexMap[ rMapKey ] = nTokenIndex;
