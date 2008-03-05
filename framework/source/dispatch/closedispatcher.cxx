@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:49:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
+#include "com/sun/star/beans/XFastPropertySet.hpp"
+
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -96,6 +98,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svtools/moduleoptions.hxx>
 
 //_______________________________________________
 // namespace
@@ -399,8 +402,10 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
             {
                 if (eOperation == E_CLOSE_FRAME)
                     bTerminateApp = sal_True;
-                else
+                else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE) )
                     bEstablishBackingMode = sal_True;
+                else
+                    bTerminateApp = sal_True;
             }
         }
     }
@@ -411,7 +416,33 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
         bSuccess = implts_closeFrame();
     else
     if (bEstablishBackingMode)
+    #if defined QUARTZ
+    {
+        // on mac close down, quickstarter keeps the process alive
+        // however if someone has shut down the quickstarter
+        // behave as any other platform
+
+        bool bQuickstarterRunning = false;
+        // get quickstart service
+        try
+        {
+            css::uno::Reference< css::beans::XFastPropertySet > xSet( xSMGR->createInstance(IMPLEMENTATIONNAME_QUICKLAUNCHER), css::uno::UNO_QUERY_THROW );
+            if( xSet.is() )
+            {
+                css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
+                sal_Bool bState = sal_False;
+                if( aVal >>= bState )
+                    bQuickstarterRunning = bState;
+            }
+        }
+        catch( css::uno::Exception& )
+        {
+        }
+        bSuccess = bQuickstarterRunning ? implts_terminateApplication() : implts_establishBackingMode();
+    }
+    #else
         bSuccess = implts_establishBackingMode();
+    #endif
     else
     if (bTerminateApp)
         bSuccess = implts_terminateApplication();
