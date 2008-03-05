@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,26 +48,46 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
-//using ::rtl::OUString;
-
 class AquaBlinker : public Timer
 {
     AquaSalFrame*       mpFrame;
     Rectangle           maInvalidateRect;
-    public:
+
     AquaBlinker( AquaSalFrame* pFrame, const Rectangle& rRect )
     : mpFrame( pFrame ), maInvalidateRect( rRect )
     {
+        mpFrame->maBlinkers.push_back( this );
     }
+
+    public:
+
+    static void Blink( AquaSalFrame*, const Rectangle&, int nTimeout = 80 );
 
     virtual void Timeout()
     {
-        if( AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbShown )
-            mpFrame->SendPaintEvent( &maInvalidateRect );
         Stop();
+        if( AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbShown )
+        {
+            mpFrame->maBlinkers.remove( this );
+            mpFrame->SendPaintEvent( &maInvalidateRect );
+        }
         delete this;
     }
 };
+
+void AquaBlinker::Blink( AquaSalFrame* pFrame, const Rectangle& rRect, int nTimeout )
+{
+    // prevent repeated paints from triggering themselves all the time
+    for( std::list< AquaBlinker* >::const_iterator it = pFrame->maBlinkers.begin();
+         it != pFrame->maBlinkers.end(); ++it )
+    {
+        if( (*it)->maInvalidateRect == rRect )
+            return;
+    }
+    AquaBlinker* pNew = new AquaBlinker( pFrame, rRect );
+    pNew->SetTimeout( nTimeout );
+    pNew->Start();
+}
 
 ControlPart ImplgetCounterPart( ControlPart nPart )
 {
@@ -221,78 +241,6 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     return bRetVal;
 }
 
-char *ImplDbgGetStringControlType(ControlType nType)
-{
-    switch (nType)
-    {
-        case CTRL_PUSHBUTTON: return "PUSHBUTTON";
-        case CTRL_RADIOBUTTON: return "RADIOBUTTON";
-        case CTRL_CHECKBOX: return "CHECKBOX";
-        case CTRL_COMBOBOX: return "COMBOBOX";
-        case CTRL_EDITBOX: return "EDITBOX";
-        case CTRL_EDITBOX_NOBORDER: return "EDITBOX_NOBORDER";
-        case CTRL_MULTILINE_EDITBOX: return "MULTILINE_EDITBOX";
-        case CTRL_LISTBOX: return "LISTBOX";
-        case CTRL_SPINBOX: return "SPINBOX";
-        case CTRL_SPINBUTTONS: return "SPINBUTTONS";
-        case CTRL_TAB_ITEM: return "TAB_ITEM";
-        case CTRL_TAB_PANE: return "TAB_PANE";
-        case CTRL_TAB_BODY: return "TAB_BODY";
-        case CTRL_SCROLLBAR: return "SCROLLBAR";
-        case CTRL_GROUPBOX: return "GROUPBOX";
-        case CTRL_FIXEDLINE: return "FIXEDLINE";
-        case CTRL_FIXEDBORDER: return "FIXEDBORDER";
-        case CTRL_TOOLBAR: return "TOOLBAR";
-        case CTRL_MENUBAR: return "MENUBAR";
-        case CTRL_MENU_POPUP: return "MENU_POPUP";
-        case CTRL_STATUSBAR: return "STATUSBAR";
-        case CTRL_TOOLTIP: return "TOOLTIP";
-        case CTRL_WINDOW_BACKGROUND: return "WINDOW_BACKGROUND";
-        case CTRL_PROGRESS: return "PROGRESS";
-    }
-
-    AquaLog( "UNKNOWN ControlType %d!\n", (int) nType);
-    return "UNKNOWN";
-}
-
-char *ImplDbgGetStringControlPart(ControlPart nPart)
-{
-    switch (nPart)
-    {
-        case PART_ENTIRE_CONTROL: return "ENTIRE_CONTROL";
-        case PART_WINDOW: return "WINDOW";
-        case PART_BUTTON: return "BUTTON";
-        case PART_BUTTON_UP: return "BUTTON_UP";
-        case PART_BUTTON_DOWN: return "BUTTON_DOWN";
-        case PART_BUTTON_LEFT: return "BUTTON_LEFT";
-        case PART_BUTTON_RIGHT: return "BUTTON_RIGHT";
-        case PART_ALL_BUTTONS: return "ALL_BUTTONS";
-        case PART_TRACK_HORZ_LEFT: return "TRACK_HORZ_LEFT";
-        case PART_TRACK_VERT_UPPER: return "TRACK_VERT_UPPER";
-        case PART_TRACK_HORZ_RIGHT: return "TRACK_HORZ_RIGHT";
-        case PART_TRACK_VERT_LOWER: return "TRACK_VERT_LOWER";
-        case PART_TRACK_HORZ_AREA: return "TRACK_HORZ_AREA";
-        case PART_TRACK_VERT_AREA: return "TRACK_VERT_AREA";
-        case PART_THUMB_HORZ: return "THUMB_HORZ";
-        case PART_THUMB_VERT: return "THUMB_VERT";
-        case PART_MENU_ITEM: return "MENU_ITEM";
-        case PART_MENU_ITEM_CHECK_MARK: return "MENU_ITEM_CHECK_MARK";
-        case PART_MENU_ITEM_RADIO_MARK: return "MENU_ITEM_RADIO_MARK";
-        case PART_SUB_EDIT: return "SUB_EDIT";
-        case PART_DRAW_BACKGROUND_HORZ: return "DRAW_BACKGROUND_HORZ";
-        case PART_DRAW_BACKGROUND_VERT: return "DRAW_BACKGROUND_VERT";
-        case PART_TABS_DRAW_RTL: return "TABS_DRAW_RTL";
-        case HAS_BACKGROUND_TEXTURE: return "HAS_BACKGROUND_TEXTURE";
-        case HAS_THREE_BUTTONS: return "HAS_THREE_BUTTONS";
-        case PART_BACKGROUND_WINDOW: return "BACKGROUND_WINDOW";
-        case PART_BACKGROUND_DIALOG: return "BACKGROUND_DIALOG";
-}
-
-    AquaLog( "UNKNOWN ControlPart %d!\n", (int) nPart);
-    return "UNKNOWN";
-}
-
-
 /*
  * IsNativeControlSupported()
  * --------------------------
@@ -308,8 +256,6 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
     // If you want to disable experimental native controls code,
     // just set the environment variable SAL_NO_NWF to something
     // and vcl controls will be used as default again.
-
-    AquaLog( "%s (%s, %s)\n", __func__, ImplDbgGetStringControlType(nType), ImplDbgGetStringControlPart(nPart));
 
     switch( nType )
     {
@@ -441,8 +387,6 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                         const Point& rPos, SalControlHandle& rControlHandle, BOOL& rIsInside )
 {
-    AquaLog( "%s (%s, %s)\n", __func__, ImplDbgGetStringControlType(nType), ImplDbgGetStringControlPart(nPart));
-
     if ( nType == CTRL_SCROLLBAR )
     {
         Rectangle aRect;
@@ -530,7 +474,6 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     SalControlHandle& rControlHandle,
                     const rtl::OUString& aCaption )
 {
-    AquaLog( "%s (%s, %s)\n", __func__, ImplDbgGetStringControlType(nType), ImplDbgGetStringControlPart(nPart));
     BOOL bOK = FALSE;
 
     if( ! CheckContext() )
@@ -667,74 +610,58 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
     case CTRL_PUSHBUTTON:
         {
             // [ FIXME] : instead of use a value, vcl can retrieve corect values on the fly (to be implemented)
-            int max_height = 20;
+            const int PB_Mini_Height = 15;
+            const int PB_Norm_Height = 20;
 
-            // [FIXME]: for width, better use (native)  text length to define width. How retrieve the text length ?
-            int max_width = 68;
+            HIThemeButtonDrawInfo aPushInfo;
+            aPushInfo.version = 0;
 
-            // [FIXME] find a better criteria to differentiate several buttons who are square, but are not Bewel buttons.
-            if((rc.size.width < 17)  && (rc.size.width == rc.size.height ) )
+            // no animation
+            aPushInfo.animation.time.start = 0;
+            aPushInfo.animation.time.current = 0;
+            PushButtonValue* pPBVal = (PushButtonValue*)aValue.getOptionalVal();
+            int nPaintHeight = rc.size.height;
+
+            if( pPBVal && pPBVal->mbBevelButton )
             {
-                HIThemeButtonDrawInfo aBevelInfo;
-                aBevelInfo.version = 0;
-                aBevelInfo.kind = kThemeBevelButton;
-                aBevelInfo.state = getState( nState );
-
-                ButtonValue aButtonValue = aValue.getTristateVal();
-                aBevelInfo.value = ImplGetButtonValue( aButtonValue );
-
-                aBevelInfo.adornment = (( nState & CTRL_STATE_DEFAULT ) != 0) ?
-                kThemeAdornmentDefault :
-                kThemeAdornmentNone;
-                if( (nState & CTRL_STATE_FOCUSED) != 0 )
-                    aBevelInfo.adornment |= kThemeAdornmentFocus;
-
-                HIThemeDrawButton( &rc, &aBevelInfo, mrContext, kHIThemeOrientationNormal, NULL );
-                bOK = true;
+                aPushInfo.kind = kThemeRoundedBevelButton;
             }
-            else
+            else if( rc.size.height <= PB_Norm_Height )
             {
-                HIThemeButtonDrawInfo aPushInfo;
-                aPushInfo.version = 0;
-                if(( rc.size.width >= max_width) || ( rc.size.height >= max_height ))
+                aPushInfo.kind = kThemePushButtonMini;
+                nPaintHeight = PB_Mini_Height;
+            }
+            else if( rc.size.height < (PB_Norm_Height + PB_Norm_Height/2) )
+            {
+                aPushInfo.kind = kThemePushButtonNormal;
+                nPaintHeight = PB_Norm_Height;
+
+                if( (nState & CTRL_STATE_DEFAULT) != 0 )
                 {
-                    aPushInfo.kind = kThemePushButton;
-                    // just in case people don't like push button with iconn inside
-                    if (rc.size.width > max_width )
-                    {
-                        // translate the origin of the button from the half of the offset
-                        // translation value must be an integrer
-                        int delta_y = static_cast<int>(floor((rc.size.height - max_height) / 2.0));
-                        rc.origin.y += delta_y + 1;
-
-                        // button height must be limited ( height value collected from OSXHIGuidelines )
-                        rc.size.height = max_height;
-                    }
-
-                    aPushInfo.state = getState( nState );
-
-                    aPushInfo.value = ImplGetButtonValue( aValue.getTristateVal() );
-
-                    aPushInfo.adornment = (( nState & CTRL_STATE_DEFAULT ) != 0) ?
-                    kThemeAdornmentDefault :
-                    kThemeAdornmentNone;
-                    if( (nState & CTRL_STATE_FOCUSED) != 0 )
-                        aPushInfo.adornment |= kThemeAdornmentFocus;
-
-                    // will show correct refresh once working
+                    AquaBlinker::Blink( mpFrame, buttonRect );
+                    // show correct animation phase
                     aPushInfo.animation.time.current = CFAbsoluteTimeGetCurrent();
-
-                    HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, NULL );
-                    bOK = true;
-
-                    if( (nState & CTRL_STATE_DEFAULT) != 0 )
-                    {
-                        AquaBlinker* pNewBlinker = new AquaBlinker( mpFrame, buttonRect );
-                        pNewBlinker->SetTimeout( 50 );
-                        pNewBlinker->Start();
-                    }
                 }
             }
+            else
+                aPushInfo.kind = kThemeBevelButton;
+
+            // translate the origin for controls with fixed paint height
+            // so content ends up somewhere sensible
+            int delta_y = static_cast<int>(rc.size.height) - nPaintHeight;
+            rc.origin.y += delta_y/2;
+
+            aPushInfo.state = getState( nState );
+            aPushInfo.value = ImplGetButtonValue( aValue.getTristateVal() );
+
+            aPushInfo.adornment = (( nState & CTRL_STATE_DEFAULT ) != 0) ?
+            kThemeAdornmentDefault :
+            kThemeAdornmentNone;
+            if( (nState & CTRL_STATE_FOCUSED) != 0 )
+                aPushInfo.adornment |= kThemeAdornmentFocus;
+
+            HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, NULL );
+            bOK = true;
         }
         break;
 
@@ -1066,7 +993,8 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SPINBOX:
         {
-            if(nPart == PART_ENTIRE_CONTROL) {
+            if(nPart == PART_ENTIRE_CONTROL)
+            {
                 //text field:
                 HIThemeFrameDrawInfo aTextDrawInfo;
                 aTextDrawInfo.version=0;
@@ -1076,7 +1004,9 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
                 //rc.size.width contains the full size of the spinbox ie textfield + button
                 //so we remove the button width and the space between the button and the textfield
-                rc.size.width -= SPIN_BUTTON_SPACE + SPIN_BUTTON_WIDTH;
+                rc.size.width -= SPIN_BUTTON_SPACE + SPIN_BUTTON_WIDTH + 2*FOCUS_RING_WIDTH;
+                rc.origin.x += FOCUS_RING_WIDTH;
+                rc.origin.y += FOCUS_RING_WIDTH;
 
                 //CGContextSetFillColorWithColor
                 CGContextFillRect (mrContext, CGRectMake(rc.origin.x, rc.origin.y, rc.size.width, rc.size.height));
@@ -1095,42 +1025,48 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     nLowerState = (ControlState) pSpinButtonVal->mnLowerState;
                 }
 
-                HIThemeButtonDrawInfo aSpinInfo;
-                aSpinInfo.kind = kThemeIncDecButton;
-                aSpinInfo.state = kThemeStateActive;
-                if(nUpperState & CTRL_STATE_PRESSED)
-                    aSpinInfo.state = kThemeStatePressedUp;
-                else if(nLowerState & CTRL_STATE_PRESSED)
-                    aSpinInfo.state = kThemeStatePressedDown;
-                else if((nUpperState & ~CTRL_STATE_ENABLED)||(nLowerState & ~CTRL_STATE_ENABLED))
-                    aSpinInfo.state = kThemeStateInactive;
-                else if((nUpperState & CTRL_STATE_ROLLOVER)||(nLowerState & CTRL_STATE_ROLLOVER))
-                    aSpinInfo.state = kThemeStateRollover;
-
-                rc.origin.x += rc.size.width + SPIN_BUTTON_SPACE;
-                rc.size.width = SPIN_BUTTON_WIDTH;
-                rc.size.height = SPIN_TWO_BUTTONS_HEIGHT;
-
-                switch( aValue.getTristateVal() )
+                if( pSpinButtonVal )
                 {
-                    case BUTTONVALUE_ON:        aSpinInfo.value = kThemeButtonOn;
-                                                break;
-                    case BUTTONVALUE_OFF:       aSpinInfo.value = kThemeButtonOff;
-                                                break;
-                    case BUTTONVALUE_MIXED:
-                    case BUTTONVALUE_DONTKNOW:
-                    default:                    aSpinInfo.value = kThemeButtonMixed;
-                                                break;
+                    HIThemeButtonDrawInfo aSpinInfo;
+                    aSpinInfo.kind = kThemeIncDecButton;
+                    aSpinInfo.state = kThemeStateActive;
+                    if(nUpperState & CTRL_STATE_PRESSED)
+                        aSpinInfo.state = kThemeStatePressedUp;
+                    else if(nLowerState & CTRL_STATE_PRESSED)
+                        aSpinInfo.state = kThemeStatePressedDown;
+                    else if((nUpperState & ~CTRL_STATE_ENABLED)||(nLowerState & ~CTRL_STATE_ENABLED))
+                        aSpinInfo.state = kThemeStateInactive;
+                    else if((nUpperState & CTRL_STATE_ROLLOVER)||(nLowerState & CTRL_STATE_ROLLOVER))
+                        aSpinInfo.state = kThemeStateRollover;
+
+                    Rectangle aSpinRect( pSpinButtonVal->maUpperRect );
+                    aSpinRect.Union( pSpinButtonVal->maLowerRect );
+                    HIRect buttonRc = ImplGetHIRectFromRectangle(aSpinRect);
+
+                    // FIXME: without this fuzz factor there is some unwanted clipping
+                    buttonRc.origin.x += FOCUS_RING_WIDTH + CLIP_FUZZ;
+
+                    switch( aValue.getTristateVal() )
+                    {
+                        case BUTTONVALUE_ON:        aSpinInfo.value = kThemeButtonOn;
+                                                    break;
+                        case BUTTONVALUE_OFF:       aSpinInfo.value = kThemeButtonOff;
+                                                    break;
+                        case BUTTONVALUE_MIXED:
+                        case BUTTONVALUE_DONTKNOW:
+                        default:                    aSpinInfo.value = kThemeButtonMixed;
+                                                    break;
+                    }
+
+                    aSpinInfo.adornment = ( ((nUpperState & CTRL_STATE_DEFAULT) != 0 ) ||
+                                            ((nLowerState & CTRL_STATE_DEFAULT) != 0 )) ?
+                                       kThemeAdornmentDefault :
+                                       kThemeAdornmentNone;
+                    if( ((nUpperState & CTRL_STATE_FOCUSED) != 0 ) || ((nLowerState & CTRL_STATE_FOCUSED) != 0 ))
+                        aSpinInfo.adornment |= kThemeAdornmentFocus;
+
+                    HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, NULL );
                 }
-
-                aSpinInfo.adornment = ( ((nUpperState & CTRL_STATE_DEFAULT) != 0 ) ||
-                                        ((nLowerState & CTRL_STATE_DEFAULT) != 0 )) ?
-                                   kThemeAdornmentDefault :
-                                   kThemeAdornmentNone;
-                if( ((nUpperState & CTRL_STATE_FOCUSED) != 0 ) || ((nLowerState & CTRL_STATE_FOCUSED) != 0 ))
-                    aSpinInfo.adornment |= kThemeAdornmentFocus;
-
-                HIThemeDrawButton( &rc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, &rc);
 
                 bOK=true;
             }
@@ -1143,7 +1079,21 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             USHORT nStyle = aValue.getNumericVal();
             if( nPart == PART_BORDER ) {
                 if(!( nStyle & FRAME_DRAW_MENU ) && !(nStyle & FRAME_DRAW_WINDOWBORDER) )
-                 {
+                {
+                    // #i84756# strange effects start to happen when HIThemeDrawFrame
+                    // meets the border of the window. These can be avoided by clipping
+                    // to the boundary of the frame
+                    if( rc.origin.y + rc.size.height >= mpFrame->maGeometry.nHeight-3 )
+                    {
+                        CGMutablePathRef rPath = CGPathCreateMutable();
+                        CGPathAddRect( rPath, NULL, CGRectMake( 0, 0, mpFrame->maGeometry.nWidth-1, mpFrame->maGeometry.nHeight-1 ) );
+
+                        CGContextBeginPath( mrContext );
+                        CGContextAddPath( mrContext, rPath );
+                        CGContextClip( mrContext );
+                        CGPathRelease( rPath );
+                    }
+
                     HIThemeFrameDrawInfo aTextDrawInfo;
                     aTextDrawInfo.version=0;
                     aTextDrawInfo.kind=kHIThemeFrameListBox;
@@ -1187,7 +1137,6 @@ BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPar
                                                ControlState nState, const ImplControlValue& aValue,
                                                SalControlHandle& rControlHandle, const rtl::OUString& aCaption )
 {
-    AquaLog("In text\n");
     return( FALSE );
 }
 
@@ -1211,7 +1160,6 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion )
 
 {
-    AquaLog( "%s (%s, %s)\n", __func__, ImplDbgGetStringControlType(nType), ImplDbgGetStringControlPart(nPart));
     BOOL toReturn = FALSE;
 
     short x = rControlRegion.GetBoundRect().Left();
@@ -1365,19 +1313,25 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
         case CTRL_SPINBOX:
                 if( nPart == PART_ENTIRE_CONTROL ) {
                     w = rControlRegion.GetBoundRect().GetWidth();
+                    if( w < 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH )
+                        w = 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
 
-                    rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
-                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
+                    rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y ), Size( w-2*FOCUS_RING_WIDTH, h ) );
+                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_SUB_EDIT ) {
                     w = rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
+                    x += 3; // add an offset for rounded borders
+                    y += 2; // don't draw into upper border
+                    w -= 3;
+                    h -= 4;
 
-                    rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
-                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
+                    rNativeContentRegion = Rectangle( Point( x + FOCUS_RING_WIDTH, y + FOCUS_RING_WIDTH ), Size( w - 2* FOCUS_RING_WIDTH, h ) );
+                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
                     toReturn = TRUE;
                 }
@@ -1385,9 +1339,10 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     //rControlRegion.GetBoundRect().GetWidth() contains the width of the full control
                     //ie the width of the textfield + button
                     //x is the position of the left corner of the full control
-                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE;
-                    w = SPIN_BUTTON_WIDTH;
-                    h = SPIN_UPPER_BUTTON_HEIGHT;
+                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
+                    y += FOCUS_RING_WIDTH - CLIP_FUZZ;
+                    w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
+                    h = SPIN_UPPER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
 
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
@@ -1395,10 +1350,10 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_DOWN ) {
-                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE;
-                    y += SPIN_UPPER_BUTTON_HEIGHT;
-                    w = SPIN_BUTTON_WIDTH;
-                    h = SPIN_LOWER_BUTTON_HEIGHT;
+                    x += rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
+                    y += SPIN_UPPER_BUTTON_HEIGHT + FOCUS_RING_WIDTH - CLIP_FUZZ;
+                    w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
+                    h = SPIN_LOWER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
 
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
@@ -1457,6 +1412,5 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
     }
 
-    AquaLog( "AquaSalGraphics::getNativeControlRegion will return: %d\n", toReturn);
     return toReturn;
 }
