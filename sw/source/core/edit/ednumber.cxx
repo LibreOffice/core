@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:39:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 SV_IMPL_VARARR_SORT( _SwPamRanges, SwPamRange )
@@ -706,7 +709,9 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
 }
 
-void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
+// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
+void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
+                                 const bool bResetIndentAttrs )
 {
     StartAllAction();
 
@@ -719,14 +724,18 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
           {
             aRangeArr.SetPam( n, aPam );
-            GetDoc()->SetNumRule( aPam, rRule );
+            // --> OD 2008-02-08 #newlistlevelattrs#
+            GetDoc()->SetNumRule( aPam, rRule, sal_True, bResetIndentAttrs );
+            // <--
             GetDoc()->SetCounted( aPam, true );
           }
         GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
     {
-        GetDoc()->SetNumRule( *pCrsr, rRule);
+        // --> OD 2008-02-08 #newlistlevelattrs#
+        GetDoc()->SetNumRule( *pCrsr, rRule, sal_True, bResetIndentAttrs );
+        // <--
         GetDoc()->SetCounted( *pCrsr, true );
     }
 
