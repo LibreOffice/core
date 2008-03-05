@@ -562,11 +562,20 @@ Sub SetDefaultOptions
 	bMakeTerminateAfterTest = true
 end Sub
 
+Sub ShutdownQuickstarter
+    dim qs as Object
+    qs = createUnoService(&quot;com.sun.star.comp.desktop.QuickstartWrapper&quot; )
+    qs.setFastPropertyValue( 0, false )
+end Sub
+
 Sub StartTestByOptions
+    call ShutdownQuickstarter
 	bShowTable = true
 	call ReadOptions
 	call Main
+
 	if bMakeTerminateAfterTest then
+
 		ClearDocFull (gOutPutDoc)
 		gOutPutDoc.dispose
 		&apos;StarDesktop.Terminate
@@ -578,11 +587,14 @@ Sub StartTestByOptions
 end Sub
 
 Sub StartTestWithDefaultOptions
+    call ShutdownQuickstarter
 	bShowTable = false
 	call SetDefaultOptions
 	call Main
+
 	if bMakeTerminateAfterTest then
 		stop
+        
 		ClearDocFull (gOutPutDoc)
 		gOutPutDoc.dispose
 		&apos;StarDesktop.Terminate
