@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextUnderlineWidthMapper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -47,35 +45,40 @@ import org.jfree.layouting.input.style.values.CSSValue;
 
 public class TextUnderlineWidthMapper extends OneOfConstantsMapper
 {
-  public TextUnderlineWidthMapper ()
-  {
-    super(TextStyleKeys.TEXT_UNDERLINE_WIDTH);
-    addMapping("auto", CSSAutoValue.getInstance());
-    addMapping("normal", BorderWidth.MEDIUM);
-    addMapping("bold", TextDecorationWidth.BOLD);
-    addMapping("thin", BorderWidth.THIN);
-    addMapping("dash", TextDecorationWidth.DASH);
-    addMapping("medium", BorderWidth.MEDIUM);
-    addMapping("thick", BorderWidth.THICK);
-  }
 
-  public void updateStyle (final String uri,
-                           final String attrName,
-                           final String attrValue,
-                           final CSSDeclarationRule targetRule)
-  {
-    if (attrName == null) throw new NullPointerException();
-
-    final CSSValue value = lookupMapping(attrValue);
-    if (value != null)
+    public TextUnderlineWidthMapper()
     {
-      targetRule.setPropertyValue(getStyleKey(), value);
-      return;
+        super(TextStyleKeys.TEXT_UNDERLINE_WIDTH);
+        addMapping("auto", CSSAutoValue.getInstance());
+        addMapping("normal", BorderWidth.MEDIUM);
+        addMapping("bold", TextDecorationWidth.BOLD);
+        addMapping("thin", BorderWidth.THIN);
+        addMapping("dash", TextDecorationWidth.DASH);
+        addMapping("medium", BorderWidth.MEDIUM);
+        addMapping("thick", BorderWidth.THICK);
     }
 
-    // percent
-    // positive integer
-    // positive length
-    targetRule.setPropertyValueAsString(getStyleKey(), attrValue);
-  }
+    public void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        if (attrName == null)
+        {
+            throw new NullPointerException();
+        }
+
+        final CSSValue value = lookupMapping(attrValue);
+        if (value != null)
+        {
+            targetRule.setPropertyValue(getStyleKey(), value);
+        }
+        else
+        // percent
+        // positive integer
+        // positive length
+        {
+            targetRule.setPropertyValueAsString(getStyleKey(), attrValue);
+        }
+    }
 }
