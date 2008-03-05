@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:41:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -52,6 +55,11 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
+// --> OD 2008-01-17 #newlistlevelattrs#
+#ifndef _SVX_TSPTITEM_HXX
+#include <svx/tstpitem.hxx>
+#endif
+// <--
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -187,6 +195,9 @@
 #endif
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 #include <swtable.hxx>
 
@@ -2791,19 +2802,35 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
         // --> OD 2005-11-02 #i51089 - TUNING#
         const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetNum()->GetLevel()));
         // <--
-        nRet = rFmt.GetAbsLSpace();
-
-        if( !bTxtLeft )
+        // --> OD 2008-01-16 #newlistlevelattrs#
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
-            if( 0 > rFmt.GetFirstLineOffset() &&
-                nRet > -rFmt.GetFirstLineOffset() )
-                nRet = nRet + rFmt.GetFirstLineOffset();
-            else
-                nRet = 0;
-        }
+            nRet = rFmt.GetAbsLSpace();
 
-        if( pRule->IsAbsSpaces() )
-            nRet = nRet - GetSwAttrSet().GetLRSpace().GetLeft();
+            if( !bTxtLeft )
+            {
+                if( 0 > rFmt.GetFirstLineOffset() &&
+                    nRet > -rFmt.GetFirstLineOffset() )
+                    nRet = nRet + rFmt.GetFirstLineOffset();
+                else
+                    nRet = 0;
+            }
+
+            if( pRule->IsAbsSpaces() )
+                nRet = nRet - GetSwAttrSet().GetLRSpace().GetLeft();
+        }
+        else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            if ( AreListLevelIndentsApplicable() )
+            {
+                nRet = rFmt.GetIndentAt();
+                if ( !bTxtLeft )
+                {
+                    nRet = nRet + rFmt.GetFirstLineIndent();
+                }
+            }
+        }
+        // <--
     }
 
     return nRet;
@@ -2811,6 +2838,8 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
 
 BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
+    BOOL bRet( FALSE );
+
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     // <--
@@ -2818,24 +2847,46 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     {
         if ( IsCounted() )
         {
-            // --> OD 2005-11-02 #i51089 - TUNING#
-            rFLOffset = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() )).GetFirstLineOffset();
-            // <--
-
-            if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+            // --> OD 2008-01-16 #newlistlevelattrs#
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetNum()->GetLevel()));
+            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                // --> OD 2005-11-02 #i51089 - TUNING#
+                rFLOffset = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() )).GetFirstLineOffset();
+                // <--
 
-                rFLOffset = rFLOffset + aItem.GetTxtFirstLineOfst();
+                if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+
+                    rFLOffset = rFLOffset + aItem.GetTxtFirstLineOfst();
+                }
             }
+            else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                if ( AreListLevelIndentsApplicable() )
+                {
+                    rFLOffset = static_cast<USHORT>(rFmt.GetFirstLineIndent());
+                }
+                else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                    rFLOffset = aItem.GetTxtFirstLineOfst();
+                }
+            }
+            // <--
         }
         else
             rFLOffset = 0;
 
-        return TRUE;
+        bRet = TRUE;
     }
-    rFLOffset = GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
-    return FALSE;
+    else
+    {
+        rFLOffset = GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
+    }
+
+    return bRet;
 }
 
 void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
@@ -3460,29 +3511,24 @@ void SwTxtNode::SetRestart(bool bRestart)
     // <--
 }
 
-/**
-   Returns if the paragraph has a visible numbering or bullet.
-   This includes all kinds of numbering/bullet/outlines.
-   Note: This function returns false, if the numbering format is
-   SVX_NUM_NUMBER_NONE or if the numbering/bullet has been deleted.
+/** Returns if the paragraph has a visible numbering or bullet.
+    This includes all kinds of numbering/bullet/outlines.
+    OD 2008-02-28 #newlistlevelattrs#
+    The concrete list label string has to be checked.
  */
-
 bool SwTxtNode::HasVisibleNumberingOrBullet() const
 {
     bool bRet = false;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
     if ( pRule && IsCounted())
     {
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        const SwNumFmt& rFmt = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() ));
-        // <--
-        if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
-        {
-            bRet = true;
-        }
+//        const SwNumFmt& rFmt = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() ));
+//        if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+//        {
+//            bRet = true;
+//        }
+        bRet = pRule->MakeNumString( *(GetNum()) ).Len() > 0;
     }
 
     return bRet;
@@ -3644,6 +3690,174 @@ bool SwTxtNode::IsFirstOfNumRule() const
     // <--
 
     return bResult;
+}
+
+/** Determines, if the list level indent attributes can be applied to the
+    paragraph.
+
+    OD 2008-01-17 #newlistlevelattrs#
+    The list level indents can be applied to the paragraph under the one
+    of following conditions:
+    - the list style is directly applied to the paragraph and the paragraph
+      has no own indent attributes.
+    - the list style is applied to the paragraph through one of its paragraph
+      styles, the paragraph has no own indent attributes and on the paragraph
+      style hierarchy from the paragraph to the paragraph style with the
+      list style no indent attributes are found.
+
+    @author OD
+
+    @return boolean
+*/
+bool SwTxtNode::AreListLevelIndentsApplicable() const
+{
+    bool bAreListLevelIndentsApplicable( true );
+
+    if ( !GetNum() || !GetNum()->GetNumRule() )
+    {
+        // no list style applied to paragraph
+        bAreListLevelIndentsApplicable = false;
+    }
+    else if ( HasSwAttrSet() &&
+              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+    {
+        // paragraph has hard-set indent attributes
+        bAreListLevelIndentsApplicable = false;
+    }
+    else if ( HasSwAttrSet() &&
+              GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+    {
+        // list style is directly applied to paragraph and paragraph has no
+        // hard-set indent attributes
+        bAreListLevelIndentsApplicable = true;
+    }
+    else
+    {
+        // list style is applied through one of the paragraph styles and
+        // paragraph has no hard-set indent attributes
+
+        // check, paragraph's
+        const SwTxtFmtColl* pColl = GetTxtColl();
+        while ( pColl )
+        {
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+            {
+                // indent attributes found in the paragraph style hierarchy.
+                bAreListLevelIndentsApplicable = false;
+                break;
+            }
+
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+            {
+                // paragraph style with the list style found and until now no
+                // indent attributes are found in the paragraph style hierarchy.
+                bAreListLevelIndentsApplicable = true;
+                break;
+            }
+
+            pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
+            ASSERT( pColl,
+                    "<SwTxtNode::AreListLevelIndentsApplicable()> - something wrong in paragraph's style hierarchy. The applied list style is not found." );
+        }
+    }
+
+    return bAreListLevelIndentsApplicable;
+}
+
+/** Retrieves the list tab stop position, if the paragraph's list level defines
+    one and this list tab stop has to merged into the tap stops of the paragraph
+
+    OD 2008-01-17 #newlistlevelattrs#
+
+    @author OD
+
+    @param nListTabStopPosition
+    output parameter - containing the list tab stop position
+
+    @return boolean - indicating, if a list tab stop position is provided
+*/
+bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
+{
+    bool bListTanStopPositionProvided( false );
+
+    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
+    if ( pNumRule && HasVisibleNumberingOrBullet() && GetLevel() >= 0 )
+    {
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetLevel()) );
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
+             rFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
+        {
+            bListTanStopPositionProvided = true;
+            nListTabStopPosition = rFmt.GetListtabPos();
+
+            if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+            {
+                // tab stop position are treated to be relative to the "before text"
+                // indent value of the paragraph. Thus, adjust <nListTabStopPos>.
+                if ( AreListLevelIndentsApplicable() )
+                {
+                    nListTabStopPosition -= rFmt.GetIndentAt();
+                }
+                else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                {
+                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                    nListTabStopPosition -= aItem.GetTxtLeft();
+                }
+            }
+        }
+    }
+
+    return bListTanStopPositionProvided;
+}
+
+/** Retrieves the character following the list label, if the paragraph's
+    list level defines one.
+
+    OD 2008-01-17 #newlistlevelattrs#
+
+    @author OD
+
+    @return XubString - the list tab stop position
+*/
+XubString SwTxtNode::GetLabelFollowedBy() const
+{
+    XubString aLabelFollowedBy;
+
+    const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
+    if ( pNumRule && HasVisibleNumberingOrBullet() && GetLevel() >= 0 )
+    {
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetLevel()) );
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            switch ( rFmt.GetLabelFollowedBy() )
+            {
+                case SvxNumberFormat::LISTTAB:
+                {
+                    const sal_Unicode aTab = '\t';
+                    aLabelFollowedBy.Insert( aTab, 0 );
+                }
+                break;
+                case SvxNumberFormat::SPACE:
+                {
+                    const sal_Unicode aSpace = ' ';
+                    aLabelFollowedBy.Insert( aSpace, 0 );
+                }
+                break;
+                case SvxNumberFormat::NOTHING:
+                {
+                    // intentionally left blank.
+                }
+                break;
+                default:
+                {
+                    ASSERT( false,
+                            "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
+                }
+            }
+        }
+    }
+
+    return aLabelFollowedBy;
 }
 
 void SwTxtNode::CalcHiddenCharFlags() const
