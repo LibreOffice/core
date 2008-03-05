@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relationshandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,9 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
 
 // ============================================================================
 
-RelationsFragmentHandler::RelationsFragmentHandler( const XmlFilterRef& rxFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
-    FragmentHandler( rxFilter, lclGetRelationsPath( rFragmentPath ), xRelations ),
-    mrRelations( *xRelations )
+RelationsFragmentHandler::RelationsFragmentHandler( XmlFilterBase& rFilter, RelationsRef xRelations ) :
+    FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getBasePath() ), xRelations ),
+    mxRelations( xRelations )
 {
 }
 
@@ -89,11 +89,11 @@ Reference< XFastContextHandler > RelationsFragmentHandler::createFastChildContex
             aRelation.maType   = rxAttribs->getOptionalValue( XML_Type );
             aRelation.maTarget = rxAttribs->getOptionalValue( XML_Target );
             if( (aRelation.maId.getLength() > 0) && (aRelation.maType.getLength() > 0) && (aRelation.maTarget.getLength() > 0) )
-                mrRelations[ aRelation.maId ] = aRelation;
+                (*mxRelations)[ aRelation.maId ] = aRelation;
         }
         break;
         case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
-            xRet.set( this );
+            xRet = getFastContextHandler();
         break;
     }
     return xRet;
