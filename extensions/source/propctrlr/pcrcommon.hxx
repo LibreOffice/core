@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrcommon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:51:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,26 +40,15 @@
 #define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _STRING_HXX
+#include <vcl/smartid.hxx>
 #include <tools/string.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
 #include <comphelper/listenernotification.hxx>
-#endif
 
 //............................................................................
 namespace pcr
@@ -97,7 +86,7 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        static sal_uInt32 getHelpId( const ::rtl::OUString& _rHelpURL );
+        static SmartId getHelpId( const ::rtl::OUString& _rHelpURL );
         static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
     };
 
