@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:40:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,6 +578,9 @@
   <node oor:name="Misc">
     <prop oor:name="UseSystemFileDialog"  install:module="UseOOoFileDialogs">
       <value>false</value>
+    </prop>
+    <prop oor:name="UseSystemPrintDialog"  install:module="macosx">
+      <value>true</value>
     </prop>
   </node>
   <node oor:name="Save">
