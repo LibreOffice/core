@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:12:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,6 +303,8 @@ namespace dbaui
                 The description of the specified object.
         */
         virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+
+        virtual void DeleteSelectedRows();
 
     protected:
         // DragSourceHelper overridables
