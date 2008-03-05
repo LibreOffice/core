@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.table;
 
 import java.util.ArrayList;
@@ -55,99 +54,106 @@ import org.xml.sax.SAXException;
  */
 public class TableReadHandler extends ElementReadHandler
 {
-  private TableColumnsReadHandler columns;
-  private ArrayList tableRows;
-  private Section table;
 
-  public TableReadHandler()
-  {
-    tableRows = new ArrayList();
-    table = new OfficeTableSection();
-  }
+    private TableColumnsReadHandler columns;
+    private ArrayList tableRows;
+    private Section table;
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs)
-      throws SAXException
-  {
-    super.startParsing(attrs);
-    final String enabled = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "visible");
-    if (enabled == null || "true".equals(enabled))
+    public TableReadHandler()
     {
-      table.setEnabled(true);
-    }
-    else
-    {
-      table.setEnabled(false);
+        tableRows = new ArrayList();
+        table = new OfficeTableSection();
     }
 
-  }
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs)
+            throws SAXException
     {
-      if ("conditional-print-expression".equals(tagName))
-      {
-        return new ConditionalPrintExpressionReadHandler(table);
-      }
-      return null;
+        super.startParsing(attrs);
+        final String enabled = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "visible");
+        if (enabled == null || "true".equals(enabled))
+        {
+            table.setEnabled(true);
+        }
+        else
+        {
+            table.setEnabled(false);
+        }
+
     }
 
-    if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      return null;
-    }
-    if ("table-columns".equals(tagName))
-    {
-      columns = new TableColumnsReadHandler();
-      return columns;
-    }
-    if ("table-row".equals(tagName))
-    {
-      final TableRowReadHandler rowHandler = new TableRowReadHandler();
-      tableRows.add(rowHandler);
-      return rowHandler;
-    }
-    return null;
-  }
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            if ("conditional-print-expression".equals(tagName))
+            {
+                return new ConditionalPrintExpressionReadHandler(table);
+            }
+            return null;
+        }
 
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    if (columns != null)
-    {
-      table.addNode(columns.getElement());
+        if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
+        {
+            return null;
+        }
+        if ("table-columns".equals(tagName) || "table-header-columns".equals(tagName))
+        {
+            columns = new TableColumnsReadHandler();
+            return columns;
+        }
+        if ("table-row".equals(tagName))
+        {
+            final TableRowReadHandler rowHandler = new TableRowReadHandler();
+            tableRows.add(rowHandler);
+            return rowHandler;
+        }
+        if ("table-rows".equals(tagName) || "table-header-rows".equals(tagName))
+        {
+            final TableRowsReadHandler rowsHandler = new TableRowsReadHandler();
+            tableRows.add(rowsHandler);
+            return rowsHandler;
+        }
+        return null;
     }
 
-    for (int i = 0; i < tableRows.size(); i++)
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
     {
-      final TableRowReadHandler handler = (TableRowReadHandler) tableRows.get(i);
-      table.addNode(handler.getElement());
+        if (columns != null)
+        {
+            table.addNode(columns.getElement());
+        }
+
+        for (int i = 0; i < tableRows.size(); i++)
+        {
+            final TableRowReadHandler handler = (TableRowReadHandler) tableRows.get(i);
+            table.addNode(handler.getElement());
+        }
     }
-  }
 
-
-  public Element getElement()
-  {
-    return table;
-  }
+    public Element getElement()
+    {
+        return table;
+    }
 }
