@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:26:34 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:25:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,7 @@ BEGIN
     $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
+    $desktoplinkexists = 0;
 
     $unomaxservices = 25;
     $javamaxservices = 15;
