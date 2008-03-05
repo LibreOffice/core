@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:38:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,27 +37,34 @@
 #include <DomainMapperTableHandler.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-//#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
-//#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
-#include <com/sun/star/text/XParagraphCursor.hpp>
-#include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/text/XDependentTextField.hpp>
-#include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <com/sun/star/text/PageNumberType.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -212,7 +219,15 @@ enum FieldId
     ,FIELD_PAGE
     /* REF targetbkm \f \* MERGEFORMAT ->
         imports a ShowVariable (bookmarkname)?
-        todo: not imported yet
+        \h hyerlink to paragraph
+        \p relative to para above/below
+        \f refenence number
+        \d separator number separator
+        \n paragraph number
+        \r paragraph number in relative context
+        \t suppres non delimiters
+        \w paragraph number in full context
+        \* Upper/Lower...
      */
     ,FIELD_REF          //
     /* REVNUM \* Numberingswitch \* MERGEFORMAT ->
@@ -344,7 +359,7 @@ sal_Int32 FIB::GetData( Id nName )
 {
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
         return aFIBData[nName - NS_rtf::LN_WIDENT];
-    OSL_ASSERT("invalid index in FIB");
+    OSL_ENSURE( false, "invalid index in FIB");
     return -1;
 }
 /*-- 18.07.2006 08:56:55---------------------------------------------------
@@ -458,7 +473,7 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
     SectionPropertyMap* pSectionContext = 0;
     PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
         (pSectionContext = new SectionPropertyMap( m_bIsFirstSection )) :
-        new PropertyMap);
+        eId == CONTEXT_PARAGRAPH ? new ParagraphPropertyMap :  new PropertyMap);
     if(eId == CONTEXT_SECTION)
     {
         if( m_bIsFirstSection )
@@ -468,7 +483,7 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
             // beginning with the second section group a section has to be inserted
             // into the document
             SectionPropertyMap* pSectionContext_ = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
-            uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+            uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
             if(xTextAppendAndConvert.is())
                 pSectionContext_->SetStart( xTextAppendAndConvert->getEnd() );
         }
@@ -487,6 +502,15 @@ void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
     m_aContextStack.push(CONTEXT_STYLESHEET);
 
     m_pTopContext = m_aPropertyStacks[CONTEXT_STYLESHEET].top();
+}
+/*-- 28.01.2008 14:47:46---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
+{
+    m_aPropertyStacks[CONTEXT_LIST].push( pListProperties );
+    m_aContextStack.push(CONTEXT_LIST);
+    m_pTopContext = m_aPropertyStacks[CONTEXT_LIST].top();
 }
 /*-------------------------------------------------------------------------
 
@@ -524,7 +548,7 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 uno::Reference< text::XTextAppendAndConvert >  DomainMapper_Impl::GetTopTextAppendAndConvert()
 {
     OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
-    return m_aTextAppendStack.top();
+    return m_aTextAppendStack.top().xTextAppendAndConvert;
 }
 
 /*-- 17.07.2006 08:47:04---------------------------------------------------
@@ -726,63 +750,312 @@ void DomainMapper_Impl::clearDeferredBreaks()
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrameProperties,
+    uno::Reference<text::XTextRange> xStartTextRange,
+    uno::Reference<text::XTextRange> xEndTextRange )
+{
+    try
+    {
+        uno::Reference<text::XTextCursor> xRangeCursor = xStartTextRange->getText()->createTextCursorByRange( xStartTextRange );
+        xRangeCursor->gotoRange( xEndTextRange, true );
+
+        uno::Reference<beans::XPropertySet> xTextRangeProperties(xRangeCursor, uno::UNO_QUERY);
+        if(!xTextRangeProperties.is())
+            return ;
+
+        PropertyIds aBorderProperties[] =
+        {
+            PROP_LEFT_BORDER,
+            PROP_RIGHT_BORDER,
+            PROP_TOP_BORDER,
+            PROP_BOTTOM_BORDER,
+            PROP_LEFT_BORDER_DISTANCE,
+            PROP_RIGHT_BORDER_DISTANCE,
+            PROP_TOP_BORDER_DISTANCE,
+            PROP_BOTTOM_BORDER_DISTANCE
+        };
+
+        sal_uInt32 nStart = rFrameProperties.getLength();
+        sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
+        rFrameProperties.realloc(nStart + nBorderPropertyCount);
+
+        beans::PropertyValue* pFrameProperties = rFrameProperties.getArray();
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        for( sal_uInt32 nProperty = 0; nProperty < nBorderPropertyCount; ++nProperty)
+        {
+            ::rtl::OUString sPropertyName = rPropNameSupplier.GetName(aBorderProperties[nProperty]);
+            pFrameProperties[nStart].Name = sPropertyName;
+            pFrameProperties[nStart].Value = xTextRangeProperties->getPropertyValue(sPropertyName);
+            if( nProperty < 4 )
+                xTextRangeProperties->setPropertyValue( sPropertyName, uno::makeAny(table::BorderLine()));
+            ++nStart;
+        }
+        rFrameProperties.realloc(nStart);
+    }
+    catch( const uno::Exception& rEx )
+   {
+        (void)rEx;
+   }
+}
+/*-- 04.01.2008 10:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void lcl_AddRangeAndStyle(
+    ParagraphPropertiesPtr& pToBeSavedProperties,
+    uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert,
+    PropertyMapPtr pPropertyMap)
+{
+    uno::Reference<text::XParagraphCursor> xParaCursor(
+        xTextAppendAndConvert->createTextCursorByRange(xTextAppendAndConvert->getEnd()), uno::UNO_QUERY_THROW);
+    pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
+    xParaCursor->gotoStartOfParagraph( false );
+
+    pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
+    if(pPropertyMap)
+    {
+        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PropertyDefinition( PROP_PARA_STYLE_NAME, false ) );
+        if( aParaStyleIter != pPropertyMap->end())
+        {
+            ::rtl::OUString sName;
+            aParaStyleIter->second >>= sName;
+            pToBeSavedProperties->SetParaStyleName(sName);
+        }
+    }
+}
+/*-------------------------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+//define some default frame width - 10cm ATM
+#define DEFAULT_FRAME_MIN_WIDTH 10000
+
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
+    TextAppendContext& rAppendContext = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = rAppendContext.xTextAppendAndConvert;
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
         {
+            /*the following combinations of previous and current frame settings can occur:
+                (1) - no old frame and no current frame     -> no special action
+                (2) - no old frame and current DropCap      -> save DropCap for later use, don't call finishParagraph
+                                                            remove character properties of the DropCap?
+                (3) - no old frame and current Frame        -> save Frame for later use
+                (4) - old DropCap and no current frame      -> add DropCap to the properties of the finished paragraph, delete previous setting
+                (5) - old DropCap and current frame         -> add DropCap to the properties of the finished paragraph, save current frame settings
+                (6) - old Frame and new DropCap             -> add old Frame, save DropCap for later use
+                (7) - old Frame and new same Frame          -> continue
+                (8) - old Frame and new different Frame     -> add old Frame, save new Frame for later use
+                (9) - old Frame and no current frame        -> add old Frame, delete previous settings
 
-            uno::Sequence< beans::PropertyValue > aProperties;
-            sal_Int32 nLeftMargin = 0;
-            if( pPropertyMap.get() )
+              old _and_ new DropCap must not occur
+             */
+
+            bool bIsDropCap = pParaContext->IsFrameMode() && sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+            style::DropCapFormat aDrop;
+            ParagraphPropertiesPtr pToBeSavedProperties;
+            bool bKeepLastParagraphProperties = false;
+            if( bIsDropCap )
             {
-                //align tab stops if left indent != 0
-                PropertyMap::const_iterator aPropertyIter =
-                        pPropertyMap->find(PropertyDefinition(PROP_PARA_LEFT_MARGIN, false ));
-                if( aPropertyIter != pPropertyMap->end())
+                uno::Reference<text::XParagraphCursor> xParaCursor(
+                    xTextAppendAndConvert->createTextCursorByRange(xTextAppendAndConvert->getEnd()), uno::UNO_QUERY_THROW);
+                //select paragraph
+                xParaCursor->gotoStartOfParagraph( true );
+                uno::Reference< beans::XPropertyState > xParaProperties( xParaCursor, uno::UNO_QUERY_THROW );
+                xParaProperties->setPropertyToDefault(rPropNameSupplier.GetName(PROP_CHAR_ESCAPEMENT));
+                xParaProperties->setPropertyToDefault(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT));
+                //handles (2) and part of (6)
+                pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                sal_Int32 nCount = xParaCursor->getString().getLength();
+                pToBeSavedProperties->SetDropCapLength(nCount > 0 && nCount < 255 ? (sal_Int8)nCount : 1);
+            }
+            if( rAppendContext.pLastParagraphProperties.get() )
+            {
+                if( sal::static_int_cast<Id>(rAppendContext.pLastParagraphProperties->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none)
                 {
-                    //either from paragraph
-                    aPropertyIter->second >>= nLeftMargin;
+                    //handles (4) and part of (5)
+                    //create a DropCap property, add it to the property sequence of finishParagraph
+                    sal_Int32 nLines = rAppendContext.pLastParagraphProperties->GetLines();
+                    aDrop.Lines = nLines > 0 && nLines < 254 ? (sal_Int8)++nLines : 2;
+                    aDrop.Count = rAppendContext.pLastParagraphProperties->GetDropCapLength();
+                    aDrop.Distance  = 0; //TODO: find distance value
+                    //completes (5)
+                    if( pParaContext->IsFrameMode() )
+                        pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                }
+                else if(*rAppendContext.pLastParagraphProperties == *pParaContext )
+                {
+                    //handles (7)
+                    rAppendContext.pLastParagraphProperties->SetEndingRange(xTextAppendAndConvert->getEnd());
+                    bKeepLastParagraphProperties = true;
                 }
                 else
                 {
-                    //or from style
-                    uno::Any aValue = GetPropertyFromStyleSheet(PROP_PARA_LEFT_MARGIN);
-                    aValue >>= nLeftMargin;
+                    //handles (8)(9) and completes (6)
+                    try
+                       {
+                            //
+                           const StyleSheetEntry* pParaStyle =
+                                m_pStyleSheetTable->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
+
+                            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 15: 0);
+                            if(pParaStyle)
+                            {
+                                const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
+                                beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
+                                pFrameProperties[0].Name = rPropNameSupplier.GetName(PROP_WIDTH);
+                                pFrameProperties[1].Name = rPropNameSupplier.GetName(PROP_HEIGHT);
+                                pFrameProperties[2].Name = rPropNameSupplier.GetName(PROP_SIZE_TYPE);
+                                pFrameProperties[3].Name = rPropNameSupplier.GetName(PROP_WIDTH_TYPE);
+                                pFrameProperties[4].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT);
+                                pFrameProperties[5].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION);
+                                pFrameProperties[6].Name = rPropNameSupplier.GetName(PROP_HORI_ORIENT_RELATION);
+                                pFrameProperties[7].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT);
+                                pFrameProperties[8].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION);
+                                pFrameProperties[9].Name = rPropNameSupplier.GetName(PROP_VERT_ORIENT_RELATION);
+                                pFrameProperties[10].Name = rPropNameSupplier.GetName(PROP_SURROUND);
+                                pFrameProperties[11].Name = rPropNameSupplier.GetName(PROP_LEFT_MARGIN);
+                                pFrameProperties[12].Name = rPropNameSupplier.GetName(PROP_RIGHT_MARGIN);
+                                pFrameProperties[13].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
+                                pFrameProperties[14].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
+                                sal_Int32 nWidth =
+                                    rAppendContext.pLastParagraphProperties->Getw() > 0 ?
+                                        rAppendContext.pLastParagraphProperties->Getw() :
+                                        pStyleProperties->Getw();
+                                bool bAutoWidth = nWidth < 1;
+                                if( bAutoWidth )
+                                    nWidth = DEFAULT_FRAME_MIN_WIDTH;
+                                pFrameProperties[0].Value <<= nWidth;
+                                pFrameProperties[1].Value <<=
+                                    rAppendContext.pLastParagraphProperties->Geth() > 0 ?
+                                        rAppendContext.pLastParagraphProperties->Geth() :
+                                        pStyleProperties->Geth();
+                                pFrameProperties[2].Value <<= sal_Int16(
+                                    rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
+                                        rAppendContext.pLastParagraphProperties->GethRule() :
+                                pStyleProperties->GethRule() >=0 ? pStyleProperties->GethRule() : text::SizeType::VARIABLE);
+
+                                pFrameProperties[3].Value <<= bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX;
+
+                                sal_Int16 nHoriOrient = sal_Int16(
+                                    rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
+                                        rAppendContext.pLastParagraphProperties->GetxAlign() :
+                                        pStyleProperties->GetxAlign() >= 0 ? pStyleProperties->GetxAlign() : text::HoriOrientation::NONE );
+                                pFrameProperties[4].Value <<= nHoriOrient;
+
+                                pFrameProperties[5].Value <<=
+                                    rAppendContext.pLastParagraphProperties->IsxValid() ?
+                                        rAppendContext.pLastParagraphProperties->Getx() : pStyleProperties->Getx();
+                                pFrameProperties[6].Value <<= sal_Int16(
+                                    rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
+                                        rAppendContext.pLastParagraphProperties->GethAnchor() :
+                                    pStyleProperties->GethAnchor() );
+
+                                sal_Int16 nVertOrient = sal_Int16(
+                                    rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
+                                        rAppendContext.pLastParagraphProperties->GetyAlign() :
+                                        pStyleProperties->GetyAlign() >= 0 ? pStyleProperties->GetyAlign() : text::VertOrientation::NONE );
+                                pFrameProperties[7].Value <<= nVertOrient;
+
+                                pFrameProperties[8].Value <<=
+                                    rAppendContext.pLastParagraphProperties->IsyValid() ?
+                                        rAppendContext.pLastParagraphProperties->Gety() : pStyleProperties->Gety();
+                                pFrameProperties[9].Value <<= sal_Int16(
+                                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
+                                        rAppendContext.pLastParagraphProperties->GetvAnchor() :
+                                        pStyleProperties->GetvAnchor() );
+
+                                pFrameProperties[10].Value <<= text::WrapTextMode(
+                                    rAppendContext.pLastParagraphProperties->GetWrap() >= 0 ?
+                                    rAppendContext.pLastParagraphProperties->GetWrap() :
+                                    pStyleProperties->GetWrap());
+
+                                sal_Int32 nBottomDist;
+                                sal_Int32 nTopDist = nBottomDist =
+                                    rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
+                                    rAppendContext.pLastParagraphProperties->GethSpace() :
+                                    pStyleProperties->GethSpace();
+
+                                pFrameProperties[11].Value <<= nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist;
+                                pFrameProperties[12].Value <<= nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist;
+
+                                sal_Int32 nRightDist;
+                                sal_Int32 nLeftDist = nRightDist =
+                                    rAppendContext.pLastParagraphProperties->GetvSpace() >= 0 ?
+                                    rAppendContext.pLastParagraphProperties->GetvSpace() :
+                                pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
+                                pFrameProperties[13].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist;
+                                pFrameProperties[14].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist;
+
+                                lcl_MoveBorderPropertiesToFrame(aFrameProperties,
+                                    rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                                    rAppendContext.pLastParagraphProperties->GetEndingRange());
+                            }
+                            xTextAppendAndConvert->convertToTextFrame(
+                            rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                            rAppendContext.pLastParagraphProperties->GetEndingRange(),
+                            aFrameProperties );
+                            // next frame follows directly
+                            if( pParaContext->IsFrameMode() )
+                            {
+                                pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                                lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppendAndConvert, pPropertyMap);
+                            }
+                       }
+                       catch( const uno::Exception& rEx )
+                       {
+                            (void)rEx;
+                       }
                 }
-/*              //#i24363# tab stops relative to indent - conversion not necessary anymore
-                if( nLeftMargin != 0 )
+
+            }
+            else //
+            {
+                // (1) doesn't need handling
+                //
+                if( !bIsDropCap && pParaContext->IsFrameMode() )
                 {
-                    PropertyMap::const_iterator aTabStopIter =
-                            pPropertyMap->find(PropertyDefinition(PROP_PARA_TAB_STOPS, false ));
-                    uno::Sequence< style::TabStop > aTabStops;
-                    if( aTabStopIter != pPropertyMap->end() &&
-                        (aTabStopIter->second >>= aTabStops))
-                    {
-                        //relocate tab stops
-                        style::TabStop* pTabs = aTabStops.getArray();
-                        for( sal_Int32 nTab = 0; nTab < aTabStops.getLength(); ++nTab )
-                            pTabs[nTab].Position -= nLeftMargin;
-                        //put the property into the map
-                        pPropertyMap->Insert(PROP_PARA_TAB_STOPS, true, uno::makeAny( aTabStops ));
-                    }
-                }*/
+                    pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppendAndConvert, pPropertyMap);
+                }
+            }
+            uno::Sequence< beans::PropertyValue > aProperties;
+            if( pPropertyMap.get() )
+            {
                 aProperties = pPropertyMap->GetPropertyValues();
             }
-            uno::Reference< text::XTextRange > xTextRange =
-                xTextAppendAndConvert->finishParagraph( aProperties );
+            if( !bIsDropCap )
+            {
+                if( aDrop.Lines > 1 )
+                {
+                    sal_uInt32 nLength = aProperties.getLength();
+                    aProperties.realloc(  nLength + 1 );
+                    aProperties[nLength].Value <<= aDrop;
+                    aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
+                }
+                uno::Reference< text::XTextRange > xTextRange =
+                    xTextAppendAndConvert->finishParagraph( aProperties );
+                m_TableManager.handle(xTextRange);
+            }
+            else
+            {
 
-            m_TableManager.handle(xTextRange);
+            }
+            if( !bKeepLastParagraphProperties )
+                rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
+
         }
         catch(const lang::IllegalArgumentException& rIllegal)
         {
             (void)rIllegal;
+            OSL_ENSURE( false, "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
         }
         catch(const uno::Exception& rEx)
         {
             (void)rEx;
+            OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
 }
@@ -791,7 +1064,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
@@ -818,7 +1091,7 @@ void DomainMapper_Impl::appendTextContent(
     const uno::Sequence< beans::PropertyValue > xPropertyValues
     )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
@@ -840,7 +1113,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange >& xBefore )
 {
     uno::Reference< beans::XPropertySet > xRet;
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     if(xTextAppendAndConvert.is())
     {
         try
@@ -872,7 +1145,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
   -----------------------------------------------------------------------*/
 /*void DomainMapper_Impl::appendTextSection()
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     if(xTextAppendAndConvert.is())
     {
         try
@@ -985,7 +1258,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
     //this has to be removed
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     try
     {
         uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursor();
@@ -2001,7 +2274,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
     //insert a dummy char to make sure the start range doesn't move together with the to-be-appended text
     xTextAppendAndConvert->appendTextPortion(::rtl::OUString( '-' ), uno::Sequence< beans::PropertyValue >() );
     uno::Reference< text::XTextCursor > xCrsr = xTextAppendAndConvert->createTextCursorByRange( xTextAppendAndConvert->getEnd() );
@@ -2055,6 +2328,10 @@ void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
         pContext->AppendCommand( rPartOfCommand );
     }
 }
+/*-- 13.12.2007 11:45:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+typedef std::multimap < sal_Int32, ::rtl::OUString > TOCStyleMap;
 /*-- 29.01.2007 11:33:16---------------------------------------------------
 //the field command has to be closed (0x14 appeared)
   -----------------------------------------------------------------------*/
@@ -2102,7 +2379,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXT")),          "DatabaseNextSet",          "", FIELD_NEXT         },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXTIF")),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGE")),          "PageNumber",               "", FIELD_PAGE         },
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "",                         "", FIELD_REF          },
+                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "GetReference",             "", FIELD_REF          },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVNUM")),        "DocInfo.Revision",         "", FIELD_REVNUM       },
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SAVEDATE")),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SECTION")),       "",                         "", FIELD_SECTION      },
@@ -2440,7 +2717,26 @@ void DomainMapper_Impl::CloseFieldCommand()
                             uno::makeAny( text::PageNumberType_CURRENT ));
 
                     break;
-                    case FIELD_REF          : break;
+                    case FIELD_REF:
+                    {
+                        ::rtl::OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" REF") );
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE),
+                            uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_SOURCE_NAME),
+                            uno::makeAny( sBookmark) );
+                        sal_Int16 nFieldPart = text::ReferenceFieldPart::TEXT;
+                        ::rtl::OUString sValue;
+                        if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
+                        {
+                            //above-below
+                            nFieldPart = text::ReferenceFieldPart::UP_DOWN;
+                        }
+                        xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
+                    }
+                    break;
                     case FIELD_REVNUM       : break;
                     case FIELD_SAVEDATE     :
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
@@ -2562,7 +2858,9 @@ void DomainMapper_Impl::CloseFieldCommand()
     //                  \t  Builds a table of contents by using style names other than the standard outline styles
                         if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
                         {
-                            sTemplate = sValue;
+                            sal_Int32 nPos = 0;
+                            ::rtl::OUString sToken = sValue.getToken( 1, '"', nPos);
+                            sTemplate = sToken.getLength() ? sToken : sValue;
                         }
     //                  \u  Builds a table of contents by using the applied paragraph outline level
                         if( lcl_FindInCommand( pContext->GetCommand(), 'u', sValue ))
@@ -2597,11 +2895,42 @@ void DomainMapper_Impl::CloseFieldCommand()
                             xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
                             if( sTemplate.getLength() )
                             {
+                                //the string contains comma separated the names and related levels
+                                //like: "Heading 1,1,Heading 2,2"
+                                TOCStyleMap aMap;
+                                sal_Int32 nLevel;
+                                sal_Int32 nPosition = 0;
+                                while( nPosition >= 0)
+                                {
+                                    ::rtl::OUString sStyleName = sTemplate.getToken( 0, ',', nPosition );
+                                    //empty tokens should be skipped
+                                    while( !sStyleName.getLength() && nPosition > 0 )
+                                        sStyleName = sTemplate.getToken( 0, ',', nPosition );
+                                    nLevel = sTemplate.getToken( 0, ',', nPosition ).toInt32();
+                                    if( !nLevel )
+                                        nLevel = 1;
+                                    if( sStyleName.getLength() )
+                                        aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
+                                }
                                 uno::Reference< container::XIndexReplace> xParaStyles;
                                 xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
-                                uno::Sequence< rtl::OUString> aStyles(1);
-                                aStyles[0] = sTemplate;
-                                xParaStyles->replaceByIndex(0, uno::makeAny(aStyles));
+                                for( nLevel = 1; nLevel < 10; ++nLevel)
+                                {
+                                    sal_Int32 nLevelCount = aMap.count( nLevel );
+                                    if( nLevelCount  )
+                                    {
+                                        TOCStyleMap::iterator aTOCStyleIter = aMap.find( nLevel );
+
+                                        uno::Sequence< rtl::OUString> aStyles( nLevelCount );
+                                        for ( sal_Int32 nStyle = 0; nStyle < nLevelCount; ++nStyle, ++aTOCStyleIter )
+                                        {
+                                            aStyles[nStyle] = aTOCStyleIter->second;
+                                        }
+                                        xParaStyles->replaceByIndex(nLevel - 1, uno::makeAny(aStyles));
+                                    }
+                                }
+                                xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
+
                             }
                             if(bHyperlinks  || sChapterNoSeparator.getLength())
                             {
@@ -2770,7 +3099,7 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
 /*            else if(m_sHyperlinkURL.getLength())
             {
                 //insert the string and apply hyperlink attribute to it
-                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
                 if(xTextAppendAndConvert.is())
                 {
                     try
@@ -2790,7 +3119,7 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
             }
             else if( m_xTOC.is() || m_xTC.is() )
             {
-                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
                 if(xTextAppendAndConvert.is())
                 {
                     try
@@ -2831,7 +3160,7 @@ void DomainMapper_Impl::PopFieldContext()
             CloseFieldCommand();
 
         //insert the field, TC or TOC
-        uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+        uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
         if(xTextAppendAndConvert.is())
         {
             try
@@ -2882,10 +3211,10 @@ void DomainMapper_Impl::PopFieldContext()
 /*-- 11.06.2007 16:19:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
+void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
-    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( rBookmarkName );
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
+    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( rId );
     //is the bookmark name already registered?
     try
     {
@@ -2906,7 +3235,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
             xCursor->gotoRange( xTextAppendAndConvert->getEnd(), true );
             uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
             //todo: make sure the name is not used already!
-            xBkmNamed->setName( rBookmarkName );
+            xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
             xTextAppendAndConvert->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
             m_aBookmarkMap.erase( aBookmarkIter );
         }
@@ -2916,7 +3245,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
             uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursorByRange( xTextAppendAndConvert->getEnd() );
             bool bIsStart = !xCursor->goLeft(1, false);
             uno::Reference< text::XTextRange > xCurrent = xCursor->getStart();
-            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rBookmarkName, BookmarkInsertPosition( bIsStart, xCurrent ) ));
+            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));
         }
     }
     catch( const uno::Exception& )
@@ -2930,7 +3259,7 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
 GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, eGraphicImportType ) );
+        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType ) );
     return m_pGraphicImport;
 }
 /*-- 09.08.2007 10:19:45---------------------------------------------------
@@ -2951,11 +3280,16 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
         //create the graphic
         ref->resolve( *m_pGraphicImport );
     }
+
+    //insert it into the document at the current cursor position
+
+    uno::Reference<text::XTextContent> xTextContent
+        (m_pGraphicImport->GetGraphicObject());
+
 #ifdef DEBUG_DOMAINMAPPER
+    uno::Reference<drawing::XShape> xShape
+        (xTextContent, uno::UNO_QUERY_THROW);
     {
-        uno::Reference<drawing::XShape> xShape
-            (m_pGraphicImport->GetGraphicObject(),
-             uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet
             (xShape, uno::UNO_QUERY_THROW);
         logger("DOMAINMAPPER", "<shapeprops-before>");
@@ -2971,15 +3305,12 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     }
 #endif
     //insert it into the document at the current cursor position
-    uno::Reference<text::XTextContent> xTextContent
-        (m_pGraphicImport->GetGraphicObject());
-    appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+    OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
+    if( xTextContent.is())
+        appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
 
 #ifdef DEBUG_DOMAINMAPPER
     {
-        uno::Reference<drawing::XShape> xShape
-            (m_pGraphicImport->GetGraphicObject(),
-             uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xPropSet
             (xShape, uno::UNO_QUERY_THROW);
         logger("DOMAINMAPPER", "<shapeprops-after>");
@@ -2991,6 +3322,14 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
         {
             logger("DOMAINMAPPER", "<exception/>");
         }
+        awt::Size aSize(xShape->getSize());
+        awt::Point aPoint(xShape->getPosition());
+        char buffer[256];
+        snprintf(buffer, sizeof(buffer),
+                 "<shape x=\"%ld\" y=\"%ld\" width=\"%ld\" height=\"%ld\">",
+                 aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
+        logger("DOMAINMAPPER", buffer);
+        logger("DOMAINMAPPER", "</shape>");
         logger("DOMAINMAPPER", "</shapeprops-after>");
     }
 #endif
