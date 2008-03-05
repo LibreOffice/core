@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:04:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,21 @@ public:
     BOOL                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(BOOL bPhys);
 
-    void                    SetItemSet(const SfxItemSet& rSet);
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value FALSE,
+    // which indicates that the indent attributes at a paragraph style should
+    // be reset in case that a list style is applied to the paragraph style and
+    // no indent attributes are applied.
+    void                    SetItemSet( const SfxItemSet& rSet,
+                                        const bool bResetIndentAttrsAtParagraphStyle = false );
+    // <--
 
     virtual SfxItemSet&     GetItemSet();
+    // --> OD 2008-02-12 #newlistlevelattrs#
+    // new method for paragraph styles to merge indent attributes of applied list
+    // style into the given item set, if the list style indent attributes are applicable.
+    void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
+    // <--
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
 
