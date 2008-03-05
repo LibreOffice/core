@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:30:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,7 +772,12 @@ const SwPropNameTab aPropNameTab = {
 /* 0714 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")},
 /* 0715 UNO_NAME_HEADER_ROW_COUNT*/     {MAP_CHAR_LEN("HeaderRowCount")},
 /* 0716 UNO_NAME_INPUT */                {MAP_CHAR_LEN("Input")},
-/* 0717 UNO_NAME_ROW_SPAN */            {MAP_CHAR_LEN("RowSpan")}
+/* 0717 UNO_NAME_ROW_SPAN */            {MAP_CHAR_LEN("RowSpan")},
+/* 0718 UNO_NAME_POSITION_AND_SPACE_MODE */ {MAP_CHAR_LEN("PositionAndSpaceMode")},
+/* 0719 UNO_NAME_LABEL_FOLLOWED_BY */       {MAP_CHAR_LEN("LabelFollowedBy")},
+/* 0720 UNO_NAME_LISTTAB_STOP_POSITION */   {MAP_CHAR_LEN("ListtabStopPosition")},
+/* 0721 UNO_NAME_FIRST_LINE_INDENT */       {MAP_CHAR_LEN("FirstLineIndent")},
+/* 0722 UNO_NAME_INDENT_AT */               {MAP_CHAR_LEN("IndentAt")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
