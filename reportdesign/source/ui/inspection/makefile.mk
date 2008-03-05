@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-20 19:11:11 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:11:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ SLOFILES=\
     $(SLO)$/DefaultInspection.obj		\
     $(SLO)$/ReportComponentHandler.obj	\
     $(SLO)$/GeometryHandler.obj			\
+    $(SLO)$/DataProviderHandler.obj		\
     $(SLO)$/metadata.obj
 
 
