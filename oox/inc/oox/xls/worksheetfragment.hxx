@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheetfragment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define OOX_XLS_WORKSHEETFRAGMENT_HXX
 
 #include "oox/xls/bifffragmenthandler.hxx"
-#include "oox/xls/ooxfragmenthandler.hxx"
+#include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
 namespace xls {
@@ -55,25 +55,24 @@ public:
                             sal_Int32 nSheet );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual bool        onCanCreateRecordContext( sal_Int32 nRecId );
-    virtual ::oox::core::RecordContextRef
-                        onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
 
-    // oox.xls.OoxFragmentHandler interface -----------------------------------
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
     virtual void        finalizeImport();
 
 private:
+    /** Imports page settings from a pageSetUpPr element. */
+    void                importPageSetUpPr( const AttributeList& rAttribs );
     /** Imports the dimension element containing the used area of the sheet. */
     void                importDimension( const AttributeList& rAttribs );
     /** Imports sheet format properties from a sheetFormatPr element. */
@@ -82,20 +81,14 @@ private:
     void                importCol( const AttributeList& rAttribs );
     /** Imports a merged cell range from a mergeCell element. */
     void                importMergeCell( const AttributeList& rAttribs );
-    /** Imports the hyperlink element containing a hyperlink for a cell range. */
-    void                importHyperlink( const AttributeList& rAttribs );
     /** Imports the dataValidation element containing data validation settings. */
     void                importDataValidation( const AttributeList& rAttribs );
-    /** Imports page settings from a pageSetUpPr element. */
-    void                importPageSetUpPr( const AttributeList& rAttribs );
+    /** Imports the hyperlink element containing a hyperlink for a cell range. */
+    void                importHyperlink( const AttributeList& rAttribs );
     /** Imports individual break that is either within row or column break context. */
     void                importBrk( const AttributeList& rAttribs );
-
-    /** Imports the formula of a data validation. */
-    void                importDataValFormula(
-                            ApiTokenSequence& orTokens,
-                            const ::rtl::OUString& rFormula,
-                            const ::com::sun::star::table::CellAddress& rBaseAddress );
+    /** Imports the the relation identifier for the DrawingML part. */
+    void                importDrawing( const AttributeList& rAttribs );
 
     /** Imports the DIMENSION record containing the used area of the sheet. */
     void                importDimension( RecordInputStream& rStrm );
@@ -111,6 +104,8 @@ private:
     void                importDataValidation( RecordInputStream& rStrm );
     /** Imports the BRK record for an individual row or column page break. */
     void                importBrk( RecordInputStream& rStrm );
+    /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
+    void                importDrawing( RecordInputStream& rStrm );
 
 private:
     ::std::auto_ptr< OoxValidationData > mxValData;
@@ -157,17 +152,6 @@ private:
     void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
     /** Imports the STANDARDWIDTH record and sets standard column width. */
     void                importStandardWidth( BiffInputStream& rStrm );
-
-    /** Reads the formula from a DATAVALIDATION record. */
-    void                readDataValFormula( ApiTokenSequence& orTokens, BiffInputStream& rStrm );
-    /** Reads and returns a string from a HYPERLINK record. */
-    ::rtl::OUString     readHyperlinkString( BiffInputStream& rStrm, sal_Int32 nChars, bool bUnicode );
-    /** Reads and returns a string from a HYPERLINK record. */
-    ::rtl::OUString     readHyperlinkString( BiffInputStream& rStrm, bool bUnicode );
-    /** Ignores a string in a HYPERLINK record. */
-    void                skipHyperlinkString( BiffInputStream& rStrm, sal_Int32 nChars, bool bUnicode );
-    /** Ignores a string in a HYPERLINK record. */
-    void                skipHyperlinkString( BiffInputStream& rStrm, bool bUnicode );
 };
 
 // ============================================================================
