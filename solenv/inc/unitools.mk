@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 18:50:29 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:34:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
 #
 #*************************************************************************
 
-# Common tools
+# Common tools - move this to the end / consolidate
 TRANSEX*=transex3
 ULFEX*=ulfex
 XMLEX*=xmlex
@@ -43,7 +43,7 @@ XSLTPROC*=xsltproc
 
 ULFCONV*=ulfconv
 
-MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
+MAKEDEPEND*=$(SOLARBINDIR)$/makedepend
 
 SCP_CHECK_TOOL:=checkscp$E
 
@@ -120,7 +120,6 @@ CDD=cd
 COPY*=cp
 COPYRECURSE=-r
 COPYUPDATE=-u
-DELAY=sleep
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
@@ -128,8 +127,6 @@ GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
 LS*=ls
-MKDIR*=mkdir
-MKDIRHIER*=mkdir -p
 PERL*:=perl
 .EXPORT : PERL
 RENAME*=mv
@@ -145,7 +142,7 @@ CDD=+cdd
 COPY*=+copy
 COPYRECURSE=/s
 COPYUPDATE=/u
-DELAY=+delay
+DELAY*=+delay
 ECHON*=+echos
 ECHONL=+echo.
 FIND*=$(BUILD_TOOLS)$/find.exe
@@ -157,16 +154,15 @@ GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
 GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
-MKDIR=+mkdir
-MKDIRHIER=$(MKDIR) /sn
 PERL*:=+call perl5.btm
 .EXPORT : PERL
 RENAME*=+ren
 TOUCH*=$(PERL) $(SOLARENV)$/bin$/touch.pl
 TYPE*=+type
+XARGS*=tr -d "\015" | xargs
 4nt_force_shell:=+
 .ENDIF  "$(USE_SHELL)"!="4nt"
-DUMPBIN*=$(WRAPCMD) dumpbin
+DUMPBIN*=dumpbin
 
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
 SED*=sed
@@ -193,8 +189,6 @@ GNUMAKE*=gmake
 .ENDIF			# "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
 TOUCH=touch
 RENAME=mv
-MKDIR=mkdir
-MKDIRHIER=mkdir -p
 GREP=grep
 FIND=find
 LS=ls
@@ -202,8 +196,14 @@ ECHON=echo -n
 ECHONL=echo
 .ENDIF			# "$(GUI)"=="UNX"
 
+# (Global) Set if not set before
+DELAY*=sleep
+MKDIR*=mkdir$E
+MKDIRHIER*=mkdir$E -p
+XARGS*=xargs
+
 RM+=$(RMFLAGS)
-ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
+ADJUSTVISIBILITY*:=adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl
