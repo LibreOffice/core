@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 17:25:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,21 @@
           <value xml:lang="zh-TW">13</value>
     </prop>
     </node>
+    <node oor:name="Menu">
+      <prop oor:name="ShowIconsInMenues" install:module="macosx">
+        <value>false</value>
+      </prop>
+    </node>
   </node>
   <node oor:name="Help">
+    <node oor:name="StartCenter">
+        <prop oor:name="AddFeatureURL" oor:type="xs:string">
+            <value>${STARTCENTER_ADDFEATURE_URL}</value>
+        </prop>
+        <prop oor:name="InfoURL" oor:type="xs:string">
+            <value>${STARTCENTER_INFO_URL}</value>
+        </prop>
+    </node>
     <node oor:name="Registration">
       <prop oor:name="TemplateURL">
         <value>${REGISTRATIONURL}</value>
@@ -125,6 +138,7 @@
     </node>
     <prop oor:name="System">
       <value install:module="unx">UNIX</value>
+      <value install:module="macosx">UNIX</value>
       <value install:module="wnt">WIN</value>
     </prop>
   </node>
