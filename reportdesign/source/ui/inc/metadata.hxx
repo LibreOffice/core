@@ -6,9 +6,9 @@
  *
  *  $RCSfile: metadata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,10 @@ namespace rptui
     #define PROPERTY_ID_FORMULALIST                     31
     #define PROPERTY_ID_SCOPE                           32
     #define PROPERTY_ID_RESETPAGENUMBER                 33
+    #define PROPERTY_ID_CHARTTYPE                       34
+    #define PROPERTY_ID_MASTERFIELDS                    35
+    #define PROPERTY_ID_DETAILFIELDS                    36
+    #define PROPERTY_ID_PREVIEW_COUNT                   37
 
 //............................................................................
 } // namespace rptui
