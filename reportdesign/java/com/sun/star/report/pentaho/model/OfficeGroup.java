@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeGroup.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:50:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import org.jfree.report.expressions.Expression;
 import org.jfree.report.structure.Section;
-import org.jfree.report.structure.Element;
 
 /**
  * An office group is a virtual section that contains the group header, footer
@@ -90,5 +90,14 @@ public class OfficeGroup extends Section
     return (OfficeGroupSection) instanceSection.findFirstChild
         (OfficeNamespaces.OOREPORT_NS, "group-footer");
 
+  }
+  public Expression getGroupingExpression(){
+      final OfficeGroupInstanceSection instanceSection =
+        (OfficeGroupInstanceSection) findFirstChild(OfficeNamespaces.INTERNAL_NS, "group-instance");
+    if (instanceSection == null)
+    {
+      return null;
+    }
+    return instanceSection.getGroupingExpression();
   }
 }
