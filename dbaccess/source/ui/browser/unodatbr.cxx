@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:33:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1510,45 +1510,33 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
 
     SbaXDataBrowserController::attachFrame(_xFrame);
 
-    if(m_xCurrentFrame.is())
+    if ( m_xCurrentFrame.is() )
     {
         m_xCurrentFrameParent = m_xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
-        if(m_xCurrentFrameParent.is())
+        if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
-    }
 
-    // obtain our toolbox
-    try
-    {
-        Reference< XLayoutManager > xLayouter;
-        Reference< XPropertySet > xFrameProps( m_xCurrentFrame, UNO_QUERY );
-        if ( xFrameProps.is() )
-            xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ) >>= xLayouter;
-
-        if ( xLayouter.is() )
+        // obtain our toolbox
+        try
         {
-            Reference< XUIElement > xUI;
-            try
+            Reference< XPropertySet > xFrameProps( m_xCurrentFrame, UNO_QUERY_THROW );
+            Reference< XLayoutManager > xLayouter(
+                xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ),
+                UNO_QUERY );
+
+            if ( xLayouter.is() )
             {
-                xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" ) ) );
-                if ( !xUI.is() )
-                    xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" ) ) );
-            }
-            catch( const Exception& )
-            { // nii
-                if ( !xUI.is() )
-                    xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" ) ) );
-            }
-            if ( xUI.is() )
-            {
+                Reference< XUIElement > xUI(
+                    xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" ) ) ),
+                    UNO_SET_THROW );
                 m_xMainToolbar = m_xMainToolbar.query( xUI->getRealInterface() );
                 OSL_ENSURE( m_xMainToolbar.is(), "SbaTableQueryBrowser::attachFrame: where's my toolbox?" );
             }
         }
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::attachFrame: caught an exception!" );
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     // get the dispatchers for the external slots
@@ -3693,7 +3681,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" )));
+            xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }
