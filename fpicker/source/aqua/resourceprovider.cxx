@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 11:00:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,6 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _RESOURCEPROVIDER_HXX_
-#include "resourceprovider.hxx"
-#endif
-
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -69,8 +65,19 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 
+#ifndef _SVTOOLS_SVTOOLS_HRC_
 #include <svtools/svtools.hrc>
+#endif
+
+#ifndef _SVTOOLS_FILEDLG2_HRC_
 #include <svtools/filedlg2.hrc>
+#endif
+
+#ifndef _NSSTRING_OOOADDITIONS_HXX_
+#include "NSString_OOoAdditions.hxx"
+#endif
+
+#include "resourceprovider.hxx"
 
 //------------------------------------------------------------
 // namespace directives
@@ -111,13 +118,14 @@ _Entry CtrlIdToResIdTable[] = {
     { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
     { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
     { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION },
-    { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE }
+    { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE },
+    { LISTBOX_FILTER_LABEL,                     STR_SVT_FILEPICKER_FILTER_TITLE}
 };
 
 _Entry OtherCtrlIdToResIdTable[] = {
     { FILE_PICKER_TITLE_OPEN,                   STR_FILEDLG_OPEN },
     { FILE_PICKER_TITLE_SAVE,                   STR_FILEDLG_SAVE },
-    { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE },
+    { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE }
 };
 
 
@@ -192,7 +200,7 @@ public:
     //
     //-------------------------------------
 
-    CFStringRef getResString( sal_Int16 aId )
+    NSString* getResString( sal_Int16 aId )
     {
         String   aResString;
         OUString aResOUString;
@@ -210,8 +218,9 @@ public:
             else
             {
                 aResId = OtherCtrlIdToResId( aId );
-                if ( aResId > -1 )
+                if ( aResId > -1 ) {
                     aResString = String( ResId( aResId, *m_OtherResMgr ) );
+                }
             }
             if ( aResId > -1 )
                 aResOUString = OUString( aResString );
@@ -220,7 +229,7 @@ public:
         {
         }
 
-        return CFStringCreateWithOUString(aResOUString);
+        return [NSString stringWithOUString:aResOUString];
     }
 
 public:
@@ -250,20 +259,13 @@ CResourceProvider::~CResourceProvider( )
 //
 //------------------------------------------------------------
 
-CFStringRef CResourceProvider::getResString( sal_Int32 aId )
+NSString* CResourceProvider::getResString( sal_Int32 aId )
 {
-    CFStringRef sImmutable = m_pImpl->getResString( aId );
-    CFIndex nLength = CFStringGetLength(sImmutable);
-    CFMutableStringRef sMutableString = CFStringCreateMutableCopy(kCFAllocatorDefault,nLength,sImmutable);
-    CFRelease(sImmutable);
-    CFStringRef sToFind = CFSTR("~");
-    CFStringRef sRep = CFSTR("");
-    CFStringFindAndReplace(sMutableString,sToFind,sRep,CFRangeMake(0,nLength),0);
-    CFRelease(sToFind);
-    CFRelease(sRep);
+    NSString* sImmutable = m_pImpl->getResString( aId );
+    NSMutableString *sMutableString = [NSMutableString stringWithString:sImmutable];
+    [sMutableString replaceOccurrencesOfString:@"~" withString:@"" options:0 range:NSMakeRange(0, [sMutableString length])];
 
-    CFStringRef result = CFStringCreateCopy(kCFAllocatorDefault,sMutableString);
-    CFRelease(sMutableString);
+    NSString *result = [NSString stringWithString:sMutableString];
 
     return result;
 }

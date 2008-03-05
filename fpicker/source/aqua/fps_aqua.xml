@@ -21,7 +21,6 @@
         <type>com.sun.star.ui.dialogs.ExecutableDialogException</type>
         <type>com.sun.star.ui.dialogs.XFilePickerNotifier</type>
         <type>com.sun.star.ui.dialogs.XFilePickerControlAccess</type>
-        <type>com.sun.star.ui.dialogs.XFilePreview</type>
         <type>com.sun.star.ui.dialogs.ExtendedFilePickerElementIds</type>
         <type>com.sun.star.ui.dialogs.ExecutableDialogResults</type>
         <type>com.sun.star.ui.dialogs.FilePickerEvent</type>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 11:01:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,9 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring>
-#endif
-
-#include "CFStringUtilities.hxx"
+#include <premac.h>
+#include <Cocoa/Cocoa.h>
+#include <postmac.h>
 
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
@@ -70,7 +68,7 @@ public:
     CResourceProvider( );
     ~CResourceProvider( );
 
-    CFStringRef getResString( sal_Int32 aId );
+    NSString* getResString( sal_Int32 aId );
 
 private:
     CResourceProvider_Impl* m_pImpl;
