@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:15:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,7 @@ private:
                               Rectangle& rStateRect, Rectangle& rMouseRect,
                               bool bLayout = false );
     SAL_DLLPRIVATE void     ImplDrawRadioButton( bool bLayout = false );
+    SAL_DLLPRIVATE void     ImplInvalidateOrDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
 
@@ -435,6 +436,7 @@ private:
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void         ImplDrawCheckBoxState();
+    SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                                     const Point& rPos, const Size& rSize,
                                     const Size& rImageSize, long nImageSep,
