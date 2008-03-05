@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:42:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
             // ignored
         break;
         default:
-            OSL_ASSERT("unknown attribute");
+            OSL_ENSURE(false, "unknown attribute");
     }
 }
 /*-- 08.10.2007 12:55:32---------------------------------------------------
