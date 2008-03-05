@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 13:14:09 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:39:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -heade
 
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
-MY_AUTODOC=$(WRAPCMD) $(SOLARBINDIR)$/autodoc
+MY_AUTODOC=$(SOLARBINDIR)$/autodoc
 
 .IF "$(SOLAR_JAVA)"!=""
 all: \
@@ -125,5 +125,5 @@ $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
 .IF "$(SOLAR_JAVA)"!=""
 $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     -$(MKDIRHIER) $(@:d)        
-    $(WRAPCMD) $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+    $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
 .ENDIF
