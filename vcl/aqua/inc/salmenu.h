@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:14:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,11 @@ public:
     const AquaSalFrame* getFrame() const;
 
     void setMainMenu();
+    void unsetMainMenu();
+    static void setDefaultMenu();
     static void enableMainMenu( bool bEnable );
+    static void addFallbackMenuItem( NSMenuItem* NewItem );
+    static void removeFallbackMenuItem( NSMenuItem* pOldItem );
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu
     NSMenu*                 mpMenu;             // The Carbon reference to this menu
