@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,144 @@ namespace xls {
 
 class BiffInputStream;
 class BiffOutputStream;
+
+// OOBIN record identifiers ===================================================
+
+const sal_Int32 OOBIN_ID_ARRAY              = 0x01AA;
+const sal_Int32 OOBIN_ID_BINARYINDEXBLOCK   = 0x002A;
+const sal_Int32 OOBIN_ID_BINARYINDEXROWS    = 0x0028;
+const sal_Int32 OOBIN_ID_BOOKVIEWS          = 0x0087;
+const sal_Int32 OOBIN_ID_BORDER             = 0x002E;
+const sal_Int32 OOBIN_ID_BORDERS            = 0x0265;
+const sal_Int32 OOBIN_ID_BRK                = 0x018C;
+const sal_Int32 OOBIN_ID_CALCPR             = 0x009D;
+const sal_Int32 OOBIN_ID_CELL_BLANK         = 0x0001;
+const sal_Int32 OOBIN_ID_CELL_BOOL          = 0x0004;
+const sal_Int32 OOBIN_ID_CELL_DOUBLE        = 0x0005;
+const sal_Int32 OOBIN_ID_CELL_ERROR         = 0x0003;
+const sal_Int32 OOBIN_ID_CELL_RK            = 0x0002;
+const sal_Int32 OOBIN_ID_CELL_RSTRING       = 0x003E;
+const sal_Int32 OOBIN_ID_CELL_SI            = 0x0007;
+const sal_Int32 OOBIN_ID_CELL_STRING        = 0x0006;
+const sal_Int32 OOBIN_ID_CELLSTYLE          = 0x0030;
+const sal_Int32 OOBIN_ID_CELLSTYLES         = 0x026B;
+const sal_Int32 OOBIN_ID_CELLSTYLEXFS       = 0x0272;
+const sal_Int32 OOBIN_ID_CELLXFS            = 0x0269;
+const sal_Int32 OOBIN_ID_CFCOLOR            = 0x0234;
+const sal_Int32 OOBIN_ID_CFRULE             = 0x01CF;
+const sal_Int32 OOBIN_ID_CHARTPAGESETUP     = 0x028C;
+const sal_Int32 OOBIN_ID_CHARTPROTECTION    = 0x029D;
+const sal_Int32 OOBIN_ID_CHARTSHEETPR       = 0x028B;
+const sal_Int32 OOBIN_ID_CHARTSHEETVIEW     = 0x008D;
+const sal_Int32 OOBIN_ID_CHARTSHEETVIEWS    = 0x008B;
+const sal_Int32 OOBIN_ID_COL                = 0x003C;
+const sal_Int32 OOBIN_ID_COLBREAKS          = 0x018A;
+const sal_Int32 OOBIN_ID_COLOR              = 0x023C;
+const sal_Int32 OOBIN_ID_COLORS             = 0x01D9;
+const sal_Int32 OOBIN_ID_COLORSCALE         = 0x01D5;
+const sal_Int32 OOBIN_ID_COLS               = 0x0186;
+const sal_Int32 OOBIN_ID_CONDFORMATTING     = 0x01CD;
+const sal_Int32 OOBIN_ID_CUSTOMCHARTVIEW    = 0x028F;
+const sal_Int32 OOBIN_ID_CUSTOMCHARTVIEWS   = 0x028D;
+const sal_Int32 OOBIN_ID_CUSTOMSHEETVIEW    = 0x01A7;
+const sal_Int32 OOBIN_ID_CUSTOMSHEETVIEWS   = 0x01A6;
+const sal_Int32 OOBIN_ID_CUSTOMWORKBOOKVIEW = 0x018D;
+const sal_Int32 OOBIN_ID_DATABAR            = 0x01D3;
+const sal_Int32 OOBIN_ID_DATATABLE          = 0x01AC;
+const sal_Int32 OOBIN_ID_DATAVALIDATION     = 0x0040;
+const sal_Int32 OOBIN_ID_DATAVALIDATIONS    = 0x023D;
+const sal_Int32 OOBIN_ID_DDEITEMVALUES      = 0x0242;
+const sal_Int32 OOBIN_ID_DDEITEM_BOOL       = 0x0248;
+const sal_Int32 OOBIN_ID_DDEITEM_DOUBLE     = 0x0244;
+const sal_Int32 OOBIN_ID_DDEITEM_ERROR      = 0x0245;
+const sal_Int32 OOBIN_ID_DDEITEM_STRING     = 0x0246;
+const sal_Int32 OOBIN_ID_DEFINEDNAME        = 0x0027;
+const sal_Int32 OOBIN_ID_DIMENSION          = 0x0094;
+const sal_Int32 OOBIN_ID_DRAWING            = 0x0226;
+const sal_Int32 OOBIN_ID_DXF                = 0x01FB;
+const sal_Int32 OOBIN_ID_DXFS               = 0x01F9;
+const sal_Int32 OOBIN_ID_EXTCELL_BLANK      = 0x016F;
+const sal_Int32 OOBIN_ID_EXTCELL_BOOL       = 0x0171;
+const sal_Int32 OOBIN_ID_EXTCELL_DOUBLE     = 0x0170;
+const sal_Int32 OOBIN_ID_EXTCELL_ERROR      = 0x0172;
+const sal_Int32 OOBIN_ID_EXTCELL_STRING     = 0x0173;
+const sal_Int32 OOBIN_ID_EXTERNALADDIN      = 0x029B;
+const sal_Int32 OOBIN_ID_EXTERNALBOOK       = 0x0168;
+const sal_Int32 OOBIN_ID_EXTERNALNAME       = 0x0241;
+const sal_Int32 OOBIN_ID_EXTERNALREF        = 0x0163;
+const sal_Int32 OOBIN_ID_EXTERNALREFS       = 0x0161;
+const sal_Int32 OOBIN_ID_EXTERNALSELF       = 0x0165;
+const sal_Int32 OOBIN_ID_EXTERNALSAME       = 0x0166;
+const sal_Int32 OOBIN_ID_EXTERNALSHEETS     = 0x016A;
+const sal_Int32 OOBIN_ID_EXTROW             = 0x016E;
+const sal_Int32 OOBIN_ID_EXTSHEETDATA       = 0x016B;
+const sal_Int32 OOBIN_ID_EXTERNALNAMEFLAGS  = 0x024A;
+const sal_Int32 OOBIN_ID_EXTSHEETNAMES      = 0x0167;
+const sal_Int32 OOBIN_ID_FILEVERSION        = 0x0080;
+const sal_Int32 OOBIN_ID_FILL               = 0x002D;
+const sal_Int32 OOBIN_ID_FILLS              = 0x025B;
+const sal_Int32 OOBIN_ID_FONT               = 0x002B;
+const sal_Int32 OOBIN_ID_FONTS              = 0x0263;
+const sal_Int32 OOBIN_ID_FORMULA_STRING     = 0x0008;
+const sal_Int32 OOBIN_ID_FORMULA_DOUBLE     = 0x0009;
+const sal_Int32 OOBIN_ID_FORMULA_BOOL       = 0x000A;
+const sal_Int32 OOBIN_ID_FORMULA_ERROR      = 0x000B;
+const sal_Int32 OOBIN_ID_FUNCTIONGROUP      = 0x0299;
+const sal_Int32 OOBIN_ID_FUNCTIONGROUPS     = 0x0298;
+const sal_Int32 OOBIN_ID_HEADERFOOTER       = 0x01DF;
+const sal_Int32 OOBIN_ID_HYPERLINK          = 0x01EE;
+const sal_Int32 OOBIN_ID_ICONSET            = 0x01D1;
+const sal_Int32 OOBIN_ID_INDEXEDCOLORS      = 0x0235;
+const sal_Int32 OOBIN_ID_MERGECELL          = 0x00B0;
+const sal_Int32 OOBIN_ID_MERGECELLS         = 0x00B1;
+const sal_Int32 OOBIN_ID_MRUCOLORS          = 0x0239;
+const sal_Int32 OOBIN_ID_MULTCELL_BLANK     = 0x000C;
+const sal_Int32 OOBIN_ID_MULTCELL_BOOL      = 0x000F;
+const sal_Int32 OOBIN_ID_MULTCELL_DOUBLE    = 0x0010;
+const sal_Int32 OOBIN_ID_MULTCELL_ERROR     = 0x000E;
+const sal_Int32 OOBIN_ID_MULTCELL_RK        = 0x000D;
+const sal_Int32 OOBIN_ID_MULTCELL_RSTRING   = 0x003D;
+const sal_Int32 OOBIN_ID_MULTCELL_SI        = 0x0012;
+const sal_Int32 OOBIN_ID_MULTCELL_STRING    = 0x0011;
+const sal_Int32 OOBIN_ID_NUMFMT             = 0x002C;
+const sal_Int32 OOBIN_ID_NUMFMTS            = 0x0267;
+const sal_Int32 OOBIN_ID_PAGEMARGINS        = 0x01DC;
+const sal_Int32 OOBIN_ID_PAGESETUP          = 0x01DE;
+const sal_Int32 OOBIN_ID_PANE               = 0x0097;
+const sal_Int32 OOBIN_ID_PHONETICPR         = 0x0219;
+const sal_Int32 OOBIN_ID_PICTURE            = 0x0232;
+const sal_Int32 OOBIN_ID_PRINTOPTIONS       = 0x01DD;
+const sal_Int32 OOBIN_ID_RGBCOLOR           = 0x01DB;
+const sal_Int32 OOBIN_ID_ROW                = 0x0000;
+const sal_Int32 OOBIN_ID_ROWBREAKS          = 0x0188;
+const sal_Int32 OOBIN_ID_SELECTION          = 0x0098;
+const sal_Int32 OOBIN_ID_SHAREDFMLA         = 0x01AB;
+const sal_Int32 OOBIN_ID_SHEET              = 0x009C;
+const sal_Int32 OOBIN_ID_SHEETDATA          = 0x0091;
+const sal_Int32 OOBIN_ID_SHEETFORMATPR      = 0x01E5;
+const sal_Int32 OOBIN_ID_SHEETPR            = 0x0093;
+const sal_Int32 OOBIN_ID_SHEETPROTECTION    = 0x0217;
+const sal_Int32 OOBIN_ID_SHEETS             = 0x008F;
+const sal_Int32 OOBIN_ID_SHEETVIEW          = 0x0089;
+const sal_Int32 OOBIN_ID_SHEETVIEWS         = 0x0085;
+const sal_Int32 OOBIN_ID_SI                 = 0x0013;
+const sal_Int32 OOBIN_ID_SST                = 0x009F;
+const sal_Int32 OOBIN_ID_STYLESHEET         = 0x0116;
+const sal_Int32 OOBIN_ID_TABLE              = 0x0157;
+const sal_Int32 OOBIN_ID_TABLEPART          = 0x0295;
+const sal_Int32 OOBIN_ID_TABLEPARTS         = 0x0294;
+const sal_Int32 OOBIN_ID_TABLESTYLEINFO     = 0x0201;
+const sal_Int32 OOBIN_ID_TABLESTYLES        = 0x01FC;
+const sal_Int32 OOBIN_ID_VOLTYPE            = 0x0204;
+const sal_Int32 OOBIN_ID_VOLTYPEMAIN        = 0x0206;
+const sal_Int32 OOBIN_ID_VOLTYPES           = 0x0202;
+const sal_Int32 OOBIN_ID_VOLTYPESTP         = 0x020A;
+const sal_Int32 OOBIN_ID_VOLTYPETR          = 0x020B;
+const sal_Int32 OOBIN_ID_WORKBOOK           = 0x0083;
+const sal_Int32 OOBIN_ID_WORKBOOKPR         = 0x0099;
+const sal_Int32 OOBIN_ID_WORKBOOKVIEW       = 0x009E;
+const sal_Int32 OOBIN_ID_WORKSHEET          = 0x0081;
+const sal_Int32 OOBIN_ID_XF                 = 0x002F;
 
 // ============================================================================
 
@@ -205,6 +343,7 @@ const sal_uInt16 BIFF_ID_PALETTE            = 0x0092;
 const sal_uInt16 BIFF_ID_PANE               = 0x0041;
 const sal_uInt16 BIFF_ID_PASSWORD           = 0x0013;
 const sal_uInt16 BIFF_ID_PHONETICPR         = 0x00EF;
+const sal_uInt16 BIFF_ID_PICTURE            = 0x00E9;
 const sal_uInt16 BIFF_ID_PRECISION          = 0x000E;
 const sal_uInt16 BIFF_ID_PRINTGRIDLINES     = 0x002B;
 const sal_uInt16 BIFF_ID_PRINTHEADERS       = 0x002A;
@@ -303,16 +442,6 @@ const sal_uInt8 BIFF_STRF_16BIT             = 0x01;
 const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
-
-/** Flags used to specify import/export mode of strings. */
-typedef sal_Int32 BiffStringFlags;
-
-const BiffStringFlags BIFF_STR_DEFAULT      = 0x0000;   /// Default string settings.
-const BiffStringFlags BIFF_STR_FORCEUNICODE = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 export only.
-const BiffStringFlags BIFF_STR_8BITLENGTH   = 0x0002;   /// 8-bit string length field (default: 16-bit).
-const BiffStringFlags BIFF_STR_SMARTFLAGS   = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
-const BiffStringFlags BIFF_STR_KEEPFONTS    = 0x0008;   /// Keep old fonts when reading unformatted string (default: clear fonts). Import only.
-const BiffStringFlags BIFF_STR_EXTRAFONTS   = 0x0010;   /// Read trailing rich-string font array (default: nothing). BIFF2-BIFF5 import only.
 
 // GUID =======================================================================
 
