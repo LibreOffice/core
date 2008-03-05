@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:27:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@ private:
     FixedLine           aFileDlgFL;
     ReadOnlyImage       aFileDlgROImage;
     CheckBox            aFileDlgCB;
+
+    FixedLine           aPrintDlgFL;
+    CheckBox            aPrintDlgCB;
 
     FixedLine           aDocStatusFL;
     CheckBox            aDocStatusCB;
