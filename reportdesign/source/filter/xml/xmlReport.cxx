@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlReport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:03:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
+#include "xmlMasterFields.hxx"
 
 namespace rptxml
 {
@@ -202,6 +203,10 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
                 pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xComponent.get(),true);
             }
             break;
+        case XML_TOK_MASTER_DETAIL_FIELDS:
+                m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                pContext = new OXMLMasterFields(m_rImport, nPrefix, rLocalName,xAttrList ,this);
+            break;
         case XML_TOK_REPORT_HEADER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
@@ -259,6 +264,17 @@ void OXMLReport::EndElement()
     const ORptFilter::TGroupFunctionMap::const_iterator aEnd = aFunctions.end();
     for (; aIter != aEnd; ++aIter)
         xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(aIter->second));
+
+    if ( !m_aMasterFields.empty() )
+        m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+    if ( !m_aDetailFields.empty() )
+        m_xComponent->setDetailFields(Sequence< ::rtl::OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+}
+// -----------------------------------------------------------------------------
+void OXMLReport::addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair)
+{
+    m_aMasterFields.push_back(_aPair.first);
+    m_aDetailFields.push_back(_aPair.second);
 }
 //----------------------------------------------------------------------------
 } // namespace rptxml
