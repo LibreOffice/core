@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:45:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SWDDETBL_HXX
 #include <swddetbl.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 
