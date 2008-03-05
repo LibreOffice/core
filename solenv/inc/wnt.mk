@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:28:48 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:34:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,14 @@
 
 # --- changes for W32-tcsh - should move into settings.mk ---
 .IF "$(USE_SHELL)"!="4nt"
-STARDEP=$(WRAPCMD) javadep
-JAVAC=$(WRAPCMD) javac
-JAVA=$(WRAPCMD) java
-JAVAI!:=$(WRAPCMD) java
+STARDEP=javadep
+JAVAC=javac
+JAVA=java
+JAVAI!:=java
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
 # --- general WNT settings ---
-CLIMAKER*=$(WRAPCMD) climaker
+CLIMAKER*=climaker
 
 HC=hc
 HCFLAGS=
