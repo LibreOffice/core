@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:37:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@
 #include <unotools/configitem.hxx>
 #endif
 // <--
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 #include <hash_map>
 
@@ -100,11 +103,9 @@ using namespace ::com::sun::star;
 USHORT SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-
-// --> OD 2006-06-27 #b6440955#
-// variable moved to class <numfunc::SwDefBulletListConfig>
-//Font* SwNumRule::pDefBulletFont = 0;
-// <--
+// --> OD 2008-02-11 #newlistlevelattrs#
+SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 char sOutline[] = "Outline";
 char* SwNumRule::pDefOutlineName = sOutline;
@@ -115,16 +116,6 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
 };
-
-// --> OD 2006-06-27 #b6440955#
-// variable moved to function <numfunc::SwDefBulletListConfig>
-//#if defined( UNX ) && defined( GCC )
-//extern const sal_Char __FAR_DATA sBulletFntName[];
-//const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
-//#else
-//extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
-//#endif
-// <--
 
 BYTE GetRealLevel( const BYTE nLvl )
 {
@@ -160,8 +151,13 @@ void SetLevel(BYTE * nLvl, BYTE nNewLevel)
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
-    return aFmts[ i ] ? *aFmts[ i ]
-                      : *aBaseFmts[ eRuleType ][ i ];
+    return aFmts[ i ]
+           ? *aFmts[ i ]
+           // --> OD 2008-02-11 #newlistlevelattrs#
+           : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
+               ? *aBaseFmts[ eRuleType ][ i ]
+               : *aLabelAlignmentBaseFmts[ eRuleType ][ i ] );
+           // <--
 }
 
 const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
@@ -510,7 +506,12 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 long int SwNumRule::nInstances = 0;
 #endif
 
-SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
+// --> OD 2008-02-11 #newlistlevelattrs#
+// handle new parameter <eDefaultNumberFormatPositionAndSpaceMode>
+SwNumRule::SwNumRule( const String& rNm,
+                      const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
+                      SwNumRuleType eType,
+                      BOOL bAutoFlg )
     : pList(0),
     aMarkedLevels( MAXLEVEL ), // #i27615#
     pNumRuleMap(0),
@@ -524,7 +525,10 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     bContinusNum( FALSE ),
     bAbsSpaces( FALSE ),
     // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
-    mbCountPhantoms( true )
+    mbCountPhantoms( true ),
+    // <--
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode )
     // <--
 {
 #ifndef PRODUCT
@@ -536,7 +540,8 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
         SwNumFmt* pFmt;
         BYTE n;
 
-        // Nummerierung:
+        // numbering:
+        // position-and-space mode LABEL_WIDTH_AND_POSITION:
         for( n = 0; n < MAXLEVEL; ++n )
         {
             pFmt = new SwNumFmt;
@@ -551,8 +556,36 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             // <--
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        // position-and-space mode LABEL_ALIGNMENT
+        // first line indent of general numbering in inch: -0,25 inch
+        const long cFirstLineIndent = -1440/4;
+        // indent values of general numbering in inch:
+        //  0,5         0,75        1,0         1,25        1,5
+        //  1,75        2,0         2,25        2,5         2,75
+        const long cIndentAt[ MAXLEVEL ] = {
+            1440/2,     1440*3/4,   1440,       1440*5/4,   1440*3/2,
+            1440*7/4,   1440*2,     1440*9/4,   1440*5/2,   1440*11/4 };
+        for( n = 0; n < MAXLEVEL; ++n )
+        {
+            pFmt = new SwNumFmt;
+            pFmt->SetIncludeUpperLevels( 1 );
+            pFmt->SetStart( 1 );
+            // --> OD 2008-01-15 #newlistlevelattrs#
+            pFmt->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
+            pFmt->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+            pFmt->SetListtabPos( cIndentAt[ n ] );
+            pFmt->SetFirstLineIndent( cFirstLineIndent );
+            pFmt->SetIndentAt( cIndentAt[ n ] );
+            // <--
+            pFmt->SetSuffix( aDotStr );
+            pFmt->SetBulletChar( numfunc::GetBulletChar(n));
+            SwNumRule::aLabelAlignmentBaseFmts[ NUM_RULE ][ n ] = pFmt;
+        }
+        // <--
 
-        // Gliederung:
+        // outline:
+        // position-and-space mode LABEL_WIDTH_AND_POSITION:
         for( n = 0; n < MAXLEVEL; ++n )
         {
             pFmt = new SwNumFmt;
@@ -565,6 +598,29 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             // <--
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        // position-and-space mode LABEL_ALIGNMENT:
+        // indent values of default outline numbering in inch:
+        //  0,3         0,4         0,5         0,6         0,7
+        //  0,8         0,9         1,0         1,1         1,2
+        const long cOutlineIndentAt[ MAXLEVEL ] = {
+            1440*3/10,  1440*2/5,   1440/2,     1440*3/5,   1440*7/10,
+            1440*4/5,   1440*9/10,  1440,       1440*11/10, 1440*6/5 };
+        for( n = 0; n < MAXLEVEL; ++n )
+        {
+            pFmt = new SwNumFmt;
+            pFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
+            pFmt->SetIncludeUpperLevels( MAXLEVEL );
+            pFmt->SetStart( 1 );
+            pFmt->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
+            pFmt->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+            pFmt->SetListtabPos( cOutlineIndentAt[ n ] );
+            pFmt->SetFirstLineIndent( -cOutlineIndentAt[ n ] );
+            pFmt->SetIndentAt( cOutlineIndentAt[ n ] );
+            pFmt->SetBulletChar( numfunc::GetBulletChar(n));
+            SwNumRule::aLabelAlignmentBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
+        }
+        // <--
     }
     memset( aFmts, 0, sizeof( aFmts ));
     ASSERT( sName.Len(), "NumRule ohne Namen!" );
@@ -584,7 +640,10 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     bContinusNum( rNumRule.bContinusNum ),
     bAbsSpaces( rNumRule.bAbsSpaces ),
     // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
-    mbCountPhantoms( true )
+    mbCountPhantoms( true ),
+    // <--
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode )
     // <--
 {
 #ifndef PRODUCT
@@ -620,6 +679,14 @@ SwNumRule::~SwNumRule()
             // Gliederung:
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
+
+            // --> OD 2008-02-11 #newlistlevelattrs#
+            ppFmts = (SwNumFmt**)SwNumRule::aLabelAlignmentBaseFmts;
+            for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
+                delete *ppFmts, *ppFmts = 0;
+            for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
+                delete *ppFmts, *ppFmts = 0;
+            // <--
     }
 
     tPamAndNums::iterator aIt;
@@ -638,20 +705,6 @@ SwNumRule::~SwNumRule()
     pList = 0;
     // <--
 }
-
-
-// --> OD 2006-06-27 #b6440955# - no longer needed
-//void SwNumRule::_MakeDefBulletFont()
-//{
-//    pDefBulletFont = new Font( String::CreateFromAscii( sBulletFntName ),
-//                                aEmptyStr, Size( 0, 14 ) );
-//    pDefBulletFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
-//    pDefBulletFont->SetFamily( FAMILY_DONTKNOW );
-//    pDefBulletFont->SetPitch( PITCH_DONTKNOW );
-//    pDefBulletFont->SetWeight( WEIGHT_DONTKNOW );
-//    pDefBulletFont->SetTransparent( TRUE );
-//}
-// <--
 
 void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 {
@@ -929,12 +982,8 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
         aFmts[n] = pSvxFmt ? new SwNumFmt(*pSvxFmt, pDoc) : 0;
     }
 
-//  eRuleType = rNumRule.eRuleType;
-//  sName = rNumRule.sName;
-//  bAutoRuleFlag = rNumRule.bAutoRuleFlag;
     bInvalidRuleFlag = TRUE;
     bContinusNum = rNumRule.IsContinuousNumbering();
-//!!!   bAbsSpaces = rNumRule.IsAbsSpaces();
 }
 /* -----------------30.10.98 08:33-------------------
  *
@@ -948,7 +997,6 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
                             NUM_RULE ?
                                 SVX_RULETYPE_NUMBERING :
                                     SVX_RULETYPE_OUTLINE_NUMBERING );
-//!!!   aRule.SetAbsSpaces( bAbsSpaces );
     for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
         SwNumFmt aNumFmt = Get(n);
@@ -1054,21 +1102,6 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
     if (bGotInvalid)
         SetInvalidRule(bGotInvalid);
 }
-
-// --> OD 2006-06-27 #6440955#
-// move to namespace <numfunc>
-//sal_Unicode GetBulletChar(BYTE nLevel)
-//{
-//    static sal_Unicode nLevelChars[MAXLEVEL] =
-//        { 0x25cf, 0x25cb, 0x25a0, 0x25cf, 0x25cb,
-//          0x25a0, 0x25cf, 0x25cb, 0x25a0, 0x25cf };
-
-//    if (nLevel > MAXLEVEL)
-//        nLevel = MAXLEVEL;
-
-//    return nLevelChars[nLevel];
-//}
-// <--
 
 void SwNumRule::NewNumberRange(const SwPaM & rPam)
 {
