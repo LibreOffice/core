@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlsbdumper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ protected:
     virtual void        implDump();
 
 private:
-    void                dumpCellHeader();
+    void                dumpCellHeader( bool bWithColumn );
     void                dumpSimpleRecord( const ::rtl::OUString& rRecData );
     void                dumpRecordBody();
 
