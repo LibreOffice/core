@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:57:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
-#include "OOXMLFastTokenHandler.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 
 #include <iostream>
@@ -90,7 +89,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
         xParser->setTokenHandler(xTokenHandler);
 
         uno::Reference<io::XInputStream> xInputStream =
-            pStream->getInputStream();
+            pStream->getDocumentStream();
 
         if (xInputStream.is())
         {
@@ -115,6 +114,11 @@ void OOXMLDocumentImpl::setXNoteId(const rtl::OUString & rId)
     msXNoteId = rId;
 }
 
+const rtl::OUString & OOXMLDocumentImpl::getXNoteId() const
+{
+    return msXNoteId;
+}
+
 writerfilter::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
 {
@@ -127,6 +131,13 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
 writerfilter::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OUString & rId)
 {
+#ifdef DEBUG_ELEMENT
+    string tmp = "<getXNoteStream id=\"";
+    tmp += OUStringToOString(rId, RTL_TEXTENCODING_ASCII_US).getStr();
+    tmp += "\"/>";
+    logger("DEBUG", tmp);
+#endif
+
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
@@ -265,6 +276,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             new OOXMLFastDocumentHandler(xContext);
         pDocHandler->setStream(&rStream);
         pDocHandler->setDocument(this);
+        pDocHandler->setXNoteId(msXNoteId);
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
         uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
@@ -279,9 +291,16 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         xParser->setTokenHandler( xTokenHandler );
 
         xml::sax::InputSource aParserInput;
-        aParserInput.aInputStream = mpStream->getInputStream();
+        aParserInput.aInputStream = mpStream->getDocumentStream();
         xParser->parseStream(aParserInput);
     }
+}
+
+uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const ::rtl::OUString & rId)
+{
+    OOXMLStream::Pointer_t pStream(OOXMLDocumentFactory::createStream(mpStream, rId));
+
+    return pStream->getInputStream();
 }
 
 string OOXMLDocumentImpl::getType() const
@@ -307,6 +326,11 @@ void OOXMLDocumentImpl::setShapes(uno::Reference<drawing::XShapes> xShapes)
 uno::Reference<drawing::XShapes> OOXMLDocumentImpl::getShapes()
 {
     return mxShapes;
+}
+
+uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStream()
+{
+    return mpStream->getInputStream();
 }
 
 OOXMLDocument *
