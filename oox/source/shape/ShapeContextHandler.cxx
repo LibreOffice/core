@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeContextHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 #include "ShapeContextHandler.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/vml/drawingfragmenthandler.hxx"
 
 namespace oox { namespace shape {
 
@@ -45,18 +45,15 @@ ShapeContextHandler::ShapeContextHandler
 (uno::Reference< uno::XComponentContext > const & context) :
 m_xContext(context)
 {
-    FragmentHandlerRef rFragmentHandler;
-    ShapePtr pMasterShape;
-    mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
-
-    mxGraphicShapeContext.set(new GraphicShapeContext(rFragmentHandler,
-                                                      pMasterShape,
-                                                      mpShape));
-
-    mpThemePtr.reset(new Theme());
-    uno::Reference<lang::XMultiServiceFactory>
-        xFactory(context->getServiceManager(), uno::UNO_QUERY_THROW);
-    mpFilterBase.reset(new ShapeFilterBase(xFactory));
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory>
+            xFactory(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        mxFilterBase.set( new ShapeFilterBase(xFactory) );
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 ShapeContextHandler::~ShapeContextHandler()
@@ -69,8 +66,29 @@ void SAL_CALL ShapeContextHandler::startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        mxGraphicShapeContext->startFastElement(Element, Attribs);
+    static const ::rtl::OUString sInputStream
+        (RTL_CONSTASCII_USTRINGPARAM ("InputStream"));
+
+    uno::Sequence<beans::PropertyValue> aSeq(1);
+    aSeq[0].Name = sInputStream;
+    aSeq[0].Value <<= mxInputStream;
+    mxFilterBase->filter(aSeq);
+
+//    FragmentHandlerRef rFragmentHandler
+//        (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+
+    ShapePtr pMasterShape;
+    mpDrawing.reset( new oox::vml::Drawing() );
+    mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
+
+
+    mxDrawingFragmentHandler.set
+        (new oox::vml::DrawingFragmentHandler( *mxFilterBase, msRelationFragmentPath, mpDrawing ));
+
+    mpThemePtr.reset(new Theme());
+
+    if (mxDrawingFragmentHandler.is())
+        mxDrawingFragmentHandler->startFastElement(Element, Attribs);
 }
 
 void SAL_CALL ShapeContextHandler::startUnknownElement
@@ -78,15 +96,15 @@ void SAL_CALL ShapeContextHandler::startUnknownElement
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        mxGraphicShapeContext->startUnknownElement(Namespace, Name, Attribs);
+    if (mxDrawingFragmentHandler.is())
+        mxDrawingFragmentHandler->startUnknownElement(Namespace, Name, Attribs);
 }
 
 void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        mxGraphicShapeContext->endFastElement(Element);
+    if (mxDrawingFragmentHandler.is())
+        mxDrawingFragmentHandler->endFastElement(Element);
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement
@@ -94,8 +112,8 @@ void SAL_CALL ShapeContextHandler::endUnknownElement
  const ::rtl::OUString & Name)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        mxGraphicShapeContext->endUnknownElement(Namespace, Name);
+    if (mxDrawingFragmentHandler.is())
+        mxDrawingFragmentHandler->endUnknownElement(Namespace, Name);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -106,8 +124,8 @@ ShapeContextHandler::createFastChildContext
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
-    if (mxGraphicShapeContext.is())
-        xResult.set(mxGraphicShapeContext->createFastChildContext
+    if (mxDrawingFragmentHandler.is())
+        xResult.set(mxDrawingFragmentHandler->createFastChildContext
                     (Element, Attribs));
 
     return xResult;
@@ -120,8 +138,8 @@ ShapeContextHandler::createUnknownChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        return mxGraphicShapeContext->createUnknownChildContext
+    if (mxDrawingFragmentHandler.is())
+        return mxDrawingFragmentHandler->createUnknownChildContext
             (Namespace, Name, Attribs);
 
     return uno::Reference< xml::sax::XFastContextHandler >();
@@ -130,8 +148,8 @@ ShapeContextHandler::createUnknownChildContext
 void SAL_CALL ShapeContextHandler::characters(const ::rtl::OUString & aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if (mxGraphicShapeContext.is())
-        mxGraphicShapeContext->characters(aChars);
+    if (mxDrawingFragmentHandler.is())
+        mxDrawingFragmentHandler->characters(aChars);
 }
 
 // ::com::sun::star::xml::sax::XFastShapeContextHandler:
@@ -139,16 +157,24 @@ uno::Reference< drawing::XShape > SAL_CALL
 ShapeContextHandler::getShape() throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XShape > xResult;
-    std::map< ::rtl::OUString, ShapePtr > aShapeMap;
 
-    if (mpFilterBase.get() != NULL && mxModel.is() &&
-        mpThemePtr.get() != NULL && mxShapes.is())
+    if (mxFilterBase.is() && mxShapes.is())
     {
-        mpShape->addShape
-            (*mpFilterBase, mxModel, mpThemePtr, aShapeMap,
-             mxShapes, NULL);
+        std::vector< oox::vml::ShapePtr >& rShapes = mpDrawing->getShapes();
+        if ( rShapes.size() )
+        {
+            rShapes[ 0 ]->addShape( *mxFilterBase, mxShapes );
 
-        xResult.set(mpShape->getXShape());
+//          mpShape->addShape(*mxFilterBase, mpThemePtr, mxShapes);
+
+            uno::Reference<drawing::XShape> xShape(mpShape->getXShape());
+            awt::Point aPoint(xShape->getPosition());
+            awt::Size aSize(xShape->getSize());
+            aSize.Width = 1000;
+            aSize.Height = 1000;
+            xShape->setSize(aSize);
+            xResult.set(xShape);
+        }
     }
 
     return xResult;
@@ -170,14 +196,45 @@ void SAL_CALL ShapeContextHandler::setShapes
 css::uno::Reference< css::frame::XModel > SAL_CALL
 ShapeContextHandler::getModel() throw (css::uno::RuntimeException)
 {
-    return mxModel;
+    if( !mxFilterBase.is() )
+        throw uno::RuntimeException();
+    return mxFilterBase->getModel();
 }
 
 void SAL_CALL ShapeContextHandler::setModel
 (const css::uno::Reference< css::frame::XModel > & the_value)
     throw (css::uno::RuntimeException)
 {
-    mxModel = the_value;
+    if( !mxFilterBase.is() )
+        throw uno::RuntimeException();
+    uno::Reference<lang::XComponent> xComp(the_value, uno::UNO_QUERY_THROW);
+    mxFilterBase->setTargetDocument(xComp);
+}
+
+uno::Reference< io::XInputStream > SAL_CALL
+ShapeContextHandler::getInputStream() throw (uno::RuntimeException)
+{
+    return mxInputStream;
+}
+
+void SAL_CALL ShapeContextHandler::setInputStream
+(const uno::Reference< io::XInputStream > & the_value)
+    throw (uno::RuntimeException)
+{
+    mxInputStream = the_value;
+}
+
+::rtl::OUString SAL_CALL ShapeContextHandler::getRelationFragmentPath()
+    throw (uno::RuntimeException)
+{
+    return msRelationFragmentPath;
+}
+
+void SAL_CALL ShapeContextHandler::setRelationFragmentPath
+(const ::rtl::OUString & the_value)
+    throw (uno::RuntimeException)
+{
+    msRelationFragmentPath = the_value;
 }
 
 ::rtl::OUString ShapeContextHandler::getImplementationName()
