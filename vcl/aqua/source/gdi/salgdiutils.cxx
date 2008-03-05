@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ bool AquaSalGraphics::CheckContext()
     }
     else
     {
-        AquaLog("<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
+        DBG_ERROR("<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
         return false;
     }
 }
@@ -271,15 +271,13 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
     {
         // update a little more around the designated rectangle
         // this helps with antialiased rendering
-        NSRect aRect = { { lX-1, lY-1 }, { lWidth+2, lHeight+2 } };
-        mpFrame->VCLToCocoa( aRect, false );
-        [mpFrame->getView() setNeedsDisplayInRect: aRect];
+        const Rectangle aVclRect( Point( lX-1, lY-1 ), Size( lWidth+2, lHeight+2) );
+        mpFrame->maInvalidRect.Union( aVclRect );
     }
 }
 
 CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
 {
-    AquaLog("-->%s\n",__func__);
     CGPoint *CGpoints = new (CGPoint[nPoints]);
     if ( CGpoints )
       {
@@ -297,7 +295,6 @@ CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
 
 void AquaSalGraphics::UpdateWindow( NSRect& rRect )
 {
-    // FIXME: optimize UpdateWindow wrt to aRect
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if( mrContext != NULL && mpFrame != NULL && pContext != nil )
     {
@@ -312,15 +309,17 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
             CGContextClip( rCGContext );
         }
 
-        CGRect aBitmapRect = {
-            { 0, 0 },
-            { CGBitmapContextGetWidth(mrContext), CGBitmapContextGetHeight(mrContext) }
-        };
+        CGRect aDstRect = { { rRect.origin.x, rRect.origin.y },  { rRect.size.width, rRect.size.height } };
+        CGRect aSrcRect = aDstRect;
+        // flip y-origin since the bitmap is upside-down
+        aSrcRect.origin.y = CGBitmapContextGetHeight(mrContext) - rRect.origin.y - rRect.size.height;
 
-        CGImageRef xImage = CGBitmapContextCreateImage( mrContext );
-        CGContextDrawImage( rCGContext, aBitmapRect, xImage );
-        CGImageRelease( xImage );
-        CGContextFlush( rCGContext );
+        CGImageRef xFullImage = CGBitmapContextCreateImage( mrContext );
+        CGImageRef xPartImage = CGImageCreateWithImageInRect( xFullImage, aSrcRect );
+        CGContextDrawImage( rCGContext, aDstRect, xPartImage );
+        CGImageRelease( xPartImage );
+        CGImageRelease( xFullImage );
+        //CGContextFlush( rCGContext );
         if( rClip ) // cleanup clipping
             CGContextRestoreGState( rCGContext );
     }
