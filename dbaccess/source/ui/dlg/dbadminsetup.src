@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:11:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,13 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
         Size = MAP_APPFONT ( 208 , 8 ) ;
         Text[ en-US ] = "Connect using JDBC (Java Database Connectivity)" ;
     };
+    RadioButton RB_CONNECTVIANATIVE
+    {
+        Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
+        Size = MAP_APPFONT ( 205 , 9 ) ;
+        Text[ en-US ] = "Connect native" ;
+        Hide = TRUE ;
+    };
 
 };
 
@@ -378,6 +385,29 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
     AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME)
 };
 
+TabPage PAGE_DBWIZARD_MYSQL_NATIVE
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+
+    String STR_MYSQLJDBC_HEADERTEXT
+    {
+        Text[ en-US ] = "Set up connection to a MySQL database" ;
+    };
+
+    String STR_MYSQLJDBC_HELPTEXT{
+        Text[ en-US ] = "Please enter the required information to connect to a MySQL database.";
+    };
+
+    String STR_MYSQL_DEFAULT{
+        Text[ en-US ] = "Default: 3306";
+    };
+
+    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME)
+};
 
 
 TabPage PAGE_DBWIZARD_DBASE
