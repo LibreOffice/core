@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:18:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
         SfxItemSet aItemSet( rWrtShell.GetAttrPool(), aRanges );
         // get all attributes spanning the whole selection in order to
         // restore those for the new text
-        rWrtShell.GetAttr( aItemSet );
+        rWrtShell.GetCurAttr( aItemSet );
 
 #ifdef DEBUG
         String aSelTxt1( rWrtShell.GetSelTxt() );
