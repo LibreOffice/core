@@ -4,9 +4,9 @@
  *
  *  $RCSfile: themebuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 using ::oox::drawingml::ClrScheme;
 using ::oox::drawingml::Theme;
+using ::oox::drawingml::ThemePtr;
 
 namespace oox {
 namespace xls {
@@ -118,7 +119,7 @@ ThemeBuffer::~ThemeBuffer()
 {
 }
 
-Theme& ThemeBuffer::getCoreTheme() const
+Theme& ThemeBuffer::getOrCreateCoreTheme()
 {
     if( !mxTheme )
         mxTheme.reset( new Theme );
@@ -128,9 +129,10 @@ Theme& ThemeBuffer::getCoreTheme() const
 sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 {
     sal_Int32 nColor = 0;
-    if( const ClrScheme* pClrScheme = getCoreTheme().getClrScheme().get() )
-        if( pClrScheme->getColor( nToken, nColor ) )
-            return nColor;
+    if( mxTheme.get() )
+        if( const ClrScheme* pClrScheme = mxTheme->getClrScheme().get() )
+            if( pClrScheme->getColor( nToken, nColor ) )
+                return nColor;
     return API_RGB_TRANSPARENT;
 }
 
@@ -141,9 +143,10 @@ sal_Int32 ThemeBuffer::getColorByIndex( sal_Int32 nIndex ) const
         XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink, XML_folHlink };
 
     sal_Int32 nColor = 0;
-    if( const ClrScheme* pClrScheme = getCoreTheme().getClrScheme().get() )
-        if( pClrScheme->getColor( STATIC_ARRAY_SELECT( spnColorTokens, nIndex, XML_TOKEN_INVALID ), nColor ) )
-            return nColor;
+    if( mxTheme.get() )
+        if( const ClrScheme* pClrScheme = mxTheme->getClrScheme().get() )
+            if( pClrScheme->getColor( STATIC_ARRAY_SELECT( spnColorTokens, nIndex, XML_TOKEN_INVALID ), nColor ) )
+                return nColor;
     return API_RGB_TRANSPARENT;
 }
 
