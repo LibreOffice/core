@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:23:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,8 @@ class TaskCreatorService : public  css::lang::XTypeProvider
                                                                       const ::rtl::OUString&                           sName            );
 
         void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
+
+        void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
 };
