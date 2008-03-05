@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:37:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1868,10 +1868,14 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     }
                     else
                         nRightMargin = aNdRect.Width();
-                    //left margin of paragraph style
-                    const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
-                    nRightMargin -= rLRSpace.GetLeft();
-                    nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
+                    //#i24363# tab stops relative to indent
+                    if( pDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+                    {
+                        //left margin of paragraph style
+                        const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
+                        nRightMargin -= rLRSpace.GetLeft();
+                        nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
+                    }
 
                     aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT,
                                                 cDfltDecimalChar,
