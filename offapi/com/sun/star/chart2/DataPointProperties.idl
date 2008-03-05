@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:42:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ service DataPointProperties
     [property] string HatchName;
     [property] string FillBitmapName;
 
-    /** If </TRUE>, fills the background of a hatch with the color
+    /** If <TRUE/>, fills the background of a hatch with the color
         given in the <member>Color</member> property.
      */
     [property] boolean FillBackground;
