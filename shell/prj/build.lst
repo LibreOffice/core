@@ -9,6 +9,7 @@ sl    shell\source\cmdmail                         nmake   -   u   sl_cmdmail sl
 sl    shell\source\cmdmail                         nmake   -   p   sl_cmdmail sl_inc NULL
 sl    shell\source\all                             nmake   -   all sl_all sl_inc NULL
 sl    shell\source\unix\sysshell                   nmake   -   u   sl_unix_sysshell sl_all sl_inc NULL
+sl    shell\source\aqua\sysshell                   nmake   -   u   sl_aqua_sysshell sl_all sl_inc NULL
 sl    shell\source\os2\sysshell                    nmake   -   p   sl_os2_sysshell sl_all sl_inc NULL
 sl    shell\source\os2\shell                       nmake   -   p   sl_os2_shell sl_all sl_inc NULL
 sl    shell\source\win32\sysshell                  nmake   -   w   sl_win32_sysshell sl_inc NULL
