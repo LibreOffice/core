@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:23:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,9 @@
 #endif
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 #include <boost/shared_ptr.hpp>
