@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextContentReadHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:52:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.text;
 
 import org.jfree.report.structure.Section;
@@ -48,31 +47,32 @@ import org.xml.sax.SAXException;
  */
 public class TextContentReadHandler extends NoCDATATextContentReadHandler
 {
-  public TextContentReadHandler(final Section section, final boolean copyType)
-  {
-    super(section, copyType);
-  }
 
-  public TextContentReadHandler(final Section section)
-  {
-    super(section);
-  }
+    public TextContentReadHandler(final Section section, final boolean copyType)
+    {
+        super(section, copyType);
+    }
 
-  public TextContentReadHandler()
-  {
-  }
+    public TextContentReadHandler(final Section section)
+    {
+        super(section);
+    }
 
-  /**
-   * This method is called to process the character data between element tags.
-   *
-   * @param ch     the character buffer.
-   * @param start  the start index.
-   * @param length the length.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  public void characters(final char[] ch, final int start, final int length)
-      throws SAXException
-  {
-    getChildren().add(new StaticText(new String(ch, start, length)));
-  }
+    public TextContentReadHandler()
+    {
+    }
+
+    /**
+     * This method is called to process the character data between element tags.
+     *
+     * @param ch     the character buffer.
+     * @param start  the start index.
+     * @param length the length.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    public void characters(final char[] ch, final int start, final int length)
+            throws SAXException
+    {
+        getChildren().add(new StaticText(new String(ch, start, length)));
+    }
 }
