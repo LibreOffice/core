@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:33:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle );
     virtual void                CaptureMouse( BOOL bMouse );
     virtual void                SetPointerPos( long nX, long nY );
+    using SalFrame::Flush;
     virtual void                Flush();
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
