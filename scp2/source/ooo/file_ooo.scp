@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.231 $
+ *  $Revision: 1.232 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:11:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,6 +464,16 @@ File gid_File_Bmp_IntroAbout
     Name = "intro.zip";
     Styles = (ARCHIVE,PATCH);
 End
+
+#ifdef WNT
+File gid_File_Desktophelper_Txt
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "desktophelper.txt";
+	ComponentCondition = "CREATEDESKTOPLINK=1";
+End
+#endif
 
 File gid_File_Dtd_Accelerator
     TXT_FILE_BODY;
@@ -2218,6 +2228,13 @@ File gid_File_Oo_Setup_Xcu
     Styles = (PACKED, SCPZIP_REPLACE,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/Setup.xcu";
+End
+
+File gid_File_Oo_Setup_Start_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE,PATCH);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
+    Name = "/registry/spool/org/openoffice/Setup-start.xcu";
 End
 
 File gid_File_Oo_Firststartwizard_Xcs
