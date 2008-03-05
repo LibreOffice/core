@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:17:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ module com {  module sun {  module star {  module sdb {
     <p>
     Here, <em>system wide registered</em> means registered on the (one and only) instance
     of the
-    <service scope="com::sun::star::sdb">
+    <type scope="com::sun::star::sdb">
     DatabaseContext
-    </service>
+    </type>
     service.
     </p>
 */
@@ -119,9 +119,9 @@ published service DatasourceAdministrationDialog
             <li><b>InitialSelection</b><br/>
                 String or XDataSource describing which data source should be selected initially.
                 This String name must be known to the
-                <service scope="com::sun::star::sdb">
+                <type scope="com::sun::star::sdb">
                 DatabaseContext
-                </service>
+                </type>
                 .
             </li>
         </ul>
