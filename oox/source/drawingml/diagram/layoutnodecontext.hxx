@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutnodecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,15 @@
 #ifndef OOX_DRAWINGML_LAYOUTNODECONTEXT_HXX
 #define OOX_DRAWINGML_LAYOUTNODECONTEXT_HXX
 
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-class LayoutNodeContext : public ::oox::core::Context
+class LayoutNodeContext : public ::oox::core::ContextHandler
 {
 public:
-    LayoutNodeContext( const ::oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const LayoutAtomPtr &pNode );
+    LayoutNodeContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const LayoutAtomPtr &pNode );
     virtual ~LayoutNodeContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);

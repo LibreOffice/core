@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagramdefinitioncontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@ namespace oox { namespace drawingml {
 
 
 // CT_DiagramDefinition
-DiagramDefinitionContext::DiagramDefinitionContext( const FragmentHandlerRef& xHandler,
+DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler& rParent,
                                                     const Reference< XFastAttributeList >& xAttributes,
                                                     const DiagramLayoutPtr &pLayout )
-    : Context( xHandler )
+    : ContextHandler( rParent )
     , mpLayout( pLayout )
 {
     OSL_TRACE( "OOX: DiagramDefinitionContext::DiagramDefinitionContext()" );
@@ -94,19 +94,19 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
         break;
     case NMSP_DIAGRAM|XML_layoutNode:
         mpLayout->getNode().reset( new LayoutNode() );
-        xRet.set( new LayoutNodeContext( getHandler(), xAttribs, mpLayout->getNode() ) );
+        xRet.set( new LayoutNodeContext( *this, xAttribs, mpLayout->getNode() ) );
         break;
      case NMSP_DIAGRAM|XML_clrData:
         // TODO, does not matter for the UI. skip.
-        xRet.set( new SkipContext( getHandler() ) );
+        xRet.set( new SkipContext( *this ) );
         break;
     case NMSP_DIAGRAM|XML_sampData:
         mpLayout->getSampData().reset( new DiagramData );
-        xRet.set( new DataModelContext( getHandler(), mpLayout->getSampData() ) );
+        xRet.set( new DataModelContext( *this, mpLayout->getSampData() ) );
         break;
     case NMSP_DIAGRAM|XML_styleData:
         mpLayout->getStyleData().reset( new DiagramData );
-        xRet.set( new DataModelContext( getHandler(), mpLayout->getStyleData() ) );
+        xRet.set( new DataModelContext( *this, mpLayout->getStyleData() ) );
         break;
     case NMSP_DIAGRAM|XML_cat:
     case NMSP_DIAGRAM|XML_catLst:

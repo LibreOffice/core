@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagramfragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,11 +48,11 @@ using ::rtl::OUString;
 
 namespace oox { namespace drawingml {
 
-DiagramDataFragmentHandler::DiagramDataFragmentHandler( const XmlFilterRef& xFilter,
+DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramDataPtr pDataPtr )
     throw( )
-    : FragmentHandler( xFilter, rFragmentPath )
+    : FragmentHandler( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -79,25 +79,25 @@ DiagramDataFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case NMSP_DIAGRAM|XML_dataModel:
-        xRet.set( new DataModelContext( this, mpDataPtr ) );
+        xRet.set( new DataModelContext( *this, mpDataPtr ) );
         break;
     default:
         break;
     }
 
     if( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
 
     return xRet;
 }
 
 ///////////////////
 
-DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( const XmlFilterRef& xFilter,
+DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramLayoutPtr pDataPtr )
     throw( )
-    : FragmentHandler( xFilter, rFragmentPath )
+    : FragmentHandler( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -124,26 +124,25 @@ DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case NMSP_DIAGRAM|XML_layoutDef:
-        xRet.set( new DiagramDefinitionContext( this, xAttribs,
-                                                mpDataPtr ) );
+        xRet.set( new DiagramDefinitionContext( *this, xAttribs, mpDataPtr ) );
         break;
     default:
         break;
     }
 
     if( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
 
     return xRet;
 }
 
 ///////////////////////
 
-DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( const XmlFilterRef& xFilter,
+DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramQStylesPtr pDataPtr )
     throw( )
-    : FragmentHandler( xFilter, rFragmentPath )
+    : FragmentHandler( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -177,18 +176,18 @@ DiagramQStylesFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
     }
 
     if( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
 
     return xRet;
 }
 
 /////////////////////
 
-DiagramColorsFragmentHandler::DiagramColorsFragmentHandler( const XmlFilterRef& xFilter,
+DiagramColorsFragmentHandler::DiagramColorsFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramColorsPtr pDataPtr )
     throw( )
-    : FragmentHandler( xFilter, rFragmentPath )
+    : FragmentHandler( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -222,7 +221,7 @@ DiagramColorsFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
     }
 
     if( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
 
     return xRet;
 }

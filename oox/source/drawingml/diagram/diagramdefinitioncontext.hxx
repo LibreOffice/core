@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagramdefinitioncontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,15 @@
 #ifndef OOX_DRAWINGML_DIAGRAMDEFINITIONCONTEXT_HXX
 #define OOX_DRAWINGML_DIAGRAMDEFINITIONCONTEXT_HXX
 
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-class DiagramDefinitionContext : public ::oox::core::Context
+class DiagramDefinitionContext : public ::oox::core::ContextHandler
 {
 public:
-    DiagramDefinitionContext( const ::oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const DiagramLayoutPtr &pLayout );
+    DiagramDefinitionContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const DiagramLayoutPtr &pLayout );
     virtual ~DiagramDefinitionContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
