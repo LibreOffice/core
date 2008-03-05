@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:02:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,11 @@ public:
         return mbStayAssignedToListLevelOfOutlineStyle;
     }
     // <--
+
+    // --> OD 2008-02-13 #newlistleveattrs#
+    bool AreListLevelIndentsApplicable() const;
+    // <--
+
 /*----------------- JP 09.08.94 17:36 -------------------
  wird die Funktionalitaet von Zeichenvorlagen an Absatzvorlagen
  ueberhaupt benoetigt ??
