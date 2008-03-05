@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.236 $
+ *  $Revision: 1.237 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:29:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,7 @@ static sal_Unicode const aMSGothic[] = { 'm','s',       0x30B4, 0x30B7, 0x30C3, 
 static sal_Unicode const aMSPGothic[] = { 'm','s','p',  0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aMSMincho[] = { 'm', 's',      0x660E, 0x671D, 0 };
 static sal_Unicode const aMSPMincho[] = { 'm','s','p',  0x660E, 0x671D, 0 };
+static sal_Unicode const aMeiryo[]    = { 0x30e1, 0x30a4, 0x30ea, 0x30aa, 0 };
 static sal_Unicode const aHGMinchoL[] = { 'h','g',      0x660E, 0x671D, 'l', 0, 0 };
 static sal_Unicode const aHGGothicB[] = { 'h','g',      0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
 static sal_Unicode const aHGPMinchoL[] = { 'h','g','p', 0x660E, 0x671D, 'l', 0 };
@@ -520,6 +521,12 @@ static sal_Unicode const aHGSSoeiKakugothicUB[]     = { 'h','g','s', 0x5275,0x82
                             0xFF9E,0xFF7C,0xFF6F,0xFF78,'u','b',0};
 static sal_Unicode const aHGSeikaishotaiPRO[]       = { 'h','g', 0x6B63,0x6977,0x66F8,0x4F53, '-','p','r','o',0};
 static sal_Unicode const aHGMaruGothicMPRO[]        = { 'h','g', 0x4E38,0xFF7A,0xFF9E,0xFF7C,0xFF6F,0xFF78, '-','p','r','o',0};
+static sal_Unicode const aHiraginoMinchoPro[]       = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x660E, 0x671D, 'p','r','o',0};
+static sal_Unicode const aHiraginoMinchoProN[]      = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x660E, 0x671D, 'p','r','o','n',0};
+static sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o',0};
+static sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
+static sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
+static sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
 
 
 static ImplLocalizedFontName aImplLocalizedNamesList[] =
@@ -557,6 +564,7 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "mspgothic",            aMSPGothic },
 {   "msmincho",             aMSMincho },
 {   "mspmincho",            aMSPMincho },
+{   "meiryo",               aMeiryo },
 {   "hgminchol",            aHGMinchoL },
 {   "hggothicb",            aHGGothicB },
 {   "hgpminchol",           aHGPMinchoL },
@@ -648,6 +656,12 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   "hgssoeikakugothicub",  aHGSSoeiKakugothicUB },
 {   "hgseikaishotaipro",    aHGSeikaishotaiPRO },
 {   "hgmarugothicmpro",     aHGMaruGothicMPRO },
+{   "hiraginominchopro",    aHiraginoMinchoPro },
+{   "hiraginominchopron",   aHiraginoMinchoProN },
+{   "hiraginokakugothicpro", aHiraginoKakuGothicPro },
+{   "hiraginokakugothicpron", aHiraginoKakuGothicProN },
+{   "hiraginomarugothicpro", aHiraginoMaruGothicPro },
+{   "hiraginomarugothicpron", aHiraginoMaruGothicProN },
 {   NULL,                   NULL },
 };
 
@@ -1179,7 +1193,8 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                         aSize.Width() = 1;
 
                     // get the name of the first available font
-                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
+                    float fExactHeight = static_cast<float>(aSize.Height());
+                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, fExactHeight, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
                     if( pEntry->maFontSelData.mpFontData )
                         aFont.SetName( pEntry->maFontSelData.mpFontData->maName );
                     else
@@ -2750,10 +2765,11 @@ ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) c
 // =======================================================================
 
 ImplFontSelectData::ImplFontSelectData( const Font& rFont,
-    const String& rSearchName, const Size& rSize )
+    const String& rSearchName, const Size& rSize, float fExactHeight)
 :   maSearchName( rSearchName ),
     mnWidth( rSize.Width() ),
     mnHeight( rSize.Height() ),
+    mfExactHeight( fExactHeight),
     mnOrientation( rFont.GetOrientation() ),
     meLanguage( rFont.GetLanguage() ),
     mbVertical( rFont.IsVertical() ),
@@ -2784,10 +2800,11 @@ ImplFontSelectData::ImplFontSelectData( const Font& rFont,
 // -----------------------------------------------------------------------
 
 ImplFontSelectData::ImplFontSelectData( ImplFontData& rFontData,
-    const Size& rSize, int nOrientation, bool bVertical )
+    const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
 :   ImplFontAttributes( rFontData ),
     mnWidth( rSize.Width() ),
     mnHeight( rSize.Height() ),
+    mfExactHeight( fExactHeight ),
     mnOrientation( nOrientation ),
     meLanguage( 0 ),
     mbVertical( bVertical ),
@@ -2872,7 +2889,7 @@ ImplFontCache::~ImplFontCache()
 // -----------------------------------------------------------------------
 
 ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
-    const Font& rFont, const Size& rSize, ImplDirectFontSubstitution* pDevSpecific )
+    const Font& rFont, const Size& rSize, float fExactHeight, ImplDirectFontSubstitution* pDevSpecific )
 {
     String aSearchName = rFont.GetName();
 
@@ -2888,7 +2905,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     }
 
     // initialize internal font request object
-    ImplFontSelectData aFontSelData( rFont, aSearchName, rSize );
+    ImplFontSelectData aFontSelData( rFont, aSearchName, rSize, fExactHeight );
     return GetFontEntry( pFontList, aFontSelData, pDevSpecific );
 }
 
@@ -3493,6 +3510,8 @@ bool OutputDevice::ImplNewFont() const
     ImplInitFontList();
 
     // convert to pixel height
+    // TODO: replace integer based aSize completely with subpixel accurate type
+    float fExactHeight = ImplFloatLogicHeightToDevicePixel( static_cast<float>(maFont.GetHeight()) );
     Size aSize = ImplLogicToDevicePixel( maFont.GetSize() );
     if ( !aSize.Height() )
     {
@@ -3501,6 +3520,7 @@ bool OutputDevice::ImplNewFont() const
             aSize.Height() = 1;
         else
             aSize.Height() = (12*mnDPIY)/72;
+        fExactHeight =  static_cast<float>(aSize.Height());
     }
 
     // select the default width only when logical width is zero
@@ -3512,7 +3532,7 @@ bool OutputDevice::ImplNewFont() const
     if( mpOutDevData )
         pDevSpecificSubst = &mpOutDevData->maDevFontSubst;
     ImplFontEntry* pOldEntry = mpFontEntry;
-    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, pDevSpecificSubst );
+    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, fExactHeight, pDevSpecificSubst );
     if( pOldEntry )
         mpFontCache->Release( pOldEntry );
 
