@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 17:00:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 /** === end UNO includes === **/
 
 #ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
@@ -172,6 +175,9 @@
 #endif
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
+#endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
@@ -210,6 +216,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::ucb;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
@@ -1144,10 +1151,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         class AsyncLoader : public AsyncLoader_Base
         {
         private:
-            Reference< XComponentLoader >   m_xFrameLoader;
-            Reference< XDesktop >           m_xDesktop;
-            ::rtl::OUString                 m_sURL;
-            OAsyncronousLink                m_aAsyncCaller;
+            Reference< XComponentLoader >       m_xFrameLoader;
+            Reference< XDesktop >               m_xDesktop;
+            Reference< XInteractionHandler >    m_xInteractionHandler;
+            ::rtl::OUString                     m_sURL;
+            OAsyncronousLink                    m_aAsyncCaller;
 
         public:
             AsyncLoader( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL );
@@ -1173,6 +1181,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             {
                 m_xDesktop.set( _rxORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
+                m_xInteractionHandler.set(
+                    _rxORB->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) )
+                    ),
+                    UNO_QUERY_THROW );
             }
             catch( const Exception& )
             {
@@ -1202,8 +1215,20 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             try
             {
                 if ( m_xFrameLoader.is() )
+                {
+                    ::comphelper::NamedValueCollection aLoadArgs;
+                    aLoadArgs.put( "InteractionHandler", m_xInteractionHandler );
+                    aLoadArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+
+                    Sequence< PropertyValue > aLoadArgPV;
+                    aLoadArgs >>= aLoadArgPV;
+
                     m_xFrameLoader->loadComponentFromURL( m_sURL,
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), FrameSearchFlag::ALL, Sequence<PropertyValue >() );
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
+                        FrameSearchFlag::ALL,
+                        aLoadArgPV
+                    );
+                }
             }
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
