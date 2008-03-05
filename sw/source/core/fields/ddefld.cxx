@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:48:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 #endif
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 using namespace rtl;
