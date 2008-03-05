@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: PositionAndSpaceMode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:33:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_PositionAndSpaceMode_idl__
+#define __com_sun_star_text_PositionAndSpaceMode_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** These enumeration values specify the position and space mode for a numbering level
+
+        @since OOo 3.0
+ */
+published constants PositionAndSpaceMode
+{
+    //-------------------------------------------------------------------------
+
+        /** positioning and spacing of list label via label width and position
+     */
+        const short LABEL_WIDTH_AND_POSITION = 0;
+
+    //-------------------------------------------------------------------------
+
+        /** positioning and spacing of list label via label alignment
+     */
+        const short LABEL_ALIGNMENT = 1;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
