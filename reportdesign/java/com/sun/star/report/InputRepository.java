@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InputRepository.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report;
 
 import java.io.InputStream;
@@ -53,29 +52,40 @@ import java.io.IOException;
  */
 public interface InputRepository
 {
-  /**
-   * Returns a unique identifier for this repository. Two repositories accessing
-   * the same location should return the same id. The identifier must never
-   * be null.
-   *
-   * @return the repository id
-   */
-  public Object getId();
 
-  public InputStream createInputStream(String name) throws IOException;
+    /**
+     * Returns a unique identifier for this repository. Two repositories accessing
+     * the same location should return the same id. The identifier must never
+     * be null.
+     *
+     * @return the repository id
+     */
+    public Object getId();
 
-  /**
-   * This returns an version number for the given resource. Return zero, if
-   * the resource is not versionable, else return a unique number for each version.
-   * As rule of thumb: Increase the version number by at least one for each change
-   * made to the resource.
-   *
-   * @param name the name of the resource
-   * @return the version number
-   */
-  public long getVersion (String name);
+    public InputStream createInputStream(String name) throws IOException;
 
-  public boolean exists (String name);
+    /** allows to acces sub repositories inside this repository
+     *
+     * @param name describes the path to the sub repository
+     * @return the sub repository
+     * @throws java.io.IOException when the sub repository doesn't exist.
+     */
+    public InputRepository openInputRepository(final String name) throws IOException;
 
-  public boolean isReadable (String name);
+    /**
+     * This returns an version number for the given resource. Return zero, if
+     * the resource is not versionable, else return a unique number for each version.
+     * As rule of thumb: Increase the version number by at least one for each change
+     * made to the resource.
+     *
+     * @param name the name of the resource
+     * @return the version number
+     */
+    public long getVersion(String name);
+
+    public boolean exists(String name);
+
+    public boolean isReadable(String name);
+
+    public void closeInputRepository();
 }

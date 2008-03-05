@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutputRepository.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report;
 
 import java.io.OutputStream;
@@ -47,21 +46,34 @@ import java.io.IOException;
  */
 public interface OutputRepository
 {
-  /**
-   * Creates an output stream for writing the data. If there is an entry with
-   * that name already contained in the repository, try to overwrite it.
-   *
-   * @param name
-   *    the name of the output stream
-   * @param mimeType
-   *    the mime type of the to-be-created output stream. Repository implementations which do not support
-   *    associating a mime time with a stream might ignore this parameter.
-   * @return the outputstream
-   * @throws IOException if opening the stream fails
-   */
-  public OutputStream createOutputStream (String name, String mimeType) throws IOException;
 
-  public boolean exists (String name);
-  public boolean isWritable (String name);
+    /**
+     * Creates an output stream for writing the data. If there is an entry with
+     * that name already contained in the repository, try to overwrite it.
+     *
+     * @param name
+     *    the name of the output stream
+     * @param mimeType
+     *    the mime type of the to-be-created output stream. Repository implementations which do not support
+     *    associating a mime time with a stream might ignore this parameter.
+     * @return the outputstream
+     * @throws IOException if opening the stream fails
+     */
+    public OutputStream createOutputStream(String name, String mimeType) throws IOException;
 
+    /** allows to acces sub repositories inside this repository
+     *
+     * @param name describes the path to the sub repository
+     * @return the sub repository
+     * @throws java.io.IOException when the sub repository doesn't exist.
+     */
+    public OutputRepository openOutputRepository(final String name) throws IOException;
+
+    public boolean exists(String name);
+
+    public boolean existsStorage(String name);
+
+    public boolean isWritable(String name);
+
+    public void closeOutputRepository();
 }
