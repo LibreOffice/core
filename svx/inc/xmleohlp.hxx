@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 14:14:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,9 @@ enum SvXMLEmbeddedObjectHelperMode
 // - SvXMLEmbeddedObjectHelper -
 // -----------------------------
 
-class SfxObjectShell;
+namespace comphelper {
+class IEmbeddedHelper;
+}
 class SvGlobalName;
 struct OUStringLess;
 class OutputStorageWrapper_Impl;
@@ -97,7 +99,7 @@ private:
 
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
-    SfxObjectShell*             mpDocPersist;
+    ::comphelper::IEmbeddedHelper*             mpDocPersist;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxContainerStorage; // container sub package for
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxTempStorage;  // package
                                                 // objects
@@ -115,7 +117,7 @@ private:
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
 
-    SVX_DLLPRIVATE String                      ImplGetUniqueName( SfxObjectShell*, const sal_Char* p ) const;
+    SVX_DLLPRIVATE String                      ImplGetUniqueName( ::comphelper::IEmbeddedHelper*, const sal_Char* p ) const;
     SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
                                     const ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjName,
@@ -133,23 +135,23 @@ protected:
                                 SvXMLEmbeddedObjectHelper();
                                 ~SvXMLEmbeddedObjectHelper();
     void                        Init( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                      SfxObjectShell& rDocPersist,
+                                      ::comphelper::IEmbeddedHelper& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     virtual void SAL_CALL       disposing();
 
 public:
                                 SvXMLEmbeddedObjectHelper(
-                                    SfxObjectShell& rDocPersist,
+                                    ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
     static SvXMLEmbeddedObjectHelper*   Create(
                                     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                    SfxObjectShell& rDocPersist,
+                                    ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
                                     sal_Bool bDirect = sal_True );
     static SvXMLEmbeddedObjectHelper*   Create(
-                                    SfxObjectShell& rDocPersist,
+                                    ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
     static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
 
