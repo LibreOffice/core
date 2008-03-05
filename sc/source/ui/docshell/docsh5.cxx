@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:41:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,10 +404,7 @@ void ScDocShell::UpdateAllRowHeights()
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    SCTAB nTabCnt = aDocument.GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCnt; nTab++)
-        aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, aProv.GetDevice(),
-                                    aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, FALSE );
+    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom );
 }
 
 void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
