@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.11 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:38:09 $
+-- $Revision: 1.12 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:27:48 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -86,6 +86,12 @@ HASHPTR hp;
          if( hp->MV_IVAR == &Max_proc || hp->MV_IVAR == &Max_proclmt ) {
             if( tvalue < 1 )
                Fatal( "Process limit value must be > 1" );
+
+#if defined(USE_CREATEPROCESS)
+            if( Max_proclmt > MAXIMUM_WAIT_OBJECTS )
+               Fatal( "Specified maximum # of processes (MAXPROCESSLIMIT)"
+              " exceeds OS limit of [%d].", MAXIMUM_WAIT_OBJECTS );
+#endif
 
             if( Max_proc > Max_proclmt )
                Fatal( "Specified # of processes exceeds limit of [%d]",
