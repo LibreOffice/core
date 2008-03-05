@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlsbdumper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include "oox/core/filterbase.hxx"
+#include "oox/xls/biffhelper.hxx"
 #include "oox/xls/formulabase.hxx"
-#include "oox/xls/ooxtokens.hxx"
 #include "oox/xls/richstring.hxx"
 
 #if OOX_INCLUDE_DUMPER
@@ -286,13 +286,12 @@ void RecordObjectBase::dumpColor( const sal_Char* pcName )
 {
     MultiItemsGuard aMultiGuard( out() );
     writeEmptyItem( pcName ? pcName : "color" );
-    switch( dumpDec< sal_uInt8 >( "type", "COLOR-TYPE" ) )
+    switch( extractValue< sal_uInt8 >( dumpDec< sal_uInt8 >( "flags", "COLOR-FLAGS" ), 1, 7 ) )
     {
-        case 0:
-        case 1:
-        case 3:     dumpDec< sal_uInt8 >( "index", "PALETTE-COLORS" );  break;
-        case 5:     dumpUnused( 1 );                                    break;
-        case 7:     dumpDec< sal_uInt8 >( "theme-id" );                 break;
+        case 0:     dumpUnused( 1 );                                    break;
+        case 1:     dumpDec< sal_uInt8 >( "index", "PALETTE-COLORS" );  break;
+        case 2:     dumpUnused( 1 );                                    break;
+        case 3:     dumpDec< sal_uInt8 >( "theme-id" );                 break;
         default:    dumpUnknown( 1 );
     }
     dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
@@ -1063,11 +1062,10 @@ void RecordObject::implDump()
         writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
 }
 
-void RecordObject::dumpCellHeader()
+void RecordObject::dumpCellHeader( bool bWithColumn )
 {
-    dumpColIndex();
-    dumpDec< sal_uInt16 >( "xf-id" );
-    dumpHex< sal_uInt16 >( "flags", "CELL-FLAGS" );
+    if( bWithColumn ) dumpColIndex();
+    dumpHex< sal_uInt32 >( "xf-id", "CELL-XFID" );
 }
 
 void RecordObject::dumpSimpleRecord( const OUString& rRecData )
@@ -1085,6 +1083,21 @@ void RecordObject::dumpRecordBody()
             dumpRange( "array-range" );
             dumpHex< sal_uInt8 >( "flags", "ARRAY-FLAGS" );
             mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_BINARYINDEXBLOCK:
+            dumpRowRange( "row-range" );
+            dumpUnknown( 12 );
+        break;
+
+        case OOBIN_ID_BINARYINDEXROWS:
+        {
+            sal_uInt32 nUsedRows = dumpBin< sal_uInt32 >( "used-rows" );
+            dumpDec< sal_Int64 >( "stream-offset" );
+            for( ; nUsedRows > 0; nUsedRows >>= 1 )
+                if( (nUsedRows & 1) != 0 )
+                    dumpBin< sal_uInt16 >( "used-columns" );
+        }
         break;
 
         case OOBIN_ID_BORDER:
@@ -1105,7 +1118,8 @@ void RecordObject::dumpRecordBody()
             dumpDec< sal_Int32 >( "id" );
             dumpDec< sal_Int32 >( "min" );
             dumpDec< sal_Int32 >( "max" );
-            dumpHex< sal_uInt32 >( "flags", "BRK-FLAGS" );
+            dumpDec< sal_Int32 >( "manual-break", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "pivot-break", "BOOLEAN" );
         break;
 
         case OOBIN_ID_CALCPR:
@@ -1118,41 +1132,41 @@ void RecordObject::dumpRecordBody()
         break;
 
         case OOBIN_ID_CELL_BLANK:
-            dumpCellHeader();
+            dumpCellHeader( true );
         break;
 
         case OOBIN_ID_CELL_BOOL:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpBoolean();
         break;
 
         case OOBIN_ID_CELL_DOUBLE:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpDec< double >( "value" );
         break;
 
         case OOBIN_ID_CELL_ERROR:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpErrorCode();
         break;
 
         case OOBIN_ID_CELL_RK:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpRk( "value" );
         break;
 
         case OOBIN_ID_CELL_RSTRING:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpString( "value", true );
         break;
 
         case OOBIN_ID_CELL_SI:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpDec< sal_Int32 >( "string-id" );
         break;
 
         case OOBIN_ID_CELL_STRING:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpString( "value" );
         break;
 
@@ -1212,10 +1226,38 @@ void RecordObject::dumpRecordBody()
         }
         break;
 
+        case OOBIN_ID_CHARTPAGESETUP:
+            dumpDec< sal_Int32 >( "paper-size", "PAGESETUP-PAPERSIZE" );
+            dumpDec< sal_Int32 >( "horizontal-res", "PAGESETUP-DPI" );
+            dumpDec< sal_Int32 >( "vertical-res", "PAGESETUP-DPI" );
+            dumpDec< sal_Int32 >( "copies" );
+            dumpDec< sal_uInt16 >( "first-page" );
+            dumpHex< sal_uInt16 >( "flags", "CHARTPAGESETUP-FLAGS" );
+            dumpString( "printer-settings-rel-id" );
+        break;
+
+        case OOBIN_ID_CHARTPROTECTION:
+            dumpHex< sal_uInt16 >( "password-hash" );
+            // no flags field for the boolean flags?!?
+            dumpDec< sal_Int32 >( "content-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "objects-locked", "BOOLEAN" );
+        break;
+
+        case OOBIN_ID_CHARTSHEETPR:
+            dumpHex< sal_uInt16 >( "flags", "CHARTSHEETPR-FLAGS" );
+            dumpColor( "tab-color" );
+            dumpString( "codename" );
+        break;
+
+        case OOBIN_ID_CHARTSHEETVIEW:
+            dumpHex< sal_uInt16 >( "flags", "CHARTSHEETVIEW-FLAGS" );
+            dumpDec< sal_Int32 >( "zoom-scale", "CONV-PERCENT" );
+            dumpDec< sal_Int32 >( "workbookview-id" );
+        break;
+
         case OOBIN_ID_COL:
             dumpColRange();
-            dumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
-            dumpUnknown( 2 );
+            dumpDec< sal_Int32 >( "col-width", "CONV-COLWIDTH" );
             dumpDec< sal_Int32 >( "custom-xf-id" );
             dumpHex< sal_uInt16 >( "flags", "COL-FLAGS" );
         break;
@@ -1231,7 +1273,7 @@ void RecordObject::dumpRecordBody()
 
         case OOBIN_ID_CONDFORMATTING:
             dumpDec< sal_Int32 >( "cfrule-count" );
-            dumpUnknown( 4 );
+            dumpDec< sal_Int32 >( "pivot-table", "BOOLEAN" );
             dumpRangeList();
         break;
 
@@ -1254,7 +1296,10 @@ void RecordObject::dumpRecordBody()
         break;
 
         case OOBIN_ID_DATAVALIDATIONS:
-            dumpUnknown( 14 );  // flags, xWindow, yWindow
+            dumpHex< sal_uInt16 >( "flags", "DATAVALIDATIONS-FLAGS" );
+            dumpDec< sal_Int32 >( "input-x" );
+            dumpDec< sal_Int32 >( "input-y" );
+            dumpUnused( 4 );
             dumpDec< sal_Int32 >( "count" );
         break;
 
@@ -1268,8 +1313,7 @@ void RecordObject::dumpRecordBody()
         break;
 
         case OOBIN_ID_DEFINEDNAME:
-            dumpHex< sal_uInt16 >( "flags", "DEFINEDNAME-FLAGS" );
-            dumpUnknown( 2 );
+            dumpHex< sal_uInt32 >( "flags", "DEFINEDNAME-FLAGS" );
             dumpHex< sal_uInt8 >( "keyboard-shortcut" );
             dumpDec< sal_Int32 >( "sheet-id", "DEFINEDNAME-SHEETID" );
             dumpString( "name" );
@@ -1380,6 +1424,12 @@ void RecordObject::dumpRecordBody()
                     case 33:
                         dumpBoolean( "value" );
                     break;
+                    case 34:
+                        dumpDec< sal_uInt8 >( "charset", "CHARSET" );
+                    break;
+                    case 35:
+                        dumpDec< sal_uInt8 >( "family", "FONT-FAMILY" );
+                    break;
                     case 36:
                         dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
                     break;
@@ -1451,7 +1501,7 @@ void RecordObject::dumpRecordBody()
         case OOBIN_ID_EXTERNALNAMEFLAGS:
             dumpHex< sal_uInt16 >( "flags", "EXTERNALNAMEFLAGS-FLAGS" );
             dumpDec< sal_Int32 >( "sheet-id" );
-            dumpUnknown( 1 );
+            dumpBoolean( "is-dde-ole" );
         break;
 
         case OOBIN_ID_EXTERNALREF:
@@ -1525,38 +1575,42 @@ void RecordObject::dumpRecordBody()
             dumpDec< sal_uInt8 >( "underline", "FONT-UNDERLINE" );
             dumpDec< sal_uInt8 >( "family", "FONT-FAMILY" );
             dumpDec< sal_uInt8 >( "charset", "CHARSET" );
-            dumpUnknown( 1 );
+            dumpUnused( 1 );
             dumpColor();
             dumpDec< sal_uInt8 >( "scheme", "FONT-SCHEME" );
             dumpString( "name" );
         break;
 
         case OOBIN_ID_FORMULA_BOOL:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpBoolean();
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
         case OOBIN_ID_FORMULA_DOUBLE:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpDec< double >( "value" );
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
         case OOBIN_ID_FORMULA_ERROR:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpErrorCode();
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
         case OOBIN_ID_FORMULA_STRING:
-            dumpCellHeader();
+            dumpCellHeader( true );
             dumpString( "value" );
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_FUNCTIONGROUP:
+            dumpString( "name" );
         break;
 
         case OOBIN_ID_HEADERFOOTER:
@@ -1579,6 +1633,45 @@ void RecordObject::dumpRecordBody()
 
         case OOBIN_ID_MERGECELL:
             dumpRange();
+        break;
+
+        case OOBIN_ID_MULTCELL_BLANK:
+            dumpCellHeader( false );
+        break;
+
+        case OOBIN_ID_MULTCELL_BOOL:
+            dumpCellHeader( false );
+            dumpBoolean();
+        break;
+
+        case OOBIN_ID_MULTCELL_DOUBLE:
+            dumpCellHeader( false );
+            dumpDec< double >( "value" );
+        break;
+
+        case OOBIN_ID_MULTCELL_ERROR:
+            dumpCellHeader( false );
+            dumpErrorCode();
+        break;
+
+        case OOBIN_ID_MULTCELL_RK:
+            dumpCellHeader( false );
+            dumpRk( "value" );
+        break;
+
+        case OOBIN_ID_MULTCELL_RSTRING:
+            dumpCellHeader( false );
+            dumpString( "value", true );
+        break;
+
+        case OOBIN_ID_MULTCELL_SI:
+            dumpCellHeader( false );
+            dumpDec< sal_Int32 >( "string-id" );
+        break;
+
+        case OOBIN_ID_MULTCELL_STRING:
+            dumpCellHeader( false );
+            dumpString( "value" );
         break;
 
         case OOBIN_ID_NUMFMT:
@@ -1622,14 +1715,19 @@ void RecordObject::dumpRecordBody()
             dumpDec< sal_Int32 >( "alignment", "PHONETICPR-ALIGNMENT" );
         break;
 
+        case OOBIN_ID_PICTURE:
+            dumpString( "rel-id" );
+        break;
+
         case OOBIN_ID_ROW:
             dumpRowIndex();
             dumpDec< sal_Int32 >( "custom-xf-id" );
             dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
-            dumpHex< sal_uInt16 >( "flags", "ROW-FLAGS" );
-            dumpUnknown( 5 );
-            if( getRecordStream().getRecLeft() >= 8 )
-                dumpRowRange( "row-spans" );
+            dumpHex< sal_uInt16 >( "flags", "ROW-FLAGS1" );
+            dumpHex< sal_uInt8 >( "flags", "ROW-FLAGS2" );
+            out().resetItemIndex();
+            for( sal_Int32 nSpan = 0, nSpanCount = dumpDec< sal_Int32 >( "row-spans-count" ); in().isValidPos() && (nSpan < nSpanCount); ++nSpan )
+                dumpRowRange( "#row-spans" );
         break;
 
         case OOBIN_ID_ROWBREAKS:
@@ -1666,10 +1764,10 @@ void RecordObject::dumpRecordBody()
         break;
 
         case OOBIN_ID_SHEETPR:
-            dumpHex< sal_uInt16 >( "flags", "SHEETPR-FLAGS" );
-            dumpUnknown( 1 );
+            dumpHex< sal_uInt16 >( "flags1", "SHEETPR-FLAGS1" );
+            dumpHex< sal_uInt8 >( "flags2", "SHEETPR-FLAGS2" );
             dumpColor( "tab-color" );
-            dumpUnknown( 8 );
+            dumpAddress( "window-anchor" );
             dumpString( "codename" );
         break;
 
@@ -1884,16 +1982,25 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 
 void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSystemFileName )
 {
-    if( (rStrgPath == CREATE_OUSTRING( "xl" )) ||
-        (rStrgPath == CREATE_OUSTRING( "xl/externalLinks" )) ||
-        (rStrgPath == CREATE_OUSTRING( "xl/macrosheets" )) ||
-        (rStrgPath == CREATE_OUSTRING( "xl/tables" )) ||
-        (rStrgPath == CREATE_OUSTRING( "xl/worksheets" )) )
+    OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
+    if( aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "vml" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "rels" ) )
     {
-        const OUString aBinSuffix = CREATE_OUSTRING( ".bin" );
-        sal_Int32 nBinSuffixPos = rStrmName.getLength() - aBinSuffix.getLength();
-        if( (nBinSuffixPos >= 0) && rStrmName.match( aBinSuffix, nBinSuffixPos ) )
+        XmlStreamObject( *this, rSystemFileName, xStrm ).dump();
+    }
+    else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
+    {
+        if( rStrgPath.equalsAscii( "xl" ) ||
+            rStrgPath.equalsAscii( "xl/chartsheets" ) ||
+            rStrgPath.equalsAscii( "xl/dialogsheets" ) ||
+            rStrgPath.equalsAscii( "xl/externalLinks" ) ||
+            rStrgPath.equalsAscii( "xl/macrosheets" ) ||
+            rStrgPath.equalsAscii( "xl/tables" ) ||
+            rStrgPath.equalsAscii( "xl/worksheets" ) )
+        {
             RecordStreamObject( *this, rSystemFileName, xStrm ).dump();
+        }
     }
 }
 
