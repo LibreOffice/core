@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:40:55 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:24:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -246,6 +246,7 @@ SHL4OBJS=       \
                 $(SLO)$/persistentwindowstate.obj   \
                 $(SLO)$/colorlistener.obj           \
                 $(SLO)$/backingcomp.obj				\
+                $(SLO)$/backingwindow.obj			\
                 $(SLO)$/dispatchhelper.obj          \
                 $(SLO)$/layoutmanager.obj           \
                 $(SLO)$/menubarmanager.obj          \
@@ -332,7 +333,8 @@ SHL4OBJS=       \
                 $(SLO)$/menubarmerger.obj                 \
                 $(SLO)$/toolbarmerger.obj                 \
                 $(SLO)$/langselectionstatusbarcontroller.obj \
-                $(SLO)$/langselectionmenucontroller.obj
+                $(SLO)$/langselectionmenucontroller.obj   \
+                $(SLO)$/tagwindowasmodified.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
@@ -390,6 +392,10 @@ DEF5NAME=		$(SHL5TARGET)
 
 SHL5VERSIONMAP= exports.map
             
+RESLIB1NAME=		fwe
+RESLIB1IMAGES=		$(PRJ)$/res
+RESLIB1SRSFILES= 	$(SRS)$/fwk_classes.srs \
+                    $(SRS)$/fwk_services.srs \
 
 # --- Targets -----------------------------------------------------------------
 
