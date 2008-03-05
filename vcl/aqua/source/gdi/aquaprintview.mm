@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aquaprintview.mm,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:16:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,9 @@
 
 -(NSRect)rectForPage: (int)page
 {
-    NSRect aRect = { { 0, 0 }, [mpInfoPrinter->getPrintInfo() paperSize] };
+    NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
+    int nWidth = (int)aPaperSize.width;
+    NSRect aRect = { { page % nWidth, page / nWidth }, aPaperSize };
     return aRect;
 }
 
@@ -74,7 +76,11 @@
 -(void)drawRect: (NSRect)rect
 {
     NSPoint aPoint = [self locationOfPrintRect: rect];
-    mpQPrinter->PrintNextPage();
+    mpInfoPrinter->setStartPageOffset( rect.origin.x, rect.origin.y );
+    NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
+    int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
+    
+    // page count is 1 based
+    mpQPrinter->PrintPage( nPage-1 );
 }
 @end
-
