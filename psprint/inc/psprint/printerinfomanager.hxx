@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:55:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,8 @@ protected:
     bool                              m_bUseIncludeFeature;
     rtl::OUString                     m_aSystemDefaultPaper;
 
+    bool                              m_bDisableCUPS;
+
     PrinterInfoManager( Type eType = Default );
     virtual ~PrinterInfoManager();
 
@@ -239,6 +241,12 @@ public:
 
     // check whether a printer's feature string contains a subfeature
     bool checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const;
+
+    // set m_bDisableCUPS and update printer config
+    void setCUPSDisabled( bool );
+
+    // gets m_bDisableCUPS, initialized from printer config
+    bool isCUPSDisabled() const;
 };
 
 } // namespace
