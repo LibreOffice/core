@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:15:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,6 +439,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LOWER_SORBIAN         LANGUAGE_LOWER_SORBIAN_GERMANY
 #define LANGUAGE_OBSOLETE_USER_OCCITAN      0x0625
 #define LANGUAGE_USER_OCCITAN               LANGUAGE_OCCITAN_FRANCE /* reserved to languedocian */
+
 #define LANGUAGE_USER_KOREAN_NORTH          0x8012  /* North Korean as opposed to South Korean, makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KOREAN)) */
 #define LANGUAGE_USER_KURDISH_TURKEY        0x0626  /* sublang 0x01, Latin script */
 #define LANGUAGE_USER_KURDISH_SYRIA         0x0A26  /* sublang 0x02, Latin script */
@@ -488,5 +489,11 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_SERBIAN_LATIN_SERBIA          0x881A  /* makeLangID( 0x20+0x02, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
 #define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO   0xCC1A  /* makeLangID( 0x20+0x13, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC)) */
 #define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO      0xC81A  /* makeLangID( 0x20+0x12, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
+#define LANGUAGE_USER_SAMI_KILDIN_RUSSIA    0x803B  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SAMI_NORTHERN_NORWAY)) */
+#define LANGUAGE_USER_BODO_INDIA            0x0643
+#define LANGUAGE_USER_DOGRI_INDIA           0x0644
+#define LANGUAGE_USER_MAITHILI_INDIA        0x0645
+#define LANGUAGE_USER_SANTALI_INDIA         0x0646
+#define LANGUAGE_USER_TETUN_TIMOR_LESTE     0x0A40  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_TETUN)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
