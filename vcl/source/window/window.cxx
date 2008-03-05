@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.274 $
+ *  $Revision: 1.275 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:11:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4297,7 +4297,12 @@ void Window::ImplNewInputContext()
             else
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;
         }
-        pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList, rFont, aSize, pFocusWin->mpOutDevData ? &pFocusWin->mpOutDevData->maDevFontSubst : NULL );
+        // TODO: No display device uses ImplDirectFontSubstitution thingy, right? => remove it
+        ImplDirectFontSubstitution* pFontSubst = NULL;
+        //if( pFocusWin->mpOutDevData )
+        //    pFontSubst = &pFocusWin->mpOutDevData->maDevFontSubst;
+        pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList,
+                         rFont, aSize, static_cast<float>(aSize.Height()), pFontSubst );
         if ( pFontEntry )
             aNewContext.mpFont = &pFontEntry->maFontSelData;
     }
@@ -5595,6 +5600,8 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
             SalExtStyle nExt = 0;
             if( (nExtendedStyle & WB_EXT_DOCUMENT) )
                 nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
+            if( (nExtendedStyle & WB_EXT_DOCMODIFIED) )
+                nExt |= SAL_FRAME_EXT_STYLE_DOCMODIFIED;
 
             pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
         }
@@ -7687,7 +7694,9 @@ void Window::Update()
 void Window::Flush()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    mpWindowImpl->mpFrame->Flush();
+
+    const Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+    mpWindowImpl->mpFrame->Flush( aWinRect );
 }
 
 // -----------------------------------------------------------------------
@@ -9319,7 +9328,20 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     }
     else
     {
-        if( bChecked || highlight == 1 )
+        if( bChecked && highlight == 2 )
+        {
+            if( bDark )
+                aSelectionFillCol = COL_LIGHTGRAY;
+            else if ( bBright )
+            {
+                aSelectionFillCol = COL_BLACK;
+                SetLineColor( COL_BLACK );
+                nPercent = 0;
+            }
+            else
+                nPercent = 20;          // selected, pressed or checked ( very dark )
+        }
+        else if( bChecked || highlight == 1 )
         {
             if( bDark )
                 aSelectionFillCol = COL_GRAY;
