@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:57:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,13 +580,28 @@ namespace dbaui
         ,m_aEDDriverClass   (this, ModuleRes(ET_JDBCDRIVERCLASS))
         ,m_aTestJavaDriver  (this, ModuleRes(PB_TESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
+        ,m_bUseClass(true)
     {
-        m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
+        if ( _pDriverName != NULL )
+        {
+            m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
+        }
+        else
+        {
+            m_bUseClass = false;
+            m_aFTDriverClass.Show(FALSE);
+            m_aEDDriverClass.Show(FALSE);
+            m_aTestJavaDriver.Show(FALSE);
+        }
+
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
 
-        m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
-        m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
+        if ( m_bUseClass )
+        {
+            m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
+            m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
+        }
 
         // #98982# OJ
         m_aNFPortNumber.SetUseThousandSep(sal_False);
@@ -602,14 +617,16 @@ namespace dbaui
 
         FreeResource();
 
-        m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
+        if ( m_bUseClass )
+            m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
     }
 
     // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDDriverClass));
+        if ( m_bUseClass )
+            _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDDriverClass));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
     }
@@ -619,7 +636,8 @@ namespace dbaui
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
+        if ( m_bUseClass )
+            _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
 
@@ -627,7 +645,8 @@ namespace dbaui
     sal_Bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        if ( m_bUseClass )
+            fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
 
@@ -646,8 +665,11 @@ namespace dbaui
 
         if ( bValid )
         {
-            m_aEDDriverClass.SetText(pDrvItem->GetValue());
-            m_aEDDriverClass.ClearModifyFlag();
+            if ( m_bUseClass )
+            {
+                m_aEDDriverClass.SetText(pDrvItem->GetValue());
+                m_aEDDriverClass.ClearModifyFlag();
+            }
 
             m_aEDHostname.SetText(pHostName->GetValue());
             m_aEDHostname.ClearModifyFlag();
@@ -659,7 +681,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correcxt value when saveValue was called by base class
-        if ( !m_aEDDriverClass.GetText().Len() )
+        if ( m_bUseClass && !m_aEDDriverClass.GetText().Len() )
         {
             m_aEDDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aEDDriverClass.SetModifyFlag();
@@ -669,6 +691,8 @@ namespace dbaui
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        OSL_ENSURE(m_bUseClass,"Who called me?");
+
         sal_Bool bSuccess = sal_False;
         try
         {
@@ -691,7 +715,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
     {
-        if ( _pEdit == &m_aEDDriverClass )
+        if ( m_bUseClass && _pEdit == &m_aEDDriverClass )
             m_aTestJavaDriver.Enable( m_aEDDriverClass.GetText().Len() != 0 );
 
         // tell the listener we were modified
@@ -703,6 +727,11 @@ namespace dbaui
     SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ,"com.mysql.jdbc.Driver") );
+    }
+    // -----------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ,0) );
     }
 
     // -----------------------------------------------------------------------
