@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:04:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,11 +734,6 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
     {
         return m_pRC_Tables->getData()->getReferencingTable();
-    }
-    // -----------------------------------------------------------------------------
-    TTableWindowData::value_type OTableListBoxControl::getReferencedTable() const
-    {
-        return m_pRC_Tables->getData()->getReferencedTable();
     }
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::enableRelation(bool _bEnable)
