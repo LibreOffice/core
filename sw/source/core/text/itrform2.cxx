@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:51:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1918,8 +1918,7 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
 /*************************************************************************
  *                SwTxtFormatter::_CalcFitToContent()
  *
- * FME: This routine does a limited text formatting under the assumption,
- * that the line length is USHORT twips.
+ * FME/OD: This routine does a limited text formatting.
  *************************************************************************/
 
 SwTwips SwTxtFormatter::_CalcFitToContent()
