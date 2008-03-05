@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:14:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1040,7 +1040,7 @@ void SwEditWin::FlushInBuffer()
             if(bLang)
             {
                 SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
-                rSh.GetAttr(aLangSet);
+                rSh.GetCurAttr(aLangSet);
                 if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, TRUE))
                 {
                     bLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage() != eBufferLanguage;
@@ -2179,7 +2179,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                         {
                             SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
-                            rSh.GetAttr(aSet);
+                            rSh.GetCurAttr(aSet);
                             if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE))
                             {
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
