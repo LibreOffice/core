@@ -147,7 +147,7 @@
 <DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="true" type="short" usage="DATE" formatindex="34">
-<FormatCode>YY"年"M"日"</FormatCode>
+<FormatCode>YY"年"M"月"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="35">
@@ -216,11 +216,11 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
-<FormatCode>MM"分"SS"秒"00"毫秒"</FormatCode>
+<FormatCode>MM"分"SS"秒"00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey14" default="false" type="long" usage="TIME"  formatindex="56">
-<FormatCode>[HH]"时"MM"分"SS"秒"00"毫秒"</FormatCode>
+<FormatCode>[HH]"时"MM"分"SS"秒"00</FormatCode>
 <DefaultName/>
 </FormatElement>
 <!-- Date_Timeformats. Index range is 46-47. -->
