@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 15:43:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,7 @@
 #define SC_UNONAME_FROMSELECT       "FromSelection"
 #define SC_UNONAME_CONRES           "ConnectionResource"
 #define SC_UNONAME_TOKENINDEX       "TokenIndex"
+#define SC_UNONAME_ISSHAREDFMLA     "IsSharedFormula"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"
