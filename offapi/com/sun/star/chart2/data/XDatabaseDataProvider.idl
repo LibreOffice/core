@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDatabaseDataProvider.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XDatabaseDataProvider_idl__
+#define __com_sun_star_report_XDatabaseDataProvider_idl__
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/sdbc/XConnection.idl>
+#include <com/sun/star/chart2/data/XDataProvider.idl>
+#include <com/sun/star/chart2/data/XRangeXMLConversion.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart2 { module data {
+
+//=============================================================================
+
+/** identifies a <type>XDataProvider</type> for result sets.
+
+    @see XDataProvider
+    @see DataProvider
+ */
+interface XDatabaseDataProvider
+{
+    /** For accessing data a component provides for being used by
+        charts.
+     */
+    interface XDataProvider;
+
+    /** allows you to convert the ranges a data provider deals with
+        internally into valid XML.
+     */
+    interface XRangeXMLConversion;
+
+    /** allows access to the properties of the instance.
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    /** allows life-time control of the database data provider.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** allows access to the properties of the instance.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** is used for subreports and contains the names of columns of the parent report.
+    <p> These columns are typically the foreign key fields of the parent report.
+    The values of theses columns are used to identify the data for the subreport.
+    Each time the parent report changes it's current row, the subreport requeries
+    it's data based on the values of the master fields.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+
+    */
+    [attribute,bound] sequence<string> MasterFields;
+
+    /**is used for subreports and contains the names of the columns of the subreport
+    which are related to the master fields of the parent report.
+    <p>Entries in this sequence can either denote column names in the sub report,
+    or paramater names.<br/>
+    For instance, you could base the report on the SQL statement
+    <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
+    to the DetailFields property. In this case, the parameter will be filled from
+    the corresponding master field.<br/>
+    Alternatively, you could simply base your report on the table <code>invoices</code>,
+    and add the column name <code>cust_ref</code> to the DetailFields. In this case,
+    and implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
+    be created, and the artificial parameter will be filled from the corresponding
+    master field.<br/>
+    If a string in this property denotes both a column name and a parameter name, it
+    is undefined which way it is interpreted, but implementations of the service are required
+    to either decide for the paramter or the column, and proceed as usual.
+    </p>
+    <p>The columns specified herein typically represent a part of the primary key
+    fields or their aliases of the detail report.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+    *
+    */
+    [attribute,bound] sequence<string> DetailFields;
+
+    /** is the command which should be executed, the type of command depends
+    on the CommandType.
+    <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+    means in case the <member>Command</member> specifies an SQL statement, the inherited
+    <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    becomes relevant:<br/>
+    It then can be to used to specify whether the SQL statement should be analyzed on the
+    client side before sending it to the database server.<br/>
+    The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+    which are not standard SQL, to your database.</p>
+
+
+    @see com::sun::star::sdb::CommandType
+    */
+    [attribute,bound] string Command;
+
+    /** specifies the type of the command to be executed to retrieve a result set.
+
+        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+
+        <p>This property is only meaningfull together with the <member>Command</member>
+        property, thus either <em>both</em> or <em>none</em> of them are present.</p>
+
+        @see com::sun::star::sdb::CommandType
+     */
+    [attribute,bound] long CommandType;
+
+    /** specifies an addtional filter to optinally use.
+
+        <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
+
+        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        row set are to be additionally filtered, the Filter property can be used.</p>
+
+        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        in the DataAccessDescriptor.</p>
+
+        @see com::sun::star::sdb::RowSet
+        @see ResultSet
+    */
+    [attribute,bound] string Filter;
+
+    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+        to the database server.
+
+        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        backend-specific SQL statements, which are not standard SQL, to your database.</p>
+
+        <p>This property is usually present together with the <member>Command</member> and
+        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        equals <member>CommandType::COMMAND</member>.</p>
+    */
+    [attribute,bound] boolean EscapeProcessing;
+
+    /** specifies the maximal count of rows which should be fetched.
+        <p>A value of zero implies that no limit exists.</p>
+    */
+    [attribute,bound] long RowLimit;
+
+    /** specifies the active connection which is used to create the resulting report.
+    */
+    [attribute,bound] com::sun::star::sdbc::XConnection ActiveConnection
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+    /** is the name of the datasource to use, this could be a named datasource
+        or the URL of a data access component.
+     */
+    [attribute,bound] string DataSourceName;
+};
+
+service DatabaseDataProvider : XDatabaseDataProvider
+{
+    createWithConnection([in] com::sun::star::sdbc::XConnection connection);
+};
+//=============================================================================
+
+ }; }; }; };  };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
