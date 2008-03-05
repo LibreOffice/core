@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapepropertiescontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:26:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,8 @@ namespace oox { namespace drawingml {
 // ====================================================================
 
 // CT_ShapeProperties
-ShapePropertiesContext::ShapePropertiesContext( const ContextRef& xParent, ::oox::drawingml::Shape& rShape )
-: Context( xParent->getHandler() )
-, mxParent( xParent )
+ShapePropertiesContext::ShapePropertiesContext( ContextHandler& rParent, Shape& rShape )
+: ContextHandler( rParent )
 , mrShape( rShape )
 {
 }
@@ -75,7 +74,7 @@ ShapePropertiesContext::ShapePropertiesContext( const ContextRef& xParent, ::oox
 
 void ShapePropertiesContext::endFastElement( sal_Int32 aElementToken ) throw( SAXException, RuntimeException )
 {
-    mxParent->endFastElement( aElementToken );
+    getParentHandler()->endFastElement( aElementToken );
 }
 
 // --------------------------------------------------------------------
@@ -88,12 +87,12 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
     {
     // CT_Transform2D
     case NMSP_DRAWINGML|XML_xfrm:
-        xRet.set( new Transform2DContext( getHandler(), xAttribs, mrShape ) );
+        xRet.set( new Transform2DContext( *this, xAttribs, mrShape ) );
         break;
 
     // GeometryGroup
     case NMSP_DRAWINGML|XML_custGeom:   // custom geometry "CT_CustomGeometry2D"
-        xRet.set( new CustomShapeGeometryContext( getHandler(), xAttribs, *(mrShape.getCustomShapeProperties())  ) );
+        xRet.set( new CustomShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties())  ) );
         break;
 
 
@@ -105,17 +104,17 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
                 static const OUString sLineShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineShape" ) );
                 mrShape.getServiceName() = sLineShape;
             }
-            xRet.set( new PresetShapeGeometryContext( getHandler(), xAttribs, *(mrShape.getCustomShapeProperties()) ) );
+            xRet.set( new PresetShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         }
         break;
 
     case NMSP_DRAWINGML|XML_prstTxWarp:
-        xRet.set( new PresetTextShapeContext( getHandler(), xAttribs, *(mrShape.getCustomShapeProperties()) ) );
+        xRet.set( new PresetTextShapeContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         break;
 
     // CT_LineProperties
     case NMSP_DRAWINGML|XML_ln:
-        xRet.set( new LinePropertiesContext( getHandler(), xAttribs, *(mrShape.getLineProperties().get()) ) );
+        xRet.set( new LinePropertiesContext( *this, xAttribs, *(mrShape.getLineProperties()) ) );
         break;
 
     // EffectPropertiesGroup
@@ -132,7 +131,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // FillPropertiesGroupContext
     if( !xRet.is() )
-        xRet.set( FillPropertiesGroupContext::StaticCreateContext( getHandler(), aElementToken, xAttribs, *(mrShape.getFillProperties().get()) ) );
+        xRet.set( FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, *(mrShape.getFillProperties()) ) );
 
     return xRet;
 }

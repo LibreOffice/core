@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_Shape
-ShapeContext::ShapeContext( const FragmentHandlerRef& xHandler, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
-: Context( xHandler )
+ShapeContext::ShapeContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
+: ContextHandler( rParent )
 , mpMasterShapePtr( pMasterShapePtr )
 , mpShapePtr( pShapePtr )
 {
@@ -87,7 +87,7 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( aElementToken &(~NMSP_MASK) )
+    switch( getToken( aElementToken ) )
     {
     // nvSpPr CT_ShapeNonVisual begin
 //  case XML_drElemPr:
@@ -103,16 +103,16 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
     // nvSpPr CT_ShapeNonVisual end
 
     case XML_spPr:
-        xRet = new ShapePropertiesContext( this, *(mpShapePtr.get()) );
+        xRet = new ShapePropertiesContext( *this, *mpShapePtr );
         break;
 
     case XML_style:
-        xRet = new ShapeStyleContext( this, *(mpShapePtr.get()) );
+        xRet = new ShapeStyleContext( *this, *mpShapePtr );
         break;
 
     case XML_txBody:
     {
-        xRet = new TextBodyContext( getHandler(), *(mpShapePtr.get()) );
+        xRet = new TextBodyContext( *this, *mpShapePtr );
         break;
     }
     }
