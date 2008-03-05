@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:38:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,7 @@ void FontTable::sprm(Sprm& rSprm)
     {
     default:
         {
-            OSL_ASSERT("FontTable::sprm()"); //
+            OSL_ENSURE( false, "FontTable::sprm()"); //
             //Value::Pointer_t pValue_ = rSprm.getValue();
         }
     }*/
