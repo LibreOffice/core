@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:25:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #include <cmdid.h>
 #endif
 #include <istyleaccess.hxx>
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
