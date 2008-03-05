@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:47:03 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:34:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ zip$(TNR)langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip$(TNR)langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip$(TNR)langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
+zip$(TNR)langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip$(TNR)generatedlangs)"!=""
 .IF "$(ZIP$(TNR)FORCEALLLANG)"!=""
