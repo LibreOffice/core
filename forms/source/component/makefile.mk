@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 14:56:41 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:51:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,6 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/entrylisthelper.obj \
             $(SLO)$/scrollbar.obj \
             $(SLO)$/spinbutton.obj \
-            $(SLO)$/formparameters.obj \
-            $(SLO)$/formfiltermanager.obj \
             $(SLO)$/navigationbar.obj \
             $(SLO)$/formcontrolfont.obj \
             $(SLO)$/refvaluecomponent.obj \
