@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:37:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:46:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,7 +805,8 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             if( NULL == GetImport().GetShapeImport()->GetAutoStylesContext())
                 break;
 
-            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName) );
+            const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
+            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, pTempStyle ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
             if( pStyle == NULL )
                 break;
 
