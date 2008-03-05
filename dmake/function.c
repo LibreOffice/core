@@ -1,6 +1,6 @@
 /* $RCSfile: function.c,v $
--- $Revision: 1.11 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:39:11 $
+-- $Revision: 1.12 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:28:45 $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -41,7 +41,7 @@ static char *_exec_assign ANSI((char *));
 static char *_exec_foreach ANSI((char *, char *, char *));
 static char *_exec_andor  ANSI((char *, int));
 static char *_exec_not    ANSI((char *));
-static int   _mystrcmp    ANSI((const PVOID, const PVOID));
+static int   _mystrcmp    ANSI((const DMPVOID, const DMPVOID));
 
 
 PUBLIC char *
@@ -367,18 +367,26 @@ char *data;
      Link_temp( Current_target, tmpfile, tmpname );
 
      /* Don't free tmpname if it is used. It is stored in a FILELIST
-      * member in Link_temp(). */
+      * member in Link_temp() and freed by Unlink_temp_files(). */
       }
       else
      FREE(tmpname);
    }
 
+   /* If file expanded to a non empty value tmpfile is already opened,
+    * otherwise open it now. */
    if( !tmpfile )
       tmpfile = Start_temp( "", Current_target, &tmpname );
 
    /* If the text parameter is given return its expanded value
     * instead of the used filename. */
-   if( !text || !*text ) text = tmpname;
+   if( !text || !*text ) {
+      /* tmpname is freed by Unlink_temp_files(). */
+      text = DmStrDup(DO_WINPATH(tmpname));
+   }
+   else {
+      text = Expand(text);
+   }
 
    data = Expand(data);
 
@@ -386,7 +394,7 @@ char *data;
    Close_temp( Current_target, tmpfile );
    FREE(data);
 
-   return( Expand(text) );
+   return( text );
 }
 
 
@@ -500,8 +508,8 @@ char *args;
 
 static int
 _mystrcmp( p, q )
-const PVOID p;
-const PVOID q;
+const DMPVOID p;
+const DMPVOID q;
 {
    return(strcmp(*((const char **)p),*((const char **)q)));
 }
