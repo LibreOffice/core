@@ -1,6 +1,6 @@
 /* $RCSfile: extern.h,v $
--- $Revision: 1.12 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:39:00 $
+-- $Revision: 1.13 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:28:27 $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -28,6 +28,12 @@
 
 #ifndef EXTERN_h
 #define EXTERN_h
+
+/* For MSVC++ needs to include windows.h first to avoid problems with
+ * type redefinitions. Include it also for MinGW for consistency. */
+#if defined(__MINGW32__) || defined(_MSC_VER)
+#include <windows.h>
+#endif
 
 #include "config.h"
 
@@ -74,7 +80,7 @@
 # include <utime.h>
 #endif
 
-#define PVOID void *
+#define DMPVOID void *
 
 #include <signal.h>
 #include "itypes.h"
@@ -139,6 +145,19 @@ char *cygdospath(char *src, int winpath);
 #  define NULLDEV "/dev/null"
 #endif
 
+/* For MSVC 6.0 and newer and MinGW use the CreateProcess() function. */
+#if defined(__MINGW32__) || defined(_MSC_VER) && _MSC_VER >= 1200
+#  define USE_CREATEPROCESS 1
+#else
+/* #undef USE_CREATEPROCESS */
+#endif
+
+/*  CreateProcess() is spawn-like. */
+#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ || __EMX__) || defined(USE_CREATEPROCESS)
+#  define USE_SPAWN 1
+#else
+/* #undef USE_SPAWN */
+#endif
 
 /* Work around some of the functions that may or may not exist */
 #if ! HAVE_TZSET
