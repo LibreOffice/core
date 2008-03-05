@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salatslayout.cxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: ihi $ $Date: 2008-01-14 16:17:11 $
+*  last change: $Author: kz $ $Date: 2008-03-05 16:58:33 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 class ATSLayout : public SalLayout
 {
 public:
-                    ATSLayout( ATSUStyle&, double fFontScale );
+                    ATSLayout( ATSUStyle&, float fFontScale );
     virtual         ~ATSLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -75,7 +75,7 @@ private:
     // to prevent ATS overflowing the Fixed16.16 values
     // ATS font requests get size limited by downscaling huge fonts
     // in these cases the font scale becomes something bigger than 1.0
-    double              mfFontScale;
+    float           mfFontScale;
 
 private:
     mutable Fixed       mnCachedWidth;      // cached value of resulting typographical width
@@ -87,6 +87,10 @@ private:
     bool    InitGIA() const;
     bool    GetIdealX() const;
     bool    GetDeltaY() const;
+
+    int Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
+    int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
+    Fixed   Vcl2Fixed( int ) const;         // convert VCL units to ATSU-Fixed units
 
     mutable ATSGlyphRef*        mpGlyphIds;         // Glyphs IDs
     mutable Fixed*              mpCharWidths;       // map rel char pos to charwidth
@@ -101,10 +105,9 @@ private:
     enum { MARKED_OUTGLYPH=0xFFFE, DROPPED_OUTGLYPH=0xFFFF};
 };
 
-
 // =======================================================================
 
-ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, double fFontScale )
+ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
 :   mrATSUStyle( rATSUStyle ),
     maATSULayout( NULL ),
     mnCharCount( 0 ),
@@ -148,6 +151,31 @@ ATSLayout::~ATSLayout()
 }
 
 // -----------------------------------------------------------------------
+
+inline int ATSLayout::Fixed2Vcl( Fixed nFixed ) const
+{
+    float fFloat = mfFontScale * FixedToFloat( nFixed );
+    return static_cast<int>(fFloat + 0.5);
+}
+
+// -----------------------------------------------------------------------
+
+inline int ATSLayout::AtsuPix2Vcl( int nAtsuPixel) const
+{
+    float fVclPixel = mfFontScale * nAtsuPixel;
+    fVclPixel += (fVclPixel>=0) ? +0.5 : -0.5;  // prepare rounding to int
+    int nVclPixel = static_cast<int>( fVclPixel);
+    return nVclPixel;
+}
+
+// -----------------------------------------------------------------------
+
+inline Fixed ATSLayout::Vcl2Fixed( int nPixel ) const
+{
+    return FloatToFixed( nPixel / mfFontScale );
+}
+
+// -----------------------------------------------------------------------
 /**
  * ATSLayout::LayoutText : Manage text layouting
  *
@@ -182,7 +210,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     ATSUGetAttribute( mrATSUStyle, kATSUSizeTag, sizeof(fFontSize), &fFontSize, &nDummy);
     String aUniName( &rArgs.mpStr[rArgs.mnMinCharPos], mnCharCount );
     ByteString aCName( aUniName, RTL_TEXTENCODING_UTF8 );
-    AquaLog( "ATSLayout( \"%s\" %d..%d of %d) with h=%4.1f\n",
+    fprintf( stderr, "ATSLayout( \"%s\" %d..%d of %d) with h=%4.1f\n",
         aCName.GetBuffer(),rArgs.mnMinCharPos,rArgs.mnEndCharPos,rArgs.mnLength,Fix2X(fFontSize) );
 #endif
 
@@ -227,6 +255,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 **/
 void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
+    int nOrigWidth = GetTextWidth();
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( !nPixelWidth && rArgs.mpDXArray ) {
         // for now we are only interested in the layout width
@@ -234,9 +263,12 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
+        int nTrailingSpaceWidth = 0;
         int i = mnCharCount;
         while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
-            nPixelWidth -= rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+            nTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+        nOrigWidth -= nTrailingSpaceWidth;
+        nPixelWidth -= nTrailingSpaceWidth;
 
         // TODO: use all mpDXArray elements for layouting
     }
@@ -244,14 +276,19 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !nPixelWidth )
         return;
 
+    // HACK: justification requests which change the width by just one pixel are probably
+    // #i86038# introduced by lossy conversions between integer based coordinate system
+    if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
+        return;
+
     ATSUAttributeTag nTags[3];
     ATSUAttributeValuePtr nVals[3];
     ByteCount nBytes[3];
 
-    Fixed nFixedWidth = FloatToFixed( nPixelWidth / mfFontScale );
+    Fixed nFixedWidth = Vcl2Fixed( nPixelWidth );
     mnCachedWidth = nFixedWidth;
     Fract nFractFactor = kATSUFullJustification;
-    ATSLineLayoutOptions nLineLayoutOptions = kATSLineHasNoHangers;
+    ATSLineLayoutOptions nLineLayoutOptions = kATSLineHasNoHangers | kATSLineHasNoOpticalAlignment;
 
     nTags[0] = kATSULineWidthTag;
     nVals[0] = &nFixedWidth;
@@ -322,8 +359,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
     // Draw the text
     DBG_ASSERT( mnBaseAdv==0, "ATSLayout::DrawText() not yet implemented for glyph fallback layouts" );
     const Point aPos = GetDrawPosition( Point(mnBaseAdv,0) );
-    const Fixed nFixedX = FloatToFixed( +aPos.X() / mfFontScale );
-    const Fixed nFixedY = FloatToFixed( -aPos.Y() / mfFontScale ); // adjusted for y-mirroring
+    const Fixed nFixedX = Vcl2Fixed( +aPos.X() );
+    const Fixed nFixedY = Vcl2Fixed( -aPos.Y() ); // adjusted for y-mirroring
     theErr = ATSUDrawText( maATSULayout, mnMinCharPos, mnCharCount, nFixedX, nFixedY );
     DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUDrawText failed!\n" );
 
@@ -370,10 +407,6 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
 int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
 {
-#if (OSL_DEBUG_LEVEL > 2)
-    AquaLog("-->%s\n",__func__);
-#endif
-
     if( nStart < 0 )                // first glyph requested?
         nStart = 0;
 
@@ -410,7 +443,7 @@ int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStar
         ++nCount;
         *(pGlyphIDs++) = mpGlyphIds[nStart];
         if( pGlyphAdvances )
-            *(pGlyphAdvances++) = static_cast<long>(mfFontScale * FixedToFloat(mpGlyphAdvances[ nStart ]));
+            *(pGlyphAdvances++) = Fixed2Vcl( mpGlyphAdvances[nStart] );
         if( pCharIndexes )
         {
             int nCharPos;
@@ -457,7 +490,7 @@ long ATSLayout::GetTextWidth() const
     if( !mnCachedWidth )
     {
         // prepare precise measurements on pixel based or reference-device
-        const UInt16 eTypeOfBounds = (mfFontScale==1.0) ? kATSUseDeviceOrigins : kATSUseFractionalOrigins;
+        const UInt16 eTypeOfBounds = kATSUseFractionalOrigins;
 
         // determine number of needed measurement trapezoids
         ItemCount nMaxBounds = 0;
@@ -494,7 +527,7 @@ long ATSLayout::GetTextWidth() const
         mnCachedWidth = nRightBound - nLeftBound;
     }
 
-    const long nScaledWidth = static_cast<long>(mfFontScale * FixedToFloat(mnCachedWidth));
+    const int nScaledWidth = Fixed2Vcl( mnCachedWidth );
     return nScaledWidth;
 }
 
@@ -510,37 +543,26 @@ long ATSLayout::GetTextWidth() const
 **/
 long ATSLayout::FillDXArray( long* pDXArray ) const
 {
-    // Get infos about glyphs
+    // short circuit requests which don't need full details
+    if( !pDXArray )
+        return GetTextWidth();
+
+    // initialize detailed metrics from the layouted glyphs
     InitGIA();
 
-    // get cache the text layout's typographical width
-    if( !mnCachedWidth )
-    {
-        long nWidth = mnBaseAdv;
-        for( int i = 0; i < mnCharCount; ++i )
-            nWidth += mpCharWidths[ i ];
-
-        mnCachedWidth = nWidth;
-    }
-
-    const long nScaledWidth = static_cast<long>(mfFontScale * FixedToFloat(mnCachedWidth) + 0.5);
-
     // distribute the widths among the string elements
-    if( pDXArray != NULL )
+    int nPixWidth = 0;
+    mnCachedWidth = 0;
+    for( int i = 0; i < mnCharCount; ++i )
     {
-        long nDXSum = 0;
-        Fixed nCWSum = 0;
-        for( int i = 0; i < mnCharCount; ++i )
-        {
-            // convert and adjust for accumulated rounding errors
-            nCWSum += mpCharWidths[i];
-            const long nPrevDXSum = nDXSum;
-            nDXSum = static_cast<long>(mfFontScale * FixedToFloat(nCWSum) + 0.5);
-            pDXArray[i] = nDXSum - nPrevDXSum;
-        }
+        // convert and adjust for accumulated rounding errors
+        mnCachedWidth += mpCharWidths[i];
+        const int nOldPixWidth = nPixWidth;
+        nPixWidth = Fixed2Vcl( mnCachedWidth );
+        pDXArray[i] = nPixWidth - nOldPixWidth;
     }
 
-    return nScaledWidth;
+    return nPixWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -559,7 +581,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
-    const ATSUTextMeasurement nATSUMaxWidth = FloatToFixed( nPixelWidth / mfFontScale );
+    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
 
     // TODO: massage ATSUBreakLine to like inword breaks:
     //   we prefer BreakInWord instead of ATSUBreakLine trying to be smart
@@ -569,10 +591,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
         nATSUMaxWidth, false, &nBreakPos );
 
     if( (nStatus != noErr) && (nStatus != kATSULineBreakInWord) )
-    {
-        AquaLog( "ATSUBreakLine => %d\n", nStatus);
         return STRING_LEN;
-    }
 
     return nBreakPos;
 }
@@ -592,76 +611,6 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
     DBG_ASSERT( ((nMaxIndex>0)&&!(nMaxIndex&1)),
         "ATSLayout::GetCaretPositions() : invalid number of caret pairs requested");
 
-#if 0 // measure caret positions without directly using the ATSUI caret API
-    // Get infos about glyphs
-    InitGIA();
-
-    Fixed nXPos = mnBaseAdv;
-    if( !mpGlyphs2Chars )
-    {
-        // set the caret positions for a simple layout
-        for( int i = 0; i < nMaxIndex; i += 2 )
-        {
-            const long nLongXPos = static_cast<long>(mfFontScale * FixedToFloat(nXPos));
-            pCaretXArray[ i ] = nLongXPos;
-            nXPos += mpGlyphAdvances[ i>>1 ];
-            pCaretXArray[ i+1 ] = nLongXPos;
-        }
-    }
-    else
-    {
-        // set the caret positions for a complex layout
-        for( int i = 0; i < nMaxIndex; ++i )
-            pCaretXArray[ i ] = -1;
-
-        // assign glyph positions to character positions
-        for( int i = 0; i < mnGlyphCount; ++i )
-        {
-            int nCurrIdx = mpGlyphs2Chars[ i ] - mnMinCharPos;
-            Fixed nXRight = nXPos + mpCharWidths[ nCurrIdx ];
-            const long nLongLeft  = static_cast<long>(mfFontScale * FixedToFloat(nXPos));
-            const long nLongRight = static_cast<long>(mfFontScale * FixedToFloat(nXRight));
-            nXPos += mpGlyphAdvances[ i ];
-
-            //AquaLog("i=%ld < %ld nCurrIdx=%ld nXPos=%ld nXRight=%ld\n",i,mnGlyphCount,nCurrIdx,nXPos,nXRight);
-            nCurrIdx *= 2;
-            if( nCurrIdx >= nMaxIndex )
-                continue;
-            if( !(mpGlyphRTLFlags && mpGlyphRTLFlags[i]) )
-            {
-                //AquaLog("nCurrIdx=%ld nXPos=%ld nXRight=%ld\n",nCurrIdx,nXPos,nXRight);
-                // normal positions for LTR case
-                pCaretXArray[ nCurrIdx ]   = nLongLeft;
-                pCaretXArray[ nCurrIdx+1 ] = nLongRight;
-            }
-            else
-            {
-                //AquaLog("RTL - nCurrIdx=%ld nXPos=%ld nXRight=%ld\n",nCurrIdx,nXPos,nXRight);
-                // reverse positions for RTL case
-                pCaretXArray[ nCurrIdx ]   = nLongRight;
-                pCaretXArray[ nCurrIdx+1 ] = nLongLeft;
-            }
-        }
-    }
-
-    // guess character carets when no directly matching glyph bounds were available
-    // TODO: RTL-case
-    long nLastLeft = static_cast<long>(mfFontScale * FixedToFloat(mnBaseAdv));
-    long nLastRight = nLastLeft;
-    for( int i = 0; i < nMaxIndex; i+=2 )
-    {
-        // update left caret position
-        if( pCaretXArray[i+0] >= 0 )
-            nLastLeft = pCaretXArray[i+0];
-        else
-            pCaretXArray[i+0] = nLastLeft;
-        // update right caret position
-        if( pCaretXArray[i+1] >= 0 )
-            nLastRight = pCaretXArray[i+1];
-        else
-            pCaretXArray[i+1] = nLastRight;
-    }
-#else
     // initialize the caret positions
     for( int i = 0; i < nMaxIndex; ++i )
         pCaretXArray[ i ] = -1;
@@ -680,7 +629,7 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
             continue;
         const Fixed nFixedPos = mnBaseAdv + aCaret0.fX;
         // convert the measurement to pixel units
-        const long nPixelPos = static_cast<long>(mfFontScale * FixedToFloat(nFixedPos));
+        const int nPixelPos = Fixed2Vcl( nFixedPos );
         // update previous trailing position
         if( n > 0 )
             pCaretXArray[2*n-1] = nPixelPos;
@@ -689,7 +638,6 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
             break;
         pCaretXArray[2*n+0] = nPixelPos;
     }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -705,8 +653,8 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
 {
     const Point aPos = GetDrawPosition( Point(mnBaseAdv, 0) );
-    const Fixed nFixedX = FloatToFixed( +aPos.X() / mfFontScale );
-    const Fixed nFixedY = FloatToFixed( +aPos.Y() / mfFontScale );
+    const Fixed nFixedX = Vcl2Fixed( +aPos.X() );
+    const Fixed nFixedY = Vcl2Fixed( +aPos.Y() );
 
     Rect aMacRect;
     OSStatus eStatus = ATSUMeasureTextImage( maATSULayout,
@@ -715,10 +663,10 @@ bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
         return false;
 
     // ATSU top-bottom are vertically flipped from a VCL aspect
-    rVCLRect.Left()     = static_cast<long>(mfFontScale * aMacRect.left);
-    rVCLRect.Top()      = static_cast<long>(mfFontScale * aMacRect.top);
-    rVCLRect.Right()    = static_cast<long>(mfFontScale * aMacRect.right);
-    rVCLRect.Bottom()   = static_cast<long>(mfFontScale * aMacRect.bottom);
+    rVCLRect.Left()   = AtsuPix2Vcl( aMacRect.left );
+    rVCLRect.Top()    = AtsuPix2Vcl( aMacRect.top );
+    rVCLRect.Right()  = AtsuPix2Vcl( aMacRect.right );
+    rVCLRect.Bottom() = AtsuPix2Vcl( aMacRect.bottom );
     return true;
 }
 
@@ -1025,8 +973,6 @@ OSStatus MyATSCubicClosePathCallback (
 
 bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const
 {
-    AquaLog("-->%s not implemented yet\n",__func__);
-
     return false;
 
     /*
@@ -1053,7 +999,7 @@ bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const
 
         if( (nStatus != noErr) && (nCBStatus != noErr) )
         {
-            AquaLog("ATSUCallback = %d,%d\n", nStatus, nCBStatus );
+            fprintf(stderr,"ATSUCallback = %d,%d\n", nStatus, nCBStatus );
             rPPV.resize( i );
             break;
         }
@@ -1074,8 +1020,6 @@ void ATSLayout::InitFont()
 
 void ATSLayout::MoveGlyph( int nStart, long nNewXPos )
 {
-    AquaLog("-->%s\n",__func__);
-
     if( nStart > mnGlyphCount )
         return;
 
@@ -1104,8 +1048,6 @@ void ATSLayout::MoveGlyph( int nStart, long nNewXPos )
 
 void ATSLayout::DropGlyph( int nStart )
 {
-    AquaLog("-->%s\n",__func__);
-
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
 }
 
@@ -1113,8 +1055,6 @@ void ATSLayout::DropGlyph( int nStart )
 
 void ATSLayout::Simplify( bool bIsBase )
 {
-    AquaLog("-->%s\n",__func__);
-
     // return early if no glyph has been dropped
     int i = mnGlyphCount;
     while( (--i >= 0) && (mpOutGlyphs[ i ] != DROPPED_OUTGLYPH) );
