@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaPicker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #ifndef _CFSTRINGUTILITIES_HXX_
 #include "CFStringUtilities.hxx"
 #endif
+#include "NSString_OOoAdditions.hxx"
+
+#include "SalAquaFilePicker.hxx"
 
 #include <stdio.h>
 
@@ -88,208 +91,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-void navigationEventHandler(NavEventCallbackMessage callBackSelector, NavCBRecPtr callBackParms, void *callBackUserData)
-{
-    NavReplyRecord reply;
-    NavUserAction userAction = 0;
-    SalAquaPicker *pSalAquaPicker = (SalAquaPicker *) callBackUserData;
-
-    switch (callBackSelector) {
-
-    // We are ignoring several callbackSelectors here...
-    case kNavCBEvent:
-        pSalAquaPicker->implHandleNavDialogEvent(callBackParms);
-        break;
-    case kNavCBCustomize:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBCustomize");
-        pSalAquaPicker->implHandleNavDialogCustomize(callBackParms);
-        break;
-    case kNavCBStart:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBStart");
-
-//leave the following in in case we should consider X11 support in the future
-#ifndef QUARTZ
-        /*
-         * We need to bring the dialog to the front. However, to make
-         * the dialog usable, soffice.bin must be the application bundle's executable.
-         */
-        if (callBackParms) {
-            WindowRef dialogWindow = callBackParms->window;
-            if (dialogWindow) {
-                ProcessSerialNumber psn;
-                OSStatus error = GetCurrentProcess(&psn);
-                if (error == noErr) {
-                    (void)SetFrontProcess(&psn);
-                }
-                BringToFront(dialogWindow);
-            }
-        }
-#endif
-        pSalAquaPicker->implHandleNavDialogStart(callBackParms);
-        break;
-    case kNavCBAdjustRect:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBAdjustRect");
-        pSalAquaPicker->getControlHelper()->handleAdjustRect(callBackParms);
-        break;
-    case kNavCBNewLocation:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBNewLocation");
-        break;
-    case kNavCBAccept:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBAccept");
-        break;
-    case kNavCBCancel:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBCancel");
-        break;
-    case kNavCBAdjustPreview:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBAdjustPreview");
-        break;
-    case kNavCBPopupMenuSelect:
-        NavMenuItemSpec* menuItem = (NavMenuItemSpec*)callBackParms->eventData.eventDataParms.param;
-        pSalAquaPicker->implHandlePopupMenuSelect(menuItem);
-        break;
-    case kNavCBUserAction:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBUserAction");
-
-         if (NavDialogGetReply (callBackParms->context, &reply) == noErr )
-         {
-             userAction = NavDialogGetUserAction (callBackParms->context);
-
-             switch (userAction) {
-             case kNavUserActionSaveAs:
-                 OSL_TRACE("NavigationServices userAction = knavUserActionSaveAs");
-                 break;
-             case kNavUserActionOpen:
-                 OSL_TRACE("NavigationServices userAction = knavUserActionOpen");
-                 break;
-             case kNavUserActionCancel:
-                 OSL_TRACE("NavigationServices userAction = knavUserActionCancel");
-                 break;
-             case kNavUserActionNewFolder:
-                 OSL_TRACE("NavigationServices userAction = knavUserActionNewFolder");
-                 break;
-             default:
-                 OSL_TRACE("NavigationServices userAction is UNKNOWN %d", userAction);
-                 break;
-             }
-
-             NavDisposeReply (&reply);
-         }
-        break;
-    case kNavCBTerminate:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBTerminate");
-//leave the following in in case we should consider X11 support in the future
-#ifndef QUARTZ
-        {
-            /*
-             * This passage searches the process list to find the X11 application.
-             * When it is found, it is being made the front process. Otherwise
-             * OpenOffice.org app would stay on top and the X11 window might be hidden.
-             */
-            OSStatus status;
-            ProcessSerialNumber psn = {0, kNoProcess};//to initialize the process list
-            while((status = GetNextProcess(&psn)) == noErr && (psn.lowLongOfPSN != kNoProcess)) {
-                CFStringRef processName;
-                CopyProcessName(&psn, &processName);
-                CFStringRef sX11 = CFSTR("X11");
-                if (CFStringCompare(processName, sX11, NULL) == kCFCompareEqualTo) {
-                    (void)SetFrontProcess(&psn);
-                    CFRelease(processName);
-                    CFRelease(sX11);
-                    break;
-                }
-                CFRelease(processName);
-                CFRelease(sX11);
-            }
-        }
-#endif
-        break;
-    case kNavCBSelectEntry:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBSelectEntry");
-        pSalAquaPicker->implHandleNavDialogSelectEntry(callBackParms);
-        break;
-    case kNavCBOpenSelection:
-        OSL_TRACE("NavigationServices callBackSelector = kNavCBOpenSelection");
-        //no need to do anythong here, sfx2 will call us
-        break;
-    default:
-        OSL_TRACE("NavigationServices callBackSelector = %d", (int)callBackSelector);
-        break;
-    }
-
-    pSalAquaPicker->setLatestEvent(callBackSelector);
-}
-
-MacOSBoolean filterEventHandler (AEDesc *theItem, void *info,
-                      void *callBackUD,
-                      NavFilterModes filterMode )
-{
-    SalAquaPicker *pPicker = (SalAquaPicker *) callBackUD;
-    return pPicker->implFilterHandler(theItem, info, callBackUD, filterMode);
-}
-
-MacOSBoolean previewHandler (NavCBRecPtr callBackParms,
-                       NavCallBackUserData callBackUD )
-{
-    SalAquaPicker *pSalAquaPicker = (SalAquaPicker *) callBackUD;
-
-    if (NULL != pSalAquaPicker) {
-        return pSalAquaPicker->implPreviewHandler(callBackParms);
-    }
-
-    return FALSE;
-}
-
-OSStatus SalAquaPicker::run()
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    if (m_pDialog == NULL) {
-        //this is the case e.g. for the folder picker at this stage
-        implInitialize();
-    }
-
-    OSStatus status = NavDialogRun (m_pDialog);
-    if (status != noErr) {
-        OSL_TRACE("NavigationServices returned an error while running the dialog");
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, status);
-
-    return status;
-}
-
-OSStatus SalAquaPicker::runandwaitforresult()
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    OSStatus status = this->run();
-    if (status != noErr) {
-        DBG_PRINT_EXIT(CLASS_NAME, __func__, status);
-        return status;
-    }
-    status = NavDialogGetReply (m_pDialog, &m_pReplyRecord);
-    if (status != noErr) {
-        OSL_TRACE("NavigationServices returned an error while getting the dialog reply");
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, status);
-    return status;
-}
-
 // constructor
 SalAquaPicker::SalAquaPicker()
 : m_pDialog(NULL)
 , m_pControlHelper(new ControlHelper())
-, m_aLatestEvent(kNavCBEvent)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    // set the standard set of dialog options
-    OSStatus status = NavGetDefaultDialogCreationOptions(&m_pDialogOptions);
-    if (status != noErr) {
-        OSL_TRACE("NavigationServices returned an error while creating dialog options");
-    }
-
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
@@ -297,18 +104,135 @@ SalAquaPicker::~SalAquaPicker()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
     if (NULL != m_pControlHelper)
         delete m_pControlHelper;
-    if (NULL != m_pEventHandler)
-        DisposeNavEventUPP(m_pEventHandler);
+
     if (NULL != m_pDialog)
-        NavDialogDispose (m_pDialog);
-    if (NULL != m_pFilterHandler)
-        DisposeNavObjectFilterUPP(m_pFilterHandler);
-    if (NULL != m_pPreviewHandler)
-        DisposeNavPreviewUPP(m_pPreviewHandler);
+        [m_pDialog release];
+
+    [pool release];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
+}
+
+void SAL_CALL SalAquaPicker::implInitialize()
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if (m_pDialog != nil) {
+        return;
+    }
+
+    switch (m_nDialogType)
+    {
+        case NAVIGATIONSERVICES_OPEN:
+            OSL_TRACE("NAVIGATIONSERVICES_OPEN");
+            m_pDialog = [NSOpenPanel openPanel];
+            [(NSOpenPanel*)m_pDialog setCanChooseDirectories:NO];
+            [(NSOpenPanel*)m_pDialog setCanChooseFiles:YES];
+            break;
+
+        case NAVIGATIONSERVICES_SAVE:
+            OSL_TRACE("NAVIGATIONSERVICES_SAVE");
+            m_pDialog = [NSSavePanel savePanel];
+            [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:YES];
+            [(NSSavePanel*)m_pDialog setExtensionHidden:NO];
+            break;
+
+        case NAVIGATIONSERVICES_DIRECTORY:
+            OSL_TRACE("NAVIGATIONSERVICES_DIRECTORY");
+            m_pDialog = [NSOpenPanel openPanel];
+            [(NSOpenPanel*)m_pDialog setCanChooseDirectories:YES];
+            [(NSOpenPanel*)m_pDialog setCanChooseFiles:NO];
+            break;
+
+        default:
+            OSL_TRACE("m_nDialogType is UNKNOWN: %d", m_nDialogType);
+            break;
+    }
+
+    if (m_pDialog == nil) {
+        OSL_TRACE("An error occurred while creating the dialog!");
+    }
+    else {
+        [(NSOpenPanel*)m_pDialog setCanCreateDirectories:YES];
+        //Retain the dialog instance or it will go away immediately
+        [m_pDialog retain];
+    }
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+}
+
+int SalAquaPicker::run()
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
+    if (m_pDialog == NULL) {
+        //this is the case e.g. for the folder picker at this stage
+        implInitialize();
+    }
+
+    NSView *userPane = m_pControlHelper->getUserPane();
+    if (userPane != NULL) {
+        [m_pDialog setAccessoryView:userPane];
+    }
+
+    int retVal = 0;
+
+    NSString *startDirectory;
+    if (m_sDisplayDirectory.getLength() > 0) {
+        NSString *temp = [NSString stringWithOUString:m_sDisplayDirectory];
+        NSURL *url = [NSURL URLWithString:temp];
+        startDirectory = [url path];
+
+        OSL_TRACE("start dir: %s", [startDirectory UTF8String]);
+        // NSLog(@"%@", startDirectory);
+    }
+    else {
+        startDirectory = NSHomeDirectory();
+    }
+
+    switch(m_nDialogType) {
+        case NAVIGATIONSERVICES_DIRECTORY:
+        case NAVIGATIONSERVICES_OPEN:
+            retVal = [(NSOpenPanel*)m_pDialog runModalForDirectory:startDirectory file:nil types:nil];
+            break;
+        case NAVIGATIONSERVICES_SAVE:
+            retVal = [m_pDialog runModalForDirectory:startDirectory file:[NSString stringWithOUString:((SalAquaFilePicker*)this)->getSaveFileName()]/*[m_pDialog saveFilename]*/];
+            break;
+        // [m_pDialog beginSheetForDirectory:startDirectory file:[m_pDialog saveFilename] modalForWindow:[NSApp keyWindow] modalDelegate:((SalAquaFilePicker*)this)->getDelegate() didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+        default:
+            break;
+    }
+
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
+
+    [pool release];
+
+    return retVal;
+}
+
+int SalAquaPicker::runandwaitforresult()
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    int status = this->run();
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__, status);
+    return status;
 }
 
 void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
@@ -316,7 +240,16 @@ void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDire
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "directory", aDirectory);
 
-    m_sDisplayDirectory = aDirectory;
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if (aDirectory != m_sDisplayDirectory) {
+        m_sDisplayDirectory = aDirectory;
+
+        if (m_pDialog != nil) {
+            //NSLog(@"would change now to:%@", [NSString stringWithOUString:aDirectory]);
+            // [m_pDialog setDirectory:[NSString stringWithOUString:aDirectory]];
+        }
+    }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
@@ -335,80 +268,10 @@ void SAL_CALL SalAquaPicker::implsetTitle( const rtl::OUString& aTitle ) throw( 
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    m_pDialogOptions.windowTitle = CFStringCreateWithOUString ( aTitle );
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-void SAL_CALL SalAquaPicker::implInitialize()
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    m_pEventHandler = NewNavEventUPP( navigationEventHandler );
-
-    //does not work currently - unfortunately
-    //WindowRef parent = FrontWindow();
-    WindowRef parent = NULL;
-    if (NULL == parent) {
-        m_pDialogOptions.modality = kWindowModalityAppModal;
-    } else if (m_nDialogType == NAVIGATIONSERVICES_SAVE) {
-        m_pDialogOptions.modality = kWindowModalityWindowModal;
-        m_pDialogOptions.parentWindow = parent;
-    }
-
-    OSStatus status = noErr;
-    // Create the corresponding dialog
-    // pass the pointer to SalAquaPicker as an userData
-    switch (m_nDialogType)
-    {
-        case NAVIGATIONSERVICES_OPEN:
-            OSL_TRACE("NAVIGATIONSERVICES_OPEN");
-            m_pFilterHandler = NewNavObjectFilterUPP(filterEventHandler);
-            m_pPreviewHandler = NewNavPreviewUPP(previewHandler);
-            status = NavCreateGetFileDialog (&m_pDialogOptions, NULL, m_pEventHandler, m_pPreviewHandler, m_pFilterHandler, (void *) this, &m_pDialog);
-            break;
-
-        case NAVIGATIONSERVICES_SAVE:
-            OSL_TRACE("NAVIGATIONSERVICES_SAVE");
-            status = NavCreatePutFileDialog (&m_pDialogOptions, kUnknownType, kUnknownType, m_pEventHandler, (void *) this, &m_pDialog);
-            break;
-
-        case NAVIGATIONSERVICES_DIRECTORY:
-            OSL_TRACE("NAVIGATIONSERVICES_DIRECTORY");
-            status = NavCreateChooseFolderDialog (&m_pDialogOptions, m_pEventHandler, NULL, (void *) this, &m_pDialog);
-            break;
-
-        default:
-            OSL_TRACE("m_nDialogType is UNKNOWN: %d", m_nDialogType);
-            break;
-    }
-
-    if (status != noErr) {
-        OSL_TRACE("An error occurred while creating the dialog!");
+    if (m_pDialog != nil) {
+        [m_pDialog setTitle:[NSString stringWithOUString:aTitle]];
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-/////
-void SAL_CALL SalAquaPicker::implHandleNavDialogCustomize(NavCBRecPtr callBackParms) { }
-
-void SAL_CALL SalAquaPicker::implHandleNavDialogStart(NavCBRecPtr callBackParms) { }
-
-void SAL_CALL SalAquaPicker::implHandleNavDialogEvent(NavCBRecPtr callBackParms) { }
-
-sal_Bool SAL_CALL SalAquaPicker::implFilterHandler(AEDesc *theItem, void *info,
-                                                   void *callBackUD,
-                                                   NavFilterModes filterMode)
-{
-    return sal_True;
-}
-
-sal_Bool SAL_CALL SalAquaPicker::implPreviewHandler(NavCBRecPtr callBackParms)
-{
-    return sal_False;
-}
-
-void SAL_CALL SalAquaPicker::implHandlePopupMenuSelect(NavMenuItemSpec* menuItem) { }
-
-void SAL_CALL SalAquaPicker::implHandleNavDialogSelectEntry(NavCBRecPtr callBackParms) { }
