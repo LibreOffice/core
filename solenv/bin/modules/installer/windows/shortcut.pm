@@ -4,9 +4,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:20:21 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:26:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,7 @@ sub get_shortcut_component
     my $absolute_filename = 0;
     if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
     if ( $styles =~ /\bABSOLUTE_FILENAME\b/ ) { $absolute_filename = 1; }   # FileID contains an absolute filename
+    if ( $styles =~ /\bUSE_HELPER_FILENAME\b/ ) { $absolute_filename = 1; } # ComponentIDFile contains id of a helper file
 
     # if the FileID contains an absolute filename, therefore the entry for "ComponentIDFile" has to be used.
     if ( $absolute_filename ) { $shortcut_fileid = $shortcut->{'ComponentIDFile'}; }
@@ -378,6 +379,7 @@ sub get_folderitem_directory
     if ( $shortcut->{'FolderID'} eq "PREDEFINED_DESKTOP" )
     {
         $directory = $installer::globals::desktopfolder;
+        $installer::globals::desktoplinkexists = 1;
     }
 
     if ( $shortcut->{'FolderID'} eq "PREDEFINED_STARTMENU" )
