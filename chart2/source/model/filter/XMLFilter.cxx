@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:06:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "ContextHelper.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "ContainerHelper.hxx"
+#include <comphelper/mediadescriptor.hxx>
 
 // for ERRCODE_SFX_GENERAL etc.
 // header contains only macros
@@ -148,16 +149,9 @@ LOCAL_CONST_STR( sXML_import_chart_oasis_styles_service,    "com.sun.star.comp.C
 LOCAL_CONST_STR( sXML_import_chart_oasis_content_service,   "com.sun.star.comp.Chart.XMLOasisContentImporter" );
 LOCAL_CONST_STR( sXML_import_chart_oasis_meta_service,      "com.sun.star.comp.Chart.XMLOasisMetaImporter" );
 
-void lcl_isOASIS( apphelper::MediaDescriptorHelper & rMDHelper, bool & rOutOASIS )
-{
-    if( rMDHelper.ISSET_FilterName )
-        rOutOASIS = rMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("chart8"));
-}
-
 uno::Reference< embed::XStorage > lcl_getWriteStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
-    const uno::Reference< uno::XComponentContext >& xContext,
-    bool & rOutOASIS )
+    const uno::Reference< uno::XComponentContext >& xContext,const ::rtl::OUString& _sMediaType)
 {
     uno::Reference< embed::XStorage > xStorage;
     try
@@ -214,8 +208,6 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
             }
         }
 
-        lcl_isOASIS( aMDHelper, rOutOASIS );
-
         // set correct media type at storage
         uno::Reference<beans::XPropertySet> xProp(xStorage,uno::UNO_QUERY);
         OUString aMediaType;
@@ -223,10 +215,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
              ! ( xProp->getPropertyValue( C2U("MediaType")) >>= aMediaType ) ||
              ( aMediaType.getLength() == 0 ))
         {
-            if( rOutOASIS )
-                xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( MIMETYPE_OASIS_OPENDOCUMENT_CHART ));
-            else
-                xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( MIMETYPE_VND_SUN_XML_CHART ));
+            xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( _sMediaType ));
         }
     }
     catch( uno::Exception & ex )
@@ -238,8 +227,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
 
 uno::Reference< embed::XStorage > lcl_getReadStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
-    const uno::Reference< uno::XComponentContext >& xContext,
-    bool & rOutOASIS )
+    const uno::Reference< uno::XComponentContext >& xContext)
 {
     uno::Reference< embed::XStorage > xStorage;
 
@@ -295,8 +283,6 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
             xStorage.set(
                 xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         }
-
-        lcl_isOASIS( aMDHelper, rOutOASIS );
 
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
@@ -435,7 +421,8 @@ sal_Int32 XMLFilter::impl_Import(
             uno::UNO_QUERY_THROW );
 
         bool bOasis = true;
-        Reference< embed::XStorage > xStorage( lcl_getReadStorage( rMediaDescriptor, m_xContext, bOasis ));
+        isOasisFormat( rMediaDescriptor, bOasis );
+        Reference< embed::XStorage > xStorage( lcl_getReadStorage( rMediaDescriptor, m_xContext));
         if( ! xStorage.is())
             return ERRCODE_SFX_GENERAL;
 
@@ -608,8 +595,31 @@ sal_Int32 XMLFilter::impl_ImportStream(
                     xFactory->createInstanceWithArgumentsAndContext( rServiceName, aFilterCompArgs, m_xContext ),
                     uno::UNO_QUERY_THROW );
 
+
                 Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
                 xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_QUERY_THROW ));
+
+                if ( m_sDocumentHandler.getLength() )
+                {
+                    try
+                    {
+                        uno::Sequence< uno::Any > aArgs(2);
+                        beans::NamedValue aValue;
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler"));
+                        aValue.Value <<= xDocHandler;
+                        aArgs[0] <<= aValue;
+                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
+                        aValue.Value <<= m_xTargetDoc;
+                        aArgs[1] <<= aValue;
+
+                        xDocHandler.set(xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext), uno::UNO_QUERY );
+                        xImporter.set(xDocHandler,uno::UNO_QUERY);
+                    }
+                    catch(uno::Exception&)
+                    {
+                        OSL_ENSURE(0,"Exception caught!");
+                    }
+                }
                 xParser->setDocumentHandler( xDocHandler );
                 xParser->parseStream( aParserInput );
             }
@@ -678,12 +688,36 @@ sal_Int32 XMLFilter::impl_Export(
             return ERRCODE_SFX_GENERAL;
 
         bool bOasis = true;
-        uno::Reference< embed::XStorage > xStorage( lcl_getWriteStorage( rMediaDescriptor, m_xContext, bOasis ) );
+        isOasisFormat( rMediaDescriptor, bOasis );
+
+        uno::Reference< embed::XStorage > xStorage( lcl_getWriteStorage( rMediaDescriptor, m_xContext, getMediaType(bOasis) ) );
         OSL_ENSURE( xStorage.is(), "No Storage" );
         if( ! xStorage.is())
             return ERRCODE_SFX_GENERAL;
 
         uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xSaxWriter, uno::UNO_QUERY );
+
+        if ( m_sDocumentHandler.getLength() )
+        {
+            try
+            {
+                uno::Sequence< uno::Any > aArgs(2);
+                beans::NamedValue aValue;
+                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler"));
+                aValue.Value <<= xDocHandler;
+                aArgs[0] <<= aValue;
+                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
+                aValue.Value <<= xDocumentComp;
+                aArgs[1] <<= aValue;
+
+                xDocHandler.set(xServiceFactory->createInstanceWithArguments(m_sDocumentHandler,aArgs), uno::UNO_QUERY );
+                xSaxWriter.set(xDocHandler,uno::UNO_QUERY);
+            }
+            catch(uno::Exception&)
+            {
+                OSL_ENSURE(0,"Exception caught!");
+            }
+        }
 
         uno::Sequence< uno::Any > aGraphicResolverArgs(1);
         aGraphicResolverArgs[0] <<= xStorage;
@@ -857,7 +891,34 @@ Sequence< OUString > XMLFilter::getSupportedServiceNames_Static()
     // XInitialization, XNamed
     return aServices;
 }
+// -----------------------------------------------------------------------------
+
+void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
+{
+    apphelper::MediaDescriptorHelper aMDHelper( _rMediaDescriptor );
+    if( aMDHelper.ISSET_FilterName )
+        rOutOASIS = aMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("chart8"));
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString XMLFilter::getMediaType(bool _bOasis)
+{
+    return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART : MIMETYPE_VND_SUN_XML_CHART;
+}
+// -----------------------------------------------------------------------------
 
 APPHELPER_XSERVICEINFO_IMPL( XMLFilter, C2U( "com.sun.star.comp.chart2.XMLFilter" ) );
+// -----------------------------------------------------------------------------
+
+void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
+{
+    apphelper::MediaDescriptorHelper aMDHelper( _rMediaDescriptor );
+    if( aMDHelper.ISSET_FilterName )
+        rOutOASIS = aMDHelper.FilterName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Base) Report Chart"));
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString XMLReportFilterHelper::getMediaType(bool )
+{
+    return MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART;
+}
 
 } //  namespace chart

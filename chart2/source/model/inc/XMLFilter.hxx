@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:06:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,19 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
+    inline ::rtl::OUString getDocumentHandler() const { return m_sDocumentHandler; }
+    inline void setDocumentHandler(const ::rtl::OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
+
+    virtual ::rtl::OUString getMediaType(bool _bOasis);
+
+    /** fills the oasis flag only when a filtername was set
+    *
+    * \param _rMediaDescriptor
+    * \param _rOutOASIS
+    */
+    virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
+
 private:
     // methods
 
@@ -174,9 +187,62 @@ private:
         ::com::sun::star::lang::XComponent >       m_xTargetDoc;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XComponent >       m_xSourceDoc;
+    ::rtl::OUString                                m_sDocumentHandler; // when set it will be set as doc handler
 
     volatile bool                                  m_bCancelOperation;
     ::osl::Mutex                                   m_aMutex;
+};
+
+// =============================================================================
+class XMLReportFilterHelper : public XMLFilter
+{
+    virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
+public:
+    explicit XMLReportFilterHelper( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::uno::XComponentContext > const & _xContext )
+                            :XMLFilter(_xContext)
+    {}
+    /// establish methods for factory instatiation
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL   create(
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new XMLReportFilterHelper( xContext );
+    }
+    static ::rtl::OUString getImplementationName_Static()
+    {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.report.XMLFilter" ));
+    }
+protected:
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName()
+            throw( ::com::sun::star::uno::RuntimeException )
+    {
+        return getImplementationName_Static();
+    }
+    // ____ XImporter ____
+    virtual void SAL_CALL setTargetDocument(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent >& Document )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException)
+    {
+        setDocumentHandler(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ImportDocumentHandler")));
+        XMLFilter::setTargetDocument(Document);
+    }
+
+    // ____ XExporter ____
+    virtual void SAL_CALL setSourceDocument(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent >& Document )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException)
+    {
+        setDocumentHandler(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ExportDocumentHandler")));
+        XMLFilter::setSourceDocument(Document);
+    }
+
+    virtual ::rtl::OUString getMediaType(bool _bOasis);
 };
 
 } //  namespace chart
