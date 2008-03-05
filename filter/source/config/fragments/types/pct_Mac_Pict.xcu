@@ -1,7 +1,7 @@
     <node oor:name="pct_Mac_Pict" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>pct</value></prop>
+        <prop oor:name="Extensions"><value>pct pict</value></prop>
         <prop oor:name="MediaType"><value>image/x-pict</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>PCT - Mac Pict</value></prop>
