@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:47:15 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:52:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ APP1OBJS=\
 APP1STDLIBS=	\
     -l$(SHL1TARGET)		\
     $(VCLLIB)			\
+    $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(UCBHELPERLIB)		\
     $(COMPHELPERLIB)	\
