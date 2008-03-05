@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:42:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,76 +36,37 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-//#ifndef _SFXFRAME_HXX
-//#include <sfx2/frame.hxx>
-//#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#include <com/sun/star/document/XEventListener.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
-#include <com/sun/star/container/XSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
-#include <comphelper/sequenceashashmap.hxx>
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
+
+/** === begin UNO includes === **/
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrameLoader.hpp>
+#include <com/sun/star/frame/XLoadEventListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/frame/XModule.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -238,45 +199,80 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     m_aURL      = rURL;
     m_aArgs     = rArgs;
 
-    INetURLObject aParser(rURL);
-    // ich benutze nicht maURL, sondern rURL, denn zwischen dem Constructor und diesem Load hier kann sich die ::com::sun::star::util::URL des Objektes
-    // schon geaendert haben (zum Beispiel durch Umbenennen)
-    Reference< XController >    xController;
-    sal_Bool bAttachModel = sal_False;
-    if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_FORMGRIDVIEW)
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_DATASOURCEBROWSER )// construct the control
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
-    else if ( (bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_QUERYDESIGN)) )// construct the control
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
-    else if ( (bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_TABLEDESIGN)) ) // construct the control
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
-    else if ( (bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_RELATIONDESIGN)) )// construct the control
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
-    else if ( aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_REPORTDESIGN )// construct the control
+    ::comphelper::ComponentContext aContext( m_xServiceFactory );
+
+    struct ServiceNameToImplName
     {
-        ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
-        sal_Bool bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW, sal_False );
+        const sal_Char*     pAsciiServiceName;
+        const sal_Char*     pAsciiImplementationName;
+        ServiceNameToImplName( const sal_Char* _pService, const sal_Char* _pImpl )
+            :pAsciiServiceName( _pService )
+            ,pAsciiImplementationName( _pImpl )
+        {
+        }
+    } aImplementations[] = {
+        ServiceNameToImplName( URL_COMPONENT_FORMGRIDVIEW,          "org.openoffice.comp.dbu.OFormGridView"        ),
+        ServiceNameToImplName( URL_COMPONENT_DATASOURCEBROWSER,     "org.openoffice.comp.dbu.ODatasourceBrowser"   ),
+        ServiceNameToImplName( URL_COMPONENT_QUERYDESIGN,           "org.openoffice.comp.dbu.OQueryDesign"         ),
+        ServiceNameToImplName( URL_COMPONENT_TABLEDESIGN,           "org.openoffice.comp.dbu.OTableDesign"         ),
+        ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN,        "org.openoffice.comp.dbu.ORelationDesign"      )
+    };
+    INetURLObject aParser( rURL );
+    Reference< XController > xController;
+    sal_Bool bAttachModel = sal_False;
+
+    const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+    for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
+    {
+        if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
+        {
+            aContext.createComponent( aImplementations[i].pAsciiImplementationName, xController );
+            break;
+        }
+    }
+
+    // if a data source browser is loaded without its tree pane, then we assume it to be a
+    // table data view, effectively. In this case, we need to adjust the module identifier.
+    // 2008-02-05 / i85879 / frank.schoenheit@sun.com
+    ::comphelper::NamedValueCollection aLoadArgs( rArgs );
+    if  (   ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
+        &&  (   ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEW, sal_True ) )
+            ||  ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEWBUTTON, sal_True ) )
+            )
+        )
+    {
+        try
+        {
+            Reference< XModule > xModule( xController, UNO_QUERY_THROW );
+            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableDataView" ) ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    if ( sComponentURL == URL_COMPONENT_REPORTDESIGN )
+    {
+        sal_Bool bPreview = aLoadArgs.getOrDefault( "Preview", sal_False );
         if ( bPreview )
         {
             if (rListener.is())
                 rListener->loadCancelled(this);
             return;
         }
-        Reference< XModel > xModel   = lDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")), Reference< XModel >());
-        if ( xModel.is() )
+        Reference< XModel > xReportModel( aLoadArgs.getOrDefault( "Model", Reference< XModel >() ) );
+        if ( xReportModel.is() )
         {
             xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ReportDesign"))),UNO_QUERY);
             if ( xController.is() )
             {
-                xController->attachModel(xModel);
-                xModel->connectController( xController );
-                xModel->setCurrentController(xController);
+                xController->attachModel(xReportModel);
+                xReportModel->connectController( xController );
+                xReportModel->setCurrentController(xController);
             }
         }
     }
-    else
-        OSL_ENSURE(0,"wrong dispatch url!");
 
     sal_Bool bSuccess = xController.is();
     Reference<XModel> xModel;
