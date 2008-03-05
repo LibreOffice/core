@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XUndoManager.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:19:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,11 @@ interface XUndoManager : ::com::sun::star::uno::XInterface
      */
     void redo( [inout] ::com::sun::star::frame::XModel xCurrentModel );
 
-    /** @return </TRUE> if the undo stack is not empty, i.e. a call to undo() will succeed
+    /** @return <TRUE/> if the undo stack is not empty, i.e. a call to undo() will succeed
      */
     boolean undoPossible();
 
-    /** @return </TRUE> if the redo stack is not empty, i.e. a call to redo() will succeed
+    /** @return <TRUE/> if the redo stack is not empty, i.e. a call to redo() will succeed
      */
     boolean redoPossible();
 
