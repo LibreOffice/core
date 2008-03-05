@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texttabstoplistcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,18 +40,15 @@
 
 #include <com/sun/star/style/TabStop.hpp>
 
-
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
 
-    class TextTabStopListContext : public ::oox::core::Context
+    class TextTabStopListContext : public ::oox::core::ContextHandler
     {
     public:
-        TextTabStopListContext( const ::oox::core::ContextRef& xParent,
-                                                        ::std::list< ::com::sun::star::style::TabStop >  & aTabList );
+        TextTabStopListContext( ::oox::core::ContextHandler& rParent,
+                ::std::list< ::com::sun::star::style::TabStop >  & aTabList );
         ~TextTabStopListContext();
 
         virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
