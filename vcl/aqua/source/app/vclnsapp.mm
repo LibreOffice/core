@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclnsapp.mm,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:16:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,12 @@
         if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
         {
             AquaSalFrame* pFrame = [(SalFrameWindow*)pKeyWin getSalFrame];
-            if( pFrame->mpParent && pFrame->mpParent->GetWindow()->IsInModalMode() )
+            // dispatch to view directly to avoid the key event being consumed by the menubar
+            // popup windows do not get the focus, so they don't get these either
+            // simplest would be dispatch this to the key window always if it is without parent
+            // however e.g. in document we want the menu shortcut if e.g. the stylist has focus
+            if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 )
             {
-                // dispatch to view directly to avoid the key event being consumed by the menubar
                 [[pKeyWin contentView] keyDown: pEvent];
                 return;
             }
@@ -98,12 +101,16 @@
 {
     return AquaSalInstance::GetDynamicDockMenu();
 }
+
 -(MacOSBOOL)application: (NSApplication*)app openFile: (NSString*)pFile
 {
     const rtl::OUString aFile( GetOUString( pFile ) );
-	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_OPEN_STRING, aFile );
-	AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    if( ! AquaSalInstance::isOnCommandLine( aFile ) )
+    {
+        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                    APPEVENT_OPEN_STRING, aFile );
+        AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    }
     return YES;
 }
 
@@ -116,16 +123,24 @@
     
     while( (pFile = [it nextObject]) != nil )
     {
-        if( aFileList.getLength() > 0 )
-            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
-        aFileList.append( GetOUString( pFile ) );
+        const rtl::OUString aFile( GetOUString( pFile ) );
+        if( ! AquaSalInstance::isOnCommandLine( aFile ) )
+        {
+            if( aFileList.getLength() > 0 )
+                aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
+            aFileList.append( aFile );
+        }
     }
-    // we have no back channel here, we have to assume success, in which case
-    // replyToOpenOrPrint does not need to be called according to documentation
-    // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_OPEN_STRING, aFileList.makeStringAndClear() );
-	AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    
+    if( aFileList.getLength() )
+    {
+        // we have no back channel here, we have to assume success, in which case
+        // replyToOpenOrPrint does not need to be called according to documentation
+        // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
+        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                    APPEVENT_OPEN_STRING, aFileList.makeStringAndClear() );
+        AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    }
 }
 
 -(MacOSBOOL)application: (NSApplication*)app printFile: (NSString*)pFile
@@ -161,16 +176,9 @@
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
     const SalData* pSalData = GetSalData();
-	if( !pSalData->maFrames.empty() )
-    {
-        // we forward the signal; alas we have no answer
-        // we cancel the request; OOo will decide whether is shuts down or not
-		pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
-        return NSTerminateCancel;
-    }
-    else
-        // no frame left to talk to -> we really should terminate
-        return NSTerminateNow;
+    if( ! pSalData->maFrames.empty() )
+        return pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
+    return NSTerminateNow;
 }
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
@@ -188,6 +196,26 @@
     {
         (*it)->screenParametersChanged();
     }
+}
+
+-(void)scrollbarVariantChanged: (NSNotification*) pNotification
+{
+    GetSalData()->mpFirstInstance->delayedSettingsChanged( true );
+}
+
+-(void)scrollbarSettingsChanged: (NSNotification*) pNotification
+{
+    GetSalData()->mpFirstInstance->delayedSettingsChanged( false );
+}
+
+-(void)addFallbackMenuItem: (NSMenuItem*)pNewItem
+{
+    AquaSalMenu::addFallbackMenuItem( pNewItem );
+}
+
+-(void)removeFallbackMenuItem: (NSMenuItem*)pItem
+{
+    AquaSalMenu::removeFallbackMenuItem( pItem );
 }
 
 @end
