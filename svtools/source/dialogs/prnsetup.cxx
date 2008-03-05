@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:28:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,7 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
     maFtName        ( this, SvtResId( FT_NAME ) ),
     maLbName        ( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
+    maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
     maFtStatus      ( this, SvtResId( FT_STATUS ) ),
     maFiStatus      ( this, SvtResId( FI_STATUS ) ),
     maFtType        ( this, SvtResId( FT_TYPE ) ),
@@ -266,6 +267,9 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
     maBtnHelp       ( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
+
+    // show options button only if link is set
+    maBtnOptions.Hide();
 
     mpPrinter       = NULL;
     mpTempPrinter   = NULL;
@@ -285,6 +289,17 @@ PrinterSetupDialog::~PrinterSetupDialog()
 }
 
 // -----------------------------------------------------------------------
+
+void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
+{
+    maBtnOptions.SetClickHdl( rLink );
+    maBtnOptions.Show( rLink.IsSet() );
+}
+
+const Link& PrinterSetupDialog::GetOptionsHdl() const
+{
+    return maBtnOptions.GetClickHdl();
+}
 
 void PrinterSetupDialog::ImplSetInfo()
 {
