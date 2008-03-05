@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:06:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1802,9 +1802,19 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( pOutDev && !mbSizeModified )
     {
         // Currentley we are simply using MAP_APPFONT
-        Any    aAny;
-        ::Size aTmp( e.Width, e.Height );
-        aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
+        ::Size aAppFontSize( e.Width, e.Height );
+
+        Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
+        Reference< XDevice > xDialogDevice( xDialogControl->getPeer(), UNO_QUERY );
+        OSL_ENSURE( xDialogDevice.is(), "UnoDialogControl::windowResized: no peer, but a windowResized event?" );
+        if ( xDialogDevice.is() )
+        {
+            DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );
+            aAppFontSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+            aAppFontSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+        }
+
+        aAppFontSize = ImplMapPixelToAppFont( pOutDev, aAppFontSize );
 
         // Remember that changes have been done by listener. No need to
         // update the position because of property change event.
@@ -1814,8 +1824,8 @@ throw (::com::sun::star::uno::RuntimeException)
         // Properties in a sequence must be sorted!
         aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
         aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
-        aValues[0] <<= aTmp.Height();
-        aValues[1] <<= aTmp.Width();
+        aValues[0] <<= aAppFontSize.Height();
+        aValues[1] <<= aAppFontSize.Width();
 
         ImplSetPropertyValues( aProps, aValues, true );
         mbSizeModified = false;
