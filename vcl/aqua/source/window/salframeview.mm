@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframeview.mm,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 14:54:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include "salgdi.h"
 #include "salframe.h"
 #include "salframeview.h"
+
+#include "vcl/svapp.hxx"
  
 static USHORT ImplGetModifierMask( unsigned int nMask, bool bKeyEvent )
 {
@@ -252,8 +254,13 @@ static const struct ExceptionalKey
     MacOSBOOL bRet = YES;
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->CallCallback( SALEVENT_CLOSE, 0 );
-        bRet = NO; // application will close the window or not, AppKit shouldn't
+        // #i84461# end possible input
+        mpFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, 0 );
+        if( AquaSalFrame::isAlive( mpFrame ) )
+        {
+            mpFrame->CallCallback( SALEVENT_CLOSE, 0 );
+            bRet = NO; // application will close the window or not, AppKit shouldn't
+        }
     }
     return bRet;
 }
@@ -356,8 +363,6 @@ static const struct ExceptionalKey
 
 -(void)drawRect: (NSRect)aRect
 {
-    AquaLog( "drawRect\n" );
-
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -438,6 +443,10 @@ static const struct ExceptionalKey
         aEvent.mnY      = static_cast<long>(aPt.y) - pDispatchFrame->maGeometry.nY;
         aEvent.mnButton = nButton;
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
+
+        // --- RTL --- (mirror mouse pos)
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
         
         pDispatchFrame->CallCallback( nEvent, &aEvent );
     }
@@ -557,22 +566,40 @@ static const struct ExceptionalKey
         aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags, false ); // FIXME: button code
-        aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+
+        // --- RTL --- (mirror mouse pos)
+        if( Application::GetSettings().GetLayoutRTL() )
+            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
         float dX = [pEvent deltaX];
         float dY = [pEvent deltaY];
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = aEvent.mnDelta;
+            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
+            if( aEvent.mnNotchDelta == 0 )
+                aEvent.mnNotchDelta = dX < 0.0 ? -1 : 1;
             aEvent.mbHorz = TRUE;
+            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            if( aEvent.mnScrollLines == 0 )
+                aEvent.mnScrollLines = 1;
+            if( aEvent.mnScrollLines > 15 )
+                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = aEvent.mnDelta;
+            aEvent.mnNotchDelta = aEvent.mnDelta / 8;
+            if( aEvent.mnNotchDelta == 0 )
+                aEvent.mnNotchDelta = dY < 0.0 ? -1 : 1;
             aEvent.mbHorz = FALSE;
+            aEvent.mnScrollLines = aEvent.mnNotchDelta > 0 ? aEvent.mnNotchDelta : -aEvent.mnNotchDelta;
+            if( aEvent.mnScrollLines == 0 )
+                aEvent.mnScrollLines = 1;
+            if( aEvent.mnScrollLines > 15 )
+                aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
+            
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
         }
     }
@@ -700,6 +727,7 @@ static const struct ExceptionalKey
 
         }
         mbKeyHandled = true;
+        [self unmarkText];
     }
 }
 
@@ -794,8 +822,7 @@ static const struct ExceptionalKey
 // NSTextInput protocol
 - (NSArray *)validAttributesForMarkedText
 {
-    // FIXME
-    return [NSArray array];
+    return [NSArray arrayWithObjects:NSUnderlineStyleAttributeName, nil];
 }
 
 - (MacOSBOOL)hasMarkedText
@@ -824,19 +851,19 @@ static const struct ExceptionalKey
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange
 {
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "location: %d, length: %d\n", selRange.location, selRange.length );
-    AquaLog( "aString = '%@'\n", aString );
-    AquaLog( "length %d\n", [aString length] );
-
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
     NSRange rangeToReplace = [self hasMarkedText] ? [self markedRange] : [self selectedRange];
-    mMarkedRange = NSMakeRange( rangeToReplace.location, [aString length] );
     if( rangeToReplace.location == NSNotFound )
-        mSelectedRange = NSMakeRange( NSNotFound, selRange.length );
+    {
+        mMarkedRange = NSMakeRange( selRange.location, [aString length] );
+        mSelectedRange = NSMakeRange( selRange.location, selRange.length );
+    }
     else
+    {
+        mMarkedRange = NSMakeRange( rangeToReplace.location, [aString length] );
         mSelectedRange = NSMakeRange( rangeToReplace.location + selRange.location, selRange.length );
+    }
 
     int len = [aString length];
     SalExtTextInputEvent aInputEvent;
@@ -849,8 +876,26 @@ static const struct ExceptionalKey
         std::vector<USHORT> aInputFlags = std::vector<USHORT>( std::max( 1, len ), 0 );
         for ( int i = 0; i < len; i++ )
         {
-            // FIXME
-            aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+            unsigned int nUnderlineValue;
+            NSRange effectiveRange;
+            
+            effectiveRange = NSMakeRange(i, 1);
+            nUnderlineValue = [[aString attribute:NSUnderlineStyleAttributeName atIndex:i effectiveRange:&effectiveRange] unsignedIntValue];
+
+            switch (nUnderlineValue & 0xff) {
+            case NSUnderlineStyleSingle:
+                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+                break;
+            case NSUnderlineStyleThick:
+                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE | SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                break;
+            case NSUnderlineStyleDouble:
+                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                break;
+            default:
+                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                break;
+            }
         }
 
         aInputEvent.maText = aInsertString;
@@ -870,24 +915,17 @@ static const struct ExceptionalKey
 
 - (void)unmarkText
 {
-    AquaLog( ">*>_> %s\n", __func__ );
-
     mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
 }
 
 - (NSAttributedString *)attributedSubstringFromRange:(NSRange)theRange
 {
-    AquaLog( ">*>_> %s\n", __func__ );
-    AquaLog( "theRange = %d, %d\n", theRange.location, theRange.length);
-
     // FIXME
     return nil;
 }
 
 - (unsigned int)characterIndexForPoint:(NSPoint)thePoint
 {
-    AquaLog( ">*>_> %s\n",__func__ );
-
     // FIXME
     return 0;
 }
@@ -899,9 +937,6 @@ static const struct ExceptionalKey
 
 - (void)doCommandBySelector:(SEL)aSelector
 {
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "aSelector %s", aSelector );
-
     // check for special characters with OOo way
     if ( [self sendSingleCharacter:mpLastEvent] )
     {
@@ -916,10 +951,6 @@ static const struct ExceptionalKey
 
 - (NSRect)firstRectForCharacterRange:(NSRange)theRange
 {
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "mSelectedRange = %d, %d", mSelectedRange.location, mSelectedRange.length );
-    AquaLog( " theRange = %d, %d\n", theRange.location, theRange.length );
-
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
 
