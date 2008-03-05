@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmddlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,9 @@ private:
     RTSDialog*                      m_pParent;
 
     ComboBox                        m_aCommandsCB;
+    CheckBox                        m_aExternalCB;
+    FixedText                       m_aQuickFT;
+    ComboBox                        m_aQuickCB;
     FixedLine                       m_aCommandTitle;
     FixedText                       m_aPrinterName;
     FixedText                       m_aConnectedTo;
@@ -121,6 +124,7 @@ private:
 
     bool                            m_bWasFax;
     bool                            m_bWasPdf;
+    bool                            m_bWasExternalDialog;
 
     DECL_LINK( DoubleClickHdl, ComboBox* );
     DECL_LINK( ClickBtnHdl, Button* );
