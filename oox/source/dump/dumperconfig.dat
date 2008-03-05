@@ -1,17 +1,16 @@
 ﻿
 # dumper settings ============================================================
 
-# Enable entire dumper (default=off). If dumper is disabled, no output into
-# a text file is done. This option does not affect the options 'enable-import'
-# and 'extract-storage-streams'.
+# Enable entire dumper (default=off). This option does not affect the option
+# 'enable-import'.
 #   0=off, 1=on
-enable-dumper=1
+# enable-dumper=0
 
 # Enable import after dumping (default=on). Disabling this option allows
 # to dump a file without loading it. This option is independent from the
 # 'enable-dumper' option.
 #   0=off, 1=on
-enable-import=1
+# enable-import=1
 
 # Maximum size of binary stream dumps (default=infinite).
 max-binary-stream-size=0x1000
@@ -22,28 +21,6 @@ max-binary-data-size=0x0200
 # Shows unknown trailing data as binary dump (default=on).
 #   0=off, 1=on
 show-trailing-unknown=1
-
-# DFF record settings --------------------------------------------------------
-
-# Show total stream position of the DFF record (default=on).
-#   0=off, 1=on
-show-dff-record-pos=0
-
-# Show total DFF record size in bytes (default=on).
-#   0=off, 1=on
-show-dff-record-size=1
-
-# Show DFF record identifier (default=on).
-#   0=off, 1=on
-show-dff-record-id=1
-
-# Show DFF record name, if known (default=on).
-#   0=off, 1=on
-show-dff-record-name=1
-
-# Show DFF record contents (default=on).
-#   0=off, 1=on
-show-dff-record-body=1
 
 # name lists =================================================================
 
@@ -162,226 +139,6 @@ constlist=CODEPAGES
   51949=euc-kr
   65000=utf-7
   65001=utf-8
-end
-
-# DFF stream -----------------------------------------------------------------
-
-multilist=DFF-RECORD-NAMES
-  0xF000=DFFDGGCONTAINER,DFFBSTORECONTAINER,DFFDGCONTAINER,DFFSPGRCONTAINER,DFFSPCONTAINER,DFFSOLVERCONTAINER,DFFDGG,DFFBSE
-  0xF008=DFFDG,DFFSPGR,DFFSP,DFFOPT,DFFTEXTBOX,DFFCLIENTTEXTBOX,DFFANCHOR,DFFCHILDANCHOR
-  0xF010=DFFCLIENTANCHOR,DFFCLIENTDATA,DFFCONNECTORRULE,DFFALIGNRULE,DFFARCRULE,DFFCLIENTRULE,DFFCLASSID,DFFCALLOUTRULE
-  # 0xF018-0xF117 reserved for pictures
-  0xF118=DFFREGROUPITEM,DFFSELECTION,DFFCOLORMRU,,,DFFDELETEDPSPL,DFFSPLITMENUCOLORS,DFFOLEOBJECT
-  0xF120=DFFCOLORSCHEME,,DFFUSERDEFPROP
-end
-
-combilist=DFF-RECORD-INST
-  0x000F=uint8,hex,version,DFF-RECORD-VERSION
-  0xFFF0=uint16,dec,instance
-end
-
-constlist=DFF-RECORD-VERSION
-  default=
-  15=container
-end
-
-flagslist=DFFCLIENTANCHOR-FLAGS
-  0x0001=pos-locked
-  0x0002=size-locked
-end
-
-combilist=DFFOPT-PROPERTY-ID
-  0x3FFF=uint16,dec,id,DFFOPT-PROPERTY-NAMES
-  0x4000=picture
-  0x8000=complex
-end
-
-multilist=DFFOPT-PROPERTY-NAMES
-  # transform
-  0x0004=rotation
-  # protection
-  0x007F=lock-flags
-  # text
-  0x0080=text-id,text-left,text-top,text-right,text-bottom,text-wrap-mode,text-scale,text-anchor-mode
-  0x0088=text-flow,text-font-rotation,text-next-shape,text-bidi
-  0x00BF=text-flags
-  # text geometry
-  0x00C0=text-unicode-string,text-rtf-string,text-curve-align,text-def-size,text-spacing,text-font-family
-  0x00FF=text-geometry-flags
-  # picture
-  0x0100=pic-crop-top,pic-crop-bottom,pic-crop-left,pic-crop-right,pic-data,pic-file-name,pic-flags,pic-transparency-color
-  0x0108=pic-contrast,pic-brightness,pic-gamma,pic-id,pic-double-cr-mod,pic-fill-cr-mod,pic-line-cr-mod,pic-data-print
-  0x0110=pic-name-print,pic-flags-print
-  0x013F=pic-flags
-  # geometry
-  0x0140=geo-left,geo-top,geo-right,geo-bottom,geo-shape-path,geo-vertices,geo-segment-info,geo-adjust-1
-  0x0148=geo-adjust-2,geo-adjust-3,geo-adjust-4,geo-adjust-5,geo-adjust-6,geo-adjust-7,geo-adjust-8,geo-adjust-9
-  0x0150=geo-adjust-10,geo-connect-points,geo-stretch-x,geo-stretch-y,geo-handles,geo-formulas,geo-text-recs
-  0x0158=geo-connector-type
-  0x017F=geo-flags
-  # fill style
-  0x0180=fill-type,fill-color,fill-opacity,fill-back-color,fill-back-opacity,fill-cr-mod,fill-blip,fill-blip-name
-  0x0188=fill-blip-flags,fill-width,fill-height,fill-angle,fill-focus,fill-to-left,fill-to-top,fill-to-right
-  0x0190=fill-to-bottom,fill-rect-left,fill-rect-top,fill-rect-right,fill-rect-bottom,fill-dz-type,fill-shade-preset,fill-shade-colors
-  0x0198=fill-origin-x,fill-origin-y,fill-shape-origin-x,fill-shape-origin-y,fill-shade-type
-  0x01BF=fill-flags
-  # line style
-  0x01C0=line-color,line-opacity,line-back-color,line-cr-mod,line-type,line-fill-blip,line-fill-blip-name,line-fill-blip-flags
-  0x01C8=line-fill-width,line-fill-height,line-fill-dz-type,line-width,line-miter-limit,line-style,line-dash,line-dash-style
-  0x01D0=line-start-arrow-head,line-end-arrow-head,line-start-arrow-width,line-start-arrow-length,line-end-arrow-width,line-end-arrow-length,line-join-style,line-end-cap-style
-  0x01FF=line-flags
-  # shadow style
-  0x0200=shadow-type,shadow-color,shadow-highlight,shadow-cr-mod,shadow-opacity,shadow-offset-x,shadow-offset-y,shadow-2nd-offset-x
-  0x0208=shadow-2nd-offset-y,shadow-scale-x-to-x,shadow-scale-y-to-x,shadow-scale-x-to-y,shadow-scale-y-to-y,shadow-persp-x,shadow-persp-y,shadow-weight
-  0x0210=shadow-origin-x,shadow-origin-y
-  0x023F=shadow-flags
-  # perspective
-  0x0240=persp-type,persp-offset-x,persp-offsety,persp-scale-x-to-x,persp-scale-y-to-x,persp-scale-x-to-y,persp-scale-y-to-y,persp-persp-x
-  0x0248=persp-persp-y,persp-weight,persp-origin-x,persp-origin-y
-  0x027F=persp-flags
-  # 3d object
-  0x0280=3dobj-specular-amt,3dobj-diffuse-amt,3dobj-shininess,3dobj-edge-thickness,3dobj-extrude-forward,3dobj-extrude-backward,3dobj-extrude-plane,3dobj-extrusion-color
-  0x0288=3dobj-cr-mod
-  0x02BF=3dobj-flags
-  # 3d style
-  0x02C0=3dstyle-y-rotation,3dstyle-x-rotation,3dstyle-rotation-axis-x,3dstyle-rotation-axis-y,3dstyle-rotation-axis-z,3dstyle-rotation,3dstyle-rotation-center-x,3dstyle-rotation-center-y
-  0x02C8=3dstyle-rotation-center-z,3dstyle-render-mode,3dstyle-tolerance,3dstyle-view-point-x,3dstyle-view-point-y,3dstyle-view-point-z,3dstyle-origin-x,3dstyle-origin-y
-  0x02D0=3dstyle-skew-angle,3dstyle-skew-amount,3dstyle-ambient-intensity,3dstyle-key-light-x,3dstyle-key-light-y,3dstyle-key-light-z,3dstyle-key-light-intensity,3dstyle-fill-light-x
-  0x02D8=3dstyle-fill-light-y,3dstyle-fill-light-z,3dstyle-fill-light-intensity
-  0x02FF=3dstyle-flags
-  # shape 1
-  0x0301=,shape-master,,shape-connect-style,shape-bw-mod,shape-bw-mode-pure-bw,shape-bw-mode-bw
-  0x033F=shape1-flags
-  # callout
-  0x0340=callout-type,callout-box-distance,callout-angle,callout-drop-type,callout-drop-distance,callout-length
-  0x037F=callout-flags
-  # shape 2
-  0x0380=shape-name,shape-description,shape-hyperlink,shape-wrap-polygon-vertices,shape-wrap-left,shape-wrap-top,shape-wrap-right,shape-wrap-bottom
-  0x0388=shape-regroup-id
-  0x03BF=shape2-flags
-end
-
-flagslist=DFFOPT-LOCK-FLAGS
-  0x00000001=lock-against-grouping
-  0x00000002=lock-adjust-handles
-  0x00000004=lock-text
-  0x00000008=lock-vertices
-  0x00000010=lock-cropping
-  0x00000020=lock-against-select
-  0x00000040=lock-position
-  0x00000080=lock-aspect-ratio
-  0x00000100=lock-rotation
-end
-
-flagslist=DFFOPT-TEXT-FLAGS
-  0x00000001=fit-text-to-shape
-  0x00000002=fit-shape-to-text
-  0x00000004=rotate-text
-  0x00000008=auto-text-margin
-  0x00000010=select-text
-end
-
-flagslist=DFFOPT-TEXTGEO-FLAGS
-  0x00000001=strike-through
-  0x00000002=small-caps
-  0x00000004=shadow
-  0x00000008=underline
-  0x00000010=italic
-  0x00000020=bold
-  0x00000040=no-measure-along-path
-  0x00000080=stretch-height
-  0x00000100=scale-on-path
-  0x00000200=shrink-to-fit
-  0x00000400=stretch-to-fit
-  0x00000800=tightening
-  0x00001000=kerning
-  0x00002000=vertical
-  0x00004000=has-effect
-  0x00008000=reverse-rows
-end
-
-flagslist=DFFOPT-PICTURE-FLAGS
-  0x00000001=ole-alive
-  0x00000002=bi-level-display
-  0x00000004=grayscale
-  0x00000008=no-hit-test
-end
-
-flagslist=DFFOPT-GEO-FLAGS
-  0x00000001=fill-support
-  0x00000002=fill-shade-shape-support
-  0x00000004=fontwork-support
-  0x00000008=line-support
-  0x00000010=3d-support
-  0x00000020=shadow-support
-end
-
-flagslist=DFFOPT-FILL-FLAGS
-  0x00000001=no-fill-hit-test
-  0x00000002=use-large-rect
-  0x00000004=register-pattern
-  0x00000008=hit-test-fill
-  0x00000010=has-fill
-end
-
-flagslist=DFFOPT-LINE-FLAGS
-  0x00000001=draw-dash-for-invisible
-  0x00000002=register-pattern
-  0x00000004=hit-test-line
-  0x00000008=has-line
-  0x00000010=arrowhead-support
-end
-
-flagslist=DFFOPT-SHADOW-FLAGS
-  0x00000001=excel5-style
-  0x00000002=has-shadow
-end
-
-flagslist=DFFOPT-PERSP-FLAGS
-  0x00000001=has-perspective
-end
-
-flagslist=DFFOPT-3DOBJ-FLAGS
-  0x00000001=light-face
-  0x00000002=extrusion-color
-  0x00000004=metallic
-  0x00000008=has-3d
-end
-
-flagslist=DFFOPT-3DSTYLE-FLAGS
-  0x00000001=fill-color-harsh
-  0x00000002=key-color-harsh
-  0x00000004=parallel
-  0x00000008=rotation-center-auto
-  0x00000010=constrain-rotation
-end
-
-flagslist=DFFOPT-SHAPE1-FLAGS
-  0x00000001=background
-  0x00000002=delete-attached-object
-  0x00000008=lock-shape-type
-  0x00000010=prefer-rel-resize
-  0x00000020=ole-iconified
-end
-
-flagslist=DFFOPT-CALLOUT-FLAGS
-  0x00000001=length-specified
-  0x00000002=drop-auto
-  0x00000004=minus-y
-  0x00000008=minus-x
-  0x00000010=has-text-border
-  0x00000020=has-accent-bar
-  0x00000040=is-callout
-end
-
-flagslist=DFFOPT-SHAPE2-FLAGS
-  0x00000001=print
-  0x00000002=hidden
-  0x00000004=1d-adjustment
-  0x00000008=action-attached
-  0x00000010=notify-double-click
-  0x00000020=behind-text
-  0x00000040=wrap-edited
 end
 
 # OLE property stream --------------------------------------------------------
