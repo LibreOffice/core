@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:04:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     sal_Bool bRet = sal_False;
     ::rtl::OUString sAnchor;
 
+    ULONG nSolarCount = Application::ReleaseSolarMutex();
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
@@ -264,6 +265,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     catch( ::com::sun::star::uno::Exception& )
     {
     }
+    Application::AcquireSolarMutex( nSolarCount );
 
     return bRet;
 }
