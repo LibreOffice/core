@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:39:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>  // #i27615#
 #endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 
 /*************************************
@@ -128,7 +131,10 @@ const USHORT& getMaxLookup()
     return nMaxLookup;
 }
 
-BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
+// --> OD 2008-01-16 #newlistlevelattrs#
+BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
+                              const bool bMergeIndentValuesOfNumRule ) const
+// <--
 {
     if( GetCrsrCnt() > getMaxLookup() )
     {
@@ -199,7 +205,11 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
                     xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
                                   nEnd = n == nEndNd ? nEndCnt
                                         : ((SwTxtNode*)pNd)->GetTxt().Len();
-                    ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd );
+                    // --> OD 2008-01-16 #newlistlevelattrs#
+                    ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
+                                                FALSE, TRUE,
+                                                bMergeIndentValuesOfNumRule );
+                    // <--
                 }
                 break;
             case ND_GRFNODE:
