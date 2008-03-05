@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:27:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,6 +657,10 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         ::SwToSfxPageDescAttr( rSet );
         // erstmal nur eine Null
         rSet.Put(SwBackgroundDestinationItem(SID_PARA_BACKGRND_DESTINATION, 0));
+        // --> OD 2008-02-13 #newlistlevelattrs#
+        // merge list level indent attributes into the item set if needed
+        aTmp.MergeIndentAttrsOfListStyle( rSet );
+        // <--
     }
 /*  else if( SFX_STYLE_FAMILY_FRAME == nFamily )
     {
@@ -722,7 +726,11 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             {
                 SfxItemSet aSet( *pDlg->GetOutputItemSet() );
                 ::SfxToSwPageDescAttr( *GetWrtShell(), aSet  );
-                aTmp.SetItemSet( aSet );
+                // --> OD 2008-02-12 #newlistlevelattrs#
+                // reset indent attributes at paragraph style, if a list style
+                // will be applied and no indent attributes will be applied.
+                aTmp.SetItemSet( aSet, true );
+                // <--
             }
             else
             {
@@ -907,7 +915,10 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
         }
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            pSh->SetCurNumRule( *pStyle->GetNumRule() );
+            // --> OD 2008-02-08 #newlistlevelattrs#
+            // reset indent attribute on applying list style
+            pSh->SetCurNumRule( *pStyle->GetNumRule(), true );
+            // <--
             break;
         }
         default:
