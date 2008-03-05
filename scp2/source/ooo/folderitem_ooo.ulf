@@ -4,9 +4,9 @@
  *
  *  $RCSfile: folderitem_ooo.ulf,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:30:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,5 +39,5 @@ en-US = "From Template"
 [STR_FI_NAME_OPENDOCUMENT]
 en-US = "Open Document"
 
-
-
+[STR_FI_TOOLTIP_SOFFICE]
+en-US = "The office productivity suite compatible to the open and standardized ODF document format. Supported by Sun Microsystems."
