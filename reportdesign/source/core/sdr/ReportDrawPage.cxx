@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDrawPage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:58:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,10 @@
 #include "RptObject.hxx"
 #include "RptDef.hxx"
 #include "corestrings.hrc"
-
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/classids.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -78,35 +81,84 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
     if ( xFactory.is() )
     {
         bool bChangeOrientation = false;
-        ::rtl::OUString sServiceName;
-        if ( pObj->ISA(OCustomShape) )
-        {
-            sServiceName = SERVICE_SHAPE;
-        }
-        else if ( pObj->ISA(OUnoObject) )
+        ::rtl::OUString sServiceName = pBaseObj->getServiceName();
+        OSL_ENSURE(sServiceName.getLength(),"No Service Name given!");
+
+
+        //if ( !sServiceName.getLength() )
+        //{
+        //    if ( pObj->ISA(OCustomShape) )
+        //    {
+        //        sServiceName = SERVICE_SHAPE;
+        //    }
+        //    if ( pObj->ISA(SdrOle2Obj) )
+        //    {
+        //        SdrOle2Obj* pOle2Obj = dynamic_cast<SdrOle2Obj*>(pObj);
+        //        uno::Reference< lang::XServiceInfo > xOleModel(pOle2Obj->getXModel(),uno::UNO_QUERY);
+        //        if ( xOleModel.is() && xOleModel->supportsService(SERVICE_REPORTDEFINITION) )
+        //            sServiceName = SERVICE_REPORTDEFINITION;
+        //        else
+        //            sServiceName = SERVICE_OLEOBJECT;
+        //    }
+        //    else if ( pObj->ISA(OUnoObject) )
+        //    {
+        //        OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
+        //        switch(pUnoObj->getObjectId())
+        //        {
+        //            case OBJ_DLG_FORMATTEDFIELD:
+        //                sServiceName = SERVICE_FORMATTEDFIELD;
+        //                break;
+        //            case OBJ_DLG_HFIXEDLINE:
+        //                sServiceName = SERVICE_FIXEDLINE;
+        //                bChangeOrientation = true;
+        //                break;
+        //            case OBJ_DLG_VFIXEDLINE:
+        //                sServiceName = SERVICE_FIXEDLINE;
+        //                break;
+        //            case OBJ_DLG_FIXEDTEXT:
+        //                sServiceName = SERVICE_FIXEDTEXT;
+        //                break;
+        //            case OBJ_DLG_IMAGECONTROL:
+        //                sServiceName = SERVICE_IMAGECONTROL;
+        //                break;
+        //            default:
+        //                OSL_ENSURE(0,"Illegal case value");
+        //                break;
+        //        }
+        //    }
+        //}
+        if ( pObj->ISA(OUnoObject) )
         {
             OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
-            switch(pUnoObj->getObjectId())
+            bChangeOrientation = pUnoObj->getObjectId() == OBJ_DLG_HFIXEDLINE;
+        }
+        else if ( pObj->ISA(SdrOle2Obj) )
+        {
+            SdrOle2Obj* pOle2Obj = dynamic_cast<SdrOle2Obj*>(pObj);
+            if ( !pOle2Obj->GetObjRef().is() )
             {
-                case OBJ_DLG_FORMATTEDFIELD:
-                    sServiceName = SERVICE_FORMATTEDFIELD;
-                    break;
-                case OBJ_DLG_HFIXEDLINE:
-                    sServiceName = SERVICE_FIXEDLINE;
-                    bChangeOrientation = true;
-                    break;
-                case OBJ_DLG_VFIXEDLINE:
-                    sServiceName = SERVICE_FIXEDLINE;
-                    break;
-                case OBJ_DLG_FIXEDTEXT:
-                    sServiceName = SERVICE_FIXEDTEXT;
-                    break;
-                case OBJ_DLG_IMAGECONTROL:
-                    sServiceName = SERVICE_IMAGECONTROL;
-                    break;
-                default:
-                    OSL_ENSURE(0,"Illegal case value");
-                    break;
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                uno::Reference < embed::XEmbeddedObject > xObj;
+                ::rtl::OUString sName;
+                xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
+                    ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("80243D39-6741-46C5-926E-069164FF87BB"))), sName );
+                OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
+
+                /**************************************************
+                * Das leere OLE-Objekt bekommt ein neues IPObj
+                **************************************************/
+                pObj->SetEmptyPresObj(FALSE);
+                pOle2Obj->SetOutlinerParaObject(NULL);
+                pOle2Obj->SetObjRef(xObj);
+                pOle2Obj->SetPersistName(sName);
+                pOle2Obj->SetName(sName);
+                pOle2Obj->SetAspect(nAspect);
+                Rectangle aRect = pOle2Obj->GetLogicRect();
+
+                Size aTmp = aRect.GetSize();
+                awt::Size aSz( aTmp.Width(), aTmp.Height() );
+                xObj->setVisualAreaSize( nAspect, aSz );
             }
         }
 
