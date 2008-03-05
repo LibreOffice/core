@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:14:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES =\
             $(SLO)$/dlgedclip.obj				\
             $(SLO)$/ReportWindow.obj			\
             $(SLO)$/DesignView.obj				\
+            $(SLO)$/InsertFunctions.obj			\
             $(SLO)$/propbrw.obj
 
 

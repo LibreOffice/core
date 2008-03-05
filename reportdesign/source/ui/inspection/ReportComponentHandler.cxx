@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportComponentHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,10 +164,10 @@ void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterf
     try
     {
         uno::Reference< container::XNameContainer > xNameCont(Component,uno::UNO_QUERY);
-        ::rtl::OUString sFormComponent(RTL_CONSTASCII_USTRINGPARAM("FormComponent"));
+        const ::rtl::OUString sFormComponent(RTL_CONSTASCII_USTRINGPARAM("FormComponent"));
         if ( xNameCont->hasByName(sFormComponent) )
             xNameCont->getByName(sFormComponent) >>= m_xFormComponent;
-        ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
+        const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
         if ( xNameCont->hasByName(sRowSet) )
         {
             uno::Reference<beans::XPropertySet> xProp(m_xFormComponentHandler,uno::UNO_QUERY);

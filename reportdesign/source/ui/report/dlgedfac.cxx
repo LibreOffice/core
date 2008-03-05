@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
-
+#include <svx/svdoole2.hxx>
 namespace rptui
 {
 using namespace ::com::sun::star;
@@ -123,7 +123,13 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                 }
                 break;
             case OBJ_CUSTOMSHAPE:
-                pObjFactory->pNewObj = new OCustomShape(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.Shape")));
+                pObjFactory->pNewObj = new OCustomShape(SERVICE_SHAPE);
+                break;
+            case OBJ_DLG_SUBREPORT:
+                pObjFactory->pNewObj = new OOle2Obj(SERVICE_REPORTDEFINITION);
+                break;
+            case OBJ_OLE2:
+                pObjFactory->pNewObj = new OOle2Obj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")));
                 break;
             default:
                 OSL_ENSURE(0,"Unknown object id");
