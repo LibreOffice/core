@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidemastertextstylescontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,21 @@
 #define OOX_DRAWINGML_SLIDEMASTERTEXTSTYLESCONTEXT_HXX
 
 #include "oox/drawingml/theme.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/ppt/slidepersist.hxx"
 
 namespace oox { namespace ppt {
 
-class SlideMasterTextStylesContext : public oox::core::Context
+class SlideMasterTextStylesContext : public oox::core::ContextHandler
 {
 public:
-    SlideMasterTextStylesContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::ppt::SlidePersistPtr pSlidePersistPtr );
+    SlideMasterTextStylesContext( ::oox::core::ContextHandler& rParent, SlidePersistPtr pSlidePersistPtr );
     ~SlideMasterTextStylesContext();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    oox::ppt::SlidePersistPtr mpSlidePersistPtr;
+    SlidePersistPtr     mpSlidePersistPtr;
 };
 
 } }

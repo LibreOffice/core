@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundactioncontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,16 @@
 #ifndef OOX_PPT_SOUNDACTIONCONTEXT
 #define OOX_PPT_SOUNDACTIONCONTEXT
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { class PropertyMap; }
 
 namespace oox { namespace ppt {
 
-class SoundActionContext : public ::oox::core::Context
+class SoundActionContext : public ::oox::core::ContextHandler
 {
 public:
-    SoundActionContext( const ::oox::core::FragmentHandlerRef & xHandler, PropertyMap & aProperties ) throw();
+    SoundActionContext( ::oox::core::ContextHandler& rParent, PropertyMap & aProperties ) throw();
     virtual ~SoundActionContext() throw();
 
     virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timenodelistcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_PPT_TIMENODELISTCONTEXT
 #define OOX_PPT_TIMENODELISTCONTEXT
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/timenode.hxx"
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -44,15 +44,15 @@
 namespace oox { namespace ppt {
 
 
-    class TimeNodeContext : public ::oox::core::Context
+    class TimeNodeContext : public ::oox::core::ContextHandler
     {
     public:
         virtual ~TimeNodeContext() throw();
 
-        static TimeNodeContext * SAL_CALL makeContext( const ::oox::core::FragmentHandlerRef& xHandler, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
+        static TimeNodeContext * SAL_CALL makeContext( ::oox::core::ContextHandler& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
     protected:
-        TimeNodeContext( const ::oox::core::FragmentHandlerRef& xHandler, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode ) throw();
+        TimeNodeContext( ::oox::core::ContextHandler& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode ) throw();
 
         sal_Int32 mnElement;
         TimeNodePtr mpNode;
@@ -61,11 +61,10 @@ namespace oox { namespace ppt {
 
 
 /** FastParser context for XML_tnLst, XML_subTnLst and XML_childTnLst */
-class TimeNodeListContext : public ::oox::core::Context
+class TimeNodeListContext : public ::oox::core::ContextHandler
 {
 public:
-    TimeNodeListContext( const ::oox::core::FragmentHandlerRef& xHandler,
-                                             TimeNodePtrList & aList ) throw();
+    TimeNodeListContext( ::oox::core::ContextHandler& rParent, TimeNodePtrList & aList ) throw();
 
     virtual ~TimeNodeListContext() throw();
 

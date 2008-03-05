@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitioncontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,30 +36,28 @@
 #ifndef OOX_PPT_SLIDETRANSITIONCONTEXT
 #define OOX_PPT_SLIDETRANSITIONCONTEXT
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/slidetransition.hxx"
 
 namespace oox { class PropertyMap; }
 
 namespace oox { namespace ppt {
 
-    class SlideTransitionContext : public ::oox::core::Context
+    class SlideTransitionContext : public ::oox::core::ContextHandler
     {
     public:
-        SlideTransitionContext( const ::oox::core::FragmentHandlerRef& xHandler,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-                                                        PropertyMap & aProperties ) throw();
+        SlideTransitionContext( ::oox::core::ContextHandler& rParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
+            PropertyMap & aProperties ) throw();
         virtual ~SlideTransitionContext() throw();
 
     virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( ::sal_Int32 Element,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
     private:
-
-
         PropertyMap&                    maSlideProperties;
         ::sal_Bool                      mbHasTransition;
         SlideTransition                 maTransition;

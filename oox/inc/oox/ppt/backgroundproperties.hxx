@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgroundproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
 #define OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 
 namespace oox { namespace drawingml {
@@ -44,10 +44,10 @@ namespace oox { namespace drawingml {
 
 // ---------------------------------------------------------------------
 
-class BackgroundPropertiesContext : public ::oox::core::Context
+class BackgroundPropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    BackgroundPropertiesContext( const ::oox::core::FragmentHandlerRef& xParser, ::oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ) throw();
+    BackgroundPropertiesContext( ::oox::core::ContextHandler& rParent, ::oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ) throw();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
