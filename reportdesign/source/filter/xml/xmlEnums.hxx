@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlEnums.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:00:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,9 @@ namespace rptxml
         XML_TOK_REPORT_FUNCTION         ,
         XML_TOK_REPORT_ELEMENT          ,
         XML_TOK_REPORT_MIMETYPE         ,
-        XML_TOK_REPORT_NAME
+        XML_TOK_REPORT_NAME             ,
+        XML_TOK_MASTER_DETAIL_FIELDS    ,
+        XML_TOK_SUB_FRAME
     };
     enum XMLGroup
     {
@@ -107,7 +109,8 @@ namespace rptxml
         XML_TOK_PAGE_COUNT,
         XML_TOK_TEXT_TAB_STOP,
         XML_TOK_TEXT_LINE_BREAK,
-        XML_TOK_TEXT_S
+        XML_TOK_TEXT_S,
+        XML_TOK_FRAME
     };
 
     enum XMLComponent
@@ -166,8 +169,7 @@ namespace rptxml
     };
     enum XMLSubDocument
     {
-         XML_TOK_MASTER_DETAIL_FIELDS
-        ,XML_TOK_MASTER_DETAIL_FIELD
+        XML_TOK_MASTER_DETAIL_FIELD
         ,XML_TOK_MASTER
         ,XML_TOK_SUB_DETAIL
     };
