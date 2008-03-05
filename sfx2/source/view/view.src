@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:35:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,10 @@ ModelessDialog DLG_PRINTMONITOR
     {
         Pos = MAP_APPFONT ( 31 , 61 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_FT_PREPARATION
+    {
+        Text [ en-US ] = "is being pepared for printing";
     };
 };
 
