@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:24:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,43 +183,47 @@ class WidgetPainter
     */
     QScrollBar   *m_pScrollBar;
 
-        /** Cached dock area. Needed for proper functionality of tool bars.
+    /** Cached dock area. Needed for proper functionality of tool bars.
 
-          @see m_pPushButton
-          */
-        QMainWindow  *m_pMainWindow;
+      @see m_pPushButton
+      */
+    QMainWindow  *m_pMainWindow;
 
-        /** Cached tool bar.
+    /** Cached tool bar.
 
-          @see m_pPushButton
-        */
-        QToolBar     *m_pToolBarHoriz, *m_pToolBarVert;
+      @see m_pPushButton
+    */
+    QToolBar     *m_pToolBarHoriz, *m_pToolBarVert;
 
-        /** Cached tool button.
+    /** Cached tool button.
 
-          @see m_pPushButton
-        */
-        QToolButton  *m_pToolButton;
+      @see m_pPushButton
+    */
+    QToolButton  *m_pToolButton;
 
-        /** Cached menu bar.
+    /** Cached menu bar.
 
-          @see m_pPushButton
-        */
-        QMenuBar     *m_pMenuBar;
+      @see m_pPushButton
+    */
+    QMenuBar     *m_pMenuBar;
 
-        /** Identifiers of menu bar items.
-         */
-        int           m_nMenuBarEnabledItem, m_nMenuBarDisabledItem;
+    /** Identifiers of menu bar items.
+     */
+    int           m_nMenuBarEnabledItem, m_nMenuBarDisabledItem;
 
-        /** Cached popup menu.
+    /** Cached popup menu.
 
-          @see m_pPushButton
-        */
-        QPopupMenu   *m_pPopupMenu;
+      @see m_pPushButton
+    */
+    QPopupMenu   *m_pPopupMenu;
 
-        /** Identifiers of popup menu items.
-         */
-        int           m_nPopupMenuEnabledItem, m_nPopupMenuDisabledItem;
+    /** Identifiers of popup menu items.
+     */
+    int           m_nPopupMenuEnabledItem, m_nPopupMenuDisabledItem;
+
+    /** cached progress bar
+      */
+    QProgressBar *m_pProgressBar;
 
     // TODO other widgets
 
@@ -337,29 +341,35 @@ class WidgetPainter
     QScrollBar   *scrollBar( const Region& rControlRegion,
         BOOL bHorizontal, const ImplControlValue& aValue );
 
-        /** 'Get' method for tool bar.
+    /** 'Get' method for tool bar.
 
-          @see pushButton()
-        */
-        QToolBar     *toolBar( const Region& rControlRegion, BOOL bHorizontal );
+      @see pushButton()
+    */
+    QToolBar     *toolBar( const Region& rControlRegion, BOOL bHorizontal );
 
-        /** 'Get' method for tool button.
+    /** 'Get' method for tool button.
 
-          @see pushButton()
-        */
-        QToolButton  *toolButton( const Region& rControlRegion );
+      @see pushButton()
+    */
+    QToolButton  *toolButton( const Region& rControlRegion );
 
-        /** 'Get' method for menu bar.
+    /** 'Get' method for menu bar.
 
-          @see pushButton()
-        */
-        QMenuBar     *menuBar( const Region& rControlRegion );
+      @see pushButton()
+    */
+    QMenuBar     *menuBar( const Region& rControlRegion );
 
-        /** 'Get' method for popup menu.
+    /** 'Get' method for popup menu.
 
-          @see pushButton()
-        */
-        QPopupMenu   *popupMenu( const Region& rControlRegion );
+      @see pushButton()
+    */
+    QPopupMenu   *popupMenu( const Region& rControlRegion );
+
+    /** 'Get' method for progress bar
+
+      @see pushButton()
+    */
+    QProgressBar *progressBar( const Region& rControlRegion );
 
     // TODO other widgets
 
@@ -413,7 +423,8 @@ WidgetPainter::WidgetPainter( void )
       m_pToolBarVert( NULL ),
       m_pToolButton( NULL ),
       m_pMenuBar( NULL ),
-      m_pPopupMenu( NULL )
+      m_pPopupMenu( NULL ),
+      m_pProgressBar( NULL )
 {
 }
 
@@ -442,6 +453,7 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pToolButton, m_pToolButton = NULL;
     delete m_pMenuBar, m_pMenuBar = NULL;
     delete m_pPopupMenu, m_pPopupMenu = NULL;
+    delete m_pProgressBar, m_pProgressBar = NULL;
 }
 
 BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
@@ -778,6 +790,19 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle,
                 QStyleOption( pMenuItem, 0, 0 ) );
+    }
+    else if ( strcmp( "QProgressBar", pClassName ) == 0 )
+    {
+        long nProgressWidth = aValue.getNumericVal();
+        QProgressBar* pProgress = static_cast<QProgressBar*>(pWidget);
+        pProgress->setProgress( nProgressWidth, qRect.width() );
+
+        kapp->style().drawControl( QStyle::CE_ProgressBarGroove,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
+        kapp->style().drawControl( QStyle::CE_ProgressBarContents,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
     }
     else
     return FALSE;
@@ -1120,6 +1145,19 @@ QPopupMenu *WidgetPainter::popupMenu( const Region& rControlRegion)
     return m_pPopupMenu;
 }
 
+QProgressBar *WidgetPainter::progressBar( const Region& rControlRegion )
+{
+    if ( !m_pProgressBar )
+    m_pProgressBar = new QProgressBar( NULL, "progress_bar" );
+
+    QRect qRect = region2QRect( rControlRegion );
+
+    m_pProgressBar->move( qRect.topLeft() );
+    m_pProgressBar->resize( qRect.size() );
+
+    return m_pProgressBar;
+}
+
 QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
     const ImplControlValue& aValue )
 {
@@ -1211,12 +1249,14 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     // CTRL_GROUPBOX not supported
     // CTRL_FIXEDLINE not supported
     // CTRL_FIXEDBORDER not supported
-        ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
-                                          nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
-                                          nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
-                                          nPart == PART_BUTTON) ) ||
-        ( (nType == CTRL_MENUBAR)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
-        ( (nType == CTRL_MENU_POPUP)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) );
+    ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
+                                      nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
+                                      nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
+                                      nPart == PART_BUTTON) ) ||
+    ( (nType == CTRL_MENUBAR)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
+    ( (nType == CTRL_MENU_POPUP)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
+    ( (nType == CTRL_PROGRESS)    && (nPart == PART_ENTIRE_CONTROL) )
+        ;
 }
 
 
@@ -1449,6 +1489,13 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->popupMenu( rControlRegion ),
+                nState, aValue,
+                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+    }
+    else if ( (nType == CTRL_PROGRESS) && (nPart == PART_ENTIRE_CONTROL) )
+    {
+        bReturn = pWidgetPainter->drawStyledWidget(
+                pWidgetPainter->progressBar( rControlRegion ),
                 nState, aValue,
                 dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
