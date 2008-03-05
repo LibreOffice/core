@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:41:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ enum PropertyIds
  /* 3*/ ,PROP_CHAR_STRIKEOUT
  /* 4*/ ,PROP_CHAR_CONTOURED
  /* 5*/ ,PROP_CHAR_SHADOWED
- /* 6*/ ,PROP_CHAR_CASEMAP
+ /* 6*/ ,PROP_CHAR_CASE_MAP
  /* 7*/ ,PROP_CHAR_COLOR
  /* 8*/ ,PROP_CHAR_RELIEF
  /* 9*/ ,PROP_CHAR_UNDERLINE
@@ -256,17 +256,22 @@ enum PropertyIds
 /*212*/ ,PROP_TABS_RELATIVE_TO_INDENT
 /*213*/ ,PROP_PREFIX
 /*214*/ ,PROP_SUFFIX
-///*215*/ ,
-///*216*/ ,PROP_
-///*217*/ ,PROP_
-///*218*/ ,PROP_
-///*219*/ ,PROP_
-///*220*/ ,PROP_
-
-
-
-
-
+/*215*/ ,PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES
+/*216*/ ,PROP_DROP_CAP_FORMAT
+/*217*/ , PROP_REFERENCE_FIELD_PART
+/*218*/ ,PROP_SOURCE_NAME
+/*219*/ ,PROP_REFERENCE_FIELD_SOURCE
+/*220*/ ,PROP_WIDTH_TYPE
+/*221*/ ,PROP_TEXT_RANGE
+/*222*/ ,PROP_SERVICE_CHAR_STYLE
+/*223*/ ,PROP_SERVICE_PARA_STYLE
+/*224*/ ,PROP_CHARACTER_STYLES
+/*225*/ ,PROP_PARAGRAPH_STYLES
+//*226*/ ,PROP_
+//*227*/ ,PROP_
+//*228*/ ,PROP_
+//*229*/ ,PROP_
+//*230*/ ,PROP_
 
 };
 struct PropertyNameSupplier_Impl;
