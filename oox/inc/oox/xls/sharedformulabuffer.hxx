@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedformulabuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@ private:
     typedef ::std::map< BinAddress, sal_Int32 >         TokenIndexMap;
     typedef ::std::auto_ptr< ExtCellFormulaContext >    ContextPtr;
 
+    const ::rtl::OUString maIsSharedProp;   /// Property name for shared formula name flag.
     TokenIndexMap       maIndexMap;         /// Maps shared formula base address to defined name identifier.
     ContextPtr          mxLastContext;      /// Cached formula context for leading formula cell.
 };
