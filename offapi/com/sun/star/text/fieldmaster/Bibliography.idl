@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bibliography.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:52:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,13 @@ published service Bibliography
     service  com::sun::star::text::TextFieldMaster;
 
     //------------------------------------------------------------------------
-    /** determins whether the bibiliography text fields are numbered. If </FALSE> the
+    /** determins whether the bibiliography text fields are numbered. If <FALSE/> the
      short name of the bibliography entry is displayed instead.
      */
     [property] boolean IsNumberEntries;
     //------------------------------------------------------------------------
     /** determins whether the bibliography entries in a bibliography index are sorted
-     by the document position. If </FALSE> the SortKey property determins the
+     by the document position. If <FALSE/> the SortKey property determins the
      sorting of the entries.
      */
     [property] boolean IsSortByPosition;
