@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagesettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,13 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
+#include <com/sun/star/style/GraphicLocation.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "oox/xls/ooxtokens.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
@@ -51,8 +53,10 @@ using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::container::XNamed;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::sheet::XHeaderFooterContent;
 using ::com::sun::star::style::XStyle;
+using ::oox::core::Relations;
 
 namespace oox {
 namespace xls {
@@ -61,39 +65,46 @@ namespace xls {
 
 namespace {
 
-const double OOX_MARGIN_DEFAULT_LR              = 0.748;    /// Left/right default margin in inches.
-const double OOX_MARGIN_DEFAULT_TB              = 0.984;    /// Top/bottom default margin in inches.
-const double OOX_MARGIN_DEFAULT_HF              = 0.512;    /// Header/footer default margin in inches.
+const double OOX_MARGIN_DEFAULT_LR                  = 0.748;    /// Left/right default margin in inches.
+const double OOX_MARGIN_DEFAULT_TB                  = 0.984;    /// Top/bottom default margin in inches.
+const double OOX_MARGIN_DEFAULT_HF                  = 0.512;    /// Header/footer default margin in inches.
 
-const sal_uInt16 OOBIN_HEADERFOOTER_DIFFEVEN    = 0x0001;
-const sal_uInt16 OOBIN_HEADERFOOTER_DIFFFIRST   = 0x0002;
-const sal_uInt16 OOBIN_HEADERFOOTER_SCALEDOC    = 0x0004;
-const sal_uInt16 OOBIN_HEADERFOOTER_ALIGNMARGIN = 0x0008;
+const sal_uInt16 OOBIN_PRINTOPT_HORCENTER           = 0x0001;
+const sal_uInt16 OOBIN_PRINTOPT_VERCENTER           = 0x0002;
+const sal_uInt16 OOBIN_PRINTOPT_PRINTHEADING        = 0x0004;
+const sal_uInt16 OOBIN_PRINTOPT_PRINTGRID           = 0x0008;
 
-const sal_uInt16 OOBIN_PAGESETUP_INROWS         = 0x0001;
-const sal_uInt16 OOBIN_PAGESETUP_LANDSCAPE      = 0x0002;
-const sal_uInt16 OOBIN_PAGESETUP_INVALID        = 0x0004;
-const sal_uInt16 OOBIN_PAGESETUP_BLACKWHITE     = 0x0008;
-const sal_uInt16 OOBIN_PAGESETUP_DRAFTQUALITY   = 0x0010;
-const sal_uInt16 OOBIN_PAGESETUP_PRINTNOTES     = 0x0020;
-const sal_uInt16 OOBIN_PAGESETUP_DEFAULTORIENT  = 0x0040;
-const sal_uInt16 OOBIN_PAGESETUP_USEFIRSTPAGE   = 0x0080;
-const sal_uInt16 OOBIN_PAGESETUP_NOTES_END      = 0x0100;   // different to BIFF flag
+const sal_uInt16 OOBIN_HEADERFOOTER_DIFFEVEN        = 0x0001;
+const sal_uInt16 OOBIN_HEADERFOOTER_DIFFFIRST       = 0x0002;
+const sal_uInt16 OOBIN_HEADERFOOTER_SCALEDOC        = 0x0004;
+const sal_uInt16 OOBIN_HEADERFOOTER_ALIGNMARGIN     = 0x0008;
 
-const sal_uInt16 OOBIN_PRINTOPT_HORCENTER       = 0x0001;
-const sal_uInt16 OOBIN_PRINTOPT_VERCENTER       = 0x0002;
-const sal_uInt16 OOBIN_PRINTOPT_PRINTHEADING    = 0x0004;
-const sal_uInt16 OOBIN_PRINTOPT_PRINTGRID       = 0x0008;
+const sal_uInt16 OOBIN_PAGESETUP_INROWS             = 0x0001;
+const sal_uInt16 OOBIN_PAGESETUP_LANDSCAPE          = 0x0002;
+const sal_uInt16 OOBIN_PAGESETUP_INVALID            = 0x0004;
+const sal_uInt16 OOBIN_PAGESETUP_BLACKWHITE         = 0x0008;
+const sal_uInt16 OOBIN_PAGESETUP_DRAFTQUALITY       = 0x0010;
+const sal_uInt16 OOBIN_PAGESETUP_PRINTNOTES         = 0x0020;
+const sal_uInt16 OOBIN_PAGESETUP_DEFAULTORIENT      = 0x0040;
+const sal_uInt16 OOBIN_PAGESETUP_USEFIRSTPAGE       = 0x0080;
+const sal_uInt16 OOBIN_PAGESETUP_NOTES_END          = 0x0100;   // different to BIFF flag
 
-const sal_uInt16 BIFF_PAGESETUP_INROWS          = 0x0001;
-const sal_uInt16 BIFF_PAGESETUP_PORTRAIT        = 0x0002;
-const sal_uInt16 BIFF_PAGESETUP_INVALID         = 0x0004;
-const sal_uInt16 BIFF_PAGESETUP_BLACKWHITE      = 0x0008;
-const sal_uInt16 BIFF_PAGESETUP_DRAFTQUALITY    = 0x0010;
-const sal_uInt16 BIFF_PAGESETUP_PRINTNOTES      = 0x0020;
-const sal_uInt16 BIFF_PAGESETUP_DEFAULTORIENT   = 0x0040;
-const sal_uInt16 BIFF_PAGESETUP_USEFIRSTPAGE    = 0x0080;
-const sal_uInt16 BIFF_PAGESETUP_NOTES_END       = 0x0200;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_LANDSCAPE     = 0x0001;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_INVALID       = 0x0002;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_BLACKWHITE    = 0x0004;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_DEFAULTORIENT = 0x0008;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_USEFIRSTPAGE  = 0x0010;
+const sal_uInt16 OOBIN_CHARTPAGESETUP_DRAFTQUALITY  = 0x0020;
+
+const sal_uInt16 BIFF_PAGESETUP_INROWS              = 0x0001;
+const sal_uInt16 BIFF_PAGESETUP_PORTRAIT            = 0x0002;
+const sal_uInt16 BIFF_PAGESETUP_INVALID             = 0x0004;
+const sal_uInt16 BIFF_PAGESETUP_BLACKWHITE          = 0x0008;
+const sal_uInt16 BIFF_PAGESETUP_DRAFTQUALITY        = 0x0010;
+const sal_uInt16 BIFF_PAGESETUP_PRINTNOTES          = 0x0020;
+const sal_uInt16 BIFF_PAGESETUP_DEFAULTORIENT       = 0x0040;
+const sal_uInt16 BIFF_PAGESETUP_USEFIRSTPAGE        = 0x0080;
+const sal_uInt16 BIFF_PAGESETUP_NOTES_END           = 0x0200;
 
 } // namespace
 
@@ -145,6 +156,14 @@ PageSettings::PageSettings( const WorksheetHelper& rHelper ) :
 {
 }
 
+void PageSettings::importPrintOptions( const AttributeList& rAttribs )
+{
+    maOoxData.mbHorCenter     = rAttribs.getBool( XML_horizontalCentered, false );
+    maOoxData.mbVerCenter     = rAttribs.getBool( XML_verticalCentered, false );
+    maOoxData.mbPrintGrid     = rAttribs.getBool( XML_gridLines, false );
+    maOoxData.mbPrintHeadings = rAttribs.getBool( XML_headings, false );
+}
+
 void PageSettings::importPageMargins( const AttributeList& rAttribs )
 {
     maOoxData.mfLeftMargin   = rAttribs.getDouble( XML_left,   OOX_MARGIN_DEFAULT_LR );
@@ -155,9 +174,9 @@ void PageSettings::importPageMargins( const AttributeList& rAttribs )
     maOoxData.mfFooterMargin = rAttribs.getDouble( XML_footer, OOX_MARGIN_DEFAULT_HF );
 }
 
-void PageSettings::importPageSetup( const AttributeList& rAttribs )
+void PageSettings::importPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maRelId         = rAttribs.getString( R_TOKEN( id ) );
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
     maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maOoxData.mnScale         = rAttribs.getInteger( XML_scale, 100 );
@@ -176,12 +195,19 @@ void PageSettings::importPageSetup( const AttributeList& rAttribs )
     maOoxData.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
 }
 
-void PageSettings::importPrintOptions( const AttributeList& rAttribs )
+void PageSettings::importChartPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.mbHorCenter     = rAttribs.getBool( XML_horizontalCentered, false );
-    maOoxData.mbVerCenter     = rAttribs.getBool( XML_verticalCentered, false );
-    maOoxData.mbPrintGrid     = rAttribs.getBool( XML_gridLines, false );
-    maOoxData.mbPrintHeadings = rAttribs.getBool( XML_headings, false );
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
+    maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
+    maOoxData.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
+    maOoxData.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
+    maOoxData.mnVerPrintRes   = rAttribs.getInteger( XML_verticalDpi, 600 );
+    maOoxData.mnOrientation   = rAttribs.getToken( XML_orientation, XML_default );
+    maOoxData.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    maOoxData.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
+    maOoxData.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
+    maOoxData.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
 }
 
 void PageSettings::importHeaderFooter( const AttributeList& rAttribs )
@@ -203,29 +229,16 @@ void PageSettings::importHeaderFooterCharacters( const OUString& rChars, sal_Int
     }
 }
 
+void PageSettings::importPicture( const Relations& rRelations, const AttributeList& rAttribs )
+{
+    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+}
+
 void PageSettings::importPageMargins( RecordInputStream& rStrm )
 {
     rStrm   >> maOoxData.mfLeftMargin   >> maOoxData.mfRightMargin
             >> maOoxData.mfTopMargin    >> maOoxData.mfBottomMargin
             >> maOoxData.mfHeaderMargin >> maOoxData.mfFooterMargin;
-}
-
-void PageSettings::importPageSetup( RecordInputStream& rStrm )
-{
-    sal_uInt16 nFlags;
-    rStrm   >> maOoxData.mnPaperSize >> maOoxData.mnScale
-            >> maOoxData.mnHorPrintRes >> maOoxData.mnVerPrintRes
-            >> maOoxData.mnCopies >> maOoxData.mnFirstPage
-            >> maOoxData.mnFitToWidth >> maOoxData.mnFitToHeight
-            >> nFlags >> maOoxData.maRelId;
-    maOoxData.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
-    maOoxData.mnOrientation   = getFlagValue( nFlags, OOBIN_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
-    maOoxData.mnPageOrder     = getFlagValue( nFlags, OOBIN_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
-    maOoxData.mnCellComments  = getFlagValue( nFlags, OOBIN_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, OOBIN_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
-    maOoxData.mbValidSettings = !getFlag( nFlags, OOBIN_PAGESETUP_INVALID );
-    maOoxData.mbUseFirstPage  = getFlag( nFlags, OOBIN_PAGESETUP_USEFIRSTPAGE );
-    maOoxData.mbBlackWhite    = getFlag( nFlags, OOBIN_PAGESETUP_BLACKWHITE );
-    maOoxData.mbDraftQuality  = getFlag( nFlags, OOBIN_PAGESETUP_DRAFTQUALITY );
 }
 
 void PageSettings::importPrintOptions( RecordInputStream& rStrm )
@@ -238,6 +251,41 @@ void PageSettings::importPrintOptions( RecordInputStream& rStrm )
     maOoxData.mbPrintHeadings = getFlag( nFlags, OOBIN_PRINTOPT_PRINTHEADING );
 }
 
+void PageSettings::importPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+{
+    OUString aRelId;
+    sal_uInt16 nFlags;
+    rStrm   >> maOoxData.mnPaperSize >> maOoxData.mnScale
+            >> maOoxData.mnHorPrintRes >> maOoxData.mnVerPrintRes
+            >> maOoxData.mnCopies >> maOoxData.mnFirstPage
+            >> maOoxData.mnFitToWidth >> maOoxData.mnFitToHeight
+            >> nFlags >> aRelId;
+    maOoxData.setBinPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
+    maOoxData.mnOrientation   = getFlagValue( nFlags, OOBIN_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maOoxData.mnPageOrder     = getFlagValue( nFlags, OOBIN_PAGESETUP_INROWS, XML_overThenDown, XML_downThenOver );
+    maOoxData.mnCellComments  = getFlagValue( nFlags, OOBIN_PAGESETUP_PRINTNOTES, getFlagValue( nFlags, OOBIN_PAGESETUP_NOTES_END, XML_atEnd, XML_asDisplayed ), XML_none );
+    maOoxData.mbValidSettings = !getFlag( nFlags, OOBIN_PAGESETUP_INVALID );
+    maOoxData.mbUseFirstPage  = getFlag( nFlags, OOBIN_PAGESETUP_USEFIRSTPAGE );
+    maOoxData.mbBlackWhite    = getFlag( nFlags, OOBIN_PAGESETUP_BLACKWHITE );
+    maOoxData.mbDraftQuality  = getFlag( nFlags, OOBIN_PAGESETUP_DRAFTQUALITY );
+}
+
+void PageSettings::importChartPageSetup( const Relations& rRelations, RecordInputStream& rStrm )
+{
+    OUString aRelId;
+    sal_uInt16 nFirstPage, nFlags;
+    rStrm   >> maOoxData.mnPaperSize >> maOoxData.mnHorPrintRes >> maOoxData.mnVerPrintRes
+            >> maOoxData.mnCopies >> nFirstPage >> nFlags >> aRelId;
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
+    maOoxData.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
+    maOoxData.mnOrientation   = getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, OOBIN_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
+    maOoxData.mbValidSettings = !getFlag( nFlags, OOBIN_CHARTPAGESETUP_INVALID );
+    maOoxData.mbUseFirstPage  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_USEFIRSTPAGE );
+    maOoxData.mbBlackWhite    = getFlag( nFlags, OOBIN_CHARTPAGESETUP_BLACKWHITE );
+    maOoxData.mbDraftQuality  = getFlag( nFlags, OOBIN_CHARTPAGESETUP_DRAFTQUALITY );
+}
+
 void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
 {
     sal_uInt16 nFlags;
@@ -247,6 +295,11 @@ void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
             >> maOoxData.maFirstHeader >> maOoxData.maFirstFooter;
     maOoxData.mbUseEvenHF  = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFEVEN );
     maOoxData.mbUseFirstHF = getFlag( nFlags, OOBIN_HEADERFOOTER_DIFFFIRST );
+}
+
+void PageSettings::importPicture( const Relations& rRelations, RecordInputStream& rStrm )
+{
+    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rStrm.readString() );
 }
 
 void PageSettings::importLeftMargin( BiffInputStream& rStrm )
@@ -342,6 +395,10 @@ void PageSettings::importFooter( BiffInputStream& rStrm )
         maOoxData.maOddFooter = OUString();
 }
 
+void PageSettings::importPicture( BiffInputStream& /*rStrm*/ )
+{
+}
+
 void PageSettings::setFitToPagesMode( bool bFitToPages )
 {
     maOoxData.mbFitToPages = bFitToPages;
@@ -394,6 +451,14 @@ const sal_Char* const sppcPageNames[] =
     "FooterIsDynamicHeight",
     "FooterHeight",
     "FooterBodyDistance",
+    0
+};
+
+/** Property names for page background graphic. */
+const sal_Char* const sppcGraphicNames[] =
+{
+    "BackGraphicURL",
+    "BackGraphicLocation",
     0
 };
 
@@ -501,6 +566,7 @@ PageSettingsPropertyHelper::PageSettingsPropertyHelper( const WorkbookHelper& rH
     WorkbookHelper( rHelper ),
     maHFParser( rHelper ),
     maPageProps( sppcPageNames ),
+    maGraphicProps( sppcGraphicNames ),
     maHeaderData( CREATE_OUSTRING( "LeftPageHeaderContent" ), CREATE_OUSTRING( "RightPageHeaderContent" ) ),
     maFooterData( CREATE_OUSTRING( "LeftPageFooterContent" ), CREATE_OUSTRING( "RightPageFooterContent" ) )
 {
@@ -509,8 +575,16 @@ PageSettingsPropertyHelper::PageSettingsPropertyHelper( const WorkbookHelper& rH
 void PageSettingsPropertyHelper::writePageSettingsProperties(
         PropertySet& rPropSet, const OoxPageData& rData, WorksheetType eSheetType )
 {
+    // special handling for chart sheets
+    bool bChartSheet = eSheetType == SHEETTYPE_CHARTSHEET;
+
     // printout scaling
-    if( rData.mbFitToPages )
+    if( bChartSheet )
+    {
+        // always fit chart sheet to 1 page
+        rPropSet.setProperty< sal_Int16 >( CREATE_OUSTRING( "ScaleToPages" ), 1 );
+    }
+    else if( rData.mbFitToPages )
     {
         // fit to number of pages
         rPropSet.setProperty( CREATE_OUSTRING( "ScaleToPagesX" ), getLimitedValue< sal_Int16, sal_Int32 >( rData.mnFitToWidth, 0, 1000 ) );
@@ -526,18 +600,14 @@ void PageSettingsPropertyHelper::writePageSettingsProperties(
     // paper orientation
     bool bLandscape = rData.mnOrientation == XML_landscape;
     // default orientation for current sheet type (chart sheets default to landscape)
-    if( !rData.mbValidSettings || (rData.mnOrientation == XML_default) ) switch( eSheetType )
-    {
-        case SHEETTYPE_WORKSHEET:   bLandscape = false; break;
-        case SHEETTYPE_CHART:       bLandscape = true;  break;
-        case SHEETTYPE_MACRO:       bLandscape = false; break;
-    }
+    if( !rData.mbValidSettings || (rData.mnOrientation == XML_default) )
+        bLandscape = bChartSheet;
 
     // paper size
     if( rData.mbValidSettings && (0 < rData.mnPaperSize) && (rData.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
     {
         const ApiPaperSize& rPaperSize = spPaperSizeTable[ rData.mnPaperSize ];
-        ::com::sun::star::awt::Size aSize( rPaperSize.mnWidth, rPaperSize.mnHeight );
+        Size aSize( rPaperSize.mnWidth, rPaperSize.mnHeight );
         if( bLandscape )
             ::std::swap( aSize.Width, aSize.Height );
         rPropSet.setProperty( CREATE_OUSTRING( "Size" ), aSize );
@@ -556,14 +626,14 @@ void PageSettingsPropertyHelper::writePageSettingsProperties(
         << (rData.mnCellComments == XML_asDisplayed)
         << rData.mbHorCenter
         << rData.mbVerCenter
-        << rData.mbPrintGrid
-        << rData.mbPrintHeadings
-        << rUnitConv.calcMm100FromInches( rData.mfLeftMargin )
-        << rUnitConv.calcMm100FromInches( rData.mfRightMargin )
+        << (!bChartSheet && rData.mbPrintGrid)      // no gridlines in chart sheets
+        << (!bChartSheet && rData.mbPrintHeadings)  // no column/row headings in chart sheets
+        << rUnitConv.scaleToMm100( rData.mfLeftMargin, UNIT_INCH )
+        << rUnitConv.scaleToMm100( rData.mfRightMargin, UNIT_INCH )
         // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
-        << rUnitConv.calcMm100FromInches( maHeaderData.mbHasContent ? rData.mfHeaderMargin : rData.mfTopMargin )
+        << rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rData.mfHeaderMargin : rData.mfTopMargin, UNIT_INCH )
         // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
-        << rUnitConv.calcMm100FromInches( maFooterData.mbHasContent ? rData.mfFooterMargin : rData.mfBottomMargin )
+        << rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rData.mfFooterMargin : rData.mfBottomMargin, UNIT_INCH )
         << maHeaderData.mbHasContent
         << maHeaderData.mbShareOddEven
         << maHeaderData.mbDynamicHeight
@@ -575,6 +645,16 @@ void PageSettingsPropertyHelper::writePageSettingsProperties(
         << maFooterData.mnHeight
         << maFooterData.mnBodyDist
         >> rPropSet;
+
+    // background image
+    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (rData.maPicturePath.getLength() == 0),
+        "PageSettingsPropertyHelper::writePageSettingsProperties - unexpected background picture" );
+    if( (getFilterType() == FILTER_OOX) && (rData.maPicturePath.getLength() > 0) )
+    {
+        OUString aPictureUrl = getOoxFilter().copyPictureStream( rData.maPicturePath );
+        if( aPictureUrl.getLength() > 0 )
+            maGraphicProps << aPictureUrl << ::com::sun::star::style::GraphicLocation_TILED >> rPropSet;
+    }
 }
 
 void PageSettingsPropertyHelper::convertHeaderFooterData(
@@ -601,7 +681,7 @@ void PageSettingsPropertyHelper::convertHeaderFooterData(
         /*  Calc contains distance between bottom of header and top of page
             body in "HeaderBodyDistance" property, and distance between bottom
             of page body and top of footer in "FooterBodyDistance" property */
-        rHFData.mnBodyDist = getUnitConverter().calcMm100FromInches( fPageMargin - fContentMargin ) - rHFData.mnHeight;
+        rHFData.mnBodyDist = getUnitConverter().scaleToMm100( fPageMargin - fContentMargin, UNIT_INCH ) - rHFData.mnHeight;
         /*  #i23296# Distance less than 0 means, header or footer overlays page
             body. As this is not possible in Calc, set fixed header or footer
             height (crop header/footer) to get correct top position of page body. */
@@ -628,7 +708,7 @@ sal_Int32 PageSettingsPropertyHelper::writeHeaderFooter(
         {
             maHFParser.parse( xHFContent, rContent );
             rPropSet.setProperty( rPropName, xHFContent );
-            nHeight = getUnitConverter().calcMm100FromPoints( maHFParser.getTotalHeight() );
+            nHeight = getUnitConverter().scaleToMm100( maHFParser.getTotalHeight(), UNIT_POINT );
         }
     }
     return nHeight;
