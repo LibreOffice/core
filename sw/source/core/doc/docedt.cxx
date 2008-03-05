@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:36:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2246,7 +2246,7 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
                                                     nPtCnt);
                 *aTmpRange.GetMark() = *aDelPam.GetPoint();
 
-                RstTxtAttr( aTmpRange );
+                RstTxtAttrs( aTmpRange );
                 Insert( aTmpRange, aSet, 0 );
             }
 
