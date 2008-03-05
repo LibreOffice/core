@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:37:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -929,7 +929,11 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
     ASSERT( pOld, "ohne die alte NumRule geht gar nichts" );
 
-    USHORT nChkLevel = 0, nChgFmtLevel = 0, nMask = 1;
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    // <nChkLevel> no longer needed, because only written, but not read.
+//    USHORT nChkLevel = 0;
+    // <--
+    USHORT nChgFmtLevel = 0, nMask = 1;
     BYTE n;
 
     for( n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
@@ -940,9 +944,12 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
         if( rOldFmt != rNewFmt )
         {
             nChgFmtLevel |= nMask;
-            if( rOldFmt.GetAbsLSpace() != rNewFmt.GetAbsLSpace() ||
-                rOldFmt.GetFirstLineOffset() != rNewFmt.GetFirstLineOffset() )
-                nChkLevel |= nMask;
+            // --> OD 2008-01-23 #newlistlevelattrs#
+            // code no longer needed, because <nChkLevel> is not referenced.
+//            if( rOldFmt.GetAbsLSpace() != rNewFmt.GetAbsLSpace() ||
+//                rOldFmt.GetFirstLineOffset() != rNewFmt.GetFirstLineOffset() )
+//                nChkLevel |= nMask;
+            // <--
         }
         else if( SVX_NUM_NUMBER_NONE > rNewFmt.GetNumberingType() && 1 < rNewFmt.GetIncludeUpperLevels() &&
                 0 != (nChgFmtLevel & GetUpperLvlChg( n, rNewFmt.GetIncludeUpperLevels(),nMask )) )
@@ -999,8 +1006,10 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     rDoc.UpdateNumRule();
 }
 
+// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
 void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
-                        sal_Bool bSetItem )
+                        sal_Bool bSetItem,
+                        const bool bResetIndentAttrs )
 {
     SwUndoInsNum * pUndo = NULL;
     if (DoesUndo())
@@ -1075,8 +1084,18 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     if ( bSetItem && pNew != GetOutlineNumRule() )
     // <--
     {
-      Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
+        Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
     }
+
+    // --> OD 2008-02-08 #newlistlevelattrs#
+    if ( bResetIndentAttrs &&
+         pNew && pNew->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        SvUShortsSort aResetAttrsArray;
+        aResetAttrsArray.Insert( RES_LR_SPACE );
+        ResetAttrs( rPam, sal_True, &aResetAttrsArray );
+    }
+    // <--
 
     if (DoesUndo())
         EndUndo( UNDO_INSNUM, NULL );
@@ -2380,8 +2399,11 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     AddNumRuleRanges(pRule, aUndoNodes);
 }
 
-USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
-                           BOOL bBroadcast)
+// --> OD 2008-02-11 #newlistlevelattrs#
+USHORT SwDoc::MakeNumRule( const String &rName,
+            const SwNumRule* pCpy,
+            BOOL bBroadcast,
+            const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
 {
     SwNumRule* pNew;
     if( pCpy )
@@ -2398,7 +2420,12 @@ USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
         pNew->CheckCharFmts( this );
     }
     else
-        pNew = new SwNumRule( GetUniqueNumRuleName( &rName ) );
+    {
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        pNew = new SwNumRule( GetUniqueNumRuleName( &rName ),
+                              eDefaultNumberFormatPositionAndSpaceMode );
+        // <--
+    }
 
     USHORT nRet = pNumRuleTbl->Count();
 
