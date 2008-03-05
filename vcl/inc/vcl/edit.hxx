@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:03:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,6 @@ private:
     Link                maUpdateDataHdl;
     Link                maAutocompleteHdl;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
 
     SAL_DLLPRIVATE void        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
@@ -146,18 +145,16 @@ private:
     SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
-//#endif
 
 protected:
-//#if 0 // _SOLAR__PRIVATE
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, BOOL bPaint = TRUE );
-//#endif
     SAL_DLLPRIVATE int         ImplGetNativeControlType();
+    static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
