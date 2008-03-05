@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:04:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@
 #include "IDocumentFieldsAccess.hxx"
 #include "IDocumentSettingAccess.hxx"
 #include "IDocumentDrawModelAccess.hxx"
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
 
 SwLayVout     *SwRootFrm::pVout = 0;
 BOOL           SwRootFrm::bInPaint = FALSE;
