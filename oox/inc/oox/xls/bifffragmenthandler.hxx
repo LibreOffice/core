@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bifffragmenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,9 @@ enum BiffFragmentType
 {
     BIFF_FRAGMENT_GLOBALS,      /// Workbook globals fragment.
     BIFF_FRAGMENT_WORKSHEET,    /// Worksheet fragment.
-    BIFF_FRAGMENT_CHART,        /// Chart fragment.
-    BIFF_FRAGMENT_MACRO,        /// Macro sheet fragment.
+    BIFF_FRAGMENT_CHARTSHEET,   /// Chart sheet fragment.
+    BIFF_FRAGMENT_MACROSHEET,   /// Macro sheet fragment.
+    BIFF_FRAGMENT_MODULESHEET,  /// BIFF5 VB module fragment.
     BIFF_FRAGMENT_EMPTYSHEET,   /// Sheet fragment of unsupported type.
     BIFF_FRAGMENT_WORKSPACE,    /// BIFF4 workspace/workbook globals.
     BIFF_FRAGMENT_UNKNOWN       /// Unknown fragment/error.
