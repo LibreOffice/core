@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:48:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,7 @@
 #include <algorithm>
 #include <hash_map>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -1065,28 +1066,13 @@ IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
     {
         try
         {
-/*AS           // #104032# OJ
-            URL aURL;
-            aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
-            if (m_xUrlTransformer.is())
-                m_xUrlTransformer->parseStrict(aURL);
-            Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
-            Reference< XDispatch > xCloseDispatch;
-            if (xDispProv.is())
-                xCloseDispatch = xDispProv->queryDispatch(aURL, m_xCurrentFrame->getName(), FrameSearchFlag::SELF);
-            OSL_ENSURE(xCloseDispatch.is(), "SbaTableQueryBrowser::OnAsyncCloseTask: could not get a dispatcher!");
-            if ( xCloseDispatch.is() && xCloseDispatch != *this )
-            {
-                xCloseDispatch->dispatch(aURL, Sequence< PropertyValue >());
-            }
-            else*/
-            {
-                Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xCurrentFrame,UNO_QUERY);
-                if(xCloseable.is())
-                    xCloseable->close(sal_False); // false - holds the owner ship for this frame inside this object!
-            }
+            Reference< util::XCloseable > xCloseable( m_xCurrentFrame, UNO_QUERY_THROW );
+            xCloseable->close( sal_False ); // false - holds the owner ship for this frame inside this object!
         }
-        catch(const Exception&) {}
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
     return 0L;
 }
