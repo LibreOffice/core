@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: os $ $Date: 2007-02-22 13:44:54 $
+#  last change: $Author: kz $ $Date: 2008-03-05 17:00:37 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
+.INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
 # --- Files -------------------------------------
 
