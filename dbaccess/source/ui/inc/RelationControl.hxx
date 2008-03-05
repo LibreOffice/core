@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:17:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,6 @@ namespace dbaui
         BOOL SaveModified();
 
         TTableWindowData::value_type getReferencingTable()  const;
-        TTableWindowData::value_type getReferencedTable()   const;
 
         /** getContainer returns the container interface
             @return the interface of the container
