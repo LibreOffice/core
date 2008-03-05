@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportDefinition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:27:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,8 @@
 #ifndef INCLUDED_CPPUHELPER_PROPERTYSETMIXIN_HXX
 #include <cppuhelper/propertysetmixin.hxx>
 #endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
+#include <comphelper/embeddedobjectcontainer.hxx>
 #ifndef SVX_UNOMOD_HXX
 #include <svx/unomod.hxx>
 #endif
@@ -97,7 +96,8 @@ namespace reportdesign
      */
     class REPORTDESIGN_DLLPUBLIC OReportDefinition :    public ::cppu::BaseMutex,
                                 public ReportDefinitionBase,
-                                public ReportDefinitionPropertySet
+                                public ReportDefinitionPropertySet,
+                                public ::comphelper::IEmbeddedHelper
     {
         ::boost::shared_ptr<OReportComponentProperties>                             m_aProps;
         ::boost::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
@@ -198,10 +198,6 @@ namespace reportdesign
         virtual void SAL_CALL setPageHeaderOption( ::sal_Int16 _pageheaderoption ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL getPageFooterOption() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPageFooterOption( ::sal_Int16 _pagefooteroption ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getMasterFields() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _masterfields ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDetailFields() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _detailfields ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getCommand() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setCommand( const ::rtl::OUString& _command ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int32 SAL_CALL getCommandType() throw (::com::sun::star::uno::RuntimeException);
@@ -210,6 +206,10 @@ namespace reportdesign
         virtual void SAL_CALL setFilter( const ::rtl::OUString& _filter ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL getEscapeProcessing() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setEscapeProcessing( ::sal_Bool _escapeprocessing ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setActiveConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _activeconnection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getDataSourceName() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setDataSourceName( const ::rtl::OUString& _datasourcename ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL getReportHeaderOn() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setReportHeaderOn( ::sal_Bool _reportheaderon ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL getReportFooterOn() throw (::com::sun::star::uno::RuntimeException);
@@ -350,6 +350,12 @@ namespace reportdesign
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
 
         static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+
+        // comphelper::IEmbeddedHelper
+        virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;
+        virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+        virtual bool isEnableSetModified() const;
       };
 // =============================================================================
 } // namespace reportdesign
