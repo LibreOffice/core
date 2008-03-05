@@ -6,14 +6,8 @@
 # hardcoding the program name everywhere
 GUWCMD*=guw.exe
 
-# Do not use WRAPCMD for 4nt or unless --enable-wrapcmd is given
-.IF "$(USE_SHELL)" != "4nt" && "$(FLIPCMD)" == "$(WRAPCMD)"
-WRAPCMD_ENV*=$(WRAPCMD) -env
-.ELSE
-
+# This is a no-op for native W32 dmake
 .WINPATH !:= yes
-
-.ENDIF
 
 # Directory cache configuration.
 .DIRCACHE  *:= no
