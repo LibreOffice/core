@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConditionalText.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:55:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@ published service ConditionalText
 {
     service  com::sun::star::text::TextField;
 
-    /** contains the text that is displayed if the condition evaluates to </TRUE>.
+    /** contains the text that is displayed if the condition evaluates to <TRUE/>.
      */
     [property] string TrueContent;
-    /** contains the text that is displayed if the condition evaluates to </FALSE>.
+    /** contains the text that is displayed if the condition evaluates to <FALSE/>.
      */
     [property] string FalseContent;
     /** contains the condition.
