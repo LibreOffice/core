@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HiddenText.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:00:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ published service HiddenText
     service  com::sun::star::text::TextField;
 
     /** contains the text content of the hidden text field.
-        <p> The content is displayed if the condition evaluates to </FALSE>.</p>
+        <p> The content is displayed if the condition evaluates to <FALSE/>.</p>
      */
     [property] string Content;
     /** contains the condition.
