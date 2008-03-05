@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bifffragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ BiffFragmentType BiffFragmentHandler::startFragment( BiffInputStream& rStrm, Bif
                 case BIFF2: switch( nType )
                 {
                     case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACRO;        break;
+                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
                     // #i51490# Excel interprets invalid types as worksheet
                     default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
                 }
@@ -98,7 +98,7 @@ BiffFragmentType BiffFragmentHandler::startFragment( BiffInputStream& rStrm, Bif
                 case BIFF3: switch( nType )
                 {
                     case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACRO;        break;
+                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
                     case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
                     // #i51490# Excel interprets invalid types as worksheet
                     default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
@@ -108,7 +108,7 @@ BiffFragmentType BiffFragmentHandler::startFragment( BiffInputStream& rStrm, Bif
                 case BIFF4: switch( nType )
                 {
                     case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACRO;        break;
+                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
                     case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_WORKSPACE;    break;
                     // #i51490# Excel interprets invalid types as worksheet
                     default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
@@ -119,8 +119,9 @@ BiffFragmentType BiffFragmentHandler::startFragment( BiffInputStream& rStrm, Bif
                 case BIFF8: switch( nType )
                 {
                     case BIFF_BOF_GLOBALS:  eFragment = BIFF_FRAGMENT_GLOBALS;      break;
-                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_CHART;        break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACRO;        break;
+                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_CHARTSHEET;   break;
+                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
+                    case BIFF_BOF_MODULE:   eFragment = BIFF_FRAGMENT_MODULESHEET;  break;
                     case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
                     // #i51490# Excel interprets invalid types as worksheet
                     default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
