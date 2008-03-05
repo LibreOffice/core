@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:29:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,19 @@ class SwNumberPortion : public SwFldPortion
 protected:
     KSHORT  nFixWidth;      // vgl. Glues
     KSHORT  nMinDist;       // minimaler Abstand zum Text
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    bool    mbLabelAlignmentPosAndSpaceModeActive;
+    // <--
+
 public:
-    SwNumberPortion( const XubString &rExpand, SwFont *pFnt,
-        const sal_Bool bLeft, const sal_Bool bCenter, const KSHORT nMinDst );
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    SwNumberPortion( const XubString &rExpand,
+                     SwFont *pFnt,
+                     const sal_Bool bLeft,
+                     const sal_Bool bCenter,
+                     const KSHORT nMinDst,
+                     const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -172,8 +182,15 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    SwBulletPortion( const xub_Unicode cCh, SwFont *pFnt, const sal_Bool bLeft,
-                     const sal_Bool bCenter, const KSHORT nMinDst );
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    SwBulletPortion( const xub_Unicode cCh,
+                     const XubString& rBulletFollowedBy,
+                     SwFont *pFnt,
+                     const sal_Bool bLeft,
+                     const sal_Bool bCenter,
+                     const KSHORT nMinDst,
+                     const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     OUTPUT_OPERATOR
 };
 
@@ -189,9 +206,17 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    SwGrfNumPortion( SwFrm *pFrm, const SvxBrushItem* pGrfBrush,
-        const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
-        const sal_Bool bLeft, const sal_Bool bCenter, const KSHORT nMinDst );
+    // --> OD 2008-01-23 #newlistlevelattrs#
+    SwGrfNumPortion( SwFrm *pFrm,
+                     const XubString& rGraphicFollowedBy,
+                     const SvxBrushItem* pGrfBrush,
+                     const SwFmtVertOrient* pGrfOrient,
+                     const Size& rGrfSize,
+                     const sal_Bool bLeft,
+                     const sal_Bool bCenter,
+                     const KSHORT nMinDst,
+                     const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
