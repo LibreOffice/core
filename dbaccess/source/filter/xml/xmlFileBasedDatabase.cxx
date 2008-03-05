@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFileBasedDatabase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:24:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,11 +156,6 @@ OXMLFileBasedDatabase::~OXMLFileBasedDatabase()
 {
 
     DBG_DTOR(OXMLFileBasedDatabase,NULL);
-}
-// -----------------------------------------------------------------------------
-ODBFilter& OXMLFileBasedDatabase::GetOwnImport()
-{
-    return static_cast<ODBFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
