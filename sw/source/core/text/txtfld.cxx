@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,13 +359,24 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
-        const KSHORT nMinDist = rNumFmt.GetCharTextDistance();
+        // --> OD 2008-01-23 #newlistlevelattrs#
+        const bool bLabelAlignmentPosAndSpaceModeActive(
+                rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
+        const KSHORT nMinDist = bLabelAlignmentPosAndSpaceModeActive
+                                ? 0 : rNumFmt.GetCharTextDistance();
+        // <--
 
         if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),rNumFmt.GetBrush(),
-                rNumFmt.GetGraphicOrientation(), rNumFmt.GetGraphicSize(),
-                bLeft, bCenter, nMinDist );
+            // --> OD 2008-01-23 #newlistlevelattrs#
+            pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),
+                                        pTxtNd->GetLabelFollowedBy(),
+                                        rNumFmt.GetBrush(),
+                                        rNumFmt.GetGraphicOrientation(),
+                                        rNumFmt.GetGraphicSize(),
+                                        bLeft, bCenter, nMinDist,
+                                        bLabelAlignmentPosAndSpaceModeActive );
+            // <--
             long nTmpA = rInf.GetLast()->GetAscent();
             long nTmpD = rInf.GetLast()->Height() - nTmpA;
             if( !rInf.IsTest() )
@@ -428,8 +439,13 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
                                       pFrm->IsVertical() );
 
-                pRet = new SwBulletPortion( rNumFmt.GetBulletChar(), pNumFnt, bLeft,
-                            bCenter, nMinDist );
+                // --> OD 2008-01-23 #newlistelevelattrs#
+                pRet = new SwBulletPortion( rNumFmt.GetBulletChar(),
+                                            pTxtNd->GetLabelFollowedBy(),
+                                            pNumFnt,
+                                            bLeft, bCenter, nMinDist,
+                                            bLabelAlignmentPosAndSpaceModeActive );
+                // <--
             }
             else
             {
@@ -439,6 +455,12 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // numbering none the prefix and the suffix strings have to be provided.
 //                XubString aTxt( pTxtNd->GetNumString() );
                 XubString aTxt( pNumRule->MakeNumString( *(pTxtNd->GetNum()) ) );
+                // <--
+                // --> OD 2008-01-23 #newlistlevelattrs#
+                if ( aTxt.Len() > 0 )
+                {
+                    aTxt.Insert( pTxtNd->GetLabelFollowedBy() );
+                }
                 // <--
 
                 // 7974: Nicht nur eine Optimierung...
@@ -472,8 +494,11 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
-                    pRet = new SwNumberPortion( aTxt, pNumFnt, bLeft, bCenter,
-                                                nMinDist );
+                    // --> OD 2008-01-23 #newlistlevelattrs#
+                    pRet = new SwNumberPortion( aTxt, pNumFnt,
+                                                bLeft, bCenter, nMinDist,
+                                                bLabelAlignmentPosAndSpaceModeActive );
+                    // <--
                 }
             }
         }
