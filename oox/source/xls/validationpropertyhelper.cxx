@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validationpropertyhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include "oox/helper/propertyset.hxx"
-#include "oox/xls/ooxtokens.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
 using ::rtl::OUString;

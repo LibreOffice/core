@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheetbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "oox/xls/ooxtokens.hxx"
+#include "oox/xls/excelhandlers.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
