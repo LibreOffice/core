@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:41:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5457,6 +5457,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<desc>Determines if the system's file and folder pickers should be used. If false, the proprietary file/folder picker implementations will be used. Relevant on platforms where file/folder picker integration is implemented.</desc>
 				</info>
 				<value>true</value>
+			</prop>
+			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
+				<info>
+					<author>PL</author>
+					<desc>Determines if the system's print dialog should be used. If false, the platform independent print dialog implementation will be used. Relevant on platforms where print dialog integration is implemented.</desc>
+				</info>
+				<value>false</value>
 			</prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
