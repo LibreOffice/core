@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addressconverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     mcUrlExternal( 0 ),
     mcUrlThisSheet( 0 ),
     mcUrlInternal( 0 ),
+    mcUrlSameSheet( 0 ),
     mbColOverflow( false ),
     mbRowOverflow( false ),
     mbTabOverflow( false )
@@ -257,23 +258,23 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
         {
             case BIFF2:
                 initializeMaxPos( BIFF2_MAXTAB, BIFF2_MAXCOL, BIFF2_MAXROW );
-                initializeEncodedUrl( '\x00', '\x01', '\x02', '\x00' );
+                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
             break;
             case BIFF3:
                 initializeMaxPos( BIFF3_MAXTAB, BIFF3_MAXCOL, BIFF3_MAXROW );
-                initializeEncodedUrl( '\x00', '\x01', '\x02', '\x00' );
+                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
             break;
             case BIFF4:
                 initializeMaxPos( BIFF4_MAXTAB, BIFF4_MAXCOL, BIFF4_MAXROW );
-                initializeEncodedUrl( '\x00', '\x01', '\x02', '\x00' );
+                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, '\x00' );
             break;
             case BIFF5:
                 initializeMaxPos( BIFF5_MAXTAB, BIFF5_MAXCOL, BIFF5_MAXROW );
-                initializeEncodedUrl( '\x04', '\x01', '\x02', '\x03' );
+                initializeEncodedUrl( '\x04', '\x01', '\x02', '\x03', '\x00' );
             break;
             case BIFF8:
                 initializeMaxPos( BIFF8_MAXTAB, BIFF8_MAXCOL, BIFF8_MAXROW );
-                initializeEncodedUrl( '\x04', '\x01', '\x00', '\x02' );
+                initializeEncodedUrl( '\x04', '\x01', 0xFFFF, '\x02', '\x00' );
             break;
             case BIFF_UNKNOWN: break;
         }
@@ -390,11 +391,12 @@ bool lclAppendUrlChar( OUStringBuffer& orUrl, sal_Unicode cChar, bool bEncodeSpe
 } // namespace
 
 bool AddressConverter::parseBiffTargetUrl(
-        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName,
+        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName, bool& orbSameSheet,
         const OUString& rBiffTargetUrl )
 {
     OUStringBuffer aTargetUrl;
     OUStringBuffer aSheetName;
+    orbSameSheet = false;
 
     enum
     {
@@ -414,15 +416,16 @@ bool AddressConverter::parseBiffTargetUrl(
 
     const sal_Unicode* pcChar = rBiffTargetUrl.getStr();
     const sal_Unicode* pcEnd = pcChar + rBiffTargetUrl.getLength();
-    for( ; (eState != STATE_ERROR) && (pcChar < pcEnd) && (*pcChar != 0); ++pcChar )
+    for( ; (eState != STATE_ERROR) && (pcChar < pcEnd); ++pcChar )
     {
         sal_Unicode cChar = *pcChar;
         switch( eState )
         {
             case STATE_START:
-                if( (cChar == mcUrlThisWorkbook) || (cChar == mcUrlThisSheet) )
+                if( (cChar == mcUrlThisWorkbook) || (cChar == mcUrlThisSheet) || (cChar == mcUrlSameSheet) )
                 {
                     if( pcChar + 1 < pcEnd ) eState = STATE_ERROR;
+                    orbSameSheet = cChar == mcUrlSameSheet;
                 }
                 else if( cChar == mcUrlExternal )
                     eState = (pcChar + 1 < pcEnd) ? STATE_ENCODED_PATH_START : STATE_ERROR;
@@ -757,12 +760,13 @@ void AddressConverter::initializeMaxPos(
 
 void AddressConverter::initializeEncodedUrl(
         sal_Unicode cUrlThisWorkbook, sal_Unicode cUrlExternal,
-        sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal )
+        sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal, sal_Unicode cUrlSameSheet )
 {
     mcUrlThisWorkbook   = cUrlThisWorkbook;
     mcUrlExternal       = cUrlExternal;
     mcUrlThisSheet      = cUrlThisSheet;
     mcUrlInternal       = cUrlInternal;
+    mcUrlSameSheet      = cUrlSameSheet;
 }
 
 // ============================================================================
