@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:33:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sw.hxx"
 
 #include <svx/svxenum.hxx>
+#include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
