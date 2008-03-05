@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:57:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
+#include <unotools/digitgroupingiterator.hxx>
 
 #define _ZFORSCAN_CXX
 #include "zforscan.hxx"
@@ -1389,6 +1390,28 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
 }
 
 
+bool ImpSvNumberformatScan::InsertSymbol( USHORT & nPos, svt::NfSymbolType eType, const String& rStr )
+{
+    if (nAnzStrings >= NF_MAX_FORMAT_SYMBOLS || nPos > nAnzStrings)
+        return false;
+    ++nAnzResStrings;
+    if (nPos > 0 && nTypeArray[nPos-1] == NF_SYMBOLTYPE_EMPTY)
+        --nPos;     // reuse position
+    else
+    {
+        ++nAnzStrings;
+        for (size_t i = nAnzStrings; i > nPos; --i)
+        {
+            nTypeArray[i] = nTypeArray[i-1];
+            sStrArray[i] = sStrArray[i-1];
+        }
+    }
+    nTypeArray[nPos] = static_cast<short>(eType);
+    sStrArray[nPos] = rStr;
+    return true;
+}
+
+
 int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
             USHORT& rAnzResStrings )
 {
@@ -1618,10 +1641,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     sStrArray[i].GetChar(0) == '?')
                                 )
                             {
-                                rStr += sStrArray[i];
+                                nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                                 nPos = nPos + sStrArray[i].Len();
-                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
                                 nCounter++;
                                 i++;
                             }
@@ -1695,17 +1716,14 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 {
                                     nPos = nPos + sStrArray[i].Len();
                                     if (!bThousand)                 // only once
-                                    {   // set hard, in case of Non-Breaking Space or ConvertMode
-                                        sStrArray[i] = pFormatter->GetNumThousandSep();
-                                        nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
+                                    {
                                         bThousand = TRUE;
                                         cThousandFill = sStrArray[i+1].GetChar(0);
                                     }
-                                    else                            // eat it
-                                    {
-                                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
-                                    }
+                                    // Eat it, will be reinserted at proper
+                                    // grouping positions further down.
+                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                    nAnzResStrings--;
                                     i++;
                                 }
                                 else if (i > 0 && (cPre == '#' || cPre == '0')
@@ -2023,7 +2041,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 else
                     nCntPre = nCounter;
             }
-            if (nThousand == 0 && bThousand)        // Expansion Tausenderpunkt:
+            if (bThousand)                          // Expansion of grouping separators
             {
                 USHORT nMaxPos;
                 if (bFrac)
@@ -2031,87 +2049,62 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     if (bBlank)
                         nMaxPos = nBlankPos;
                     else
-                        nMaxPos = 0;                // keine Expansion
+                        nMaxPos = 0;                // no grouping
                 }
-                else if (bDecSep)                   // , vorhanden
+                else if (bDecSep)                   // decimal separator present
                     nMaxPos = nDecPos;
-                else if (bExp)                      // E vorhanden
+                else if (bExp)                      // 'E' exponent present
                     nMaxPos = nExpPos;
-                else                                // sonst bis Ende
+                else                                // up to end
                     nMaxPos = i;
-                i = 0;
-                long nCount = nCntPre;
-                while (i < nMaxPos && nTypeArray[i] != NF_SYMBOLTYPE_THSEP)                 // nur bis zum ,
-                {
-                    if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
-                        nCount -= sStrArray[i].Len();
-                    i++;
-                }
-                USHORT nPosThSep = i;               // Position merken
-                i++;                                // Ziffern hinter .
-                xub_StrLen nFill = 0;
-                if (nCount > 0)                     // muesste immer sein
-                    nFill = xub_StrLen(nCount % 3);
-                if (nFill)
-                {
-                    nFill = 3 - nFill;
-                    if (i < nMaxPos)
-                        for (xub_StrLen k = 0; k < nFill; k++)
-                            sStrArray[i].Insert(cThousandFill,0);
-                    nCntPre = nCntPre + USHORT(nFill);
-                }
-                nCount = 0;                         // Aufuellen mit .
-                while (i < nMaxPos)                 // nach hinten
+                // Insert separators at proper positions.
+                xub_StrLen nCount = 0;
+                utl::DigitGroupingIterator aGrouping( pLoc->getDigitGrouping());
+                size_t nFirstDigitSymbol = nMaxPos;
+                size_t nFirstGroupingSymbol = nMaxPos;
+                i = nMaxPos;
+                while (i-- > 0)
                 {
                     if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
                     {
-                        xub_StrLen nLen = sStrArray[i].Len();
-                        if (nCount+nLen > 3)
-                        {                           // hier muss . dazwischen
-                            xub_StrLen nAnz =
-                                sal::static_int_cast< xub_StrLen >(
-                                    (nLen+nCount-4)/3+1);
-                            xub_StrLen InPos =
-                                sal::static_int_cast< xub_StrLen >(3-nCount);
-                            for (xub_StrLen k = 0; k < nAnz; k++)
-                            {
-                                sStrArray[i].Insert(
-                                        pFormatter->GetNumThousandSep(),InPos);
-                                InPos += 4;
-                            }
-                            nCount = sStrArray[i].Len() - InPos + 3;
+                        nFirstDigitSymbol = i;
+                        nCount = nCount + sStrArray[i].Len();   // MSC converts += to int and then warns, so ...
+                        // Insert separator only if not leftmost symbol.
+                        if (i > 0 && nCount >= aGrouping.getPos())
+                        {
+                            DBG_ASSERT( sStrArray[i].Len() == 1,
+                                    "ImpSvNumberformatScan::FinalScan: combined digits in group separator insertion");
+                            if (!InsertSymbol( i, NF_SYMBOLTYPE_THSEP,
+                                        pFormatter->GetNumThousandSep()))
+                                // nPos isn't correct here, but signals error
+                                return nPos;
+                            // i may have been decremented by 1
+                            nFirstDigitSymbol = i + 1;
+                            nFirstGroupingSymbol = i;
+                            aGrouping.advance();
                         }
-                        else
-                            nCount += sStrArray[i].Len();
                     }
-                    i++;
                 }
-                nCount = 0;                         // Aufuellen mit .
-                i = nPosThSep;                      // nach vorn
-                while (i > 0)
+                // Generated something like "string",000; remove separator again.
+                if (nFirstGroupingSymbol < nFirstDigitSymbol)
                 {
-                    i--;
-                    if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+                    nTypeArray[nFirstGroupingSymbol] = NF_SYMBOLTYPE_EMPTY;
+                    nAnzResStrings--;
+                }
+            }
+            // Combine digits into groups to save memory (Info will be copied
+            // later, taking only non-empty symbols).
+            for (i = 0; i < nAnzStrings; ++i)
+            {
+                if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+                {
+                    String& rStr = sStrArray[i];
+                    while (++i < nAnzStrings &&
+                            nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
                     {
-                        xub_StrLen nLen = sStrArray[i].Len();
-                        if (nCount+nLen > 3)
-                        {                           // hier muss . dazwischen
-                            xub_StrLen nAnz =
-                                sal::static_int_cast< xub_StrLen >(
-                                    (nLen+nCount-4)/3+1);
-                            xub_StrLen InPos =
-                                sal::static_int_cast< xub_StrLen >(
-                                    nLen + nCount - 3);
-                            for (xub_StrLen k = 0; k < nAnz; k++)
-                            {
-                                sStrArray[i].Insert(
-                                    pFormatter->GetNumThousandSep(),InPos);
-                                InPos -= 3;
-                            }
-                            nCount = InPos + 3;
-                        }
-                        else
-                            nCount += sStrArray[i].Len();
+                        rStr += sStrArray[i];
+                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                        nAnzResStrings--;
                     }
                 }
             }
