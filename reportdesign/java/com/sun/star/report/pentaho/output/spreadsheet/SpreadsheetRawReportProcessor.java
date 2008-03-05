@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpreadsheetRawReportProcessor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2007-08-03 10:35:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.output.spreadsheet;
 
+import com.sun.star.report.DataSourceFactory;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
@@ -53,54 +53,61 @@ import com.sun.star.report.ImageService;
  */
 public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
 {
-  private OutputRepository outputRepository;
 
-  private String targetName;
-  private InputRepository inputRepository;
-  private ImageService imageService;
+    private OutputRepository outputRepository;
+    private String targetName;
+    private InputRepository inputRepository;
+    private ImageService imageService;
+    private DataSourceFactory dataSourceFactory;
 
-  public SpreadsheetRawReportProcessor(final InputRepository inputRepository,
-                                       final OutputRepository outputRepository,
-                                       final String targetName,
-                                       final ImageService imageService)
-  {
-    if (outputRepository == null)
+    public SpreadsheetRawReportProcessor(final InputRepository inputRepository,
+            final OutputRepository outputRepository,
+            final String targetName,
+            final ImageService imageService,
+            final DataSourceFactory dataSourceFactory)
     {
-      throw new NullPointerException();
-    }
-    if (targetName == null)
-    {
-      throw new NullPointerException();
-    }
-    if (imageService == null)
-    {
-      throw new NullPointerException();
-    }
-    if (inputRepository == null)
-    {
-      throw new NullPointerException();
-    }
-    this.targetName = targetName;
-    this.inputRepository = inputRepository;
-    this.outputRepository = outputRepository;
-    this.imageService = imageService;
-  }
+        if (outputRepository == null)
+        {
+            throw new NullPointerException();
+        }
+        if (targetName == null)
+        {
+            throw new NullPointerException();
+        }
+        if (imageService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (inputRepository == null)
+        {
+            throw new NullPointerException();
+        }
+        if (dataSourceFactory == null)
+        {
+            throw new NullPointerException();
+        }
 
-  protected ReportTarget createReportTarget(final ReportJob job) throws ReportProcessingException
-  {
-    final ReportStructureRoot report = job.getReportStructureRoot();
-    final ResourceManager resourceManager = report.getResourceManager();
-    return new SpreadsheetRawReportTarget
-        (job, resourceManager, report.getBaseResource(), inputRepository, outputRepository, targetName, imageService);
-  }
+        this.targetName = targetName;
+        this.inputRepository = inputRepository;
+        this.outputRepository = outputRepository;
+        this.imageService = imageService;
+        this.dataSourceFactory = dataSourceFactory;
+    }
 
-  public void processReport(final ReportJob job) throws ReportDataFactoryException, DataSourceException,
-      ReportProcessingException
-  {
-    final ReportTarget reportTarget = createReportTarget(job);
-    // first run: collect table cell sizes for all tables
-    processReportRun(job, reportTarget);
-    // second run: uses table cell data to output a single uniform table
-    processReportRun(job, reportTarget);
-  }
+    protected ReportTarget createReportTarget(final ReportJob job) throws ReportProcessingException
+    {
+        final ReportStructureRoot report = job.getReportStructureRoot();
+        final ResourceManager resourceManager = report.getResourceManager();
+        return new SpreadsheetRawReportTarget(job, resourceManager, report.getBaseResource(), inputRepository, outputRepository, targetName, imageService, dataSourceFactory);
+    }
+
+    public void processReport(final ReportJob job) throws ReportDataFactoryException, DataSourceException,
+            ReportProcessingException
+    {
+        final ReportTarget reportTarget = createReportTarget(job);
+        // first run: collect table cell sizes for all tables
+        processReportRun(job, reportTarget);
+        // second run: uses table cell data to output a single uniform table
+        processReportRun(job, reportTarget);
+    }
 }
