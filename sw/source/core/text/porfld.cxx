@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:29:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,9 +547,19 @@ sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt 
  *                      class SwNumberPortion
  *************************************************************************/
 
-SwNumberPortion::SwNumberPortion( const XubString &rExpand, SwFont *pFont,
-                    const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst )
-        : SwFldPortion( rExpand, pFont ), nFixWidth(0), nMinDist( nMinDst )
+// --> OD 2008-01-23 #newlistlevelattrs#
+SwNumberPortion::SwNumberPortion( const XubString &rExpand,
+                                  SwFont *pFont,
+                                  const sal_Bool bLft,
+                                  const sal_Bool bCntr,
+                                  const KSHORT nMinDst,
+                                  const bool bLabelAlignmentPosAndSpaceModeActive )
+        : SwFldPortion( rExpand, pFont ),
+          nFixWidth(0),
+          nMinDist( nMinDst ),
+          // --> OD 2008-01-23 #newlistlevelattrs#
+          mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
+          // <--
 {
     SetWhichPor( POR_NUMBER );
     SetLeft( bLft );
@@ -567,8 +577,10 @@ SwFldPortion *SwNumberPortion::Clone( const XubString &rExpand ) const
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
+    // --> OD 2008-01-23 #newlistlevelattrs#
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
-        nMinDist );
+                                nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
+    // <--
 }
 
 /*************************************************************************
@@ -593,22 +605,27 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 //        SetAscent( rInf.GetAscent() );
         ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
-        long nDiff;
-        if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
-             // --> FME 2004-08-13 #i32902#
-             !IsFtnNumPortion() )
-             // <--
+        long nDiff( 0 );
+        // --> OD 2008-01-23 #newlistlevelattrs#
+        if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
-            nDiff = rInf.Left()
-                + rInf.GetTxtFrm()->GetTxtNode()->
-                GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst()
-                - rInf.First()
-                + rInf.ForcedLeftMargin();
+            if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
+                 // --> FME 2004-08-13 #i32902#
+                 !IsFtnNumPortion() )
+                 // <--
+            {
+                nDiff = rInf.Left()
+                    + rInf.GetTxtFrm()->GetTxtNode()->
+                    GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst()
+                    - rInf.First()
+                    + rInf.ForcedLeftMargin();
+            }
+            else
+            {
+                nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+            }
         }
-        else
-        {
-            nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-        }
+        // <--
         // Ein Vorschlag von Juergen und Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
@@ -787,9 +804,18 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
  *                      class SwBulletPortion
  *************************************************************************/
 
-SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet, SwFont *pFont,
-                    const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst )
-    : SwNumberPortion( XubString( cBullet ), pFont, bLft, bCntr, nMinDst )
+// --> OD 2008-01-23 #newlistlevelattrs#
+SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
+                                  const XubString& rBulletFollowedBy,
+                                  SwFont *pFont,
+                                  const sal_Bool bLft,
+                                  const sal_Bool bCntr,
+                                  const KSHORT nMinDst,
+                                  const bool bLabelAlignmentPosAndSpaceModeActive )
+    : SwNumberPortion( XubString( rBulletFollowedBy ).Insert( cBullet, 0 ) ,
+                       pFont, bLft, bCntr, nMinDst,
+                       bLabelAlignmentPosAndSpaceModeActive )
+// <--
 {
     SetWhichPor( POR_BULLET );
 }
@@ -800,12 +826,17 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet, SwFont *pFont,
 
 #define GRFNUM_SECURE 10
 
+// --> OD 2008-01-23 #newlistlevelattrs#
 SwGrfNumPortion::SwGrfNumPortion(
         SwFrm *pFrm,
+        const XubString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
-        const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst ) :
-    SwNumberPortion( aEmptyStr, NULL, bLft, bCntr, nMinDst ),
+        const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst,
+        const bool bLabelAlignmentPosAndSpaceModeActive ) :
+    SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
+                     bLabelAlignmentPosAndSpaceModeActive ),
+// <--
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
     SetWhichPor( POR_GRFNUM );
@@ -854,7 +885,17 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( sal_False );
-    Width( nFixWidth );
+    // --> OD 2008-01-29 #newlistlevelattrs#
+//    Width( nFixWidth );
+    KSHORT nFollowedByWidth( 0 );
+    if ( mbLabelAlignmentPosAndSpaceModeActive )
+    {
+        SwFldPortion::Format( rInf );
+        nFollowedByWidth = Width();
+        SetLen( 0 );
+    }
+    Width( nFixWidth + nFollowedByWidth );
+    // <--
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
@@ -874,7 +915,12 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
     rInf.SetNumDone( sal_True );
-    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+    // --> OD 2008-01-23 #newlistlevelattrs#
+//    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+    long nDiff = mbLabelAlignmentPosAndSpaceModeActive
+                 ? 0
+                 : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
+    // <--
     // Ein Vorschlag von Juergen und Volkmar:
     // Der Textteil hinter der Numerierung sollte immer
     // mindestens beim linken Rand beginnen.
@@ -919,10 +965,11 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
-
-    const sal_Bool bTmpLeft = ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
+    // --> OD 2008-02-05 #newlistlevelattrs#
+    const sal_Bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
+                              ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
                               ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
-
+    // <--
 
     if( nFixWidth < Width() && !bTmpLeft )
     {
