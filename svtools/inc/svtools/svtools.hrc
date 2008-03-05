@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtools.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,8 +376,9 @@
 #define STR_SVT_FILEPICKER_TEMPLATES                (STR_SVT_FILEPICKER_START+ 8)
 #define STR_SVT_FILEPICKER_IMAGE_TEMPLATE           (STR_SVT_FILEPICKER_START+ 9)
 #define STR_SVT_FILEPICKER_SELECTION                (STR_SVT_FILEPICKER_START+10)
-#define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          (STR_SVT_FILEPICKER_START+11)
-#define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    (STR_SVT_FILEPICKER_START+12)
+#define STR_SVT_FILEPICKER_FILTER_TITLE             (STR_SVT_FILEPICKER_START+11)
+#define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          (STR_SVT_FILEPICKER_START+12)
+#define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    (STR_SVT_FILEPICKER_START+13)
 #define STR_SVT_FILEPICKER_END                      (STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION)
 
 // String-Ids for accessibility
