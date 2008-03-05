@@ -1,22 +1,25 @@
 all_fragments+=database
 
 # -----------------------------------------------
-# count = 2
+# count = 3
 T4_DATABASE = \
     StarBase \
-    StarBase_Report
+    StarBase_Report \
+    StarBaseReportChart
 
 # -----------------------------------------------
-# count = 2
+# count = 3
 F4_DATABASE = \
     StarOffice_XML__Base_ \
-    StarOffice_XML__Report_
+    StarOffice_XML__Report_ \
+    StarOffice_XML__DB_Report_Chart_
     
 # -----------------------------------------------
-# count = 2
+# count = 3
 F4_UI_DATABASE = \
     StarOffice_XML__Base__ui \
-    StarOffice_XML__Report__ui
+    StarOffice_XML__Report__ui \
+    StarOffice_XML__DB_Report_Chart__ui
 
 # -----------------------------------------------
 # count = 3
