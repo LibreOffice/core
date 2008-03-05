@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:19:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include "vcl/svids.hrc"
 #include "vcl/cmdevt.hxx"
 #include "vcl/window.hxx"
+#include "vcl/svapp.hxx"
 #include "rtl/ustrbuf.hxx"
 
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
@@ -64,6 +65,19 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
             pFrame->CallCallback( SALEVENT_SHOWDIALOG, reinterpret_cast<void*>(nDialog) );
         }
     }
+    else
+    {
+        String aDialog;
+        if( nDialog == SHOWDIALOG_ID_ABOUT )
+            aDialog = String( RTL_CONSTASCII_USTRINGPARAM( "ABOUT" ) );
+        else if( nDialog == SHOWDIALOG_ID_PREFERENCES )
+            aDialog = String( RTL_CONSTASCII_USTRINGPARAM( "PREFERENCES" ) );
+        const ApplicationEvent* pAppEvent = new ApplicationEvent( String(),
+                                                                  ApplicationAddress(),
+                                                                  ByteString( "SHOWDIALOG" ),
+                                                                  aDialog );
+        AquaSalInstance::aAppEventList.push_back( pAppEvent );
+    }
 }
 
 -(void)showPreferences: (id) sender
@@ -79,12 +93,8 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 // FIXME: currently this is leaked
 static MainMenuSelector* pMainMenuSelector = nil;
 
-// =======================================================================
-
-SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
+static void initAppMenu()
 {
-    AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
-
     static bool bOnce = true;
     if( bOnce )
     {
@@ -171,6 +181,16 @@ SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
             }
         }
     }
+}
+
+// =======================================================================
+
+SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
+{
+    initAppMenu();
+
+    AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
+
     return pAquaSalMenu;
 }
 
@@ -256,6 +276,18 @@ const AquaSalFrame* AquaSalMenu::getFrame() const
     return pMenu ? pMenu->mpFrame : NULL;
 }
 
+void AquaSalMenu::unsetMainMenu()
+{
+    DBG_ASSERT( mbMenuBar, "unsetMainMenu on non menubar" );
+    if( mbMenuBar )
+    {
+        pCurrentMenuBar = NULL;
+        // remove items from main menu
+        for( int nItems = [mpMenu numberOfItems]; nItems > 1; nItems-- )
+            [mpMenu removeItemAtIndex: 1];
+    }
+}
+
 void AquaSalMenu::setMainMenu()
 {
     DBG_ASSERT( mbMenuBar, "setMainMenu on non menubar" );
@@ -263,9 +295,7 @@ void AquaSalMenu::setMainMenu()
     {
         if( pCurrentMenuBar != this )
         {
-            // remove items from main menu
-            for( int nItems = [mpMenu numberOfItems]; nItems > 1; nItems-- )
-                [mpMenu removeItemAtIndex: 1];
+            unsetMainMenu();
             // insert our items
             for( unsigned int i = 0; i < maItems.size(); i++ )
             {
@@ -275,6 +305,25 @@ void AquaSalMenu::setMainMenu()
             pCurrentMenuBar = this;
         }
         enableMainMenu( true );
+    }
+}
+
+void AquaSalMenu::setDefaultMenu()
+{
+    NSMenu* pMenu = [NSApp mainMenu];
+
+    pCurrentMenuBar = NULL;
+    // remove items from main menu
+    for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
+        [pMenu removeItemAtIndex: 1];
+
+    // insert default items
+    std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
+    unsigned int nItems = rFallbackMenu.size();
+    for( unsigned int i = 0; i < nItems; i++ )
+    {
+        NSMenuItem* pItem = rFallbackMenu[i];
+        [pMenu insertItem: pItem atIndex: i+1];
     }
 }
 
@@ -289,6 +338,50 @@ void AquaSalMenu::enableMainMenu( bool bEnable )
         {
             NSMenuItem* pItem = [pMainMenu itemAtIndex: n];
             [pItem setEnabled: bEnable ? YES : NO];
+        }
+    }
+}
+
+void AquaSalMenu::addFallbackMenuItem( NSMenuItem* pNewItem )
+{
+    initAppMenu();
+
+    std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
+
+    // prevent duplicate insertion
+    int nItems = rFallbackMenu.size();
+    for( int i = 0; i < nItems; i++ )
+    {
+        if( rFallbackMenu[i] == pNewItem )
+            return;
+    }
+
+    // push the item to the back and retain it
+    [pNewItem retain];
+    rFallbackMenu.push_back( pNewItem );
+
+    if( pCurrentMenuBar == NULL )
+        setDefaultMenu();
+}
+
+void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
+{
+    std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
+
+    // find item
+    unsigned int nItems = rFallbackMenu.size();
+    for( unsigned int i = 0; i < nItems; i++ )
+    {
+        if( rFallbackMenu[i] == pOldItem )
+        {
+            // remove item and release
+            rFallbackMenu.erase( rFallbackMenu.begin() + i );
+            [pOldItem release];
+
+            if( pCurrentMenuBar == NULL )
+                setDefaultMenu();
+
+            return;
         }
     }
 }
