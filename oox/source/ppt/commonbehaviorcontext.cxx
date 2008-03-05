@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonbehaviorcontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:36:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-    CommonBehaviorContext::CommonBehaviorContext( const FragmentHandlerRef& xHandler,
-                                                                                                const Reference< XFastAttributeList >& xAttribs,
-                                                                                                const TimeNodePtr & pNode )
-        : TimeNodeContext( xHandler, NMSP_PPT|XML_cBhvr, xAttribs, pNode )
+    CommonBehaviorContext::CommonBehaviorContext( ContextHandler& rParent,
+            const Reference< XFastAttributeList >& xAttribs,
+            const TimeNodePtr & pNode )
+        : TimeNodeContext( rParent, NMSP_PPT|XML_cBhvr, xAttribs, pNode )
             , mbInAttrList( false )
             , mbIsInAttrName( false )
     {
@@ -155,10 +155,10 @@ namespace oox { namespace ppt {
         switch ( aElementToken )
         {
         case NMSP_PPT|XML_cTn:
-            xRet.set( new CommonTimeNodeContext( getHandler(), aElementToken, xAttribs, mpNode ) );
+            xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
             break;
         case NMSP_PPT|XML_tgtEl:
-            xRet.set( new TimeTargetElementContext( getHandler(), mpNode->getTarget() ) );
+            xRet.set( new TimeTargetElementContext( *this, mpNode->getTarget() ) );
             break;
         case NMSP_PPT|XML_attrNameLst:
             mbInAttrList = true;
