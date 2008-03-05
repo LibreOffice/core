@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-22 14:38:19 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:17:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ STAR_REGISTRY=
 
 .INCLUDE :      target.mk   
 
-.IF "$(OS)"!="MACOSX"    
 ALLTAR : make_test
 
 
@@ -77,5 +76,4 @@ make_test:
 
 noremove:
     @$(PERL) smoketest.pl -nr $(LAST_MINOR)
-.ENDIF 		# "$(OS)"!="MACOSX"    
 
