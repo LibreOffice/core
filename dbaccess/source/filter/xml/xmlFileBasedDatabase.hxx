@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFileBasedDatabase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:17:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ namespace dbaxml
     class ODBFilter;
     class OXMLFileBasedDatabase : public SvXMLImportContext
     {
-        ODBFilter& GetOwnImport();
     public:
 
         OXMLFileBasedDatabase( ODBFilter& rImport, sal_uInt16 nPrfx,

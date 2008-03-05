@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlConnectionResource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:13:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ namespace dbaxml
     class ODBFilter;
     class OXMLConnectionResource : public SvXMLImportContext
     {
-        ODBFilter& GetOwnImport();
     public:
 
         OXMLConnectionResource( ODBFilter& rImport, sal_uInt16 nPrfx,
