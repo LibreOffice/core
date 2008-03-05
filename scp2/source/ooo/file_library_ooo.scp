@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.276 $
+ *  $Revision: 1.277 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 16:01:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1810,7 +1810,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE_PATCH( gid_File_Lib_BaseBmp, basebmp )
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Lib_Recentfile
     TXT_FILE_BODY;
