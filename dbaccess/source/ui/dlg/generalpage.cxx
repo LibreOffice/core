@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:45:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,10 +442,13 @@ namespace dbaui
         if ( m_DBWizardMode && ( eType == DST_MYSQL_JDBC ) )
             _inout_rDisplayName = m_sMySQLEntry;
 
-        if ( m_DBWizardMode && ( eType == DST_MYSQL_ODBC ) )
+        else if ( m_DBWizardMode && ( eType == DST_MYSQL_ODBC ) )
             _inout_rDisplayName = String();
 
-        if ( eType == DST_EMBEDDED_HSQLDB )
+        else if ( m_DBWizardMode && ( eType == DST_MYSQL_NATIVE ) )
+            _inout_rDisplayName = String();
+
+        else if ( eType == DST_EMBEDDED_HSQLDB )
             _inout_rDisplayName = String();
 
         return _inout_rDisplayName.Len() > 0;
