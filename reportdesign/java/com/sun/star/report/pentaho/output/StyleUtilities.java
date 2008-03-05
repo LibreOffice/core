@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleUtilities.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:10:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
-import org.jfree.report.structure.Node;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.util.Log;
 
@@ -60,6 +59,7 @@ import org.jfree.util.Log;
  */
 public class StyleUtilities
 {
+    private static final String STYLE = "style";
 
   private StyleUtilities()
   {
@@ -156,7 +156,7 @@ public class StyleUtilities
     // messed up the fileformat. Lets create a new empty style for this.
     final OfficeStyle autostyle = new OfficeStyle();
     autostyle.setNamespace(OfficeNamespaces.STYLE_NS);
-    autostyle.setType("style");
+    autostyle.setType(STYLE);
     autostyle.setStyleFamily(styleFamily);
     autostyle.setStyleName(styleName);
 
@@ -305,24 +305,6 @@ public class StyleUtilities
       if (autoDataStyle != null)
       {
         final DataStyle derivedStyle = (DataStyle) autoDataStyle.clone();
-        Node[] nodes = autoDataStyle.getNodeArray();
-        for (int i = 0; i < nodes.length; i++) {
-            Node node = nodes[i];
-            if (node instanceof DataStyle) {
-                DataStyle element = (DataStyle) node;
-                final Object apply = element.getAttribute(OfficeNamespaces.STYLE_NS, "apply-style-name");
-                if (apply != null) {
-                    final String applyStyleName = String.valueOf(apply);
-                    if (!stylesCollection.getAutomaticStyles().containsDataStyle(applyStyleName)) {
-                        final DataStyle autoApplyDataStyle = automaticStyles.getDataStyle(applyStyleName);
-                        if (autoApplyDataStyle != null) {
-                            stylesCollection.getAutomaticStyles().addDataStyle((DataStyle) autoApplyDataStyle.clone());
-                        }
-                    }
-                    break;
-                }
-            }
-        }
         stylesCollection.getAutomaticStyles().addDataStyle(derivedStyle);
         return;
       }
@@ -455,7 +437,7 @@ public class StyleUtilities
     // No such style. Create a new one ..
     final OfficeStyle autostyle = new OfficeStyle();
     autostyle.setNamespace(OfficeNamespaces.STYLE_NS);
-    autostyle.setType("style");
+    autostyle.setType(STYLE);
     autostyle.setStyleFamily(styleFamily);
     if (styleName != null)
     {
@@ -481,7 +463,7 @@ public class StyleUtilities
   {
     final OfficeStyle autostyle = new OfficeStyle();
     autostyle.setNamespace(OfficeNamespaces.STYLE_NS);
-    autostyle.setType("style");
+    autostyle.setType(STYLE);
     autostyle.setStyleFamily(styleFamily);
     autostyle.setStyleName(nameGenerator.generateName("derived_" + styleName));
     autostyle.setStyleParent(styleName);
@@ -509,7 +491,7 @@ public class StyleUtilities
     {
       final OfficeStyle autostyle = (OfficeStyle) commonStyle.clone();
       autostyle.setNamespace(OfficeNamespaces.STYLE_NS);
-      autostyle.setType("style");
+      autostyle.setType(STYLE);
       autostyle.setStyleFamily(styleFamily);
       autostyle.setStyleName
           (nameGenerator.generateName("derived_auto_" + styleName));
