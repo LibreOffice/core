@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,13 @@ public:
 
     using oox::drawingml::Shape::addShape;
     // addShape is creating and inserting the corresponding XShape.
-    void addShape( const oox::core::XmlFilterBase& rFilterBase, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &rxModel,
-                    const oox::ppt::SlidePersist& rPersist,
-                        const oox::drawingml::ThemePtr, std::map< ::rtl::OUString,
-                            oox::drawingml::ShapePtr > &,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                                    const com::sun::star::awt::Rectangle* pShapeRect );
+    void addShape(
+            const oox::core::XmlFilterBase& rFilterBase,
+            const SlidePersist& rPersist,
+            const oox::drawingml::ThemePtr& rxTheme,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+            const com::sun::star::awt::Rectangle* pShapeRect = 0,
+            ::oox::drawingml::ShapeIdMap* pShapeMap = 0 );
 
     virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape );
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidepersist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,52 +76,51 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    getPage() const { return mxPage; };
 
-    void                                                                    setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; };
-    SlidePersistPtr                                                         getMasterPersist() const { return mpMasterPagePtr; };
+    void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
+    SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
 
-    void                                                                    setPath( const rtl::OUString& rPath ) { maPath = rPath; };
-    const rtl::OUString                                                     getPath() const { return maPath; };
+    void setPath( const rtl::OUString& rPath ) { maPath = rPath; }
+    const rtl::OUString getPath() const { return maPath; }
 
-    void                                                                    setLayoutPath( const rtl::OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; };
-    const rtl::OUString                                                     getLayoutPath() const { return maLayoutPath; };
+    void setLayoutPath( const rtl::OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
+    const rtl::OUString getLayoutPath() const { return maLayoutPath; }
 
-    void                                                                    setTheme( const oox::drawingml::ThemePtr pThemePtr ){ mpThemePtr = pThemePtr; };
-    oox::drawingml::ThemePtr                                                getTheme() const { return mpThemePtr; };
+    void setTheme( const oox::drawingml::ThemePtr pThemePtr ){ mpThemePtr = pThemePtr; }
+    oox::drawingml::ThemePtr getTheme() const { return mpThemePtr; }
 
-    void                                                                    setClrScheme( const oox::drawingml::ClrSchemePtr pClrSchemePtr ){ mpClrSchemePtr = pClrSchemePtr; };
-    oox::drawingml::ClrSchemePtr                                            getClrScheme() const { return mpClrSchemePtr; };
+    void setClrScheme( const oox::drawingml::ClrSchemePtr pClrSchemePtr ){ mpClrSchemePtr = pClrSchemePtr; }
+    oox::drawingml::ClrSchemePtr getClrScheme() const { return mpClrSchemePtr; }
 
-    void                                                                    setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; };
-    oox::drawingml::ClrMapPtr                                               getClrMap() const { return mpClrMapPtr; };
+    void setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; }
+    oox::drawingml::ClrMapPtr getClrMap() const { return mpClrMapPtr; }
 
-    void                                                                    setBackgroundProperties( const oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ){ mpBackgroundPropertiesPtr = pFillPropertiesPtr; };
-    oox::drawingml::FillPropertiesPtr                                       getBackgroundProperties() const { return mpBackgroundPropertiesPtr; };
+    void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ){ mpBackgroundPropertiesPtr = pFillPropertiesPtr; }
+    oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
 
-    sal_Bool                                                                isMasterPage() const { return mbMaster; };
-    sal_Bool                                                                isNotesPage() const { return mbNotes; };
+    sal_Bool isMasterPage() const { return mbMaster; }
+    sal_Bool isNotesPage() const { return mbNotes; }
 
-    void                                                                    setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; };
-    short                                                                   getLayoutFromValueToken();
+    void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
+    short getLayoutFromValueToken();
 
-    oox::drawingml::TextListStylePtr                                        getTitleTextStyle() const { return maTitleTextStylePtr; };
-    oox::drawingml::TextListStylePtr                                        getBodyTextStyle() const { return maBodyTextStylePtr; };
-    oox::drawingml::TextListStylePtr                                        getNotesTextStyle() const { return maNotesTextStylePtr; };
-    oox::drawingml::TextListStylePtr                                        getOtherTextStyle() const { return maOtherTextStylePtr; };
+    oox::drawingml::TextListStylePtr getTitleTextStyle() const { return maTitleTextStylePtr; }
+    oox::drawingml::TextListStylePtr getBodyTextStyle() const { return maBodyTextStylePtr; }
+    oox::drawingml::TextListStylePtr getNotesTextStyle() const { return maNotesTextStylePtr; }
+    oox::drawingml::TextListStylePtr getOtherTextStyle() const { return maOtherTextStylePtr; }
 
-    oox::drawingml::ShapePtr                                                getShapes() { return maShapesPtr; };
-    ::std::list< boost::shared_ptr< TimeNode > >&                           getTimeNodeList() { return maTimeNodeList; };
+    oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
+    ::std::list< boost::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
 
-    oox::vml::DrawingPtr                                                    getDrawing() { return mpDrawingPtr; };
+    oox::vml::DrawingPtr getDrawing() { return mpDrawingPtr; }
 
-    void createXShapes( const oox::core::XmlFilterBase& rFilterBase, com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel );
+    void createXShapes( const oox::core::XmlFilterBase& rFilterBase );
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
-    void applyTextStyles( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel );
+    void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 
-    std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >&         getAnimNodesMap() { return maAnimNodesMap; };
-    ::oox::drawingml::ShapePtr getShape( const ::rtl::OUString & id )
-        { return maShapeMap[ id ]; }
-    std::map< ::rtl::OUString, ::oox::drawingml::ShapePtr >  & getShapeMap()
-        { return maShapeMap; }
+    std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
+    ::oox::drawingml::ShapePtr getShape( const ::rtl::OUString & id ) { return maShapeMap[ id ]; }
+    ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
+
 private:
     rtl::OUString                                                           maPath;
     rtl::OUString                                                           maLayoutPath;
