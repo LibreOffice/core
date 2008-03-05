@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:35:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             rWrtShell.GetFlyFrmAttr(*pItemSet);
         else
         {
-            rWrtShell.GetAttr(*pItemSet);
+            rWrtShell.GetCurAttr(*pItemSet);
 
             // additional numbering properties for paragraph styles
             if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetCurNumRule() )
