@@ -4,9 +4,9 @@
  *
  *  $RCSfile: report.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 12:14:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,4 +625,12 @@ String RID_STR_REPORTHEADERFOOTER_INSERT
 String RID_STR_REPORTHEADERFOOTER_DELETE
 {
     Text [ en-US ] = "Delete Report Header/Footer";
+};
+String RID_ERR_NO_COMMAND
+{
+    Text [ en-US ] = "The report can not be executed unless it is bound to content.";
+};
+String RID_ERR_NO_OBJECTS
+{
+    Text [ en-US ] = "The report can not be executed unless at least one object has been inserted.";
 };
