@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,9 @@ namespace pcr
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                         m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xDetailForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xMasterForm;
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -99,12 +99,18 @@ namespace pcr
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                         m_aRelationMasterColumns;
 
+        ::rtl::OUString                 m_sDetailLabel;
+        ::rtl::OUString                 m_sMasterLabel;
+
     public:
         FormLinkDialog(
             Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxDetailForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxMasterForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDetailForm,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxMasterForm,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::rtl::OUString& _sExplanation = ::rtl::OUString(),
+            const ::rtl::OUString& _sDetailLabel = ::rtl::OUString(),
+            const ::rtl::OUString& _sMasterLabel = ::rtl::OUString()
         );
         ~FormLinkDialog( );
 
@@ -129,11 +135,11 @@ namespace pcr
                     );
 
         String      getFormDataSourceType(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm
                     ) const SAL_THROW(());
 
         void        getFormFields(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
                             ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rNames
                     ) const SAL_THROW(());
 
