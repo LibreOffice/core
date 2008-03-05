@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defnamesbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
-#include "oox/xls/ooxtokens.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -76,13 +75,21 @@ namespace xls {
 
 namespace {
 
+const sal_uInt32 OOBIN_DEFNAME_HIDDEN       = 0x00000001;
+const sal_uInt32 OOBIN_DEFNAME_FUNC         = 0x00000002;
+const sal_uInt32 OOBIN_DEFNAME_VBNAME       = 0x00000004;
+const sal_uInt32 OOBIN_DEFNAME_MACRO        = 0x00000008;
+const sal_uInt32 OOBIN_DEFNAME_CALCEXP      = 0x00000010;
+const sal_uInt32 OOBIN_DEFNAME_BUILTIN      = 0x00000020;
+const sal_uInt32 OOBIN_DEFNAME_PUBLISHED    = 0x00008000;
+const sal_uInt32 OOBIN_DEFNAME_WBPARAM      = 0x00010000;
+
 const sal_uInt16 BIFF_DEFNAME_HIDDEN        = 0x0001;
 const sal_uInt16 BIFF_DEFNAME_FUNC          = 0x0002;
 const sal_uInt16 BIFF_DEFNAME_VBNAME        = 0x0004;
 const sal_uInt16 BIFF_DEFNAME_MACRO         = 0x0008;
 const sal_uInt16 BIFF_DEFNAME_CALCEXP       = 0x0010;
 const sal_uInt16 BIFF_DEFNAME_BUILTIN       = 0x0020;
-const sal_uInt16 BIFF_DEFNAME_FGROUPMASK    = 0x0FC0;
 const sal_uInt16 BIFF_DEFNAME_BIG           = 0x1000;
 
 const sal_uInt8 BIFF2_DEFNAME_FUNC          = 0x02;     /// BIFF2 function/command flag.
@@ -95,6 +102,7 @@ const sal_uInt16 BIFF_DEFNAME_GLOBAL        = 0;        /// 0 = Globally defined
 
 OoxDefinedNameData::OoxDefinedNameData() :
     mnSheet( -1 ),
+    mnFuncGroupId( -1 ),
     mbMacro( false ),
     mbFunction( false ),
     mbVBName( false ),
@@ -295,21 +303,19 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet )
     DefinedNameBase( rHelper, nLocalSheet ),
     mnTokenIndex( -1 ),
     mcBuiltinId( OOX_DEFNAME_UNKNOWN ),
-    mpStrm( 0 ),
-    mnRecHandle( -1 ),
-    mnRecPos( 0 ),
     mnFmlaSize( 0 )
 {
 }
 
 void DefinedName::importDefinedName( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name );
-    maOoxData.mnSheet = rAttribs.getInteger( XML_localSheetId, -1 );
-    maOoxData.mbMacro = rAttribs.getBool( XML_xlm, false );
-    maOoxData.mbFunction = rAttribs.getBool( XML_function, false );
-    maOoxData.mbVBName = rAttribs.getBool( XML_vbProcedure, false );
-    maOoxData.mbHidden = rAttribs.getBool( XML_hidden, false );
+    maOoxData.maName        = rAttribs.getString( XML_name );
+    maOoxData.mnSheet       = rAttribs.getInteger( XML_localSheetId, -1 );
+    maOoxData.mnFuncGroupId = rAttribs.getInteger( XML_functionGroupId, -1 );
+    maOoxData.mbMacro       = rAttribs.getBool( XML_xlm, false );
+    maOoxData.mbFunction    = rAttribs.getBool( XML_function, false );
+    maOoxData.mbVBName      = rAttribs.getBool( XML_vbProcedure, false );
+    maOoxData.mbHidden      = rAttribs.getBool( XML_hidden, false );
     mcBuiltinId = lclGetBuiltinIdFromOox( maOoxData.maName );
 }
 
@@ -320,19 +326,20 @@ void DefinedName::setFormula( const OUString& rFormula )
 
 void DefinedName::importDefinedName( RecordInputStream& rStrm )
 {
-    sal_uInt16 nFlags;
+    sal_uInt32 nFlags;
     rStrm >> nFlags;
-    rStrm.skip( 3 );    // 2 bytes unknown, 1 byte keyboard shortcut
+    rStrm.skip( 1 );    // keyboard shortcut
     rStrm >> maOoxData.mnSheet >> maOoxData.maName;
 
-    // macro function/command, hidden flag, equal flags in BIFF and OOBIN
-    maOoxData.mbMacro = getFlag( nFlags, BIFF_DEFNAME_MACRO );
-    maOoxData.mbFunction = getFlag( nFlags, BIFF_DEFNAME_FUNC );
-    maOoxData.mbVBName = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
-    maOoxData.mbHidden = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
+    // macro function/command, hidden flag
+    maOoxData.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 9 );
+    maOoxData.mbMacro       = getFlag( nFlags, OOBIN_DEFNAME_MACRO );
+    maOoxData.mbFunction    = getFlag( nFlags, OOBIN_DEFNAME_FUNC );
+    maOoxData.mbVBName      = getFlag( nFlags, OOBIN_DEFNAME_VBNAME );
+    maOoxData.mbHidden      = getFlag( nFlags, OOBIN_DEFNAME_HIDDEN );
 
     // get builtin name index from name
-    if( getFlag( nFlags, BIFF_DEFNAME_BUILTIN ) )
+    if( getFlag( nFlags, OOBIN_DEFNAME_BUILTIN ) )
         mcBuiltinId = lclGetBuiltinIdFromOob( maOoxData.maName );
     // unhide built-in names (_xlnm._FilterDatabase is always hidden)
     if( isBuiltinName() )
@@ -360,6 +367,7 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
     sal_Int16 nTabId = BIFF_DEFNAME_GLOBAL;
     sal_uInt8 nNameLen = 0, nShortCut = 0;
 
+    rStrm.enableNulChars( true );
     switch( eBiff )
     {
         case BIFF2:
@@ -388,23 +396,21 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
         break;
         case BIFF_UNKNOWN: break;
     }
+    rStrm.enableNulChars( false );
 
     // macro function/command, hidden flag
-    maOoxData.mbMacro = getFlag( nFlags, BIFF_DEFNAME_MACRO );
-    maOoxData.mbFunction = getFlag( nFlags, BIFF_DEFNAME_FUNC );
-    maOoxData.mbVBName = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
-    maOoxData.mbHidden = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
+    maOoxData.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 6 );
+    maOoxData.mbMacro       = getFlag( nFlags, BIFF_DEFNAME_MACRO );
+    maOoxData.mbFunction    = getFlag( nFlags, BIFF_DEFNAME_FUNC );
+    maOoxData.mbVBName      = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
+    maOoxData.mbHidden      = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
 
     // get builtin name index from name
     if( getFlag( nFlags, BIFF_DEFNAME_BUILTIN ) )
     {
         OSL_ENSURE( maOoxData.maName.getLength() == 1, "DefinedName::importDefinedName - wrong builtin name" );
         if( maOoxData.maName.getLength() > 0 )
-        {
             mcBuiltinId = maOoxData.maName[ 0 ];
-            if( mcBuiltinId == '?' )      // the NUL character is imported as '?'
-                mcBuiltinId = OOX_DEFNAME_CONSOLIDATEAREA;
-        }
     }
     /*  In BIFF5, _xlnm._FilterDatabase appears as hidden user name without
         built-in flag, and even worse, localized. */
@@ -441,9 +447,7 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
     }
 
     // store record position to be able to import token array later
-    mpStrm = &rStrm;
-    mnRecHandle = rStrm.getRecHandle();
-    mnRecPos = rStrm.getRecPos();
+    mxBiffStrm.reset( new BiffInputStreamPos( rStrm ) );
 }
 
 void DefinedName::createNameObject()
@@ -486,11 +490,20 @@ void DefinedName::convertFormula()
     if( xTokens.is() )
     {
         // convert and set formula of the defined name
-        SimpleFormulaContext aContext( xTokens, true, true );
         switch( getFilterType() )
         {
-            case FILTER_OOX:    implImportOoxFormula( aContext );   break;
-            case FILTER_BIFF:   implImportBiffFormula( aContext );  break;
+            case FILTER_OOX:
+            {
+                SimpleFormulaContext aContext( xTokens, true, false );
+                implImportOoxFormula( aContext );
+            }
+            break;
+            case FILTER_BIFF:
+            {
+                SimpleFormulaContext aContext( xTokens, true, getBiff() <= BIFF4 );
+                implImportBiffFormula( aContext );
+            }
+            break;
             case FILTER_UNKNOWN: break;
         }
 
@@ -538,7 +551,7 @@ void DefinedName::convertFormula()
             break;
         }
     }
-    else if( maOoxData.mbHidden && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') )
+    else if( mxBiffStrm.get() && maOoxData.mbHidden && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') )
     {
         // import BIFF2-BIFF4 external references
         TokensFormulaContext aContext( true, true );
@@ -560,12 +573,11 @@ void DefinedName::implImportOoxFormula( FormulaContext& rContext )
 
 void DefinedName::implImportBiffFormula( FormulaContext& rContext )
 {
-    OSL_ENSURE( mpStrm, "DefinedName::importBiffFormula - missing BIFF stream" );
-    sal_Int64 nCurrRecHandle = mpStrm->getRecHandle();
-    if( mpStrm->startRecordByHandle( mnRecHandle ) )
-    mpStrm->seek( mnRecPos );
-    importBiffFormula( rContext, *mpStrm, &mnFmlaSize );
-    mpStrm->startRecordByHandle( nCurrRecHandle );
+    OSL_ENSURE( mxBiffStrm.get(), "DefinedName::importBiffFormula - missing BIFF stream" );
+    BiffInputStream& rStrm = mxBiffStrm->getStream();
+    BiffInputStreamGuard aStrmGuard( rStrm );
+    if( mxBiffStrm->restorePosition() )
+        importBiffFormula( rContext, rStrm, &mnFmlaSize );
 }
 
 // ============================================================================
