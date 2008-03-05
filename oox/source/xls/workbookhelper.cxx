@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workbookhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
+using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -129,7 +130,8 @@ WorkbookDataDebug::~WorkbookDataDebug()
     sal_Int32 nMillis = (aEndTime.Seconds - maStartTime.Seconds) * 1000 + static_cast< sal_Int32 >( aEndTime.Nanosec - maStartTime.Nanosec ) / 1000000;
     OSL_ENSURE( false, OStringBuffer( "load/save time = " ).append( nMillis / 1000.0 ).append( " seconds" ).getStr() );
 #endif
-    OSL_ENSURE( mnDebugCount == 0, "WorkbookDataDebug::~WorkbookDataDebug - failed to delete some objects" );
+    OSL_ENSURE( mnDebugCount == 0,
+        OStringBuffer( "WorkbookDataDebug::~WorkbookDataDebug - failed to delete " ).append( mnDebugCount ).append( " objects" ).getStr() );
 }
 
 #endif
@@ -249,7 +251,7 @@ public:
 
 private:
     /** Initializes some basic members and sets needed document properties. */
-    void                initialize();
+    void                initialize( bool bWorkbookFile );
     /** Finalizes the filter process (sets some needed document properties). */
     void                finalize();
 
@@ -328,7 +330,7 @@ WorkbookData::WorkbookData( XmlFilterBase& rFilter ) :
     mpOoxFilter( &rFilter ),
     meBiff( BIFF_UNKNOWN )
 {
-    initialize();
+    initialize( true );
 }
 
 WorkbookData::WorkbookData( BinaryFilterBase& rFilter, BiffType eBiff ) :
@@ -337,7 +339,7 @@ WorkbookData::WorkbookData( BinaryFilterBase& rFilter, BiffType eBiff ) :
     mpBiffFilter( &rFilter ),
     meBiff( eBiff )
 {
-    initialize();
+    initialize( eBiff >= BIFF5 );
 }
 
 WorkbookData::~WorkbookData()
@@ -465,15 +467,15 @@ void WorkbookData::createBuffersPerSheet()
             // #i11183# sheets in BIFF4W files have own styles or names
             if( mbWorkbook )
             {
-                mxStyles.reset( new StylesBuffer( WorkbookHelper( *this ) ) );
-                mxDefNames.reset( new DefinedNamesBuffer( WorkbookHelper( *this ) ) );
-                mxExtLinks.reset( new ExternalLinkBuffer( WorkbookHelper( *this ) ) );
+                mxStyles.reset( new StylesBuffer( *this ) );
+                mxDefNames.reset( new DefinedNamesBuffer( *this ) );
+                mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
             }
         break;
 
         case BIFF5:
             // BIFF5 stores external references per sheet
-            mxExtLinks.reset( new ExternalLinkBuffer( WorkbookHelper( *this ) ) );
+            mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
         break;
 
         case BIFF8:
@@ -498,7 +500,7 @@ OUString WorkbookData::queryPassword()
 
 // private --------------------------------------------------------------------
 
-void WorkbookData::initialize()
+void WorkbookData::initialize( bool bWorkbookFile )
 {
     maRefDeviceProp = CREATE_OUSTRING( "ReferenceDevice" );
     maNamedRangesProp = CREATE_OUSTRING( "NamedRanges" );
@@ -508,7 +510,7 @@ void WorkbookData::initialize()
     maPageStylesProp = CREATE_OUSTRING( "PageStyles" );
     maCellStyleServ = CREATE_OUSTRING( "com.sun.star.style.CellStyle" );
     maPageStyleServ = CREATE_OUSTRING( "com.sun.star.style.PageStyle" );
-    mbWorkbook = false;
+    mbWorkbook = bWorkbookFile;
     meTextEnc = osl_getThreadTextEncoding();
     mbHasCodePage = false;
     mbHasPassword = false;
@@ -517,23 +519,23 @@ void WorkbookData::initialize()
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookData::initialize - no spreadsheet document" );
 
-    mxWorkbookSettings.reset( new WorkbookSettings( WorkbookHelper( *this ) ) );
-    mxViewSettings.reset( new ViewSettings( WorkbookHelper( *this ) ) );
-    mxWorksheets.reset( new WorksheetBuffer( WorkbookHelper( *this ) ) );
-    mxTheme.reset( new ThemeBuffer( WorkbookHelper( *this ) ) );
-    mxStyles.reset( new StylesBuffer( WorkbookHelper( *this ) ) );
-    mxSharedStrings.reset( new SharedStringsBuffer( WorkbookHelper( *this ) ) );
-    mxExtLinks.reset( new ExternalLinkBuffer( WorkbookHelper( *this ) ) );
-    mxDefNames.reset( new DefinedNamesBuffer( WorkbookHelper( *this ) ) );
-    mxTables.reset( new TableBuffer( WorkbookHelper( *this ) ) );
-    mxWebQueries.reset( new WebQueryBuffer( WorkbookHelper( *this ) ) );
-    mxPivotTables.reset( new PivotTableBuffer( WorkbookHelper( *this ) ) );
+    mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
+    mxViewSettings.reset( new ViewSettings( *this ) );
+    mxWorksheets.reset( new WorksheetBuffer( *this ) );
+    mxTheme.reset( new ThemeBuffer( *this ) );
+    mxStyles.reset( new StylesBuffer( *this ) );
+    mxSharedStrings.reset( new SharedStringsBuffer( *this ) );
+    mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
+    mxDefNames.reset( new DefinedNamesBuffer( *this ) );
+    mxTables.reset( new TableBuffer( *this ) );
+    mxWebQueries.reset( new WebQueryBuffer( *this ) );
+    mxPivotTables.reset( new PivotTableBuffer( *this ) );
 
-    mxUnitConverter.reset( new UnitConverter( WorkbookHelper( *this ) ) );
-    mxAddrConverter.reset( new AddressConverter( WorkbookHelper( *this ) ) );
-    mxStylesPropHlp.reset( new StylesPropertyHelper( WorkbookHelper( *this ) ) );
-    mxPageSettPropHlp.reset( new PageSettingsPropertyHelper( WorkbookHelper( *this ) ) );
-    mxValidationPropHlp.reset( new ValidationPropertyHelper( WorkbookHelper( *this ) ) );
+    mxUnitConverter.reset( new UnitConverter( *this ) );
+    mxAddrConverter.reset( new AddressConverter( *this ) );
+    mxStylesPropHlp.reset( new StylesPropertyHelper( *this ) );
+    mxPageSettPropHlp.reset( new PageSettingsPropertyHelper( *this ) );
+    mxValidationPropHlp.reset( new ValidationPropertyHelper( *this ) );
 
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
@@ -554,7 +556,7 @@ void WorkbookData::initialize()
 
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Loading..." ) ) );
-        mxFmlaParser.reset( new FormulaParser( WorkbookHelper( *this ) ) );
+        mxFmlaParser.reset( new FormulaParser( *this ) );
     }
     else if( mrBaseFilter.isExportFilter() )
     {
@@ -627,6 +629,13 @@ void WorkbookHelper::finalizeWorkbookImport()
     // workbook settings, document and sheet view settings
     mrBookData.getWorkbookSettings().finalizeImport();
     mrBookData.getViewSettings().finalizeImport();
+
+    /*  Set 'Default' page style to automatic page numbering (default is manual
+        number 1). Otherwise hidden tables (e.g. for scenarios) which have
+        'Default' page style will break automatic page numbering for following
+        sheets. Automatic numbering is set by passing the value 0. */
+    PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
+    aDefPageStyle.setProperty< sal_Int16 >( CREATE_OUSTRING( "FirstPageNumber" ), 0 );
 }
 
 // document model -------------------------------------------------------------
