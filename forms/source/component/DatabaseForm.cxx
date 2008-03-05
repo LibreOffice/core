@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:32:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1539,7 +1539,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_FILTER:
-            rValue <<= m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter );
+            rValue <<= m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter );
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -1622,7 +1622,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             break;
 
         case PROPERTY_ID_FILTER:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ) );
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -1711,7 +1711,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         {
             ::rtl::OUString sNewFilter;
             rValue >>= sNewFilter;
-            m_aFilterManager.setFilterComponent( FormFilterManager::fcPublicFilter, sNewFilter );
+            m_aFilterManager.setFilterComponent( FilterManager::fcPublicFilter, sNewFilter );
         }
         break;
 
@@ -1844,31 +1844,22 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
             return (NavigationBarMode_CURRENT == m_eNavigation) ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
 
         case PROPERTY_ID_CYCLE:
-            if (!m_aCycle.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
+            eState = m_aCycle.hasValue() ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
             break;
 
         case PROPERTY_ID_INSERTONLY:
-            if ( !m_bInsertOnly )
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
+            eState = m_bInsertOnly ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
             break;
 
         case PROPERTY_ID_FILTER:
-            if ( !m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter ).getLength() )
+            if ( !m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ).getLength() )
                 eState = PropertyState_DEFAULT_VALUE;
             else
                 eState = PropertyState_DIRECT_VALUE;
             break;
 
         case PROPERTY_ID_APPLYFILTER:
-            if ( m_aFilterManager.isApplyPublicFilter() )
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
+            eState = m_aFilterManager.isApplyPublicFilter() ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
             break;
 
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
@@ -1923,15 +1914,15 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         case PROPERTY_ID_INSERTONLY:
         case PROPERTY_ID_DYNAMIC_CONTROL_BORDER:
-            aReturn = makeAny( (sal_Bool)(sal_False ) );
+            aReturn <<= sal_False;
             break;
 
         case PROPERTY_ID_FILTER:
-            aReturn = makeAny( ::rtl::OUString() );
+            aReturn <<= ::rtl::OUString();
             break;
 
         case PROPERTY_ID_APPLYFILTER:
-            aReturn = makeAny( (sal_Bool)(sal_True ) );
+            aReturn <<= sal_True;
             break;
 
         case PROPERTY_ID_NAVIGATION:
