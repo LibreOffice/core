@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 14:53:17 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:18:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,16 +120,22 @@ elsif ($gui eq "UNX") {
     $REMOVE_FILE = "rm -f";
     $LIST_DIR = "ls";
     $COPY_FILE = "cp -f";
-    $COPY_DIR = "cp -rf";
     $MK_DIR = "mkdir";
     $RENAME_FILE = "mv";
     $nul = '> /dev/null';
     $RESPFILE="response_fat_unx";
     $SVERSION_INI = $ENV{HOME} . $PathSeparator . ".sversionrc";
-    $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstraprc";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = $ENV{PKGFORMAT};
+    if ($ENV{OS} eq "MACOSX") {
+        $SOFFICEBIN = "soffice.bin";
+        $COPY_DIR = "cp -RPfp";
+    }
+    else {
+        $SOFFICEBIN = "soffice";
+        $COPY_DIR = "cp -rf";
+    }
 }
 elsif ($gui eq $cygwin) {
     $PathSeparator = '/';
@@ -260,7 +266,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.28 $ ';
+$id_str = ' $Revision: 1.29 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -413,7 +419,12 @@ sub doTest {
 
     $basedir = doInstall ("$INSTALLSET$INSTSETNAME$PathSeparator", $installpath);
     print "$basedir\n";
-    $programpath = "$basedir". "program$PathSeparator";
+    if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
+        $programpath = "$basedir". "MacOS$PathSeparator";
+    }
+    else {
+        $programpath = "$basedir". "program$PathSeparator";
+    }
     $userinstallpath_without = $installpath . $userinstalldir;
     $userinstallpath = $userinstallpath_without . $PathSeparator;
     $userpath = "$userinstallpath" . "user$PathSeparator";
@@ -422,7 +433,7 @@ sub doTest {
     $LOGPATH="$userinstallpath" . "user" . $PathSeparator . "temp";
 
     if ($gui eq "UNX") {
-        $Command = "chmod -R 777 \"$installpath\"*";
+        $Command = "chmod -R 777 \"$basedir\"*";
         execute_system ("$Command");
     }
 
@@ -467,11 +478,14 @@ sub doTest {
     }
     if ((defined($ENV{OS})) && (defined($ENV{PROEXT})) && ($ENV{OS} eq "LINUX") && ($ENV{PROEXT} eq ".pro") && $is_do_statistics)  {
         print "collecting statistic...\n";
-        $Command = "$PERL stats.pl -p=\"$programpath" . "soffice\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
+        $Command = "$PERL stats.pl -p=\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
         execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
     }
     else {
-        $Command = "\"$programpath" . "soffice\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
+        $Command = "\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
+        if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
+            $Command = "cd \"$programpath\"; " . $Command;
+        }
         execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
     }
 
@@ -704,6 +718,52 @@ sub doInstall {
             execute_Command ($Command, $error_setup, $show_NoMessage, $command_withoutErrorcheck | $command_withoutOutput);
             $ENV{LD_PRELOAD} = $ld_preload;
         }
+        elsif ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
+            @DirArray = ();
+            my $install_dmg;
+            getSubFiles ("$installsetpath", \@DirArray, "^[a-zA-Z0-9].*\\.dmg\$");
+            if ($#DirArray == 0) {
+                $install_dmg = "$installsetpath" . $DirArray[0];
+            }
+            elsif ($#DirArray > 0) {
+                print_error ("more than one installset found in $installsetpath", 2);
+            }
+            else {
+                print_error ("no installset found in $installsetpath", 2);
+            }
+            $Command = "hdiutil attach " . $install_dmg;
+            my $output_ref;
+            $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+            my $volumeinfo = $$output_ref[$#{@{$output_ref}}];
+            if (!$volumeinfo =~ /OpenOffice/) {
+                print_error ("mount of $install_dmg failed", 2);
+            }
+            $volumeinfo =~ s/\s{2,}/;/g;
+            my @volumeinfos = split(/;/,$volumeinfo);
+            my $detachpath = $volumeinfos[0];
+            my $newinstallsetpath = $volumeinfos[2] . $PathSeparator;
+            createPath ($dest_installdir, $error_setup);
+            $Command = "$COPY_DIR \"$newinstallsetpath\" \"$dest_installdir\"";
+            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+            $Command = "hdiutil detach " . $detachpath;
+            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+            @DirArray = ();
+            getSubFiles ("$dest_installdir", \@DirArray, "\\.app");
+            if ($#DirArray == 0) {
+                $optdir = "$dest_installdir" . $DirArray[0] . $PathSeparator;
+                my $PListFile = "Info.plist";
+                                my $officeDir = "$optdir" . "Contents" . $PathSeparator;
+                my $programmDir = "$officeDir" . "MacOS" . $PathSeparator;
+                $Command = "$COPY_FILE \"$officeDir$PListFile\" \"$programmDir$PListFile\"";
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+            }
+            else {
+                print_error ("Installation in $dest_installdir is incomplete", 2);
+            }
+        }
+                else {
+            print_error ("Plattform is not supported", 2);
+                }
         @DirArray = ();
         getSubDirsFullPath ($optdir, \@DirArray);
         if ($#DirArray == 0) {
