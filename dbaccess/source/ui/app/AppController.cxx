@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:41:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1779,8 +1779,7 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
         ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
         Reference< XComponent > xDefinition;
         xRet.set(aHelper->open(_sName, xDefinition,_eOpenMode),UNO_QUERY);
-        if (_eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN ||
-        _eType == E_FORM )
+        if (_eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN || _eType == E_FORM )
         {
         //  // LLA: close only if in EDIT mode
             addDocumentListener(xRet,xDefinition);
