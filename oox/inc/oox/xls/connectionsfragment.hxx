@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectionsfragment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_XLS_CONNECTIONSFRAGMENT_HXX
 #define OOX_XLS_CONNECTIONSFRAGMENT_HXX
 
-#include "oox/xls/ooxfragmenthandler.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
@@ -52,9 +52,9 @@ public:
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
 
 private:
