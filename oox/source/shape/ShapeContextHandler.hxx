@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeContextHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
+#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/vml/drawingfragmenthandler.hxx"
 #include "ShapeFilterBase.hxx"
 
 namespace css = ::com::sun::star;
@@ -63,6 +66,18 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 ShapeContextHandler_createInstance
 ( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
 throw( css::uno::Exception );
+
+class ShapeFragmentHandler : public core::FragmentHandler
+{
+public:
+    typedef boost::shared_ptr<ShapeFragmentHandler> Pointer_t;
+
+    explicit ShapeFragmentHandler(core::XmlFilterBase& rFilter,
+                                  const ::rtl::OUString& rFragmentPath )
+    : FragmentHandler(rFilter, rFragmentPath)
+    {
+    }
+};
 
 class ShapeContextHandler:
     public ::cppu::WeakImplHelper1<
@@ -138,6 +153,19 @@ public:
     (const css::uno::Reference< css::frame::XModel > & the_value)
         throw (css::uno::RuntimeException);
 
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    getInputStream() throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL setInputStream
+    (const css::uno::Reference< css::io::XInputStream > & the_value)
+        throw (css::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getRelationFragmentPath()
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRelationFragmentPath
+    (const ::rtl::OUString & the_value)
+        throw (css::uno::RuntimeException);
+
 private:
     ShapeContextHandler(ShapeContextHandler &); // not defined
     void operator =(ShapeContextHandler &); // not defined
@@ -147,12 +175,15 @@ private:
 
     typedef boost::shared_ptr<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
+    css::uno::Reference< ::oox::vml::DrawingFragmentHandler> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
 
-    ShapeFilterBase::Pointer_t mpFilterBase;
-    css::uno::Reference<css::frame::XModel> mxModel;
+    core::XmlFilterRef mxFilterBase;
+    oox::vml::DrawingPtr mpDrawing;
     drawingml::ThemePtr mpThemePtr;
     css::uno::Reference<css::drawing::XShapes> mxShapes;
+    css::uno::Reference<css::io::XInputStream> mxInputStream;
+    ::rtl::OUString msRelationFragmentPath;
 };
 
 }}
