@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeReport.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Element;
@@ -50,87 +48,90 @@ import org.jfree.report.structure.Node;
  * @author Thomas Morgner
  * @since 02.03.2007
  */
-public class OfficeReport extends Element
-{
-  private Node pageHeader;
-  private Node pageFooter;
-  private Node columnHeader;
-  private Node columnFooter;
-  private Node reportHeader;
-  private Node reportFooter;
-  private Node bodySection;
+public class OfficeReport extends Element {
 
-  public OfficeReport()
-  {
-  }
+    private Node pageHeader;
+    private Node pageFooter;
+    private Node columnHeader;
+    private Node columnFooter;
+    private Node reportHeader;
+    private Node reportFooter;
+    private Node bodySection;
+    private Node preBodySection;
+    private Node postBodySection;
 
-  public Node getPageHeader()
-  {
-    return pageHeader;
-  }
+    public Node getPostBodySection() {
+        return postBodySection;
+    }
 
-  public void setPageHeader(final Node pageHeader)
-  {
-    this.pageHeader = pageHeader;
-  }
+    public void setPostBodySection(Node postBodySection) {
+        this.postBodySection = postBodySection;
+    }
 
-  public Node getPageFooter()
-  {
-    return pageFooter;
-  }
+    public Node getPreBodySection() {
+        return preBodySection;
+    }
 
-  public void setPageFooter(final Node pageFooter)
-  {
-    this.pageFooter = pageFooter;
-  }
+    public void setPreBodySection(Node preBodySection) {
+        this.preBodySection = preBodySection;
+    }
 
-  public Node getColumnHeader()
-  {
-    return columnHeader;
-  }
+    public OfficeReport() {
+    }
 
-  public void setColumnHeader(final Node columnHeader)
-  {
-    this.columnHeader = columnHeader;
-  }
+    public Node getPageHeader() {
+        return pageHeader;
+    }
 
-  public Node getColumnFooter()
-  {
-    return columnFooter;
-  }
+    public void setPageHeader(final Node pageHeader) {
+        this.pageHeader = pageHeader;
+    }
 
-  public void setColumnFooter(final Node columnFooter)
-  {
-    this.columnFooter = columnFooter;
-  }
+    public Node getPageFooter() {
+        return pageFooter;
+    }
 
-  public Node getReportHeader()
-  {
-    return reportHeader;
-  }
+    public void setPageFooter(final Node pageFooter) {
+        this.pageFooter = pageFooter;
+    }
 
-  public void setReportHeader(final Node reportHeader)
-  {
-    this.reportHeader = reportHeader;
-  }
+    public Node getColumnHeader() {
+        return columnHeader;
+    }
 
-  public Node getReportFooter()
-  {
-    return reportFooter;
-  }
+    public void setColumnHeader(final Node columnHeader) {
+        this.columnHeader = columnHeader;
+    }
 
-  public void setReportFooter(final Node reportFooter)
-  {
-    this.reportFooter = reportFooter;
-  }
+    public Node getColumnFooter() {
+        return columnFooter;
+    }
 
-  public Node getBodySection()
-  {
-    return bodySection;
-  }
+    public void setColumnFooter(final Node columnFooter) {
+        this.columnFooter = columnFooter;
+    }
 
-  public void setBodySection(final Node bodySection)
-  {
-    this.bodySection = bodySection;
-  }
+    public Node getReportHeader() {
+        return reportHeader;
+    }
+
+    public void setReportHeader(final Node reportHeader) {
+        this.reportHeader = reportHeader;
+    }
+
+    public Node getReportFooter() {
+        return reportFooter;
+    }
+
+    public void setReportFooter(final Node reportFooter) {
+        this.reportFooter = reportFooter;
+    }
+
+    public Node getBodySection() {
+        return bodySection;
+    }
+
+    public void setBodySection(final Node bodySection) {
+        this.bodySection = bodySection;
+    }
 }
