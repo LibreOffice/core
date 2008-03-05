@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_EVENT_HXX
-#include <vcl/event.hxx>
-#endif
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
-#ifndef _SV_DECOVIEW_HXX
-#include <vcl/decoview.hxx>
-#endif
-#ifndef _SV_SCRBAR_HXX
-#include <vcl/scrbar.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
+#include "vcl/event.hxx"
+#include "vcl/sound.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/scrbar.hxx"
+#include "vcl/timer.hxx"
+#include "vcl/svdata.hxx"
 
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
-
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
+#include "rtl/string.hxx"
+#include "tools/rc.h"
 
 
 
@@ -1082,68 +1068,70 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 Sound::Beep( SOUND_DISABLE, this );
         }
-        // HitTestNativeControl, see remark at top of file
-        else if( rMEvt.IsMiddle() ||
-                 ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
-                                         Region( maThumbRect ), rMousePos, bIsInside ) ?
-                   bIsInside:
-                   maThumbRect.IsInside( rMousePos ) ) )
+        else
         {
-            if( mpData )
+            bool bThumbHit = HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
+                                                   Region( maThumbRect ), rMousePos, bIsInside )
+                             ? bIsInside : maThumbRect.IsInside( rMousePos );
+            bool bDragHandling = rMEvt.IsMiddle() || bThumbHit || ImplGetSVData()->maNWFData.mbScrollbarJumpPage;
+            if( bDragHandling )
             {
-                mpData->mbHide = TRUE;  // disable focus blinking
-                if( HasFocus() )
-                    ImplDraw( SCRBAR_DRAW_THUMB, this ); // paint without focus
-            }
-
-            if ( mnVisibleSize < mnMaxRange-mnMinRange )
-            {
-                nTrackFlags     = 0;
-                meScrollType    = SCROLL_DRAG;
-                mnDragDraw      = SCRBAR_DRAW_THUMB;
-
-                // calculate mouse offset
-                if( rMEvt.IsMiddle() )
+                if( mpData )
                 {
-                    bDragToMouse = TRUE;
-                    if ( GetStyle() & WB_HORZ )
-                        mnMouseOff = maThumbRect.GetWidth()/2;
+                    mpData->mbHide = TRUE;  // disable focus blinking
+                    if( HasFocus() )
+                        ImplDraw( SCRBAR_DRAW_THUMB, this ); // paint without focus
+                }
+
+                if ( mnVisibleSize < mnMaxRange-mnMinRange )
+                {
+                    nTrackFlags     = 0;
+                    meScrollType    = SCROLL_DRAG;
+                    mnDragDraw      = SCRBAR_DRAW_THUMB;
+
+                    // calculate mouse offset
+                    if( rMEvt.IsMiddle() || (ImplGetSVData()->maNWFData.mbScrollbarJumpPage && !bThumbHit) )
+                    {
+                        bDragToMouse = TRUE;
+                        if ( GetStyle() & WB_HORZ )
+                            mnMouseOff = maThumbRect.GetWidth()/2;
+                        else
+                            mnMouseOff = maThumbRect.GetHeight()/2;
+                    }
                     else
-                        mnMouseOff = maThumbRect.GetHeight()/2;
+                    {
+                        if ( GetStyle() & WB_HORZ )
+                            mnMouseOff = rMousePos.X()-maThumbRect.Left();
+                        else
+                            mnMouseOff = rMousePos.Y()-maThumbRect.Top();
+                    }
+
+                    mnStateFlags |= SCRBAR_STATE_THUMB_DOWN;
+                    ImplDraw( mnDragDraw, this );
+                }
+                else
+                    Sound::Beep( SOUND_DISABLE, this );
+            }
+            else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
+                                           aControlRegion, rMousePos, bIsInside )?
+                bIsInside : TRUE )
+            {
+                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+
+                // HitTestNativeControl, see remark at top of file
+                if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
+                                           Region( maPage1Rect ), rMousePos, bIsInside )?
+                    bIsInside:
+                    maPage1Rect.IsInside( rMousePos ) )
+                {
+                    meScrollType    = SCROLL_PAGEUP;
+                    mnDragDraw      = SCRBAR_DRAW_PAGE1;
                 }
                 else
                 {
-                    if ( GetStyle() & WB_HORZ )
-                        mnMouseOff = rMousePos.X()-maThumbRect.Left();
-                    else
-                        mnMouseOff = rMousePos.Y()-maThumbRect.Top();
+                    meScrollType    = SCROLL_PAGEDOWN;
+                    mnDragDraw      = SCRBAR_DRAW_PAGE2;
                 }
-
-                mnStateFlags |= SCRBAR_STATE_THUMB_DOWN;
-                ImplDraw( mnDragDraw, this );
-            }
-            else
-                Sound::Beep( SOUND_DISABLE, this );
-        }
-        else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
-                                       aControlRegion, rMousePos, bIsInside )?
-            bIsInside : TRUE )
-        {
-            nTrackFlags = STARTTRACK_BUTTONREPEAT;
-
-            // HitTestNativeControl, see remark at top of file
-            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
-                                       Region( maPage1Rect ), rMousePos, bIsInside )?
-                bIsInside:
-                maPage1Rect.IsInside( rMousePos ) )
-            {
-                meScrollType    = SCROLL_PAGEUP;
-                mnDragDraw      = SCRBAR_DRAW_PAGE1;
-            }
-            else
-            {
-                meScrollType    = SCROLL_PAGEDOWN;
-                mnDragDraw      = SCRBAR_DRAW_PAGE2;
             }
         }
 
