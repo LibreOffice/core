@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapegroupcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-ShapeGroupContext::ShapeGroupContext( const FragmentHandlerRef& xHandler,
-        sal_Int32 /* aElementToken */, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
-: Context( xHandler )
+ShapeGroupContext::ShapeGroupContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
+: ContextHandler( rParent )
 , mpGroupShapePtr( pGroupShapePtr )
 , mpMasterShapePtr( pMasterShapePtr )
 {
@@ -76,7 +75,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( aElementToken &(~NMSP_MASK) )
+    switch( getToken( aElementToken ) )
     {
     case XML_cNvPr:
         mpGroupShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
@@ -89,10 +88,10 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
     // nvSpPr CT_ShapeNonVisual end
 
     case XML_grpSpPr:
-        xRet = new ShapePropertiesContext( this, *(mpGroupShapePtr.get()) );
+        xRet = new ShapePropertiesContext( *this, *mpGroupShapePtr );
         break;
     case XML_spPr:
-        xRet = new ShapePropertiesContext( this, *(mpGroupShapePtr.get()) );
+        xRet = new ShapePropertiesContext( *this, *mpGroupShapePtr );
         break;
 /*
     case XML_style:
@@ -100,19 +99,19 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         break;
 */
     case XML_cxnSp:         // connector shape
-        xRet.set( new ConnectorShapeContext( getHandler(), aElementToken, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.ConnectorShape" ) ) ) );
+        xRet.set( new ConnectorShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.ConnectorShape" ) ) ) );
         break;
     case XML_grpSp:         // group shape
-        xRet.set( new ShapeGroupContext( getHandler(), aElementToken, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) ) );
+        xRet.set( new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) ) );
         break;
     case XML_sp:            // shape
-        xRet.set( new ShapeContext( getHandler(), mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) ) );
+        xRet.set( new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) ) );
         break;
     case XML_pic:           // CT_Picture
-        xRet.set( new GraphicShapeContext( getHandler(), mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
+        xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( getHandler(), mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ) ) );
+        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ) ) );
         break;
     }
     if( !xRet.is() )
