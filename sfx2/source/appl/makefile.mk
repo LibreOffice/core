@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 17:28:12 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:38:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@ LIBTARGET=NO
 CFLAGS+=-Od
 CFLAGS+=-DENABLE_QUICKSTART_APPLET
 .ENDIF
+.ENDIF
+
+.IF "$(GUIBASE)"=="aqua"
+CFLAGS+=-DENABLE_QUICKSTART_APPLET
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -114,6 +118,10 @@ SFX_OBJECTS = \
 
 .IF "$(GUI)"=="OS2"
 SFX_OBJECTS +=  $(SLO)$/shutdowniconOs2.obj
+.ENDIF
+
+.IF "$(GUIBASE)"=="aqua"
+SFX_OBJECTS += $(SLO)$/shutdowniconaqua.obj
 .ENDIF
 
 SLOFILES = $(SFX_OBJECTS)
