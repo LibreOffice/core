@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:19:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,149 +512,6 @@ DBG_NAME(OTableSubscriptionPage)
     {
         return OnControlModified(_pControl);
     }
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::collectEntryPaths(StringArray& _rFillInPaths, EntryPredicateCheck _pPredicateCheck)
-    {
-        _rFillInPaths.clear();
-
-        SvLBoxEntry* pRoot = m_aTablesList.getAllObjectsEntry();
-        SvLBoxEntry* pLoop = pRoot ? m_aTablesList.FirstChild(pRoot) : NULL;
-
-        StringArray aCurrentEntryPath;
-        const ::rtl::OUString sPathSeparator = ::rtl::OUString::createFromAscii(".");
-
-        sal_Bool bAlreadyVisitedCurrent = sal_False;
-        while (pLoop)
-        {
-            // is this entry expanded ?
-            if (!bAlreadyVisitedCurrent && (m_aTablesList.*_pPredicateCheck)(pLoop))
-            {   // -> add it to the view settings' lits
-                ::rtl::OUString sThisEntryPath;
-                for (   ConstStringArrayIterator aPathElements = aCurrentEntryPath.begin();
-                        aPathElements != aCurrentEntryPath.end();
-                        ++aPathElements
-                    )
-                {
-                    sThisEntryPath += *aPathElements;
-                    sThisEntryPath += sPathSeparator;
-                }
-                sThisEntryPath += m_aTablesList.GetEntryText(pLoop);
-                _rFillInPaths.push_back(sThisEntryPath);
-            }
-
-            // if the entry has children, step down
-            SvLBoxEntry* pCandidate = m_aTablesList.FirstChild(pLoop);
-            if (pCandidate && !bAlreadyVisitedCurrent)
-            {
-                // remember the text for this level
-                aCurrentEntryPath.push_back(m_aTablesList.GetEntryText(pLoop));
-                // step down
-                pLoop  = pCandidate;
-                bAlreadyVisitedCurrent = sal_False;
-            }
-            else
-            {
-                pCandidate = m_aTablesList.NextSibling(pLoop);
-                if (pCandidate)
-                {
-                    pLoop = pCandidate;
-                    bAlreadyVisitedCurrent = sal_False;
-                }
-                else
-                {   // step up
-                    pCandidate = m_aTablesList.GetParent(pLoop);
-                    if (pCandidate == pRoot)
-                        // don't go further
-                        pCandidate = NULL;
-
-                    DBG_ASSERT( (NULL != pCandidate) == (0 != aCurrentEntryPath.size()),
-                        "OTableSubscriptionPage::collectEntryPaths: inconsistence!");
-                    if (aCurrentEntryPath.size())
-                        aCurrentEntryPath.pop_back();
-
-                    // don't step down again
-                    bAlreadyVisitedCurrent = sal_True;
-
-                    pLoop = pCandidate;
-                }
-            }
-        }
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::doExpand(SvLBoxEntry* _pEntry)
-    {
-        m_aTablesList.Expand(_pEntry);
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::doSelect(SvLBoxEntry* _pEntry)
-    {
-        m_aTablesList.Select(_pEntry, sal_True);
-    }
-
-    //------------------------------------------------------------------------
-    void OTableSubscriptionPage::actOnEntryPaths(const StringArray& _rPaths, EntryAction _pAction)
-    {
-        // TODO: this whole stuff is not really performant ....
-        // (but hey, this is no critical area ....)
-
-        for (   ConstStringArrayIterator aLoop = _rPaths.begin();
-                aLoop != _rPaths.end();
-                ++aLoop
-            )
-        {
-            SvLBoxEntry* pEntry = getEntryFromPath(*aLoop);
-            if (pEntry)
-                (this->*_pAction)(pEntry);
-        }
-    }
-
-    //------------------------------------------------------------------------
-    SvLBoxEntry* OTableSubscriptionPage::getEntryFromPath(const ::rtl::OUString& _rPath)
-    {
-        const sal_Unicode aSeparator = '.';
-
-        SvLBoxEntry* pParent = m_aTablesList.getAllObjectsEntry();
-
-        sal_Int32 nSepPos = -1;
-        sal_Int32 nPreviousSegmentStart = 0;
-
-        nSepPos = _rPath.indexOf(aSeparator, nPreviousSegmentStart);
-        while ((nPreviousSegmentStart >= 0) && pParent)
-        {
-            String sSegmentName = _rPath.copy(
-                nPreviousSegmentStart,
-                (nSepPos > nPreviousSegmentStart ? nSepPos : _rPath.getLength()) - nPreviousSegmentStart);
-
-            SvLBoxEntry* pChildSearch = m_aTablesList.FirstChild(pParent);
-            String sChildText;
-            while (pChildSearch)
-            {
-                sChildText = m_aTablesList.GetEntryText(pChildSearch);
-                if (sChildText == sSegmentName)
-                    break;
-
-                pChildSearch = m_aTablesList.NextSibling(pChildSearch);
-            }
-
-            if (!pChildSearch)
-            {   // did not find this levels child
-                pParent = NULL;
-                break;
-            }
-
-            pParent = pChildSearch;
-
-            if (nSepPos > 0)
-                nSepPos = _rPath.indexOf(aSeparator, nPreviousSegmentStart = (nSepPos + 1));
-            else
-                nPreviousSegmentStart = -1;
-        }
-
-        return pParent;
-    }
-
     //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {
