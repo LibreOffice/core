@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2007-10-13" "Dmake Version 4.11"
+.TH DMAKE 1  "2008-02-26" "Dmake Version 4.12"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -719,8 +719,9 @@ environments ignore this attribute.)
 Under Cygwin it can be useful to generate Windows style paths (with
 regular slashes) instead of the default cygwin style (POSIX) paths
 for dmake's dynamic macros.
-The affected macros are $@, $*, $>, $?, $<, $&, $^ and $(PWD), $(MAKEDIR)
-and $(TMD). This feature can be used to create DOS style path parameters
+The affected macros are $@, $*, $>, $?, $<, $&, $^ and $(MAKEDIR), $(PWD),
+$(TMD), $(TMPFILE) and the $(mktmp ...) function macro.
+This feature can be used to create DOS style path parameters
 for native W32 programs from dynamic macros.
 .sp
 \fBNote\fP that the Windows style paths use regular slashes ('/') instead
