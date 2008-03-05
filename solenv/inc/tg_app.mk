@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-07 16:09:59 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:33:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,11 +147,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(APP$(TNR)LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .IF "$(APP$(TNR)ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP$(TNR)ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF		# "$(APP$(TNR)ICON)" != ""
 .IF "$(APP$(TNR)VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
