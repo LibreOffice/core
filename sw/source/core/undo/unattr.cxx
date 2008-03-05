@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:30:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -732,6 +732,43 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     // <--
 }
 
+// --> OD 2008-02-12 #newlistlevelattrs#
+SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
+                                        const USHORT nWhichId )
+    : SwUndo( UNDO_RESETATTR ),
+      mpChangedFormat( &rChangedFormat ),
+      mnWhichId( nWhichId ),
+      mpOldItem( 0 )
+{
+    const SfxPoolItem* pItem = 0;
+    if ( rChangedFormat.GetItemState( nWhichId, FALSE, &pItem ) == SFX_ITEM_SET )
+    {
+        mpOldItem = pItem->Clone();
+    }
+}
+
+SwUndoFmtResetAttr::~SwUndoFmtResetAttr()
+{
+    delete mpOldItem;
+}
+
+void SwUndoFmtResetAttr::Undo( SwUndoIter& )
+{
+    if ( mpOldItem )
+    {
+        mpChangedFormat->SetAttr( *mpOldItem );
+    }
+}
+
+void SwUndoFmtResetAttr::Redo( SwUndoIter& )
+{
+    if ( mpOldItem )
+    {
+        mpChangedFormat->ResetAttr( mnWhichId );
+    }
+}
+// <--
+
 /*  */
 
 SwUndoRstAttr::SwUndoRstAttr( const SwPaM& rRange, USHORT nFmt )
@@ -786,13 +823,13 @@ void SwUndoRstAttr::Redo( SwUndoIter& rUndoIter )
     switch( nFmtId )
     {
     case RES_CHRFMT:
-        rUndoIter.GetDoc().RstTxtAttr( *rUndoIter.pAktPam );
+        rUndoIter.GetDoc().RstTxtAttrs( *rUndoIter.pAktPam );
         break;
     case RES_TXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttr( *rUndoIter.pAktPam, FALSE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, FALSE, pIdArr );
         break;
     case RES_CONDTXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttr( *rUndoIter.pAktPam, TRUE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, TRUE, pIdArr );
 
         break;
     case RES_TXTATR_TOXMARK:
@@ -844,13 +881,13 @@ void SwUndoRstAttr::Repeat( SwUndoIter& rUndoIter )
     switch( nFmtId )
     {
     case RES_CHRFMT:
-        rUndoIter.GetDoc().RstTxtAttr( *rUndoIter.pAktPam );
+        rUndoIter.GetDoc().RstTxtAttrs( *rUndoIter.pAktPam );
         break;
     case RES_TXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttr( *rUndoIter.pAktPam, FALSE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, FALSE, pIdArr );
         break;
     case RES_CONDTXTFMTCOLL:
-        rUndoIter.GetDoc().ResetAttr( *rUndoIter.pAktPam, TRUE, pIdArr );
+        rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, TRUE, pIdArr );
         break;
     }
     rUndoIter.pLastUndoObj = this;
