@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:58:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ published service DataSource
         The object returned by the
         <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
         supports the
-        <service scope="com::sun::star::sdb">DefinitionContainer</service>
+        <type scope="com::sun::star::sdb">DefinitionContainer</type>
         service.
         </p>
      */
@@ -117,7 +117,7 @@ published service DataSource
         The object returned by the
         <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
         supports the
-        <service scope="com::sun::star::sdb">DefinitionContainer</service>
+        <type scope="com::sun::star::sdb">DefinitionContainer</type>
         service.
         </p>
      */
