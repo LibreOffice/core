@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedTextLayoutController.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:33:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.ReportTarget;
-import org.jfree.report.flow.layoutprocessor.ElementLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.util.Log;
