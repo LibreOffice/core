@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:59:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ namespace chart
 
 #define CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
 #define CHART_WIZARD_DIALOG_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.WizardDialog")
+
+#define CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartTypeDialog")
+#define CHART_TYPE_DIALOG_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartTypeDialog")
 
 // wrapper for old UNO API (com.sun.star.chart)
 #define CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartDocumentWrapper")
