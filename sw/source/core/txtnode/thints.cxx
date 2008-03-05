@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:48:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
 #endif
+// --> OD 2008-01-16 #newlistlevelattrs#
+#include <svx/lrspitem.hxx>
+// <--
 
 #ifndef _TXTINET_HXX //autogen
 #include <txtinet.hxx>
@@ -1423,9 +1426,32 @@ public:
     SwPoolItemEndPair() : mpItem( 0 ), mnEndPos( 0 ) {};
 };
 
+// --> OD 2008-01-16 #newlistlevelattrs#
+void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
+                                            SfxItemSet& rSet )
+{
+    if ( rTxtNode.AreListLevelIndentsApplicable() )
+    {
+        const SwNumRule* pRule = rTxtNode.GetNumRule();
+        if ( pRule && rTxtNode.GetLevel() >= 0 )
+        {
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(rTxtNode.GetLevel()));
+            if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                SvxLRSpaceItem aLR( RES_LR_SPACE );
+                aLR.SetTxtLeft( rFmt.GetIndentAt() );
+                aLR.SetTxtFirstLineOfst( static_cast<short>(rFmt.GetFirstLineIndent()) );
+                rSet.Put( aLR );
+            }
+        }
+    }
+}
+
 // erfrage die Attribute vom TextNode ueber den Bereich
+// --> OD 2008-01-16 #newlistlevelattrs#
 BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
-                            BOOL bOnlyTxtAttr, BOOL bGetFromChrFmt ) const
+                         BOOL bOnlyTxtAttr, BOOL bGetFromChrFmt,
+                         const bool bMergeIndentValuesOfNumRule ) const
 {
     if( pSwpHints )
     {
@@ -1448,7 +1474,15 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         // dann besorge mal die Auto-(Fmt)Attribute
         SfxItemSet aFmtSet( *rSet.GetPool(), rSet.GetRanges() );
         if( !bOnlyTxtAttr )
+        {
             SwCntntNode::GetAttr( aFmtSet );
+            // --> OD 2008-01-16 #newlistlevelattrs#
+            if ( bMergeIndentValuesOfNumRule )
+            {
+                lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFmtSet );
+            }
+            // <--
+        }
 
         const USHORT nSize = pSwpHints->Count();
         USHORT n;
@@ -1633,8 +1667,16 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
         }
     }
     else if( !bOnlyTxtAttr )
+    {
         // dann besorge mal die Auto-(Fmt)Attribute
         SwCntntNode::GetAttr( rSet );
+        // --> OD 2008-01-16 #newlistlevelattrs#
+        if ( bMergeIndentValuesOfNumRule )
+        {
+            lcl_MergeListLevelIndentAsLRSpaceItem( *this, rSet );
+        }
+        // <--
+    }
 
     return rSet.Count() ? TRUE : FALSE;
 }
