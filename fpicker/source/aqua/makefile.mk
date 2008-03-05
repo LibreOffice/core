@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 11:00:44 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:39:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-#CFLAGS += -Wall
 DLLPRE=
 
 # ------------------------------------------------------------------
@@ -61,14 +61,17 @@ dummy:
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-        $(SLO)$/resourceprovider.obj    \
-        $(SLO)$/FPentry.obj             \
-        $(SLO)$/SalAquaPicker.obj       \
-        $(SLO)$/SalAquaFilePicker.obj   \
-        $(SLO)$/SalAquaFolderPicker.obj \
-        $(SLO)$/CFStringUtilities.obj   \
-        $(SLO)$/FilterHelper.obj        \
-        $(SLO)$/ControlHelper.obj
+        $(SLO)$/resourceprovider.obj       \
+        $(SLO)$/FPentry.obj                \
+        $(SLO)$/SalAquaPicker.obj          \
+        $(SLO)$/SalAquaFilePicker.obj      \
+        $(SLO)$/SalAquaFolderPicker.obj    \
+        $(SLO)$/CFStringUtilities.obj      \
+        $(SLO)$/FilterHelper.obj           \
+        $(SLO)$/ControlHelper.obj          \
+        $(SLO)$/NSString_OOoAdditions.obj  \
+        $(SLO)$/NSURL_OOoAdditions.obj     \
+        $(SLO)$/AquaFilePickerDelegate.obj
 
 SHL1NOCHECK=TRUE
 SHL1TARGET= $(TARGET)
@@ -81,6 +84,7 @@ SHL1STDLIBS=\
     $(SALLIB)
 
 SHL1VERSIONMAP=exports.map
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 .ENDIF # "$(GUIBASE)" != "aqua"
