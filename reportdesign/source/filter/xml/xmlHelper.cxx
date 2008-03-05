@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:45:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -511,6 +511,47 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 }
+// -----------------------------------------------------------------------------
+SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
+{
+    static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+    {
+        { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
+        { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
+        { XML_NAMESPACE_REPORT, XML_GROUP,                      XML_TOK_GROUP                   },
+        { XML_NAMESPACE_REPORT, XML_DETAIL      ,               XML_TOK_DETAIL                  },
+        { XML_NAMESPACE_REPORT, XML_PAGE_FOOTER ,               XML_TOK_PAGE_FOOTER             },
+        { XML_NAMESPACE_REPORT, XML_REPORT_FOOTER,              XML_TOK_REPORT_FOOTER           },
+        { XML_NAMESPACE_REPORT, XML_HEADER_ON_NEW_PAGE,         XML_TOK_HEADER_ON_NEW_PAGE      },
+        { XML_NAMESPACE_REPORT, XML_FOOTER_ON_NEW_PAGE,         XML_TOK_FOOTER_ON_NEW_PAGE      },
+        { XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,               XML_TOK_COMMAND_TYPE            },
+        { XML_NAMESPACE_REPORT, XML_COMMAND,                    XML_TOK_COMMAND                 },
+        { XML_NAMESPACE_REPORT, XML_FILTER,                     XML_TOK_FILTER                  },
+        { XML_NAMESPACE_REPORT, XML_CAPTION,                    XML_TOK_CAPTION                 },
+        { XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING,          XML_TOK_ESCAPE_PROCESSING       },
+        { XML_NAMESPACE_REPORT, XML_FUNCTION,                   XML_TOK_REPORT_FUNCTION         },
+        { XML_NAMESPACE_OFFICE, XML_MIMETYPE,                   XML_TOK_REPORT_MIMETYPE         },
+        { XML_NAMESPACE_DRAW,   XML_NAME,                       XML_TOK_REPORT_NAME             },
+        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,       XML_TOK_MASTER_DETAIL_FIELDS    },
+        { XML_NAMESPACE_DRAW,   XML_FRAME,                      XML_TOK_SUB_FRAME               },
+        XML_TOKEN_MAP_END
+    };
+    return new SvXMLTokenMap( aElemTokenMap );
+}
+// -----------------------------------------------------------------------------
+SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
+{
+    static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+    {
+        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
+        { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},
+        { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL},
+        XML_TOKEN_MAP_END
+    };
+    return new SvXMLTokenMap( aElemTokenMap );
+}
+
+
 // -----------------------------------------------------------------------------
 } // rptxml
 // -----------------------------------------------------------------------------
