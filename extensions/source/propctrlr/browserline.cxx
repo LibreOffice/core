@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:55:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,19 +120,19 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetComponentHelpIds( sal_uInt32 _nControlId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
+    void OBrowserLine::SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
     {
         if ( m_pControlWindow )
-            m_pControlWindow->SetHelpId( _nControlId );
+            m_pControlWindow->SetSmartHelpId( _rHelpId );
 
         if ( m_pBrowseButton )
         {
-            m_pBrowseButton->SetHelpId( _nControlId );
+            m_pBrowseButton->SetSmartHelpId( _rHelpId );
             m_pBrowseButton->SetUniqueId( _bPrimaryButtonId );
 
             if ( m_pAdditionalBrowseButton )
             {
-                m_pAdditionalBrowseButton->SetHelpId( _nControlId );
+                m_pAdditionalBrowseButton->SetSmartHelpId( _rHelpId );
                 m_pAdditionalBrowseButton->SetUniqueId( _nSecondaryButtonId );
             }
         }
