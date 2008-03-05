@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:32:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,12 +139,10 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #include "InterfaceContainer.hxx"
 #endif
-#ifndef FORMS_SOURCE_COMPONENT_FORMPARAMETERS_HXX
-#include "formparameters.hxx"
-#endif
-#ifndef FORMS_SOURCE_COMPONENT_FORMFILTERMANAGER_HXX
-#include "formfiltermanager.hxx"
-#endif
+
+#include "connectivity/parameters.hxx"
+#include "connectivity/filtermanager.hxx"
+
 #ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
 #endif
@@ -280,8 +278,8 @@ class ODatabaseForm :public OFormComponents
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
     OGroupManager*              m_pGroupManager;
-    FormParameterManager        m_aParameterManager;
-    FormFilterManager           m_aFilterManager;
+    ::dbtools::ParameterManager m_aParameterManager;
+    ::dbtools::FilterManager    m_aFilterManager;
     Timer*                      m_pLoadTimer;
 
     OFormSubmitResetThread*     m_pThread;
