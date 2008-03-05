@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:12:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1940,6 +1940,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 #endif
 
     SWRECTFN( this )
+
+    // --> OD 2008-01-31 #newlistlevelattrs#
+    CalcAdditionalFirstLineOffset();
+    // <--
 
     // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
     // gelegentlich TxtFrms mit einer Breite <=0.
