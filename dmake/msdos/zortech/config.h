@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:29 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2008-03-05 18:37:45 kz Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -47,6 +47,6 @@
 extern unsigned _psp;
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 #include <io.h>

@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:29 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2008-03-05 18:37:29 kz Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -71,7 +71,7 @@
 #endif
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 /* Have to pull this in for the standard lib defines */
 #include <io.h>
