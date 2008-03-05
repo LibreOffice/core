@@ -5,9 +5,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:12:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,9 @@ struct SalData
     CGColorSpaceRef                               mxGraySpace;
 
     std::vector< NSCursor* >                      maCursors;
+    std::vector< NSMenuItem* >                    maFallbackMenu;
 
     static oslThreadKey                           s_aAutoReleaseKey;
-    static FILE                                  *s_pLog;
 
     bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
 
@@ -110,8 +110,6 @@ struct SalData
     static void ensureThreadAutoreleasePool();
     static void drainThreadAutoreleasePool();
 };
-
-void AquaLog( const char* pFormat, ... );
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
 inline SalData *GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
