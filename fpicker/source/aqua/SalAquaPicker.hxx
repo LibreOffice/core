@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaPicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,33 +44,24 @@
 #include <osl/mutex.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HXX_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
-#include <com/sun/star/util/XCancellable.hpp>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HXX_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 #ifndef _CONTROLHELPER_HXX_
 #include "ControlHelper.hxx"
 #endif
 
-#include <unistd.h>
 #include <premac.h>
-#include <Carbon/Carbon.h>
+#import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
 //----------------------------------------------------------
@@ -84,33 +75,10 @@ public:
     SalAquaPicker();
     virtual ~SalAquaPicker();
 
-    OSStatus run();
-    OSStatus runandwaitforresult();
-
-    virtual void implHandleNavDialogCustomize(NavCBRecPtr callBackParms);
-
-    virtual void implHandleNavDialogStart(NavCBRecPtr callBackParms);
-
-    virtual void implHandleNavDialogEvent(NavCBRecPtr callBackParms);
-
-    virtual sal_Bool implFilterHandler(AEDesc *theItem, void *info,
-                                       void *callBackUD,
-                                       NavFilterModes filterMode);
-
-    virtual void implHandlePopupMenuSelect(NavMenuItemSpec* menuItem);
-    virtual void implHandleNavDialogSelectEntry(NavCBRecPtr callBackParms);
-    virtual sal_Bool implPreviewHandler(NavCBRecPtr callBackParms);
+    int run();
+    int runandwaitforresult();
 
     inline rtl::OUString getDisplayDirectory() { return m_sDisplayDirectory; }
-    inline NavDialogRef getDialogRef() { return m_pDialog; }
-
-    inline NavEventCallbackMessage getLatestEvent() {
-        return m_aLatestEvent;
-    }
-
-    inline void setLatestEvent(NavEventCallbackMessage eventType) {
-        m_aLatestEvent = eventType;
-    }
 
     inline ControlHelper* getControlHelper() const {
         return m_pControlHelper;
@@ -119,17 +87,12 @@ public:
 protected:
 
     rtl::OUString m_sDisplayDirectory;
-    NavDialogRef  m_pDialog;
+
+    NSSavePanel *m_pDialog;
+
     ControlHelper *m_pControlHelper;
 
     osl::Mutex m_rbHelperMtx;
-    //::vos::OGuard guard;
-
-    NavDialogCreationOptions m_pDialogOptions;
-    NavEventUPP              m_pEventHandler;
-    NavObjectFilterUPP       m_pFilterHandler;
-    NavPreviewUPP            m_pPreviewHandler;
-    NavReplyRecord           m_pReplyRecord;
 
     // The type of dialog
     enum NavigationServices_DialogType {
@@ -140,9 +103,6 @@ protected:
 
     NavigationServices_DialogType m_nDialogType;
 
-    NavEventCallbackMessage m_aLatestEvent;
-
-protected:
     void implsetTitle( const ::rtl::OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
 
