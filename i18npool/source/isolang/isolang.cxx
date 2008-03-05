@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:15:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,7 +337,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_TIGRIGNA_ETHIOPIA,           "ti", "ET" },
     { LANGUAGE_TIGRIGNA_ERITREA,            "ti", "ER" },
     { LANGUAGE_AMHARIC_ETHIOPIA,            "am", "ET" },
-    { LANGUAGE_GUARANI_PARAGUAY,            "gn", "PY" },
+    { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY" },
     { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US" },
     { LANGUAGE_EDO,                        "bin", "NG" },
     { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG" },
@@ -358,14 +358,15 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 //  { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,  "iu", "CA" },   // script codes not supported yet
 //  { LANGUAGE_ARABIC_SUDAN,                "ar", "SD" },   // unknown MS-LCID
     { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO" },
-    { LANGUAGE_SAMI_INARI,                 "smn", "FI" },   // ISO/DIS 639-3 (!)
-    { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO" },   // ISO/DIS 639-3 (!)
-    { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE" },   // ISO/DIS 639-3 (!)
+    { LANGUAGE_SAMI_INARI,                 "smn", "FI" },
+    { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO" },
+    { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE" },
     { LANGUAGE_SAMI_NORTHERN_FINLAND,       "se", "FI" },
     { LANGUAGE_SAMI_NORTHERN_SWEDEN,        "se", "SE" },
-    { LANGUAGE_SAMI_SKOLT,                 "sms", "FI" },   // ISO/DIS 639-3 (!)
-    { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO" },   // ISO/DIS 639-3 (!)
-    { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE" },   // ISO/DIS 639-3 (!)
+    { LANGUAGE_SAMI_SKOLT,                 "sms", "FI" },
+    { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO" },
+    { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE" },
+    { LANGUAGE_USER_SAMI_KILDIN_RUSSIA,    "sjd", "RU" },
     { LANGUAGE_MAPUDUNGUN_CHILE,           "arn", "CL" },
     { LANGUAGE_CORSICAN_FRANCE,             "co", "FR" },
     { LANGUAGE_ALSATIAN_FRANCE,            "gsw", "FR" },   // in fact 'gsw' is Schwyzerduetsch (Swiss German), which is a dialect of Alemannic German, as is Alsatian. They aren't distinct languages and share this code.
@@ -373,7 +374,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_MOHAWK_CANADA,              "moh", "CA" },
     { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU" },
     { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT" },
-    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF" },   // ISO/DIS 639-3 (!)
+    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF" },
     { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN" },
     { LANGUAGE_FILIPINO,                   "fil", "PH" },
     { LANGUAGE_USER_TAGALOG,                "tl", "PH" },
@@ -434,6 +435,12 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU" },
     { LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA, "qul", "BO" },
     { LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA, "quh", "BO" },
+    { LANGUAGE_USER_BODO_INDIA,            "brx", "IN" },
+    { LANGUAGE_USER_DOGRI_INDIA,           "dgo", "IN" },
+    { LANGUAGE_USER_MAITHILI_INDIA,        "mai", "IN" },
+    { LANGUAGE_USER_SANTALI_INDIA,         "sat", "IN" },
+    { LANGUAGE_USER_TETUN,                 "tet", "ID" },
+    { LANGUAGE_USER_TETUN_TIMOR_LESTE,     "tet", "TL" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
