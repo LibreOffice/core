@@ -4,9 +4,9 @@
  *
  *  $RCSfile: themefragmenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,29 +33,36 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGML_THEMEFRAGMENTHANDLER
-#define OOX_DRAWINGML_THEMEFRAGMENTHANDLER
+#ifndef OOX_DRAWINGML_THEMEFRAGMENTHANDLER_HXX
+#define OOX_DRAWINGML_THEMEFRAGMENTHANDLER_HXX
 
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/theme.hxx"
-#include <vector>
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-class ThemeFragmentHandler : public ::oox::core::FragmentHandler
+// ============================================================================
+
+class ThemeFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    ThemeFragmentHandler( const oox::core::XmlFilterRef& xFilter, const ::rtl::OUString& rFragmentPath, oox::drawingml::Theme& rTheme ) throw();
-    virtual ~ThemeFragmentHandler() throw();
+    explicit            ThemeFragmentHandler(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            const ::rtl::OUString& rFragmentPath,
+                            Theme& rTheme );
+    virtual             ~ThemeFragmentHandler();
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 private:
-
-    oox::drawingml::Theme& mrTheme;
+    Theme&              mrTheme;
 };
 
-} }
+// ============================================================================
 
-#endif // OOX_DRAWINGML_THEMEFRAGMENTHANDLER
+} // namespace drawingml
+} // namespace oox
+
+#endif
+
