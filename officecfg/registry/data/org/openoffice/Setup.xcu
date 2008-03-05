@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:33:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,7 +647,7 @@
                                   <value >Basic</value>
                 </prop>
             </node>
-            <node oor:name="com.sun.star.frame.StartModule" oor:op="replace">
+            <node oor:name="com.sun.star.frame.StartModule" oor:op="replace" install:module="start">
                 <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
                 <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
                 <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
