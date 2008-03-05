@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:48:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1137,15 +1137,38 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
-                USHORT nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
-                USHORT nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
-                USHORT nNumberXPos = nXStart;
-                USHORT nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
-                if(nFirstLineOffset <= nNumberXPos)
-                    nNumberXPos = nNumberXPos - nFirstLineOffset;
-                else
-                    nNumberXPos = 0;
+                // --> OD 2008-02-01 #newlistlevelattrs#
+                USHORT nXStart( 0 );
+                short nTextOffset( 0 );
+                USHORT nNumberXPos( 0 );
+                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
+                    nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
+                    nNumberXPos = nXStart;
+                    USHORT nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
+
+                    if(nFirstLineOffset <= nNumberXPos)
+                        nNumberXPos = nNumberXPos - nFirstLineOffset;
+                    else
+                        nNumberXPos = 0;
+                }
+                else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                {
+                    const long nTmpNumberXPos( ( rFmt.GetIndentAt() +
+                                                 rFmt.GetFirstLineIndent() ) /
+                                               nWidthRelation );
+                    if ( nTmpNumberXPos < 0 )
+                    {
+                        nNumberXPos = 0;
+                    }
+                    else
+                    {
+                        nNumberXPos = static_cast<USHORT>(nTmpNumberXPos);
+                    }
+                }
+                // <--
 
                 USHORT nBulletWidth = 0;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
@@ -1170,9 +1193,54 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     nBulletWidth = (USHORT)pVDev->GetTextWidth(aText);
                     nPreNum++;
                 }
-                USHORT nTextXPos = nXStart;
-                if(nNumberXPos + nBulletWidth + nTextOffset > nTextXPos )
-                    nTextXPos = nNumberXPos + nBulletWidth + nTextOffset;
+                // --> OD 2008-02-01 #newlistlevelattrs#
+                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
+                     rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
+                {
+                    pVDev->SetFont(aStdFont);
+                    String aText(' ');
+                    pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
+                    nBulletWidth = nBulletWidth + (USHORT)pVDev->GetTextWidth(aText);
+                }
+                // <--
+
+                // --> OD 2008-02-01 #newlistlevelattrs#
+                USHORT nTextXPos( 0 );
+                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    nTextXPos = nXStart;
+                    if(nTextOffset < 0)
+                         nTextXPos = nTextXPos + nTextOffset;
+                    if(nNumberXPos + nBulletWidth + nTextOffset > nTextXPos )
+                        nTextXPos = nNumberXPos + nBulletWidth + nTextOffset;
+                }
+                else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                {
+                    switch ( rFmt.GetLabelFollowedBy() )
+                    {
+                        case SvxNumberFormat::LISTTAB:
+                        {
+                            nTextXPos = static_cast<USHORT>(
+                                            rFmt.GetListtabPos() / nWidthRelation );
+                            if ( nTextXPos < nNumberXPos + nBulletWidth )
+                            {
+                                nTextXPos = nNumberXPos + nBulletWidth;
+                            }
+                        }
+                        break;
+                        case SvxNumberFormat::SPACE:
+                        case SvxNumberFormat::NOTHING:
+                        {
+                            nTextXPos = nNumberXPos + nBulletWidth;
+                        }
+                        break;
+                    }
+
+                    nXStart = static_cast<USHORT>( rFmt.GetIndentAt() / nWidthRelation );
+                }
+                // <--
+
+
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
                 pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() ); // Color( COL_BLACK ) );
                 pVDev->DrawRect( aRect1 );
@@ -1191,7 +1259,29 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
-                USHORT nXStart = (rFmt.GetAbsLSpace() / nWidthRelation) / 2 + 2;
+                // --> OD 2008-02-01 #newlistlevelattrs#
+                USHORT nXStart( 0 );
+                if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
+                }
+                else if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                {
+                    const long nTmpXStart( ( rFmt.GetIndentAt() +
+                                             rFmt.GetFirstLineIndent() ) /
+                                           nWidthRelation );
+                    if ( nTmpXStart < 0 )
+                    {
+                        nXStart = 0;
+                    }
+                    else
+                    {
+                        nXStart = static_cast<USHORT>(nTmpXStart);
+                    }
+                }
+                nXStart /= 2;
+                nXStart += 2;
+                // <--
                 USHORT nTextOffset = 2 * nXStep;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
