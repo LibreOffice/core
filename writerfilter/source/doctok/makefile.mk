@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.9 $
+#  $Revision: 1.10 $
 #
-#  last change: $Author: ihi $ $Date: 2008-02-04 12:54:40 $
+#  last change: $Author: kz $ $Date: 2008-03-05 16:56:28 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
 #CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 #CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
-CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
+#CDEFS+=-DDEBUG_DOCTOK_DUMP
 
 
 # --- Files --------------------------------------------------------
