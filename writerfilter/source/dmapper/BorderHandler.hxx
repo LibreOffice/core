@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:36:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ public:
 
     ::boost::shared_ptr<PropertyMap>            getProperties();
     ::com::sun::star::table::BorderLine         getBorderLine();
+    sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
 };
 typedef boost::shared_ptr< BorderHandler >          BorderHandlerPtr;
 }}
