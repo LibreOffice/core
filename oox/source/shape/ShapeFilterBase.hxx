@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeFilterBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,6 @@
 namespace oox {
 namespace shape {
 
-class FragmentHandler;
-
 // ============================================================================
 
 
@@ -67,8 +65,8 @@ public:
 
     virtual rtl::OUString implGetImplementationName() const;
 
-    virtual bool importDocument() { return false; }
-    virtual bool exportDocument() { return false; }
+    virtual bool importDocument() { return true; }
+    virtual bool exportDocument() { return true; }
 };
 
 // ============================================================================
