@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timetargetelementcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,11 @@ namespace oox { namespace ppt {
 
     // CT_TLShapeTargetElement
     class ShapeTargetElementContext
-        : public Context
+        : public ContextHandler
     {
     public:
-        ShapeTargetElementContext( const ::oox::core::Context & xParent, ShapeTargetElement & aValue )
-            : Context( xParent )
+        ShapeTargetElementContext( ContextHandler& rParent, ShapeTargetElement & aValue )
+            : ContextHandler( rParent )
                 , bTargetSet(false)
                 , maShapeTarget(aValue)
             {
@@ -97,7 +97,7 @@ namespace oox { namespace ppt {
                 case NMSP_PPT|XML_pRg:
                     if( bTargetSet && maShapeTarget.mnType == XML_txEl )
                     {
-                        maShapeTarget.mnRangeType = (aElementToken & ~NMSP_MASK);
+                        maShapeTarget.mnRangeType = getToken( aElementToken );
                         maShapeTarget.maRange = drawingml::GetIndexRange( xAttribs );
                     }
                     break;
@@ -116,9 +116,8 @@ namespace oox { namespace ppt {
 
 
 
-    TimeTargetElementContext::TimeTargetElementContext( const FragmentHandlerRef & xHandler,
-                                                                                                            const AnimTargetElementPtr & pValue )
-        : Context( xHandler ),
+    TimeTargetElementContext::TimeTargetElementContext( ContextHandler& rParent, const AnimTargetElementPtr & pValue )
+        : ContextHandler( rParent ),
             mpTarget( pValue )
     {
         OSL_ENSURE( mpTarget, "no valid target passed" );
@@ -156,7 +155,7 @@ namespace oox { namespace ppt {
         {
             mpTarget->mnType = XML_sndTgt;
             drawingml::EmbeddedWAVAudioFile aAudio;
-            drawingml::getEmbeddedWAVAudioFile( getHandler(), xAttribs, aAudio);
+            drawingml::getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio);
 
             OUString sSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msLink );
             mpTarget->msValue = sSndName;
@@ -171,7 +170,7 @@ namespace oox { namespace ppt {
             break;
         }
         default:
-            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", (aElementToken & ~NMSP_MASK) );
+            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getToken( aElementToken ) );
             break;
         }
 
