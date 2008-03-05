@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:27:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
