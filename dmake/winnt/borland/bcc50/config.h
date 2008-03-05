@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:37 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2008-03-05 18:41:34 kz Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +38,7 @@ extern unsigned int coreleft();
 #define CONST const
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 /* Borland redefined the environment variable, sigh */
 #define environ _environ
