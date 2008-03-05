@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:33:42 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:22:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,12 @@ PATCH_FILE_DEP:=$(PRJ)$/$(NEW_PATCH_FILE_NAME)
 TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
 .ENDIF          # "$(TAR_EXCLUDES)"!=""
 
+unzip_quiet_switch:=-qq
+#.IF "$(VERBOSE)"!=""
+tar_verbose_switch=v
+unzip_quiet_switch:=
+#.ENDIF			# "$(VERBOSE)"!=""
+
 # Clean PWD to let a build_action=dmake set it with new value. (See iz61212)
 .IF "$(USE_SHELL)"=="4nt"
 PWD:=
@@ -117,9 +123,9 @@ clean:
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -127,34 +133,34 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
+    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @-$(RM) $@
-    noop $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar)
+    noop $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(BACK_PATH)download$/$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @-$(RM) $@
-    noop $(assign UNPACKCMD := unzip -o $(BACK_PATH)download$/$(TARFILE_NAME).zip)
+    noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(BACK_PATH)download$/$(TARFILE_NAME).zip)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
@@ -311,13 +317,15 @@ $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    @@-$(MKDIRHIER) $(NEW_PATCH_FILE_NAME:d)
     @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp
     @@-$(RM) $(NEW_PATCH_FILE_NAME).bak
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
-    -cd $(PRJ)$/$(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
-    @@-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak
-    @@-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME)
+    -cd $(PRJ)$/$(ROUT) && diff -ru misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME:f).tmp
+    -mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak
+    $(PERL) $(SOLARENV)$/bin$/patch_sanitizer.pl $(NEW_PATCH_FILE_NAME).bak $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME)
+    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp
     $(MAKECMD) $(MAKEMACROS) patch
     @echo still some problems with win32 generated patches...
 
