@@ -4,9 +4,9 @@
  *
  *  $RCSfile: worksheetsettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@ namespace xls {
 
 namespace {
 
+const sal_uInt8 OOBIN_SHEETPR_FILTERMODE        = 0x01;
+const sal_uInt8 OOBIN_SHEETPR_EVAL_CF           = 0x02;
+
+const sal_uInt16 BIFF_SHEETPR_DIALOGSHEET       = 0x0010;
 const sal_uInt16 BIFF_SHEETPR_APPLYSTYLES       = 0x0020;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSBELOW      = 0x0040;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSRIGHT      = 0x0080;
@@ -79,7 +83,8 @@ const sal_uInt16 BIFF_SHEETPROT_SELECT_UNLOCKED = 0x4000;
 
 // ============================================================================
 
-OoxOutlinePrData::OoxOutlinePrData() :
+OoxSheetPrData::OoxSheetPrData() :
+    mbFilterMode( false ),
     mbApplyStyles( false ),
     mbSummaryBelow( true ),
     mbSummaryRight( true )
@@ -111,24 +116,48 @@ OoxSheetProtectionData::OoxSheetProtectionData() :
 
 // ============================================================================
 
+namespace {
+
+sal_uInt16 lclGetCheckedHash( sal_Int32 nHash )
+{
+    OSL_ENSURE( (0 <= nHash) && (nHash <= SAL_MAX_UINT16), "lclGetCheckedHash - invalid password hash" );
+    return getLimitedValue< sal_uInt16, sal_Int32 >( nHash, 0, SAL_MAX_UINT16 );
+}
+
+} // namespace
+
 WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     maPhoneticSett( rHelper )
 {
 }
 
+void WorksheetSettings::importSheetPr( const AttributeList& rAttribs )
+{
+    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName );
+    maOoxSheetData.mbFilterMode = rAttribs.getBool( XML_filterMode, false );
+}
+
+void WorksheetSettings::importChartSheetPr( const AttributeList& rAttribs )
+{
+    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName );
+}
+
+void WorksheetSettings::importTabColor( const AttributeList& rAttribs )
+{
+    maOoxSheetData.maTabColor.importColor( rAttribs );
+}
+
 void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 {
-    maOoxOutlineData.mbApplyStyles  = rAttribs.getBool( XML_applyStyles, false );
-    maOoxOutlineData.mbSummaryBelow = rAttribs.getBool( XML_summaryBelow, true );
-    maOoxOutlineData.mbSummaryRight = rAttribs.getBool( XML_summaryRight, true );
+    maOoxSheetData.mbApplyStyles  = rAttribs.getBool( XML_applyStyles, false );
+    maOoxSheetData.mbSummaryBelow = rAttribs.getBool( XML_summaryBelow, true );
+    maOoxSheetData.mbSummaryRight = rAttribs.getBool( XML_summaryRight, true );
 }
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
-    sal_Int32 nHash = rAttribs.getHex( XML_password, 0 );
-    OSL_ENSURE( (0 <= nHash) && (nHash <= SAL_MAX_UINT16), "WorksheetSettings::importSheetProtection - invalid password hash" );
-    maOoxProtData.mnPasswordHash     = static_cast< sal_uInt16 >( nHash );
+    maOoxProtData.mnPasswordHash     = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
     maOoxProtData.mbSheet            = rAttribs.getBool( XML_sheet, false );
     maOoxProtData.mbObjects          = rAttribs.getBool( XML_objects, false );
     maOoxProtData.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
@@ -147,6 +176,13 @@ void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
     maOoxProtData.mbSelectUnlocked   = rAttribs.getBool( XML_selectUnlockedCells, false );
 }
 
+void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
+{
+    maOoxProtData.mnPasswordHash = lclGetCheckedHash( rAttribs.getHex( XML_password, 0 ) );
+    maOoxProtData.mbSheet        = rAttribs.getBool( XML_content, false );
+    maOoxProtData.mbObjects      = rAttribs.getBool( XML_objects, false );
+}
+
 void WorksheetSettings::importPhoneticPr( const AttributeList& rAttribs )
 {
     maPhoneticSett.importPhoneticPr( rAttribs );
@@ -154,15 +190,26 @@ void WorksheetSettings::importPhoneticPr( const AttributeList& rAttribs )
 
 void WorksheetSettings::importSheetPr( RecordInputStream& rStrm )
 {
-    sal_uInt16 nFlags;
-    rStrm >> nFlags;
+    sal_uInt16 nFlags1;
+    sal_uInt8 nFlags2;
+    rStrm >> nFlags1 >> nFlags2 >> maOoxSheetData.maTabColor;
+    rStrm.skip( 8 );    // sync anchor cell
+    rStrm >> maOoxSheetData.maCodeName;
+    // sheet settings
+    maOoxSheetData.mbFilterMode = getFlag( nFlags2, OOBIN_SHEETPR_FILTERMODE );
     // outline settings, equal flags in BIFF and OOBIN
-    maOoxOutlineData.mbApplyStyles  = getFlag( nFlags, BIFF_SHEETPR_APPLYSTYLES );
-    maOoxOutlineData.mbSummaryRight = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSRIGHT );
-    maOoxOutlineData.mbSummaryBelow = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSBELOW );
+    maOoxSheetData.mbApplyStyles  = getFlag( nFlags1, BIFF_SHEETPR_APPLYSTYLES );
+    maOoxSheetData.mbSummaryRight = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSRIGHT );
+    maOoxSheetData.mbSummaryBelow = getFlag( nFlags1, BIFF_SHEETPR_SYMBOLSBELOW );
     /*  Fit printout to width/height - for whatever reason, this flag is still
         stored separated from the page settings */
-    getPageSettings().setFitToPagesMode( getFlag( nFlags, BIFF_SHEETPR_FITTOPAGES ) );
+    getPageSettings().setFitToPagesMode( getFlag( nFlags1, BIFF_SHEETPR_FITTOPAGES ) );
+}
+
+void WorksheetSettings::importChartSheetPr( RecordInputStream& rStrm )
+{
+    rStrm.skip( 2 );    // flags, contains only the 'published' flag
+    rStrm >> maOoxSheetData.maTabColor >> maOoxSheetData.maCodeName;
 }
 
 void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
@@ -187,6 +234,14 @@ void WorksheetSettings::importSheetProtection( RecordInputStream& rStrm )
     maOoxProtData.mbSelectUnlocked   = rStrm.readInt32() != 0;
 }
 
+void WorksheetSettings::importChartProtection( RecordInputStream& rStrm )
+{
+    rStrm >> maOoxProtData.mnPasswordHash;
+    // no flags field for all these boolean flags?!?
+    maOoxProtData.mbSheet            = rStrm.readInt32() != 0;
+    maOoxProtData.mbObjects          = rStrm.readInt32() != 0;
+}
+
 void WorksheetSettings::importPhoneticPr( RecordInputStream& rStrm )
 {
     maPhoneticSett.importPhoneticPr( rStrm );
@@ -196,10 +251,16 @@ void WorksheetSettings::importSheetPr( BiffInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
+    // worksheet vs. dialogsheet
+    if( getFlag( nFlags, BIFF_SHEETPR_DIALOGSHEET ) )
+    {
+        OSL_ENSURE( getSheetType() == SHEETTYPE_WORKSHEET, "WorksheetSettings::importSheetPr - unexpected sheet type" );
+        setSheetType( SHEETTYPE_DIALOGSHEET );
+    }
     // outline settings
-    maOoxOutlineData.mbApplyStyles  = getFlag( nFlags, BIFF_SHEETPR_APPLYSTYLES );
-    maOoxOutlineData.mbSummaryRight = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSRIGHT );
-    maOoxOutlineData.mbSummaryBelow = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSBELOW );
+    maOoxSheetData.mbApplyStyles  = getFlag( nFlags, BIFF_SHEETPR_APPLYSTYLES );
+    maOoxSheetData.mbSummaryRight = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSRIGHT );
+    maOoxSheetData.mbSummaryBelow = getFlag( nFlags, BIFF_SHEETPR_SYMBOLSBELOW );
     // fit printout to width/height
     getPageSettings().setFitToPagesMode( getFlag( nFlags, BIFF_SHEETPR_FITTOPAGES ) );
     // save external linked values, in BIFF5-BIFF8 moved to BOOKBOOK record
