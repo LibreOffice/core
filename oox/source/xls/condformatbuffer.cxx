@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condformatbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -66,7 +65,6 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::style::XStyleFamiliesSupplier;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XIndexAccess;
