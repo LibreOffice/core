@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,12 +108,6 @@ XmlFilterBase::~XmlFilterBase()
 {
 }
 
-RecordInfoProviderRef XmlFilterBase::getRecordInfoProvider()
-{
-    // default: no support for binary streams
-    return RecordInfoProviderRef();
-}
-
 // ----------------------------------------------------------------------------
 
 OUString XmlFilterBase::getFragmentPathFromType( const OUString& rType )
@@ -147,8 +141,6 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
             // create the record parser
             RecordParser aParser;
             aParser.setFragmentHandler( rxHandler );
-            aParser.setRecordInfoProvider( getRecordInfoProvider() );
-            rxHandler->setRecordParser( aParser );
 
             // create the input source and parse the stream
             RecordInputSource aSource;
@@ -178,18 +170,25 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         xParser->setTokenHandler( mxImpl->mxTokenHandler );
 
         // register XML namespaces
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_EXCEL );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_WORD );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://www.w3.org/XML/1998/namespace" ), NMSP_XML );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_POWERPOINT );
-        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:activation" ), NMSP_ACTIVATION );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:office" ), NMSP_OFFICE );
+
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/main" ), NMSP_DRAWINGML );
         xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ), NMSP_DIAGRAM );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/chart" ), NMSP_CHART );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:vml" ), NMSP_VML );
+
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:word" ), NMSP_WORD );
+
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/spreadsheetml/2006/main"), NMSP_XLS );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ), NMSP_XDR );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/2006/main" ), NMSP_XM );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:excel" ), NMSP_EXCEL );
+
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/presentationml/2006/main"), NMSP_PPT );
+        xParser->registerNamespace( CREATE_OUSTRING( "urn:schemas-microsoft-com:office:powerpoint" ), NMSP_POWERPOINT );
 
         // create the input source and parse the stream
         InputSource aSource;
@@ -211,8 +210,8 @@ RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
     if( !rxRelations )
     {
         // import and cache relations
-        rxRelations.reset( new Relations );
-        importFragment( new RelationsFragmentHandler( this, rFragmentPath, rxRelations ) );
+        rxRelations.reset( new Relations( rFragmentPath ) );
+        importFragment( new RelationsFragmentHandler( *this, rxRelations ) );
     }
     return rxRelations;
 }
