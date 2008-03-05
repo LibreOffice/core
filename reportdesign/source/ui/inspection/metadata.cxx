@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metadata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:50:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:11:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,10 @@ namespace rptui
             ,DEF_INFO_1( BACKTRANSPARENT,               BACKTRANSPARENT,            BACKTRANSPARENT,            COMPOSEABLE )
             ,DEF_INFO_1( CONTROLBACKGROUNDTRANSPARENT,  CONTROLBACKGROUNDTRANSPARENT
                                                                     ,CONTROLBACKGROUNDTRANSPARENT, COMPOSEABLE )
+            ,DEF_INFO_1( CHARTTYPE,                     CHARTTYPE,                  CHARTTYPE,                  COMPOSEABLE )
+            ,DEF_INFO_1( PREVIEW_COUNT,                 PREVIEW_COUNT,              PREVIEW_COUNT,              COMPOSEABLE )
+            ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               COMPOSEABLE,DATA_PROPERTY )
+            ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               COMPOSEABLE,DATA_PROPERTY)
         };
 
         s_pPropertyInfos = aPropertyInfos;
@@ -376,6 +380,7 @@ namespace rptui
                 ,PROPERTY_FORMULALIST
                 ,PROPERTY_SCOPE
                 ,PROPERTY_TYPE
+                ,PROPERTY_DATASOURCENAME
         };
 
         beans::Property* pPropsIter = aProps.getArray();
