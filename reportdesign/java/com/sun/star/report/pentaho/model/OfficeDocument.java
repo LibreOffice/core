@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 
 package com.sun.star.report.pentaho.model;
 
+import com.sun.star.report.JobProperties;
 import org.jfree.report.JFreeReport;
 
 /**
@@ -49,6 +50,15 @@ import org.jfree.report.JFreeReport;
 public class OfficeDocument extends JFreeReport
 {
   private OfficeStylesCollection stylesCollection;
+  private JobProperties jobProperties;
+
+    public JobProperties getJobProperties() {
+        return jobProperties;
+    }
+
+    public void setJobProperties(JobProperties jobProperties) {
+        this.jobProperties = jobProperties;
+    }
 
   public OfficeDocument()
   {

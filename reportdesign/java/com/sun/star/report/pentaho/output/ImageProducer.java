@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageProducer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ import org.jfree.io.IOUtils;
 import org.jfree.layouting.input.style.values.CSSNumericType;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.util.Log;
-import org.jfree.util.StringUtils;
 import org.jfree.util.WaitingImageObserver;
 
 /**
