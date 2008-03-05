@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,48 +35,74 @@
 
 #include <string.h>
 #include <osl/mutex.hxx>
-
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-
 #include "oox/core/fasttokenhandler.hxx"
 #include "tokens.hxx"
 
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 using ::osl::Mutex;
 using ::osl::MutexGuard;
-using namespace ::com::sun::star::xml::sax;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::xml::sax::FastToken::DONTKNOW;
 
-#ifdef WNT
-#pragma warning(disable:4129)
-#endif
+namespace oox {
 
-namespace oox
-{
+#include "tokens.inc"
+#include "tokenwords.inc"
 
-#include "tokens.cxx"
+// ============================================================================
 
-Mutex& getTokenMutex()
+namespace {
+
+Mutex& lclGetTokenMutex()
 {
     static Mutex aMutex;
     return aMutex;
 }
 
-::sal_Int32 FastTokenHandler::getToken( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException)
+} // namespace
+
+// ============================================================================
+
+FastTokenHandler::FastTokenHandler()
 {
-    MutexGuard guard( getTokenMutex() );
-
-    rtl::OString aUTF8( Identifier.getStr(), Identifier.getLength(), RTL_TEXTENCODING_UTF8 );
-
-    struct xmltoken * t = Perfect_Hash::in_word_set( aUTF8, aUTF8.getLength() );
-    if( t )
-        return t->nToken;
-    else
-        return FastToken::DONTKNOW;
+#if OSL_DEBUG_LEVEL > 0
+    MutexGuard aGuard( lclGetTokenMutex() );
+    bool bOk = true;
+    for( sal_Int32 nIdx = 0; bOk && (nIdx < XML_TOKEN_COUNT); ++nIdx )
+    {
+        // check that the getIdentifier <-> getToken roundtrip works
+        OUString aToken = getIdentifier( nIdx );
+        bOk = getToken( aToken ) == nIdx;
+        OSL_ENSURE( bOk, OStringBuffer( "FastTokenHandler::FastTokenHandler - token list broken, #" ).
+            append( nIdx ).append( ", '" ).
+            append( OUStringToOString( aToken, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+    }
+#endif
 }
 
-::rtl::OUString FastTokenHandler::getIdentifier( ::sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException)
+FastTokenHandler::~FastTokenHandler()
 {
-    MutexGuard guard( getTokenMutex() );
+}
+
+sal_Int32 FastTokenHandler::getToken( const OUString& rIdentifier ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+
+    OString aUTF8 = OUStringToOString( rIdentifier, RTL_TEXTENCODING_UTF8 );
+
+    struct xmltoken * t = Perfect_Hash::in_word_set( aUTF8.getStr(), aUTF8.getLength() );
+    return t ? t->nToken : DONTKNOW;
+}
+
+OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
 
     if( nToken >= XML_TOKEN_COUNT )
         return OUString();
@@ -84,22 +110,20 @@ Mutex& getTokenMutex()
     static OUString aTokens[XML_TOKEN_COUNT];
 
     if( aTokens[nToken].getLength() == 0 )
-        aTokens[nToken] = OUString::createFromAscii(wordlist[nToken].name);
+        aTokens[nToken] = OUString::createFromAscii( tokentowordlist[nToken] );
 
     return aTokens[nToken];
 }
 
-::sal_Int32 FastTokenHandler::getTokenFromUTF8( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException )
 {
-    MutexGuard guard( getTokenMutex() );
+    MutexGuard aGuard( lclGetTokenMutex() );
 
-    struct xmltoken * t = Perfect_Hash::in_word_set((const char*)Identifier.getConstArray(), Identifier.getLength());
-    if( t )
-        return t->nToken;
-    else
-        return FastToken::DONTKNOW;
+    struct xmltoken * t = Perfect_Hash::in_word_set( reinterpret_cast< const char* >( rIdentifier.getConstArray() ), rIdentifier.getLength());
+    return t ? t->nToken : DONTKNOW;
 }
 
-}
+// ============================================================================
 
+} // namespace oox
 
