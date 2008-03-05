@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:28:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -790,7 +790,14 @@ enum SwPropNameIds
 /* 0715 */  UNO_NAME_HEADER_ROW_COUNT,
 /* 0716 */  UNO_NAME_INPUT,
 /* 0717 */  UNO_NAME_ROW_SPAN,
-/* 0718 */  SW_PROPNAME_END
+// --> OD 2008-01-15 #newlistlevelattrs#
+/* 0718 */  UNO_NAME_POSITION_AND_SPACE_MODE,
+/* 0719 */  UNO_NAME_LABEL_FOLLOWED_BY,
+/* 0720 */  UNO_NAME_LISTTAB_STOP_POSITION,
+/* 0721 */  UNO_NAME_FIRST_LINE_INDENT,
+/* 0722 */  UNO_NAME_INDENT_AT,
+// <--
+/* 0723 */  SW_PROPNAME_END
 };
 
 
