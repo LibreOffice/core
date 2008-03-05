@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectionsfragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,28 +54,33 @@ OoxConnectionsFragment::OoxConnectionsFragment( const WorkbookHelper& rHelper, c
 {
 }
 
-bool OoxConnectionsFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
-        case XML_ROOT_CONTEXT:         return (nElement == XLS_TOKEN( connections ));
-        case XLS_TOKEN( connections ): return (nElement == XLS_TOKEN( connection ));
-        case XLS_TOKEN( connection ):  return (nElement == XLS_TOKEN( webPr ))  ||
-                                              (nElement == XLS_TOKEN( textPr )) ||
-                                              (nElement == XLS_TOKEN( dbPr ))   ||
-                                              (nElement == XLS_TOKEN( olapPr )) ||
-                                              (nElement == XLS_TOKEN( parameters ));
-        case XLS_TOKEN( webPr ):       return (nElement == XLS_TOKEN( tables ));
-        case XLS_TOKEN( tables ):      return (nElement == XLS_TOKEN( m )) ||
-                                              (nElement == XLS_TOKEN( s )) ||
-                                              (nElement == XLS_TOKEN( x ));
+        case XML_ROOT_CONTEXT:
+            return  (nElement == XLS_TOKEN( connections ));
+        case XLS_TOKEN( connections ):
+            return  (nElement == XLS_TOKEN( connection ));
+        case XLS_TOKEN( connection ):
+            return  (nElement == XLS_TOKEN( webPr )) ||
+                    (nElement == XLS_TOKEN( textPr )) ||
+                    (nElement == XLS_TOKEN( dbPr )) ||
+                    (nElement == XLS_TOKEN( olapPr )) ||
+                    (nElement == XLS_TOKEN( parameters ));
+        case XLS_TOKEN( webPr ):
+            return  (nElement == XLS_TOKEN( tables ));
+        case XLS_TOKEN( tables ):
+            return  (nElement == XLS_TOKEN( m )) ||
+                    (nElement == XLS_TOKEN( s )) ||
+                    (nElement == XLS_TOKEN( x ));
     }
     return false;
 }
 
 void OoxConnectionsFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch ( getCurrentContext() )
+    switch ( getCurrentElement() )
     {
         case XLS_TOKEN( connection ):
             importConnection( rAttribs );
@@ -125,3 +130,4 @@ void OoxConnectionsFragment::importX( const AttributeList& /*rAttribs*/ )
 
 } // namespace xls
 } // namespace oox
+
