@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcharacterpropertiescontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,25 @@
 #ifndef OOX_DRAWINGML_TEXTCHARACTERPROPERTIESCONTEXT_HXX
 #define OOX_DRAWINGML_TEXTCHARACTERPROPERTIESCONTEXT_HXX
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/drawingml/textfont.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextCharacterPropertiesContext : public ::oox::core::Context
+class TextCharacterPropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    TextCharacterPropertiesContext( const ::oox::core::ContextRef& xParent,
+    TextCharacterPropertiesContext( ::oox::core::ContextHandler& rParent,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
-            oox::drawingml::TextCharacterProperties& rTextCharacterProperties );
+            TextCharacterProperties& rTextCharacterProperties );
     ~TextCharacterPropertiesContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::TextCharacterProperties& mrTextCharacterProperties;
+    TextCharacterProperties& mrTextCharacterProperties;
     bool      mbHasHighlightColor;
     TextFont  maLatinFont;
     TextFont  maAsianFont;

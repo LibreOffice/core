@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textliststylecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,25 +37,21 @@
 #define OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 
 #include "oox/drawingml/textliststyle.hxx"
-
-#include "oox/core/fragmenthandler.hxx"
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextListStyleContext : public ::oox::core::Context
+class TextListStyleContext : public ::oox::core::ContextHandler
 {
 public:
-    TextListStyleContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::TextListStyle& rTextListStyle );
+    TextListStyleContext( ::oox::core::ContextHandler& rParent, TextListStyle& rTextListStyle );
     ~TextListStyleContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::TextListStyle& mrTextListStyle;
+    TextListStyle& mrTextListStyle;
 };
 
 } }

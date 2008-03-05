@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapestylecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,24 +37,21 @@
 #define OOX_DRAWINGML_SHAPESTYLECONTEXT_HXX
 
 #include "oox/drawingml/shape.hxx"
-
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
 
-class ShapeStyleContext : public ::oox::core::Context
+class ShapeStyleContext : public ::oox::core::ContextHandler
 {
 public:
-    ShapeStyleContext( const ::oox::core::ContextRef& xParent, oox::drawingml::Shape& rShape );
+    ShapeStyleContext( ::oox::core::ContextHandler& rParent, Shape& rShape );
     ~ShapeStyleContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::Shape& mrShape;
+    Shape&              mrShape;
 };
 
 } }

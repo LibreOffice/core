@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textbodycontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,40 +43,37 @@
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textrun.hxx"
-
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextBodyContext : public ::oox::core::Context
+class TextBodyContext : public ::oox::core::ContextHandler
 {
 public:
-    TextBodyContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::Shape& rShape );
+    TextBodyContext( ::oox::core::ContextHandler& rParent, Shape& rShape );
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    oox::drawingml::Shape& mrShape;
-    oox::drawingml::TextBodyPtr mpBodyPtr;
+    Shape&              mrShape;
+    TextBodyPtr         mpBodyPtr;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxText;
 };
 
 // CT_RegularTextRun
-class RegularTextRunContext : public ::oox::core::Context
+class RegularTextRunContext : public ::oox::core::ContextHandler
 {
 public:
-    RegularTextRunContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::TextRunPtr pRunPtr );
+    RegularTextRunContext( ::oox::core::ContextHandler& rParent, TextRunPtr pRunPtr );
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    oox::drawingml::TextRunPtr mpRunPtr;
-    bool mbIsInText;
+    TextRunPtr          mpRunPtr;
+    bool                mbIsInText;
 };
 
 } }

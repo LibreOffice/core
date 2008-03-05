@@ -4,9 +4,9 @@
  *
  *  $RCSfile: themeelementscontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,21 @@
 #ifndef OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 #define OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/theme.hxx"
 
 namespace oox { namespace drawingml {
 
-class themeElementsContext : public oox::core::Context
+class themeElementsContext : public oox::core::ContextHandler
 {
-
 public:
-    themeElementsContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::Theme& );
+    themeElementsContext( ::oox::core::ContextHandler& rParent, Theme& );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-
-    oox::drawingml::Theme& mrTheme;
+    Theme& mrTheme;
 
 };
 

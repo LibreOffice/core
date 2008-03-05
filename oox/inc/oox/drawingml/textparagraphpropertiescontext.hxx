@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textparagraphpropertiescontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,26 +41,23 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/drawingml/textspacing.hxx"
-
-#ifndef OOX_CORE_CONTEXT_HXX
-#include "oox/core/context.hxx"
-#endif
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextParagraphPropertiesContext : public ::oox::core::Context
+class TextParagraphPropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    TextParagraphPropertiesContext( const ::oox::core::ContextRef& xParent,
+    TextParagraphPropertiesContext( ::oox::core::ContextHandler& rParent,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
-            oox::drawingml::TextParagraphProperties& rTextParagraphProperties );
+            TextParagraphProperties& rTextParagraphProperties );
     ~TextParagraphPropertiesContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::TextParagraphProperties& mrTextParagraphProperties;
+    TextParagraphProperties& mrTextParagraphProperties;
     TextSpacing     maLineSpacing;
     TextSpacing&    mrSpaceBefore;
     TextSpacing&    mrSpaceAfter;
