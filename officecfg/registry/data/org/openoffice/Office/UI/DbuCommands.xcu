@@ -470,6 +470,16 @@
                     <value xml:lang="en-US">Report to Text Document...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:FormSlots/deleteRecord" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete ~Record</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FormSlots/insertRecord" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Record</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DBQueryPreview" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Preview</value>
