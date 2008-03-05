@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:14:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1671,24 +1671,44 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
     if(!IsValid())
         throw  uno::RuntimeException();
     uno::Reference< text::XTextContent > xRet;
-   SwUnoInternalPaM aStartPam(*GetDoc());
+    SwUnoInternalPaM aStartPam(*GetDoc());
     std::auto_ptr < SwUnoInternalPaM > pEndPam( new SwUnoInternalPaM(*GetDoc()));
-   if(SwXTextRange::XTextRangeToSwPaM(aStartPam, xStart) &&
+    if(SwXTextRange::XTextRangeToSwPaM(aStartPam, xStart) &&
         SwXTextRange::XTextRangeToSwPaM(*pEndPam, xEnd) )
     {
-       pDoc->StartUndo( UNDO_START, NULL );
+        uno::Reference<lang::XUnoTunnel> xStartRangeTunnel( xStart, uno::UNO_QUERY);
+        SwXTextRange* pStartRange  = reinterpret_cast< SwXTextRange * >(
+                   sal::static_int_cast< sal_IntPtr >( xStartRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        uno::Reference<lang::XUnoTunnel> xEndRangeTunnel( xEnd, uno::UNO_QUERY);
+        SwXTextRange* pEndRange  = reinterpret_cast< SwXTextRange * >(
+                   sal::static_int_cast< sal_IntPtr >( xEndRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        //bokmarks have to be removed before the referenced text node is deleted in DelFullPara
+        if( pStartRange )
+        {
+            SwBookmark* pStartBookmark = pStartRange->GetBookmark();
+            if( pStartBookmark )
+                pDoc->deleteBookmark( pStartBookmark->GetName() );
+        }
+        if( pEndRange )
+        {
+            SwBookmark* pEndBookmark = pEndRange->GetBookmark();
+            if( pEndBookmark )
+                pDoc->deleteBookmark( pEndBookmark->GetName() );
+        }
+
+        pDoc->StartUndo( UNDO_START, NULL );
         bool bIllegalException = false;
         bool bRuntimeException = false;
         ::rtl::OUString sMessage;
         SwNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
-       while(pStartStartNode && pStartStartNode->IsSectionNode())
-       {
-       }
+        while(pStartStartNode && pStartStartNode->IsSectionNode())
+        {
+        }
         SwNode* pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
-       while(pEndStartNode && pEndStartNode->IsSectionNode())
-       {
-           pEndStartNode = pEndStartNode->StartOfSectionNode();
-       }
+        while(pEndStartNode && pEndStartNode->IsSectionNode())
+        {
+            pEndStartNode = pEndStartNode->StartOfSectionNode();
+        }
         if(pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
             throw lang::IllegalArgumentException();
         //make a selection from aStartPam to a EndPam
@@ -1710,8 +1730,34 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
             for(sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
                 pNewFrame->SwXFrame::setPropertyValue(pValues[nProp].Name, pValues[nProp].Value);
 
-            uno::Reference< text::XTextRange> xInsertTextRange = new SwXTextRange(aStartPam, this);
-            pNewFrame->attach( xInsertTextRange );
+            {//has to be in a block to remove the SwIndexes before DelFullPara is called
+                uno::Reference< text::XTextRange> xInsertTextRange = new SwXTextRange(aStartPam, this);
+                pNewFrame->attach( xInsertTextRange );
+                pNewFrame->setName(pDoc->GetUniqueFrameName());
+            }
+
+            if( !aStartPam.GetTxt().Len() )
+            {
+
+                bool bMoved = false;
+                {//has to be in a block to remove the SwIndexes before DelFullPara is called
+                    SwPaM aMovePam( *aStartPam.GetNode() );
+                    if( aMovePam.Move( fnMoveForward, fnGoCntnt ) )
+                    {
+                        //move the anchor to the next paragraph
+                        SwFmtAnchor aNewAnchor( pNewFrame->GetFrmFmt()->GetAnchor() );
+                        aNewAnchor.SetAnchor( aMovePam.Start() );
+                        pDoc->SetAttr( aNewAnchor, *pNewFrame->GetFrmFmt() );
+                    }
+                    bMoved = true;
+                }
+                if(bMoved)
+                {
+                    aStartPam.DeleteMark();
+//                    SwPaM aDelPam( *aStartPam.GetNode() );
+                    pDoc->DelFullPara(aStartPam/*aDelPam*/);
+                }
+            }
         }
         catch( lang::IllegalArgumentException& rIllegal )
         {
