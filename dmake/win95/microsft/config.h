@@ -1,6 +1,6 @@
 /* $RCSfile: config.h,v $
--- $Revision: 1.13 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:58:14 $
+-- $Revision: 1.14 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:40:17 $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +38,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.11"
+#define VERSION "4.12"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
@@ -113,7 +113,7 @@
 #endif
 
 /* a small problem with pointer to voids on some unix machines needs this */
-#define PVOID void *
+#define DMPVOID void *
 
 /* Use my own tempnam for MSC Version less than 6.0 */
 #if _MSC_VER < 600
