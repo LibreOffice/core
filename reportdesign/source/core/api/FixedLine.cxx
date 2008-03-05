@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedLine.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:57:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
             ,PROPERTY_PRINTREPEATEDVALUES
             ,PROPERTY_CONDITIONALPRINTEXPRESSION
             ,PROPERTY_PRINTWHENGROUPCHANGE
+            ,PROPERTY_MASTERFIELDS
+            ,PROPERTY_DETAILFIELDS
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
@@ -245,7 +247,8 @@ sal_Bool SAL_CALL OFixedLine::supportsService(const ::rtl::OUString& ServiceName
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL3(OFixedLine)
+REPORTCOMPONENT_IMPL3(OFixedLine,m_aProps.aComponent)
+REPORTCOMPONENT_NOMASTERDETAIL(OFixedLine)
 // -----------------------------------------------------------------------------
 ::sal_Int16  SAL_CALL OFixedLine::getControlBorder( ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
