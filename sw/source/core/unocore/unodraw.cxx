@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:26:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,12 @@
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
 #endif
+#include <swunohelper.hxx>
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
+#include <fmtflcnt.hxx>
+#include <txtatr.hxx>
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -658,6 +661,16 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
             aExcept.Message = C2U("illegal object");
         throw aExcept;
     }
+
+    // --> OD, HB
+    if ( pSvxShape->GetSdrObject() )
+    {
+        if ( pSvxShape->GetSdrObject()->IsInserted() )
+        {
+            return;
+        }
+    }
+    // <--
     GetSvxPage()->add(xShape);
 
     uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
@@ -1212,9 +1225,37 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                         aValue >>= xRg;
                         if ( SwXTextRange::XTextRangeToSwPaM(*pInternalPam, xRg) )
                         {
-                            aAnchor.SetAnchor( pInternalPam->GetPoint() );
-                            aSet.Put(aAnchor);
-                            pFmt->SetAttr(aSet);
+                            if(aAnchor.GetAnchorId() == FLY_IN_CNTNT)
+                            {
+                                //delete old SwFmtFlyCnt
+                                //With AnchorAsCharacter the current TxtAttribute has to be deleted.
+                                //Tbis removes the frame format too.
+                                //To prevent this the connection between format and attribute has to be broken before.
+                                const SwPosition *pPos = aAnchor.GetCntntAnchor();
+                                SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
+                                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                                const xub_StrLen nIdx = pPos->nContent.GetIndex();
+                                SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+                                DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                                            "Missing FlyInCnt-Hint." );
+                                DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFmt,
+                                            "Wrong TxtFlyCnt-Hint." );
+                                ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+
+                                //The connection is removed now the attribute can be deleted.
+                                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                                //create a new one
+                                SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
+                                DBG_ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
+                                pNd->InsertItem( SwFmtFlyCnt( pFmt ),
+                                                pInternalPam->GetPoint()->nContent.GetIndex(), 0 );
+                            }
+                            else
+                            {
+                                aAnchor.SetAnchor( pInternalPam->GetPoint() );
+                                aSet.Put(aAnchor);
+                                pFmt->SetAttr(aSet);
+                            }
                         }
                         else
                         {
@@ -1254,7 +1295,78 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 else
                 {
                     aPropSet.setPropertyValue(*pMap, aValue, aSet);
-                    pFmt->SetAttr(aSet);
+
+                    if(RES_ANCHOR == pMap->nWID && MID_ANCHOR_ANCHORTYPE == pMap->nMemberId)
+                    {
+                        bool bSetAttr = true;
+                        sal_Int32 eNewAnchor = SWUnoHelper::GetEnumAsInt32( aValue );
+
+                        //if old anchor was in_cntnt the related text attribute has to be removed
+                        const SwFmtAnchor& rOldAnchor = pFmt->GetAnchor();
+                        RndStdIds eOldAnchorId = rOldAnchor.GetAnchorId();
+                        SdrObject* pObj = pFmt->FindSdrObject();
+                        SwFrmFmt *pFlyFmt = FindFrmFmt( pObj );
+                        pFlyFmt->DelFrms();
+                        if( text::TextContentAnchorType_AS_CHARACTER != eNewAnchor &&
+                            FLY_IN_CNTNT == eOldAnchorId )
+                        {
+                            //With AnchorAsCharacter the current TxtAttribute has to be deleted.
+                            //Tbis removes the frame format too.
+                            //To prevent this the connection between format and attribute has to be broken before.
+                            const SwPosition *pPos = rOldAnchor.GetCntntAnchor();
+                            SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
+                            ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                            const xub_StrLen nIdx = pPos->nContent.GetIndex();
+                            SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+                            DBG_ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                                        "Missing FlyInCnt-Hint." );
+                            DBG_ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFlyFmt,
+                                        "Wrong TxtFlyCnt-Hint." );
+                            ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
+
+                            //The connection is removed now the attribute can be deleted.
+                            pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                        }
+                        else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
+                                FLY_PAGE == eOldAnchorId )
+                        {
+                            SwFmtAnchor aNewAnchor( dynamic_cast< const SwFmtAnchor& >( aSet.Get( RES_ANCHOR ) ) );
+                            //if the fly has been anchored at page then it needs to be connected
+                            //to the content position
+                            SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
+                            if( pDoc->GetRootFrm() )
+                            {
+                                SwCrsrMoveState aState( MV_SETONLYTEXT );
+                                Point aTmp( pObj->GetSnapRect().TopLeft() );
+                                pDoc->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                            }
+                            else
+                            {
+                                //without access to the layout the last node of the body will be used as anchor position
+                                aPam.Move( fnMoveBackward, fnGoDoc );
+                            }
+                            //anchor position has to be inserted after the text attribute has been inserted
+                            aNewAnchor.SetAnchor( aPam.GetPoint() );
+                            aSet.Put( aNewAnchor );
+                            pFmt->SetAttr(aSet);
+                            bSetAttr = false;
+                            if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
+                                FLY_IN_CNTNT != eOldAnchorId )
+                            {
+                                //the RES_TXTATR_FLYCNT needs to be added now
+                                SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
+                                DBG_ASSERT( pNd, "Crsr is not in a TxtNode." );
+                                pNd->InsertItem( SwFmtFlyCnt( pFlyFmt ),
+                                                aPam.GetPoint()->nContent.GetIndex(), 0 );
+                                //aPam.GetPoint()->nContent--;
+
+                            }
+                        }
+                        if( bSetAttr )
+                            pFmt->SetAttr(aSet);
+                    }
+                    else
+                        pFmt->SetAttr(aSet);
                 }
             }
             else
