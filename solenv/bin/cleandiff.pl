@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cleandiff.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:05:22 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:37:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ while (<>)
 {
     next if /^Only in/ ;
     next if /^diff -rc / ;
+    next if /^diff -ru / ;
     next if /^Common sub/ ;
 
     if ( /^---/ || /^\*\*\*/ || /^\+\+\+/ )
