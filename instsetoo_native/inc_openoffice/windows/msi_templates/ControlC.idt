@@ -19,6 +19,7 @@ LicenseAgreement	Next	Enable	AgreeToLicense = "Yes"
 ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
 ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
 ReadyToInstall	DlgTitle3	Show	ProgressType0="install"
+ReadyToInstall	DesktopLink	Hide	NOT DESKTOPLINKEXISTS
 SetupCompleteError	Back	Default	UpdateStarted
 SetupCompleteError	Back	Disable	NOT UpdateStarted
 SetupCompleteError	Back	Enable	UpdateStarted
