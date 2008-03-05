@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFOTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:39:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,7 +566,7 @@ void LFOTable::attribute(Id Name, Value & val)
 //        case NS_rtf::LN_STYLESHEET: break;
         default:
         {
-            OSL_ASSERT("LFOTable::attribute: default statement");
+            OSL_ENSURE( false, "LFOTable::attribute: default statement");
             //---->debug
             int nVal = val.getInt();
             ++nVal;
@@ -579,7 +579,7 @@ void LFOTable::attribute(Id Name, Value & val)
   -----------------------------------------------------------------------*/
 void LFOTable::sprm(Sprm& )
 {
-    OSL_ASSERT("Which sprm should be handled here?");
+    OSL_ENSURE( false, "Which sprm should be handled here?");
 }
 /*-- 27.06.2006 15:13:04---------------------------------------------------
 
