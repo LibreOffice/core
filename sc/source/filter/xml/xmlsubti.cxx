@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:53:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,9 +637,7 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        SCTAB nDocTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
-        for (SCTAB i = 0; i < nDocTableCount; ++i)
-            ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
+        ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights();
         rImport.UnlockSolarMutex();
     }
 }
