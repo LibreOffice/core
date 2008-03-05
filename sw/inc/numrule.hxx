@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:31:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,10 @@ class SW_DLLPUBLIC SwNumRule
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static USHORT aDefNumIndents[ MAXLEVEL ];
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    // default list level properties for position-and-space mode LABEL_ALIGNMENT
+    static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
+    // <--
     static USHORT nRefCount;
     // --> OD 2006-06-27 #6440955#
     // move to function numfunc::GetDefBulletFont()
@@ -192,18 +196,20 @@ class SW_DLLPUBLIC SwNumRule
     BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
     bool mbCountPhantoms;
 
-    // --> OD 2006-06-27 #b6440955#
-    // functionality of method moved to function numfunc::GetDefBulletFont()
-//    SW_DLLPRIVATE static void _MakeDefBulletFont();
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     // <--
 
     // forbidden and not implemented.
     SwNumRule();
 
 public:
-    // single argument constructors shall be explicit.
-    explicit SwNumRule( const String& rNm, SwNumRuleType = NUM_RULE,
-                BOOL bAutoFlg = TRUE );
+    // --> OD 2008-02-08 #newlistlevelattrs#
+    // add parameter <eDefaultNumberFormatPositionAndSpaceMode>
+    SwNumRule( const String& rNm,
+               const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
+               SwNumRuleType = NUM_RULE,
+               BOOL bAutoFlg = TRUE );
 
     SwNumRule( const SwNumRule& );
     ~SwNumRule();
