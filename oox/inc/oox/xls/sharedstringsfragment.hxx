@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedstringsfragment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_XLS_SHAREDSTRINGSFRAGMENT_HXX
 #define OOX_XLS_SHAREDSTRINGSFRAGMENT_HXX
 
-#include "oox/xls/ooxfragmenthandler.hxx"
+#include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
 namespace xls {
@@ -51,17 +51,16 @@ public:
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.xls.OoxContextHelper interface -------------------------------------
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual bool        onCanCreateContext( sal_Int32 nElement ) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
-    virtual bool        onCanCreateRecordContext( sal_Int32 nRecId );
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
 
-    // oox.xls.OoxFragmentHandler interface -----------------------------------
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
 };
 
