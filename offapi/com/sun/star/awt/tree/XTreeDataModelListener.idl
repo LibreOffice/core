@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTreeDataModelListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:28:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,11 @@ module com {  module sun {  module star {  module awt {  module tree {
 
 //=============================================================================
 
-/** An instance of this interface is used by the <service>TreeControl</service> to
+/** An instance of this interface is used by the <type>TreeControl</type> to
     get notifications about data model changes.
 
     <p>Usually you must not implement this interface yourself as it is already handled
-    by the <service>TreeControl</service>, but you must notify it correctly if
+    by the <type>TreeControl</type>, but you must notify it correctly if
     you implement the <type>XTreeDataModel</type> yourself</p>.
  */
 interface XTreeDataModelListener: com::sun::star::lang::XEventListener
