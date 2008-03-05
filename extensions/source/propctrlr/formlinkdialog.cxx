@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HXX
 #include "formlinkdialog.hxx"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HRC
 #include "formlinkdialog.hrc"
-#endif
 
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
@@ -205,8 +201,11 @@ namespace pcr
     //= FormLinkDialog
     //========================================================================
     //------------------------------------------------------------------------
-    FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XForm >& _rxDetailForm,
-        const Reference< XForm >& _rxMasterForm, const Reference< XMultiServiceFactory >& _rxORB )
+    FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
+            const Reference< XPropertySet >& _rxMasterForm, const Reference< XMultiServiceFactory >& _rxORB,
+            const ::rtl::OUString& _sExplanation,
+            const ::rtl::OUString& _sDetailLabel,
+            const ::rtl::OUString& _sMasterLabel)
         :ModalDialog( _pParent, PcrRes( RID_DLG_FORMLINKS ) )
         ,m_aExplanation( this, PcrRes( FT_EXPLANATION  ) )
         ,m_aDetailLabel( this, PcrRes( FT_DETAIL_LABEL ) )
@@ -222,8 +221,12 @@ namespace pcr
         ,m_xORB       ( _rxORB        )
         ,m_xDetailForm( _rxDetailForm )
         ,m_xMasterForm( _rxMasterForm )
+        ,m_sDetailLabel(_sDetailLabel)
+        ,m_sMasterLabel(_sMasterLabel)
     {
         FreeResource();
+        if ( _sExplanation.getLength() )
+            m_aExplanation.SetText(_sExplanation);
 
         m_aSuggest.SetClickHdl       ( LINK( this, FormLinkDialog, OnSuggest      ) );
         m_aRow1->SetLinkChangeHandler( LINK( this, FormLinkDialog, OnFieldChanged ) );
@@ -270,9 +273,9 @@ namespace pcr
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
             if ( xDetailFormProps.is() )
             {
-            ::rtl::OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
+                ::rtl::OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
                 xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aDetailFields.size() ) ) );
-            pFields = aMasterFields.empty() ? 0 : &aMasterFields[0];
+                pFields = aMasterFields.empty() ? 0 : &aMasterFields[0];
                 xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aMasterFields.size() ) ) );
             }
         }
@@ -320,8 +323,12 @@ namespace pcr
         String sDetailType = getFormDataSourceType( m_xDetailForm );
         if ( !sDetailType.Len() )
         {
-            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-            sDetailType = String( PcrRes( STR_DETAIL_FORM ) );
+            if ( !m_sDetailLabel.getLength() )
+            {
+                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
+                m_sDetailLabel = String( PcrRes( STR_DETAIL_FORM ) );
+            }
+            sDetailType = m_sDetailLabel;
         }
         m_aDetailLabel.SetText( sDetailType );
 
@@ -329,8 +336,12 @@ namespace pcr
         String sMasterType = getFormDataSourceType( m_xMasterForm );
         if ( !sMasterType.Len() )
         {
-            ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-            sMasterType = String( PcrRes( STR_MASTER_FORM ) );
+            if ( !m_sMasterLabel.getLength() )
+            {
+                ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
+                m_sMasterLabel = String( PcrRes( STR_MASTER_FORM ) );
+            }
+            sMasterType = m_sMasterLabel;
         }
         m_aMasterLabel.SetText( sMasterType );
     }
@@ -403,7 +414,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    String FormLinkDialog::getFormDataSourceType( const Reference< XForm >& _rxForm ) const SAL_THROW(())
+    String FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const SAL_THROW(())
     {
         String sReturn;
         Reference< XPropertySet > xFormProps( _rxForm, UNO_QUERY );
@@ -431,11 +442,12 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void FormLinkDialog::getFormFields( const Reference< XForm >& _rxForm, Sequence< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(( ))
+    void FormLinkDialog::getFormFields( const Reference< XPropertySet >& _rxForm, Sequence< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(( ))
     {
         _rNames.realloc( 0 );
 
         ::dbtools::SQLExceptionInfo aErrorInfo;
+        ::rtl::OUString sCommand;
         try
         {
             WaitObject aWaitCursor( const_cast< FormLinkDialog* >( this ) );
@@ -444,7 +456,6 @@ namespace pcr
             OSL_ENSURE( xFormProps.is(), "FormLinkDialog::getFormFields: invalid form!" );
 
             sal_Int32       nCommandType = CommandType::COMMAND;
-            ::rtl::OUString sCommand;
 
             xFormProps->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
             xFormProps->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
@@ -472,7 +483,8 @@ namespace pcr
             String sErrorMessage;
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-                sErrorMessage = String( PcrRes( ( _rxForm == m_xDetailForm ) ? STR_ERROR_RETRIEVING_MASTER_COLUMNS : STR_ERROR_RETRIEVING_DETAIL_COLUMNS ) );
+                sErrorMessage = String( PcrRes( STR_ERROR_RETRIEVING_COLUMNS) );
+                sErrorMessage.SearchAndReplace('#',sCommand);
             }
 
             SQLContext aContext;
@@ -488,8 +500,11 @@ namespace pcr
         OSL_PRECOND( _rxFormProps.is(), "FormLinkDialog::ensureFormConnection: invalid form!" );
         if ( !_rxFormProps.is() )
             return;
+        if ( _rxFormProps->getPropertySetInfo()->hasPropertyByName(PROPERTY_ACTIVE_CONNECTION) )
+            _rxConnection.set(_rxFormProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
-        _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
+        if ( !_rxConnection.is() )
+            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
     }
 
     //------------------------------------------------------------------------
@@ -625,7 +640,14 @@ namespace pcr
                 Reference< XDatabaseMetaData > xMeta;
                 getConnectionMetaData( xDetailFormProps, xMeta );
                 OSL_ENSURE( xMeta.is(), "FormLinkDialog::initializeSuggest: unable to retrieve the meta data for the connection!" );
-                bEnable = xMeta.is() && xMeta->supportsIntegrityEnhancementFacility();
+                try
+                {
+                    bEnable = xMeta.is() && xMeta->supportsIntegrityEnhancementFacility();
+                }
+                catch(const Exception&)
+                {
+                    bEnable = sal_False;
+                }
             }
 
             // only enable the button if there is a "canonic" table underlying both forms
@@ -688,7 +710,6 @@ namespace pcr
         initializeSuggest();
         return 0L;
     }
-
 //............................................................................
 }   // namespace pcr
 //............................................................................
