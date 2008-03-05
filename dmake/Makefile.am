@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-18 09:26:37 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:26:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@ endif
 if OSTYPEWIN32
 dmake_SOURCES += win95/dchdir.c win95/switchar.c \
                  msdos/dstrlwr.c msdos/arlib.c \
-                 msdos/dirbrk.c msdos/runargv.c \
-                 msdos/rmprq.c \
+                 msdos/dirbrk.c unix/runargv.c \
+                 unix/rmprq.c \
                  win95/microsft/ruletab.c
 INCLUDES += -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
 endif
