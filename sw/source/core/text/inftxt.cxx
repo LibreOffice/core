@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:46:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,11 @@
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
 #endif
+// --> OD 2008-01-17 #newlistlevelattrs#
+#ifndef _SVX_TSTPITEM_HXX
+#include <svx/tstpitem.hxx>
+#endif
+// <--
 
 #include <SwSmartTagMgr.hxx>
 
@@ -221,9 +226,65 @@ sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
  *                      SwLineInfo::SwLineInfo()
  *************************************************************************/
 
-void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet )
+// --> OD 2008-01-17 #newlistlevelattrs#
+SwLineInfo::SwLineInfo()
+    : pRuler( 0 ),
+      pSpace( 0 ),
+      nVertAlign( 0 ),
+      nDefTabStop( 0 ),
+      bListTabStopIncluded( false ),
+      nListTabStopPosition( 0 )
 {
-    pRuler = &rAttrSet.GetTabStops();
+}
+
+SwLineInfo::~SwLineInfo()
+{
+    delete pRuler;
+}
+void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
+                                   const SwTxtNode& rTxtNode )
+// <--
+{
+    // --> OD 2008-01-17 #newlistlevelattrs#
+//    pRuler = &rAttrSet.GetTabStops();
+    delete pRuler;
+    pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
+    if ( rTxtNode.GetListTabStopPosition( nListTabStopPosition ) )
+    {
+        bListTabStopIncluded = true;
+
+        // insert the list tab stop into SvxTabItem instance <pRuler>
+        const SvxTabStop aListTabStop( nListTabStopPosition,
+                                       SVX_TAB_ADJUST_LEFT );
+        pRuler->Insert( aListTabStop );
+
+        // remove default tab stops, which are before the inserted list tab stop
+        for ( USHORT i = 0; i < pRuler->Count(); i++ )
+        {
+            if ( (*pRuler)[i].GetTabPos() < nListTabStopPosition &&
+                 (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+            {
+                pRuler->Remove(i);
+                continue;
+            }
+        }
+    }
+    // <--
+    // --> OD 2008-02-15 #newlistlevelattrs#
+    if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+    {
+        // remove default tab stop at position 0
+        for ( USHORT i = 0; i < pRuler->Count(); i++ )
+        {
+            if ( (*pRuler)[i].GetTabPos() == 0 &&
+                 (*pRuler)[i].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+            {
+                pRuler->Remove(i);
+                break;
+            }
+        }
+    }
+    // <--
     pSpace = &rAttrSet.GetLineSpacing();
     nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
     nDefTabStop = MSHRT_MAX;
