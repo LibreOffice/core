@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unitconverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,19 +55,9 @@ namespace xls {
 namespace {
 
 const double MM100_PER_INCH         = 2540.0;
-const double INCH_PER_MM100         = 1.0 / MM100_PER_INCH;
-
-const double POINT_PER_INCH         = 72.0;
-const double INCH_PER_POINT         = 1.0 / POINT_PER_INCH;
-
-const double MM100_PER_POINT        = MM100_PER_INCH * INCH_PER_POINT;
-const double POINT_PER_MM100        = 1.0 / MM100_PER_POINT;
-
-const double TWIP_PER_POINT         = 20.0;
-const double POINT_PER_TWIP         = 1.0 / TWIP_PER_POINT;
-
-const double MM100_PER_TWIP         = MM100_PER_POINT * POINT_PER_TWIP;
-const double TWIP_PER_MM100         = 1.0 / MM100_PER_TWIP;
+const double MM100_PER_POINT        = MM100_PER_INCH / 72.0;
+const double MM100_PER_TWIP         = MM100_PER_POINT / 20.0;
+const double MM100_PER_EMU          = 1.0 / 360.0;
 
 } // namespace
 
@@ -75,11 +65,18 @@ const double TWIP_PER_MM100         = 1.0 / MM100_PER_TWIP;
 
 UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mfPixelPerMm100X( 0.08 ),
-    mfPixelPerMm100Y( 0.08 ),
-    mnDigitWidth( 200 ),
-    mnSpaceWidth( 100 )
+    maCoeffs( UNIT_ENUM_SIZE, 1.0 )
 {
+    // initialize constant and default coefficients
+    maCoeffs[ UNIT_INCH ]   = MM100_PER_INCH;
+    maCoeffs[ UNIT_POINT ]  = MM100_PER_POINT;
+    maCoeffs[ UNIT_TWIP ]   = MM100_PER_TWIP;
+    maCoeffs[ UNIT_EMU ]    = MM100_PER_EMU;
+    maCoeffs[ UNIT_PIXELX ] = 12.5;                 // default: 1 px = 0.125 mm
+    maCoeffs[ UNIT_PIXELY ] = 12.5;                 // default: 1 px = 0.125 mm
+    maCoeffs[ UNIT_DIGIT ]  = 200.0;                // default: 1 digit = 2 mm
+    maCoeffs[ UNIT_SPACE ]  = 100.0;                // default  1 space = 1 mm
+
     // map error code names to BIFF error codes
     maErrorCodes[ CREATE_OUSTRING( "#NULL!" ) ]  = BIFF_ERR_NULL;
     maErrorCodes[ CREATE_OUSTRING( "#DIV/0!" ) ] = BIFF_ERR_DIV0;
@@ -97,28 +94,28 @@ void UnitConverter::finalizeImport()
     {
         // get pixel metric first, needed to get character widths below
         DeviceInfo aInfo = xDevice->getInfo();
-        mfPixelPerMm100X = aInfo.PixelPerMeterX / 100000.0;
-        mfPixelPerMm100Y = aInfo.PixelPerMeterY / 100000.0;
+        maCoeffs[ UNIT_PIXELX ] = 100000.0 / aInfo.PixelPerMeterX;
+        maCoeffs[ UNIT_PIXELY ] = 100000.0 / aInfo.PixelPerMeterY;
 
         // get character widths from default font
         if( const Font* pDefFont = getStyles().getDefaultFont().get() )
         {
             // XDevice expects pixels in font descriptor, but font contains twips
             FontDescriptor aDesc = pDefFont->getFontDescriptor();
-            aDesc.Height = static_cast< sal_Int16 >( calcPixelsXFromMm100( calcMm100FromTwips( aDesc.Height ) ) );
+            aDesc.Height = static_cast< sal_Int16 >( scaleValue( aDesc.Height, UNIT_TWIP, UNIT_PIXELX ) + 0.5 );
             Reference< XFont > xFont = xDevice->getFont( aDesc );
             if( xFont.is() )
             {
                 // get maximum width of all digits
                 sal_Int32 nDigitWidth = 0;
                 for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-                    nDigitWidth = ::std::max( nDigitWidth, calcMm100FromPixelsX( xFont->getCharWidth( cChar ) ) );
+                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_PIXELX ) );
                 if( nDigitWidth > 0 )
-                    mnDigitWidth = nDigitWidth;
+                    maCoeffs[ UNIT_DIGIT ] = nDigitWidth;
                 // get width of space character
-                sal_Int32 nSpaceWidth = calcMm100FromPixelsX( xFont->getCharWidth( ' ' ) );
+                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), UNIT_PIXELX );
                 if( nSpaceWidth > 0 )
-                    mnSpaceWidth = nSpaceWidth;
+                    maCoeffs[ UNIT_SPACE ] = nSpaceWidth;
             }
         }
     }
@@ -126,80 +123,31 @@ void UnitConverter::finalizeImport()
 
 // conversion -----------------------------------------------------------------
 
-sal_Int32 UnitConverter::calcMm100FromInches( double fInches ) const
+double UnitConverter::scaleValue( double fValue, Unit eFromUnit, Unit eToUnit ) const
 {
-    return static_cast< sal_Int32 >( fInches * MM100_PER_INCH );
+    return fValue * getCoefficient( eFromUnit ) / getCoefficient( eToUnit );
 }
 
-sal_Int32 UnitConverter::calcMm100FromPoints( double fPoints ) const
+sal_Int32 UnitConverter::scaleToMm100( double fValue, Unit eUnit ) const
 {
-    return static_cast< sal_Int32 >( fPoints * MM100_PER_POINT + 0.5 );
+    return static_cast< sal_Int32 >( fValue * getCoefficient( eUnit ) + 0.5 );
 }
 
-sal_Int32 UnitConverter::calcMm100FromTwips( double fTwips ) const
+double UnitConverter::scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const
 {
-    return static_cast< sal_Int32 >( fTwips * MM100_PER_TWIP + 0.5 );
-}
-
-sal_Int32 UnitConverter::calcMm100FromPixelsX( double fPixels ) const
-{
-    return static_cast< sal_Int32 >( fPixels / mfPixelPerMm100X + 0.5 );
-}
-
-sal_Int32 UnitConverter::calcMm100FromPixelsY( double fPixels ) const
-{
-    return static_cast< sal_Int32 >( fPixels / mfPixelPerMm100Y + 0.5 );
-}
-
-sal_Int32 UnitConverter::calcMm100FromDigits( double fChars ) const
-{
-    return static_cast< sal_Int32 >( fChars * mnDigitWidth + 0.5 );
-}
-
-sal_Int32 UnitConverter::calcMm100FromSpaces( double fSpaces ) const
-{
-    return static_cast< sal_Int32 >( fSpaces * mnSpaceWidth + 0.5 );
-}
-
-double UnitConverter::calcInchesFromMm100( sal_Int32 nMm100 ) const
-{
-    return nMm100 * INCH_PER_MM100;
-}
-
-double UnitConverter::calcPointsFromMm100( sal_Int32 nMm100 ) const
-{
-    return nMm100 * POINT_PER_MM100;
-}
-
-double UnitConverter::calcTwipsFromMm100( sal_Int32 nMm100 ) const
-{
-    return nMm100 * TWIP_PER_MM100;
-}
-
-double UnitConverter::calcPixelsXFromMm100( sal_Int32 nMm100 ) const
-{
-    return nMm100 * mfPixelPerMm100X;
-}
-
-double UnitConverter::calcPixelsYFromMm100( sal_Int32 nMm100 ) const
-{
-    return nMm100 * mfPixelPerMm100Y;
-}
-
-double UnitConverter::calcDigitsFromMm100( sal_Int32 nMm100 ) const
-{
-    return static_cast< double >( nMm100 ) / mnDigitWidth;
-}
-
-double UnitConverter::calcSpacesFromMm100( sal_Int32 nMm100 ) const
-{
-    return static_cast< double >( nMm100 ) / mnSpaceWidth;
+    return static_cast< double >( nMm100 ) / getCoefficient( eUnit );
 }
 
 sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
 {
     ErrorCodeMap::const_iterator aIt = maErrorCodes.find( rErrorCode );
     return (aIt == maErrorCodes.end()) ? BIFF_ERR_NA : aIt->second;
+}
+
+double UnitConverter::getCoefficient( Unit eUnit ) const
+{
+    OSL_ENSURE( static_cast< size_t >( eUnit ) < UNIT_ENUM_SIZE, "UnitConverter::getCoefficient - invalid unit" );
+    return maCoeffs[ static_cast< size_t >( eUnit ) ];
 }
 
 // ============================================================================
