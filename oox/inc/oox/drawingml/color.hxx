@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,13 @@ class clrChangeContext;
 
 typedef boost::shared_ptr< Color > ColorPtr;
 
+struct ColorTransformation
+{
+    sal_Int32 mnToken;
+    sal_Int32 mnValue;
+    ColorTransformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
+};
+
 class Color
 {
 
@@ -67,6 +74,11 @@ public:
 
     sal_Bool    isUsed() const { return mbUsed; };
 
+    //HSL values = 0 ÷ 1
+    //RGB values = 0 ÷ 255
+    static void RGBtoHSL( sal_uInt8 R, sal_uInt8 G, sal_uInt8 B, double& H, double& S, double& L );
+    static void HSLtoRGB( double H, double S, double L, sal_uInt8& R, sal_uInt8& G, sal_uInt8& B );
+
 private:
 
     sal_Int32       mnColor;
@@ -74,6 +86,8 @@ private:
     sal_Bool        mbUsed;
     sal_Bool        mbSchemeColor;
     sal_Bool        mbAlphaColor;
+
+    std::vector< ColorTransformation > maColorTransformation;
 };
 
 } }
