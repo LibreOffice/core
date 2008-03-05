@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:56:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_PAGE_ADO             9
 #define ADDITIONAL_PAGE_ODBC           10
 #define ADDITIONAL_USERDEFINED         11
+#define ADDITIONAL_PAGE_MYSQL_NATIVE   12
 
 
 DBG_NAME(ODbTypeWizDialog)
@@ -238,6 +239,9 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
                 case DST_ADABAS:
                     nNextState = ADDITIONAL_PAGE_ADABAS;
                     break;
+                case DST_MYSQL_NATIVE:
+                    nNextState = ADDITIONAL_PAGE_MYSQL_NATIVE;
+                    break;
                 case DST_MYSQL_JDBC:
                     nNextState = ADDITIONAL_PAGE_MYSQL_JDBC;
                     break;
@@ -334,6 +338,9 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
             pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);
+            break;
+            case ADDITIONAL_PAGE_MYSQL_NATIVE:
+            pPage = ODriversSettings::CreateMySQLNATIVE(this,*m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
             pPage = ODriversSettings::CreateMySQLODBC(this,*m_pOutSet);
