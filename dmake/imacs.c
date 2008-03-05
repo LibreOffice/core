@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.8 2007-10-15 15:39:37 ihi Exp $
+/* RCS  $Id: imacs.c,v 1.9 2008-03-05 18:29:01 kz Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -137,9 +137,14 @@ Create_macro_vars()
    _set_int_var( "PREP",          "0", M_DEFAULT, &Prep );
    (void) Def_macro("MAXLINELENGTH", "1024", M_FLAG | M_DEFAULT);
 
-   /* set MAXPROCESSLIMIT high initially so that it allows MAXPROCESS to
-    * change from command line. */
+   /* MAXPROCESSLIMIT is overwritten by the ruletab.c settings. Set its
+    * initial value high so that it allows MAXPROCESS to be changed
+    * from the command line. */
    _set_int_var( "MAXPROCESSLIMIT", "100", M_DEFAULT|M_NOEXPORT,&Max_proclmt );
+#if defined(USE_CREATEPROCESS)
+   /* Set the OS early enough. */
+   Max_proclmt = MAXIMUM_WAIT_OBJECTS;
+#endif
    _set_int_var( "MAXPROCESS", "1", M_DEFAULT|M_NOEXPORT, &Max_proc );
    sprintf(buf,"%d",NAME_MAX);
    _set_int_var( "NAMEMAX", buf, M_DEFAULT|M_NOEXPORT, &NameMax);
