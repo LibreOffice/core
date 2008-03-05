@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingLevel.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2006-06-19 10:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,68 @@ published service NumberingLevel
         numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
     */
     [optional, property] short BulletRelSize;
+
+        /** position and space mode
+
+                @since OOo 3.0
+
+                <p>
+                Specifies the position and space mode of the numbering level.
+                For valid values see com::sun::star::text::PositionAndSpaceMode.
+                If it equals LABEL_WIDTH_AND_POSITION, properties Adjust,
+                LeftMargin, SymbolTextDistance and FirstLineOffset are used.
+                If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
+                ListtabStopPosition, FirstLineIndent, IndentAt are used.
+                </p>
+        */
+        [optional, property] short PositionAndSpaceMode;
+
+        /** character following the list label
+
+                @since OOo 3.0
+
+                <p>
+                Specifies the character following the list label.
+                For valid values see com::sun::star::text::LabelFollow.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+        */
+        [optional, property] short LabelFollowedBy;
+
+        /** list tab position
+
+                @since OOo 3.0
+
+                <p>
+                Specifies the position of the list tab stop - only non-negative
+                values are allowed.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
+                and LabelFollowedBy equal LABELFOLLOW_LISTTAB
+                </p>
+        */
+        [optional, property] long ListtabStopPosition;
+
+        /** additional line indent for the first text line
+
+                @since OOo 3.0
+
+                <p>
+                Specifies the first line indent.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+        */
+        [optional, property] long FirstLineIndent;
+
+        /** indentation of the text lines
+
+                @since OOo 3.0
+
+                <p>
+                Specifies the indent of the text lines
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+        */
+        [optional, property] long IndentAt;
 };
 
 //=============================================================================
