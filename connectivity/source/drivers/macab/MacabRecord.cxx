@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabRecord.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:53:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,8 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
             fields[_column] = new macabfield;
 
         fields[_column]->value = _value;
-        CFRetain(fields[_column]->value);
+        if (fields[_column]->value)
+            CFRetain(fields[_column]->value);
         fields[_column]->type = _type;
     }
 }
@@ -151,7 +152,8 @@ macabfield *MacabRecord::copy(const sal_Int32 i) const
         macabfield *_copy = new macabfield;
         _copy->type = fields[i]->type;
         _copy->value = fields[i]->value;
-        CFRetain(_copy->value);
+        if (_copy->value)
+            CFRetain(_copy->value);
         return _copy;
     }
 
