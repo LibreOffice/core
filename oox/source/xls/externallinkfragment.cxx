@@ -4,9 +4,9 @@
  *
  *  $RCSfile: externallinkfragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:00:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 #include "oox/xls/externallinkfragment.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/recordparser.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/sheetdatacontext.hxx"
@@ -43,8 +42,7 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::oox::core::RecordContextRef;
+using ::oox::core::RecordInfo;
 using ::oox::core::Relation;
 
 namespace oox {
@@ -60,9 +58,11 @@ OoxExternalLinkFragment::OoxExternalLinkFragment( const WorkbookHelper& rHelper,
 {
 }
 
-bool OoxExternalLinkFragment::onCanCreateContext( sal_Int32 nElement ) const
+// oox.core.ContextHandler2Helper interface -----------------------------------
+
+ContextWrapper OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nElement == XLS_TOKEN( externalLink ));
@@ -79,7 +79,9 @@ bool OoxExternalLinkFragment::onCanCreateContext( sal_Int32 nElement ) const
         case XLS_TOKEN( definedNames ):
             return  (nElement == XLS_TOKEN( definedName ));
         case XLS_TOKEN( sheetDataSet ):
-            return  (nElement == XLS_TOKEN( sheetData ));
+            if( (nElement == XLS_TOKEN( sheetData )) && (mrExtLink.getLinkType() == LINKTYPE_EXTERNAL) )
+                return createSheetDataContext( rAttribs.getInteger( XML_sheetId, -1 ) ).get();
+        break;
         case XLS_TOKEN( ddeLink ):
             return  (nElement == XLS_TOKEN( ddeItems ));
         case XLS_TOKEN( ddeItems ):
@@ -98,28 +100,9 @@ bool OoxExternalLinkFragment::onCanCreateContext( sal_Int32 nElement ) const
     return false;
 }
 
-Reference< XFastContextHandler > OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
-{
-    switch( nElement )
-    {
-        case XLS_TOKEN( sheetData ):
-            if( mrExtLink.getLinkType() == LINKTYPE_EXTERNAL )
-            {
-                sal_Int32 nSheet = mrExtLink.getSheetIndex( rAttribs.getInteger( XML_sheetId, -1 ) );
-                Reference< XFastContextHandler > xHandler;
-                ::rtl::Reference< OoxExternalSheetDataContext > xContext( new OoxExternalSheetDataContext( *this, SHEETTYPE_WORKSHEET, nSheet ) );
-                if( xContext->isValidSheet() )
-                    xHandler.set( xContext.get() );
-                return xHandler;
-            }
-        break;
-    }
-    return this;
-}
-
 void OoxExternalLinkFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( externalBook ): mrExtLink.importExternalBook( getRelations(), rAttribs );   break;
         case XLS_TOKEN( sheetName ):    mrExtLink.importSheetName( rAttribs );                      break;
@@ -135,7 +118,7 @@ void OoxExternalLinkFragment::onStartElement( const AttributeList& rAttribs )
 
 void OoxExternalLinkFragment::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( val ):
             maResultValue = rChars;
@@ -162,38 +145,20 @@ void OoxExternalLinkFragment::onEndElement( const OUString& rChars )
     }
 }
 
-bool OoxExternalLinkFragment::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
-    /*  Weird things are going on in this fragment...
-
-        Without external names, several EXTSHEETDATA/EXTSHEETDATA_END contexts
-        contain the external cells. They are not preceded by a SHEETDATASET
-        context record, but a SHEETDATASET_END record occurs at the end of the
-        stream. In this case we have to start a SHEETDATASET context on-the-fly
-        to keep the context stack valid.
-     */
-    if( (getCurrentContext() == OOBIN_ID_EXTERNALBOOK) && (nRecId == OOBIN_ID_EXTSHEETDATA) )
-        getRecordParser().pushContext( OOBIN_ID_SHEETDATASET, this );
-
-    /*  With external names, SHEETDATASET contexts are opened after each
-        external name, but not closed before a new external name starts. Here
-        we have to close the SHEETDATASET context before.
-     */
-    else if( (getCurrentContext() == OOBIN_ID_SHEETDATASET) && (nRecId != OOBIN_ID_EXTSHEETDATA) )
-        getRecordParser().popContext();
-
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nRecId == OOBIN_ID_EXTERNALBOOK);
         case OOBIN_ID_EXTERNALBOOK:
+            if( (nRecId == OOBIN_ID_EXTSHEETDATA) && (mrExtLink.getLinkType() == LINKTYPE_EXTERNAL) )
+                return createSheetDataContext( rStrm.readInt32() ).get();
             return  (nRecId == OOBIN_ID_EXTSHEETNAMES) ||
-                    (nRecId == OOBIN_ID_EXTERNALNAME) ||
-                    (nRecId == OOBIN_ID_EXTERNALNAMEFLAGS) ||
-                    (nRecId == OOBIN_ID_SHEETDATASET) ||
+                    (nRecId == OOBIN_ID_EXTERNALNAME);
+        case OOBIN_ID_EXTERNALNAME:
+            return  (nRecId == OOBIN_ID_EXTERNALNAMEFLAGS) ||
                     (nRecId == OOBIN_ID_DDEITEMVALUES);
-        case OOBIN_ID_SHEETDATASET:
-            return  (nRecId == OOBIN_ID_EXTSHEETDATA);
         case OOBIN_ID_DDEITEMVALUES:
             return  (nRecId == OOBIN_ID_DDEITEM_BOOL) ||
                     (nRecId == OOBIN_ID_DDEITEM_DOUBLE) ||
@@ -203,28 +168,9 @@ bool OoxExternalLinkFragment::onCanCreateRecordContext( sal_Int32 nRecId )
     return false;
 }
 
-RecordContextRef OoxExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
-{
-    switch( nRecId )
-    {
-        case OOBIN_ID_EXTSHEETDATA:
-            if( mrExtLink.getLinkType() == LINKTYPE_EXTERNAL )
-            {
-                sal_Int32 nSheet = mrExtLink.getSheetIndex( rStrm.readInt32() );
-                RecordContextRef xRecContext;
-                ::rtl::Reference< OoxExternalSheetDataContext > xContext( new OoxExternalSheetDataContext( *this, SHEETTYPE_WORKSHEET, nSheet ) );
-                if( xContext->isValidSheet() )
-                    xRecContext.set( xContext.get() );
-                return xRecContext;
-            }
-        break;
-    }
-    return this;
-}
-
 void OoxExternalLinkFragment::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_EXTERNALBOOK:         mrExtLink.importExternalBook( getRelations(), rStrm );              break;
         case OOBIN_ID_EXTSHEETNAMES:        mrExtLink.importExtSheetNames( rStrm );                             break;
@@ -236,6 +182,32 @@ void OoxExternalLinkFragment::onStartRecord( RecordInputStream& rStrm )
         case OOBIN_ID_DDEITEM_ERROR:        if( mxExtName.get() ) mxExtName->importDdeItemError( rStrm );       break;
         case OOBIN_ID_DDEITEM_STRING:       if( mxExtName.get() ) mxExtName->importDdeItemString( rStrm );      break;
     }
+}
+
+::rtl::Reference< OoxExternalSheetDataContext > OoxExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )
+{
+    sal_Int32 nSheet = mrExtLink.getSheetIndex( nSheetId );
+    ::rtl::Reference< OoxExternalSheetDataContext > xContext(
+        new OoxExternalSheetDataContext( *this, SHEETTYPE_WORKSHEET, nSheet ) );
+    if( xContext->isValidSheet() )
+        return xContext;
+    return 0;
+}
+
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxExternalLinkFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { OOBIN_ID_DDEITEMVALUES,   OOBIN_ID_DDEITEMVALUES + 1  },
+        { OOBIN_ID_EXTERNALBOOK,    OOBIN_ID_EXTERNALBOOK + 228 },
+        { OOBIN_ID_EXTERNALNAME,    OOBIN_ID_EXTERNALNAME + 10  },
+        { OOBIN_ID_EXTROW,          -1                          },
+        { OOBIN_ID_EXTSHEETDATA,    OOBIN_ID_EXTSHEETDATA + 1   },
+        { -1,                       -1                          }
+    };
+    return spRecInfos;
 }
 
 // ============================================================================
