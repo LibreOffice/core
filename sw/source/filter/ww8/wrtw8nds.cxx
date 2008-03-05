@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:51:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,9 @@
 #ifndef SW_WRITERWORDGLUE
 #include "writerwordglue.hxx"
 #endif
-
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
 
 #ifndef _WRTWW8_HXX
 #include "wrtww8.hxx"
