@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:19:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ Pict: Update Font
 void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich )
 {
     SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
-    _rPage.rSh.GetAttr(aSet);
+    _rPage.rSh.GetCurAttr(aSet);
     SvxFontItem aFmtFont((SvxFontItem &) aSet.Get(_nWhich));
 
     _rFont.SetFamily (aFmtFont.GetFamily());
