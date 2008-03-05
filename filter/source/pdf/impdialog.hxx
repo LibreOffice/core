@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:41:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,20 @@
 #define IMPDIALOG_HXX
 
 #include "pdffilter.hxx"
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 
-#ifndef _GROUP_HXX
-#include <vcl/group.hxx>
-#endif
-#include <svtools/FilterConfigItem.hxx>
+#include "vcl/dialog.hxx"
+#include "vcl/button.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/field.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/group.hxx"
+#include "vcl/pdfwriter.hxx"
 
-#ifndef _SFXTABDLG_HXX
-#include <sfx2/tabdlg.hxx>
-#endif
+#include "svtools/FilterConfigItem.hxx"
+
+#include "sfx2/tabdlg.hxx"
 
 // ----------------
 // - ImpPDFDialog -
@@ -63,6 +61,21 @@ class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
+
+class ImplErrorDialog : public ModalDialog
+{
+    FixedImage      maFI;
+    FixedText       maProcessText;
+    ListBox         maErrors;
+    FixedText       maExplanation;
+
+    OKButton        maButton;
+
+    DECL_LINK( SelectHdl, ListBox* );
+    public:
+    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >&, ResMgr& rResMgr );
+    ~ImplErrorDialog();
+};
 
 ////////////////////////////////////////////////////////////////////////
 //class tabbed dialog
