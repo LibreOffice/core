@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:07:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_framework.hxx"
 
 #include "services/backingcomp.hxx"
+
+#include "backingwindow.hxx"
 
 //_______________________________________________
 // own includes
@@ -644,10 +646,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         {
             xLayoutManager->lock();
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
+            /* #i85963# new backing window comes withoud standard bar and statusbar
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
             xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
             xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+            */
             xLayoutManager->unlock();
         }
 
@@ -946,7 +950,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     // create the component window
     Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
-    Window* pWindow   = new Window(pParent, WB_BORDER);
+    Window* pWindow   = new BackingWindow(pParent);
             m_xWindow = VCLUnoHelper::GetInterface(pWindow);
 
     if (!m_xWindow.is())
