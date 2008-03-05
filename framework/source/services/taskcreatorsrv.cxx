@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
 #include <helper/persistentwindowstate.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_TAGWINDOWASMODIFIED_HXX_
+#include <helper/tagwindowasmodified.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -257,6 +261,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     if (bSupportPersistentWindowState)
         implts_establishWindowStateListener(xFrame);
 
+    // special feature: On Mac we need tagging the window in case
+    // the underlying model was modified.
+    // VCL will ignore our calls in case different platform then Mac
+    // is used ...
+    if (bTopLevelDocumentWindow)
+        implts_establishDocModifyListener (xFrame);
+
     // Make it visible directly here ...
     // if its required from outside.
     if (bVisible)
@@ -391,8 +402,26 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     PersistentWindowState* pPersistentStateHandler = new PersistentWindowState(xSMGR);
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY_THROW);
 
-    // This will start listening at this frame ... and then these two objects hold herself alive!
-    // We can forget xInit without any problems.
+    css::uno::Sequence< css::uno::Any > lInitData(1);
+    lInitData[0] <<= xFrame;
+    xInit->initialize(lInitData);
+}
+
+//-----------------------------------------------
+void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    // SAFE  ->
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
+
+    // Special feature: It's allowed for frames using a top level window only!
+    // We must create a special listener service and couple it with the new created task frame.
+    // It will tag the window as modified if the underlying model was modified ...
+    TagWindowAsModified* pTag = new TagWindowAsModified(xSMGR);
+    css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pTag), css::uno::UNO_QUERY_THROW);
+
     css::uno::Sequence< css::uno::Any > lInitData(1);
     lInitData[0] <<= xFrame;
     xInit->initialize(lInitData);
