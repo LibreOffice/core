@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptPage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 16:00:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,14 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRe
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
+
+    //// check if we are a shape
+    //uno::Reference<beans::XPropertySet> xProp(xShape,uno::UNO_QUERY);
+    //if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) )
+    //{
+    //    // use MimeConfigurationHelper::GetStringClassIDRepresentation(MimeConfigurationHelper::GetSequenceClassID(SO3_SCH_OLE_EMBED_CLASSID_8))
+    //    xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")),uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12dcae26-281f-416f-a234-c3086127382e"))));
+    //}
 
     // now that the shape is inserted into its structures, we can allow the OObjectBase
     // to release the reference to it
