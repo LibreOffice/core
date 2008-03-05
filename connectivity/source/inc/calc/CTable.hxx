@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:00:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheet;
+    class XSpreadsheetDocument;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -69,7 +70,8 @@ namespace connectivity
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
             ::std::vector<sal_Int32> m_aScales;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > m_xSheet;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >           m_xSheet;
+            OCalcConnection* m_pConnection;
             sal_Int32 m_nStartCol;
             sal_Int32 m_nStartRow;
             sal_Int32 m_nDataCols;
@@ -109,6 +111,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
+            void construct();
         };
     }
 }
