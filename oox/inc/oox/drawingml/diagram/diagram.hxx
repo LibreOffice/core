@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagram.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <vector>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include <rtl/ustring.hxx>
 
@@ -58,13 +59,15 @@ class Connection
 {
 public:
     Connection()
-        : mnSourceOrder( 0 )
+        : mnType( 0 )
+        , mnSourceOrder( 0 )
         , mnDestOrder( 0 )
         {
         }
 
     void dump();
 
+    sal_Int32 mnType;
     ::rtl::OUString msModelId;
     ::rtl::OUString msSourceId;
     ::rtl::OUString msDestId;
@@ -77,7 +80,12 @@ public:
 };
 
 typedef boost::shared_ptr< Connection > ConnectionPtr;
+typedef std::vector< ConnectionPtr > Connections;
 
+class Point;
+
+typedef boost::shared_ptr< Point > PointPtr;
+typedef std::vector< PointPtr >      Points;
 /** A point
  */
 class Point
@@ -89,10 +97,13 @@ public:
 
     void setCnxId( const ::rtl::OUString & sCnxId )
         { msCnxId = sCnxId; }
-    void setModelId( const ::rtl::OUString & sModelId )
-        { msModelId = sModelId; }
+    void setModelId( const ::rtl::OUString & sModelId );
+    const ::rtl::OUString & getModelId() const
+        { return msModelId; }
     void setType( const sal_Int32 nType )
         { mnType = nType; }
+    sal_Int32 getType() const
+        { return mnType; }
 
     void dump();
 private:
@@ -102,11 +113,34 @@ private:
     sal_Int32       mnType;
 };
 
-typedef boost::shared_ptr< Point > PointPtr;
 
-typedef std::vector< ConnectionPtr > Connections;
-typedef std::vector< PointPtr >      Points;
+class PointsTree;
+typedef boost::shared_ptr< PointsTree > PointsTreePtr;
 
+/** a points tree node */
+class PointsTree
+    : public boost::enable_shared_from_this< PointsTree >
+{
+public:
+    typedef std::vector< PointsTreePtr > Childrens;
+    PointsTree()
+        {};
+    PointsTree( const PointPtr & pPoint )
+        : mpNode( pPoint )
+        { }
+    bool addChild( const PointsTreePtr & pChild );
+    const PointPtr & getPoint() const
+        { return mpNode; }
+    PointsTreePtr getParent() const;
+    Childrens::const_iterator beginChild() const
+        { return maChildrens.begin(); }
+    Childrens::const_iterator endChild() const
+        { return maChildrens.end(); }
+private:
+    PointPtr                           mpNode;
+    boost::weak_ptr< PointsTree >      mpParent;
+    Childrens       maChildrens;
+};
 
 }
 
@@ -145,6 +179,8 @@ public:
         { msMinVer = sMinVer; }
     void setUniqueId( const ::rtl::OUString & sUniqueId )
         { msUniqueId = sUniqueId; }
+    const ::rtl::OUString & getUniqueId()
+        { return msUniqueId; }
     void setTitle( const ::rtl::OUString & sTitle )
         { msTitle = sTitle; }
     void setDesc( const ::rtl::OUString & sDesc )
@@ -162,6 +198,8 @@ public:
         { return mpStyleData; }
     const DiagramDataPtr & getStyleData() const
         { return mpStyleData; }
+
+    void layout( const dgm::PointsTreePtr & pTree, const com::sun::star::awt::Point & pt );
 private:
     ::rtl::OUString msDefStyle;
     ::rtl::OUString msMinVer;
@@ -212,11 +250,15 @@ public:
     void setColors( const DiagramColorsPtr & );
 
     void addTo( const ShapePtr & pShape );
+    ::rtl::OUString getLayoutId() const;
 private:
+    void build( );
     DiagramDataPtr    mpData;
     DiagramLayoutPtr  mpLayout;
     DiagramQStylesPtr mpQStyles;
     DiagramColorsPtr  mpColors;
+    std::map< ::rtl::OUString, ShapePtr > maShapeMap;
+    dgm::PointsTreePtr  mpRoot;
 };
 
 
