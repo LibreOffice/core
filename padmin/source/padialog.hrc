@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:41:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,9 @@
 #define RID_PA_BTN_ADD                      19
 #define RID_PA_BTN_ADDFONTS                 20
 #define RID_PA_STR_RENAME                   21
-#define RID_PA_FL_SEPBUTTON              22
+#define RID_PA_FL_SEPBUTTON                 22
+#define RID_PA_FL_CUPSUSAGE                 23
+#define RID_PA_CB_CUPSUSAGE                 23
 
 #define RID_STRINGQUERYDLG         1003
 #define RID_STRQRY_TXT_RENAME         1
