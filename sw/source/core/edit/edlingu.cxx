@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:46:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1268,7 +1268,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                     case SCRIPTTYPE_COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                 }
                 SfxItemSet aSet(GetAttrPool(), nLangWhichId, nLangWhichId, 0);
-                GetAttr( aSet );
+                GetCurAttr( aSet );
                 const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
                     SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
@@ -1537,7 +1537,7 @@ LanguageType lcl_GetLanguage(SwEditShell& rSh)
         case SCRIPTTYPE_COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
     }
     SfxItemSet aSet(rSh.GetAttrPool(), nLangWhichId, nLangWhichId, 0);
-    rSh.GetAttr( aSet );
+    rSh.GetCurAttr( aSet );
     const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
     return rLang.GetLanguage();
 }
