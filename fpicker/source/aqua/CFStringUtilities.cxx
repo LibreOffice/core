@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CFStringUtilities.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:57:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _CFSTRINGUTILITIES_HXX_
 #include "CFStringUtilities.hxx"
+#endif
 
 rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
     //DBG_PRINT_ENTRY("CFStringUtilities", __func__, "sOrig", sOrig);
@@ -79,6 +81,20 @@ rtl::OUString FSRefToOUString(FSRef fsRef, InfoType info)
 
     CFURLRef aUrlRef = CFURLCreateFromFSRef(NULL, &fsRef);
 
+    rtl::OUString sResult = CFURLRefToOUString(aUrlRef, info);
+
+    //we no longer need the CFURLRef
+    CFRelease(aUrlRef);
+
+    //DBG_PRINT_EXIT("CFStringUtilities", __func__, OUStringToOString(sResult, RTL_TEXTENCODING_UTF8).getStr());
+
+    return sResult;
+}
+
+rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
+{
+    //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
+
     CFStringRef sURLString = NULL;
 
     switch(info) {
@@ -111,9 +127,6 @@ rtl::OUString FSRefToOUString(FSRef fsRef, InfoType info)
     rtl::OUString sResult = CFStringToOUString(sURLString);
 
     CFRelease(sURLString);
-
-    //we no longer need the CFURLRef
-    CFRelease(aUrlRef);
 
     //DBG_PRINT_EXIT("CFStringUtilities", __func__, OUStringToOString(sResult, RTL_TEXTENCODING_UTF8).getStr());
 
