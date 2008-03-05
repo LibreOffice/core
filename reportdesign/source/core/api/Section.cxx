@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Section.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:53:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,8 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
     //.getSdrModel()->createNewPage(m_xSection);
 }
 //--------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 OSection::~OSection()
 {
     DBG_DTOR( rpt_OSection,NULL);
@@ -214,6 +216,8 @@ void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 void SAL_CALL OSection::disposing()
 {
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
