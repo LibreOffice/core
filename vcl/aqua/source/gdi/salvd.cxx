@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:16:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,14 +72,10 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         mbForeignContext = true;        // the mxContext is from pData
         mpGraphics = pGraphic;
         mpGraphics->SetVirDevGraphics( mxContext, true );
-
-        AquaLog( "vcl::AquaSalVirtualDevice::%s(): Created virtual device based on existing SystemGraphicsData w:%ld h:%ld b:\n", __func__,CGBitmapContextGetWidth(mxContext),CGBitmapContextGetHeight(mxContext));
     }
     else
     {
         // create empty new virtual device
-
-        //AquaLog( "vcl::AquaSalVirtualDevice::%s(): Creating empty virtual device\n", __func__);
         mbForeignContext = false;           // the mxContext is created within VCL
         mpGraphics = new AquaSalGraphics(); // never fails
 
