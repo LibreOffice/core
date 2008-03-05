@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recordparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,18 @@
 #ifndef OOX_CORE_RECORDPARSER_HXX
 #define OOX_CORE_RECORDPARSER_HXX
 
+#include <map>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
 #include "oox/helper/binaryinputstream.hxx"
-#include "oox/core/recordinfoprovider.hxx"
 
 namespace oox {
 namespace core {
 
 class FragmentHandler;
-class RecordContext;
+struct RecordInfo;
 
 namespace prv { class Locator; }
 namespace prv { class ContextStack; }
@@ -70,7 +70,6 @@ public:
     virtual             ~RecordParser();
 
     void                setFragmentHandler( const ::rtl::Reference< FragmentHandler >& rxHandler );
-    void                setRecordInfoProvider( const RecordInfoProviderRef& rxProvider );
 
     void                parseStream( const RecordInputSource& rInputSource )
                             throw(  ::com::sun::star::xml::sax::SAXException,
@@ -79,17 +78,23 @@ public:
 
     inline const RecordInputSource& getInputSource() const { return maSource; }
 
-    /** Helper for broken OOBIN streams, pushes a new context onto the stack. */
-    void                pushContext( sal_Int32 nRecId, const ::rtl::Reference< RecordContext >& rxContext );
-    /** Helper for broken OOBIN streams, pops the current context from stack. */
-    void                popContext();
+private:
+    /** Returns a RecordInfo struct that contains the passed record identifier
+        as context start identifier. */
+    const RecordInfo*   getStartRecordInfo( sal_Int32 nRecId ) const;
+    /** Returns a RecordInfo struct that contains the passed record identifier
+        as context end identifier. */
+    const RecordInfo*   getEndRecordInfo( sal_Int32 nRecId ) const;
 
 private:
+    typedef ::std::map< sal_Int32, RecordInfo > RecordInfoMap;
+
     RecordInputSource   maSource;
     ::rtl::Reference< FragmentHandler > mxHandler;
-    RecordInfoProviderRef mxRecInfoProvider;
     ::rtl::Reference< prv::Locator > mxLocator;
     ::std::auto_ptr< prv::ContextStack > mxStack;
+    RecordInfoMap       maStartMap;
+    RecordInfoMap       maEndMap;
 };
 
 // ============================================================================
