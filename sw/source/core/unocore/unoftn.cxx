@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:23:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 using namespace ::com::sun::star;
