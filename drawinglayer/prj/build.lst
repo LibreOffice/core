@@ -1,13 +1,13 @@
 fx	drawinglayer	:	goodies sal vcl basegfx offuh cppuhelper cppu svtools avmedia NULL
 fx	drawinglayer						usr1	-	all	fx_mkout NULL
-fx	drawinglayer\inc					get		-	all	fx_inc NULL
+fx	drawinglayer\inc					nmake	-	all	fx_inc NULL
 fx	drawinglayer\prj					get		-	all	fx_prj NULL
-fx	drawinglayer\source\primitive2d		nmake	-	all	fx_primitive2d NULL
-fx	drawinglayer\source\primitive3d		nmake	-	all	fx_primitive3d NULL
-fx	drawinglayer\source\animation		nmake	-	all	fx_animation NULL
-fx	drawinglayer\source\geometry		nmake	-	all	fx_geometry NULL
-fx	drawinglayer\source\processor2d		nmake	-	all	fx_processor2d NULL
-fx	drawinglayer\source\processor3d		nmake	-	all	fx_processor3d NULL
-fx	drawinglayer\source\attribute		nmake	-	all	fx_attribute NULL
-fx	drawinglayer\source\texture			nmake	-	all	fx_texture NULL
+fx	drawinglayer\source\primitive2d		nmake	-	all	fx_primitive2d fx_inc NULL
+fx	drawinglayer\source\primitive3d		nmake	-	all	fx_primitive3d fx_inc NULL
+fx	drawinglayer\source\animation		nmake	-	all	fx_animation fx_inc NULL
+fx	drawinglayer\source\geometry		nmake	-	all	fx_geometry fx_inc NULL
+fx	drawinglayer\source\processor2d		nmake	-	all	fx_processor2d fx_inc NULL
+fx	drawinglayer\source\processor3d		nmake	-	all	fx_processor3d fx_inc NULL
+fx	drawinglayer\source\attribute		nmake	-	all	fx_attribute fx_inc NULL
+fx	drawinglayer\source\texture			nmake	-	all	fx_texture fx_inc NULL
 fx	drawinglayer\util					nmake	-	all	fx_util fx_primitive2d fx_primitive3d fx_animation fx_geometry fx_processor2d fx_processor3d fx_attribute fx_texture NULL

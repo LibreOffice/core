@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_drawinglayer.hxx"
 
 #ifndef _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 #include <drawinglayer/processor2d/canvasprocessor.hxx>

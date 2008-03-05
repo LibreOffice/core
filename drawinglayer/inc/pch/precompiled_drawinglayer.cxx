@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: fillbitmapattribute.cxx,v $
+ *  $RCSfile: precompiled_drawinglayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:41 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 09:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,36 +33,5 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace attribute
-    {
-        FillBitmapAttribute::FillBitmapAttribute(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize, bool bTiling)
-        :   maBitmap(rBitmap),
-            maTopLeft(rTopLeft),
-            maSize(rSize),
-            mbTiling(bTiling)
-        {
-        }
-
-        bool FillBitmapAttribute::operator==(const FillBitmapAttribute& rCandidate) const
-        {
-            return (maBitmap == rCandidate.maBitmap
-                && maTopLeft == rCandidate.maTopLeft
-                && maSize == rCandidate.maSize
-                && mbTiling == rCandidate.mbTiling);
-        }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
