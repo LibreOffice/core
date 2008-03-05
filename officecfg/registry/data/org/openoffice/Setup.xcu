@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:43:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,6 +576,31 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
                     <value >Data Source Browser</value>
+                </prop>
+            </node>
+            <node oor:name="com.sun.star.sdb.TableDataView" oor:op="replace" install:module="base">
+                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
+                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
+                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
+                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
+                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
+                <prop oor:name="ooSetupFactoryCommandConfigRef">
+                    <value>DbuCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryShortName">
+                    <value>dbtdata</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value>DbTableDataWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value>14</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value>GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value>Table Data View</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
