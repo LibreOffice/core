@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:02:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,17 @@
 #define STR_PDF_EXPORT_CB_PERM       (RID_PDF_DIALOG_START + 8)
 #define STR_PDF_EXPORT_OSPWD         (RID_PDF_DIALOG_START + 9)
 #define STR_PDF_EXPORT_ODPWD         (RID_PDF_DIALOG_START + 10)
+
+#define RID_PDF_ERROR_DLG            (RID_PDF_DIALOG_START + 11)
+#define FT_PROCESS                        1
+#define IMG_WARN                          2
+#define IMG_ERR                           3
+#define STR_WARN_TRANSP_PDFA              4
+#define STR_WARN_TRANSP_PDFA_SHORT        5
+#define STR_WARN_TRANSP_VERSION           6
+#define STR_WARN_TRANSP_VERSION_SHORT     7
+#define STR_WARN_FORMACTION_PDFA          8
+#define STR_WARN_FORMACTION_PDFA_SHORT    9
 
 //ATTENTION: maximum allowed value is( RID_PDF_DIALOG_START +   19)
 
