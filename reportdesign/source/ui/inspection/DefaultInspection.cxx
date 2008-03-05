@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DefaultInspection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:49:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,8 +168,8 @@ namespace rptui
             const sal_Char* serviceName;
         } aFactories[] = {
 
-            // a generic handler for form component properties (must precede the ButtonNavigationHandler)
             { "com.sun.star.report.inspection.ReportComponentHandler"},
+            { "com.sun.star.report.inspection.DataProviderHandler"},
             { "com.sun.star.report.inspection.GeometryHandler"},
 
             // generic virtual edit properties
