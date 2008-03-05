@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:27:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,18 @@ TabPage OFA_TP_MISC
         Pos = MAP_APPFONT( COL6, OFFS_TEXTBOX_FIXEDTEXT(ROW11) );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL6, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ en-US ] = "and " ;
+    };
+    FixedLine FL_PRINTDLG
+    {
+        Pos = MAP_APPFONT( COL0, ROW8 );
+        Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Print dialogs";
+    };
+    CheckBox CB_PRINTDLG
+    {
+        Pos = MAP_APPFONT( COL1, ROW9 );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "Use %PRODUCTNAME ~dialogs";
     };
 };
 
