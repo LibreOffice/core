@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:46:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+#include <com/sun/star/beans/NamedValue.hpp>
 #ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #endif
@@ -298,6 +299,8 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
     const uno::Reference<XMultiServiceFactory> & rFactory,
+    const Reference< document::XGraphicObjectResolver > & _xGraphicObjectResolver,
+    const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
     const ::rtl::OUString& _sFilterName)
 {
     DBG_ASSERT( xStorage.is(), "Need storage!");
@@ -342,15 +345,30 @@ sal_Int32 ReadThroughComponent(
             return 1; // TODO/LATER: error handling
         }
 
+        sal_Int32 nArgs = 0;
+        if( _xGraphicObjectResolver.is())
+            nArgs++;
+        if( _xEmbeddedObjectResolver.is())
+            nArgs++;
 
-        uno::Reference< XDocumentHandler > xFilter(rFactory->createInstance(_sFilterName),uno::UNO_QUERY);
+        uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+
+        nArgs = 0;
+        if( _xGraphicObjectResolver.is())
+            aFilterCompArgs[nArgs++] <<= _xGraphicObjectResolver;
+        if( _xEmbeddedObjectResolver.is())
+            aFilterCompArgs[ nArgs++ ] <<= _xEmbeddedObjectResolver;
+
+        Reference< xml::sax::XDocumentHandler > xDocHandler(
+            rFactory->createInstanceWithArguments( _sFilterName, aFilterCompArgs ),
+            uno::UNO_QUERY_THROW );
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,pStreamName
                                     ,rFactory
-                                    ,xFilter
+                                    ,xDocHandler
                                     ,bEncrypted );
     }
 
@@ -560,13 +578,32 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         if ( !m_xReportDefinition.is() )
             return sal_False;
 
-        //m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
-        //if ( !m_pReportModel )
-        //    return sal_False;
+#if OSL_DEBUG_LEVEL > 1
+        uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+        uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            (void)*pIter;
+        }
+#endif
 
-        //if ( !xNumberFormatsSupplier.is() )
-        //    xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
-        //SetNumberFormatsSupplier(xNumberFormatsSupplier);
+        Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
+        uno::Reference<document::XEmbeddedObjectResolver> xEmbeddedObjectResolver;
+        uno::Reference< lang::XMultiServiceFactory > xServiceFactory( getServiceFactory(), uno::UNO_QUERY);
+        if( xServiceFactory.is())
+        {
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[0] <<= xStorage;
+            xGraphicObjectResolver.set(
+                xServiceFactory->createInstanceWithArguments(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Svx.GraphicImportHelper")), aArgs ), uno::UNO_QUERY );
+
+            uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
+            aArgs[0] <<= beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage")),uno::makeAny(xStorage));
+            xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")),aArgs) , uno::UNO_QUERY);
+        }
 
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
@@ -575,12 +612,19 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,"settings.xml"
                                     ,"Settings.xml"
                                     ,getServiceFactory()
+                                    ,xGraphicObjectResolver
+                                    ,xEmbeddedObjectResolver
                                     ,SERVICE_SETTINGSIMPORTER
                                     );
         if ( nRet == 0 )
-            nRet = ReadThroughComponent(
-                xStorage, xModel, "styles.xml", "Styles.xml", getServiceFactory(),
-                SERVICE_STYLESIMPORTER );
+            nRet = ReadThroughComponent(xStorage
+                                    ,xModel
+                                    ,"styles.xml"
+                                    ,"Styles.xml"
+                                    ,getServiceFactory()
+                                    ,xGraphicObjectResolver
+                                    ,xEmbeddedObjectResolver
+                                    ,SERVICE_STYLESIMPORTER );
 
         if ( nRet == 0 )
             nRet = ReadThroughComponent( xStorage
@@ -588,6 +632,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,"content.xml"
                                     ,"Content.xml"
                                     ,getServiceFactory()
+                                    ,xGraphicObjectResolver
+                                    ,xEmbeddedObjectResolver
                                     ,SERVICE_CONTENTIMPORTER
                                     );
 
@@ -710,46 +756,14 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
 {
     if ( !m_pReportElemTokenMap.get() )
-    {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
-            { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
-            { XML_NAMESPACE_REPORT, XML_GROUP,                      XML_TOK_GROUP                   },
-            { XML_NAMESPACE_REPORT, XML_DETAIL      ,               XML_TOK_DETAIL                  },
-            { XML_NAMESPACE_REPORT, XML_PAGE_FOOTER ,               XML_TOK_PAGE_FOOTER             },
-            { XML_NAMESPACE_REPORT, XML_REPORT_FOOTER,              XML_TOK_REPORT_FOOTER           },
-            { XML_NAMESPACE_REPORT, XML_HEADER_ON_NEW_PAGE,         XML_TOK_HEADER_ON_NEW_PAGE      },
-            { XML_NAMESPACE_REPORT, XML_FOOTER_ON_NEW_PAGE,         XML_TOK_FOOTER_ON_NEW_PAGE      },
-            { XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,               XML_TOK_COMMAND_TYPE            },
-            { XML_NAMESPACE_REPORT, XML_COMMAND,                    XML_TOK_COMMAND                 },
-            { XML_NAMESPACE_REPORT, XML_FILTER,                     XML_TOK_FILTER                  },
-            { XML_NAMESPACE_REPORT, XML_CAPTION,                    XML_TOK_CAPTION                 },
-            { XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING,          XML_TOK_ESCAPE_PROCESSING       },
-            { XML_NAMESPACE_REPORT, XML_FUNCTION,                   XML_TOK_REPORT_FUNCTION         },
-            { XML_NAMESPACE_OFFICE, XML_MIMETYPE,                   XML_TOK_REPORT_MIMETYPE         },
-            { XML_NAMESPACE_DRAW,   XML_NAME,                       XML_TOK_REPORT_NAME             },
-            XML_TOKEN_MAP_END
-        };
-        m_pReportElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
+        m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
     return *m_pReportElemTokenMap;
 }
 // -----------------------------------------------------------------------------
 const SvXMLTokenMap& ORptFilter::GetSubDocumentElemTokenMap() const
 {
     if ( !m_pSubDocumentElemTokenMap.get() )
-    {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,   XML_TOK_MASTER_DETAIL_FIELDS},
-            { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
-            { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},
-            { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL},
-            XML_TOKEN_MAP_END
-        };
-        m_pSubDocumentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
+        m_pSubDocumentElemTokenMap.reset(OXMLHelper::GetSubDocumentElemTokenMap());
     return *m_pSubDocumentElemTokenMap;
 }
 // -----------------------------------------------------------------------------
@@ -952,6 +966,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
             { XML_NAMESPACE_REPORT, XML_IMAGE                       ,   XML_TOK_IMAGE                       },
             { XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT                ,   XML_TOK_SUB_DOCUMENT                },
             { XML_NAMESPACE_DRAW,   XML_CUSTOM_SHAPE                ,   XML_TOK_CUSTOM_SHAPE                },
+            { XML_NAMESPACE_DRAW,   XML_FRAME                       ,   XML_TOK_FRAME                       },
             { XML_NAMESPACE_TEXT,   XML_PAGE_NUMBER                 ,   XML_TOK_PAGE_NUMBER                 },
             { XML_NAMESPACE_TEXT,   XML_PAGE_COUNT                  ,   XML_TOK_PAGE_COUNT                  },
             { XML_NAMESPACE_TEXT,   XML_TAB                         ,   XML_TOK_TEXT_TAB_STOP               },
@@ -1049,6 +1064,7 @@ void SAL_CALL ORptFilter::startDocument( void )
         //uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
         //if ( xNumberFormatsSupplier.is() )
         //    SetNumberFormatsSupplier(xNumberFormatsSupplier);
+        SvXMLImport::startDocument();
     }
 }
 // -----------------------------------------------------------------------------
