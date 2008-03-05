@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTransitionFilter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ interface XTransitionFilter : XAnimate
         the transition progress increases and <false/> indicating that the parent media will
         become less visible as the transition progress increases.
 
-        The default value is </true>.
+        The default value is <true/>.
     */
     [attribute] boolean Mode;
 
