@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidepersist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,9 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase, Reference< frame::XModel > xModel )
+void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase )
 {
-    applyTextStyles( xModel );
+    applyTextStyles( rFilterBase );
 
     Reference< XShapes > xShapes( getPage(), UNO_QUERY );
 
@@ -141,9 +141,9 @@ void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase, R
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
             if ( pPPTShape )
-                pPPTShape->addShape( rFilterBase, xModel, *this, getTheme(), getShapeMap(), xShapes, NULL );
+                pPPTShape->addShape( rFilterBase, *this, getTheme(), xShapes, 0, &getShapeMap() );
             else
-                (*aChildIter)->addShape( rFilterBase, xModel, getTheme(), getShapeMap(), xShapes, NULL );
+                (*aChildIter)->addShape( rFilterBase, getTheme(), xShapes, 0, &getShapeMap() );
 
             aChildIter++;
         }
@@ -159,7 +159,7 @@ void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase, R
             TimeNodePtr pNode(maTimeNodeList.front());
             OSL_ENSURE( pNode, "pNode" );
 
-            pNode->setNode( xModel, xNode, pSlidePtr );
+            pNode->setNode( rFilterBase.getModel(), xNode, pSlidePtr );
         }
     }
 }
@@ -174,7 +174,7 @@ void SlidePersist::createBackground( const oox::core::XmlFilterBase& rFilterBase
             static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
-            mpBackgroundPropertiesPtr->pushToPropSet( rFilterBase, xPropertySet );
+            mpBackgroundPropertiesPtr->pushToPropSet( rFilterBase, xPropertySet, 0 );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )
@@ -212,13 +212,13 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet,
         rxPropSet->setPropertyValue( aNames[ i ], aValues[ i ] );
 }
 
-void SlidePersist::applyTextStyles( Reference< frame::XModel > xModel )
+void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase )
 {
     if ( mbMaster )
     {
         try
         {
-            Reference< style::XStyleFamiliesSupplier > aXStyleFamiliesSupplier( xModel, UNO_QUERY_THROW );
+            Reference< style::XStyleFamiliesSupplier > aXStyleFamiliesSupplier( rFilterBase.getModel(), UNO_QUERY_THROW );
             Reference< container::XNameAccess > aXNameAccess( aXStyleFamiliesSupplier->getStyleFamilies() );
             Reference< container::XNamed > aXNamed( mxPage, UNO_QUERY_THROW );
 
