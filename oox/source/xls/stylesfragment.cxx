@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylesfragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "oox/helper/attributelist.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
@@ -50,11 +51,11 @@ OoxStylesFragment::OoxStylesFragment(
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxStylesFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxStylesFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    sal_Int32 nCurrContext = getCurrentContext();
+    sal_Int32 nCurrContext = getCurrentElement();
     switch( nCurrContext )
     {
         case XML_ROOT_CONTEXT:
@@ -128,8 +129,8 @@ bool OoxStylesFragment::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxStylesFragment::onStartElement( const AttributeList& rAttribs )
 {
-    sal_Int32 nCurrContext = getCurrentContext();
-    sal_Int32 nPrevContext = getPreviousContext();
+    sal_Int32 nCurrContext = getCurrentElement();
+    sal_Int32 nPrevContext = getPreviousElement();
 
     switch( nCurrContext )
     {
@@ -238,7 +239,7 @@ void OoxStylesFragment::onStartElement( const AttributeList& rAttribs )
 
 void OoxStylesFragment::onEndElement( const OUString& /*rChars*/ )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( font ):     mxFont.reset();     break;
         case XLS_TOKEN( border ):   mxBorder.reset();   break;
@@ -248,9 +249,9 @@ void OoxStylesFragment::onEndElement( const OUString& /*rChars*/ )
     }
 }
 
-bool OoxStylesFragment::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxStylesFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nRecId == OOBIN_ID_STYLESHEET);
@@ -289,20 +290,42 @@ bool OoxStylesFragment::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxStylesFragment::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_RGBCOLOR:     getStyles().importPaletteColor( rStrm );                break;
         case OOBIN_ID_FONT:         getStyles().importFont( rStrm );                        break;
         case OOBIN_ID_NUMFMT:       getStyles().importNumFmt( rStrm );                      break;
         case OOBIN_ID_BORDER:       getStyles().importBorder( rStrm );                      break;
         case OOBIN_ID_FILL:         getStyles().importFill( rStrm );                        break;
-        case OOBIN_ID_XF:           getStyles().importXf( getPreviousContext(), rStrm );    break;
+        case OOBIN_ID_XF:           getStyles().importXf( getPreviousElement(), rStrm );    break;
         case OOBIN_ID_DXF:          getStyles().importDxf( rStrm );                         break;
         case OOBIN_ID_CELLSTYLE:    getStyles().importCellStyle( rStrm );                   break;
     }
 }
 
-// oox.xls.OoxFragmentHandler interface ---------------------------------------
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxStylesFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { OOBIN_ID_BORDERS,         OOBIN_ID_BORDERS + 1        },
+        { OOBIN_ID_CELLSTYLES,      OOBIN_ID_CELLSTYLES + 1     },
+        { OOBIN_ID_CELLSTYLEXFS,    OOBIN_ID_CELLSTYLEXFS + 1   },
+        { OOBIN_ID_CELLXFS,         OOBIN_ID_CELLXFS + 1        },
+        { OOBIN_ID_COLORS,          OOBIN_ID_COLORS + 1         },
+        { OOBIN_ID_DXFS,            OOBIN_ID_DXFS + 1           },
+        { OOBIN_ID_FILLS,           OOBIN_ID_FILLS + 1          },
+        { OOBIN_ID_FONTS,           OOBIN_ID_FONTS + 1          },
+        { OOBIN_ID_INDEXEDCOLORS,   OOBIN_ID_INDEXEDCOLORS + 1  },
+        { OOBIN_ID_MRUCOLORS,       OOBIN_ID_MRUCOLORS + 1      },
+        { OOBIN_ID_NUMFMTS,         OOBIN_ID_NUMFMTS + 1        },
+        { OOBIN_ID_STYLESHEET,      OOBIN_ID_STYLESHEET + 1     },
+        { OOBIN_ID_TABLESTYLES,     OOBIN_ID_TABLESTYLES + 1    },
+        { -1,                       -1                          }
+    };
+    return spRecInfos;
+}
 
 void OoxStylesFragment::finalizeImport()
 {

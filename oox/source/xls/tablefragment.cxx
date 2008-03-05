@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablefragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "oox/xls/tablefragment.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
@@ -47,11 +48,11 @@ OoxTableFragment::OoxTableFragment( const WorksheetHelper& rHelper, const OUStri
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxTableFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nElement == XLS_TOKEN( table ));
@@ -61,15 +62,15 @@ bool OoxTableFragment::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxTableFragment::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( table ):    mxTable = getTables().importTable( rAttribs, getSheetIndex() ); break;
     }
 }
 
-bool OoxTableFragment::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nRecId == OOBIN_ID_TABLE);
@@ -79,10 +80,22 @@ bool OoxTableFragment::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxTableFragment::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_TABLE:    mxTable = getTables().importTable( rStrm, getSheetIndex() );    break;
     }
+}
+
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxTableFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { OOBIN_ID_TABLE,   OOBIN_ID_TABLE + 1  },
+        { -1,               -1                  }
+    };
+    return spRecInfos;
 }
 
 // ============================================================================
