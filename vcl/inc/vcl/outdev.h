@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,8 @@ public:
                         ~ImplFontCache();
 
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
-                             const Font&, const Size& rPixelSize, ImplDirectFontSubstitution* pDevSpecific );
+                             const Font&, const Size& rPixelSize, float fExactHeight,
+                ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
                     ImplFontSelectData&, ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, ImplFontSelectData&,

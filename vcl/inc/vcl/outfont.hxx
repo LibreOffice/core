@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,8 +187,8 @@ friend class ImplDevFontListData;
 class ImplFontSelectData : public ImplFontAttributes
 {
 public:
-                        ImplFontSelectData( const Font&, const String& rSearchName, const Size& );
-                        ImplFontSelectData( ImplFontData&, const Size&,
+                        ImplFontSelectData( const Font&, const String& rSearchName, const Size&, float fExactHeight );
+                        ImplFontSelectData( ImplFontData&, const Size&, float fExactHeight,
                             int nOrientation, bool bVertical );
 
 public: // TODO: change to private
@@ -196,6 +196,7 @@ public: // TODO: change to private
     String              maSearchName;       // name of the font that matches best
     int                 mnWidth;            // width of font in pixel units
     int                 mnHeight;           // height of font in pixel units
+    float               mfExactHeight;       // requested height (in pixels with subpixel details)
     int                 mnOrientation;      // text orientation in 3600 system
     LanguageType        meLanguage;         // text language
     bool                mbVertical;         // vertical mode of requested font
