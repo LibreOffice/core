@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:15:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,9 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     pFrm = pNewFrm;
     pInf = pNewInf;
-    aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet() );
+    // --> OD 2008-01-17 #newlistlevelattrs#
+    aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
+    // <--
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
