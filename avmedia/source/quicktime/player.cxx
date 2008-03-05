@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-10 09:40:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,36 @@
 #include "framegrabber.hxx"
 #include "window.hxx"
 
-// Quicktime 7+ in Mac OS X 10.4
-#define QT701 0x07010000
+// dbg_dump for development
+#if OSL_DEBUG_LEVEL > 1
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 
-// Quicktime 6.4+ in Mac OS X 10.3
-#define QT64 0x06400000
+const sal_Char *dbg_dump(const rtl::OString &rStr)
+{
+    static rtl::OStringBuffer aStr;
+
+    aStr = rtl::OStringBuffer(rStr);
+    aStr.append(static_cast<char>(0));
+    return aStr.getStr();
+}
+
+const sal_Char *dbg_dump(const rtl::OUString &rStr)
+{
+    return dbg_dump(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
+}
+
+const sal_Char *dbg_dump(rtl_String *pStr)
+{
+    return dbg_dump(rtl::OString(pStr));
+}
+
+const sal_Char *dbg_dump(rtl_uString *pStr)
+{
+    return dbg_dump(rtl::OUString(pStr));
+}
+
+#endif
 
 using namespace ::com::sun::star;
 
@@ -116,7 +141,9 @@ bool Player::create( const ::rtl::OUString& rURL )
 {
     bool    bRet = false;
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    NSURL* aURL = [NSURL URLWithString:[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()] ];
+    NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+//  NSString * aNSStringEscaped = [aNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
     // create the Movie
 
