@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:49:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,7 @@ enum ContextType
     CONTEXT_PARAGRAPH,
     CONTEXT_CHARACTER,
     CONTEXT_STYLESHEET,
+    CONTEXT_LIST,
     NUMBER_OF_CONTEXTS
 };
 
@@ -181,12 +182,20 @@ public:
 
 };
 
+struct TextAppendContext
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >       xTextAppendAndConvert;
+    ParagraphPropertiesPtr                                                                  pLastParagraphProperties;
+
+    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >& xAppend ) :
+        xTextAppendAndConvert( xAppend ){}
+};
+
 typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
 
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
-typedef std::stack< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert > >
-                                                TextAppendStack;
+typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
 
 /*-- 18.07.2006 08:49:08---------------------------------------------------
@@ -227,9 +236,11 @@ struct DeletableTabStop : public ::com::sun::star::style::TabStop
 struct BookmarkInsertPosition
 {
     bool                                                                    m_bIsStartOfText;
+    ::rtl::OUString                                                         m_sBookmarkName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
+    BookmarkInsertPosition(bool bIsStartOfText, const ::rtl::OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
         m_bIsStartOfText( bIsStartOfText ),
+        m_sBookmarkName( rName ),
         m_xTextRange( xTextRange )
      {}
 };
@@ -338,8 +349,10 @@ public:
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
     void    PushStyleProperties(PropertyMapPtr pStyleProperties);
+    void    PushListProperties(PropertyMapPtr pListProperties);
     void    PopProperties(ContextType eId);
 
+    ContextType GetTopContextType() const { return m_aContextStack.top(); }
     PropertyMapPtr GetTopContext()
     {
         return m_pTopContext;
@@ -357,7 +370,7 @@ public:
     StyleSheetTablePtr GetStyleSheetTable()
     {
         if(!m_pStyleSheetTable)
-            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper ));
+            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument ));
         return m_pStyleSheetTable;
     }
     ListTablePtr GetListTable();
@@ -418,7 +431,7 @@ public:
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
-    void AddBookmark( const ::rtl::OUString& rBookmarkName );
+    void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
 
     DomainMapperTableManager& getTableManager() { return m_TableManager; }
 
