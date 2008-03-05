@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 08:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #endif
 
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -52,6 +56,10 @@ namespace drawinglayer
         class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
+            // The Pixel renderer resets the original MapMode from the OutputDevice.
+            // For some situations it is necessary to get it again, so it is rescued here
+            MapMode                             maOriginalMapMode;
+
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,
             // called from the common process()-implementation
@@ -63,6 +71,9 @@ namespace drawinglayer
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
+
+            // data access
+            const MapMode& getOriginalMapMode() const { return maOriginalMapMode; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

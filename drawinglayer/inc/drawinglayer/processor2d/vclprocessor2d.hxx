@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:58 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 08:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ namespace drawinglayer { namespace primitive2d {
     class PolygonStrokePrimitive2D;
     class ControlPrimitive2D;
     class PagePreviewPrimitive2D;
+    class ChartPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -120,6 +121,7 @@ namespace drawinglayer
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);
             void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
+            void RenderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate, bool bCalledFromPixelRenderer);
 
             /////////////////////////////////////////////////////////////////////////////
             // DrawMode adaption support

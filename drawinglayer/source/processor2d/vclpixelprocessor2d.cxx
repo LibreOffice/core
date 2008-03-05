@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 08:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,10 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/chartprimitive2d.hxx>
+#endif
+
 #include <cstdio>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -122,7 +126,8 @@ namespace drawinglayer
     namespace processor2d
     {
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev)
+        :   VclProcessor2D(rViewInformation, rOutDev),
+            maOriginalMapMode(rOutDev.GetMapMode())
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getViewTransformation();
@@ -421,6 +426,12 @@ namespace drawinglayer
                     // restore DrawMode
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
+                    break;
+                }
+                case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
+                {
+                    // chart primitive
+                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate), true);
                     break;
                 }
                 default :

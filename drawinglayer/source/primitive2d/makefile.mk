@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: aw $ $Date: 2008-02-26 08:28:51 $
+#   last change: $Author: aw $ $Date: 2008-03-05 08:20:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ SLOFILES= \
         $(SLO)$/baseprimitive2d.obj				\
         $(SLO)$/backgroundcolorprimitive2d.obj	\
         $(SLO)$/bitmapprimitive2d.obj			\
+        $(SLO)$/chartprimitive2d.obj			\
         $(SLO)$/controlprimitive2d.obj			\
         $(SLO)$/embedded3dprimitive2d.obj		\
         $(SLO)$/fillbitmapprimitive2d.obj		\

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:59 $
+ *  last change: $Author: aw $ $Date: 2008-03-05 08:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,13 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// for current chart PrettyPrinting support
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1697,6 +1704,12 @@ namespace drawinglayer
                 {
                     // use default point array pocessing
                     RenderPointArrayPrimitive2D(static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
+                {
+                    // point array
+                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate), false);
                     break;
                 }
                 default :
