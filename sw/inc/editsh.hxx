@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:01:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,18 @@ public:
     // Anwenden / Entfernen von Attributen
     // liefert Attribute im angeforderten AttributSet. Wenn nicht eindeutig
     // steht im Set ein DONT_CARE !!
-    BOOL GetAttr( SfxItemSet& ) const;
+    // --> OD 2008-01-16 #newlistlevelattrs#
+    // Renaming method to <GetCurAttr(..)> indicating that the attributes at
+    // the current cursors are retrieved.
+    // Introduce 2nd optional parameter <bMergeIndentValuesOfNumRule>.
+    // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
+    // the corresponding list level of an applied list style is merged into
+    // the requested item set as a LR-SPACE item, if corresponding node has not
+    // its own indent attributes and the position-and-space mode of the list
+    // level is SvxNumberFormat::LABEL_ALIGNMENT.
+    BOOL GetCurAttr( SfxItemSet& ,
+                     const bool bMergeIndentValuesOfNumRule = false ) const;
+    // <--
     void SetAttr( const SfxPoolItem&, USHORT nFlags = 0 );
     void SetAttr( const SfxItemSet&, USHORT nFlags = 0 );
 
@@ -460,7 +471,14 @@ public:
 
     // setzt, wenn noch keine Numerierung, sonst wird geaendert
     // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    void SetCurNumRule(const SwNumRule&);
+    // --> OD 2008-02-08 #newlistlevelattrs#
+    // Add optional parameter <bResetIndentAttrs> (default value FALSE).
+    // If <bResetIndentAttrs> equals true, the indent attributes "before text"
+    // and "first line indent" are additionally reset at the current selection,
+    // if the list style makes use of the new list level attributes.
+    void SetCurNumRule( const SwNumRule&,
+                        const bool bResetIndentAttrs = false );
+    // <--
     // Absaetze ohne Numerierung, aber mit Einzuegen
     BOOL NoNum();
     // Loeschen, Splitten der Aufzaehlungsliste
