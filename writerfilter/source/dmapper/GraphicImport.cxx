@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,35 +33,18 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_GRAPHICIMPORT_HXX
 #include <GraphicImport.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
+#include <dmapper/DomainMapper.hxx>
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
-#endif
 #include <ooxml/resourceids.hxx>
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
 #include <com/sun/star/container/XNamed.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
-#endif
 
 //#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 //#include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -238,14 +221,21 @@ struct GraphicBorderLine
         {}
 
 };
-struct GraphicImport_Impl
+
+class GraphicImport_Impl
 {
+private:
+    sal_Int32 nXSize;
+    bool      bXSizeValid;
+    sal_Int32 nYSize;
+    bool      bYSizeValid;
+
+public:
     GraphicImportType eGraphicImportType;
+    DomainMapper&   rDomainMapper;
 
     sal_Int32 nHoriScaling;
     sal_Int32 nVertScaling;
-    sal_Int32 nXSize;
-    sal_Int32 nYSize;
     sal_Int32 nLeftPosition;
     sal_Int32 nTopPosition;
     sal_Int32 nRightPosition;
@@ -301,12 +291,15 @@ struct GraphicImport_Impl
     ::rtl::OUString sName;
     ::rtl::OUString sAlternativeText;
 
-    GraphicImport_Impl(GraphicImportType eImportType) :
-        eGraphicImportType( eImportType )
+    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper) :
+        nXSize(0)
+        ,bXSizeValid(false)
+        ,nYSize(0)
+        ,bYSizeValid(false)
+        ,eGraphicImportType( eImportType )
+        ,rDomainMapper( rDMapper )
         ,nHoriScaling(0)
         ,nVertScaling(0)
-        ,nXSize(0)
-        ,nYSize(0)
         ,nLeftPosition(0)
         ,nTopPosition(0)
         ,nRightPosition(0)
@@ -346,14 +339,47 @@ struct GraphicImport_Impl
         ,bPositionProtected(false)
         ,bInShapeOptionMode(false)
         {}
+
+    void setXSize(sal_Int32 _nXSize)
+    {
+        nXSize = _nXSize;
+        bXSizeValid = true;
+    }
+
+    sal_uInt32 getXSize() const
+    {
+        return nXSize;
+    }
+
+    bool isXSizeValid() const
+    {
+        return bXSizeValid;
+    }
+
+    void setYSize(sal_Int32 _nYSize)
+    {
+        nYSize = _nYSize;
+        bYSizeValid = true;
+    }
+
+    sal_uInt32 getYSize() const
+    {
+        return nYSize;
+    }
+
+    bool isYSizeValis () const
+    {
+        return bYSizeValid;
+    }
 };
 /*-- 01.11.2006 09:42:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
+                             DomainMapper& rDMapper,
                              GraphicImportType eImportType )
-: m_pImpl( new GraphicImport_Impl( eImportType ))
+: m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
   ,m_xComponentContext( xComponentContext )
   ,m_xTextFactory( xTextFactory)
 {
@@ -495,9 +521,13 @@ void GraphicImport::attribute(Id nName, Value & val)
 
         break; //mapmode
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_XEXT: m_pImpl->nXSize = nIntValue; break; // x-size
+        case NS_rtf::LN_XEXT:
+            m_pImpl->setXSize(nIntValue);
+            break; // x-size
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_YEXT: m_pImpl->nYSize = nIntValue; break; // y-size
+        case NS_rtf::LN_YEXT:
+            m_pImpl->setYSize(nIntValue);
+            break; // y-size
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_HMF: break; //identifier - ignored
 
@@ -880,9 +910,9 @@ void GraphicImport::attribute(Id nName, Value & val)
         {
             sal_Int32 nDim = ConversionHelper::convertEMUToMM100( nIntValue );
             if( nName == NS_ooxml::LN_CT_PositiveSize2D_cx )
-                m_pImpl->nXSize = nDim;
+                m_pImpl->setXSize(nDim);
             else
-                m_pImpl->nYSize = nDim;
+                m_pImpl->setYSize(nDim);
         }
         break;
         case NS_ooxml::LN_CT_EffectExtent_l:// 90907;
@@ -1002,18 +1032,26 @@ void GraphicImport::attribute(Id nName, Value & val)
                         (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
                          uno::makeAny
                          (text::TextContentAnchorType_AS_CHARACTER));
+                    xShapeProps->setPropertyValue
+                        (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
+                         uno::makeAny
+                         (m_pImpl->rDomainMapper.GetCurrentTextRange()));
 
+                    awt::Point aPoint(m_xShape->getPosition());
                     awt::Size aSize(m_xShape->getSize());
-                    aSize.Width = m_pImpl->nXSize;
-                    aSize.Height = m_pImpl->nYSize;
+
+                    if (m_pImpl->isXSizeValid())
+                        aSize.Width = m_pImpl->getXSize();
+                    if (m_pImpl->isYSizeValis())
+                        aSize.Height = m_pImpl->getYSize();
 
                     m_xShape->setSize(aSize);
 
 #ifdef DEBUG_DOMAINMAPPER
                     char buffer[256];
                     snprintf(buffer, sizeof(buffer),
-                             "<shape width=\"%ld\" height=\"%ld\">",
-                             aSize.Width, aSize.Height);
+                             "<shape x=\"%ld\" y=\"%ld\" width=\"%ld\" height=\"%ld\">",
+                             aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
                     logger("DOMAINMAPPER", buffer);
                     logger("DOMAINMAPPER", "</shape>");
 #endif
@@ -1715,7 +1753,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
         case NS_dff::LN_shpfPrint              /*959*/:  break;  // rtf:shpfPrint
 
         default:
-            OSL_ASSERT("shape option unsupported?");
+            OSL_ENSURE( false, "shape option unsupported?");
     }
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
@@ -2036,9 +2074,9 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
-                if( m_pImpl->nXSize && m_pImpl->nYSize )
+                if( m_pImpl->getXSize() && m_pImpl->getYSize() )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
-                        uno::makeAny( awt::Size( m_pImpl->nXSize, m_pImpl->nYSize )));
+                        uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
                 try
                 {
                     if( m_pImpl->sName.getLength() )
