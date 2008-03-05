@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:40:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@
 #endif
 #ifndef _CMDID_H
 #include <cmdid.h>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 #define RTF_NUMRULE_NAME "RTF_Num"
