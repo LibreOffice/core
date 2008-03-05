@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:42:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnOpenBookmarkLevels    ( -1 ),
     mbUseLosslessCompression( sal_False ),
     mbReduceImageResolution ( sal_False ),
-    mbSkipEmptyPages        ( sal_False ),
+    mbSkipEmptyPages        ( sal_True ),
     mbAddStream             ( sal_False ),
     mnMaxImageResolution    ( 300 ),
     mnQuality               ( 90 ),
