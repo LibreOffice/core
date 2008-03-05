@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NamedRange.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:40:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,24 @@ published service NamedRange
         @since OOo 2.x
      */
     [optional, readonly, property] long TokenIndex;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines if this defined name represents a shared formula.
+
+        <p>This special property shall not be used externally. It is used by
+        import and export filters for compatibility with spreadsheet
+        documents containing shared formulas. Shared formulas are shared
+        by several cells to save memory and to decrease file size.</p>
+
+        <p>A defined name with this property set will not appear in the user
+        interface of Calc, and its name will not appear in cell formulas. A
+        formula referring to this defined name will show the formula
+        definition contained in the name instead.</p>
+
+        @since CWS xmlfilter03
+     */
+    [optional, property] boolean IsSharedFormula;
 };
 
 //=============================================================================
