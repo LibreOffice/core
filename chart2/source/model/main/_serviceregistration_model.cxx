@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_model.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:52:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
           ::chart::XMLFilter::create
         , ::chart::XMLFilter::getImplementationName_Static
         , ::chart::XMLFilter::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+     ,{
+          ::chart::XMLReportFilterHelper::create
+        , ::chart::XMLReportFilterHelper::getImplementationName_Static
+        , ::chart::XMLFilter::getSupportedServiceNames_Static // we support the same, because we are derived from
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
