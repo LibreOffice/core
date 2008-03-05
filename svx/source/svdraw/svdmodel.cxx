@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:40:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,6 @@
 #ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
 #endif
-
-#include <sfx2/objsh.hxx>
 
 #include "svditext.hxx"
 #include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
@@ -194,7 +192,7 @@ struct SdrModelImpl
 
 DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
-void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
+void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
     bool bUseExtColorTable, bool bLoadRefCounts)
 {
     mpImpl = new SdrModelImpl;
@@ -211,7 +209,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     pLayerAdmin=NULL;
     pItemPool=pPool;
     bMyPool=FALSE;
-    pPersist=pPers;
+    m_pEmbeddedHelper=_pEmbeddedHelper;
     pDrawOutliner=NULL;
     pHitTestOutliner=NULL;
     pRefOutDev=NULL;
@@ -307,7 +305,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     ImpCreateTables();
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -319,7 +317,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefC
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -332,7 +330,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPer
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -344,7 +342,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtCo
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
