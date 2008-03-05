@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFastShapeContextHandler.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:45:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,16 +35,11 @@
 #ifndef __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
 #define __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
 
-#ifndef __com_sun_star_xml_sax_XFastContextHandler_idl__
 #include <com/sun/star/xml/sax/XFastContextHandler.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
 #include <com/sun/star/drawing/XShape.idl>
 #include <com/sun/star/drawing/XShapes.idl>
 #include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/io/XInputStream.idl>
 
 //=============================================================================
 
@@ -62,7 +57,8 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute, readonly] com::sun::star::drawing::XShape Shape;
     [attribute] com::sun::star::drawing::XShapes Shapes;
     [attribute] com::sun::star::frame::XModel Model;
-
+    [attribute] com::sun::star::io::XInputStream InputStream;
+    [attribute] string RelationFragmentPath;
   };
 
 //=============================================================================
@@ -70,3 +66,4 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
 }; }; }; }; };
 
 #endif
+
