@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedwavaudiofile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,10 @@ namespace oox { namespace drawingml {
         ::rtl::OUString msLink;
     };
 
-    void getEmbeddedWAVAudioFile( const ::oox::core::FragmentHandlerRef & xHandler,
-                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-                                                                EmbeddedWAVAudioFile & aAudio );
+    void getEmbeddedWAVAudioFile(
+            const ::oox::core::Relations& rRelations,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+            EmbeddedWAVAudioFile & aAudio );
 
 } }
 

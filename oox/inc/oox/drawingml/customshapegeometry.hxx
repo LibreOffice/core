@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapegeometry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/shape.hxx"
 
 namespace oox { namespace drawingml {
@@ -46,38 +46,38 @@ namespace oox { namespace drawingml {
 
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
-class CustomShapeGeometryContext : public ::oox::core::Context
+class CustomShapeGeometryContext : public ::oox::core::ContextHandler
 {
 public:
-    CustomShapeGeometryContext( const ::oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::CustomShapeProperties& rCustomShapeProperties );
+    CustomShapeGeometryContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::oox::drawingml::CustomShapeProperties& mrCustomShapeProperties;
+    CustomShapeProperties& mrCustomShapeProperties;
 };
 
 // ---------------------------------------------------------------------
 // CT_PresetGeometry2D
-class PresetShapeGeometryContext : public ::oox::core::Context
+class PresetShapeGeometryContext : public ::oox::core::ContextHandler
 {
 public:
-    PresetShapeGeometryContext( const ::oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::CustomShapeProperties& rCustomShapeProperties );
+    PresetShapeGeometryContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::oox::drawingml::CustomShapeProperties& mrCustomShapeProperties;
+    CustomShapeProperties& mrCustomShapeProperties;
 };
 
 // ---------------------------------------------------------------------
 // CT_PresetTextShape
-class PresetTextShapeContext : public ::oox::core::Context
+class PresetTextShapeContext : public ::oox::core::ContextHandler
 {
 public:
-    PresetTextShapeContext( const ::oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::CustomShapeProperties& rCustomShapeProperties );
+    PresetTextShapeContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::oox::drawingml::CustomShapeProperties& mrCustomShapeProperties;
+    CustomShapeProperties& mrCustomShapeProperties;
 };
 
 } }

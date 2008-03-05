@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawingmltypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/shape.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace core {
     class PropertyMap;
@@ -108,16 +108,16 @@ IndexRange GetIndexRange( const ::com::sun::star::uno::Reference< ::com::sun::st
 
 
 /** context to import a CT_Transform2D */
-class Transform2DContext : public ::oox::core::Context
+class Transform2DContext : public ::oox::core::ContextHandler
 {
 public:
-    Transform2DContext( const ::oox::core::FragmentHandlerRef& xHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::Shape& rShape ) throw();
+    Transform2DContext( ::oox::core::ContextHandler& rParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, Shape& rShape ) throw();
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    oox::drawingml::Shape& mrShape;
+    Shape&              mrShape;
 };
 
 } }

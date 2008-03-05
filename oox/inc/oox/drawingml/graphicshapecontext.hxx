@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicshapecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ namespace oox { namespace drawingml {
 class GraphicShapeContext : public ShapeContext
 {
 public:
-    GraphicShapeContext( const ::oox::core::FragmentHandlerRef& xHandler, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
+    GraphicShapeContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
@@ -56,7 +56,7 @@ public:
 class GraphicalObjectFrameContext : public ShapeContext
 {
 public:
-    GraphicalObjectFrameContext( const ::oox::core::FragmentHandlerRef& xHandler, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
+    GraphicalObjectFrameContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
@@ -67,7 +67,7 @@ public:
 class PresentationOle2006Context : public ShapeContext
 {
 public:
-    PresentationOle2006Context( const ::oox::core::FragmentHandlerRef& xHandler, ShapePtr pShapePtr );
+    PresentationOle2006Context( ::oox::core::ContextHandler& rParent, ShapePtr pShapePtr );
     ~PresentationOle2006Context();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
@@ -86,7 +86,7 @@ class DiagramGraphicDataContext
     : public ShapeContext
 {
 public:
-    DiagramGraphicDataContext( const ::oox::core::FragmentHandlerRef& xHandler, ShapePtr pShapePtr );
+    DiagramGraphicDataContext( ::oox::core::ContextHandler& rParent, ShapePtr pShapePtr );
     ~DiagramGraphicDataContext();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 

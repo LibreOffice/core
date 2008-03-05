@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linepropertiescontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 #define OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 
 namespace oox { namespace core {
@@ -48,12 +48,12 @@ namespace oox { namespace drawingml {
 
 // ---------------------------------------------------------------------
 
-class LinePropertiesContext : public ::oox::core::Context
+class LinePropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    LinePropertiesContext( const ::oox::core::FragmentHandlerRef& xHandler,
+    LinePropertiesContext( ::oox::core::ContextHandler& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-            ::oox::drawingml::LineProperties& rLineProperties ) throw();
+            LineProperties& rLineProperties ) throw();
     ~LinePropertiesContext();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
@@ -61,7 +61,7 @@ public:
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::LineProperties&   mrLineProperties;
+    LineProperties& mrLineProperties;
 };
 
 } }

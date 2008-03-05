@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clrschemecontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,32 +36,31 @@
 #ifndef OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 #define OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/color.hxx"
 
 namespace oox { namespace drawingml {
 
-class clrMapContext : public oox::core::Context
+class clrMapContext : public oox::core::ContextHandler
 {
 public:
-    clrMapContext( const ::oox::core::FragmentHandlerRef& xHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, oox::drawingml::ClrMap& rClrMap );
+    clrMapContext( ::oox::core::ContextHandler& rParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ClrMap& rClrMap );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
 
-class clrSchemeContext : public oox::core::Context
+class clrSchemeContext : public oox::core::ContextHandler
 {
 public:
-    clrSchemeContext( const ::oox::core::FragmentHandlerRef& xHandler, const oox::drawingml::ClrSchemePtr pClrSchemePtr );
+    clrSchemeContext( ::oox::core::ContextHandler& rParent, const ClrSchemePtr pClrSchemePtr );
     virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    oox::drawingml::ClrSchemePtr    mpClrSchemePtr;
-    oox::drawingml::Color           maColor;
+    ClrSchemePtr    mpClrSchemePtr;
+    Color           maColor;
 };
 
 } }
