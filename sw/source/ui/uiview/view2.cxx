@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:27:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1494,7 +1494,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         {
                             SfxItemSet aSet(GetPool(),
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
-                            rShell.GetAttr(aSet);
+                            rShell.GetCurAttr(aSet);
                             /* const SfxPoolItem* pItem; */
                             if(SFX_ITEM_AVAILABLE <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
