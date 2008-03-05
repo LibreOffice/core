@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condformatcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,16 @@ namespace xls {
 
 // ============================================================================
 
-OoxCondFormatContext::OoxCondFormatContext( const OoxWorksheetFragmentBase& rFragment ) :
+OoxCondFormatContext::OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment ) :
     OoxWorksheetContextBase( rFragment )
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxCondFormatContext::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxCondFormatContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( conditionalFormatting ):
             return  (nElement == XLS_TOKEN( cfRule ));
@@ -63,7 +63,7 @@ bool OoxCondFormatContext::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( conditionalFormatting ):
             mxCondFmt = getCondFormats().importConditionalFormatting( rAttribs );
@@ -76,7 +76,7 @@ void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
 
 void OoxCondFormatContext::onEndElement( const OUString& rChars )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( formula ):
             if( mxCondFmt.get() && mxRule.get() ) mxRule->appendFormula( rChars );
@@ -84,9 +84,9 @@ void OoxCondFormatContext::onEndElement( const OUString& rChars )
     }
 }
 
-bool OoxCondFormatContext::onCanCreateRecordContext( sal_Int32 nRecId )
+ContextWrapper OoxCondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_CONDFORMATTING:
             return  (nRecId == OOBIN_ID_CFRULE);
@@ -96,7 +96,7 @@ bool OoxCondFormatContext::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxCondFormatContext::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_CONDFORMATTING:
             mxCondFmt = getCondFormats().importCondFormatting( rStrm );

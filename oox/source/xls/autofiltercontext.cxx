@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofiltercontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ FilterFieldItem::FilterFieldItem(Type eType) :
 
 // ============================================================================
 
-OoxAutoFilterContext::OoxAutoFilterContext( const OoxWorksheetFragmentBase& rFragment ) :
+OoxAutoFilterContext::OoxAutoFilterContext( OoxWorksheetFragmentBase& rFragment ) :
     OoxWorksheetContextBase( rFragment ),
     mbValidAddress( false ),
     mbUseRegex( false ),
@@ -135,11 +135,11 @@ OoxAutoFilterContext::OoxAutoFilterContext( const OoxWorksheetFragmentBase& rFra
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxAutoFilterContext::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxAutoFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( autoFilter ):
             return (nElement == XLS_TOKEN( filterColumn ));
@@ -158,7 +158,7 @@ bool OoxAutoFilterContext::onCanCreateContext( sal_Int32 nElement ) const
 
 void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( autoFilter ):
             importAutoFilter( rAttribs );
@@ -196,7 +196,7 @@ void OoxAutoFilterContext::onStartElement( const AttributeList& rAttribs )
 
 void OoxAutoFilterContext::onEndElement( const OUString& /*rChars*/ )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XLS_TOKEN( autoFilter ):
             maybeShowBlank();
