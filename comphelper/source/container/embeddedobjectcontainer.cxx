@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,11 @@
 #ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
+#include <com/sun/star/embed/EntryInitModes.hpp>
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#include <com/sun/star/util/XModifiable.hpp>
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
@@ -86,6 +88,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <hash_map>
 #include <algorithm>
@@ -355,6 +358,13 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
 
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
+    uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
+    const ::rtl::OUString* pIter = aSeq.getConstArray();
+    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        (void)*pIter;
+    }
     OSL_ENSURE( aIt != pImpl->maObjectContainer.end() || xAccess->hasByName(rName), "Could not return object!" );
 #endif
 
@@ -1350,5 +1360,328 @@ sal_Bool EmbeddedObjectContainer::RemoveGraphicStream( const ::rtl::OUString& rO
 
     return sal_True;
 }
+namespace {
+    void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage >& xDocStor,
+                                            const uno::Reference< io::XInputStream >& xInStream,
+                                            const ::rtl::OUString& aStreamName )
+    {
+        OSL_ENSURE( aStreamName.getLength() && xInStream.is() && xDocStor.is(), "Misuse of the method!\n" );
 
+        try
+        {
+            uno::Reference< embed::XStorage > xPictures = xDocStor->openStorageElement(
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ),
+                                        embed::ElementModes::READWRITE );
+            uno::Reference< io::XStream > xObjReplStr = xPictures->openStreamElement(
+                                        aStreamName,
+                                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            uno::Reference< io::XOutputStream > xOutStream(
+                                        xObjReplStr->getInputStream(), uno::UNO_QUERY_THROW );
+
+            ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xOutStream );
+            xOutStream->closeOutput();
+
+            uno::Reference< embed::XTransactedObject > xTransact( xPictures, uno::UNO_QUERY );
+            if ( xTransact.is() )
+                xTransact->commit();
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "The pictures storage is not available!\n" );
+        }
+    }
+
+}
+// -----------------------------------------------------------------------------
+sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Bool _bCreateEmbedded,const uno::Reference < embed::XStorage >& _xStorage)
+{
+    sal_Bool bResult = sal_False;
+    try
+    {
+        comphelper::EmbeddedObjectContainer aCnt( _xStorage );
+        const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
+            {
+                sal_Bool bSwitchBackToLoaded = sal_False;
+                uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+
+                uno::Reference < io::XInputStream > xStream;
+                ::rtl::OUString aMediaType;
+
+                sal_Int32 nCurState = xObj->getCurrentState();
+                if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+                {
+                    // means that the object is not active
+                    // copy replacement image from old to new container
+                    xStream = GetGraphicStream( xObj, &aMediaType );
+                }
+
+                if ( !xStream.is() )
+                {
+                    // the image must be regenerated
+                    // TODO/LATER: another aspect could be used
+                    if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
+                            bSwitchBackToLoaded = sal_True;
+
+                    xStream = GetGraphicReplacementStream(
+                                                            embed::Aspects::MSOLE_CONTENT,
+                                                            xObj,
+                                                            &aMediaType );
+                }
+
+                if ( _bOasisFormat || xLink.is() && xLink->isLink() )
+                {
+                    if ( xStream.is() )
+                    {
+                        if ( _bOasisFormat )
+                        {
+                            // if it is an embedded object or the optimized inserting fails the normal inserting should be done
+                            if ( _bCreateEmbedded
+                                || !aCnt.InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
+                                aCnt.InsertGraphicStream( xStream, *pIter, aMediaType );
+                        }
+                        else
+                        {
+                            // it is a linked object exported into SO7 format
+                            InsertStreamIntoPicturesStorage_Impl( _xStorage, xStream, *pIter );
+                        }
+                    }
+                }
+
+                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if ( xPersist.is() )
+                {
+                    uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 2 : 3 );
+                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
+                    aArgs[0].Value <<= (sal_Bool)( !_bOasisFormat );
+
+                    // if it is an embedded object or the optimized inserting fails the normal inserting should be done
+                    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanTryOptimization" ) );
+                    aArgs[1].Value <<= !_bCreateEmbedded;
+                    if ( !_bOasisFormat )
+                    {
+                        // if object has no cached replacement it will use this one
+                        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                        aArgs[2].Value <<= xStream;
+                    }
+
+                    xPersist->storeAsEntry( _xStorage,
+                                            xPersist->getEntryName(),
+                                            uno::Sequence< beans::PropertyValue >(),
+                                            aArgs );
+                }
+
+                if ( bSwitchBackToLoaded )
+                    // switch back to loaded state; that way we have a minimum cache confusion
+                    xObj->changeState( embed::EmbedStates::LOADED );
+            }
+        }
+
+        bResult = aCnt.CommitImageSubStorage();
+
+    }
+    catch ( uno::Exception& )
+    {
+        // TODO/LATER: error handling
+        bResult = sal_False;
+    }
+
+    // the old SO6 format does not store graphical replacements
+    if ( !_bOasisFormat && bResult )
+    {
+        try
+        {
+            // the substorage still can not be locked by the embedded object conteiner
+            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            if ( _xStorage->hasByName( aObjReplElement ) && _xStorage->isStorageElement( aObjReplElement ) )
+                _xStorage->removeElement( aObjReplElement );
+        }
+        catch ( uno::Exception& )
+        {
+            // TODO/LATER: error handling;
+            bResult = sal_False;
+        }
+    }
+    return bResult;
+}
+// -----------------------------------------------------------------------------
+sal_Bool EmbeddedObjectContainer::StoreChildren(sal_Bool _bOasisFormat,sal_Bool _bObjectsOnly)
+{
+    sal_Bool bResult = sal_True;
+    const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
+    const ::rtl::OUString* pIter = aNames.getConstArray();
+    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+        if ( xObj.is() )
+        {
+            sal_Int32 nCurState = xObj->getCurrentState();
+            if ( _bOasisFormat && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
+            {
+                // means that the object is active
+                // the image must be regenerated
+                ::rtl::OUString aMediaType;
+
+                // TODO/LATER: another aspect could be used
+                uno::Reference < io::XInputStream > xStream =
+                            GetGraphicReplacementStream(
+                                                        embed::Aspects::MSOLE_CONTENT,
+                                                        xObj,
+                                                        &aMediaType );
+                if ( xStream.is() )
+                {
+                    if ( !InsertGraphicStreamDirectly( xStream, *pIter, aMediaType ) )
+                        InsertGraphicStream( xStream, *pIter, aMediaType );
+                }
+            }
+
+            // TODO/LATER: currently the object by default does not cache replacement image
+            // that means that if somebody loads SO7 document and store its objects using
+            // this method the images might be lost.
+            // Currently this method is only used on storing to alien formats, that means
+            // that SO7 documents storing does not use it, and all other filters are
+            // based on OASIS format. But if it changes the method must be fixed. The fix
+            // must be done only on demand since it can affect performance.
+
+            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+            if ( xPersist.is() )
+            {
+                try
+                {
+                    //TODO/LATER: only storing if changed!
+                    xPersist->storeOwn();
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO/LATER: error handling
+                    bResult = sal_False;
+                    break;
+                }
+            }
+
+            if ( !_bOasisFormat && !_bObjectsOnly )
+            {
+                // copy replacement images for linked objects
+                try
+                {
+                    uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                    if ( xLink.is() && xLink->isLink() )
+                    {
+                        ::rtl::OUString aMediaType;
+                        uno::Reference < io::XInputStream > xInStream = GetGraphicStream( xObj, &aMediaType );
+                        if ( xInStream.is() )
+                            InsertStreamIntoPicturesStorage_Impl( pImpl->mxStorage, xInStream, *pIter );
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+
+    if ( bResult && _bOasisFormat )
+        bResult = CommitImageSubStorage();
+
+    if ( bResult && !_bObjectsOnly )
+    {
+        try
+        {
+            ReleaseImageSubStorage();
+            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            if ( !_bOasisFormat && pImpl->mxStorage->hasByName( aObjReplElement ) && pImpl->mxStorage->isStorageElement( aObjReplElement ) )
+                pImpl->mxStorage->removeElement( aObjReplElement );
+        }
+        catch( uno::Exception& )
+        {
+            // TODO/LATER: error handling
+            bResult = sal_False;
+        }
+    }
+    return bResult;
+}
+// -----------------------------------------------------------------------------
+uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacementStream(
+                                                                sal_Int64 nViewAspect,
+                                                                const uno::Reference< embed::XEmbeddedObject >& xObj,
+                                                                ::rtl::OUString* pMediaType )
+{
+    uno::Reference< io::XInputStream > xInStream;
+    if ( xObj.is() )
+    {
+        try
+        {
+            // retrieving of the visual representation can switch object to running state
+            embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
+            if ( pMediaType )
+                *pMediaType = aRep.Flavor.MimeType;
+
+            uno::Sequence < sal_Int8 > aSeq;
+            aRep.Data >>= aSeq;
+            xInStream = new ::comphelper::SequenceInputStream( aSeq );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
+    return xInStream;
+}
+// -----------------------------------------------------------------------------
+sal_Bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::XStorage >& _xStorage,bool _bClearModifedFlag)
+{
+    sal_Bool bError = sal_False;
+    const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
+    const ::rtl::OUString* pIter = aNames.getConstArray();
+    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
+        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+        if ( xObj.is() )
+        {
+            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+            if ( xPersist.is() )
+            {
+                try
+                {
+                    xPersist->setPersistentEntry( _xStorage,
+                                                *pIter,
+                                                embed::EntryInitModes::NO_INIT,
+                                                uno::Sequence< beans::PropertyValue >(),
+                                                uno::Sequence< beans::PropertyValue >() );
+
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO/LATER: error handling
+                    bError = sal_True;
+                    break;
+                }
+            }
+            if ( _bClearModifedFlag )
+            {
+                // if this method is used as part of SaveCompleted the object must stay unmodified after execution
+                try
+                {
+                    uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
+                    if ( xModif->isModified() )
+                        xModif->setModified( sal_False );
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+    return bError;
+}
 }
