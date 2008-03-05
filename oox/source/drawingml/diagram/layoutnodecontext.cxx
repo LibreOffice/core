@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutnodecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,10 @@ class IfContext
     : public LayoutNodeContext
 {
 public:
-    IfContext( const FragmentHandlerRef& xHandler,
+    IfContext( ContextHandler& rParent,
                const Reference< XFastAttributeList >& xAttribs,
                const LayoutAtomPtr & pNode )
-        : LayoutNodeContext( xHandler, xAttribs, pNode )
+        : LayoutNodeContext( rParent, xAttribs, pNode )
         {
             ConditionAtomPtr pAtom( boost::dynamic_pointer_cast< ConditionAtom >(pNode) );
             OSL_ENSURE( pAtom, "Must pass a ConditionAtom" );
@@ -68,11 +68,11 @@ public:
 
 
 class AlgorithmContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    AlgorithmContext( const FragmentHandlerRef& xHandler,  const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
-        : Context( xHandler )
+    AlgorithmContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
+        : ContextHandler( rParent )
         , mnRevision( 0 )
         , mnType( 0 )
         , mpNode( pNode )
@@ -90,11 +90,11 @@ private:
 
 
 class ChooseContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    ChooseContext( const FragmentHandlerRef& xHandler,  const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
-        : Context( xHandler )
+    ChooseContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
+        : ContextHandler( rParent )
         , mbHasElse( false )
         , mpNode( pNode )
         {
@@ -115,7 +115,7 @@ public:
                 // CT_When
                 LayoutAtomPtr pAtom( new ConditionAtom( false ) );
                 mpNode->addChild( pAtom );
-                xRet.set( new IfContext( getHandler(), xAttribs, pAtom ) );
+                xRet.set( new IfContext( *this, xAttribs, pAtom ) );
                 break;
             }
             case XML_else:
@@ -124,7 +124,7 @@ public:
                 {
                     LayoutAtomPtr pAtom( new ConditionAtom( true ) );
                     mpNode->addChild( pAtom );
-                    xRet.set( new IfContext( getHandler(), xAttribs, pAtom ) );
+                    xRet.set( new IfContext( *this, xAttribs, pAtom ) );
                     mbHasElse = true;
                 }
                 else
@@ -154,8 +154,8 @@ class ForEachContext
     : public LayoutNodeContext
 {
 public:
-    ForEachContext( const FragmentHandlerRef& xHandler,  const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
-        : LayoutNodeContext( xHandler, xAttribs, pNode )
+    ForEachContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
+        : LayoutNodeContext( rParent, xAttribs, pNode )
         {
             ForEachAtomPtr pAtom( boost::dynamic_pointer_cast< ForEachAtom >(pNode) );
             OSL_ENSURE( pAtom, "Must pass a ForEachAtom" );
@@ -168,12 +168,11 @@ public:
 
 // CT_LayoutVariablePropertySet
 class LayoutVariablePropertySetContext
-    : public Context
+    : public ContextHandler
 {
 public:
-    LayoutVariablePropertySetContext( const FragmentHandlerRef& xHandler,
-                                      LayoutNode::VarMap & aVar )
-        : Context( xHandler )
+    LayoutVariablePropertySetContext( ContextHandler& rParent, LayoutNode::VarMap & aVar )
+        : ContextHandler( rParent )
         , mVariables( aVar )
         {
         }
@@ -187,7 +186,7 @@ public:
         {
             Reference< XFastContextHandler > xRet;
 
-            sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( aElement & ( ~NMSP_MASK ) );
+            sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getToken( aElement ) );
             if( nIdx != -1 )
             {
                 mVariables[ nIdx ] = makeAny( xAttribs->getOptionalValue( XML_val ) );
@@ -203,10 +202,10 @@ private:
 
 
 // CT_LayoutNode
-LayoutNodeContext::LayoutNodeContext( const FragmentHandlerRef& xHandler,
+LayoutNodeContext::LayoutNodeContext( ContextHandler& rParent,
                                       const Reference< XFastAttributeList >& xAttribs,
                                       const LayoutAtomPtr &pNode )
-    : Context( xHandler )
+    : ContextHandler( rParent )
     , mpNode( pNode )
 {
     OSL_ENSURE( pNode, "Node must NOT be NULL" );
@@ -285,24 +284,24 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
     {
         LayoutNodePtr pNode( new LayoutNode() );
         mpNode->addChild( pNode );
-        xRet.set( new LayoutNodeContext( getHandler(), xAttribs, pNode ) );
+        xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
         break;
     }
     case NMSP_DIAGRAM|XML_shape:
     {
         ShapePtr pShape( new Shape() );
-        xRet.set( new ShapeContext( getHandler(), ShapePtr( ( Shape* )NULL ), pShape ) );
+        xRet.set( new ShapeContext( *this, ShapePtr(), pShape ) );
         break;
     }
     case NMSP_DIAGRAM|XML_extLst:
-        xRet.set( new SkipContext( getHandler() ) );
+        xRet.set( new SkipContext( *this ) );
         break;
     case NMSP_DIAGRAM|XML_alg:
     {
         // CT_Algorithm
         LayoutAtomPtr pAtom( new AlgAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new AlgorithmContext( getHandler(), xAttribs, pAtom ) );
+        xRet.set( new AlgorithmContext( *this, xAttribs, pAtom ) );
         break;
     }
     case NMSP_DIAGRAM|XML_choose:
@@ -310,7 +309,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         // CT_Choose
         LayoutAtomPtr pAtom( new ChooseAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new ChooseContext( getHandler(), xAttribs, pAtom ) );
+        xRet.set( new ChooseContext( *this, xAttribs, pAtom ) );
          break;
     }
     case NMSP_DIAGRAM|XML_forEach:
@@ -318,7 +317,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         // CT_ForEach
         LayoutAtomPtr pAtom( new ForEachAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new ForEachContext( getHandler(), xAttribs, pAtom ) );
+        xRet.set( new ForEachContext( *this, xAttribs, pAtom ) );
         break;
     }
     case NMSP_DIAGRAM|XML_constrLst:
@@ -346,8 +345,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
         if( pNode )
         {
-            xRet.set( new LayoutVariablePropertySetContext( getHandler(),
-                                                            pNode->variables() ) );
+            xRet.set( new LayoutVariablePropertySetContext( *this, pNode->variables() ) );
         }
         else
         {
