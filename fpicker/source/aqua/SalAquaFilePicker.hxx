@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaFilePicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,20 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
-#include <cppuhelper/compbase9.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
+#include <com/sun/star/util/XCancellable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
@@ -62,10 +70,6 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
-#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
@@ -87,6 +91,10 @@
 #include "FilterHelper.hxx"
 #endif
 
+#ifndef _AQUAFILEPICKERDELEGATE_HXX_
+#include "AquaFilePickerDelegate.hxx"
+#endif
+
 //----------------------------------------------------------
 // Implementation class for the XFilePicker Interface
 //----------------------------------------------------------
@@ -103,12 +111,11 @@ using namespace rtl;
 
 class SalAquaFilePicker :
     public SalAquaPicker,
-    public cppu::WeakComponentImplHelper9<
+    public cppu::WeakComponentImplHelper8<
     ::com::sun::star::ui::dialogs::XFilterManager,
     ::com::sun::star::ui::dialogs::XFilterGroupManager,
     ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
     ::com::sun::star::ui::dialogs::XFilePickerNotifier,
-    ::com::sun::star::ui::dialogs::XFilePreview,
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::util::XCancellable,
     ::com::sun::star::lang::XEventListener,
@@ -198,31 +205,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    // XFilePreview
-    //------------------------------------------------
-
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int32 SAL_CALL getTargetColorDepth(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int32 SAL_CALL getAvailableWidth(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int32 SAL_CALL getAvailableHeight(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL getShowState(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
     // XInitialization
     //------------------------------------------------
 
@@ -261,11 +243,19 @@ public:
     // FilePicker Event functions
     //------------------------------------------------------------------------------------
 
-//    void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-//    void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-//    rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
-//    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-//    void SAL_CALL dialogSizeChanged( );
+   void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+   void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+   // rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
+   void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+   void SAL_CALL dialogSizeChanged( );
+
+   inline AquaFilePickerDelegate * getDelegate() {
+       return m_pDelegate;
+   }
+
+   inline rtl::OUString getSaveFileName() {
+       return m_sSaveFileName;
+   }
 
 private:
     // prevent copy and assignment
@@ -274,7 +264,7 @@ private:
 
     virtual void ensureFilterHelper();
 
-    // to instanciate own services
+    // to instantiate own services
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
@@ -284,46 +274,16 @@ private:
 
     rtl::OUString m_sSaveFileName;
 
-    bool bVersionWidthUnset;
-    sal_Bool mbPreviewState;
+    AquaFilePickerDelegate *m_pDelegate;
 
-    sal_Int32 m_PreviewImageWidth;
-    sal_Int32 m_PreviewImageHeight;
-
-    sal_Bool m_bFilterUICorrectlySet;
-
-    void UpdateFilterfromUI();
-
-    //        void updateCurrentFilterFromName(const gchar* filtername);
-    void unselect_type();
-    void InitialMapping();
-
-    //        static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
-    //      static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
-    //static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
-    //static void type_changed_cb( GtkTreeSelection *selection, SalGtkFilePicker *pobjFP );
-    //static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
-    //static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
-    //static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
-    //static void dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP);
-    void setDefaultName(const rtl::OUString& aName, bool appendExtension);
     void updateFilterUI();
-    void updateSaveFileNameExtension(bool appendExtension = false);
+    void updateSaveFileNameExtension();
 
 public:
-    ~SalAquaFilePicker();
 
-    void implHandleNavDialogCustomize(NavCBRecPtr callBackParms);
-    void implHandleNavDialogStart(NavCBRecPtr callBackParms);
-    void implHandleNavDialogEvent(NavCBRecPtr callBackParms);
+    virtual ~SalAquaFilePicker();
 
-    sal_Bool implFilterHandler(AEDesc *theItem, void *info,
-                                               void *callBackUD,
-                                               NavFilterModes filterMode);
-
-    virtual void implHandlePopupMenuSelect(NavMenuItemSpec* menuItem);
-    void implHandleNavDialogSelectEntry(NavCBRecPtr callBackParms);
-    sal_Bool implPreviewHandler (NavCBRecPtr callBackParms);
+    void filterControlChanged();
 
     void implInitialize();
 
