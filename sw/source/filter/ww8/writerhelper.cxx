@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:31:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@
 #endif
 #ifndef _UNOTOOLS_STREAMWRAP_HXX
 #   include <unotools/streamwrap.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 #ifdef DEBUGDUMP
