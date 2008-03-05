@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:39:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,8 @@ namespace writerfilter {
 namespace dmapper
 {
 using namespace std;
-struct GraphicImport_Impl;
+class GraphicImport_Impl;
+class DomainMapper;
 
 enum GraphicImportType
 {
@@ -87,6 +88,7 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
 public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
                   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,
+                  DomainMapper& rDomainMapper,
                   GraphicImportType eGraphicImportType);
     virtual ~GraphicImport();
 
