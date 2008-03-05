@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:23:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU
@@ -732,6 +732,7 @@ private:
     SvMemoryStream*                         m_pMemStream;
 
     std::vector< PDFAddStream >             m_aAdditionalStreams;
+    std::set< PDFWriter::ErrorCode >        m_aErrors;
 
     rtlDigest                               m_aDocDigest;
 
@@ -1069,6 +1070,7 @@ public:
     /* document structure */
     sal_Int32 newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
     bool emit();
+    std::set< PDFWriter::ErrorCode > getErrors();
 
     PDFWriter::PDFVersion getVersion() const { return m_aContext.Version; }
     void setDocInfo( const PDFDocInfo& rInfo );
