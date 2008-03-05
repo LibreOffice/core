@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlMasterFields.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:02:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,7 @@
 #ifndef RPT_XMLENUMS_HXX
 #include "xmlEnums.hxx"
 #endif
-#ifndef RPT_XMLSUBDOCUMENT_HXX
-#include "xmlSubDocument.hxx"
-#endif
+#include "xmlReport.hxx"
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -71,10 +69,10 @@ DBG_NAME( rpt_OXMLMasterFields )
 OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
-                ,OXMLSubDocument* _pSubDocument
+                ,IMasterDetailFieds* _pReport
                 ) :
     SvXMLImportContext( rImport, nPrfx, rLName)
-,m_pSubDocument(_pSubDocument)
+,m_pReport(_pReport)
 {
     DBG_CTOR( rpt_OXMLMasterFields,NULL);
 
@@ -104,7 +102,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     }
     if ( !sDetailField.getLength() )
         sDetailField = sMasterField;
-    m_pSubDocument->addFieldPair(::std::pair< ::rtl::OUString,::rtl::OUString >(sMasterField,sDetailField));
+    m_pReport->addMasterDetailPair(::std::pair< ::rtl::OUString,::rtl::OUString >(sMasterField,sDetailField));
 }
 // -----------------------------------------------------------------------------
 
@@ -127,7 +125,7 @@ SvXMLImportContext* OXMLMasterFields::CreateChildContext(
         case XML_TOK_MASTER_DETAIL_FIELD:
             {
                 GetImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()), _nPrefix, _rLocalName,xAttrList ,m_pSubDocument);
+                pContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()), _nPrefix, _rLocalName,xAttrList ,m_pReport);
             }
             break;
         default:
