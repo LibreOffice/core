@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:29:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,7 +1097,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver") ) )
     {
-        SfxObjectShell *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
+        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
         if( NULL == pPersist )
             throw lang::DisposedException();
 
@@ -1106,7 +1106,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
     {
-        SfxObjectShell *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
+        ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
         if( NULL == pPersist )
             throw lang::DisposedException();
 
