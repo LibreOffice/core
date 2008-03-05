@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedstringsfragment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XFastContextHandler;
+using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
@@ -52,33 +52,25 @@ OoxSharedStringsFragment::OoxSharedStringsFragment(
 {
 }
 
-// oox.xls.OoxContextHelper interface -----------------------------------------
+// oox.core.ContextHandler2Helper interface -----------------------------------
 
-bool OoxSharedStringsFragment::onCanCreateContext( sal_Int32 nElement ) const
+ContextWrapper OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nElement == XLS_TOKEN( sst ));
         case XLS_TOKEN( sst ):
-            return  (nElement == XLS_TOKEN( si ));
+            if( nElement == XLS_TOKEN( si ) )
+                return new OoxRichStringContext( *this, getSharedStrings().createRichString() );
+        break;
     }
     return false;
 }
 
-Reference< XFastContextHandler > OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
+ContextWrapper OoxSharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
-    switch( nElement )
-    {
-        case XLS_TOKEN( si ):
-            return new OoxRichStringContext( *this, getSharedStrings().createRichString() );
-    }
-    return this;
-}
-
-bool OoxSharedStringsFragment::onCanCreateRecordContext( sal_Int32 nRecId )
-{
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             return  (nRecId == OOBIN_ID_SST);
@@ -90,13 +82,23 @@ bool OoxSharedStringsFragment::onCanCreateRecordContext( sal_Int32 nRecId )
 
 void OoxSharedStringsFragment::onStartRecord( RecordInputStream& rStrm )
 {
-    switch( getCurrentContext() )
+    switch( getCurrentElement() )
     {
         case OOBIN_ID_SI:   getSharedStrings().createRichString()->importString( rStrm, true ); break;
     }
 }
 
-// oox.xls.OoxFragmentHandler interface ---------------------------------------
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxSharedStringsFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { OOBIN_ID_SST,     OOBIN_ID_SST + 1    },
+        { -1,               -1                  }
+    };
+    return spRecInfos;
+}
 
 void OoxSharedStringsFragment::finalizeImport()
 {
