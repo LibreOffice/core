@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:52:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#include <com/sun/star/frame/status/Visibility.hpp>
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
@@ -136,6 +137,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -467,6 +469,8 @@ namespace
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
             _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
+        if ( !!_rFeatureState.bInvisible )
+            _out_rStates.push_back( makeAny( Visibility( !*_rFeatureState.bInvisible ) ) );
         if ( _rFeatureState.aValue.hasValue() )
             _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )
@@ -489,6 +493,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         if ( bAlreadyCached )
             if  (   ( rCachedState.bEnabled == aFeatState.bEnabled )
                 &&  ( rCachedState.bChecked == aFeatState.bChecked )
+                &&  ( rCachedState.bInvisible == aFeatState.bInvisible )
                 &&  ( rCachedState.sTitle == aFeatState.sTitle )
                 )
             return;
