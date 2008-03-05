@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 17:25:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3317,6 +3317,24 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 				</set>
 			</group>
+            <group oor:name="StartCenter">
+                <info>
+                    <author>PL</author>
+                    <desc>Contains settings for the start center.</desc>
+                </info>
+				<prop oor:name="AddFeatureURL" oor:type="xs:string">
+					<info>
+						<desc>Contains a string specifying the URL to be browsed for additional features (e.g. extensions)</desc>
+					</info>
+					<value/>
+				</prop>
+				<prop oor:name="InfoURL" oor:type="xs:string">
+					<info>
+						<desc>Contains a string specifying the URL to be browsed for information about the product</desc>
+					</info>
+					<value/>
+				</prop>
+            </group>
 			<group oor:name="Registration">
 				<info>
 					<author>FS</author>
