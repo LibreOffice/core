@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vmlshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,13 @@
  *
  ************************************************************************/
 
+#include <rtl/ustring.hxx>
 #include "oox/vml/shape.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+using namespace com::sun::star;
 
 namespace oox { namespace vml {
 
@@ -67,6 +73,27 @@ void Shape::applyAttributes( const vml::Shape& rSource )
         mnFilled = rSource.mnFilled;
     if ( rSource.msPath.getLength() )
         msPath = rSource.msPath;
+}
+
+void Shape::addShape( const ::oox::core::XmlFilterBase& rFilterBase,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes )
+{
+    ::rtl::OUString rServiceName( rtl::OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape( xServiceFact->createInstance( rServiceName ), uno::UNO_QUERY_THROW );
+    rxShapes->add( xShape );
+
+    static const ::rtl::OUString sShapePresetType(RTL_CONSTASCII_USTRINGPARAM("smiley"));
+
+    uno::Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, uno::UNO_QUERY );
+    if( xDefaulter.is() )
+        xDefaulter->createCustomShapeDefaults( sShapePresetType );
+
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+    static const rtl::OUString sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"));
+    static const rtl::OUString sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"));
+    xPropSet->setPropertyValue( sWidth, uno::Any( (sal_Int32)5000 ) );
+    xPropSet->setPropertyValue( sHeight, uno::Any( (sal_Int32)5000 ) );
 }
 
 } }
