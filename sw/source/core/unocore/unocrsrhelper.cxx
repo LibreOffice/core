@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:23:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -745,7 +748,7 @@ void resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam)
         {
             SvUShortsSort aWhichIds;
             aWhichIds.Insert(RES_TXTATR_CHARFMT);
-            pDoc->ResetAttr(rPam, sal_True, &aWhichIds);
+            pDoc->ResetAttrs(rPam, sal_True, &aWhichIds);
         }
         break;
     }
