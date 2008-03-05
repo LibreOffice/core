@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:50:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,6 +466,22 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 }
 
 //------------------------------------------------------
+::rtl::OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion )
+{
+    ::rtl::OUString aFilterName = GetPresetFilterName();
+    if ( !aFilterName.getLength() )
+    {
+        try {
+            ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+            aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(), nVersion );
+        } catch( uno::Exception& )
+        {}
+    }
+
+    return aFilterName;
+}
+
+//------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl(
                                                             const uno::Reference< embed::XStorage >& xStorage )
 {
@@ -482,14 +498,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
         throw uno::RuntimeException();
 
-    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
-    ::rtl::OUString aFilterName;
-    // TODO/LATER: the filter will be provided from outside, factory will set it in object props
-    try {
-        aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
-                                                    ::comphelper::OStorageHelper::GetXStorageFormat( xStorage ) );
-    } catch( uno::Exception& )
-    {}
+    ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( xStorage ) );
 
     OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
     if ( !aFilterName.getLength() )
@@ -609,16 +618,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     if( !xStorable.is() )
         throw uno::RuntimeException(); // TODO:
 
-    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
-    ::rtl::OUString aFilterName;
-    try {
-        // TODO/LATER: the filter must be provided from outside in future
-        aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
-                                                    nStorageFormat );
-    }
-    catch( uno::Exception& )
-    {
-    }
+    ::rtl::OUString aFilterName = GetFilterName( nStorageFormat );
 
     OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
     if ( !aFilterName.getLength() )
@@ -765,18 +765,9 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
             xDoc = uno::Reference< document::XStorageBasedDocument >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     }
 
-    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     if ( xDoc.is() )
     {
-        ::rtl::OUString aFilterName;
-        try {
-            // TODO/LATER: the filter must be provided from outside in future
-            aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
-                                                        nStorageFormat );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        ::rtl::OUString aFilterName = GetFilterName( nStorageFormat );
 
         OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
         if ( !aFilterName.getLength() )
@@ -895,8 +886,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
         OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
     }
 
-
-    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     if ( m_pDocHolder->GetComponent().is() )
     {
         aTempMediaDescr.realloc( 4 );
@@ -924,10 +913,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
         aTempMediaDescr[1].Name = ::rtl::OUString::createFromAscii( "InputStream" );
         aTempMediaDescr[1].Value <<= xTempStream;
         aTempMediaDescr[2].Name = ::rtl::OUString::createFromAscii( "FilterName" );
-        // TODO/LATER: the filter must be provided from outside in future
-        aTempMediaDescr[2].Value <<= aHelper.GetDefaultFilterFromServiceName(
-                                                    GetDocumentServiceName(),
-                                                    nStorageFormat );
+        aTempMediaDescr[2].Value <<= GetFilterName( nStorageFormat );
         aTempMediaDescr[3].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
         aTempMediaDescr[3].Value <<= sal_True;
     }
