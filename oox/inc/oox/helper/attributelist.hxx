@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributelist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,10 @@ public:
     explicit            AttributeList(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
 
+    /** Returns the wrapped com.sun.star.xml.sax.XFastAttributeList object. */
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >
+                        getFastAttributeList() const { return mxAttribs; }
+
     /** Returns true, if the specified attribute is present. */
     bool                hasAttribute( sal_Int32 nElement ) const;
 
@@ -77,6 +81,10 @@ public:
     /** Returns the unsigned integer value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to unsigned integer. */
     sal_uInt32          getUnsignedInteger( sal_Int32 nElement, sal_uInt32 nDefault ) const;
+
+    /** Returns the 64-bit integer value of the specified attribute, or the passed
+        default value if the attribute is missing or not convertible to integer. */
+    sal_Int64           getInteger64( sal_Int32 nElement, sal_Int64 nDefault ) const;
 
     /** Returns the integer value of the specified hexadecimal attribute,
         or the passed default value if the attribute is missing or not convertible. */
