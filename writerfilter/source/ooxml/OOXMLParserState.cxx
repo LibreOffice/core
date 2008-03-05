@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLParserState.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:58:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:05:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,12 +146,12 @@ OOXMLDocument * OOXMLParserState::getDocument() const
 
 void OOXMLParserState::setXNoteId(const rtl::OUString & rId)
 {
-    msXNoteId = rId;
+    mpDocument->setXNoteId(rId);
 }
 
 const rtl::OUString & OOXMLParserState::getXNoteId() const
 {
-    return msXNoteId;
+    return mpDocument->getXNoteId();
 }
 
 void OOXMLParserState::newCharacterProperty(const Id & rId,
@@ -167,8 +167,9 @@ void OOXMLParserState::newCharacterProperty(const Id & rId,
             (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
 
 #ifdef DEBUG_PROPERTIES
-        clog << "OOXMLParserState::newCharacterProperty: "
-             << pProperty->toString() << endl;
+        logger("DEBUG", "<newCharacterProperty>");
+        logger("DEBUG", pProperty->toString());
+        logger("DEBUG", "</newCharacterProperty>");
 #endif
 
         mpCharacterProps->add(pProperty);
@@ -180,10 +181,12 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 {
     if (mpCharacterProps.get() != NULL)
     {
-        writerfilter::Reference<Properties>::Pointer_t
-            pProps(mpCharacterProps->clone());
-        rStream.props(pProps);
-
+#ifdef DEBUG_PROPERTIES
+        logger("DEBUG", "<resolveCharacterProperties>");
+        logger("DEBUG", mpCharacterProps->toString());
+        logger("DEBUG", "</resolveCharacterProperties>");
+#endif
+        rStream.props(mpCharacterProps);
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
     }
 }
@@ -195,6 +198,24 @@ void OOXMLParserState::setCharacterProperties
         mpCharacterProps = pProps;
     else
         mpCharacterProps->add(pProps);
+}
+
+void OOXMLParserState::resolveTableProperties(Stream & rStream)
+{
+    if (mpTableProps.get() != NULL)
+    {
+        rStream.props(mpTableProps);
+        mpTableProps.reset(new OOXMLPropertySetImpl());
+    }
+}
+
+void OOXMLParserState::setTableProperties
+(OOXMLPropertySet::Pointer_t pProps)
+{
+    if (mpTableProps.get() == NULL)
+        mpTableProps = pProps;
+    else
+        mpTableProps->add(pProps);
 }
 
 string OOXMLParserState::toString() const
