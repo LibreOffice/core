@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:41:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,14 +292,6 @@ namespace dbaui
 
         /// copies the current object into clipboard
         TransferableHelper* copyObject();
-
-        /** fills all elements of the wanted type into the list.
-            @param  _eType
-                The type.
-            @param  _rList
-                The list to fill.
-        */
-        void getElements(ElementType _eType,::std::vector< ::rtl::OUString>& _rList);
 
         /// returns the nameaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getElements(ElementType _eType);
