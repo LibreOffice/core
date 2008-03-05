@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 13:13:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,10 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
         *pInit = win32_init_sys_tray;
         *pDeInit = win32_shutdown_sys_tray;
     }
+    return true;
+#  elif defined QUARTZ
+    *pInit = aqua_init_systray;
+    *pDeInit = aqua_shutdown_systray;
     return true;
 #  else // UNX
     osl::Module *pPlugin;
@@ -753,6 +757,8 @@ void ShutdownIcon::LeaveModalMode()
 // defined in shutdowniconw32.cxx
 #elif defined(OS2)
 // defined in shutdowniconOs2.cxx
+#elif defined QUARTZ
+// defined in shutdowniconaqua.cxx
 #else
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
@@ -825,6 +831,8 @@ bool ShutdownIcon::GetAutostart( )
 {
 #if defined(OS2)
     return GetAutostartOs2( );
+#elif defined QUARTZ
+    return true;
 #else
     bool bRet = false;
 #ifdef ENABLE_QUICKSTART_APPLET
