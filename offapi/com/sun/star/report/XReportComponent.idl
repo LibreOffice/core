@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XReportComponent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:21:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,51 @@ interface XReportComponent
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
+
+        /** is used for subreports and contains the names of columns of the parent report.
+    <p> These columns are typically the foreign key fields of the parent report.
+    The values of theses columns are used to identify the data for the subreport.
+    Each time the parent report changes it's current row, the subreport requeries
+    it's data based on the values of the master fields.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+
+    */
+    [attribute,bound] sequence<string> MasterFields
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /**is used for subreports and contains the names of the columns of the subreport
+    which are related to the master fields of the parent report.
+    <p>Entries in this sequence can either denote column names in the sub report,
+    or paramater names.<br/>
+    For instance, you could base the report on the SQL statement
+    <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
+    to the DetailFields property. In this case, the parameter will be filled from
+    the corresponding master field.<br/>
+    Alternatively, you could simply base your report on the table <code>invoices</code>,
+    and add the column name <code>cust_ref</code> to the DetailFields. In this case,
+    and implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
+    be created, and the artificial parameter will be filled from the corresponding
+    master field.<br/>
+    If a string in this property denotes both a column name and a parameter name, it
+    is undefined which way it is interpreted, but implementations of the service are required
+    to either decide for the paramter or the column, and proceed as usual.
+    </p>
+    <p>The columns specified herein typically represent a part of the primary key
+    fields or their aliases of the detail report.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+    *
+    */
+    [attribute,bound] sequence<string> DetailFields
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
 
     /** Specifies the section where the control belongs to.
         This is a shortcut to get control hierachy up.
