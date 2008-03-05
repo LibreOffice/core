@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:20:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,10 +98,13 @@ struct SwBmpItemInfo
 --------------------------------------------------*/
 class SwNumPositionTabPage : public SfxTabPage
 {
+    FixedLine       aPositionFL;
     FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
-    FixedLine            aPositionFL;
+    // --> OD 2008-02-01 #newlistlevelattrs#
+    // former set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedText           aDistBorderFT;
     MetricField         aDistBorderMF;
     CheckBox            aRelativeCB;
@@ -111,6 +114,23 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aDistNumMF;
     FixedText           aAlignFT;
     ListBox             aAlignLB;
+    // <--
+
+    // --> OD 2008-02-01 #newlistlevelattrs#
+    // new set of controls shown for numbering rules containing list level
+    // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
+    FixedText           aLabelFollowedByFT;
+    ListBox             aLabelFollowedByLB;
+    FixedText           aListtabFT;
+    MetricField         aListtabMF;
+    FixedText           aAlign2FT;
+    ListBox             aAlign2LB;
+    FixedText           aAlignedAtFT;
+    MetricField         aAlignedAtMF;
+    FixedText           aIndentAtFT;
+    MetricField         aIndentAtMF;
+    // <--
+
     PushButton          aStandardPB;
 
     NumberingPreview    aPreviewWIN;
@@ -126,8 +146,10 @@ class SwNumPositionTabPage : public SfxTabPage
     BOOL                bHasChild           : 1;
     BOOL                bPreset             : 1;
     BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    // --> OD 2008-02-01 #newlistlevelattrs#
+    bool                bLabelAlignmentPosAndSpaceModeActive;
+    // <--
 
-//  void                SetMinDist();
     void                InitControls();
 
     DECL_LINK( LevelHdl, ListBox * );
@@ -135,6 +157,16 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( DistanceHdl, MetricField * );
     DECL_LINK( RelativeHdl, CheckBox * );
     DECL_LINK( StandardHdl, PushButton * );
+
+    // --> OD 2008-02-01 #newlistlevelattrs#
+    void InitPosAndSpaceMode();
+    void ShowControlsDependingOnPosAndSpaceMode();
+
+    DECL_LINK( LabelFollowedByHdl_Impl, ListBox* );
+    DECL_LINK( ListtabPosHdl_Impl, MetricField* );
+    DECL_LINK( AlignAtHdl_Impl, MetricField* );
+    DECL_LINK( IndentAtHdl_Impl, MetricField* );
+    // <--
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
