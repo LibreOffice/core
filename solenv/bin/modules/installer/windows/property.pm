@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-05 17:37:04 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:26:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,15 @@ sub set_important_properties
     if ( $allvariables->{'PRODUCTBUILDID'} )
     {
         my $onepropertyline = "PRODUCTBUILDID" . "\t" . $allvariables->{'PRODUCTBUILDID'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::desktoplinkexists )
+    {
+        my $onepropertyline = "DESKTOPLINKEXISTS" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+
+        $onepropertyline = "CREATEDESKTOPLINK" . "\t" . "1" . "\n"; # Setting the default
         push(@{$propertyfile}, $onepropertyline);
     }
 
