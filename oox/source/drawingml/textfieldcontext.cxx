@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfieldcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,10 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-    TextFieldContext::TextFieldContext( const ContextRef& xParent,
-                                                                            const Reference< XFastAttributeList >& rXAttributes,
-                                                                            const TextFieldPtr & pTextField)
-        : Context( xParent->getHandler() )
+    TextFieldContext::TextFieldContext( ContextHandler& rParent,
+                const Reference< XFastAttributeList >& rXAttributes,
+                const TextFieldPtr & pTextField)
+        : ContextHandler( rParent )
             ,   mpTextField( pTextField )
             , mbIsInText( false )
     {
@@ -89,10 +89,10 @@ namespace oox { namespace drawingml {
         switch( aElementToken )
         {
         case NMSP_DRAWINGML|XML_rPr:
-            xRet.set( new TextCharacterPropertiesContext( this, xAttribs, *(mpTextField->getTextCharacterProperties().get()) ) );
+            xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, *mpTextField->getTextCharacterProperties() ) );
             break;
         case NMSP_DRAWINGML|XML_pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, xAttribs, *(mpTextField->getTextParagraphProperties().get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, *mpTextField->getTextParagraphProperties() ) );
             break;
         case NMSP_DRAWINGML|XML_t:
             mbIsInText = true;

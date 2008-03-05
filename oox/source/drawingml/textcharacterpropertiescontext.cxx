@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcharacterpropertiescontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,11 @@ namespace oox { namespace drawingml {
 // --------------------------------------------------------------------
 
 // CT_TextCharacterProperties
-TextCharacterPropertiesContext::TextCharacterPropertiesContext( const ::oox::core::ContextRef& xParent,
-                                                                const Reference< XFastAttributeList >& rXAttributes,
-                                                                oox::drawingml::TextCharacterProperties& rTextCharacterProperties )
-: Context( xParent->getHandler() )
+TextCharacterPropertiesContext::TextCharacterPropertiesContext(
+        ContextHandler& rParent,
+        const Reference< XFastAttributeList >& rXAttributes,
+        oox::drawingml::TextCharacterProperties& rTextCharacterProperties )
+: ContextHandler( rParent )
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
     AttributeList attribs( rXAttributes );
@@ -224,7 +225,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
             break;
         // EG_FillProperties
       case NMSP_DRAWINGML|XML_solidFill:
-            xRet.set( new colorChoiceContext( getHandler(), *(mrTextCharacterProperties.getCharColor().get()) ) );
+            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getCharColor() ) );
             break;
         // EG_EffectProperties
     case NMSP_DRAWINGML|XML_effectDag:
@@ -234,7 +235,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
             break;
 
         case NMSP_DRAWINGML|XML_highlight:      //CT_Color
-            xRet.set( new colorChoiceContext( getHandler(), *(mrTextCharacterProperties.getHighlightColor().get()) ) );
+            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getHighlightColor() ) );
             break;
 
         // EG_TextUnderlineLine
@@ -251,24 +252,24 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
              mrTextCharacterProperties.getUnderlineFillFollowText() <<= sal_True;
             break;
         case NMSP_DRAWINGML|XML_uFill:          // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            xRet.set( new colorChoiceContext( getHandler(), *(mrTextCharacterProperties.getUnderlineColor().get()) ) );
+            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getUnderlineColor() ) );
             break;
 
         case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
-            xRet.set( new TextFontContext( getHandler(), aElementToken,  xAttributes, maAsianFont ) );
+            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maAsianFont ) );
             break;
         case NMSP_DRAWINGML|XML_cs:             // CT_TextFont
-            xRet.set( new TextFontContext( getHandler(), aElementToken,  xAttributes, maComplexFont ) );
+            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maComplexFont ) );
             break;
         case NMSP_DRAWINGML|XML_sym:            // CT_TextFont
-            xRet.set( new TextFontContext( getHandler(), aElementToken,  xAttributes, maSymbolFont ) );
+            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maSymbolFont ) );
             break;
         case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
-            xRet.set( new TextFontContext( getHandler(), aElementToken,  xAttributes, maLatinFont ) );
+            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maLatinFont ) );
             break;
         case NMSP_DRAWINGML|XML_hlinkClick:     // CT_Hyperlink
         case NMSP_DRAWINGML|XML_hlinkMouseOver: // CT_Hyperlink
-            xRet.set( new HyperLinkContext( getHandler(), xAttributes,  mrTextCharacterProperties.getHyperlinkPropertyMap() ) );
+            xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.getHyperlinkPropertyMap() ) );
             break;
     }
     if ( !xRet.is() )

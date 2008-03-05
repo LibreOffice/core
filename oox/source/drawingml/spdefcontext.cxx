@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spdefcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-spDefContext::spDefContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::Shape& rDefaultObject )
-: Context( xHandler )
+spDefContext::spDefContext( ContextHandler& rParent, Shape& rDefaultObject )
+: ContextHandler( rParent )
 , mrDefaultObject( rDefaultObject )
 {
 }
@@ -60,16 +60,16 @@ Reference< XFastContextHandler > spDefContext::createFastChildContext( sal_Int32
     {
         case NMSP_DRAWINGML|XML_spPr:
         {
-            xRet = new ShapePropertiesContext( this, mrDefaultObject );
+            xRet = new ShapePropertiesContext( *this, mrDefaultObject );
             break;
         }
         case NMSP_DRAWINGML|XML_bodyPr:
         {
-            xRet = new TextBodyPropertiesContext( this, xAttribs, mrDefaultObject );
+            xRet = new TextBodyPropertiesContext( *this, xAttribs, mrDefaultObject );
             break;
         }
         case NMSP_DRAWINGML|XML_lstStyle:
-            xRet.set( new TextListStyleContext( getHandler(), *(mrDefaultObject.getMasterTextListStyle().get()) ) );
+            xRet.set( new TextListStyleContext( *this, *mrDefaultObject.getMasterTextListStyle() ) );
             break;
         case NMSP_DRAWINGML|XML_style:
             break;

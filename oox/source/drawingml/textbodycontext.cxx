@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textbodycontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,10 @@ namespace oox { namespace drawingml {
 // --------------------------------------------------------------------
 
 // CT_TextParagraph
-class TextParagraphContext : public Context
+class TextParagraphContext : public ContextHandler
 {
 public:
-    TextParagraphContext( const FragmentHandlerRef& xHandler, TextParagraph& rPara );
+    TextParagraphContext( ContextHandler& rParent, TextParagraph& rPara );
 
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
@@ -66,8 +66,8 @@ protected:
 };
 
 // --------------------------------------------------------------------
-TextParagraphContext::TextParagraphContext( const FragmentHandlerRef& xHandler, TextParagraph& rPara )
-: Context( xHandler )
+TextParagraphContext::TextParagraphContext( ContextHandler& rParent, TextParagraph& rPara )
+: ContextHandler( rParent )
 , mrParagraph( rPara )
 {
 }
@@ -93,7 +93,7 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     {
         TextRunPtr pRun( new TextRun() );
         mrParagraph.addRun( pRun );
-        xRet.set( new RegularTextRunContext( getHandler(), pRun ) );
+        xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
     case NMSP_DRAWINGML|XML_br: // "CT_TextLineBreak" Soft return line break (vertical tab).
@@ -101,21 +101,21 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
         TextRunPtr pRun( new TextRun() );
         pRun->setLineBreak();
         mrParagraph.addRun( pRun );
-        xRet.set( new RegularTextRunContext( getHandler(), pRun ) );
+        xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
     case NMSP_DRAWINGML|XML_fld:    // "CT_TextField" Text Field.
     {
         TextFieldPtr pField( new TextField() );
         mrParagraph.addRun( pField );
-        xRet.set( new TextFieldContext( this, xAttribs, pField ) );
+        xRet.set( new TextFieldContext( *this, xAttribs, pField ) );
         break;
     }
     case NMSP_DRAWINGML|XML_pPr:
-        xRet.set( new TextParagraphPropertiesContext( this, xAttribs, *(mrParagraph.getProperties().get()) ) );
+        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, *mrParagraph.getProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_endParaRPr:
-        xRet.set( new TextParagraphPropertiesContext( this, xAttribs, *(mrParagraph.getEndProperties().get()) ) );
+        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, *mrParagraph.getEndProperties() ) );
         break;
     }
 
@@ -123,8 +123,8 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
 }
 // --------------------------------------------------------------------
 
-RegularTextRunContext::RegularTextRunContext( const FragmentHandlerRef& xHandler, oox::drawingml::TextRunPtr pRunPtr )
-: Context( xHandler )
+RegularTextRunContext::RegularTextRunContext( ContextHandler& rParent, TextRunPtr pRunPtr )
+: ContextHandler( rParent )
 , mpRunPtr( pRunPtr )
 , mbIsInText( false )
 {
@@ -168,7 +168,7 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_rPr:    // "CT_TextCharPropertyBag" The text char properties of this text run.
-        xRet.set( new TextCharacterPropertiesContext( this, xAttribs, *(mpRunPtr->getTextCharacterProperties().get()) ) );
+        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, *mpRunPtr->getTextCharacterProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_t:      // "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
@@ -180,8 +180,8 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
 
 // --------------------------------------------------------------------
 
-TextBodyContext::TextBodyContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::Shape& rShape )
-: Context( xHandler )
+TextBodyContext::TextBodyContext( ContextHandler& rParent, Shape& rShape )
+: ContextHandler( rParent )
 , mrShape( rShape )
 , mpBodyPtr( new TextBody() )
 {
@@ -203,15 +203,15 @@ Reference< XFastContextHandler > TextBodyContext::createFastChildContext( sal_In
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_bodyPr:     // CT_TextBodyPropertyBag
-        xRet.set( new TextBodyPropertiesContext( this, xAttribs, mrShape ) );
+        xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrShape ) );
         break;
     case NMSP_DRAWINGML|XML_lstStyle:   // CT_TextListStyle
-        xRet.set( new TextListStyleContext( getHandler(), *(mpBodyPtr->getTextListStyle().get()) ) );
+        xRet.set( new TextListStyleContext( *this, *mpBodyPtr->getTextListStyle() ) );
         break;
     case NMSP_DRAWINGML|XML_p:          // CT_TextParagraph
         TextParagraphPtr pPara( new TextParagraph() );
         mpBodyPtr->addParagraph( pPara );
-        xRet.set( new TextParagraphContext( getHandler(), *(pPara.get()) ) );
+        xRet.set( new TextParagraphContext( *this, *pPara ) );
         break;
     }
 

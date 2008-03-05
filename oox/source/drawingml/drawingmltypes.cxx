@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawingmltypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,8 +395,8 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
 // --------------------------------------------------------------------
 
 /** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >& xAttribs, ::oox::drawingml::Shape& rShape ) throw()
-: Context( xHandler )
+Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, Shape& rShape ) throw()
+: ContextHandler( rParent )
 , mrShape( rShape )
 {
     AttributeList aAttributeList( xAttribs );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperlinkcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "oox/core/relations.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/skipcontext.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
 #include "tokens.hxx"
 
@@ -51,33 +52,32 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-
-    HyperLinkContext::HyperLinkContext( const FragmentHandlerRef& xParent,
-                                                                            const Reference< XFastAttributeList >& xAttributes,
-                                                                            PropertyMap& aProperties)
-        : Context( xParent )
-            , maProperties(aProperties)
+HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
+        const Reference< XFastAttributeList >& xAttributes, PropertyMap& aProperties )
+    : ContextHandler( rParent )
+    , maProperties(aProperties)
+{
+    OUString aRelId = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
+    OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
+    const OUString& sHref = getRelations().getTargetFromRelId( aRelId );
+    if( sHref.getLength() > 0 )
     {
-        OUString aRelId = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
-        OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
-        const OUString& sHref = getHandler()->getRelations().getTargetFromRelId( aRelId );
-        if( sHref.getLength() > 0 )
-        {
-            OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
-            const OUString sURL( CREATE_OUSTRING( "URL" ) );
-            maProperties[ sURL ] <<= getHandler()->getFilter()->getAbsoluteUrl( sHref );
-            OUString sTooltip = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tooltip );
-            const OUString sRepresentation( CREATE_OUSTRING( "Representation" ) );
-            maProperties[ sRepresentation ] <<= sTooltip;
+        OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
+        const OUString sURL( CREATE_OUSTRING( "URL" ) );
+        maProperties[ sURL ] <<= getFilter().getAbsoluteUrl( sHref );
+        OUString sTooltip = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tooltip );
+        const OUString sRepresentation( CREATE_OUSTRING( "Representation" ) );
+        maProperties[ sRepresentation ] <<= sTooltip;
 
-            OUString sFrame = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tgtFrame );
-            if( sFrame.getLength() )
-            {
-                const OUString sTargetFrame( CREATE_OUSTRING( "TargetFrame" ) );
-                maProperties[ sTargetFrame ] <<= sFrame;
-            }
+        OUString sFrame = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tgtFrame );
+        if( sFrame.getLength() )
+        {
+            const OUString sTargetFrame( CREATE_OUSTRING( "TargetFrame" ) );
+            maProperties[ sTargetFrame ] <<= sFrame;
+        }
 
 //              sValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
 //              const rtl::OUString sUnvisitedCharStyleName( CREATE_OUSTRING( "UnvisitedCharStyleName" ) );
@@ -85,37 +85,38 @@ namespace oox { namespace drawingml {
 //              const rtl::OUString sVisitedCharStyleName( CREATE_OUSTRING( "VisitedCharStyleName" ) );
 //              maProperties[ sVisitedCharStyleName ] <<= sValue;
 
-        }
-        // TODO unhandled
-        // XML_invalidUrl
-        // XML_history
-        // XML_highlightClick
-        // XML_endSnd
-        // XML_action
     }
+    // TODO unhandled
+    // XML_invalidUrl
+    // XML_history
+    // XML_highlightClick
+    // XML_endSnd
+    // XML_action
+}
 
-    HyperLinkContext::~HyperLinkContext()
+HyperLinkContext::~HyperLinkContext()
+{
+}
+
+Reference< XFastContextHandler > HyperLinkContext::createFastChildContext(
+        ::sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xRet;
+    switch( aElement )
     {
+    case NMSP_DRAWINGML|XML_extLst:
+        xRet.set( new SkipContext( *this ) );
+        break;
+    case NMSP_DRAWINGML|XML_snd:
+        EmbeddedWAVAudioFile aAudio;
+        getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio );
+        break;
     }
+    if ( !xRet.is() )
+        xRet.set( this );
+    return xRet;
+}
 
-    Reference< XFastContextHandler > HyperLinkContext::createFastChildContext( ::sal_Int32 aElement,
-                                                                                                                                                         const Reference< XFastAttributeList >& xAttribs )
-        throw (SAXException, RuntimeException)
-    {
-        Reference< XFastContextHandler > xRet;
-        switch( aElement )
-        {
-        case NMSP_DRAWINGML|XML_extLst:
-            xRet.set( new SkipContext( getHandler() ) );
-            break;
-        case NMSP_DRAWINGML|XML_snd:
-            EmbeddedWAVAudioFile aAudio;
-            getEmbeddedWAVAudioFile( getHandler(), xAttribs, aAudio );
-            break;
-        }
-        if ( !xRet.is() )
-            xRet.set( this );
-        return xRet;
-    }
+} // namespace drawingml
+} // namespace oox
 
-} }

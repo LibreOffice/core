@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:24:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,47 +49,47 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/shapecontext.obj\
-        $(SLO)$/shapegroupcontext.obj\
+        $(SLO)$/clrscheme.obj\
+        $(SLO)$/clrschemecontext.obj\
+        $(SLO)$/color.obj\
+        $(SLO)$/colorchoicecontext.obj\
+        $(SLO)$/connectorshapecontext.obj\
+        $(SLO)$/customshapegeometry.obj\
+        $(SLO)$/customshapeproperties.obj\
+        $(SLO)$/drawingmltypes.obj\
+        $(SLO)$/embeddedwavaudiofile.obj\
         $(SLO)$/fillproperties.obj\
         $(SLO)$/fillpropertiesgroupcontext.obj\
+        $(SLO)$/graphicshapecontext.obj\
+        $(SLO)$/hyperlinkcontext.obj\
         $(SLO)$/lineproperties.obj\
         $(SLO)$/linepropertiescontext.obj\
-        $(SLO)$/drawingmltypes.obj\
-        $(SLO)$/customshapegeometry.obj\
-        $(SLO)$/connectorshapecontext.obj\
-        $(SLO)$/graphicshapecontext.obj\
+        $(SLO)$/objectdefaultcontext.obj\
+        $(SLO)$/shape.obj\
+        $(SLO)$/shapecontext.obj\
+        $(SLO)$/shapegroupcontext.obj\
+        $(SLO)$/shapepropertiescontext.obj\
+        $(SLO)$/shapestylecontext.obj\
+        $(SLO)$/spdefcontext.obj\
+        $(SLO)$/textbody.obj\
         $(SLO)$/textbodycontext.obj\
         $(SLO)$/textbodypropertiescontext.obj\
-        $(SLO)$/themefragmenthandler.obj\
-        $(SLO)$/objectdefaultcontext.obj\
-        $(SLO)$/themeelementscontext.obj\
-        $(SLO)$/spdefcontext.obj\
-        $(SLO)$/colorchoicecontext.obj\
-        $(SLO)$/clrschemecontext.obj\
-        $(SLO)$/clrscheme.obj\
-        $(SLO)$/color.obj\
-        $(SLO)$/shape.obj\
-        $(SLO)$/shapestylecontext.obj\
-        $(SLO)$/shapepropertiescontext.obj\
-        $(SLO)$/textparagraphproperties.obj\
-        $(SLO)$/textparagraphpropertiescontext.obj\
         $(SLO)$/textcharacterproperties.obj\
         $(SLO)$/textcharacterpropertiescontext.obj\
-        $(SLO)$/theme.obj\
-        $(SLO)$/textliststylecontext.obj\
-        $(SLO)$/textrun.obj\
-        $(SLO)$/textbody.obj\
-        $(SLO)$/textparagraph.obj\
+        $(SLO)$/textfield.obj\
+        $(SLO)$/textfieldcontext.obj\
         $(SLO)$/textfontcontext.obj\
+        $(SLO)$/textliststyle.obj \
+        $(SLO)$/textliststylecontext.obj\
+        $(SLO)$/textparagraph.obj\
+        $(SLO)$/textparagraphproperties.obj\
+        $(SLO)$/textparagraphpropertiescontext.obj\
+        $(SLO)$/textrun.obj\
         $(SLO)$/textspacingcontext.obj\
         $(SLO)$/texttabstoplistcontext.obj\
-        $(SLO)$/textliststyle.obj \
-        $(SLO)$/textfieldcontext.obj\
-        $(SLO)$/textfield.obj\
-        $(SLO)$/hyperlinkcontext.obj\
-        $(SLO)$/embeddedwavaudiofile.obj\
-        $(SLO)$/customshapeproperties.obj
+        $(SLO)$/theme.obj\
+        $(SLO)$/themeelementscontext.obj\
+        $(SLO)$/themefragmenthandler.obj
 
 # --- Targets -------------------------------------------------------
 

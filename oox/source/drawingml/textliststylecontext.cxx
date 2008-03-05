@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textliststylecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@ namespace oox { namespace drawingml {
 // --------------------------------------------------------------------
 
 // CT_TextListStyle
-TextListStyleContext::TextListStyleContext( const ::oox::core::FragmentHandlerRef& xHandler, oox::drawingml::TextListStyle& rTextListStyle )
-: Context( xHandler )
+TextListStyleContext::TextListStyleContext( ContextHandler& rParent, TextListStyle& rTextListStyle )
+: ContextHandler( rParent )
 , mrTextListStyle( rTextListStyle )
 {
 }
@@ -73,40 +73,40 @@ Reference< XFastContextHandler > TextListStyleContext::createFastChildContext( s
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_defPPr:     // CT_TextParagraphProperties
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 0 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
             break;
         case NMSP_DRAWINGML|XML_outline1pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getAggregationListStyle()[ 0 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 0 ] ) );
             break;
         case NMSP_DRAWINGML|XML_outline2pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getAggregationListStyle()[ 1 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 1 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl1pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 0 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl2pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 1 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 1 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl3pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 2 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 2 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl4pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 3 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 3 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl5pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 4 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 4 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl6pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 5 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 5 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl7pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 6 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 6 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl8pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 7 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 7 ] ) );
             break;
         case NMSP_DRAWINGML|XML_lvl9pPr:
-            xRet.set( new TextParagraphPropertiesContext( this, rxAttributes, *(mrTextListStyle.getListStyle()[ 8 ].get()) ) );
+            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 8 ] ) );
             break;
     }
     if ( !xRet.is() )

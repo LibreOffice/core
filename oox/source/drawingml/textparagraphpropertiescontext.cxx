@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textparagraphpropertiescontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:30:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,10 @@ using namespace ::com::sun::star::text;
 namespace oox { namespace drawingml {
 
 // CT_TextParagraphProperties
-TextParagraphPropertiesContext::TextParagraphPropertiesContext( const ::oox::core::ContextRef& xParent,
+TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& rParent,
                                                                 const Reference< XFastAttributeList >& xAttribs,
-                                                                oox::drawingml::TextParagraphProperties& rTextParagraphProperties )
-: Context( xParent->getHandler() )
+                                                                TextParagraphProperties& rTextParagraphProperties )
+: ContextHandler( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrSpaceBefore( rTextParagraphProperties.getParaTopMargin() )
 , mrSpaceAfter( rTextParagraphProperties.getParaBottomMargin() )
@@ -210,13 +210,13 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_lnSpc:          // CT_TextSpacing
-            xRet.set( new TextSpacingContext( getHandler(), maLineSpacing ) );
+            xRet.set( new TextSpacingContext( *this, maLineSpacing ) );
             break;
         case NMSP_DRAWINGML|XML_spcBef:         // CT_TextSpacing
-            xRet.set( new TextSpacingContext( getHandler(), mrSpaceBefore ) );
+            xRet.set( new TextSpacingContext( *this, mrSpaceBefore ) );
             break;
         case NMSP_DRAWINGML|XML_spcAft:         // CT_TextSpacing
-            xRet.set( new TextSpacingContext( getHandler(), mrSpaceAfter ) );
+            xRet.set( new TextSpacingContext( *this, mrSpaceAfter ) );
             break;
 
         // EG_TextBulletColor
@@ -224,7 +224,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             mrBulletList.mbBulletColorFollowText <<= sal_True;
             break;
         case NMSP_DRAWINGML|XML_buClr:          // CT_Color
-            xRet.set( new colorChoiceContext( getHandler(), *mrBulletList.maBulletColorPtr.get() ) );
+            xRet.set( new colorChoiceContext( *this, *mrBulletList.maBulletColorPtr ) );
             break;
 
         // EG_TextBulletSize
@@ -244,8 +244,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             mrBulletList.mbBulletFontFollowText <<= sal_True;
             break;
         case NMSP_DRAWINGML|XML_buFont:         // CT_TextFont
-            xRet.set( new TextFontContext( getHandler(), aElementToken, rXAttributes,
-                                                                         mrBulletList.maBulletFont ) );
+            xRet.set( new TextFontContext( *this, aElementToken, rXAttributes, mrBulletList.maBulletFont ) );
             break;
 
         // EG_TextBullet
@@ -289,10 +288,10 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             break;
 
         case NMSP_DRAWINGML|XML_tabLst:         // CT_TextTabStopList
-            xRet.set( new TextTabStopListContext( this, maTabList ) );
+            xRet.set( new TextTabStopListContext( *this, maTabList ) );
             break;
         case NMSP_DRAWINGML|XML_defRPr:         // CT_TextCharacterProperties
-            xRet.set( new TextCharacterPropertiesContext( this, rXAttributes, *(mrTextParagraphProperties.getTextCharacterProperties().get()) ) );
+            xRet.set( new TextCharacterPropertiesContext( *this, rXAttributes, *mrTextParagraphProperties.getTextCharacterProperties() ) );
             break;
     }
     if ( !xRet.is() )

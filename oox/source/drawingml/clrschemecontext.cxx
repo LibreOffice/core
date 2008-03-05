@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clrschemecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 static void setClrMap( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-            oox::drawingml::ClrMap& rClrMap, sal_Int32 nToken )
+            ClrMap& rClrMap, sal_Int32 nToken )
 {
     if ( xAttributes->hasAttribute( nToken ) )
     {
@@ -54,9 +54,9 @@ static void setClrMap( const ::com::sun::star::uno::Reference< ::com::sun::star:
     }
 }
 
-clrMapContext::clrMapContext( const FragmentHandlerRef& xHandler,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, oox::drawingml::ClrMap& rClrMap )
-: Context( xHandler )
+clrMapContext::clrMapContext( ContextHandler& rParent,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ClrMap& rClrMap )
+: ContextHandler( rParent )
 {
     setClrMap( xAttributes, rClrMap, XML_bg1 );
     setClrMap( xAttributes, rClrMap, XML_tx1 );
@@ -79,8 +79,8 @@ Reference< XFastContextHandler > clrMapContext::createFastChildContext( sal_Int3
     return xRet;
 }
 
-clrSchemeContext::clrSchemeContext( const ::oox::core::FragmentHandlerRef& xHandler, const oox::drawingml::ClrSchemePtr pClrSchemePtr )
-: Context( xHandler )
+clrSchemeContext::clrSchemeContext( ContextHandler& rParent, const ClrSchemePtr pClrSchemePtr )
+: ContextHandler( rParent )
 , mpClrSchemePtr( pClrSchemePtr )
 {
 }
@@ -106,7 +106,7 @@ void clrSchemeContext::endFastElement( sal_Int32 aElementToken ) throw (SAXExcep
         case NMSP_DRAWINGML|XML_hlink:
         case NMSP_DRAWINGML|XML_folHlink:
         {
-            mpClrSchemePtr->setColor( aElementToken & 0xffff, maColor.getColor( *getHandler()->getFilter().get() ) );
+            mpClrSchemePtr->setColor( aElementToken & 0xffff, maColor.getColor( getFilter() ) );
             break;
         }
     }
@@ -124,7 +124,7 @@ Reference< XFastContextHandler > clrSchemeContext::createFastChildContext( sal_I
 //      case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
         case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
         {
-            xRet.set( new colorChoiceContext( getHandler(), maColor ) );
+            xRet.set( new colorChoiceContext( *this, maColor ) );
             break;
         }
     }

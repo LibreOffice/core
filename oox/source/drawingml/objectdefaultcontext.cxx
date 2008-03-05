@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectdefaultcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-objectDefaultContext::objectDefaultContext( const ::oox::core::FragmentHandlerRef& xHandler, Theme& rTheme )
-: Context( xHandler )
+objectDefaultContext::objectDefaultContext( ContextHandler& rParent, Theme& rTheme )
+: ContextHandler( rParent )
 , mrTheme( rTheme )
 {
 }
@@ -58,17 +58,17 @@ Reference< XFastContextHandler > objectDefaultContext::createFastChildContext( s
     {
         case NMSP_DRAWINGML|XML_spDef:
         {
-            xRet.set( new spDefContext( getHandler(), *(mrTheme.getspDef().get()) ) );
+            xRet.set( new spDefContext( *this, *mrTheme.getspDef() ) );
             break;
         }
         case NMSP_DRAWINGML|XML_lnDef:
         {
-            xRet.set( new spDefContext( getHandler(), *(mrTheme.getlnDef().get()) ) );
+            xRet.set( new spDefContext( *this, *mrTheme.getlnDef() ) );
             break;
         }
         case NMSP_DRAWINGML|XML_txDef:
         {
-            xRet.set( new spDefContext( getHandler(), *(mrTheme.gettxDef().get()) ) );
+            xRet.set( new spDefContext( *this, *mrTheme.gettxDef() ) );
             break;
         }
     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedwavaudiofile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,13 @@ namespace oox { namespace drawingml {
 
 
     // CT_EmbeddedWAVAudioFile
-    void getEmbeddedWAVAudioFile( const FragmentHandlerRef &xHandler, const Reference< XFastAttributeList >& xAttribs,
-                                                                EmbeddedWAVAudioFile & aAudio )
+    void getEmbeddedWAVAudioFile( const Relations& rRelations,
+            const Reference< XFastAttributeList >& xAttribs, EmbeddedWAVAudioFile & aAudio )
     {
         AttributeList attribs(xAttribs);
 
         OUString sId = xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_embed );
-        aAudio.msLink = xHandler->getRelations().getTargetFromRelId( sId );
+        aAudio.msLink = rRelations.getTargetFromRelId( sId );
         aAudio.mbBuiltIn = attribs.getBool( XML_builtIn, false );
         aAudio.msName = xAttribs->getOptionalValue( XML_name );
     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperlinkcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,31 +37,30 @@
 #define OOX_DRAWINGML_HYPERLINKCONTEXT_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-
-#include "oox/core/context.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { class PropertyMap; }
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-    class HyperLinkContext : public ::oox::core::Context
-    {
-    public:
-        HyperLinkContext( const ::oox::core::FragmentHandlerRef& xParent,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-                                            PropertyMap& aProperties);
-        ~HyperLinkContext();
+class HyperLinkContext : public ::oox::core::ContextHandler
+{
+public:
+                        HyperLinkContext(
+                            ::oox::core::ContextHandler& rParent,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+                            PropertyMap& aProperties );
+    virtual             ~HyperLinkContext();
 
-//      virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-    protected:
-        PropertyMap& maProperties;
-    };
+protected:
+    PropertyMap&        maProperties;
+};
 
-
-} }
-
+} // namespace drawingml
+} // namespace oox
 
 #endif
+

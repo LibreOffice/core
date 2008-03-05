@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapestylecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,11 @@ namespace oox { namespace drawingml {
 // -------------------------
 // CT_StyleMatrixReference
 // -------------------------
-class StyleMatrixReferenceContext : public ::oox::core::Context
+class StyleMatrixReferenceContext : public ContextHandler
 {
 public:
-    StyleMatrixReferenceContext( const ::oox::core::ContextRef& rxParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs,
-            const oox::drawingml::ShapeStyle eShapeStyle, oox::drawingml::Shape& rShape );
+    StyleMatrixReferenceContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs,
+            const ShapeStyle eShapeStyle, Shape& rShape );
     ~StyleMatrixReferenceContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -62,15 +62,15 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::Shape&        mrShape;
-    ::oox::drawingml::ShapeStyle    meShapeStyle;
-    ::oox::drawingml::ColorPtr      maColor;
+    Shape&              mrShape;
+    ShapeStyle          meShapeStyle;
+    ColorPtr            maColor;
 };
 
-StyleMatrixReferenceContext::StyleMatrixReferenceContext( const ::oox::core::ContextRef& rxParent,
+StyleMatrixReferenceContext::StyleMatrixReferenceContext( ContextHandler& rParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
-    const oox::drawingml::ShapeStyle eShapeStyle, oox::drawingml::Shape& rShape )
-: Context( rxParent->getHandler() )
+    const ShapeStyle eShapeStyle, Shape& rShape )
+: ContextHandler( rParent )
 , mrShape( rShape )
 , meShapeStyle( eShapeStyle )
 , maColor( new Color() )
@@ -94,14 +94,14 @@ void StyleMatrixReferenceContext::endFastElement( sal_Int32 ) throw (SAXExceptio
 
 Reference< XFastContextHandler > StyleMatrixReferenceContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* rxAttributes */ ) throw (SAXException, RuntimeException)
 {
-    return new colorChoiceContext( getHandler(), *maColor.get() );
+    return new colorChoiceContext( *this, *maColor );
 }
 
 // ---------------
 // CT_ShapeStyle
 // ---------------
-ShapeStyleContext::ShapeStyleContext( const ::oox::core::ContextRef& rxParent, oox::drawingml::Shape& rShape )
-: Context( rxParent->getHandler() )
+ShapeStyleContext::ShapeStyleContext( ContextHandler& rParent, Shape& rShape )
+: ContextHandler( rParent )
 , mrShape( rShape )
 {
 }
@@ -125,16 +125,16 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_lnRef :     // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( this, rxAttributes, oox::drawingml::SHAPESTYLE_ln, mrShape ) );
+            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, SHAPESTYLE_ln, mrShape ) );
             break;
         case NMSP_DRAWINGML|XML_fillRef :   // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( this, rxAttributes, oox::drawingml::SHAPESTYLE_fill, mrShape ) );
+            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, SHAPESTYLE_fill, mrShape ) );
             break;
         case NMSP_DRAWINGML|XML_effectRef : // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( this, rxAttributes, oox::drawingml::SHAPESTYLE_effect, mrShape ) );
+            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, SHAPESTYLE_effect, mrShape ) );
             break;
         case NMSP_DRAWINGML|XML_fontRef :   // CT_FontReference
-            xRet.set( new StyleMatrixReferenceContext( this, rxAttributes, oox::drawingml::SHAPESTYLE_font, mrShape ) );
+            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, SHAPESTYLE_font, mrShape ) );
             break;
     }
     if ( !xRet.is() )
