@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:14:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,21 @@
             </prop>
             <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
         </node>
+        <node oor:name="80243D39-6741-46C5-926E-069164FF87BB" oor:op="replace" install:module="chart">
+            <prop oor:name="ObjectFactory"><value>com.sun.star.embed.OOoEmbeddedObjectFactory</value></prop>
+            <prop oor:name="ObjectDocumentServiceName"><value>com.sun.star.chart2.ChartDocument</value></prop>
+            <prop oor:name="ObjectDocumentFilterName"><value>StarOffice XML (Base) Report Chart</value></prop>
+            <prop oor:name="ObjectMiscStatus"><value>1</value></prop>
+            <prop oor:name="ObjectVerbs"><value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value></prop>
+        </node>
+    </node>
+    <node oor:name="MimeTypeClassIDRelations">
+        <prop oor:name="application/vnd.sun.xml.report.chart" oor:op="replace" oor:type="xs:string">
+            <value>80243D39-6741-46C5-926E-069164FF87BB</value>
+        </prop>
+        <prop oor:name="application/vnd.sun.xml.report" oor:op="replace" oor:type="xs:string">
+            <value>D7896D52-B7AF-4820-9DFE-D404D015960F</value>
+        </prop>
     </node>
     <node oor:name="ObjectNames">
         <node oor:name="Calc" oor:op="replace" install:module="calc">
