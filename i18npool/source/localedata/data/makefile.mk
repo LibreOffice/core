@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2008-01-28 16:36:46 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:43:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_gl_ES.cxx  \
     $(MISC)$/localedata_gsc_FR.cxx \
     $(MISC)$/localedata_gu_IN.cxx  \
+    $(MISC)$/localedata_gug_PY.cxx  \
     $(MISC)$/localedata_ha_GH.cxx  \
     $(MISC)$/localedata_he_IL.cxx  \
     $(MISC)$/localedata_hi_IN.cxx  \
@@ -222,6 +223,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_tg_TJ.cxx  \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_ti_ER.cxx  \
+    $(MISC)$/localedata_tk_TM.cxx  \
     $(MISC)$/localedata_tn_ZA.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_ts_ZA.cxx  \
@@ -420,6 +422,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_eo.obj    \
     $(SLO)$/localedata_fa_IR.obj \
     $(SLO)$/localedata_gu_IN.obj \
+    $(SLO)$/localedata_gug_PY.obj \
     $(SLO)$/localedata_ha_GH.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
@@ -458,6 +461,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_tg_TJ.obj \
     $(SLO)$/localedata_th_TH.obj \
     $(SLO)$/localedata_ti_ER.obj \
+    $(SLO)$/localedata_tk_TM.obj \
     $(SLO)$/localedata_tn_ZA.obj \
     $(SLO)$/localedata_ts_ZA.obj \
     $(SLO)$/localedata_uz_UZ.obj \
