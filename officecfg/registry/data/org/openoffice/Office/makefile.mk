@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 18:02:34 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:41:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ MODULEFILES= \
     Common-base.xcu   \
     Common-math.xcu   \
     Common-unx.xcu   \
+    Common-macosx.xcu   \
     Common-wnt.xcu   \
     Common-dicooo.xcu   \
     Common-UseOOoFileDialogs.xcu \
