@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vmldrawingfragmenthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,14 @@
  *
  ************************************************************************/
 
+#include "oox/vml/drawingfragmenthandler.hxx"
+
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include "oox/core/context.hxx"
+#include "oox/core/contexthandler.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/vml/drawingfragmenthandler.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
@@ -54,19 +55,20 @@ namespace oox { namespace vml {
 
 //--------------------------------------------------------------------------------------------------------------
 
-class BasicShapeContext : public oox::core::Context
+class BasicShapeContext : public ContextHandler
 {
 public:
-    BasicShapeContext( const FragmentHandlerRef& xHandler,
+    BasicShapeContext( ContextHandler& rParent,
         sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
         const Reference< XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, RuntimeException);
 private:
     ShapePtr mpShapePtr;
 };
-BasicShapeContext::BasicShapeContext( const FragmentHandlerRef& xHandler,
+
+BasicShapeContext::BasicShapeContext( ContextHandler& rParent,
     sal_Int32 /* aElement */, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: Context( xHandler )
+: ContextHandler( rParent )
 , mpShapePtr( pShapePtr )
 {
     mpShapePtr->msId = xAttribs->getOptionalValue( XML_id );
@@ -98,7 +100,7 @@ Reference< XFastContextHandler > BasicShapeContext::createFastChildContext( sal_
         case NMSP_VML|XML_imagedata:
             {
                 OUString aRelId( xAttribs->getOptionalValue( NMSP_OFFICE|XML_relid ) );
-                mpShapePtr->msGraphicURL = getHandler()->getFragmentPathFromRelId( aRelId );
+                mpShapePtr->msGraphicURL = getFragmentPathFromRelId( aRelId );
                 mpShapePtr->msImageTitle = xAttribs->getOptionalValue( NMSP_OFFICE|XML_title );
             }
             break;
@@ -115,17 +117,18 @@ Reference< XFastContextHandler > BasicShapeContext::createFastChildContext( sal_
 class ShapeTypeContext : public BasicShapeContext
 {
 public:
-    ShapeTypeContext( const FragmentHandlerRef& xHandler,
+    ShapeTypeContext( ContextHandler& rParent,
         sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
         const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
-
 };
-ShapeTypeContext::ShapeTypeContext( const FragmentHandlerRef& xHandler,
+
+ShapeTypeContext::ShapeTypeContext( ContextHandler& rParent,
     sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: BasicShapeContext( xHandler, aElement, xAttribs, pShapePtr )
+: BasicShapeContext( rParent, aElement, xAttribs, pShapePtr )
 {
 }
+
 Reference< XFastContextHandler > ShapeTypeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
@@ -146,16 +149,18 @@ Reference< XFastContextHandler > ShapeTypeContext::createFastChildContext( sal_I
 class ShapeContext : public BasicShapeContext
 {
 public:
-    ShapeContext( const FragmentHandlerRef& xHandler,
+    ShapeContext( ContextHandler& rParent,
         sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
         const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
 };
-ShapeContext::ShapeContext( const FragmentHandlerRef& xHandler,
+
+ShapeContext::ShapeContext( ContextHandler& rParent,
     sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: BasicShapeContext( xHandler, aElement, xAttribs, pShapePtr )
+: BasicShapeContext( rParent, aElement, xAttribs, pShapePtr )
 {
 }
+
 Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
@@ -173,9 +178,9 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 
 //--------------------------------------------------------------------------------------------------------------
 
-DrawingFragmentHandler::DrawingFragmentHandler( const XmlFilterRef& xFilter, const OUString& rFragmentPath, const DrawingPtr pDrawingPtr )
+DrawingFragmentHandler::DrawingFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, const DrawingPtr pDrawingPtr )
     throw()
-: FragmentHandler( xFilter, rFragmentPath )
+: FragmentHandler( rFilter, rFragmentPath )
 , mpDrawingPtr( pDrawingPtr )
 {
 }
@@ -196,20 +201,20 @@ Reference< XFastContextHandler > DrawingFragmentHandler::createFastChildContext(
         case NMSP_VML|XML_shapetype:
             {
                 ShapePtr pShapePtr( new Shape );
-                xRet = new ShapeTypeContext( this, aElementToken, xAttribs, pShapePtr );
+                xRet = new ShapeTypeContext( *this, aElementToken, xAttribs, pShapePtr );
                 mpDrawingPtr->getShapeTypes().push_back( pShapePtr );
             }
         break;
         case NMSP_VML|XML_shape:
             {
                 ShapePtr pShapePtr( new Shape );
-                xRet = new ShapeContext( this, aElementToken, xAttribs, pShapePtr );
+                xRet = new ShapeContext( *this, aElementToken, xAttribs, pShapePtr );
                 mpDrawingPtr->getShapes().push_back( pShapePtr );
             }
         break;
     }
     if( !xRet.is() )
-        xRet.set( this );
+        xRet = getFastContextHandler();
     return xRet;
 }
 
