@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptResId.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,15 @@
 #define RID_STR_SCOPE                       (RID_STRING_START + 141)
 #define RID_STR_TYPE                        (RID_STRING_START + 142)
 #define RID_STR_TYPE_CONST                  (RID_STRING_START + 143)
+#define RID_STR_CHARTTYPE                   (RID_STRING_START + 144)
+#define RID_STR_MASTERFIELDS                (RID_STRING_START + 145)
+#define RID_STR_DETAILFIELDS                (RID_STRING_START + 146)
+#define RID_STR_EXPLANATION                 (RID_STRING_START + 147)
+#define RID_STR_DETAILLABEL                 (RID_STRING_START + 148)
+#define RID_STR_MASTERLABEL                 (RID_STRING_START + 149)
+#define RID_STR_PREVIEW_COUNT               (RID_STRING_START + 150)
+#define RID_ERR_NO_COMMAND                  (RID_STRING_START + 151)
+#define RID_ERR_NO_OBJECTS                  (RID_STRING_START + 152)
 
 // #define RID_STR_                     (RID_STRING_START + 130)
 // -----------------------------------------------------------------------
