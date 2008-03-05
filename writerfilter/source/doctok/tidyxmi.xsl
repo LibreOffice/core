@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tidyxmi.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:10:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
   <XMI.content>
     <UML:Model xmlns:UML="org.omg.xmi.namespace.UML" name="WW8Document" >
       <UML:Namespace.ownedElement>
-        <xsl:apply-templates select=".//UML:Model/UML:Namespace.ownedElement"/>
+        <xsl:apply-templates select="XMI/XMI.content/UML:Model/UML:Namespace.ownedElement"/>
       </UML:Namespace.ownedElement>
     </UML:Model>
   </XMI.content>
@@ -82,11 +82,14 @@
   <xsl:comment>DFFOPT</xsl:comment>
 </xsl:template>
 
+<xsl:key name="generalization" match="UML:Generalization" 
+         use="UML:Generalization.child/UML:Class/@xmi.idref"/>
+
 <xsl:template match="UML:Class[count(UML:ModelElement.stereotype) = 0]">
   <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
   <xsl:comment>Class <xsl:value-of select="@xmi.id"/></xsl:comment>
   <xsl:copy-of select="."/>
-  <xsl:copy-of select="//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$theid]"/>
+  <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>Class <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
@@ -94,7 +97,7 @@
   <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
   <xsl:comment>Class <xsl:value-of select="@xmi.id"/></xsl:comment>
   <xsl:copy-of select="."/>
-  <xsl:copy-of select="//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$theid]"/>
+  <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>Class <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
@@ -102,7 +105,7 @@
   <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
   <xsl:comment>SPRM <xsl:value-of select="@xmi.id"/></xsl:comment>
   <xsl:copy-of select="."/>
-  <xsl:copy-of select="//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$theid]"/>
+  <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>SPRM <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
@@ -110,7 +113,7 @@
   <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
   <xsl:comment>DFF <xsl:value-of select="@xmi.id"/></xsl:comment>
   <xsl:copy-of select="."/>
-  <xsl:copy-of select="//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$theid]"/>
+  <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>DFF <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
@@ -118,7 +121,7 @@
   <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
   <xsl:comment>DFFOPT <xsl:value-of select="@xmi.id"/></xsl:comment>
   <xsl:copy-of select="."/>
-  <xsl:copy-of select="//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$theid]"/>
+  <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>DFFOPT <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
