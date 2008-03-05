@@ -4,9 +4,9 @@
  *
  *  $RCSfile: externallinkbuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,11 @@
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
+#include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/formulaparser.hxx"
-#include "oox/xls/ooxfragmenthandler.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
 using ::rtl::OString;
@@ -246,9 +247,10 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
 
     switch( mrParentLink.getLinkType() )
     {
+        case LINKTYPE_INTERNAL:
         case LINKTYPE_EXTERNAL:
-            // external cell references that are stored in hidden external names (seen in BIFF3-BIFF4)
-            if( (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') && (rStrm.getRecLeft() > 2) )
+            // cell references that are stored in hidden external names (seen in BIFF3-BIFF4)
+            if( (getBiff() <= BIFF4) && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') && (rStrm.getRecLeft() > 2) )
             {
                 TokensFormulaContext aContext( true, true );
                 importBiffFormula( aContext, rStrm );
@@ -419,6 +421,16 @@ void ExternalLink::importExternalSelf( RecordInputStream& )
     meLinkType = LINKTYPE_SELF;
 }
 
+void ExternalLink::importExternalSame( RecordInputStream& )
+{
+    meLinkType = LINKTYPE_SAME;
+}
+
+void ExternalLink::importExternalAddin( RecordInputStream& )
+{
+    meLinkType = LINKTYPE_UNKNOWN;
+}
+
 void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputStream& rStrm )
 {
     switch( rStrm.readuInt16() )
@@ -473,7 +485,9 @@ ExternalNameRef ExternalLink::importExternalName( RecordInputStream& rStrm )
 
 void ExternalLink::importExternSheet( BiffInputStream& rStrm )
 {
+    rStrm.enableNulChars( true );
     OStringBuffer aTargetBuffer( rStrm.readByteString( false ) );
+    rStrm.enableNulChars( false );
     // references to own sheets have wrong string length field (off by 1)
     if( (aTargetBuffer.getLength() > 0) && (aTargetBuffer[ 0 ] == 3) )
         aTargetBuffer.append( static_cast< sal_Char >( rStrm.readuInt8() ) );
@@ -508,7 +522,10 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
     }
     else if( rStrm.getRecLeft() >= 3 )
     {
+        // NUL characters may occur
+        rStrm.enableNulChars( true );
         aTarget = rStrm.readUniString();
+        rStrm.enableNulChars( false );
     }
 
     // parse the encoded URL
@@ -559,18 +576,22 @@ sal_Int32 ExternalLink::getSheetIndex( sal_Int32 nTabId ) const
 
 void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const
 {
-    orSheetRange.setDeleted();
     switch( meLinkType )
     {
+        case LINKTYPE_SAME:
+            orSheetRange.setRelative();
+        break;
+
         case LINKTYPE_SELF:
         case LINKTYPE_INTERNAL:
-            orSheetRange.set( nTabId1, nTabId2 );
+            orSheetRange.setRange( nTabId1, nTabId2 );
         break;
+
         case LINKTYPE_EXTERNAL: switch( getFilterType() )
         {
             case FILTER_OOX:
                 // OOBIN: passed indexes point into sheet list of EXTSHEETLIST
-                orSheetRange.set( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
+                orSheetRange.setRange( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
             break;
             case FILTER_BIFF:
                 switch( getBiff() )
@@ -578,27 +599,28 @@ void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId
                     case BIFF2:
                     case BIFF3:
                     case BIFF4:
-                        orSheetRange.set( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
+                        orSheetRange.setRange( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
                     break;
                     case BIFF5:
                         // BIFF5: first sheet from this external link, last sheet is passed in nTabId2
                         if( const ExternalLink* pExtLink2 = getExternalLinks().getExternalLink( nTabId2 ).get() )
                             if( (pExtLink2->getLinkType() == LINKTYPE_EXTERNAL) && (maTargetUrl == pExtLink2->getTargetUrl()) )
-                                orSheetRange.set( getSheetIndex(), pExtLink2->getSheetIndex() );
+                                orSheetRange.setRange( getSheetIndex(), pExtLink2->getSheetIndex() );
                     break;
                     case BIFF8:
                         // BIFF8: passed indexes point into sheet list of EXTERNALBOOK
-                        orSheetRange.set( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
+                        orSheetRange.setRange( getSheetIndex( nTabId1 ), getSheetIndex( nTabId2 ) );
                     break;
                     case BIFF_UNKNOWN: break;
                 }
             break;
-            case FILTER_UNKNOWN:
-            break;
+            case FILTER_UNKNOWN: break;
         }
         break;
 
-        default:;
+        default:
+            // unsupported/unexpected link type: #REF! error
+            orSheetRange.setDeleted();
     }
 }
 
@@ -627,8 +649,9 @@ void ExternalLink::setDdeOleTargetUrl( const OUString& rClassName, const OUStrin
 OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
 {
     OUString aClassName, aTargetUrl, aSheetName;
+    bool bSameSheet = false;
     meLinkType = LINKTYPE_UNKNOWN;
-    if( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, rBiffTargetUrl ) )
+    if( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, bSameSheet, rBiffTargetUrl ) )
     {
         if( aClassName.getLength() > 0 )
         {
@@ -636,7 +659,7 @@ OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
         }
         else if( aTargetUrl.getLength() == 0 )
         {
-            meLinkType = (aSheetName.getLength() > 0) ? LINKTYPE_INTERNAL : LINKTYPE_SELF;
+            meLinkType = (aSheetName.getLength() > 0) ? LINKTYPE_INTERNAL : (bSameSheet ? LINKTYPE_SAME : LINKTYPE_SELF);
         }
         else if( (aTargetUrl.getLength() == 1) && (aTargetUrl[ 0 ] == ':') )
         {
@@ -710,6 +733,18 @@ void ExternalLinkBuffer::importExternalSelf( RecordInputStream& rStrm )
 {
     mbUseRefSheets = true;
     createExternalLink()->importExternalSelf( rStrm );
+}
+
+void ExternalLinkBuffer::importExternalSame( RecordInputStream& rStrm )
+{
+    mbUseRefSheets = true;
+    createExternalLink()->importExternalSame( rStrm );
+}
+
+void ExternalLinkBuffer::importExternalAddin( RecordInputStream& rStrm )
+{
+    mbUseRefSheets = true;
+    createExternalLink()->importExternalAddin( rStrm );
 }
 
 void ExternalLinkBuffer::importExternalSheets( RecordInputStream& rStrm )
