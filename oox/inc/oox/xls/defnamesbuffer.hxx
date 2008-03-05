@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defnamesbuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
+class FormulaContext;
+class BiffInputStreamPos;
+
 // ============================================================================
 
 // codes for built-in names
@@ -73,6 +76,7 @@ struct OoxDefinedNameData
     ::rtl::OUString     maName;         /// The original name.
     ::rtl::OUString     maFormula;      /// The formula string.
     sal_Int32           mnSheet;        /// Sheet index for local names.
+    sal_Int32           mnFuncGroupId;  /// Function group identifier.
     bool                mbMacro;        /// True = Macro name (VBasic or sheet macro).
     bool                mbFunction;     /// True = function, false = command.
     bool                mbVBName;       /// True = VBasic macro, false = sheet macro.
@@ -82,8 +86,6 @@ struct OoxDefinedNameData
 };
 
 // ============================================================================
-
-class FormulaContext;
 
 /** Base class for defined names and external names. */
 class DefinedNameBase : public WorkbookHelper
@@ -158,15 +160,14 @@ private:
 
 private:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >    XNamedRangeRef;
-    typedef ::std::auto_ptr< RecordDataSequence >                                       RecordDataSequencePtr;
+    typedef ::std::auto_ptr< RecordDataSequence >                                       RecordDataSeqPtr;
+    typedef ::std::auto_ptr< BiffInputStreamPos >                                       BiffStreamPosPtr;
 
     XNamedRangeRef      mxNamedRange;       /// XNamedRange interface of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
-    RecordDataSequencePtr mxFormula;        /// Formula data for OOBIN import.
-    BiffInputStream*    mpStrm;             /// Cached BIFF stream for formula import.
-    sal_Int64           mnRecHandle;        /// Cached BIFF record handle for formula import.
-    sal_uInt32          mnRecPos;           /// Cached BIFF record position for formula import.
+    RecordDataSeqPtr    mxFormula;          /// Formula data for OOBIN import.
+    BiffStreamPosPtr    mxBiffStrm;         /// Cached BIFF stream for formula import.
     sal_uInt16          mnFmlaSize;         /// Cached BIFF formula size for formula import.
 };
 
