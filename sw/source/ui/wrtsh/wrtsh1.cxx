@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:01:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1351,11 +1351,17 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         }
         // <--
 
-        SetCurNumRule(aNumRule);
+        // --> OD 2008-02-08 #newlistlevelattrs#
+        // reset indent attribute on applying list style
+        SetCurNumRule( aNumRule, true );
+        // <--
     }
     else
     {
-        SwNumRule aNumRule(GetUniqueNumRuleName());
+        // --> OD 2008-02-11 #newlistlevelattrs#
+        SwNumRule aNumRule( GetUniqueNumRuleName(),
+                            SvxNumberFormat::LABEL_ALIGNMENT );
+        // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
@@ -1415,7 +1421,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             aNumRule.Set( nLvl, aFmt );
         }
 
-        SetCurNumRule( aNumRule );
+        // --> OD 2008-02-08 #newlistlevelattrs#
+        // reset indent attribute on applying list style
+        SetCurNumRule( aNumRule, true );
+        // <--
     }
 
     EndUndo(UNDO_NUMORNONUM);
@@ -1687,7 +1696,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
             SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
             0   );
-    GetAttr( aCoreSet );
+    GetCurAttr( aCoreSet );
     BOOL bReset = FALSE;
     SfxItemIter aParaIter( aCoreSet );
     const SfxPoolItem* pParaItem = aParaIter.FirstItem();
