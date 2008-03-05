@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namespaces.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,22 +38,48 @@
 
 #include <sal/types.h>
 
-namespace oox { namespace core {
+namespace oox {
 
-const sal_Int32 NMSP_EXCEL = (1 << 16);
-const sal_Int32 NMSP_OFFICE = (2 << 16);
-const sal_Int32 NMSP_PPT = (3 << 16);
-const sal_Int32 NMSP_WORD = (4 << 16);
-const sal_Int32 NMSP_VML = (5 << 16);
-const sal_Int32 NMSP_DRAWINGML = (6 << 16);
-const sal_Int32 NMSP_RELATIONSHIPS = (7 << 16);
-const sal_Int32 NMSP_PACKAGE_RELATIONSHIPS = (8 << 16);
-const sal_Int32 NMSP_XML = (9 << 16);
-const sal_Int32 NMSP_CONTENT_TYPES = (10 << 16);
-const sal_Int32 NMSP_POWERPOINT = (11 << 16);
-const sal_Int32 NMSP_ACTIVATION = (12 << 16);
-const sal_Int32 NMSP_DIAGRAM = (13 << 16);
-const sal_Int32 NMSP_MASK = 0xffff << 16;
-} }
+// ============================================================================
+
+// relations, XML
+const sal_Int32 NMSP_XML                    = 1 << 16;
+const sal_Int32 NMSP_PACKAGE_RELATIONSHIPS  = 2 << 16;
+const sal_Int32 NMSP_RELATIONSHIPS          = 3 << 16;
+const sal_Int32 NMSP_CONTENT_TYPES          = 4 << 16;
+// office global
+const sal_Int32 NMSP_OFFICE                 = 11 << 16;
+const sal_Int32 NMSP_ACTIVATION             = 12 << 16;
+// DrawingML
+const sal_Int32 NMSP_DRAWINGML              = 21 << 16;
+const sal_Int32 NMSP_DIAGRAM                = 22 << 16;
+const sal_Int32 NMSP_CHART                  = 23 << 16;
+const sal_Int32 NMSP_VML                    = 24 << 16;
+// WordML
+const sal_Int32 NMSP_WORD                   = 31 << 16; // Word VML
+// SpreadsheetML
+const sal_Int32 NMSP_XLS                    = 41 << 16;
+const sal_Int32 NMSP_XDR                    = 42 << 16; // SpreadsheetDrawingML
+const sal_Int32 NMSP_XM                     = 43 << 16; // Macro sheet
+const sal_Int32 NMSP_EXCEL                  = 44 << 16; // Excel VML
+// PresentationML
+const sal_Int32 NMSP_PPT                    = 51 << 16;
+const sal_Int32 NMSP_POWERPOINT             = 52 << 16; // PowerPoint VML
+
+// ----------------------------------------------------------------------------
+
+const sal_Int32 TOKEN_MASK                  = SAL_MAX_UINT16;
+const sal_Int32 NMSP_MASK                   = SAL_MAX_INT16 << 16;
+
+/** Returns the token identifier of the passed element without namespace. */
+inline sal_Int32 getToken( sal_Int32 nElement ) { return nElement & TOKEN_MASK; }
+
+/** Returns the namespace of the passed element without token identifier. */
+inline sal_Int32 getNamespace( sal_Int32 nElement ) { return nElement & NMSP_MASK; }
+
+// ============================================================================
+
+} // namespace oox
 
 #endif // OOX_CORE_NAMESPACES_HXX
+
