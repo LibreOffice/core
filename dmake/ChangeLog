@@ -1,9 +1,171 @@
+2008-02-26 18:37  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.tf,
+	  win95/microsft/config.h, winnt/microsft/config.h, man/dmake.nc:
+
+	#i83497# Release dmake 4.12.
+
+2008-02-07 14:50  vq
+
+	* function.c, sysintf.c, man/dmake.nc, man/dmake.tf:
+
+	#i83940# Make the result of $(mktmp ..) aware of the .WINPATH setting.
+
+2008-02-07 10:42  vq
+
+	* dmake.c:
+
+	#i85136# The content of INCFILENAME needs no further expansion.
+
+2008-02-07 10:28  vq
+
+	* dmake.c:
+
+	#i85136# Prevent filenames from being expanded if they already are.
+
+2008-02-06 17:22  vq
+
+	* dmake.c:
+
+	#i85136# Do not expand ABSMAKECMD and MAKECMD macros.
+
+2008-02-05 17:02  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-30:
+
+	#i84800# Add testcase.
+
+2008-02-04 16:05  vq
+
+	* make.c:
+
+	#i85381# Fix possible heap corruption for the cygwin dmake version.
+
+2008-01-22 00:34  vq
+
+	* unix/runargv.c:
+
+	#i83540# Separate error handling from pid.
+
+2008-01-07 20:36  vq
+
+	* unix/runargv.c:
+
+	#i83540# Add diagnostics for WaitForMultipleObjects() calls.
+
+2008-01-07 19:31  vq
+
+	* quit.c:
+
+	#i83540# Prevent possible invinite loop when aborting.
+
+2008-01-07 01:07  vq
+
+	* path.c:
+
+	#i84800# Do not collaps the foo/.. entries if foo is '.' or '..'.
+
+2008-01-06 16:21  vq
+
+	* make.c, unix/runargv.c:
+
+	#i85014# Let master targets for targets with multiple (::) rules inherit
+	the newest time stamp of their "sub"-rules.
+	Make runargv() indicate that it finished the command when it had to wait
+	for its completion.
+
+2007-11-28 15:18  vq
+
+	* win95/microsft/config.mk:
+
+	#i83540# Fix dmake's own makefile to build itself.
+
+2007-11-27 23:08  vq
+
+	* Makefile.am, Makefile.in, msdos/rmprq.c,
+	  win95/microsft/vpp40/mk.bat:
+
+	#i83540# A parallel runargv needs a corresponding rmprq.
+
+2007-11-26 09:23  vq
+
+	* unix/runargv.c:
+
+	#i83540# Return the pid that was waited for.
+
+2007-11-25 22:37  vq
+
+	* unix/runargv.c:
+
+	#i83540# Fix handle inheritance for native W32 process spawning.
+
+2007-11-25 12:53  vq
+
+	* NEWS:
+
+	#i83540# Add NEWS entry about parallel builds with native W32 dmake.
+
+2007-11-22 10:27  vq
+
+	* unix/runargv.c:
+
+	#i83540# Avoid conflict on solaris, rename NOPID to DMNOPID.
+
+2007-11-11 19:12  vq
+
+	* dag.c, extern.h, imacs.c, sysintf.c, unix/runargv.c,
+	  win95/microsft/config.mk, win95/microsft/ruletab.c,
+	  win95/microsft/vpp40/mk.bat:
+
+	#i83540# Make dmake buildable with .NET 2003 again.
+
+2007-11-11 18:05  vq
+
+	* Makefile.am, Makefile.in, dag.c, dmake.c, extern.h, imacs.c,
+	  sysintf.c, msdos/runargv.c, unix/runargv.c,
+	  win95/microsft/ruletab.c:
+
+	#i83540# Enable parallel builds with native W32 dmake. (First MinGW only.)
+
+2007-11-10 19:19  vq
+
+	* sysintf.c:
+
+	#i83523# Post-rename clean up.
+
+2007-11-10 19:03  vq
+
+	* extern.h, function.c, msdos/borland/bcc30/config.h,
+	  msdos/borland/bcc40/config.h, msdos/borland/bcc45/config.h,
+	  msdos/borland/bcc50/config.h, msdos/borland/tcc20/config.h,
+	  msdos/microsft/config.h, msdos/zortech/config.h,
+	  os2/ibm/config.h, win95/borland/bcc50/config.h,
+	  win95/microsft/config.h, winnt/borland/bcc50/config.h,
+	  winnt/microsft/config.h:
+
+	#i83523# Rename macro PVOID to DMPVOID to avoid problems when including
+	windows.h.
+
+2007-11-09 20:54  vq
+
+	* unix/runargv.c:
+
+	#i10000# Small clean up.
+
+2007-11-09 10:50  vq
+
+	* NEWS, configure, configure.in, man/dmake.nc, man/dmake.tf,
+	  readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i83497# Bump version to 4.12-cvs.
+
 2007-10-13 19:43  vq
 
 	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
 	  man/dmake.tf, win95/microsft/config.h, winnt/microsft/config.h:
 
-	#i79272# Release dmake 4.11.
+	#i79271# Release dmake 4.11.
 
 2007-10-13 18:27  vq
 
