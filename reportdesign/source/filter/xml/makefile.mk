@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:00:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,32 +43,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 .INCLUDE :  	settings.mk
 
-# --- Types -------------------------------------
-
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
-
 SLOFILES=	$(SLO)$/xmlfilter.obj				\
             $(SLO)$/xmlReport.obj				\
-            $(SLO)$/xmlSubDocument.obj			\
             $(SLO)$/xmlMasterFields.obj			\
             $(SLO)$/xmlGroup.obj				\
             $(SLO)$/xmlHelper.obj				\
@@ -92,7 +69,10 @@ SLOFILES=	$(SLO)$/xmlfilter.obj				\
             $(SLO)$/xmlCell.obj					\
             $(SLO)$/xmlTable.obj				\
             $(SLO)$/xmlFixedContent.obj			\
-            $(SLO)$/xmlservices.obj
+            $(SLO)$/xmlSubDocument.obj			\
+            $(SLO)$/xmlservices.obj				\
+            $(SLO)$/xmlImportDocumentHandler.obj \
+            $(SLO)$/xmlExportDocumentHandler.obj
 
 # --- Targets ----------------------------------
 
