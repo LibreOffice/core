@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:43:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1428,7 +1428,7 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
         SwPaM aPam(aInsertPosition);
         pDoc->AppendTxtNode( *aPam.GetPoint() );
         //remove attributes from the previous paragraph
-        pDoc->ResetAttr(aPam);
+        pDoc->ResetAttrs(aPam);
         //in case of finishParagraph the PaM needs to be moved to the previous paragraph
         if(bFinish)
             aPam.Move( fnMoveBackward, fnGoNode );
