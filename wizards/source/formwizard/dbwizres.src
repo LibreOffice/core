@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 08:03:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1444,6 +1444,31 @@ String RID_DB_REPORT_WIZARD_START + 84
 String RID_DB_REPORT_WIZARD_START + 85
 {
     Text [ en-US ] = "In blocks, labels above";
+};
+String RID_DB_REPORT_WIZARD_START + 86
+{
+    Text [ en-US ] = "Title:";
+};
+String RID_DB_REPORT_WIZARD_START + 87
+{
+    Text [ en-US ] = "Author:";
+};
+String RID_DB_REPORT_WIZARD_START + 88
+{
+    Text [ en-US ] = "Date:";
+};
+String RID_DB_REPORT_WIZARD_START + 89
+{
+    Text [ en-US ] = "Page #page# of #count#";
+    Text [ x-comment ] = "Please don't translate the words #page# and #count#, these are placeholders.";
+};
+String RID_DB_REPORT_WIZARD_START + 90
+{
+    Text [ en-US ] = "Page number:";
+};
+String RID_DB_REPORT_WIZARD_START + 91
+{
+    Text [ en-US ] = "Page count:";
 };
 
 // ============================================================================
