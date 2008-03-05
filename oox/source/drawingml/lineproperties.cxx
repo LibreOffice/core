@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,13 @@ LineProperties::~LineProperties()
 
 void LineProperties::apply( const LinePropertiesPtr& rSourceLineProperties )
 {
-    maLineProperties.insert( rSourceLineProperties->maLineProperties.begin(), rSourceLineProperties->maLineProperties.end() );
+    PropertyMapBase::const_iterator aIter( rSourceLineProperties->maLineProperties.begin() );
+    PropertyMapBase::const_iterator aEnd( rSourceLineProperties->maLineProperties.end() );
+    while( aIter != aEnd )
+    {
+        maLineProperties[ (*aIter).first ] = (*aIter).second;
+        aIter++;
+    }
     if ( rSourceLineProperties->maLineColor->isUsed() )
         maLineColor = rSourceLineProperties->maLineColor;
     if ( rSourceLineProperties->moLineWidth )
@@ -236,6 +242,12 @@ void LineProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBas
     {
         const rtl::OUString sLineColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineColor" ) ) );
         xPropSet->setPropertyValue( sLineColor, Any( maLineColor->getColor( rFilterBase ) ) );
+
+        if ( maLineColor->hasAlpha() )
+        {
+            const rtl::OUString sLineTransparence( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineTransparence" ) ) );
+            xPropSet->setPropertyValue( sLineTransparence, Any( static_cast< sal_Int16 >( ( 100000 - maLineColor->getAlpha() ) / 1000 ) ) );
+        }
     }
     if ( moLineWidth )
     {
