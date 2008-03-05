@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2708,11 +2708,13 @@ namespace pcr
     {
         Reference< XForm > xDetailForm( m_xComponent, UNO_QUERY );
         Reference< XForm > xMasterForm( m_xObjectParent, UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xMasterProp(m_xObjectParent,uno::UNO_QUERY);
         OSL_PRECOND( xDetailForm.is() && xMasterForm.is(), "FormComponentPropertyHandler::impl_dialogLinkedFormFields_nothrow: no forms!" );
         if ( !xDetailForm.is() || !xMasterForm.is() )
             return false;
 
-        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), xDetailForm, xMasterForm, m_aContext.getLegacyServiceFactory() );
+
+        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_aContext.getLegacyServiceFactory() );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );
     }
