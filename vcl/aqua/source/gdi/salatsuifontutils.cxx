@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     if( rc != noErr )
         return false;
     int nBestNameValue = 0;
+    int nBestStyleValue = 0;
     FontLanguageCode eBestLangCode = 0;
     const FontLanguageCode eUILangCode = Application::GetSettings().GetUILanguage();
     typedef std::vector<char> NameBuffer;
@@ -188,22 +189,29 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // heuristic to find the most common font name
-        int nNameValue = (eFontNameLanguage==eUILangCode) ? 0 : -1; // prefer the UI language
+    // prefering default language names or even better the names matching to the UI language
+        int nNameValue = (eFontNameLanguage==eUILangCode) ? 0 : ((eFontNameLanguage==0) ? -10 : -20);
+    rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UNICODE;
         const int nPlatformEncoding = ((int)eFontNamePlatform << 8) + (int)eFontNameScript;
         switch( nPlatformEncoding )
         {
-            case 0x000: nNameValue += 20; break;    // Unicode 1.0
-            case 0x001: nNameValue += 21; break;    // Unicode 1.1
-            case 0x002: nNameValue += 22; break;    // iso10646_1993
-            case 0x003: nNameValue += 23; break;    // UCS-2
-            case 0x004: nNameValue +=  0; break;    // TODO?: UCS-4
-            case 0x100: nNameValue +=  2; break;    // TODO?: Mac Roman
-            case 0x301: nNameValue += 28; break;    // Win UCS-2
-            case 0x30A: nNameValue +=  0; break;    // TODO: Win-UCS-4
-            case 0x300: nNameValue +=  0;           // Win Symbol encoded name!
+            case 0x000: nNameValue += 23; break;    // Unicode 1.0
+            case 0x001: nNameValue += 24; break;    // Unicode 1.1
+            case 0x002: nNameValue += 25; break;    // iso10646_1993
+            case 0x003: nNameValue += 26; break;    // UCS-2
+            case 0x301: nNameValue += 27; break;    // Win UCS-2
+            case 0x004:                             // UCS-4
+            case 0x30A: nNameValue += 0;            // Win-UCS-4
+                        eEncoding = RTL_TEXTENCODING_UCS4;
+                        break;
+            case 0x100: nNameValue += 21;       // Mac Roman
+                        eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
+                        break;
+            case 0x300: nNameValue =  0;            // Win Symbol encoded name!
                         rDFA.mbSymbolFlag = true;   // (often seen for symbol fonts)
                         break;
-            default:    break;
+            default:    nNameValue = 0;             // ignore other encodings
+            break;
         }
 
         // ignore name entries with no useful encoding
@@ -219,10 +227,12 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
         // convert to unicode name
         UniString aUtf16Name;
-        if( nNameValue >= 5 )      // we are just interested in UTF16 encoded names
+        if( eEncoding == RTL_TEXTENCODING_UNICODE ) // we are just interested in UTF16 encoded names
             aUtf16Name = UniString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
-        else if( nNameValue >= 1 ) // the important PSNAME often has apple-roman encoding though
-            aUtf16Name = UniString( &aNameBuffer[0], nNameLength, RTL_TEXTENCODING_APPLE_ROMAN );
+        else if( eEncoding == RTL_TEXTENCODING_UCS4 )
+            aUtf16Name = UniString(); // TODO
+        else // assume the non-unicode encoded names are byte encoded
+            aUtf16Name = UniString( &aNameBuffer[0], nNameLength, eEncoding );
 
         // ignore empty strings
         if( aUtf16Name.Len() <= 0 )
@@ -253,9 +263,11 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 break;
             case kFontStyleName:
                 // get a style name matching to the family name
-                if( (nBestNameValue < nNameValue)
-                ||  (eBestLangCode == eFontNameLanguage) )
+                if( nBestStyleValue < nNameValue )
+        {
+                    nBestStyleValue = nNameValue;
                     rDFA.maStyleName = aUtf16Name;
+                }
                 break;
             case kFontPostscriptName:
                 // use the postscript name to get some useful info
@@ -277,7 +289,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         rc = ATSUGetFontInstance( nFontID, nInstanceIndex, 0, NULL, NULL, &nMaxVariations );
         if( (rc == noErr) && (nMaxVariations > 0) )
         {
-            AquaLog("\tnMaxVariations=%d\n",(int)nMaxVariations);
+            fprintf(stderr,"\tnMaxVariations=%d\n",(int)nMaxVariations);
             typedef ::std::vector<ATSUFontVariationAxis> VariationAxisVector;
             typedef ::std::vector<ATSUFontVariationValue> VariationValueVector;
             VariationAxisVector aVariationAxes( nMaxVariations );
@@ -285,11 +297,11 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             ItemCount nVariationCount = 0;
             rc = ATSUGetFontInstance ( nFontID, nInstanceIndex, nMaxVariations,
                 &aVariationAxes[0], &aVariationValues[0], &nVariationCount );
-            AquaLog("\tnVariationCount=%d\n",(int)nVariationCount);
+            fprintf(stderr,"\tnVariationCount=%d\n",(int)nVariationCount);
             for( ItemCount nVariationIndex = 0; nVariationIndex < nMaxVariations; ++nVariationIndex )
             {
                 const char* pTag = (const char*)&aVariationAxes[nVariationIndex];
-                AquaLog("\tvariation[%d] \'%c%c%c%c\' is %d\n", (int)nVariationIndex,
+                fprintf(stderr,"\tvariation[%d] \'%c%c%c%c\' is %d\n", (int)nVariationIndex,
                     pTag[3],pTag[2],pTag[1],pTag[0], (int)aVariationValues[nVariationIndex]);
             }
        }
@@ -301,19 +313,19 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     ByteString aSName( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
     ItemCount nMaxFeatures = 0;
     rc = ATSUCountFontFeatureTypes( nFontID, &nMaxFeatures );
-    AquaLog("Font \"%s\" \"%s\" has %d features\n",aFName.GetBuffer(),aSName.GetBuffer(),rc);
+    fprintf(stderr,"Font \"%s\" \"%s\" has %d features\n",aFName.GetBuffer(),aSName.GetBuffer(),rc);
     if( (rc == noErr) && (nMaxFeatures > 0) )
     {
         typedef std::vector<ATSUFontFeatureType> FeatureVector;
         FeatureVector aFeatureVector( nMaxFeatures );
         ItemCount nFeatureCount = 0;
         rc = ATSUGetFontFeatureTypes( nFontID, nMaxFeatures, &aFeatureVector[0], &nFeatureCount );
-        AquaLog("nFeatureCount=%d\n",(int)nFeatureCount);
+        fprintf(stderr,"nFeatureCount=%d\n",(int)nFeatureCount);
         for( ItemCount nFeatureIndex = 0; nFeatureIndex < nFeatureCount; ++nFeatureIndex )
         {
             ItemCount nMaxSelectors = 0;
             rc = ATSUCountFontFeatureSelectors( nFontID, aFeatureVector[nFeatureIndex], &nMaxSelectors );
-            AquaLog("\tFeature[%d] = %d has %d selectors\n",
+            fprintf(stderr,"\tFeature[%d] = %d has %d selectors\n",
                (int)nFeatureIndex, (int)aFeatureVector[nFeatureIndex], (int)nMaxSelectors );
             typedef std::vector<ATSUFontFeatureSelector> SelectorVector;
             SelectorVector aSelectorVector( nMaxSelectors );
@@ -328,7 +340,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 FontNameCode eFontNameCode;
                 rc = ATSUGetFontFeatureNameCode( nFontID, aFeatureVector[nFeatureIndex],
                     aSelectorVector[nSelectorIndex], &eFontNameCode );
-                AquaLog("\t\tselector[%d] n=%d e=%d, x=%d\n",
+                fprintf(stderr,"\t\tselector[%d] n=%d e=%d, x=%d\n",
                     (int)nSelectorIndex, (int)eFontNameCode,
                     aEnabledVector[nSelectorIndex], aExclusiveVector[nSelectorIndex] );
             }
