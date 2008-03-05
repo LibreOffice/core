@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:01:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,48 +36,23 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#ifndef _TOOLS_TESTTOOLLOADER_HXX_
-#include <tools/testtoolloader.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _VCL_UNOWRAP_HXX
-#include <vcl/unowrap.hxx>
-#endif
-#ifndef _PAD_PADIALOG_HXX_
-#include <padialog.hxx>
-#endif
-#ifndef _PAD_HELPER_HXX_
-#include <helper.hxx>
-#endif
+#include "tools/testtoolloader.hxx"
 
-#ifndef _PADMIN_DESKTOPCONTEXT_HXX_
-#include <desktopcontext.hxx>
-#endif
+#include "vcl/svapp.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/unowrap.hxx"
 
-#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
-#include <cppuhelper/bootstrap.hxx>
-#endif
+#include "padialog.hxx"
+#include "helper.hxx"
+#include "desktopcontext.hxx"
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+#include "cppuhelper/bootstrap.hxx"
+#include "comphelper/processfactory.hxx"
+#include "ucbhelper/contentbroker.hxx"
+#include "ucbhelper/configurationkeys.hxx"
+#include "unotools/configmgr.hxx"
 
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
-#include <ucbhelper/contentbroker.hxx>
-#endif
-
-#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
-#include <ucbhelper/configurationkeys.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
 using namespace padmin;
 using namespace rtl;
@@ -93,9 +68,24 @@ class MyApp : public Application
 public:
     void            Main();
     virtual USHORT  Exception( USHORT nError );
+
+    static void ReadStringHook( String& );
 };
 
 MyApp aMyApp;
+
+void MyApp::ReadStringHook( String& rStr )
+{
+    static String maProduct;
+    if( ! maProduct.Len() )
+    {
+        Any aRet = utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME );
+        OUString aProd;
+        aRet >>= aProd;
+        maProduct = String( aProd );
+    }
+    rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", maProduct );
+};
 
 
 // -----------------------------------------------------------------------
@@ -175,6 +165,8 @@ void MyApp::Main()
 
     // initialize test-tool library (if available)
     tools::InitTestToolLib();
+
+    ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
     pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
