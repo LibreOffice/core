@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #endif
+#include <com/sun/star/drawing/XShape.hpp>
 
 namespace oox { namespace drawingml {
 
@@ -96,7 +97,8 @@ public:
 
     void apply( const CustomShapePropertiesPtr& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
+            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
+                        const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 
     void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
     std::vector< CustomShapeGuide >& getAdjustmentValues(){ return maAdjustmentValues; };
