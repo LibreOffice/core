@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:52:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::AppendPage(const String & _rText,sal_uInt32 _nHelpId)
+    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const SmartId& _rHelpId )
     {
         // obtain a new id
         sal_uInt16 nId = m_nNextId++;
@@ -254,7 +254,7 @@ namespace pcr
         pPage->getListBox().SetObserver(m_pObserver);
         pPage->getListBox().EnableHelpSection( m_bHasHelpSection );
         pPage->getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
-        pPage->SetHelpId(_nHelpId);
+        pPage->SetSmartHelpId( _rHelpId );
 
         // immediately activate the page
         m_aTabControl.SetTabPage(nId, pPage);
