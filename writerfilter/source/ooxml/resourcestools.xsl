@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:14:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:14:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,12 +227,12 @@ typedef sal_Int32 Token_t;
 const Token_t OOXML_</xsl:text>
 <xsl:value-of select="translate(., '-', '_')"/>
 <xsl:text> = </xsl:text>
-<xsl:value-of select="position()"/>
+<xsl:value-of select="position() - 1"/>
 <xsl:text>;</xsl:text>
     </xsl:for-each>
     <xsl:text>
 const Token_t OOXML_FAST_TOKENS_END =</xsl:text>
-<xsl:value-of select="count(/model/fasttoken) + 1 "/>
+<xsl:value-of select="count(/model/fasttoken)"/>
 <xsl:text>;&#xa;</xsl:text>
   </xsl:template>
 
@@ -446,13 +446,6 @@ public:
           xContextHandler.set(</xsl:text>
           <xsl:value-of select="$createstatement"/>
           <xsl:text>);
-#ifdef DEBUG_CREATE
-          debugstr = "&lt;create-element&gt;</xsl:text>
-          <xsl:value-of select="ancestor::rng:define/@name"/>
-          <xsl:text> - </xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>&lt;/create-element&gt;";
-#endif
           </xsl:text>
         </xsl:if>
         <xsl:text>
@@ -488,20 +481,28 @@ public:
       </xsl:variable>
       <xsl:if test="string-length($createstatement) > 0">
         <xsl:text>
-      if (! xContextHandler.is())
+      if (! xContextHandler.is() || dynamic_cast&lt;OOXMLFastContextHandler *&gt;(xContextHandler.get())->isFallback())
       {
           xContextHandler.set(</xsl:text>
           <xsl:value-of select="$createstatement"/>
-          <xsl:text>);
-#ifdef DEBUG_CREATE
-          debugstr = "&lt;create-ref&gt;</xsl:text>
-          <xsl:value-of select="ancestor::rng:define/@name"/>
-          <xsl:text> - </xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>&lt;/create-ref&gt;";
-#endif
+          <xsl:text>);                    
       }
           </xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//rng:element[rng:anyName]">
+      <xsl:variable name="createstatement">
+        <xsl:call-template name="fastelementcreatestatement"/>
+      </xsl:variable>
+      <xsl:if test="string-length($createstatement) > 0">
+        <xsl:text>
+      if (! xContextHandler.is() || dynamic_cast&lt;OOXMLFastContextHandler *&gt;(xContextHandler.get())->isFallback())
+      {
+          xContextHandler.set(</xsl:text>
+          <xsl:value-of select="$createstatement"/>
+          <xsl:text>);                    
+      } 
+          </xsl:text>        
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -535,9 +536,6 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; xContextHandler;
-#ifdef DEBUG_CREATE
-    string debugstr;
-#endif
 </xsl:text>
 <xsl:if test="string-length($switchbody) > 0">
   <xsl:text>
@@ -555,9 +553,6 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
   <xsl:value-of select="$switchbodyrefs"/>
 </xsl:if>
 <xsl:text>
-#ifdef DEBUG_CREATE
-    logger("DEBUG", debugstr);
-#endif
 
     return xContextHandler;
 }
@@ -656,6 +651,17 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
       Chooses the action for the current <action> element.
   -->
   <xsl:template name="chooseaction">
+<!--
+    <xsl:if test="@tokenid">
+      <xsl:text>
+        if (sal::static_int_cast&lt;Id&gt;(getId()) == </xsl:text>
+      <xsl:call-template name="idtoqname">
+        <xsl:with-param name="id" select="@tokenid"/>
+      </xsl:call-template>
+      <xsl:text>)
+      {</xsl:text>
+    </xsl:if>
+-->
     <xsl:for-each select="./cond">
       <xsl:text>
     {
@@ -730,9 +736,9 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:text>
     cr();</xsl:text>
       </xsl:when>
-      <xsl:when test="@action='noBreak'">
+      <xsl:when test="@action='noBreakHyphen'">
         <xsl:text>
-    noBreak();</xsl:text>
+    noBreakHyphen();</xsl:text>
       </xsl:when>
       <xsl:when test="@action='softHyphen'">
         <xsl:text>
@@ -774,6 +780,8 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
     handleHyperlink();</xsl:when>
         <xsl:when test="@action='handleBreak'">
     handleBreak();</xsl:when>
+        <xsl:when test="@action='handleOLE'">
+    handleOLE();</xsl:when>
         <xsl:when test="@action='printproperty'">
           <xsl:text>
     sendProperty(</xsl:text>
@@ -785,6 +793,9 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:when test="@action='propagateCharacterProperties'">
     propagateCharacterProperties();
         </xsl:when>
+        <xsl:when test="@action='propagateTableProperties'">
+    propagateTableProperties();
+        </xsl:when>
         <xsl:when test="@action='clearProps'">
     clearProps();
         </xsl:when>
@@ -794,9 +805,9 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:when test="@action='setHandle'">
     setHandle();
         </xsl:when>
-        <xsl:when test="@name='newProperty'">
+        <xsl:when test="@action='newProperty'">
           <xsl:text>
-    OOXMLCreator&lt;OOXMLIntegerValue&gt;::newProperty(*pResult, </xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(this, </xsl:text>
     <xsl:call-template name="idtoqname">
       <xsl:with-param name="id" select="@tokenid"/>
     </xsl:call-template>
@@ -804,12 +815,26 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
     <xsl:value-of select="@value"/>
     <xsl:text>")));</xsl:text>
         </xsl:when>
+        <xsl:when test="@action='tokenproperty'">
+          <xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(this, </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id">ooxml:token</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>, getToken());</xsl:text>
+        </xsl:when>
     </xsl:choose>
     <xsl:for-each select="./cond">
       <xsl:text>
         }
     }</xsl:text>
     </xsl:for-each>
+<!--
+    <xsl:if test="@tokenid">
+      <xsl:text>
+    }</xsl:text>
+    </xsl:if>
+-->
   </xsl:template>
 
   <!-- 
@@ -841,7 +866,7 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
 <xsl:call-template name="createfastchildcontext"/>
 <xsl:call-template name="fastattribute"/>
 <xsl:call-template name="fastcharacters"/>
-<xsl:call-template name="propagatescharacterproperties"/>
+<xsl:call-template name="propagatesproperties"/>
         </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
@@ -860,29 +885,42 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
   <xsl:template name="valuestringname">
     <xsl:param name="string"/>
     <xsl:text>OOXMLValueString_</xsl:text>
-    <xsl:value-of select="translate($string, '-+', 'mp')"/>
+    <xsl:value-of select="translate($string, '-+ ,', 'mp__')"/>
   </xsl:template>
   
   <!--
       Generates constant definitions for attribute values.
   -->
   <xsl:template name="valueconstants">
-    <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
-      <xsl:text>
+    <xsl:text>
 rtl::OUString </xsl:text>
-      <xsl:call-template name="valuestringname">
-        <xsl:with-param name="string" select="."/>
-      </xsl:call-template>
-      <xsl:text>(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
-      <xsl:value-of select="."/> 
-      <xsl:text>"));</xsl:text>
-    </xsl:for-each>
+<xsl:call-template name="valuestringname">
+  <xsl:with-param name="string"></xsl:with-param>
+</xsl:call-template>
+<xsl:text>(RTL_CONSTASCII_USTRINGPARAM(""));</xsl:text>
+<xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
+  <xsl:text>
+rtl::OUString </xsl:text>
+<xsl:call-template name="valuestringname">
+  <xsl:with-param name="string" select="."/>
+</xsl:call-template>
+<xsl:text>(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+<xsl:value-of select="."/> 
+<xsl:text>"));</xsl:text>
+</xsl:for-each>
   </xsl:template>
 
   <!--
       Generates constant declarations for attribute values.
   -->
   <xsl:template name="valueconstantdecls">
+    <xsl:text>
+extern rtl::OUString 
+    </xsl:text>
+    <xsl:call-template name="valuestringname">
+      <xsl:with-param name="string"></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>;</xsl:text>    
     <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
       <xsl:text>
 extern rtl::OUString </xsl:text>
@@ -926,23 +964,22 @@ extern rtl::OUString </xsl:text>
     <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
       <xsl:for-each select="./default">
         <xsl:text>
-        mnValue = </xsl:text>
-        <xsl:choose>
-          <xsl:when test="@tokenid">
-            <xsl:call-template name="idtoqname">
-              <xsl:with-param name="id" select="@tokenid"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="."/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>;</xsl:text>
+  mnValue = </xsl:text>
+  <xsl:choose>
+    <xsl:when test="@tokenid">
+      <xsl:call-template name="idtoqname">
+        <xsl:with-param name="id" select="@tokenid"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="."/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>;</xsl:text>
       </xsl:for-each>
       <xsl:for-each select="./value">
         <xsl:text>
-  </xsl:text>
-  <xsl:text>if (rValue.compareTo(</xsl:text>
+  if (rValue.compareTo(</xsl:text>
   <xsl:call-template name="valuestringname">
     <xsl:with-param name="string" select="text()"/>
   </xsl:call-template>
@@ -1475,7 +1512,9 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
   </xsl:template>
 
   <xsl:template name="fastattributesproperties">
+    <xsl:variable name="definename" select="@name"/>
     <xsl:for-each select=".//rng:attribute">
+      <xsl:variable name="attrname" select="@name"/>
       <xsl:variable name="contextname">
         <xsl:call-template name="fastcontextnameforattribute"/>
       </xsl:variable>
@@ -1488,13 +1527,29 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
         <xsl:call-template name="fastattributescheckattrwithns"/>
         <xsl:text>
         {
+           ::rtl::OUString aValue(Attribs->getValue(</xsl:text>
+           <xsl:call-template name="fasttoken"/>
+           <xsl:text>));
            OOXMLFastHelper &lt; </xsl:text>
            <xsl:value-of select="$contextname"/>
            <xsl:text> &gt;::newProperty(this, </xsl:text>
            <xsl:value-of select="$attrid"/>
-           <xsl:text>, Attribs->getValue(</xsl:text>
-           <xsl:call-template name="fasttoken"/>
-           <xsl:text>));
+           <xsl:text>, aValue);</xsl:text>
+           <xsl:for-each select="ancestor::namespace/resource[@name=$definename]">
+             <xsl:for-each select="./attribute[@name=$attrname]">
+               <xsl:choose>
+                 <xsl:when test="@action='checkId'">
+               <xsl:text>
+           checkId(aValue);</xsl:text>
+                 </xsl:when>
+                 <xsl:when test="@action='setXNoteId'">
+               <xsl:text>
+           setXNoteId(aValue);</xsl:text>
+                 </xsl:when>
+               </xsl:choose>
+             </xsl:for-each>
+           </xsl:for-each>
+           <xsl:text>
         }</xsl:text>
       </xsl:if>
     </xsl:for-each>
@@ -1593,7 +1648,7 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$resource = 'Properties' or $resource = 'Stream'">
+      <xsl:when test="$resource = 'Properties' or $resource = 'Stream' or $resource='XNote'" >
         <xsl:call-template name="fastattributesproperties"/>
       </xsl:when>
       <xsl:when test="$resource = 'StringValue'">
@@ -1783,13 +1838,13 @@ public:
       <xsl:call-template name="faststartaction"/>
     </xsl:variable>
     <xsl:if test="string-length($faststartactionbody)">
-     virtual void startAction();
+     virtual void startAction(Token_t nElement);
     </xsl:if>
     <xsl:variable name="fastendactionbody">
       <xsl:call-template name="fastendaction"/>
     </xsl:variable>
     <xsl:if test="string-length($fastendactionbody)">
-     virtual void endAction();
+     virtual void endAction(Token_t nElement);
     </xsl:if>
     <xsl:variable name="fastcharactersbody">
       <xsl:call-template name="fastcharacters"/>
@@ -1802,12 +1857,12 @@ public:
     virtual string getType() const { return "</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>"; }</xsl:text>
-    <xsl:variable name="propagatescharpropsbody">
-      <xsl:call-template name="propagatescharacterproperties"/>
+    <xsl:variable name="propagatespropsbody">
+      <xsl:call-template name="propagatesproperties"/>
     </xsl:variable>
-    <xsl:if test="string-length($propagatescharpropsbody)">
+    <xsl:if test="string-length($propagatespropsbody)">
       <xsl:text>
-    virtual bool propagatesCharacterProperties() const;</xsl:text>
+    virtual bool propagatesProperties() const;</xsl:text>
     </xsl:if>
     <xsl:text>
 };
@@ -1877,7 +1932,7 @@ public:
   </xsl:template>
 
   <xsl:template name="faststartactionbodychooseaction">
-    <xsl:for-each select=".//action[@name='start']">
+    <xsl:for-each select="./action[@name='start']">
       <xsl:call-template name="chooseaction"/>
     </xsl:for-each>    
   </xsl:template>
@@ -1894,6 +1949,7 @@ public:
     <xsl:variable name="body">
       <xsl:call-template name="faststartactionbody"/>
     </xsl:variable>
+    <xsl:variable name="name" select="@name"/>
     <xsl:if test="string-length($body) > 0">
       <xsl:variable name="classname">
         <xsl:call-template name="fastcontextname"/>
@@ -1901,7 +1957,13 @@ public:
       <xsl:text>
 void </xsl:text>
 <xsl:value-of select="$classname"/>
-<xsl:text>::startAction()
+<xsl:text>::startAction(Token_t</xsl:text>
+<xsl:for-each select="ancestor::namespace/resource[@name=$name]">
+  <xsl:if test="./element/action[@name='start']">
+    <xsl_text> nElement</xsl_text>
+  </xsl:if>
+</xsl:for-each>
+<xsl:text>)
 {</xsl:text>
 <xsl:value-of select="$body"/>
 <xsl:text>
@@ -1912,8 +1974,10 @@ void </xsl:text>
 
   <xsl:template name="fastendactionbody">
     <xsl:variable name="name" select="@name"/>
-    <xsl:for-each select="ancestor::namespace/resource[@name = $name]//action[@name='end']">
-      <xsl:call-template name="chooseaction"/>
+    <xsl:for-each select="ancestor::namespace/resource[@name = $name]">
+      <xsl:for-each select="./action[@name='end']">
+        <xsl:call-template name="chooseaction"/>
+      </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
 
@@ -1921,6 +1985,7 @@ void </xsl:text>
     <xsl:variable name="body">
       <xsl:call-template name="fastendactionbody"/>
     </xsl:variable>
+    <xsl:variable name="name" select="@name"/>
     <xsl:if test="string-length($body) > 0">
       <xsl:variable name="classname">
         <xsl:call-template name="fastcontextname"/>
@@ -1928,7 +1993,13 @@ void </xsl:text>
       <xsl:text>
 void </xsl:text>
 <xsl:value-of select="$classname"/>
-<xsl:text>::endAction()
+<xsl:text>::endAction(Token_t</xsl:text>
+<xsl:for-each select="ancestor::namespace/resource[@name=$name]">
+  <xsl:if test="./element/action[@name='end']">
+    <xsl_text> nElement</xsl_text>
+  </xsl:if>
+</xsl:for-each>
+<xsl:text>)
 {</xsl:text>
 <xsl:value-of select="$body"/>
 <xsl:text>
@@ -1965,17 +2036,27 @@ void </xsl:text>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="propagatescharacterpropertiesbody">
+  <xsl:template name="propagatespropertiesbody">
     <xsl:variable name="name" select="@name"/>
-    <xsl:if test="ancestor::namespace/resource[@name=$name]//action[@name='propagateCharacterProperties']">
-      <xsl:text>
+    <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
+      <xsl:for-each select=".//action">
+        <xsl:choose>          
+          <xsl:when test="@name='propagateCharacterProperties'">
+            <xsl:text>
     return true;</xsl:text>
-    </xsl:if>
+          </xsl:when>
+          <xsl:when test="@name='propagateTableProperties'">
+            <xsl:text>
+    return true;</xsl:text>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="propagatescharacterproperties">
+  <xsl:template name="propagatesproperties">
     <xsl:variable name="body">
-      <xsl:call-template name="propagatescharacterpropertiesbody"/>
+      <xsl:call-template name="propagatespropertiesbody"/>
     </xsl:variable>
     <xsl:if test="string-length($body) > 0">
       <xsl:variable name="classname">
@@ -1984,7 +2065,7 @@ void </xsl:text>
       <xsl:text>
 bool </xsl:text>
 <xsl:value-of select="$classname"/>
-<xsl:text>::propagatesCharacterProperties() const
+<xsl:text>::propagatesProperties() const
 {</xsl:text>
       <xsl:value-of select="$body"/>
       <xsl:text>
@@ -2005,8 +2086,8 @@ OOXMLFastContextHandler::createFromStart
     <xsl:for-each select="//start">
       <xsl:variable name="name" select="@name"/>
       <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
-        <xsl:text>
-    if (! xResult.is()) 
+        <xsl:text>    
+    if (! xResult.is() || dynamic_cast&lt;OOXMLFastContextHandler *&gt;(xResult.get())->isFallback())
     {
         xResult = OOXMLFastHelper &lt; </xsl:text>
     <xsl:call-template name="fastcontextname"/>
