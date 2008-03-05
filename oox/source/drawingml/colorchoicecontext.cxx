@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorchoicecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-colorChoiceContext::colorChoiceContext( const ::oox::core::FragmentHandlerRef& xHandler, ::oox::drawingml::Color& rColor )
-: Context( xHandler )
+colorChoiceContext::colorChoiceContext( ContextHandler& rParent, Color& rColor )
+: ContextHandler( rParent )
 , mrColor( rColor )
 {
 }
@@ -72,8 +72,18 @@ void colorChoiceContext::startFastElement( sal_Int32 aElementToken, const Refere
         break;
     }
     case NMSP_DRAWINGML|XML_hslClr: // CT_HslColor
-        // todo
+        {
+        sal_uInt8 r = 0;
+        sal_uInt8 g = 0;
+        sal_uInt8 b = 0;
+        double fH = xAttribs->getOptionalValue( XML_hue ).toInt32() / ( 60000.0 * 360.0 );
+        double fL = xAttribs->getOptionalValue( XML_lum ).toInt32() / 100000.0;
+        double fS = xAttribs->getOptionalValue( XML_sat ).toInt32() / 100000.0;
+        oox::drawingml::Color::HSLtoRGB( fH, fS, fL, r, g, b );
+        mrColor.mnColor = (r << 16) | (g << 8) | b;
+        mrColor.mbUsed = sal_True;
         break;
+        }
     case NMSP_DRAWINGML|XML_sysClr: // CT_SystemColor
         sal_Int32 nColor;
         if( !ClrScheme::getSystemColor( xAttribs->getOptionalValueToken( XML_val, XML_TOKEN_INVALID ), nColor ) )
@@ -104,12 +114,16 @@ Reference< XFastContextHandler > colorChoiceContext::createFastChildContext( sal
 
     switch( aElementToken )
     {
+/* TODO
     case NMSP_DRAWINGML|XML_tint:       // CT_PositiveFixedPercentage
     case NMSP_DRAWINGML|XML_shade:      // CT_PositiveFixedPercentage
     case NMSP_DRAWINGML|XML_comp:       // CT_ComplementTransform
     case NMSP_DRAWINGML|XML_inv:        // CT_InverseTransform
     case NMSP_DRAWINGML|XML_gray:       // CT_GrayscaleTransform
+    case NMSP_DRAWINGML|XML_alphaOff:   // CT_FixedPercentage
+    case NMSP_DRAWINGML|XML_alphaMod:   // CT_PositivePercentage
     break;
+*/
     case NMSP_DRAWINGML|XML_alpha:      // CT_PositiveFixedPercentage
         {
             mrColor.mbUsed = sal_True;
@@ -117,8 +131,6 @@ Reference< XFastContextHandler > colorChoiceContext::createFastChildContext( sal
             mrColor.mnAlpha = GetPercent( rxAttribs->getOptionalValue( XML_val ) );
         }
     break;
-    case NMSP_DRAWINGML|XML_alphaOff:   // CT_FixedPercentage
-    case NMSP_DRAWINGML|XML_alphaMod:   // CT_PositivePercentage
     case NMSP_DRAWINGML|XML_hue:        // CT_PositiveFixedAngle
     case NMSP_DRAWINGML|XML_hueOff: // CT_Angle
     case NMSP_DRAWINGML|XML_hueMod: // CT_PositivePercentage
@@ -137,6 +149,11 @@ Reference< XFastContextHandler > colorChoiceContext::createFastChildContext( sal
     case NMSP_DRAWINGML|XML_blue:       // CT_Percentage
     case NMSP_DRAWINGML|XML_blueOff:    // CT_Percentage
     case NMSP_DRAWINGML|XML_blueMod:    // CT_Percentage
+        {
+            sal_Int32 nToken = aElementToken&(~NMSP_MASK);
+            ColorTransformation aColorTransformation( nToken, rxAttribs->getOptionalValue( XML_val ).toInt32() );
+            mrColor.maColorTransformation.push_back( aColorTransformation );
+        }
         break;
     }
     return this;
