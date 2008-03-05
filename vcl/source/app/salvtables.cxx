@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:19:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,17 @@
 SalFrame::~SalFrame()
 {
 }
+
+// -----------------------------------------------------------------------
+
+// default to full-frame flushes
+// on ports where partial-flushes are much cheaper this method should be overridden
+void SalFrame::Flush( const Rectangle& )
+{
+    Flush();
+}
+
+// -----------------------------------------------------------------------
 
 SalInstance::~SalInstance()
 {
