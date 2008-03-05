@@ -40,7 +40,9 @@ T4_IMPRESS = \
     pwp_PlaceWare\
     impress8\
     impress8_template\
-    draw8
+    draw8\
+    MS_PowerPoint_2007_XML\
+    MS_PowerPoint_2007_XML_Template
 
 # -----------------------------------------------
 # count = 20
@@ -55,7 +57,9 @@ F4_IMPRESS = \
     placeware_Export\
     impress8\
     impress8_template\
-    impress8_draw
+    impress8_draw\
+    impress_MS_PowerPoint_2007_XML\
+    impress_MS_PowerPoint_2007_XML_Template
 
 # -----------------------------------------------
 # count = 12
@@ -71,7 +75,9 @@ F4_UI_IMPRESS = \
     impress_StarOffice_XML_Impress_Template_ui \
     impress8_ui \
     impress8_template_ui \
-    impress8_draw_ui
+    impress8_draw_ui \
+    impress_MS_PowerPoint_2007_XML_ui \
+    impress_MS_PowerPoint_2007_XML_Template_ui
 
 # -----------------------------------------------
 # count = 0
