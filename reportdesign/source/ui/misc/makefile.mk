@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:39:26 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:11:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@ EXCEPTIONSFILES=	\
         $(SLO)$/Undo.obj					\
         $(SLO)$/ColorListener.obj			\
         $(SLO)$/UITools.obj					\
-        $(SLO)$/rptuiservices.obj				\
-        $(SLO)$/toolboxcontroller.obj
+        $(SLO)$/rptuiservices.obj			\
+        $(SLO)$/toolboxcontroller.obj		
 
 
 SLOFILES=	\
