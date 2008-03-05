@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-18 15:45:34 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:13:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ SLOFILES=   	\
                 $(SLO)$/dlg_InsertTitle.obj \
                 $(SLO)$/dlg_CreationWizard.obj \
                 $(SLO)$/dlg_CreationWizard_UNO.obj \
+                $(SLO)$/dlg_ChartType_UNO.obj \
                 $(SLO)$/dlg_ChartType.obj \
                 $(SLO)$/dlg_NumberFormat.obj \
                 $(SLO)$/RangeSelectionButton.obj \
