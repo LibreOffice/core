@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:55:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@ private:            // private data
     sal_uInt32      mnHeightPt;
     sal_uInt32      mnMaxWidthPt;
     sal_uInt32      mnMaxHeightPt;
+
+    int mnLandscapes;
+    int mnPortraits;
 
     sal_uInt32      mnLMarginPt;
     sal_uInt32      mnRMarginPt;
