@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:57:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@ protected:
     getXNoteStream(OOXMLStream::StreamType_t nType,
                    const rtl::OUString & rNoteId);
 
-    void setXNoteId(const rtl::OUString & rId);
-
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
@@ -107,6 +105,10 @@ public:
     virtual uno::Reference<frame::XModel> getModel();
     virtual void setShapes(uno::Reference<drawing::XShapes> xShapes);
     virtual uno::Reference<drawing::XShapes> getShapes();
+    virtual uno::Reference<io::XInputStream> getInputStream();
+    virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);
+    virtual void setXNoteId(const rtl::OUString & rId);
+    virtual const ::rtl::OUString & getXNoteId() const;
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
