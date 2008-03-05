@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ struct SystemEnvData;
 // ----------------------------------------
 typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_EXT_STYLE_DOCUMENT        SalExtStyle(0x00000001)
+#define SAL_FRAME_EXT_STYLE_DOCMODIFIED     SalExtStyle(0x00000002)
 
 // ------------------------
 // - Flags for SetPosSize -
@@ -230,7 +231,8 @@ public:
     virtual void                SetPointerPos( long nX, long nY ) = 0;
 
     // flush output buffer
-    virtual void                Flush() = 0;
+    virtual void                Flush( void) = 0;
+    virtual void                Flush( const Rectangle& );
     // flush output buffer, wait till outstanding operations are done
     virtual void                Sync() = 0;
 
