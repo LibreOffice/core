@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Handler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:55:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,34 @@ void OOXMLCommentHandler::attribute(Id name, Value & val)
 }
 
 void OOXMLCommentHandler::sprm(Sprm & /*sprm*/)
+{
+}
+
+/*
+   class OOXMLOLEHandler
+*/
+OOXMLOLEHandler::OOXMLOLEHandler(OOXMLFastContextHandler * pContext)
+: mpFastContext(pContext)
+{
+}
+
+OOXMLOLEHandler::~OOXMLOLEHandler()
+{
+}
+
+void OOXMLOLEHandler::attribute(Id name, Value & val)
+{
+    switch (name)
+    {
+    case NS_ooxml::LN_CT_OLEObject_r_id:
+        mpFastContext->resolveOLE(val.getString());
+        break;
+    default:
+        ;
+    }
+}
+
+void OOXMLOLEHandler::sprm(Sprm & /*sprm*/)
 {
 }
 
