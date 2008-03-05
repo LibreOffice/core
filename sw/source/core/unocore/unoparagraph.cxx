@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:38:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -871,7 +871,7 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                 SvUShortsSort aWhichIds;
                 aWhichIds.Insert(pMap->nWID);
                 if(pMap->nWID < RES_PARATR_BEGIN)
-                    pUnoCrsr->GetDoc()->ResetAttr(*pUnoCrsr, sal_True, &aWhichIds);
+                    pUnoCrsr->GetDoc()->ResetAttrs(*pUnoCrsr, sal_True, &aWhichIds);
                 else
                 {
                     //fuer Absatzattribute muss die Selektion jeweils auf
@@ -891,7 +891,7 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                     {
                         pTemp->MovePara(fnParaCurr, fnParaEnd);
                     }
-                    pTemp->GetDoc()->ResetAttr(*pTemp, sal_True, &aWhichIds);
+                    pTemp->GetDoc()->ResetAttrs(*pTemp, sal_True, &aWhichIds);
                     delete pTemp;
                 }
             }
