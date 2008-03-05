@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectorshapecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-ConnectorShapeContext::ConnectorShapeContext( const FragmentHandlerRef& xHandler,
-        sal_Int32 /* aElementToken */, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
-: ShapeContext( xHandler, pMasterShapePtr, pGroupShapePtr )
+ConnectorShapeContext::ConnectorShapeContext( ContextHandler& rParent,
+        ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
+: ShapeContext( rParent, pMasterShapePtr, pGroupShapePtr )
 {
 }
 
@@ -71,7 +71,7 @@ Reference< XFastContextHandler > ConnectorShapeContext::createFastChildContext( 
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( aElementToken &(~NMSP_MASK) )
+    switch( getToken( aElementToken ) )
     {
         case XML_nvCxnSpPr :
         break;
