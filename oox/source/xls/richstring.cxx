@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richstring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,14 +437,14 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
     sal_uInt8 nFlagField = 0;
     if( (nChars > 0) || !getFlag( nFlags, BIFF_STR_SMARTFLAGS ) )
         rStrm >> nFlagField;
-
-    bool b16Bit, bFonts, bPhonetic;
-    sal_uInt16 nFontCount;
-    sal_uInt32 nPhoneticSize;
-    rStrm.readExtendedUniStringHeader( b16Bit, bFonts, bPhonetic, nFontCount, nPhoneticSize, nFlagField );
+    bool b16Bit    = getFlag( nFlagField, BIFF_STRF_16BIT );
+    bool bFonts    = getFlag( nFlagField, BIFF_STRF_RICH );
+    bool bPhonetic = getFlag( nFlagField, BIFF_STRF_PHONETIC );
+    sal_uInt16 nFontCount = bFonts ? rStrm.readuInt16() : 0;
+    sal_uInt32 nPhoneticSize = bPhonetic ? rStrm.readuInt32() : 0;
 
     // --- character array ---
-    OUString aBaseText = rStrm.readRawUniString( nChars, b16Bit );
+    OUString aBaseText = rStrm.readUniStringChars( nChars, b16Bit );
 
     // --- formatting ---
     // #122185# bRich flag may be set, but format runs may be missing

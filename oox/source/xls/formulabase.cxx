@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formulabase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1197,10 +1197,10 @@ void ApiTokenIterator::skipSpaces()
 
 // formual contexts ===========================================================
 
-FormulaContext::FormulaContext( bool bRelativeAsOffset, bool bAlways3dRefs ) :
+FormulaContext::FormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
     maBaseAddress( 0, 0, 0 ),
     mbRelativeAsOffset( bRelativeAsOffset ),
-    mbAlways3dRefs( bAlways3dRefs )
+    mb2dRefsAs3dRefs( b2dRefsAs3dRefs )
 {
 }
 
@@ -1214,8 +1214,8 @@ void FormulaContext::setSharedFormula( const CellAddress& )
 
 // ----------------------------------------------------------------------------
 
-TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool bAlways3dRefs ) :
-    FormulaContext( bRelativeAsOffset, bAlways3dRefs )
+TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
+    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs )
 {
 }
 
@@ -1227,8 +1227,8 @@ void TokensFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 // ----------------------------------------------------------------------------
 
 SimpleFormulaContext::SimpleFormulaContext( const Reference< XFormulaTokens >& rxTokens,
-        bool bRelativeAsOffset, bool bAlways3dRefs ) :
-    FormulaContext( bRelativeAsOffset, bAlways3dRefs ),
+        bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
+    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs ),
     mxTokens( rxTokens )
 {
     OSL_ENSURE( mxTokens.is(), "SimpleFormulaContext::SimpleFormulaContext - missing XFormulaTokens interface" );

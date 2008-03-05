@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formulaparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,13 +180,13 @@ private:
     // reference conversion ---------------------------------------------------
 
     void                initReference2d( SingleReference& orApiRef ) const;
-    void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet ) const;
+    void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet ) const;
     void                convertColRow( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bRelativeAsOffset ) const;
     void                convertReference( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
-    void                convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
+    void                convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference3d( ComplexReference& orApiRef, const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
 
     // finalize token sequence ------------------------------------------------
@@ -589,7 +589,7 @@ bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange,
         return pushValueOperand( aApiRef );
     }
     SingleReference aApiRef;
-    convertReference3d( aApiRef, rSheetRange.isDeleted() ? -1 : rSheetRange.mnFirst, rRef, bDeleted, bRelativeAsOffset );
+    convertReference3d( aApiRef, rSheetRange.mnFirst, rSheetRange.mbRel, rRef, bDeleted, bRelativeAsOffset );
     return pushValueOperand( aApiRef );
 }
 
@@ -696,9 +696,9 @@ bool FormulaParserImpl::pushFunctionOperator( const FunctionInfo& rFuncInfo, siz
 
 void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
 {
-    if( mpContext->isAlways3dRefs() )
+    if( mpContext->is2dRefsAs3dRefs() )
     {
-        initReference3d( orApiRef, mpContext->getBaseAddress().Sheet );
+        initReference3d( orApiRef, mpContext->getBaseAddress().Sheet, false );
     }
     else
     {
@@ -709,13 +709,19 @@ void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
     }
 }
 
-void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet ) const
+void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet ) const
 {
     orApiRef.Flags = SHEET_3D;
     if( nSheet < 0 )
     {
         orApiRef.Sheet = 0;
         orApiRef.Flags |= SHEET_DELETED;
+    }
+    else if( bRelSheet )
+    {
+        OSL_ENSURE( nSheet == 0, "FormulaParserImpl::initReference3d - invalid sheet index" );
+        orApiRef.Flags |= SHEET_RELATIVE;
+        orApiRef.RelativeSheet = 0;
     }
     else
     {
@@ -777,16 +783,16 @@ void FormulaParserImpl::convertReference2d( ComplexReference& orApiRef, const Bi
     setFlag( orApiRef.Reference2.Flags, SHEET_3D, false );
 }
 
-void FormulaParserImpl::convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const
+void FormulaParserImpl::convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const
 {
-    initReference3d( orApiRef, nSheet );
+    initReference3d( orApiRef, nSheet, bRelSheet );
     convertReference( orApiRef, rRef, bDeleted, bRelativeAsOffset );
 }
 
 void FormulaParserImpl::convertReference3d( ComplexReference& orApiRef, const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const
 {
-    initReference3d( orApiRef.Reference1, rSheetRange.isDeleted() ? -1 : rSheetRange.mnFirst );
-    initReference3d( orApiRef.Reference2, rSheetRange.isDeleted() ? -1 : rSheetRange.mnLast );
+    initReference3d( orApiRef.Reference1, rSheetRange.mnFirst, rSheetRange.mbRel );
+    initReference3d( orApiRef.Reference2, rSheetRange.mnLast, rSheetRange.mbRel );
     convertReference( orApiRef, rRef1, rRef2, bDeleted, bRelativeAsOffset );
     // remove sheet name from second part of reference
     setFlag( orApiRef.Reference2.Flags, SHEET_3D, rSheetRange.is3dRange() );
