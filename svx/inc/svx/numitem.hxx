@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:01:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,11 @@ namespace com{namespace sun{ namespace star{
 #define SVX_NO_NUM              200 // Markierung fuer keine Numerierung
 #define SVX_NO_NUMLEVEL         0x20
 
-#define NUMITEM_VERSION_01      0x01
-#define NUMITEM_VERSION_02      0x02
-#define NUMITEM_VERSION_03      0x03
+// --> OD 2008-01-10 #newlistlevelattrs# - no longer used
+//#define NUMITEM_VERSION_01        0x01
+//#define NUMITEM_VERSION_02        0x02
+//#define NUMITEM_VERSION_03        0x03
+// <--
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
 class SVX_DLLPUBLIC SvxNumberType
@@ -141,6 +143,22 @@ public:
 
 class SVX_DLLPUBLIC SvxNumberFormat : public SvxNumberType
 {
+public:
+    // --> OD 2008-01-08 #newlistlevelattrs#
+    enum SvxNumPositionAndSpaceMode
+    {
+        LABEL_WIDTH_AND_POSITION,
+        LABEL_ALIGNMENT
+    };
+    enum SvxNumLabelFollowedBy
+    {
+        LISTTAB,
+        SPACE,
+        NOTHING
+    };
+    // <--
+
+private:
     String              sPrefix;
     String              sSuffix;
 
@@ -153,10 +171,35 @@ class SVX_DLLPUBLIC SvxNumberFormat : public SvxNumberType
     USHORT              nBulletRelSize;     //proz. Groesse des Bullets
     Color               nBulletColor;       //Bullet color
 
+    // --> OD 2008-01-08 #newlistlevelattrs#
+    // mode indicating, if the position and spacing of the list label is
+    // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
+    // nLSpace and nCharTextDistance) called position and spacing via label
+    // width and position (LABEL_WIDTH_AND_POSITION) or by the new attributes
+    // (meLabelFollowedBy, mnListtabPos, mnFirstLineIndent and mnIndentAt)
+    // called position and spacing via label alignment.
+    // Note 1: Attribute <eNumAdjust> is relevant for both modes.
+    // Note 2: The values of the former attributes are treated as 0, if mode
+    //         LABEL_ALIGNMENT is active.
+    SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
+    // <--
+
     short               nFirstLineOffset;   //Erstzeileneinzug
     short               nAbsLSpace;         //Abstand Rand<->Nummer
     short               nLSpace;            //relative Einrueckung zum Vorgaenger
     short               nCharTextDistance;  //Abstand Nummer<->Text
+
+    // --> OD 2008-01-08 #newlistlevelattrs#
+    // specifies what follows the list label before the text of the first line
+    // of the list item starts
+    SvxNumLabelFollowedBy       meLabelFollowedBy;
+    // specifies an additional list tab stop position for meLabelFollowedBy = LISTTAB
+    long                        mnListtabPos;
+    // specifies the first line indent
+    long                        mnFirstLineIndent;
+    // specifies the indent before the text, e.g. in L2R-layout the left margin
+    long                        mnIndentAt;
+    // <--
 
     SvxBrushItem*       pGraphicBrush;          //
     sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
@@ -171,12 +214,19 @@ class SVX_DLLPUBLIC SvxNumberFormat : public SvxNumberType
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
 public:
-    SvxNumberFormat(sal_Int16 nNumberingType);
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    SvxNumberFormat( sal_Int16 nNumberingType,
+                     SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
+    // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
-    SvxNumberFormat(SvStream &rStream);
+    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
+//    SvxNumberFormat(SvStream &rStream);
+    // <--
     virtual ~SvxNumberFormat();
 
-    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
+    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
+//    SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
+    // <--
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
     BOOL            operator==( const SvxNumberFormat&  ) const;
@@ -214,14 +264,38 @@ public:
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const;
+    void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
+    // <--
+
     void            SetLSpace(short nSet) {nLSpace = nSet;}
-    short           GetLSpace() const {return nLSpace;}
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    short           GetLSpace() const;
+    // <--
     void            SetAbsLSpace(short nSet) {nAbsLSpace = nSet;}
-    short           GetAbsLSpace() const {return nAbsLSpace;}
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    short           GetAbsLSpace() const;
+    // <--
     void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}
-    short           GetFirstLineOffset() const {return nFirstLineOffset; }
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    short           GetFirstLineOffset() const;
+    // <--
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
-    short           GetCharTextDistance() const {return nCharTextDistance;}
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    short           GetCharTextDistance() const;
+    // <--
+
+    // --> OD 2008-01-09 #newlistlevelattrs#
+    void SetLabelFollowedBy( const SvxNumLabelFollowedBy eLabelFollowedBy );
+    SvxNumLabelFollowedBy GetLabelFollowedBy() const;
+    void SetListtabPos( const long nListtabPos );
+    long GetListtabPos() const;
+    void SetFirstLineIndent( const long nFirstLineIndent );
+    long GetFirstLineIndent() const;
+    void SetIndentAt( const long nIndentAt );
+    long GetIndentAt() const;
+    // <--
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static String   CreateRomanString( ULONG nNo, BOOL bUpper );
@@ -248,9 +322,19 @@ class SVX_DLLPUBLIC SvxNumRule
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
-    SvxNumRule(ULONG nFeatures, USHORT nLevels, BOOL bCont, SvxNumRuleType eType = SVX_RULETYPE_NUMBERING);
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    SvxNumRule( ULONG nFeatures,
+                USHORT nLevels,
+                BOOL bCont,
+                SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
+                SvxNumberFormat::SvxNumPositionAndSpaceMode
+                        eDefaultNumberFormatPositionAndSpaceMode
+                                = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+    // <--
     SvxNumRule(const SvxNumRule& rCopy);
-    SvxNumRule(SvStream &rStream);
+    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
+//  SvxNumRule(SvStream &rStream);
+    // <--
     virtual ~SvxNumRule();
 
     int                     operator==( const SvxNumRule& ) const;
@@ -258,7 +342,9 @@ public:
 
     SvxNumRule&             operator=( const SvxNumRule&  );
 
-    SvStream&               Store(SvStream &rStream);
+    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
+//    SvStream&               Store(SvStream &rStream);
+    // <--
 
     const SvxNumberFormat*  Get(USHORT nLevel)const;
     const SvxNumberFormat&  GetLevel(USHORT nLevel)const;
@@ -296,9 +382,11 @@ public:
     virtual ~SvxNumBulletItem();
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
+    // --> OD 2008-01-09 #newlistlevelattrs# - no longer used
+//    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+//    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+//    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
+    // <--
     virtual int              operator==( const SfxPoolItem& ) const;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
