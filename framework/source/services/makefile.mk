@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 13:26:12 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:23:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ SLOFILES=			\
                     $(SLO)$/substitutepathvars.obj					\
                     $(SLO)$/pathsettings.obj                        \
                     $(SLO)$/backingcomp.obj							\
+                    $(SLO)$/backingwindow.obj						\
                     $(SLO)$/dispatchhelper.obj                      \
                     $(SLO)$/license.obj                      		\
                     $(SLO)$/modulemanager.obj                       \
@@ -60,6 +61,9 @@ SLOFILES=			\
                     $(SLO)$/sessionlistener.obj                     \
                     $(SLO)$/taskcreatorsrv.obj						\
                     $(SLO)$/uriabbreviation.obj
+
+SRS1NAME=$(TARGET)
+SRC1FILES= fwk_services.src
 
 # --- Targets ------------------------------------------------------
 
