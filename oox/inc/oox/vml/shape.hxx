@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,16 @@
 #ifndef OOX_VML_SHAPE_HXX
 #define OOX_VML_SHAPE_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
+#include "com/sun/star/drawing/XShape.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <rtl/ustring.hxx>
+
+namespace oox { namespace core {
+    class XmlFilterBase;
+} }
 
 namespace oox { namespace vml {
 
@@ -61,6 +68,15 @@ struct Shape
     rtl::OUString   msGraphicURL;
     rtl::OUString   msImageTitle;
     rtl::OUString   msPath;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& getXShape() const { return mxShape; };
+
+    // addShape is creating and inserting the corresponding XShape.
+    void addShape( const ::oox::core::XmlFilterBase& rFilterBase,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+
 };
 
 typedef boost::shared_ptr< Shape > ShapePtr;
