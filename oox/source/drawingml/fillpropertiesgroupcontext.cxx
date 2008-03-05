@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillpropertiesgroupcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,12 @@
  ************************************************************************/
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include "oox/drawingml/colorchoicecontext.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
@@ -46,6 +47,7 @@
 using ::rtl::OUString;
 using ::com::sun::star::beans::NamedValue;
 using namespace ::oox::core;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -61,7 +63,7 @@ namespace oox { namespace drawingml {
 class NoFillContext : public FillPropertiesGroupContext
 {
 public:
-    NoFillContext( const oox::core::FragmentHandlerRef& xHandler, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    NoFillContext( ContextHandler& rParent, FillProperties& rFillProperties ) throw();
 };
 
 // ---------------------------------------------------------------------
@@ -69,7 +71,7 @@ public:
 class SolidColorFillPropertiesContext : public FillPropertiesGroupContext
 {
 public:
-    SolidColorFillPropertiesContext( const oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    SolidColorFillPropertiesContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, FillProperties& rFillProperties ) throw();
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
 };
 
@@ -78,7 +80,7 @@ public:
 class GradFillPropertiesContext : public FillPropertiesGroupContext
 {
 public:
-    GradFillPropertiesContext( const oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    GradFillPropertiesContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, FillProperties& rFillProperties ) throw();
 
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
@@ -89,7 +91,7 @@ public:
 class PattFillPropertiesContext : public FillPropertiesGroupContext
 {
 public:
-    PattFillPropertiesContext( const oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    PattFillPropertiesContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, FillProperties& rFillProperties ) throw();
 
     virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
@@ -101,7 +103,7 @@ public:
 class GrpFillPropertiesContext : public FillPropertiesGroupContext
 {
 public:
-    GrpFillPropertiesContext( const oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ::oox::drawingml::FillProperties& rFillProperties ) throw();
+    GrpFillPropertiesContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, FillProperties& rFillProperties ) throw();
 
     virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
@@ -110,55 +112,54 @@ public:
 
 // ---------------------------------------------------------------------
 
-class clrChangeContext : public ::oox::core::Context
+class clrChangeContext : public ContextHandler
 {
-    oox::drawingml::ColorPtr& mraClrFrom;
-    oox::drawingml::ColorPtr& mraClrTo;
+    ColorPtr& mraClrFrom;
+    ColorPtr& mraClrTo;
     sal_Bool mbUseAlpha;
 public:
-    clrChangeContext( const oox::core::FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-        oox::drawingml::ColorPtr& raClrFrom, oox::drawingml::ColorPtr& raClrTo ) throw();
+    clrChangeContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
+        ColorPtr& raClrFrom, ColorPtr& raClrTo ) throw();
     ~clrChangeContext();
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
 };
 
 // ---------------------------------------------------------------------
 
-FillPropertiesGroupContext::FillPropertiesGroupContext( const FragmentHandlerRef& xHandler, ::com::sun::star::drawing::FillStyle eFillStyle, oox::drawingml::FillProperties& rFillProperties ) throw()
-: ::oox::core::Context( xHandler )
+FillPropertiesGroupContext::FillPropertiesGroupContext( ContextHandler& rParent, ::com::sun::star::drawing::FillStyle eFillStyle, FillProperties& rFillProperties ) throw()
+: ContextHandler( rParent )
 , mrFillProperties( rFillProperties )
 {
-    static const OUString sFillStyle = CREATE_OUSTRING( "FillStyle" );
-    mrFillProperties.getFillPropertyMap()[ sFillStyle ] <<= eFillStyle;
+    rFillProperties.getFillStyle() = ::boost::optional< ::com::sun::star::drawing::FillStyle >( eFillStyle );
 }
 
 // ---------------------------------------------------------------------
 
-Reference< XFastContextHandler > FillPropertiesGroupContext::StaticCreateContext( const FragmentHandlerRef& xHandler, sal_Int32 aElementToken,
-    const Reference< XFastAttributeList >& xAttribs, ::oox::drawingml::FillProperties& rFillProperties )
+Reference< XFastContextHandler > FillPropertiesGroupContext::StaticCreateContext( ContextHandler& rParent, sal_Int32 aElementToken,
+    const Reference< XFastAttributeList >& xAttribs, FillProperties& rFillProperties )
         throw ( SAXException, RuntimeException )
 {
     Reference< XFastContextHandler > xRet;
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_noFill:
-        xRet.set( new NoFillContext( xHandler, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_noFill:     // CT_NoFillProperties
+        xRet.set( new NoFillContext( rParent, rFillProperties ) );
         break;
-    case NMSP_DRAWINGML|XML_solidFill:
-        xRet.set( new SolidColorFillPropertiesContext( xHandler, xAttribs, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_solidFill:  // CT_SolidFillProperties
+        xRet.set( new SolidColorFillPropertiesContext( rParent, xAttribs, rFillProperties ) );
         break;
-    case NMSP_DRAWINGML|XML_gradFill:
-        xRet.set( new GradFillPropertiesContext( xHandler, xAttribs, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_gradFill:   // CT_GradientFillProperties
+        xRet.set( new GradFillPropertiesContext( rParent, xAttribs, rFillProperties ) );
         break;
-    case NMSP_DRAWINGML|XML_blipFill:
-        xRet.set( new BlipFillPropertiesContext( xHandler, xAttribs, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_blipFill:   // CT_BlipFillProperties
+        xRet.set( new BlipFillPropertiesContext( rParent, xAttribs, rFillProperties ) );
         break;
-    case NMSP_DRAWINGML|XML_pattFill:
-        xRet.set( new PattFillPropertiesContext( xHandler, xAttribs, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_pattFill:   // CT_PatternFillProperties
+        xRet.set( new PattFillPropertiesContext( rParent, xAttribs, rFillProperties ) );
         break;
-    case NMSP_DRAWINGML|XML_grpFill:
-        xRet.set( new GrpFillPropertiesContext( xHandler, xAttribs, rFillProperties ) );
+    case NMSP_DRAWINGML|XML_grpFill:    // CT_GroupFillProperties
+        xRet.set( new GrpFillPropertiesContext( rParent, xAttribs, rFillProperties ) );
         break;
     }
     return xRet;
@@ -166,15 +167,15 @@ Reference< XFastContextHandler > FillPropertiesGroupContext::StaticCreateContext
 
 // ---------------------------------------------------------------------
 
-NoFillContext::NoFillContext( const FragmentHandlerRef& xHandler, oox::drawingml::FillProperties& rFillProperties ) throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_NONE, rFillProperties )
+NoFillContext::NoFillContext( ContextHandler& rParent, FillProperties& rFillProperties ) throw()
+: FillPropertiesGroupContext( rParent, FillStyle_NONE, rFillProperties )
 {
 }
 
 // ---------------------------------------------------------------------
 
-SolidColorFillPropertiesContext::SolidColorFillPropertiesContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >&, ::oox::drawingml::FillProperties& rFillProperties ) throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_SOLID, rFillProperties )
+SolidColorFillPropertiesContext::SolidColorFillPropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >&, FillProperties& rFillProperties ) throw()
+: FillPropertiesGroupContext( rParent, FillStyle_SOLID, rFillProperties )
 {
 }
 Reference< XFastContextHandler > SolidColorFillPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
@@ -195,7 +196,7 @@ Reference< XFastContextHandler > SolidColorFillPropertiesContext::createFastChil
     case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
     case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
         {
-            xRet.set( new colorChoiceContext( getHandler(), *(mrFillProperties.getFillColor().get()) ) );
+            xRet.set( new colorChoiceContext( *this, *mrFillProperties.getFillColor() ) );
             break;
         }
     case NMSP_DRAWINGML|XML_tint:       // CT_PositiveFixedPercentage
@@ -233,31 +234,112 @@ Reference< XFastContextHandler > SolidColorFillPropertiesContext::createFastChil
 
 // ---------------------------------------------------------------------
 
-GradFillPropertiesContext::GradFillPropertiesContext( const FragmentHandlerRef& xHandler, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >&, ::oox::drawingml::FillProperties& rFillProperties ) throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_GRADIENT, rFillProperties )
+class GradientStopContext : public ::oox::core::ContextHandler
 {
+    GradientStop& mrGradientStop;
+public:
+    GradientStopContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, GradientStop& rGradientStop ) throw();
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
+};
+GradientStopContext::GradientStopContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+                                                        GradientStop& rGradientStop ) throw()
+: ContextHandler( rParent )
+, mrGradientStop( rGradientStop )
+{
+    if ( xAttribs->hasAttribute( XML_pos ) )
+        mrGradientStop.mnPosition = GetPositiveFixedPercentage( xAttribs->getOptionalValue( XML_pos ) );
+}
+Reference< XFastContextHandler > GradientStopContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+{
+    return new colorChoiceContext( *this, *(mrGradientStop.maColor) );
+}
+
+GradFillPropertiesContext::GradFillPropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+                                                        FillProperties& rFillProperties ) throw()
+: FillPropertiesGroupContext( rParent, FillStyle_GRADIENT, rFillProperties )
+{
+    if( xAttribs->hasAttribute( XML_flip ) )            // ST_TileFlipMode
+        rFillProperties.getFlipModeToken() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_flip, XML_none ) );
+
+    if( xAttribs->hasAttribute( XML_rotWithShape ) )    // xsd:boolean
+    {
+        AttributeList aAttributeList( xAttribs );
+        rFillProperties.getRotateWithShape() = ::boost::optional< sal_Bool >( aAttributeList.getBool( XML_rotWithShape, sal_False ) );
+    }
 }
 
 void GradFillPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
 {
 }
 
-Reference< XFastContextHandler > GradFillPropertiesContext::createFastChildContext( sal_Int32, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > GradFillPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs) throw (SAXException, RuntimeException)
 {
-    return this;
+    Reference< XFastContextHandler > xRet;
+    switch( aElementToken )
+    {
+    case NMSP_DRAWINGML|XML_gsLst:          // CT_GradientStopList
+        {
+            xRet = this;
+        }
+    break;
+    case NMSP_DRAWINGML|XML_gs:
+        {
+            std::vector< GradientStop >& rGradientStops = mrFillProperties.getGradientStops();
+            GradientStop aGradientStop;
+            rGradientStops.push_back( aGradientStop );
+            xRet.set( new GradientStopContext( *this, xAttribs, rGradientStops.back() ) );
+        }
+        break;
+
+    // EG_ShadeProperties
+        case NMSP_DRAWINGML|XML_lin:        // CT_LinearShadeProperties
+        {
+            if ( xAttribs->hasAttribute( XML_ang ) )
+            {
+                AttributeList aAttributeList( xAttribs );
+                mrFillProperties.getShadeAngle() = ::boost::optional< sal_Int32 >( aAttributeList.getInteger( XML_ang, 0 ) );
+            }
+            if ( xAttribs->hasAttribute( XML_scaled ) )
+            {
+                AttributeList aAttributeList( xAttribs );
+                mrFillProperties.getShadeScaled() = ::boost::optional< sal_Bool >( aAttributeList.getBool( XML_scaled, sal_False ) );
+            }
+        }
+        break;
+
+        case NMSP_DRAWINGML|XML_path:           // CT_PathShadeProperties
+        {
+            if ( xAttribs->hasAttribute( XML_path ) )
+                mrFillProperties.getShadeTypeToken() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_path, XML_rect ) );
+            xRet = this;
+        }
+        break;
+        case NMSP_DRAWINGML|XML_fillToRect:     // CT_RelativeRect
+        {
+            mrFillProperties.getFillToRect() = boost::optional< ::com::sun::star::geometry::IntegerRectangle2D >( GetRelativeRect( xAttribs ) );
+        }
+        break;
+
+    case NMSP_DRAWINGML|XML_tileRect:           // CT_RelativeRect
+    {
+        mrFillProperties.getTileRect() = boost::optional< ::com::sun::star::geometry::IntegerRectangle2D >( GetRelativeRect( xAttribs ) );
+    }
+    break;
+    default:
+    break;
+    }
+    return xRet;
 }
 
 // ---------------------------------------------------------------------
 // CT_BlipFill
 // ---------------------------------------------------------------------
 
-BlipFillPropertiesContext::BlipFillPropertiesContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >&,
-    ::oox::drawingml::FillProperties& rFillProperties )
+BlipFillPropertiesContext::BlipFillPropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+                                                        FillProperties& rFillProperties )
         throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_BITMAP, rFillProperties )
-, meBitmapMode( BitmapMode_REPEAT )
-, mnWidth( 0 )
-, mnHeight( 0 )
+: FillPropertiesGroupContext( rParent, FillStyle_BITMAP, rFillProperties )
+, meBitmapMode( BitmapMode_NO_REPEAT )
 {
     /* todo
     if( xAttribs->hasAttribute( XML_dpi ) )
@@ -267,28 +349,28 @@ BlipFillPropertiesContext::BlipFillPropertiesContext( const FragmentHandlerRef& 
                     the DPI in the blip is used.
 
     }
-    if( xAttribs->hasAttribute( XML_rotWithShape ) )
-    {
-        xsd:boolean
-        fill should rotate with the shape
-    }
     */
+    if( xAttribs->hasAttribute( XML_rotWithShape ) )    // xsd:boolean
+    {
+        AttributeList aAttributeList( xAttribs );
+        rFillProperties.getRotateWithShape() = ::boost::optional< sal_Bool >( aAttributeList.getBool( XML_rotWithShape, sal_False ) );
+    }
 }
 
 void BlipFillPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
 {
     if( msEmbed.getLength() )
     {
-        const OUString aFragmentPath = getHandler()->getFragmentPathFromRelId( msEmbed );
+        const OUString aFragmentPath = getFragmentPathFromRelId( msEmbed );
         if( aFragmentPath.getLength() > 0 ) try
         {
             // get the input stream for the fill bitmap
-            XmlFilterRef xFilter = getHandler()->getFilter();
-            Reference< XInputStream > xInputStream( xFilter->openInputStream( aFragmentPath ), UNO_QUERY_THROW );
+            XmlFilterBase& rFilter = getFilter();
+            Reference< XInputStream > xInputStream( rFilter.openInputStream( aFragmentPath ), UNO_QUERY_THROW );
 
             // load the fill bitmap into an XGraphic with the GraphicProvider
             static const OUString sGraphicProvider = CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" );
-            Reference< XMultiServiceFactory > xMSFT( xFilter->getServiceFactory(), UNO_QUERY_THROW );
+            Reference< XMultiServiceFactory > xMSFT( rFilter.getServiceFactory(), UNO_QUERY_THROW );
             Reference< XGraphicProvider > xGraphicProvider( xMSFT->createInstance( sGraphicProvider ), UNO_QUERY_THROW );
 
             static const OUString sInputStream = CREATE_OUSTRING( "InputStream" );
@@ -296,7 +378,7 @@ void BlipFillPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException,
             aMediaProperties[0].Name = sInputStream;
             aMediaProperties[0].Value <<= xInputStream;
 
-            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic(aMediaProperties ) );
+            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ) );
             mrFillProperties.mxGraphic = xGraphic;
         }
         catch( Exception& )
@@ -309,9 +391,7 @@ void BlipFillPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException,
                     RTL_TEXTENCODING_UTF8 )).getStr() );
 
         }
-
-        static const OUString sFillBitmapMode = CREATE_OUSTRING( "FillBitmapMode" );
-        mrFillProperties.getFillPropertyMap()[ sFillBitmapMode ] <<= meBitmapMode;
+        mrFillProperties.getBitmapMode() = ::boost::optional< ::com::sun::star::drawing::BitmapMode >( meBitmapMode );
     }
 }
 
@@ -321,8 +401,6 @@ Reference< XFastContextHandler > BlipFillPropertiesContext::createFastChildConte
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_blip:           // CT_Blip
-//      mnWidth = xAttribs.getInt32( XML_w );
-//      mnHeight = xAttribs.getInt32( XML_h );
         msEmbed = xAttribs->getOptionalValue(NMSP_RELATIONSHIPS|XML_embed); // relationship identifer for embedded blobs
         msLink = xAttribs->getOptionalValue(NMSP_RELATIONSHIPS|XML_link);   // relationship identifer for linked blobs
         break;
@@ -338,7 +416,7 @@ Reference< XFastContextHandler > BlipFillPropertiesContext::createFastChildConte
         break;
         case NMSP_DRAWINGML|XML_clrChange:
             {
-                xRet = new clrChangeContext( getHandler(), xAttribs, mrFillProperties.getColorChangeFrom(), mrFillProperties.getColorChangeTo() );
+                xRet = new clrChangeContext( *this, xAttribs, mrFillProperties.getColorChangeFrom(), mrFillProperties.getColorChangeTo() );
             }
             break;
         case NMSP_DRAWINGML|XML_clrRepl:
@@ -351,26 +429,33 @@ Reference< XFastContextHandler > BlipFillPropertiesContext::createFastChildConte
         case NMSP_DRAWINGML|XML_tint:
         break;
 
-    case NMSP_DRAWINGML|XML_srcRect:        // CT_RelativeRect
+    case NMSP_DRAWINGML|XML_srcRect:                    // CT_RelativeRect
 // todo     maSrcRect = GetRelativeRect( xAttribs );
         break;
-    case NMSP_DRAWINGML|XML_tile:           // CT_TileInfo
+    case NMSP_DRAWINGML|XML_tile:                       // CT_TileInfo
+        {
         meBitmapMode = BitmapMode_REPEAT;
-/* todo
-        mnTileX = GetCoordinate( xAttribs[ XML_tx ] );  // additional horizontal offset after alignment
-        mnTileY = GetCoordinate( xAttribs[ XML_ty ] );  // additional vertical offset after alignment
-        mnSX = xAttribs.getInt32( XML_sx, 100000 );     // amount to horizontally scale the srcRect
-        mnSX = xAttribs.getInt32( XML_sy, 100000 );     // amount to vertically scale the srcRect
-        mnFlip = xAttribs->getOptionalValueToken( XML_flip ); // ST_TileFlipMode how to flip the tile when it repeats
-        mnAlign = xAttribs->getOptionalValueToken( XML_algn ); // ST_RectAlignment where to align the first tile with respect to the shape; alignment happens after the scaling, but before the additional offset.
-*/
+
+        if( xAttribs->hasAttribute( XML_flip ) )        // ST_TileFlipMode
+            mrFillProperties.getFlipModeToken() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_flip, XML_none ) );
+        if ( xAttribs->hasAttribute( XML_tx ) )
+            mrFillProperties.getTileX() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValue( XML_tx ).toInt32() );
+        if ( xAttribs->hasAttribute( XML_ty ) )
+            mrFillProperties.getTileY() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValue( XML_ty ).toInt32() );
+        if ( xAttribs->hasAttribute( XML_sx ) )
+            mrFillProperties.getTileSX() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValue( XML_sx ).toInt32() );
+        if ( xAttribs->hasAttribute( XML_sx ) )
+            mrFillProperties.getTileSY() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValue( XML_sy ).toInt32() );
+        if ( xAttribs->hasAttribute( XML_algn ) )       // ST_RectAlignment
+            mrFillProperties.getTileAlign() = ::boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_algn, XML_l ) );
+        }
         break;
     case NMSP_DRAWINGML|XML_stretch:        // CT_StretchInfo
         meBitmapMode = BitmapMode_STRETCH;
         break;
-    case NMSP_DRAWINGML|XML_fillRect:
-// todo     maFillRect = GetRelativeRect( xAttribs );
-        break;
+        case NMSP_DRAWINGML|XML_fillRect:
+    // todo     maFillRect = GetRelativeRect( xAttribs );
+            break;
     }
     if ( !xRet.is() )
         xRet.set( this );
@@ -379,8 +464,8 @@ Reference< XFastContextHandler > BlipFillPropertiesContext::createFastChildConte
 
 // ---------------------------------------------------------------------
 
-PattFillPropertiesContext::PattFillPropertiesContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >&, ::oox::drawingml::FillProperties& rFillProperties ) throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_HATCH, rFillProperties )
+PattFillPropertiesContext::PattFillPropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >&, FillProperties& rFillProperties ) throw()
+: FillPropertiesGroupContext( rParent, FillStyle_HATCH, rFillProperties )
 {
 }
 
@@ -399,8 +484,8 @@ Reference< XFastContextHandler > PattFillPropertiesContext::createFastChildConte
 
 // ---------------------------------------------------------------------
 
-GrpFillPropertiesContext::GrpFillPropertiesContext( const FragmentHandlerRef& xHandler,const Reference< XFastAttributeList >&, ::oox::drawingml::FillProperties& rFillProperties ) throw()
-: FillPropertiesGroupContext( xHandler, FillStyle_NONE, rFillProperties )
+GrpFillPropertiesContext::GrpFillPropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >&, FillProperties& rFillProperties ) throw()
+: FillPropertiesGroupContext( rParent, FillStyle_NONE, rFillProperties )
 {
 }
 
@@ -421,9 +506,9 @@ Reference< XFastContextHandler > GrpFillPropertiesContext::createFastChildContex
 
 // ---------------------------------------------------------------------
 
-clrChangeContext::clrChangeContext( const FragmentHandlerRef& xHandler,const Reference< XFastAttributeList >& xAttributes,
+clrChangeContext::clrChangeContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttributes,
     ColorPtr& raClrFrom, ColorPtr& raClrTo ) throw()
-: Context( xHandler )
+: ContextHandler( rParent )
 , mraClrFrom( raClrFrom )
 , mraClrTo( raClrTo )
 , mbUseAlpha( xAttributes->getOptionalValueToken( XML_useA, XML_true ) == XML_true ? sal_True : sal_False )
@@ -443,10 +528,10 @@ Reference< XFastContextHandler > clrChangeContext::createFastChildContext( sal_I
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_clrFrom:    // CT_Color
-            xRet.set( new colorChoiceContext( getHandler(), *mraClrFrom.get() ) );
+            xRet.set( new colorChoiceContext( *this, *mraClrFrom ) );
             break;
         case NMSP_DRAWINGML|XML_clrTo:      // CT_Color
-            xRet.set( new colorChoiceContext( getHandler(), *mraClrTo.get() ) );
+            xRet.set( new colorChoiceContext( *this, *mraClrTo ) );
             break;
         default:
         break;
