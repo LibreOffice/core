@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportEngineJFree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ namespace reportdesign
         typedef ::std::multimap< ::rtl::OUString, ::com::sun::star::uno::Any , ::comphelper::UStringMixLess>            TComponentMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >     m_xReport;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator>         m_StatusIndicator;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xActiveConnection;
     private:
@@ -113,17 +112,14 @@ namespace reportdesign
         */
         ::rtl::OUString getNewOutputName();
 
-        /** set the rowset properties.
-        *
-        */
-        void setRowSetProperties();
-
         /** generates the order statement defined by the groups of the report
         *
         * \return the ORDER BY part
         */
         ::rtl::OUString getOrderStatement() const;
     protected:
+        // TODO: VirtualFunctionFinder: This is virtual function!
+        //
         virtual ~OReportEngineJFree();
     public:
         typedef ::comphelper::ImplementationReference< OReportEngineJFree   ,::com::sun::star::report::XReportEngine,::com::sun::star::uno::XWeak > TReportEngine;
