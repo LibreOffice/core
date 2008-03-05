@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 
 #ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
@@ -96,8 +97,6 @@
 #ifndef _XMLEOHLP_HXX
 #include "xmleohlp.hxx"
 #endif
-
-#include <sfx2/objsh.hxx>
 
 // -----------
 // - Defines -
@@ -212,7 +211,7 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 {
 }
 
-SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( SfxObjectShell& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
+SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
     maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
@@ -429,14 +428,14 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 {
     (void)pClassId;
 
-    uno::Reference < embed::XStorage > xDocStor( mpDocPersist->GetStorage() );
+    uno::Reference < embed::XStorage > xDocStor( mpDocPersist->getStorage() );
     uno::Reference < embed::XStorage > xCntnrStor( ImplGetContainerStorage( rContainerStorageName ) );
 
     if( !xCntnrStor.is() && !pTemp )
         return sal_False;
 
     String aSrcObjName( rObjName );
-    comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->GetEmbeddedObjectContainer();
+    comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
 
     // Is the object name unique?
     // if the object is already instantiated by GetEmbeddedObject
@@ -549,7 +548,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     }
     else
     {
-        // Objects are written using SfxObjectShell::SaveAs
+        // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
         sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM("./") );
         if( aContainerStorageName.getLength() )
         {
@@ -580,7 +579,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
                 // means that the object is not active
                 // copy replacement image from old to new container
                 OUString aMediaType;
-                xStream = mpDocPersist->GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                xStream = mpDocPersist->getEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
             }
 
             if ( !xStream.is() )
@@ -612,7 +611,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
 
 void SvXMLEmbeddedObjectHelper::Init(
         const uno::Reference < embed::XStorage >& rRootStorage,
-        SfxObjectShell& rPersist,
+        ::comphelper::IEmbeddedHelper& rPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode )
 {
     mxRootStorage = rRootStorage;
@@ -624,7 +623,7 @@ void SvXMLEmbeddedObjectHelper::Init(
 
 SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
         const uno::Reference < embed::XStorage >& rRootStorage,
-        SfxObjectShell& rDocPersist,
+        ::comphelper::IEmbeddedHelper& rDocPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode,
         sal_Bool bDirect )
 {
@@ -639,7 +638,7 @@ SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
 }
 
 SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
-        SfxObjectShell& rDocPersist,
+        ::comphelper::IEmbeddedHelper& rDocPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode )
 {
     SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
@@ -726,7 +725,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
             try
             {
                 comphelper::EmbeddedObjectContainer& rContainer =
-                        mpDocPersist->GetEmbeddedObjectContainer();
+                        mpDocPersist->getEmbeddedObjectContainer();
 
                 Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( aObjectStorageName );
                 DBG_ASSERT( xObj.is(), "Didn't get object" );
@@ -806,7 +805,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
                                   sal_True ) )
             return sal_False;
 
-        comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->GetEmbeddedObjectContainer();
+        comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
         return aObjectStorageName.getLength() > 0 &&
                rContainer.HasEmbeddedObject( aObjectStorageName );
     }
@@ -833,7 +832,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
     }
     else
     {
-        comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->GetEmbeddedObjectContainer();
+        comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
         return rContainer.HasEmbeddedObjects();
     }
 }
