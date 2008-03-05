@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapegeometry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,18 +105,18 @@ static const FormulaCommandHMap* pCommandHashMap;
 
 // ---------------------------------------------------------------------
 // CT_GeomGuideList
-class AdjustmentValueContext : public ::oox::core::Context
+class AdjustmentValueContext : public ContextHandler
 {
 public:
-    AdjustmentValueContext( const ::oox::core::FragmentHandlerRef& xHandler, CustomShapeProperties& rCustomShapeProperties );
+    AdjustmentValueContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::oox::drawingml::CustomShapeProperties& mrCustomShapeProperties;
+    CustomShapeProperties& mrCustomShapeProperties;
 };
 
-AdjustmentValueContext::AdjustmentValueContext( const FragmentHandlerRef& xHandler, CustomShapeProperties& rCustomShapeProperties )
-: Context( xHandler )
+AdjustmentValueContext::AdjustmentValueContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
@@ -189,7 +189,7 @@ Reference< XFastContextHandler > AdjustmentValueContext::createFastChildContext(
 
 // ---------------------------------------------------------------------
 
-static OUString GetShapeType( sal_Int32 nType )
+OUString GetShapeType( sal_Int32 nType )
 {
     OUString sType;
      switch( nType )
@@ -990,8 +990,8 @@ static OUString GetTextShapeType( sal_Int32 nType )
 
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
-CustomShapeGeometryContext::CustomShapeGeometryContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >& /* xAttribs */, CustomShapeProperties& rCustomShapeProperties )
-: Context( xHandler )
+CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& /* xAttribs */, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
@@ -1016,8 +1016,8 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
 
 // ---------------------------------------------------------------------
 // CT_PresetGeometry2D
-PresetShapeGeometryContext::PresetShapeGeometryContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
-: Context( xHandler )
+PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     OUString sShapeType;
@@ -1031,15 +1031,15 @@ PresetShapeGeometryContext::PresetShapeGeometryContext( const FragmentHandlerRef
 Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
     if ( aElementToken == ( NMSP_DRAWINGML | XML_avLst ) )
-        return new AdjustmentValueContext( getHandler(), mrCustomShapeProperties );
+        return new AdjustmentValueContext( *this, mrCustomShapeProperties );
     else
         return this;
 }
 
 // ---------------------------------------------------------------------
 // CT_PresetTextShape
-PresetTextShapeContext::PresetTextShapeContext( const FragmentHandlerRef& xHandler, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
-: Context( xHandler )
+PresetTextShapeContext::PresetTextShapeContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     OUString sShapeType;
