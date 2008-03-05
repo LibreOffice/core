@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:37:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,61 @@ USHORT SwTxtFmtColl::ResetAllFmtAttr()
     mbStayAssignedToListLevelOfOutlineStyle = bOldState;
 
     return nRet;
+}
+// <--
+
+// --> OD 2008-02-13 #newlistlevelattrs#
+bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
+{
+    bool bAreListLevelIndentsApplicable( true );
+
+    if ( GetItemState( RES_PARATR_NUMRULE ) != SFX_ITEM_SET )
+    {
+        // no list style applied to paragraph style
+        bAreListLevelIndentsApplicable = false;
+    }
+    else if ( GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+    {
+        // paragraph style has hard-set indent attributes
+        bAreListLevelIndentsApplicable = false;
+    }
+    else if ( GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+    {
+        // list style is directly applied to paragraph style and paragraph
+        // style has no hard-set indent attributes
+        bAreListLevelIndentsApplicable = true;
+    }
+    else
+    {
+        // list style is applied through one of the parent paragraph styles and
+        // paragraph style has no hard-set indent attributes
+
+        // check parent paragraph styles
+        const SwTxtFmtColl* pColl = dynamic_cast<const SwTxtFmtColl*>(DerivedFrom());
+        while ( pColl )
+        {
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+            {
+                // indent attributes found in the paragraph style hierarchy.
+                bAreListLevelIndentsApplicable = false;
+                break;
+            }
+
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+            {
+                // paragraph style with the list style found and until now no
+                // indent attributes are found in the paragraph style hierarchy.
+                bAreListLevelIndentsApplicable = true;
+                break;
+            }
+
+            pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
+            ASSERT( pColl,
+                    "<SwTxtFmtColl::AreListLevelIndentsApplicable()> - something wrong in paragraph style hierarchy. The applied list style is not found." );
+        }
+    }
+
+    return bAreListLevelIndentsApplicable;
 }
 // <--
 
