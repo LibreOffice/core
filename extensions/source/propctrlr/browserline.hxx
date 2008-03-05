@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:52:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ namespace pcr
         const ::rtl::OUString&
                             GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds( sal_uInt32 _nControlId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
+        void                SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
 
         void                SetTitle(const String& rString );
         void                FullFillTitleString();
