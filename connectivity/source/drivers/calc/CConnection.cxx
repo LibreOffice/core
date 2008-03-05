@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:38:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ using namespace ::com::sun::star::sheet;
 
 // --------------------------------------------------------------------------------
 
-OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver)
+OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
 {
     // m_aFilenameExtension is not used
 }
@@ -117,30 +117,22 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     nLen = url.indexOf(':',nLen+1);
     ::rtl::OUString aDSN(url.copy(nLen+1));
 
-    String aFileName = aDSN;
+    m_aFileName = aDSN;
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     {
         SvtPathOptions aPathOptions;
-        aFileName = aPathOptions.SubstituteVariable(aFileName);
+        m_aFileName = aPathOptions.SubstituteVariable(m_aFileName);
     }
-    aURL.SetSmartURL(aFileName);
+    aURL.SetSmartURL(m_aFileName);
     if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
         //  don't pass invalid URL to loadComponentFromURL
         throw SQLException();
     }
-    aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-    if (!xDesktop.is())
-    {
-        OSL_ASSERT("no desktop");
-        throw SQLException();
-    }
-
-    ::rtl::OUString sPassword;
+    m_sPassword = ::rtl::OUString();
     const char* pPwd        = "password";
 
     const PropertyValue *pIter  = info.getConstArray();
@@ -149,11 +141,19 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     {
         if(!pIter->Name.compareToAscii(pPwd))
         {
-            pIter->Value >>= sPassword;
+            pIter->Value >>= m_sPassword;
             break;
         }
     }
-
+}
+// -----------------------------------------------------------------------------
+Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
+{
+    if ( m_xDoc.is() )
+    {
+        osl_incrementInterlockedCount(&m_nDocCount);
+        return m_xDoc;
+    }
     //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
     aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
@@ -161,26 +161,34 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
     aArgs[1].Value <<= (sal_Bool) sal_True;
 
-    if ( sPassword.getLength() )
+    if ( m_sPassword.getLength() )
     {
-        sal_Int32 nPos = aArgs.getLength();
+        const sal_Int32 nPos = aArgs.getLength();
         aArgs.realloc(nPos+1);
         aArgs[nPos].Name = ::rtl::OUString::createFromAscii("Password");
-        aArgs[nPos].Value <<= sPassword;
+        aArgs[nPos].Value <<= m_sPassword;
     }
 
+    Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
+                    ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+    if (!xDesktop.is())
+    {
+        OSL_ASSERT("no desktop");
+        throw SQLException();
+    }
     Reference< XComponent > xComponent;
     Any aLoaderException;
     try
     {
         xComponent = xDesktop->loadComponentFromURL(
-            aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
+            m_aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
     }
     catch( const Exception& )
     {
         aLoaderException = ::cppu::getCaughtException();
     }
-    m_xDoc = Reference<XSpreadsheetDocument>( xComponent, UNO_QUERY );
+
+    m_xDoc.set(xComponent, UNO_QUERY );
 
     //  if the URL is not a spreadsheet document, throw the exception here
     //  instead of at the first access to it
@@ -203,14 +211,22 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
             aErrorDetails <<= aDetailException;
         }
 
-        ::rtl::OUString sError( aResourceLoader.getResourceStringWithSubstitution(
+        const ::rtl::OUString sError( aResourceLoader.getResourceStringWithSubstitution(
             STR_COULD_NOT_LOAD_FILE,
-            "$filename$", aFileName
+            "$filename$", m_aFileName
          ) );
         ::dbtools::throwGenericSQLException( sError, *this, aErrorDetails );
     }
+    osl_incrementInterlockedCount(&m_nDocCount);
+    return m_xDoc;
 }
-
+// -----------------------------------------------------------------------------
+void OCalcConnection::releaseDoc()
+{
+    if ( osl_decrementInterlockedCount(&m_nDocCount) == 0 )
+        ::comphelper::disposeComponent( m_xDoc );
+}
+// -----------------------------------------------------------------------------
 void OCalcConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
