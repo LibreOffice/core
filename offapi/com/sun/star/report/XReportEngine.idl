@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XReportEngine.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:12:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,14 +143,14 @@ interface XReportEngine
 
     /** specifies the report definition object which is used to create the resulting report.
     */
-    [attribute] XReportDefinition ReportDefinition
+    [attribute,bound] XReportDefinition ReportDefinition
     {
         set raises (com::sun::star::lang::IllegalArgumentException);
     };
 
     /** specifies the active connection which is used to create the resulting report.
     */
-    [attribute] com::sun::star::sdbc::XConnection ActiveConnection
+    [attribute,bound] com::sun::star::sdbc::XConnection ActiveConnection
     {
         set raises (com::sun::star::lang::IllegalArgumentException);
     };
