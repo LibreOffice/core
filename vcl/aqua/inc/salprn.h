@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:11:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // really needed however is a solution for paper formats
     Orientation               mePageOrientation;
 
+    int                       mnStartPageOffsetX;
+    int                       mnStartPageOffsetY;
+
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
     virtual ~AquaSalInfoPrinter();
@@ -107,7 +110,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     BOOL                        StartJob( const String* pFileName,
                                           const String& rAppName,
                                           ImplJobSetup* pSetupData,
-                                          ImplQPrinter* pQPrinter );
+                                          ImplQPrinter* pQPrinter,
+                                          bool bIsQuickJob );
     BOOL                        EndJob();
     BOOL                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
@@ -115,6 +119,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     ULONG                       GetErrorCode() const;
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
+    void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
 
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& );
