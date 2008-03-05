@@ -1,8 +1,19 @@
 ﻿
 # dumper settings ============================================================
 
-# Path to base configuration data, relative to this file.
+# Path to additional configuration data, relative to this file.
 include-config-file=dumperconfig.dat
+
+# Enable entire dumper (default=off). This option does not affect the option
+# 'enable-import'.
+#   0=off, 1=on
+enable-dumper=1
+
+# Enable import after dumping (default=on). Disabling this option allows
+# to dump a file without loading it. This option is independent from the
+# 'enable-dumper' option.
+#   0=off, 1=on
+enable-import=1
 
 # XLSB record settings -------------------------------------------------------
 
@@ -46,8 +57,9 @@ flagslist=STRING-FLAGS
   0x02=phonetic-text
 end
 
-flagslist=CELL-FLAGS
-  0x0100=show-phonetic
+combilist=CELL-XFID
+  0x00FFFFFF=int32,dec,xf-id
+  0x01000000=show-phonetic
 end
 
 combilist=PHONETIC-FLAGS
@@ -56,7 +68,12 @@ combilist=PHONETIC-FLAGS
   0x000C=uint8,dec,alignment,PHONETICPR-ALIGNMENT
 end
 
-shortlist=COLOR-TYPE,0,none,auto,,indexed,,rgb,,theme
+shortlist=COLOR-TYPE,0,auto,indexed,rgb,theme
+
+combilist=COLOR-FLAGS
+  0x01=rgb-valid
+  0xFE=uint8,dec,type,COLOR-TYPE
+end
 
 multilist=PALETTE-COLORS
   default=
@@ -164,35 +181,36 @@ shortlist=ARRAYVALUE-TYPE,0,number,string,boolean,,error
 
 multilist=RECORD-NAMES
   0x0000=ROW,CELL_BLANK,CELL_RK,CELL_ERROR,CELL_BOOL,CELL_DOUBLE,CELL_STRING,CELL_SI
-  0x0008=FORMULA_STRING,FORMULA_DOUBLE,FORMULA_BOOL,FORMULA_ERROR,,,,
-  0x0010=,,,SI,,,,
+  0x0008=FORMULA_STRING,FORMULA_DOUBLE,FORMULA_BOOL,FORMULA_ERROR,MULTCELL_BLANK,MULTCELL_RK,MULTCELL_ERROR,MULTCELL_BOOL
+  0x0010=MULTCELL_DOUBLE,MULTCELL_STRING,MULTCELL_SI,SI,,,,
 
   0x0020=,,,,,,,DEFINEDNAME
-  0x0028=,,,FONT,NUMFMT,FILL,BORDER,XF
+  0x0028=BINARYINDEXROWS,,BINARYINDEXBLOCK,FONT,NUMFMT,FILL,BORDER,XF
   0x0030=CELLSTYLE,,,,,,,
-  0x0038=,,,,COL,,CELL_RSTRING,CALCCHAINCELL
+  0x0038=,,,,COL,MULTCELL_RSTRING,CELL_RSTRING,CALCCHAINCELL
   0x0040=DATAVALIDATION,,,,,,,
 
   0x0080=FILEVERSION,WORKSHEET,WORKSHEET_END,WORKBOOK,WORKBOOK_END,SHEETVIEWS,SHEETVIEWS_END,BOOKVIEWS
-  0x0088=BOOKVIEWS_END,SHEETVIEW,SHEETVIEW_END,,,,,SHEETS
+  0x0088=BOOKVIEWS_END,SHEETVIEW,SHEETVIEW_END,CHARTSHEETVIEWS,CHARTSHEETVIEWS_END,CHARTSHEETVIEW,CHARTSHEETVIEW_END,SHEETS
   0x0090=SHEETS_END,SHEETDATA,SHEETDATA_END,SHEETPR,DIMENSION,,,PANE
-  0x0098=SELECTION,WORKBOOKPR,,,SHEET,CALCPR,WORKBOOKVIEW,SST
+  0x0098=SELECTION,WORKBOOKPR,SMARTTAGPR,FILERECOVERYPR,SHEET,CALCPR,WORKBOOKVIEW,SST
   0x00A0=SST_END,AUTOFILTER,AUTOFILTER_END,FILTERCOLUMN,FILTERCOLUMN_END,,,
 
   0x00B0=,MERGECELLS,MERGECELLS_END,,,,,
 
-  0x0110=,,,,,,STYLESHEET,STYLESHEET_END
+  0x0110=,,,,,BINARYINDEX_END,STYLESHEET,STYLESHEET_END
 
   0x0150=,,,,,,,TABLE
   0x0158=TABLE_END,TABLECOLUMNS,TABLECOLUMNS_END,TABLECOLUMN,TABLECOLUMN_END,,,CALCEDCOLUMNFMLA
   0x0160=,EXTERNALREFS,EXTERNALREFS_END,EXTERNALREF,,EXTERNALSELF,EXTERNALSAME,EXTSHEETNAMES
-  0x0168=EXTERNALBOOK,,EXTERNALSHEETS,EXTSHEETDATA,EXTSHEETDATA_END,,EXTROW,
+  0x0168=EXTERNALBOOK,,EXTERNALSHEETS,EXTSHEETDATA,EXTSHEETDATA_END,,EXTROW,EXTCELL_BLANK
   0x0170=EXTCELL_DOUBLE,EXTCELL_BOOL,EXTCELL_ERROR,EXTCELL_STRING,,,,
 
   0x0180=,,,,,,COLS,COLS_END
-  0x0188=ROWBREAKS,ROWBREAKS_END,COLBREAKS,COLBREAKS_END,BRK,,,
+  0x0188=ROWBREAKS,ROWBREAKS_END,COLBREAKS,COLBREAKS_END,BRK,CUSTOMWORKBOOKVIEW,,
 
-  0x01A8=,,ARRAY,SHAREDFMLA,DATATABLE,,,
+  0x01A0=,,,,,,CUSTOMSHEETVIEWS,CUSTOMSHEETVIEW
+  0x01A8=CUSTOMSHEETVIEW_END,CUSTOMSHEETVIEWS_END,ARRAY,SHAREDFMLA,DATATABLE,,,
 
   0x01C8=,,,,,CONDFORMATTING,CONDFORMATTING_END,CFRULE
   0x01D0=CFRULE_END,ICONSET,ICONSET_END,DATABAR,DATABAR_END,COLORSCALE,COLORSCALE_END,CFVO
@@ -207,10 +225,10 @@ multilist=RECORD-NAMES
   0x0218=,PHONETICPR,,,,,,
   0x0220=,,,,,,DRAWING,LEGACYDRAWING
 
-  0x0230=,,,,CFCOLOR,INDEXEDCOLORS,INDEXEDCOLORS_END,
+  0x0230=,,PICTURE,,CFCOLOR,INDEXEDCOLORS,INDEXEDCOLORS_END,
   0x0238=,MRUCOLORS,MRUCOLORS_END,,COLOR,DATAVALIDATIONS,DATAVALIDATIONS_END,
   0x0240=,EXTERNALNAME,DDEITEMVALUES,DDEITEMVALUES_END,DDEITEM_DOUBLE,DDEITEM_ERROR,DDEITEM_STRING,DDEITEM_EMPTY
-  0x0248=DDEITEM_BOOL,EXTERNALNAMEREF,EXTERNALNAMEFLAGS,SHEETDATASET|EXTERNALNAME_END,SHEETDATASET_END,,,
+  0x0248=DDEITEM_BOOL,EXTERNALNAMEREF,EXTERNALNAMEFLAGS,EXTERNALNAME_END,EXTERNALBOOK_END,,,
 
   0x0258=,,,FILLS,FILLS_END,,,
   0x0260=,,,FONTS,FONTS_END,BORDERS,BORDERS_END,NUMFMTS
@@ -218,7 +236,9 @@ multilist=RECORD-NAMES
   0x0270=,,CELLSTYLEXFS,CELLSTYLEXFS_END
   0x0278=,,,,,,,OLEOBJECT
 
-  0x0290=,,,,TABLEPARTS,TABLEPART,TABLEPARTS_END,
+  0x0288=,,,CHARTSHEETPR,CHARTPAGESETUP,CUSTOMCHARTVIEWS,CUSTOMCHARTVIEWS_END,CUSTOMCHARTVIEW
+  0x0290=CUSTOMCHARTVIEW_END,,,,TABLEPARTS,TABLEPART,TABLEPARTS_END,SHEETCALCPR
+  0x0298=FUNCTIONGROUPS,FUNCTIONGROUP,FUNCTIONGROUPS_END,EXTERNALADDIN,,CHARTPROTECTION,,
 end
 
 # simple records -------------------------------------------------------------
@@ -240,6 +260,8 @@ constlist=SIMPLE-RECORDS
   0x026B=int32,dec,count
   0x0272=int32,dec,count
   0x0294=int32,dec,count
+  0x0297=uint8,hex,flags,SHEETCALCPR-FLAGS
+  0x0298=uint8,dec,builtin-count
 end
 
 # ARRAY ----------------------------------------------------------------------
@@ -255,17 +277,12 @@ flagslist=BORDER-FLAGS
   0x02=diag-bl-to-tr
 end
 
-# BRK ------------------------------------------------------------------------
-
-flagslist=BRK-FLAGS
-  0x00000001=manual
-end
-
 # CALCPR ---------------------------------------------------------------------
 
 shortlist=CALCPR-CALCMODE,0,manual,auto,auto-no-tables
 
 flagslist=CALCPR-FLAGS
+  0x0001=calc-on-load
   0x0002=a1
   0x0004=iterate
   0x0008=full-precision
@@ -310,10 +327,35 @@ shortlist=CFRULE-TIME-OPERATOR,0,today,yesterday,last-7-days,this-week,last-week
 shortlist=CFRULE-OTHER-OPERATOR,0,none
 
 flagslist=CFRULE-FLAGS
+  0x0001=table-row
   0x0002=stop-if-true
   0x0004=avove-average
   0x0008=bottom
   0x0010=percent
+end
+
+# CHARTPAGESETUP ------------------------------------------------------------------
+
+combilist=CHARTPAGESETUP-FLAGS
+  0x0001=landscape
+  0x0002=uninitialized
+  0x0004=black-and-white
+  0x0008=default-orientation
+  0x0010=use-first-page
+  0x0020=draft-quality
+end
+
+# CHARTSHEETPR ---------------------------------------------------------------
+
+flagslist=CHARTSHEETPR-FLAGS
+  0x0001=published
+end
+
+# CHARTSHEETVIEW -------------------------------------------------------------
+
+flagslist=CHARTSHEETVIEW-FLAGS
+  0x0001=selected
+  0x0002=zoom-to-fit
 end
 
 # COL ------------------------------------------------------------------------
@@ -322,6 +364,7 @@ combilist=COL-FLAGS
   0x0001=hidden
   0x0002=custom-width
   0x0004=best-fit
+  0x0008=show-phonetic
   0x0700=uint8,dec,outline-level
   0x1000=outline-collapsed
 end
@@ -333,6 +376,7 @@ flagslist=DATATABLE-FLAGS
   0x02=table-2d
   0x04=ref1-deleted
   0x08=ref2-deleted
+  0x10=recalc-always
 end
 
 # DATAVALIDATION -------------------------------------------------------------
@@ -352,15 +396,24 @@ shortlist=DATAVALIDATION-TYPE,0,any,whole,decimal,list,date,time,text-length,cus
 shortlist=DATAVALIDATION-OPERATOR,0,between,not-between,equal,not-equal,greater-than,less-than,greater-equal,less-equal
 shortlist=DATAVALIDATION-ERRORSTYLE,0,error,warning,info
 
+# DATAVALIDATIONS ------------------------------------------------------------
+
+combilist=DATAVALIDATIONS-FLAGS
+  0x0001=disable-prompts
+end
+
 # DEFINEDNAME ----------------------------------------------------------------
 
 combilist=DEFINEDNAME-FLAGS
-  0x0001=hidden
-  0x0002=function
-  0x0004=command
-  0x0008=macro
-  0x0020=built-in
-  0x0FC0=uint16,dec,func-group,DEFINEDNAME-FUNCGROUP
+  0x00000001=hidden
+  0x00000002=function
+  0x00000004=command
+  0x00000008=macro
+  0x00000010=complex
+  0x00000020=built-in
+  0x00007FC0=int32,dec,func-group,DEFINEDNAME-FUNCGROUP
+  0x00008000=published
+  0x00010000=workbook-param
 end
 
 shortlist=DEFINEDNAME-FUNCGROUP,0,none,financial,date-time,math-trig,statistical,lookup-ref,database,text,logical,information,commands,customizing,macro-control,dde-external,user-definded
@@ -383,8 +436,8 @@ multilist=DXF-SUBREC
   15=ALIGN-HORIZONTAL,ALIGN-VERTICAL,ALIGN-ROTATION,ALIGN-INDENT,ALIGN-READINGORDER
   20=ALIGN-WRAPTEXT,ALIGN-JUSTLASTLINE,ALIGN-SHRINKTOFIT,,FONT-NAME
   25=FONT-WEIGHT,FONT-UNDERLINE,FONT-ESCAPEMENT,FONT-ITALIC,FONT-STRIKE
-  30=FONT-OUTLINE,FONT-SHADOW,FONT-CONDENSE,FONT-EXTEND,
-  35=,FONT-HEIGHT,FONT-SCHEME,NUMFMT-CODE,
+  30=FONT-OUTLINE,FONT-SHADOW,FONT-CONDENSE,FONT-EXTEND,FONT-CHARSET
+  35=FONT-FAMILY,FONT-HEIGHT,FONT-SCHEME,NUMFMT-CODE,
   40=,NUMFMT-ID,ALIGN-RELINDENT,PROT-LOCKED,PROT-HIDDEN
 end
 
@@ -425,6 +478,7 @@ shortlist=FILL-GRADIENTTYPE,0,linear,path
 flagslist=FONT-FLAGS
   0x0001=bold
   0x0002=italic
+  0x0004=underline
   0x0008=strikeout
   0x0010=outline
   0x0020=shadow
@@ -515,7 +569,7 @@ end
 
 # ROW ------------------------------------------------------------------------
 
-combilist=ROW-FLAGS
+combilist=ROW-FLAGS1
   0x0001=thick-top
   0x0002=thick-bottom
   0x0700=uint8,dec,outline-level
@@ -525,9 +579,19 @@ combilist=ROW-FLAGS
   0x4000=custom-format
 end
 
+flagslist=ROW-FLAGS2
+  0x01=show-phonetic
+end
+
 # SHEET ----------------------------------------------------------------------
 
 shortlist=SHEET-STATE,0,visible,hidden,very-hidden
+
+# SHEETCALCPR ----------------------------------------------------------------
+
+flagslist=SHEETCALCPR-FLAGS
+  0x01=calc-on-load
+end
 
 # SHEETFORMATPR --------------------------------------------------------------
 
@@ -538,13 +602,24 @@ end
 
 # SHEETPR --------------------------------------------------------------------
 
-flagslist=SHEETPR-FLAGS
+flagslist=SHEETPR-FLAGS1
   0x0001=show-autopagebreaks
+  0x0008=published
+  0x0010=dialog-sheet
   0x0020=outline-auto-style
   0x0040=row-symbols-below
   0x0080=column-symbols-right
   0x0100=fit-to-pages
   0x0400=show-outline-symbols
+  0x1000=is-row-synched
+  0x2000=is-col-synched
+  0x4000=lotus-formula-eval
+  0x8000=lotus-formula-entry
+end
+
+flagslist=SHEETPR-FLAGS2
+  0x01=is-filtered
+  0x02=eval-cond-formats
 end
 
 # SHEETVIEW ------------------------------------------------------------------
@@ -606,6 +681,7 @@ combilist=WORKBBOKPR-FLAGS
   0x00006000=uint8,dec,show-objects,WORKBBOKPR-SHOWOBJECTS
   0x00008000=show-pivotchart-filter
   0x00010000=autocompress-pic
+  0x00020000=refresh-all-links
 end
 
 shortlist=WORKBBOKPR-UPDATELINKS,0,ask-user,never,always
