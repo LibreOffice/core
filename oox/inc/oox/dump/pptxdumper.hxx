@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: pptxdumper.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:25 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef OOX_DUMP_PPTXDUMPER_HXX
+#define OOX_DUMP_PPTXDUMPER_HXX
+
+#include "oox/dump/dumperbase.hxx"
+
+#if OOX_INCLUDE_DUMPER
+
+namespace oox {
+namespace dump {
+namespace pptx {
+
+// ============================================================================
+
+class RootStorageObject : public RootStorageObjectBase
+{
+public:
+    explicit            RootStorageObject( const DumperBase& rParent );
+
+protected:
+    virtual void        implDumpStream(
+                            BinaryInputStreamRef xStrm,
+                            const ::rtl::OUString& rStrgPath,
+                            const ::rtl::OUString& rStrmName,
+                            const ::rtl::OUString& rSystemFileName );
+};
+
+// ============================================================================
+
+class Dumper : public DumperBase
+{
+public:
+    explicit            Dumper( const ::oox::core::FilterBase& rFilter );
+
+protected:
+    virtual void        implDump();
+};
+
+// ============================================================================
+
+} // namespace pptx
+} // namespace dump
+} // namespace oox
+
+#endif
+#endif
+
