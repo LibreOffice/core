@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:27:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 
     SfxItemSet aSet( GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
     if (STATE_TOGGLE == eState)
-        rSh.GetAttr( aSet );
+        rSh.GetCurAttr( aSet );
 
     switch ( nWhich )
     {
@@ -310,7 +310,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         case FN_SHRINK_FONT_SIZE:
         {
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
-            rWrtSh.GetAttr( aSetItem.GetItemSet() );
+            rWrtSh.GetCurAttr( aSetItem.GetItemSet() );
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
             const SfxPoolItem* pI;
@@ -503,7 +503,7 @@ SET_LINESPACE:
 */
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
-            GetShell().GetAttr(aAdjustSet);
+            GetShell().GetCurAttr(aAdjustSet);
             BOOL bChgAdjust = FALSE;
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, FALSE);
             if(eAdjustState  >= SFX_ITEM_DEFAULT)
@@ -547,7 +547,10 @@ SET_LINESPACE:
 
                         aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                     }
-                    SwNumRule aSetRule( pCurRule->GetName());
+                    // --> OD 2008-02-11 #newlistlevelattrs#
+                    SwNumRule aSetRule( pCurRule->GetName(),
+                                        pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
+                    // <--
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( TRUE );
                     GetShell().SetCurNumRule( aSetRule );
@@ -591,7 +594,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             {
                 String sCharStyleName = ((const SfxStringItem*)pItem)->GetValue();
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP, 0L);
-                rSh.GetAttr(aSet);
+                rSh.GetCurAttr(aSet);
                 SwFmtDrop aDropItem((const SwFmtDrop&)aSet.Get(RES_PARATR_DROP));
                 SwCharFmt* pFmt = 0;
                 if(sCharStyleName.Len())
@@ -612,7 +615,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             {
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP,
                                            HINT_END, HINT_END, 0);
-                rSh.GetAttr(aSet);
+                rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
@@ -671,7 +674,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemPool& rPool = GetPool();
     SfxItemSet aCoreSet(rPool, aTxtFmtCollSetRange);
-    rSh.GetAttr(aCoreSet);  // *alle* Textattribute von der Core erfragen
+    rSh.GetCurAttr(aCoreSet); // *alle* Textattribute von der Core erfragen
 
     SfxWhichIter aIter(rSet);
     USHORT nSlot = aIter.FirstWhich();
@@ -869,7 +872,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case RES_TXTATR_INETFMT:
             {
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
-                rSh.GetAttr(aSet);
+                rSh.GetCurAttr(aSet);
 #if OSL_DEBUG_LEVEL > 1
                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
                 rSet.Put(rItem);
