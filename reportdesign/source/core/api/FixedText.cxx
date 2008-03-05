@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:51:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace reportdesign
     using namespace comphelper;
 uno::Sequence< ::rtl::OUString > lcl_getFixedTextOptionals()
 {
-    ::rtl::OUString pProps[] = { PROPERTY_DATAFIELD };
+    ::rtl::OUString pProps[] = { PROPERTY_DATAFIELD,PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 DBG_NAME( rpt_OFixedText )
@@ -179,8 +179,9 @@ sal_Bool SAL_CALL OFixedText::supportsService(const ::rtl::OUString& ServiceName
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL(OFixedText)
-REPORTCOMPONENT_IMPL2(OFixedText)
+REPORTCOMPONENT_IMPL(OFixedText,m_aProps.aComponent)
+REPORTCOMPONENT_IMPL2(OFixedText,m_aProps.aComponent)
+REPORTCOMPONENT_NOMASTERDETAIL(OFixedText)
 REPORTCONTROLFORMAT_IMPL(OFixedText,m_aProps.aFormatProperties)
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OFixedText::getPropertySetInfo(  ) throw(uno::RuntimeException)
