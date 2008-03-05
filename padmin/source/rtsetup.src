@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:05:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,8 +302,30 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Border = TRUE ;
         Sort = TRUE ;
+        Dropdown = TRUE;
         Pos = MAP_APPFONT ( 11 , 75 ) ;
         Size = MAP_APPFONT ( 150 , 65 ) ;
+    };
+    CheckBox RID_RTS_CMD_CB_EXTERNAL
+    {
+        Pos = MAP_APPFONT( 11, 95 );
+        Size = MAP_APPFONT( 220, 10 );
+        Text [ en-US ] = "~Use system print dialog, disable %PRODUCTNAME's print dialog";
+    };
+    FixedText RID_RTS_CMD_FT_QUICKCMD
+    {
+        Pos = MAP_APPFONT( 11, 110 );
+        Size = MAP_APPFONT( 150, 20 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Command for quick printing without dialog (optional)";
+    };
+    ComboBox RIT_RTS_CMD_CB_QUICKCMD
+    {
+        Border = TRUE;
+        Sort = TRUE;
+        Dropdown = TRUE;
+        Pos = MAP_APPFONT( 11, 130 );
+        Size = MAP_APPFONT( 150, 65 );
     };
     FixedLine RID_RTS_CMD_FL_INSTALL
     {
