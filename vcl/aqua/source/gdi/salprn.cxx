@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,20 @@
 #include "vcl/jobset.h"
 #include "vcl/salptype.hxx"
 #include "vcl/impprn.hxx"
+#include "vcl/print.hxx"
+#include "vcl/unohelp.hxx"
+
 #include <boost/bind.hpp>
+
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+using namespace rtl;
+using namespace vcl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
 
 // =======================================================================
 
@@ -54,7 +67,9 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mbJob( false ),
     mpPrinter( nil ),
     mpPrintInfo( nil ),
-    mePageOrientation( ORIENTATION_PORTRAIT )
+    mePageOrientation( ORIENTATION_PORTRAIT ),
+    mnStartPageOffsetX( 0 ),
+    mnStartPageOffsetY( 0 )
 {
     NSString* pStr = CreateNSString( i_rQueue.maPrinterName );
     mpPrinter = [NSPrinter printerWithName: pStr];
@@ -116,7 +131,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
                 double dX = 0, dY = aPaperSize.height;
                 dX += [mpPrintInfo leftMargin];
                 dY -= [mpPrintInfo topMargin];
-                CGContextTranslateCTM( i_rContext, dX, dY );
+                CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
                 CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
             else
@@ -126,7 +141,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
                 dY += [mpPrintInfo topMargin];
                 dX -= [mpPrintInfo rightMargin];
 
-                CGContextTranslateCTM( i_rContext, dX, dY );
+                CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
                 CGContextScaleCTM( i_rContext, -0.1, 0.1 );
             }
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
@@ -325,6 +340,68 @@ XubString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup* i_pSetupData,
 
 // -----------------------------------------------------------------------
 
+static bool getUseNativeDialog()
+{
+    bool bNative = true;
+    try
+    {
+        // get service provider
+        Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        // create configuration hierachical access name
+        if( xSMgr.is() )
+        {
+            try
+            {
+                Reference< XMultiServiceFactory > xConfigProvider(
+                    Reference< XMultiServiceFactory >(
+                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.configuration.ConfigurationProvider" ))),
+                        UNO_QUERY )
+                    );
+                if( xConfigProvider.is() )
+                {
+                    Sequence< Any > aArgs(1);
+                    PropertyValue aVal;
+                    aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                    aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
+                    aArgs.getArray()[0] <<= aVal;
+                    Reference< XNameAccess > xConfigAccess(
+                        Reference< XNameAccess >(
+                            xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "com.sun.star.configuration.ConfigurationAccess" )),
+                                                                            aArgs ),
+                            UNO_QUERY )
+                        );
+                    if( xConfigAccess.is() )
+                    {
+                        try
+                        {
+                            sal_Bool bValue = sal_False;
+                            Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseSystemPrintDialog" ) ) );
+                            if( aAny >>= bValue )
+                                bNative = bValue;
+                        }
+                        catch( NoSuchElementException& )
+                        {
+                        }
+                        catch( WrappedTargetException& )
+                        {
+                        }
+                    }
+                }
+            }
+            catch( Exception& )
+            {
+            }
+        }
+    }
+    catch( WrappedTargetException& )
+    {
+    }
+
+    return bNative;
+}
+
 ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USHORT i_nType )
 {
     switch( i_nType )
@@ -343,6 +420,8 @@ ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USH
             return 1;
         case PRINTER_CAPABILITIES_SETPAPER:
             return 1;
+        case PRINTER_CAPABILITIES_EXTERNALDIALOG:
+            return getUseNativeDialog() ? 1 : 0;
         default: break;
     };
     return 0;
@@ -375,12 +454,14 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
                                    const String& rAppName,
                                    ImplJobSetup* pSetupData,
-                                   ImplQPrinter* pQPrinter )
+                                   ImplQPrinter* pQPrinter,
+                                   bool bIsQuickJob )
 {
     if( mbJob )
         return FALSE;
 
     BOOL bSuccess = FALSE;
+    mnStartPageOffsetX = mnStartPageOffsetY = 0;
 
     // create view
     NSView* pPrintView = [[AquaPrintView alloc] initWithQPrinter: pQPrinter withInfoPrinter: this];
@@ -408,8 +489,9 @@ BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
 
     if( pPrintOperation )
     {
-        [pPrintOperation setShowsPrintPanel: NO];
-        [pPrintOperation setShowsProgressPanel: NO];
+        bool bShowPanel = (! bIsQuickJob && getUseNativeDialog());
+        [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
+        // [pPrintOperation setShowsProgressPanel: NO];
         bSuccess = TRUE;
         mbJob = true;
         [pPrintOperation runOperation];
@@ -423,6 +505,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
 
 BOOL AquaSalInfoPrinter::EndJob()
 {
+    mnStartPageOffsetX = mnStartPageOffsetY = 0;
     mbJob = false;
     return TRUE;
 }
@@ -485,7 +568,17 @@ BOOL AquaSalPrinter::StartJob( const String* pFileName,
                                ImplJobSetup* pSetupData,
                                ImplQPrinter* pQPrinter )
 {
-    return mpInfoPrinter->StartJob( pFileName, rAppName, pSetupData, pQPrinter );
+    bool bIsQuickJob = false;
+    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
+        pSetupData->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
+
+    if( quick_it != pSetupData->maValueMap.end() )
+    {
+        if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            bIsQuickJob = true;
+    }
+
+    return mpInfoPrinter->StartJob( pFileName, rAppName, pSetupData, pQPrinter, bIsQuickJob );
 }
 
 // -----------------------------------------------------------------------
