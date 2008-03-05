@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:16:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1355,7 +1355,9 @@ void PushButton::ImplDrawPushButton( bool bLayout )
 
     if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
+        PushButtonValue aPBVal;
         ImplControlValue aControlValue;
+        aControlValue.setOptionalVal( &aPBVal );
         Region           aCtrlRegion( aInRect );
         ControlState     nState = 0;
 
@@ -1367,6 +1369,9 @@ void PushButton::ImplDrawPushButton( bool bLayout )
 
         if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
             nState |= CTRL_STATE_ROLLOVER;
+
+        if( GetStyle() & WB_BEVELBUTTON )
+            aPBVal.mbBevelButton = true;
 
         bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                          aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
@@ -2289,6 +2294,20 @@ void RadioButton::DrawRadioButtonState( )
 
 // -----------------------------------------------------------------------
 
+void RadioButton::ImplInvalidateOrDrawRadioButtonState()
+{
+    if( ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase )
+    {
+        if ( IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL) )
+        {
+            Invalidate();
+            Update();
+            return;
+        }
+    }
+    ImplDrawRadioButtonState();
+}
+
 void RadioButton::ImplDrawRadioButtonState()
 {
     USHORT nButtonStyle = 0;
@@ -2443,6 +2462,16 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             aPos.X() += rImageSize.Width() + nImageSep;
             aSize.Width() -= rImageSize.Width() + nImageSep;
 
+            // if the text rect height is smaller than the height of the image
+            // then for single lines the default should be centered text
+            if( (nWinStyle & (WB_TOP|WB_CENTER|WB_BOTTOM)) == 0 &&
+                (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK)  ) )
+            {
+                nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
+                nTextStyle |= TEXT_DRAW_VCENTER;
+                aSize.Height() = rImageSize.Height();
+            }
+
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
                                   nDrawFlags, nTextStyle, NULL );
 
@@ -2454,6 +2483,12 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
             if ( aSize.Height() > rImageSize.Height() )
                 rStateRect.Top() += ( aSize.Height() - rImageSize.Height() ) / 2;
+            else
+            {
+                rStateRect.Top() -= ( rImageSize.Height() - aSize.Height() ) / 2;
+                if( rStateRect.Top() < 0 )
+                    rStateRect.Top() = 0;
+            }
 
             rStateRect.Right()  = rStateRect.Left() + rImageSize.Width()-1;
             rStateRect.Bottom() = rStateRect.Top() + rImageSize.Height()-1;
@@ -2667,7 +2702,7 @@ void RadioButton::ImplCallClick( BOOL bGrabFocus, USHORT nFocusFlags )
     mbStateChanged = !mbChecked;
     mbChecked = TRUE;
     mpWindowImpl->mnStyle |= WB_TABSTOP;
-    ImplDrawRadioButtonState();
+    ImplInvalidateOrDrawRadioButtonState();
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     if ( mbRadioCheck )
@@ -2738,7 +2773,7 @@ void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )
     {
         ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-        ImplDrawRadioButtonState();
+        ImplInvalidateOrDrawRadioButtonState();
         StartTracking();
         return;
     }
@@ -2763,7 +2798,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             if ( !rTEvt.IsTrackingCanceled() )
                 ImplCallClick();
             else
-                ImplDrawRadioButtonState();
+                ImplInvalidateOrDrawRadioButtonState();
         }
     }
     else
@@ -2773,7 +2808,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             if ( !(ImplGetButtonState() & BUTTON_DRAW_PRESSED) )
             {
                 ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-                ImplDrawRadioButtonState();
+                ImplInvalidateOrDrawRadioButtonState();
             }
         }
         else
@@ -2781,7 +2816,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
             {
                 ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-                ImplDrawRadioButtonState();
+                ImplInvalidateOrDrawRadioButtonState();
             }
         }
     }
@@ -2798,13 +2833,13 @@ void RadioButton::KeyInput( const KeyEvent& rKEvt )
         if ( !(ImplGetButtonState() & BUTTON_DRAW_PRESSED) )
         {
             ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-            ImplDrawRadioButtonState();
+            ImplInvalidateOrDrawRadioButtonState();
         }
     }
     else if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-        ImplDrawRadioButtonState();
+        ImplInvalidateOrDrawRadioButtonState();
     }
     else
         Button::KeyInput( rKEvt );
@@ -2942,7 +2977,7 @@ void RadioButton::LoseFocus()
     if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-        ImplDrawRadioButtonState();
+        ImplInvalidateOrDrawRadioButtonState();
     }
 
     HideFocus();
@@ -3410,6 +3445,20 @@ void CheckBox::ImplLoadRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
+void CheckBox::ImplInvalidateOrDrawCheckBoxState()
+{
+    if( ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase )
+    {
+        if ( IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
+        {
+            Invalidate();
+            Update();
+            return;
+        }
+    }
+    ImplDrawCheckBoxState();
+}
+
 void CheckBox::ImplDrawCheckBoxState()
 {
     bool    bNativeOK = TRUE;
@@ -3479,6 +3528,16 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         aPos.X() += rImageSize.Width() + nImageSep;
         aSize.Width() -= rImageSize.Width() + nImageSep;
 
+        // if the text rect height is smaller than the height of the image
+        // then for single lines the default should be centered text
+        if( (nWinStyle & (WB_TOP|WB_CENTER|WB_BOTTOM)) == 0 &&
+            (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
+        {
+            nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
+            nTextStyle |= TEXT_DRAW_VCENTER;
+            aSize.Height() = rImageSize.Height();
+        }
+
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1,
                               nDrawFlags, nTextStyle, NULL );
         nLineY = aPos.Y() + aSize.Height()/2;
@@ -3490,6 +3549,13 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
         if ( aSize.Height() > rImageSize.Height() )
             rStateRect.Top() += ( aSize.Height() - rImageSize.Height() ) / 2;
+        else
+        {
+            rStateRect.Top() -= ( rImageSize.Height() - aSize.Height() ) / 2;
+            if( rStateRect.Top() < 0 )
+                rStateRect.Top() = 0;
+        }
+
         rStateRect.Right()  = rStateRect.Left()+rImageSize.Width()-1;
         rStateRect.Bottom() = rStateRect.Top()+rImageSize.Height()-1;
         if ( rStateRect.Bottom() > rMouseRect.Bottom() )
@@ -3578,7 +3644,7 @@ void CheckBox::ImplCheck()
     else
         eNewState = STATE_NOCHECK;
     meState = eNewState;
-    ImplDrawCheckBoxState();
+    ImplInvalidateOrDrawCheckBoxState();
 
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
@@ -3620,7 +3686,7 @@ void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )
     {
         ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-        ImplDrawCheckBoxState();
+        ImplInvalidateOrDrawCheckBoxState();
         StartTracking();
         return;
     }
@@ -3645,7 +3711,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             if ( !rTEvt.IsTrackingCanceled() )
                 ImplCheck();
             else
-                ImplDrawCheckBoxState();
+                ImplInvalidateOrDrawCheckBoxState();
         }
     }
     else
@@ -3655,7 +3721,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             if ( !(ImplGetButtonState() & BUTTON_DRAW_PRESSED) )
             {
                 ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-                ImplDrawCheckBoxState();
+                ImplInvalidateOrDrawCheckBoxState();
             }
         }
         else
@@ -3663,7 +3729,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
             {
                 ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-                ImplDrawCheckBoxState();
+                ImplInvalidateOrDrawCheckBoxState();
             }
         }
     }
@@ -3680,13 +3746,13 @@ void CheckBox::KeyInput( const KeyEvent& rKEvt )
         if ( !(ImplGetButtonState() & BUTTON_DRAW_PRESSED) )
         {
             ImplGetButtonState() |= BUTTON_DRAW_PRESSED;
-            ImplDrawCheckBoxState();
+            ImplInvalidateOrDrawCheckBoxState();
         }
     }
     else if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-        ImplDrawCheckBoxState();
+        ImplInvalidateOrDrawCheckBoxState();
     }
     else
         Button::KeyInput( rKEvt );
@@ -3862,7 +3928,7 @@ void CheckBox::LoseFocus()
     if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )
     {
         ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
-        ImplDrawCheckBoxState();
+        ImplInvalidateOrDrawCheckBoxState();
     }
 
     HideFocus();
