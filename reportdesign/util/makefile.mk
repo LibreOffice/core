@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:26:55 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:15:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ XMLFILES := $(ZIP1DIR)$/description.xml \
             $(ZIP1DIR)$/META-INF$/manifest.xml
             
 XCU_FILES := $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
-             $(ZIP1DIR)$/merge$/org$/openoffice$/Office$/DataAccess.xcu
+             $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu
 
 .IF "$(WITH_LANG)"!=""
 XCU_TMP := $(MISC)$/merge$/org$/openoffice$/Office$/DataAccess.xcu
