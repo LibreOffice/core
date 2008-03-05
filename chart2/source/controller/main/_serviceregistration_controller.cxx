@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_controller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:46:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "ChartController.hxx"
 #include "ChartFrameloader.hxx"
 #include "dlg_CreationWizard_UNO.hxx"
+#include "dlg_ChartType_UNO.hxx"
 #include "ChartDocumentWrapper.hxx"
 #include "AccessibleChartView.hxx"
 
@@ -67,6 +68,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
           ::chart::CreationWizardUnoDlg::create
         , ::chart::CreationWizardUnoDlg::getImplementationName_Static
         , ::chart::CreationWizardUnoDlg::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::ChartTypeUnoDlg::Create
+        , ::chart::ChartTypeUnoDlg::getImplementationName_Static
+        , ::chart::ChartTypeUnoDlg::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
