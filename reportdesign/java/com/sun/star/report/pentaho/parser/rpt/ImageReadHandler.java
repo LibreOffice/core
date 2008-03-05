@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageReadHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:24:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:43:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -56,98 +54,96 @@ import org.xml.sax.SAXException;
  */
 public class ImageReadHandler extends ElementReadHandler
 {
-  private ImageElement contentElement;
-  private XLinkReadHandler xLinkReadHandler;
 
-  public ImageReadHandler()
-  {
-    contentElement = new ImageElement();
-  }
+    private ImageElement contentElement;
+    private XLinkReadHandler xLinkReadHandler;
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    super.startParsing(attrs);
-    final String formula = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "formula");
-    final String preserveIRI = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "preserve-IRI");
-    if (formula != null && formula.length() != 0)
+    public ImageReadHandler()
     {
-      // now, the evaulated content ends up in the 'content' attribute of the
-      // element.
-      final FormulaExpression valueExpression = new FormulaExpression();
-      valueExpression.setFormula(formula);
-      contentElement.setFormula(valueExpression);
+        contentElement = new ImageElement();
     }
 
-    contentElement.setNamespace(OfficeNamespaces.FORM_NS);
-    contentElement.setType("image");
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.DRAWING_NS.equals(uri))
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs) throws SAXException
     {
-      if ("image-data".equals(tagName))
-      {
-        xLinkReadHandler = new XLinkReadHandler();
-        return xLinkReadHandler;
-      }
+        super.startParsing(attrs);
+        final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
+//        final String preserveIRI = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "preserve-IRI");
+        if (formula != null && formula.length() != 0)
+        {
+            // now, the evaulated content ends up in the 'content' attribute of the
+            // element.
+            final FormulaExpression valueExpression = new FormulaExpression();
+            valueExpression.setFormula(formula);
+            contentElement.setFormula(valueExpression);
+        }
+
+        contentElement.setNamespace(OfficeNamespaces.FORM_NS);
+        contentElement.setType("image");
     }
 
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      // expect a report control. The control will modifiy the current
-      // element (as we do not separate the elements that strictly ..)
-      if ("report-control".equals(tagName))
-      {
-        return new IgnoreAnyChildReadHandler();
-      }
-      if ("report-element".equals(tagName))
-      {
-        return new ReportElementReadHandler(contentElement);
-      }
-    }
-    return null;
-  }
+        if (OfficeNamespaces.DRAWING_NS.equals(uri))
+        {
+            if ("image-data".equals(tagName))
+            {
+                xLinkReadHandler = new XLinkReadHandler();
+                return xLinkReadHandler;
+            }
+        }
 
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    // if we have static content (as well or only), that one goes into the
-    // alternate-content attribute right now. It is part of the output target
-    // and style rules to deal with them properly ..
-    if (xLinkReadHandler != null)
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            // expect a report control. The control will modifiy the current
+            // element (as we do not separate the elements that strictly ..)
+            if ("report-control".equals(tagName))
+            {
+                return new IgnoreAnyChildReadHandler();
+            }
+            if ("report-element".equals(tagName))
+            {
+                return new ReportElementReadHandler(contentElement);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
     {
-      contentElement.setAttribute(OfficeNamespaces.OOREPORT_NS,
-          "alternate-content", xLinkReadHandler.getUri());
+        // if we have static content (as well or only), that one goes into the
+        // alternate-content attribute right now. It is part of the output target
+        // and style rules to deal with them properly ..
+        if (xLinkReadHandler != null)
+        {
+            contentElement.setAttribute(OfficeNamespaces.OOREPORT_NS,
+                    "alternate-content", xLinkReadHandler.getUri());
+        }
     }
-  }
 
-
-  public Element getElement()
-  {
-    return contentElement;
-  }
+    public Element getElement()
+    {
+        return contentElement;
+    }
 }
