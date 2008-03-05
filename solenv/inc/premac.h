@@ -4,9 +4,9 @@
  *
  *  $RCSfile: premac.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:03:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 
 #define Boolean MacOSBoolean
+#define BOOL MacOSBOOL
 #define Button MacOSButton
 #define Byte MacOSByte
 #define Control MacOSControl
@@ -53,7 +54,6 @@
 //#define ShowWindow MacOSShowWindow
 #define StringPtr MacOSStringPtr
 #define DirInfo MacOSDirInfo
-#define BOOL MacOSBOOL
 #define ULONG MacOSULONG
 #define Line MacOSLine
 #define TimeValue MacOSTimeValue
