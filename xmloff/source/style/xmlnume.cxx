@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,14 @@
 #ifndef _COM_SUN_STAR_TEXT_XCHAPTERNUMBERINGSUPPLIER_HPP_
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #endif
+// --> OD 2008-01-16 #newlistlevelattrs#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONANDSPACEMODE_HPP_
+#include <com/sun/star/text/PositionAndSpaceMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_LABELFOLLOW_HPP_
+#include <com/sun/star/text/LabelFollow.hpp>
+#endif
+// <--
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -139,11 +147,17 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LEFT_MARGIN[] = "LeftMargin";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] =
-    "FirstLineOffset";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] = "FirstLineOffset";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
+// --> OD 2008-01-15 #newlistlevelattrs#
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
+// <--
 
 void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::star::container::XIndexReplace > & xNumRule,
                                              sal_Bool bOutline )
@@ -186,7 +200,15 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     sal_Int32 nImageWidth = 0, nImageHeight = 0;
     sal_Int16 eImageVertOrient = VertOrientation::LINE_CENTER;
 
-    sal_Int32 nCount = rProps.getLength();
+    // --> OD 2008-01-15 #newlistlevelattrs#
+    sal_Int16 ePosAndSpaceMode = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
+    sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
+    sal_Int32 nListtabStopPosition( 0 );
+    sal_Int32 nFirstLineIndent( 0 );
+    sal_Int32 nIndentAt( 0 );
+    // <--
+
+    const sal_Int32 nCount = rProps.getLength();
     const beans::PropertyValue* pPropArray = rProps.getConstArray();
     for( sal_Int32 i=0; i<nCount; i++ )
     {
@@ -289,6 +311,37 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             rProp.Value >>= nValue;
             eImageVertOrient = nValue;
         }
+        // --> OD 2008-01-16 #newlistlevelattrs#
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE,
+                                          sizeof(XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE)-1 ) )
+        {
+            sal_Int16 nValue = 0;
+            rProp.Value >>= nValue;
+            ePosAndSpaceMode = nValue;
+        }
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY,
+                                          sizeof(XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY)-1 ) )
+        {
+            sal_Int16 nValue = 0;
+            rProp.Value >>= nValue;
+            eLabelFollowedBy = nValue;
+        }
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION,
+                                          sizeof(XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION)-1 ) )
+        {
+            rProp.Value >>= nListtabStopPosition;
+        }
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_FIRST_LINE_INDENT,
+                                          sizeof(XML_UNO_NAME_NRULE_FIRST_LINE_INDENT)-1 ) )
+        {
+            rProp.Value >>= nFirstLineIndent;
+        }
+        else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_INDENT_AT,
+                                          sizeof(XML_UNO_NAME_NRULE_INDENT_AT)-1 ) )
+        {
+            rProp.Value >>= nIndentAt;
+        }
+        // <--
     }
 
     if( bOutline && (NumberingType::CHAR_SPECIAL == eType ||
@@ -392,27 +445,42 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_True );
 
-        nSpaceBefore += nMinLabelWidth;
-        nMinLabelWidth = -nMinLabelWidth;
+        // --> OD 2008-01-16 #newlistlevelattrs#
         OUStringBuffer sBuffer;
-        if( nSpaceBefore != 0 )
+        if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
         {
-            GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nSpaceBefore );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
-                          sBuffer.makeStringAndClear() );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
+                                      XML_LABEL_WIDTH_AND_POSITION );
+
+            nSpaceBefore += nMinLabelWidth;
+            nMinLabelWidth = -nMinLabelWidth;
+            if( nSpaceBefore != 0 )
+            {
+                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nSpaceBefore );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
+                              sBuffer.makeStringAndClear() );
+            }
+            if( nMinLabelWidth != 0 )
+            {
+                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelWidth );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
+                              sBuffer.makeStringAndClear() );
+            }
+            if( nMinLabelDist > 0 )
+            {
+                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelDist );
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
+                              sBuffer.makeStringAndClear() );
+            }
         }
-        if( nMinLabelWidth != 0 )
+        else if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT )
         {
-            GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelWidth );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
-                          sBuffer.makeStringAndClear() );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
+                                      XML_LABEL_ALIGNMENT );
         }
-        if( nMinLabelDist > 0 )
-        {
-            GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelDist );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
-                          sBuffer.makeStringAndClear() );
-        }
+        // <--
         if( HoriOrientation::LEFT != eAdjust )
         {
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
@@ -488,11 +556,58 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             }
         }
 
-        if( GetExport().GetAttrList().getLength() > 0 )
+        // --> OD 2008-01-16 #newlistlevelattrs#
+//        if( GetExport().GetAttrList().getLength() > 0 )
         {
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_LIST_LEVEL_PROPERTIES, sal_True, sal_True );
+
+            if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT )
+            {
+                enum XMLTokenEnum eValue = XML_LISTTAB;
+                if ( eLabelFollowedBy == LabelFollow::SPACE )
+                {
+                    eValue = XML_SPACE;
+                }
+                else if ( eLabelFollowedBy == LabelFollow::NOTHING )
+                {
+                    eValue = XML_NOTHING;
+                }
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                          XML_LABEL_FOLLOWED_BY, eValue );
+
+                if ( eLabelFollowedBy == LabelFollow::LISTTAB &&
+                     nListtabStopPosition > 0 )
+                {
+                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nListtabStopPosition );
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              XML_LIST_TAB_STOP_POSITION,
+                                              sBuffer.makeStringAndClear() );
+                }
+
+                if ( nFirstLineIndent != 0 )
+                {
+                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nFirstLineIndent );
+                    GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                              XML_TEXT_INDENT,
+                                              sBuffer.makeStringAndClear() );
+                }
+
+                if ( nIndentAt != 0 )
+                {
+                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nIndentAt );
+                    GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                              XML_MARGIN_LEFT,
+                                              sBuffer.makeStringAndClear() );
+                }
+
+                SvXMLElementExport aLabelAlignmentElement( GetExport(), XML_NAMESPACE_STYLE,
+                                             XML_LABEL_ALIGNMENT,
+                                             sal_True, sal_True );
+            }
         }
+        // <--
+
         if( NumberingType::CHAR_SPECIAL == eType )
         {
             if( sBulletFontName.getLength() )
@@ -835,7 +950,7 @@ sal_Bool SvxXMLNumRuleExport::GetOutlineStyles( XMLStringVector& rStyleNames,
         uno::Sequence<beans::PropertyValue> aSeq;
         if( aEntry >>= aSeq )
         {
-            sal_Int32 nCount = aSeq.getLength();
+            const sal_Int32 nCount = aSeq.getLength();
             const beans::PropertyValue* pPropArray = aSeq.getConstArray();
             for( sal_Int32 j=0; j<nCount; j++ )
             {
