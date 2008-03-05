@@ -1,6 +1,6 @@
 /* $RCSfile: quit.c,v $
--- $Revision: 1.7 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:41:12 $
+-- $Revision: 1.8 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:29:56 $
 --
 -- SYNOPSIS
 --      End the dmake session.
@@ -53,6 +53,7 @@ int sig;
       fprintf(stderr, "Caught signal %d. Trying to quit ...\n", sig);
 
    if( _quitting ) return; /* Guard to only quit once. */
+   _quitting = 1;
 
    while( Closefile() != NIL( FILE ) );
 
@@ -104,7 +105,6 @@ char *err_target;
       cp = hp->CP_OWNR;
       Glob_attr |= A_IGNORE;
 
-      _quitting = 1;
       cp->ce_flag |= F_TARGET;
       Make( cp, NIL(CELL) );
 
