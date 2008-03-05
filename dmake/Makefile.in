@@ -20,9 +20,9 @@
 #
 #   $RCSfile: Makefile.in,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-18 09:26:49 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:26:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ bin_PROGRAMS = dmake$(EXEEXT)
 
 @OSTYPEWIN32_TRUE@am__append_4 = win95/dchdir.c win95/switchar.c \
 @OSTYPEWIN32_TRUE@                 msdos/dstrlwr.c msdos/arlib.c \
-@OSTYPEWIN32_TRUE@                 msdos/dirbrk.c msdos/runargv.c \
-@OSTYPEWIN32_TRUE@                 msdos/rmprq.c \
+@OSTYPEWIN32_TRUE@                 msdos/dirbrk.c unix/runargv.c \
+@OSTYPEWIN32_TRUE@                 unix/rmprq.c \
 @OSTYPEWIN32_TRUE@                 win95/microsft/ruletab.c
 
 @OSTYPEWIN32_TRUE@am__append_5 = -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
@@ -112,8 +112,7 @@ am__dmake_SOURCES_DIST = infer.c make.c stat.c expand.c dmstring.c \
 	function.c dbug/dbug/dbug.c unix/arlib.c unix/dcache.c \
 	unix/dirbrk.c unix/rmprq.c unix/ruletab.c unix/runargv.c \
 	unix/tempnam.c win95/dchdir.c win95/switchar.c msdos/dstrlwr.c \
-	msdos/arlib.c msdos/dirbrk.c msdos/runargv.c msdos/rmprq.c \
-	win95/microsft/ruletab.c
+	msdos/arlib.c msdos/dirbrk.c win95/microsft/ruletab.c
 am__dirstamp = $(am__leading_dot)dirstamp
 @DBUG_TRUE@am__objects_1 = dbug/dbug/dbug.$(OBJEXT)
 @OSTYPEUNIX_TRUE@am__objects_2 = unix/arlib.$(OBJEXT) \
@@ -124,8 +123,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @OSTYPEWIN32_TRUE@	win95/switchar.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	msdos/dstrlwr.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	msdos/arlib.$(OBJEXT) msdos/dirbrk.$(OBJEXT) \
-@OSTYPEWIN32_TRUE@	msdos/runargv.$(OBJEXT) \
-@OSTYPEWIN32_TRUE@	msdos/rmprq.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	unix/runargv.$(OBJEXT) unix/rmprq.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	win95/microsft/ruletab.$(OBJEXT)
 am_dmake_OBJECTS = infer.$(OBJEXT) make.$(OBJEXT) stat.$(OBJEXT) \
 	expand.$(OBJEXT) dmstring.$(OBJEXT) hash.$(OBJEXT) \
@@ -404,10 +402,6 @@ msdos/arlib.$(OBJEXT): msdos/$(am__dirstamp) \
 	msdos/$(DEPDIR)/$(am__dirstamp)
 msdos/dirbrk.$(OBJEXT): msdos/$(am__dirstamp) \
 	msdos/$(DEPDIR)/$(am__dirstamp)
-msdos/runargv.$(OBJEXT): msdos/$(am__dirstamp) \
-	msdos/$(DEPDIR)/$(am__dirstamp)
-msdos/rmprq.$(OBJEXT): msdos/$(am__dirstamp) \
-	msdos/$(DEPDIR)/$(am__dirstamp)
 win95/microsft/$(am__dirstamp):
 	@$(mkdir_p) win95/microsft
 	@: > win95/microsft/$(am__dirstamp)
@@ -426,8 +420,6 @@ mostlyclean-compile:
 	-rm -f msdos/arlib.$(OBJEXT)
 	-rm -f msdos/dirbrk.$(OBJEXT)
 	-rm -f msdos/dstrlwr.$(OBJEXT)
-	-rm -f msdos/rmprq.$(OBJEXT)
-	-rm -f msdos/runargv.$(OBJEXT)
 	-rm -f unix/arlib.$(OBJEXT)
 	-rm -f unix/dcache.$(OBJEXT)
 	-rm -f unix/dirbrk.$(OBJEXT)
@@ -466,8 +458,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/arlib.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/dirbrk.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/dstrlwr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/rmprq.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@msdos/$(DEPDIR)/runargv.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/arlib.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/dcache.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@unix/$(DEPDIR)/dirbrk.Po@am__quote@
