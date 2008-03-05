@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
 #endif
+#include <svtools/syslocale.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -349,10 +350,8 @@ OEvoabFolderList::OEvoabFolderList(OEvoabConnection* _pConnection)
 // -----------------------------------------------------------------------------
 void OEvoabFolderList::construct()
 {
-    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = MsLangId::convertIsoStringToLanguage(comphelper::getString(aValue),'-');
-
-    ::com::sun::star::lang::Locale aAppLocale(MsLangId::convertLanguageToLocale(eLanguage));
+    SvtSysLocale aLocale;
+    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLocaleDataPtr()->getLocale());
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
