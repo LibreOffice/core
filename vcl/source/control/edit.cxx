@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:41:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1307,7 +1307,9 @@ void Edit::ImplAlign()
         }
         else
         {
-            if ( mnXOffset < nMinXOffset )
+            if( nTextWidth < nOutWidth )
+                mnXOffset = nMinXOffset;
+            else if ( mnXOffset < nMinXOffset )
                 mnXOffset = nMinXOffset;
         }
     }
