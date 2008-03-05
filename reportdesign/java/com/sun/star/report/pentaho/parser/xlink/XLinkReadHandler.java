@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLinkReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.xlink;
 
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import org.jfree.xmlns.parser.AbstractXmlReadHandler;
 import org.xml.sax.Attributes;
@@ -50,57 +47,58 @@ import org.xml.sax.SAXException;
  */
 public class XLinkReadHandler extends AbstractXmlReadHandler
 {
-  private String uri;
-  private String type;
-  private String show;
-  private String actuate;
 
-  public XLinkReadHandler()
-  {
-  }
+    private String uri;
+    private String type;
+    private String show;
+    private String actuate;
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    uri = attrs.getValue(OfficeNamespaces.XLINK_NS, "uri");
-    type = attrs.getValue(OfficeNamespaces.XLINK_NS, "type");
-    show = attrs.getValue(OfficeNamespaces.XLINK_NS, "show");
-    actuate = attrs.getValue(OfficeNamespaces.XLINK_NS, "actuate");
-  }
+    public XLinkReadHandler()
+    {
+    }
 
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject() throws SAXException
-  {
-    return uri;
-  }
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs) throws SAXException
+    {
+        uri = attrs.getValue(OfficeNamespaces.XLINK_NS, "uri");
+        type = attrs.getValue(OfficeNamespaces.XLINK_NS, "type");
+        show = attrs.getValue(OfficeNamespaces.XLINK_NS, "show");
+        actuate = attrs.getValue(OfficeNamespaces.XLINK_NS, "actuate");
+    }
 
-  public String getUri()
-  {
-    return uri;
-  }
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject() throws SAXException
+    {
+        return uri;
+    }
 
-  public String getType()
-  {
-    return type;
-  }
+    public String getUri()
+    {
+        return uri;
+    }
 
-  public String getShow()
-  {
-    return show;
-  }
+    public String getType()
+    {
+        return type;
+    }
 
-  public String getActuate()
-  {
-    return actuate;
-  }
+    public String getShow()
+    {
+        return show;
+    }
+
+    public String getActuate()
+    {
+        return actuate;
+    }
 }
