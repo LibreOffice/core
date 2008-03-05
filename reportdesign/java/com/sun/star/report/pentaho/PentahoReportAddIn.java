@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PentahoReportAddIn.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho;
 
 import com.sun.star.report.ReportAddIn;
@@ -48,27 +46,24 @@ import com.sun.star.report.pentaho.expressions.SumExpression;
  */
 public class PentahoReportAddIn implements ReportAddIn
 {
-  public PentahoReportAddIn()
-  {
-  }
 
-  public ReportExpression createExpression(int expression)
-  {
-    if (expression == 0)
+    public PentahoReportAddIn()
     {
-      return new SumExpression();
     }
-    return null;
-  }
 
-  public int getExpressionCount()
-  {
-    return 1;
-  }
+    public ReportExpression createExpression(int expression)
+    {
+        return (expression == 0) ? new SumExpression() : null;
+    }
 
-  public ReportExpressionMetaData getMetaData(int expression)
-  {
-    // todo implement me
-    return null;
-  }
+    public int getExpressionCount()
+    {
+        return 1;
+    }
+
+    public ReportExpressionMetaData getMetaData(int expression)
+    {
+        // todo implement me
+        return null;
+    }
 }
