@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XChartTypeTemplate.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:00:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         template.</p>
 
         <p>Ideally a <member>matchesTemplate</member> call for the
-        given diagram should return </TRUE> before this method is
+        given diagram should return <TRUE/> before this method is
         called.</p>
 
         @param xDataSource
