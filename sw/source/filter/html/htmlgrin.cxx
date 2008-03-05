@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:44:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,9 @@
 #endif
 #ifndef _SWHTML_HXX
 #include <swhtml.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 using namespace ::com::sun::star;
