@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:49:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,8 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     // get the sheet names from the document
 
-    Reference<XSpreadsheetDocument> xDoc = ((OCalcConnection*)m_pConnection)->getDoc();
+    OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
+    Reference<XSpreadsheetDocument> xDoc = aDocHodler.getDoc();
     if ( !xDoc.is() )
         throw SQLException();
     Reference<XSpreadsheets> xSheets = xDoc->getSheets();
