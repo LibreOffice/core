@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:50:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1924,7 +1924,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
 
 // -----------------------------------------------------------------------
 
-static void ImplInvalidateOutermostBorder( Window* pWin )
+void Edit::ImplInvalidateOutermostBorder( Window* pWin )
 {
     // allow control to show focused state
     Window *pInvalWin = pWin, *pBorder = pWin;
@@ -2413,6 +2413,15 @@ void Edit::Modify()
 
         // #i13677# notify edit listeners about caret position change
         ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+
+        // FIXME: this is currently only on aqua
+        // check for other platforms that need similar handling
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+            IsNativeWidgetEnabled() &&
+            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+        {
+            ImplInvalidateOutermostBorder( this );
+        }
     }
 }
 
