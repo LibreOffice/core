@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportHelperImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:30:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,15 @@
 #ifndef INCLUDED_REPORTHELPERIMPL_HXX
 #define INCLUDED_REPORTHELPERIMPL_HXX
 // ::com::sun::star::report::XReportComponent:
-#define REPORTCOMPONENT_IMPL3(clazz) \
+#define REPORTCOMPONENT_IMPL3(clazz,arg) \
 ::rtl::OUString SAL_CALL clazz::getName() throw (uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return m_aProps.aComponent.m_sName; \
+    return (arg).m_sName; \
 } \
 void SAL_CALL clazz::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException,beans::PropertyVetoException) \
 { \
-    set(PROPERTY_NAME,_name,m_aProps.aComponent.m_sName); \
+    set(PROPERTY_NAME,_name,(arg).m_sName); \
 } \
 ::sal_Int32 SAL_CALL clazz::getHeight() throw (uno::RuntimeException) \
 { \
@@ -92,37 +92,77 @@ uno::Reference< report::XSection > SAL_CALL clazz::getSection() throw (uno::Runt
     return lcl_getSection(xParent); \
 }
 
-#define REPORTCOMPONENT_IMPL(clazz) \
-REPORTCOMPONENT_IMPL3(clazz)\
+#define REPORTCOMPONENT_IMPL(clazz,arg) \
+REPORTCOMPONENT_IMPL3(clazz,arg)\
 ::sal_Bool SAL_CALL clazz::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return m_aProps.aComponent.m_bPrintRepeatedValues; \
+    return (arg).m_bPrintRepeatedValues; \
 } \
 void SAL_CALL clazz::setPrintRepeatedValues( ::sal_Bool _printrepeatedvalues ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
-    set(PROPERTY_PRINTREPEATEDVALUES,_printrepeatedvalues,m_aProps.aComponent.m_bPrintRepeatedValues); \
+    set(PROPERTY_PRINTREPEATEDVALUES,_printrepeatedvalues,(arg).m_bPrintRepeatedValues); \
 }
 
-#define REPORTCOMPONENT_IMPL2(clazz) \
+#define REPORTCOMPONENT_IMPL2(clazz,arg) \
 ::sal_Int16  SAL_CALL clazz::getControlBorder() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return m_aProps.aComponent.m_nBorder; \
+    return (arg).m_nBorder; \
 } \
 void SAL_CALL clazz::setControlBorder( ::sal_Int16 _border ) throw (uno::RuntimeException,lang::IllegalArgumentException,beans::UnknownPropertyException)\
 { \
-    set(PROPERTY_CONTROLBORDER,_border,m_aProps.aComponent.m_nBorder); \
+    set(PROPERTY_CONTROLBORDER,_border,(arg).m_nBorder); \
 } \
 ::sal_Int32 SAL_CALL clazz::getControlBorderColor() throw (beans::UnknownPropertyException,uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return m_aProps.aComponent.m_nBorderColor; \
+    return (arg).m_nBorderColor; \
 } \
 void SAL_CALL clazz::setControlBorderColor( ::sal_Int32 _bordercolor ) throw (uno::RuntimeException, lang::IllegalArgumentException, beans::UnknownPropertyException) \
 { \
-    set(PROPERTY_CONTROLBORDERCOLOR,_bordercolor,m_aProps.aComponent.m_nBorderColor); \
+    set(PROPERTY_CONTROLBORDERCOLOR,_bordercolor,(arg).m_nBorderColor); \
+}
+
+#define REPORTCOMPONENT_MASTERDETAIL(clazz,arg) \
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    return (arg).m_aMasterFields; \
 } \
+void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    set(PROPERTY_MASTERFIELDS,_masterfields,(arg).m_aMasterFields); \
+} \
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    return (arg).m_aDetailFields; \
+} \
+void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    set(PROPERTY_DETAILFIELDS,_detailfields,(arg).m_aDetailFields); \
+}
+
+#define REPORTCOMPONENT_NOMASTERDETAIL(clazz) \
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
+{ \
+    throw ::com::sun::star::beans::UnknownPropertyException();\
+} \
+void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    throw ::com::sun::star::beans::UnknownPropertyException();\
+} \
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    throw ::com::sun::star::beans::UnknownPropertyException();\
+} \
+void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >&  ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+{ \
+    throw ::com::sun::star::beans::UnknownPropertyException();\
+}
 
 // ::com::sun::star::report::XReportControlFormat:
 #define REPORTCONTROLFORMAT_IMPL1(clazz,varName)  \
