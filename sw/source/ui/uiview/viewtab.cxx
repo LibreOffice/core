@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:33:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,7 +624,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
         // Default-Tab an Pos 0
         SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
-        rSh.GetAttr( aSet );
+        rSh.GetCurAttr( aSet );
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)aSet.Get(RES_LR_SPACE);
 
         if ( rLR.GetTxtFirstLineOfst() < 0 )
@@ -680,7 +680,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             // --> FME 2005-02-22 #i42922# Mouse move of numbering label
             // has to consider the left indent of the paragraph
             SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
-            rSh.GetAttr( aSet );
+            rSh.GetCurAttr( aSet );
             const SvxLRSpaceItem& rLR =
                     static_cast<const SvxLRSpaceItem&>(aSet.Get(RES_LR_SPACE));
             // <--
@@ -706,7 +706,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         {
             SfxItemSet aSet( GetPool(), RES_PARATR_TABSTOP, RES_PARATR_TABSTOP );
 
-            rSh.GetAttr( aSet );
+            rSh.GetCurAttr( aSet );
             const SvxTabStopItem&  rTabStops = (const SvxTabStopItem&)aSet.Get(RES_PARATR_TABSTOP);
 
             // Haben wir einen Tab an Stelle Null
@@ -1004,7 +1004,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     SfxItemSet aCoreSet( GetPool(), RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
                                     RES_LR_SPACE,        RES_UL_SPACE, 0 );
-    rSh.GetAttr( aCoreSet );
+    // --> OD 2008-01-17 #newlistlevelattrs#
+    // get also the list level indent values merged as LR-SPACE item, if needed.
+    rSh.GetCurAttr( aCoreSet, true );
+    // <--
     SelectionType nSelType = rSh.GetSelectionType();
 
     SfxWhichIter aIter( rSet );
@@ -1137,7 +1140,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                  )
                 rSet.DisableItem( nWhich );
             else
-            {   SvxTabStopItem aTabStops((const SvxTabStopItem&)
+            {
+                SvxTabStopItem aTabStops((const SvxTabStopItem&)
                                             aCoreSet.Get( RES_PARATR_TABSTOP ));
 
                 const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
@@ -1229,7 +1233,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SfxItemSet aCoreSet1( GetPool(),
                                                 RES_BOX, RES_BOX,
                                                 0 );
-                        rSh.GetAttr( aCoreSet1 );
+                        rSh.GetCurAttr( aCoreSet1 );
                         const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet1.Get(RES_BOX);
                         aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
                         aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
@@ -1258,7 +1262,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SfxItemSet aCoreSet1( GetPool(),
                                             RES_BOX, RES_BOX,
                                             0 );
-                    rSh.GetAttr( aCoreSet1 );
+                    rSh.GetCurAttr( aCoreSet1 );
                     const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet1.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
                     aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
@@ -1300,7 +1304,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SfxItemSet aCoreSetTmp( GetPool(),
                                             RES_BOX, RES_BOX,
                                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
-                    rSh.GetAttr( aCoreSetTmp );
+                    rSh.GetCurAttr( aCoreSetTmp );
                     const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSetTmp.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
                     aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
