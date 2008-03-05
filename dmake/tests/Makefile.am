@@ -15,7 +15,7 @@ TESTS = infra-0 function_macros-1 function_macros-2 function_macros-3 \
         targets-7 targets-8 targets-9 targets-10 targets-11 targets-12 \
         targets-13 targets-14 targets-15 targets-16 targets-17 targets-18 \
         targets-19 targets-20 targets-21 targets-22 targets-23 targets-24 \
-        targets-25 targets-26 targets-27 targets-28 targets-29
+        targets-25 targets-26 targets-27 targets-28 targets-29 targets-30
 
 TESTS_ENVIRONMENT = DMAKEPROG="../dmake"
 
