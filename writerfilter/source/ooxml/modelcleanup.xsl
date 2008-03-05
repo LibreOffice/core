@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelcleanup.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:13:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
       <xsl:for-each select=".//rng:value">
         <xsl:element name="value">
           <xsl:attribute name="name">
-            <xsl:value-of select="."/>
+            <xsl:value-of select="translate(., '-+ ,', 'mp__')"/>
           </xsl:attribute>
           <xsl:attribute name="tokenid">
             <xsl:text>ooxml:Value_</xsl:text>
@@ -85,7 +85,7 @@
             <xsl:text>_</xsl:text>
             <xsl:value-of select="$definename"/>
             <xsl:text>_</xsl:text>
-            <xsl:value-of select="translate(., '-+', 'mp')"/>
+            <xsl:value-of select="translate(., '-+ ,', 'mp__')"/>
           </xsl:attribute>
           <xsl:value-of select="."/>
         </xsl:element>
@@ -188,17 +188,14 @@
   </xsl:template>
 
   <xsl:template match="fasttoken">
-    <fasttoken>
-      <xsl:for-each select="@*">
-        <xsl:copy-of select="."/>
-      </xsl:for-each>
-    </fasttoken>
+    <xsl:copy-of select="."/>
   </xsl:template>
 
   <xsl:template match="/">
     <model>
       <xsl:apply-templates select=".//namespace-alias"/>
       <xsl:apply-templates select=".//token"/>
+      <xsl:apply-templates select=".//fasttoken"/>
       <xsl:apply-templates select=".//namespace"/>
     </model>
   </xsl:template>
