@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:24:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@
 #ifndef RPTXML_DBLOADER2_HXX
 #include "dbloader2.hxx"
 #endif
-
+#include "xmlExportDocumentHandler.hxx"
+#include "xmlImportDocumentHandler.hxx"
 
 
 /********************************************************************************************/
@@ -89,6 +90,10 @@ cppu::ImplementationEntry entries[] = {
     { &ORptContentImportHelper::create, &ORptContentImportHelper::getImplementationName_Static, &ORptContentImportHelper::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { &ORptStylesImportHelper::create, &ORptStylesImportHelper::getImplementationName_Static, &ORptStylesImportHelper::getSupportedServiceNames_Static,
+        &cppu::createSingleComponentFactory, 0, 0 },
+    { &ExportDocumentHandler::create, &ExportDocumentHandler::getImplementationName_Static, &ExportDocumentHandler::getSupportedServiceNames_static,
+        &cppu::createSingleComponentFactory, 0, 0 },
+    { &ImportDocumentHandler::create, &ImportDocumentHandler::getImplementationName_Static, &ImportDocumentHandler::getSupportedServiceNames_static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
