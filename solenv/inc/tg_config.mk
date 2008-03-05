@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:45:45 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:33:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,9 @@ PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 XSLTPACKAGEDIR*:=$(subst,.,/ $(PACKAGE))
 XCSROOTURL!:=$(ABSXCSROOT)
 .IF $(GUI)==WNT
-XCSROOTURL!:=$(shell @+$(WRAPCMD) echo $(XCSROOTURL))
 XCSROOTURL!:=file:///$(subst,\,/ $(XCSROOTURL))
 .ENDIF
-SYSXSLDIR*:=$(shell @+$(WRAPCMD) echo $(XSLDIR)$/)
+SYSXSLDIR*:=$(XSLDIR)$/
 
 #
 # --- XCS ---
@@ -131,7 +130,7 @@ $(XCU_LANG) : localize.sdf
 
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
     -$(MKDIRHIER) $(@:d)
-    $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
+    $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
 .IF "$(XCU_LANG)" != ""
 $(XCU_LANG) : $(XSLDIR)$/alllang.xsl
