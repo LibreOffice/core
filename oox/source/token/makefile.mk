@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2008-01-24 16:09:18 $
+#   last change: $Author: kz $ $Date: 2008-03-05 18:54:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,12 +54,12 @@ SLOFILES =	\
 
 .INCLUDE :  target.mk
 
-$(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf : tokens.txt gentoken.pl
-        $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf
+$(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf : tokens.txt gentoken.pl
+        $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf
 
-$(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf
-        gperf --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.cxx
+$(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf
+        gperf --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.inc
 
-$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
+$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx
 
 $(INCCOM)$/tokens.gperf : $(INCCOM)$/tokens.hxx
