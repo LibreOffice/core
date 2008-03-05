@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.11 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:40:19 $
+-- $Revision: 1.12 $
+-- last change: $Author: kz $ $Date: 2008-03-05 18:29:19 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -166,7 +166,7 @@ gen_path_list_string(LISTSTRINGPTR s)/*
       len=cell->len;
 #else
       /* For cygwin with .WINPATH set the lenght of the converted
-       * filepaths might me longer. Extra checking is needed ... */
+       * filepaths might be longer. Extra checking is needed ... */
       tpath = DO_WINPATH(cell->datum);
       if( tpath == cell->datum ) {
      len=cell->len;
@@ -174,26 +174,29 @@ gen_path_list_string(LISTSTRINGPTR s)/*
       else {
      /* ... but only if DO_WINPATH() did something. */
      len = strlen(tpath);
-
-     if( len > slen_rest ) {
-        /* We need more memory. As DOS paths are usually shorter than the
-         * original cygwin POSIX paths (exception mounted paths) this should
-         * rarely happen. */
-        int p_offset = p - result;
-        /* Get more than needed. */
-        slen += slen + len-slen_rest + 128;
-        if((result = realloc( result, (unsigned)(slen*sizeof(char)) ) ) == NULL)
-           No_ram();
-        p = result + p_offset;
-     }
       }
-
-      slen_rest -= len;
+      if( len >= slen_rest ) {
+     /* We need more memory. As DOS paths are usually shorter than the
+      * original cygwin POSIX paths (exception mounted paths) this should
+      * rarely happen. */
+     int p_offset = p - result;
+     /* Get more than needed. */
+     slen = slen + len - slen_rest + 128;
+     if((result = realloc( result, slen ) ) == NULL)
+        No_ram();
+     p = result + p_offset;
+      }
 #endif
 
       memcpy((void *)p, (void *)tpath, len);
       p += len;
       *p++ = ' ';
+
+#if defined(__CYGWIN__)
+      /* slen_rest is only used in the cygwin / .WINPATH case. */
+      slen_rest = slen - (p - result);
+#endif
+
       next = cell->next;
       free_cell(cell);
    }
@@ -583,7 +586,8 @@ CELLPTR setdirroot;
       if( cp->ce_attr & A_LIBRARY )
          tcp->ce_attr ^= A_LIBRARYM;
 
-      /* Return on error or if Make() is still running and A_SEQ is set. */
+      /* Return on error or if Make() is still running and A_SEQ is set.
+       * (All F_MULTI targets have the A_SEQ attribute.)  */
       if( rval == -1 || (seq && (rval==1)) )
      goto stop_making_it;
 
@@ -631,6 +635,11 @@ CELLPTR setdirroot;
             list_add(&imm_list, name);
       }
    }
+
+   /* If we are building a F_MULTI target inherit the time from
+    * its children. */
+   if( (cp->ce_flag & F_MULTI) )
+      cp->ce_time = otime;
 
    /* All prerequisites are made, now make the current target. */
 
