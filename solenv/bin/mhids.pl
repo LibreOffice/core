@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:48:16 $
+#   last change: $Author: kz $ $Date: 2008-03-05 16:25:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ my $outobj_flag;
 my $objext;
 my $preprocess_flag; # preprocess to stdout
 
-my $wrap_command = "";
 my $no_hid_files;
 
 sub cleandie
@@ -119,11 +118,6 @@ $defs = join " ",@ARGV if ($#ARGV);
 
 if ( !defined $prjname ) { die "ERROR - check usage\n"; }
 
-if ( $ENV{WRAPCMD} ) {
-    $wrap_command = $ENV{WRAPCMD};
-    $wrap_command .= " ";
-}
-
 if ( $ENV{NO_HID_FILES} ) {
     $no_hid_files = $ENV{"NO_HID_FILES"};
 }
@@ -182,15 +176,15 @@ if ( defined $ENV{"NO_HID_FILES"} ) {
 #call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
 
 print  "hidc $filename ${shell_workfile}.c1 $prjname \n";
-$ret = system "$ENV{WRAPCMD} hidc $filename ${shell_workfile}.c1 $prjname";
+$ret = system "hidc $filename ${shell_workfile}.c1 $prjname";
 if ( $ret ) {
     push @cleanuplist, ".c1";
     cleandie("ERROR - calling \"hidc\" failed");
 }
 push @cleanuplist, ".c1";
 
-print         "$wrap_command$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n";
-$ret = system "$wrap_command$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
+print         "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2\n";
+$ret = system "$compiler $solarincludes $defs $preprocess_flag ${shell_workfile}.c1 > ${shell_workfile}.c2";
 if ( $ret ) {
     push @cleanuplist, ".c2";
     cleandie("ERROR - calling compiler for preprocessing failed");
@@ -232,8 +226,8 @@ if ( $outobj_flag ne "" )
 {
     $outobj_param = "$outobj_flag${shell_workfile}$objext";
 }
-print         "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n";
-$ret = system "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
+print         "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n";
+$ret = system "$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
 if ( $ret ) {
     push @cleanuplist, "$appext";
     cleandie("ERROR - compiling $workfile.c failed");
