@@ -19,6 +19,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\stclient_wrapper.exe %_DEST%\bin%_EXT%\stclient_wrapper.exe
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin%_EXT%\patchlist.txt
+..\source\win32\desktophelper.txt %_DEST%\bin%_EXT%\desktophelper.txt
 ..\source\win32\get_retval.bat %_DEST%\bin%_EXT%\get_retval.bat
 ..\source\win32\nsis\downloadtemplate.nsi %_DEST%\bin%_EXT%\downloadtemplate.nsi
 ..\source\win32\nsis\*.ico %_DEST%\bin%_EXT%\*.ico
