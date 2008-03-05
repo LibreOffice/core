@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
@@ -64,6 +65,17 @@
 
 namespace comphelper
 {
+    class EmbeddedObjectContainer;
+    /** Helper interface to give access to some common object which replace the SfxObjectShell
+    */
+    class SAL_NO_VTABLE IEmbeddedHelper
+    {
+    public:
+        virtual EmbeddedObjectContainer& getEmbeddedObjectContainer() const = 0;
+        virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const = 0;
+        virtual bool isEnableSetModified() const = 0;
+    };
 
 struct EmbedImpl;
 class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
@@ -175,6 +187,23 @@ public:
                                                     const ::rtl::OUString& aTargetName );
 
     void                CloseEmbeddedObjects();
+    sal_Bool            StoreChildren(sal_Bool _bOasisFormat,sal_Bool _bObjectsOnly);
+    sal_Bool            StoreAsChildren( sal_Bool _bOasisFormat
+                                        ,sal_Bool _bCreateEmbedded
+                                        ,const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& _xStorage);
+
+    static com::sun::star::uno::Reference< com::sun::star::io::XInputStream > GetGraphicReplacementStream(
+                                            sal_Int64 nViewAspect,
+                                            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&,
+                                            ::rtl::OUString* pMediaType );
+
+    /** call setPersistentEntry for each embedded object in the container
+    *
+    * \param _xStorage The storeage where to store the objects.
+    * \param _bClearModifedFlag If <TRUE/> then the modifed flag will be set to <FALSE/> otherwise nothing happen.
+    * \return <FALSE/> if no error occured, otherwise <TRUE/>.
+    */
+    sal_Bool             SetPersistentEntries(const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
 };
 
 }
