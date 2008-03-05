@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dumperbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,10 @@
 
 #include "oox/dump/dumperbase.hxx"
 
+#include <algorithm>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <osl/file.hxx>
-#include <osl/thread.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -100,6 +100,15 @@ sal_Int32 InputOutputHelper::getFileNamePos( const OUString& rFileUrl )
 {
     sal_Int32 nSepPos = rFileUrl.lastIndexOf( '/' );
     return (nSepPos < 0) ? 0 : (nSepPos + 1);
+}
+
+OUString InputOutputHelper::getFileNameExtension( const OUString& rFileUrl )
+{
+    sal_Int32 nNamePos = getFileNamePos( rFileUrl );
+    sal_Int32 nExtPos = rFileUrl.lastIndexOf( '.' );
+    if( nExtPos >= nNamePos )
+        return rFileUrl.copy( nExtPos + 1 );
+    return OUString();
 }
 
 Reference< XInputStream > InputOutputHelper::openInputStream( const OUString& rFileName )
@@ -1512,13 +1521,17 @@ void SharedConfigData::implProcessConfigItemStr(
 
 bool SharedConfigData::readConfigFile( const OUString& rFileUrl )
 {
-    bool bLoaded = false;
-    Reference< XTextInputStream > xTextInStrm =
-        InputOutputHelper::openTextInputStream( rFileUrl, CREATE_OUSTRING( "UTF-8" ) );
-    if( xTextInStrm.is() )
+    bool bLoaded = maConfigFiles.count( rFileUrl ) > 0;
+    if( !bLoaded )
     {
-        readConfigBlockContents( xTextInStrm );
-        bLoaded = true;
+        Reference< XTextInputStream > xTextInStrm =
+            InputOutputHelper::openTextInputStream( rFileUrl, CREATE_OUSTRING( "UTF-8" ) );
+        if( xTextInStrm.is() )
+        {
+            maConfigFiles.insert( rFileUrl );
+            readConfigBlockContents( xTextInStrm );
+            bLoaded = true;
+        }
     }
     return bLoaded;
 }
@@ -2673,37 +2686,152 @@ void InputStreamObject::implDump()
 }
 
 // ============================================================================
+// ============================================================================
 
-TextStreamObject::TextStreamObject( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm ) :
-    InputStreamObject( rParent, rOutFileName, xStrm )
+TextStreamObject::TextStreamObject( const ObjectBase& rParent,
+        const OUString& rOutFileName, BinaryInputStreamRef xStrm, rtl_TextEncoding eTextEnc ) :
+    InputStreamObject( rParent, rOutFileName, xStrm ),
+    meTextEnc( eTextEnc )
 {
 }
 
 void TextStreamObject::implDump()
 {
-    dumpTextStream( osl_getThreadTextEncoding() );
-}
-
-void TextStreamObject::dumpTextStream( rtl_TextEncoding eTextEnc, bool bShowLines )
-{
-    Output& rOut = out();
-    TableGuard aTabGuard( rOut, bShowLines ? 8 : 0 );
-
-    const sal_Char* pcTextEnc = rtl_getBestUnixCharsetFromTextEncoding( eTextEnc );
+    const sal_Char* pcTextEnc = rtl_getBestMimeCharsetFromTextEncoding( meTextEnc );
     OUString aEncoding = OUString::createFromAscii( pcTextEnc ? pcTextEnc : "UTF-8" );
     Reference< XTextInputStream > xTextStrm = InputOutputHelper::openTextInputStream( getStream().getXInputStream(), aEncoding );
-    if( xTextStrm.is() )
+    if( xTextStrm.is() ) try
     {
         sal_uInt32 nLine = 0;
         while( !xTextStrm->isEOF() )
+            implDumpLine( xTextStrm->readLine(), ++nLine );
+    }
+    catch( Exception& )
+    {
+        writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
+    }
+    out().emptyLine();
+}
+
+void TextStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 nLine )
+{
+    Output& rOut = out();
+    TableGuard aTabGuard( rOut, 8 );
+    rOut.writeDec( nLine, 6 );
+    rOut.tab();
+    rOut.writeString( rLine );
+    rOut.newLine();
+}
+
+// ============================================================================
+
+XmlStreamObject::XmlStreamObject( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm ) :
+    TextStreamObject( rParent, rOutFileName, xStrm, RTL_TEXTENCODING_UTF8 )
+{
+}
+
+void XmlStreamObject::implDump()
+{
+    maIncompleteLine = OUString();
+    TextStreamObject::implDump();
+    if( maIncompleteLine.getLength() > 0 )
+    {
+        out().resetIndent();
+        out().writeString( maIncompleteLine );
+        out().emptyLine();
+        writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
+    }
+}
+
+void XmlStreamObject::implDumpLine( const OUString& rLine, sal_uInt32 )
+{
+    // build input line from cached incomplete element and new text data
+    OUStringBuffer aLine;
+    if( maIncompleteLine.getLength() > 0 )
+        aLine.append( maIncompleteLine ).append( sal_Unicode( ' ' ) );
+    aLine.append( rLine );
+    maIncompleteLine = OUString();
+
+    Output& rOut = out();
+    if( aLine.getLength() == 0 )
+    {
+        rOut.newLine();
+        return;
+    }
+
+    const sal_Unicode* pcPos = aLine.getStr();
+    const sal_Unicode* pcEnd = pcPos + aLine.getLength();
+    while( pcPos < pcEnd )
+    {
+        OUStringBuffer aOutLine;
+        bool bIsStartElement = false;
+        bool bIsComplElement = false;
+        bool bIsEndElement = false;
+
+        /*  check for start element at beginning of the line - pcEnd and thus (pcPos+1)
+            are dereferenceable, because OUStringBuffer::getStr is null-terminated. */
+        if( (*pcPos == '<') && (*(pcPos + 1) != '/') )
         {
-            rOut.writeDec( ++nLine, 6 );
-            rOut.tab();
-            try { rOut.writeString( xTextStrm->readLine() ); } catch( Exception& ) {}
+            const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
+            if( pcElementEnd == pcEnd )
+            {
+                // incomplete start element
+                maIncompleteLine = OUString( pcPos, static_cast< sal_Int32 >( pcEnd - pcPos ) );
+                pcPos = pcEnd;
+            }
+            else
+            {
+                bIsComplElement = (*(pcPos + 1) == '?') || (*(pcElementEnd - 1) == '/');
+                bIsStartElement = !bIsComplElement;
+                ++pcElementEnd;
+                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcElementEnd - pcPos ) );
+                pcPos = pcElementEnd;
+            }
+        }
+
+        // check for following element text
+        if( !bIsComplElement && (pcPos < pcEnd) )
+        {
+            const sal_Unicode* pcElementStart = ::std::find( pcPos, pcEnd, '<' );
+            // append text between elements
+            if( pcPos < pcElementStart )
+            {
+                OUString aText( pcPos, static_cast< sal_Int32 >( pcElementStart - pcPos ) );
+                if( aText.trim().getLength() > 0 )
+                    aOutLine.append( aText );
+                pcPos = pcElementStart;
+            }
+        }
+
+        // check for stand-alone or following end element
+        if( !bIsComplElement && (pcPos < pcEnd) && (*(pcPos + 1) == '/') )
+        {
+            const sal_Unicode* pcElementEnd = ::std::find( pcPos, pcEnd, '>' );
+            if( pcElementEnd == pcEnd )
+            {
+                // incomplete end element
+                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcEnd - pcPos ) );
+                maIncompleteLine = aOutLine.makeStringAndClear();
+                pcPos = pcEnd;
+            }
+            else
+            {
+                bIsEndElement = true;
+                ++pcElementEnd;
+                aOutLine.append( pcPos, static_cast< sal_Int32 >( pcElementEnd - pcPos ) );
+                pcPos = pcElementEnd;
+            }
+        }
+
+        // flush output line
+        if( maIncompleteLine.getLength() == 0 )
+        {
+            if( !bIsStartElement && bIsEndElement ) rOut.decIndent();
+            rOut.writeString( aOutLine.makeStringAndClear() );
             rOut.newLine();
+            if( bIsStartElement && !bIsEndElement ) rOut.incIndent();
         }
     }
-    rOut.emptyLine();
 }
 
 // ============================================================================
