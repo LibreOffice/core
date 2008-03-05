@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:25:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:04:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,7 @@ namespace dbaui
         sal_Bool                    bEnabled;
 
         optional< bool >            bChecked;
+        optional< bool >            bInvisible;
         ::com::sun::star::uno::Any  aValue;
         optional< ::rtl::OUString > sTitle;
 
