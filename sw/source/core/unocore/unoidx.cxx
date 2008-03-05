@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:27:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
 #include "precompiled_sw.hxx"
 
 
-
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
