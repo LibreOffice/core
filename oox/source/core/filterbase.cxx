@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <rtl/uri.hxx>
 #include <comphelper/mediadescriptor.hxx>
 
 using ::rtl::OUString;
@@ -146,9 +147,68 @@ const OUString& FilterBase::getFileUrl() const
     return mxImpl->maFileUrl;
 }
 
+namespace {
+
+inline bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
+{
+    return
+        (rUrl.getLength() >= nPos + 3) &&
+        ((('A' <= rUrl[ nPos ]) && (rUrl[ nPos ] <= 'Z')) || (('a' <= rUrl[ nPos ]) && (rUrl[ nPos ] <= 'z'))) &&
+        (rUrl[ nPos + 1 ] == ':') &&
+        (rUrl[ nPos + 2 ] == '/');
+}
+
+} // namespace
+
 OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
 {
-    return rUrl;
+    // handle some special cases before calling ::rtl::Uri::convertRelToAbs()
+
+    const OUString aFileSchema = CREATE_OUSTRING( "file:" );
+    const OUString aFilePrefix = CREATE_OUSTRING( "file:///" );
+    const sal_Int32 nFilePrefixLen = aFilePrefix.getLength();
+    const OUString aUncPrefix = CREATE_OUSTRING( "//" );
+
+    /*  (1) convert all backslashes to slashes. */
+    OUString aUrl = rUrl.replace( '\\', '/' );
+
+    /*  (2) add 'file:///' to absolute Windows paths, e.g. convert
+        'C:/path/file' to 'file:///c:/path/file'. */
+    if( lclIsDosDrive( aUrl ) )
+        return aFilePrefix + aUrl;
+
+    /*  (3) add 'file:' to UNC paths, e.g. convert '//server/path/file' to
+        'file://server/path/file'. */
+    if( aUrl.match( aUncPrefix ) )
+        return aFileSchema + aUrl;
+
+    /*  (4) remove additional slashes from UNC paths, e.g. convert
+        'file://///server/path/file' to 'file://server/path/file'. */
+    if( (aUrl.getLength() >= nFilePrefixLen + 2) &&
+        aUrl.match( aFilePrefix ) &&
+        aUrl.match( aUncPrefix, nFilePrefixLen ) )
+    {
+        return aFileSchema + aUrl.copy( nFilePrefixLen );
+    }
+
+    /*  (5) handle URLs relative to current drive, e.g. the URL '/path1/file1'
+        relative to the base URL 'file:///C:/path2/file2' does not result in
+        the expected 'file:///C:/path1/file1', but in 'file:///path1/file1'. */
+    if( (aUrl.getLength() >= 1) && (aUrl[ 0 ] == '/') &&
+        mxImpl->maFileUrl.match( aFilePrefix ) &&
+        lclIsDosDrive( mxImpl->maFileUrl, nFilePrefixLen ) )
+    {
+        return mxImpl->maFileUrl.copy( 0, nFilePrefixLen + 3 ) + aUrl.copy( 1 );
+    }
+
+    try
+    {
+        return ::rtl::Uri::convertRelToAbs( mxImpl->maFileUrl, aUrl );
+    }
+    catch( ::rtl::MalformedUriException& )
+    {
+    }
+    return aUrl;
 }
 
 StorageRef FilterBase::getStorage() const
