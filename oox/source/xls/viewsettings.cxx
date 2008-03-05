@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 19:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
-#include "oox/xls/ooxtokens.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
@@ -88,6 +87,9 @@ const sal_uInt16 OOBIN_SHEETVIEW_SHOWRULER      = 0x0080;
 const sal_uInt16 OOBIN_SHEETVIEW_SHOWOUTLINE    = 0x0100;
 const sal_uInt16 OOBIN_SHEETVIEW_DEFGRIDCOLOR   = 0x0200;
 const sal_uInt16 OOBIN_SHEETVIEW_SHOWWHITESPACE = 0x0400;
+
+const sal_uInt16 OOBIN_CHARTSHEETVIEW_SELECTED  = 0x0001;
+const sal_uInt16 OOBIN_CHARTSHEETVIEW_ZOOMTOFIT = 0x0002;
 
 const sal_uInt8 OOBIN_WBVIEW_HIDDEN             = 0x01;
 const sal_uInt8 OOBIN_WBVIEW_MINIMIZED          = 0x02;
@@ -227,7 +229,8 @@ OoxSheetViewData::OoxSheetViewData() :
     mbShowGrid( true ),
     mbShowHeadings( true ),
     mbShowZeros( true ),
-    mbShowOutline( true )
+    mbShowOutline( true ),
+    mbZoomToFit( false )
 {
 }
 
@@ -327,6 +330,15 @@ void SheetViewSettings::importSelection( const AttributeList& rAttribs )
     }
 }
 
+void SheetViewSettings::importChartSheetView( const AttributeList& rAttribs )
+{
+    OoxSheetViewData& rData = *createSheetViewData();
+    rData.mnWorkbookViewId = rAttribs.getToken( XML_workbookViewId, 0 );
+    rData.mnCurrentZoom    = rAttribs.getInteger( XML_zoomScale, 100 );
+    rData.mbSelected       = rAttribs.getBool( XML_tabSelected, false );
+    rData.mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
+}
+
 void SheetViewSettings::importSheetView( RecordInputStream& rStrm )
 {
     OoxSheetViewData& rData = *createSheetViewData();
@@ -392,6 +404,16 @@ void SheetViewSettings::importSelection( RecordInputStream& rStrm )
     }
 }
 
+void SheetViewSettings::importChartSheetView( RecordInputStream& rStrm )
+{
+    OoxSheetViewData& rData = *createSheetViewData();
+    sal_uInt16 nFlags;
+    rStrm >> nFlags >> rData.mnCurrentZoom >> rData.mnWorkbookViewId;
+
+    rData.mbSelected  = getFlag( nFlags, OOBIN_CHARTSHEETVIEW_SELECTED );
+    rData.mbZoomToFit = getFlag( nFlags, OOBIN_CHARTSHEETVIEW_ZOOMTOFIT );
+}
+
 void SheetViewSettings::importWindow2( BiffInputStream& rStrm )
 {
     OSL_ENSURE( maSheetDatas.empty(), "SheetViewSettings::importWindow2 - multiple WINDOW2 records" );
@@ -431,7 +453,7 @@ void SheetViewSettings::importWindow2( BiffInputStream& rStrm )
         {
             rData.maGridColor.importColorId( rStrm );
             // zoom data not included in chart sheets
-            if( rStrm.getRecLeft() >= 6 )
+            if( (getSheetType() != SHEETTYPE_CHARTSHEET) && (rStrm.getRecLeft() >= 6) )
             {
                 rStrm.skip( 2 );
                 sal_uInt16 nPageZoom, nNormalZoom;
@@ -502,12 +524,15 @@ void SheetViewSettings::importSelection( BiffInputStream& rStrm )
 
 void SheetViewSettings::finalizeImport()
 {
+    // special handling for chart sheets
+    bool bChartSheet = getSheetType() == SHEETTYPE_CHARTSHEET;
+
     // force creation of sheet view data to get the Excel defaults
     OoxSheetViewDataRef xData = maSheetDatas.empty() ? createSheetViewData() : maSheetDatas.front();
 
     // mirrored sheet (this is not a view setting in Calc)
     // #i59590# real life: Excel ignores mirror flag in chart sheets
-    if( xData->mbRightToLeft && (getSheetType() != SHEETTYPE_CHART) )
+    if( !bChartSheet && xData->mbRightToLeft )
     {
         PropertySet aPropSet( getXSpreadsheet() );
         aPropSet.setProperty( CREATE_OUSTRING( "TableLayout" ), ::com::sun::star::text::WritingMode2::RL_TB );
@@ -516,62 +541,74 @@ void SheetViewSettings::finalizeImport()
     // sheet selected (active sheet must be selected)
     bool bSelected = xData->mbSelected || (getSheetIndex() == getViewSettings().getActiveSheetIndex());
 
-    // current cursor position (selection not supported via API)
-    const OoxSheetSelectionData* pSelData = xData->getActiveSelectionData();
-    CellAddress aCursor = pSelData ? pSelData->maActiveCell : xData->maFirstPos;
+    // visible area and current cursor position (selection not supported via API)
+    CellAddress aFirstPos( getSheetIndex(), 0, 0 );
+    CellAddress aCursor( getSheetIndex(), 0, 0 );
+    if( !bChartSheet )
+    {
+        aFirstPos = xData->maFirstPos;
+        const OoxSheetSelectionData* pSelData = xData->getActiveSelectionData();
+        aCursor = pSelData ? pSelData->maActiveCell : xData->maFirstPos;
+    }
 
-    // freeze/split position
+    // freeze/split position default
     sal_Int16 nHSplitMode = API_SPLITMODE_NONE;
     sal_Int16 nVSplitMode = API_SPLITMODE_NONE;
     sal_Int32 nHSplitPos = 0;
     sal_Int32 nVSplitPos = 0;
-    if( (xData->mnPaneState == XML_frozen) || (xData->mnPaneState == XML_frozenSplit) )
-    {
-        /*  Frozen panes: handle split position as row/column positions.
-            #i35812# Excel uses number of visible rows/columns in the
-                frozen area (rows/columns scolled outside are not incuded),
-                Calc uses absolute position of first unfrozen row/column. */
-        const CellAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
-        if( (xData->mfSplitX >= 1.0) && (xData->maFirstPos.Column + xData->mfSplitX <= rMaxApiPos.Column) )
-            nHSplitPos = static_cast< sal_Int32 >( xData->maFirstPos.Column + xData->mfSplitX );
-        nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
-        if( (xData->mfSplitY >= 1.0) && (xData->maFirstPos.Row + xData->mfSplitY <= rMaxApiPos.Row) )
-            nVSplitPos = static_cast< sal_Int32 >( xData->maFirstPos.Row + xData->mfSplitY );
-        nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
-    }
-    else if( xData->mnPaneState == XML_split )
-    {
-        // split window: view settings API uses twips...
-        nHSplitPos = getLimitedValue< sal_Int32, double >( xData->mfSplitX + 0.5, 0, SAL_MAX_INT32 );
-        nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
-        nVSplitPos = getLimitedValue< sal_Int32, double >( xData->mfSplitY + 0.5, 0, SAL_MAX_INT32 );
-        nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
-    }
-
-    // active pane
+    // active pane default
     sal_Int16 nActivePane = API_SPLITPANE_BOTTOMLEFT;
-    switch( xData->mnActivePaneId )
+
+    if( !bChartSheet )
     {
-        // no horizontal split -> always use left panes
-        // no vertical split -> always use *bottom* panes
-        case XML_topLeft:
-            nActivePane = (nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT;
-        break;
-        case XML_topRight:
-            nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ?
-                ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT) :
-                ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMRIGHT : API_SPLITPANE_TOPRIGHT);
-        break;
-        case XML_bottomLeft:
-            nActivePane = API_SPLITPANE_BOTTOMLEFT;
-        break;
-        case XML_bottomRight:
-            nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_BOTTOMRIGHT;
-        break;
+        // freeze/split position
+        if( (xData->mnPaneState == XML_frozen) || (xData->mnPaneState == XML_frozenSplit) )
+        {
+            /*  Frozen panes: handle split position as row/column positions.
+                #i35812# Excel uses number of visible rows/columns in the
+                    frozen area (rows/columns scolled outside are not incuded),
+                    Calc uses absolute position of first unfrozen row/column. */
+            const CellAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
+            if( (xData->mfSplitX >= 1.0) && (xData->maFirstPos.Column + xData->mfSplitX <= rMaxApiPos.Column) )
+                nHSplitPos = static_cast< sal_Int32 >( xData->maFirstPos.Column + xData->mfSplitX );
+            nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
+            if( (xData->mfSplitY >= 1.0) && (xData->maFirstPos.Row + xData->mfSplitY <= rMaxApiPos.Row) )
+                nVSplitPos = static_cast< sal_Int32 >( xData->maFirstPos.Row + xData->mfSplitY );
+            nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
+        }
+        else if( xData->mnPaneState == XML_split )
+        {
+            // split window: view settings API uses twips...
+            nHSplitPos = getLimitedValue< sal_Int32, double >( xData->mfSplitX + 0.5, 0, SAL_MAX_INT32 );
+            nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
+            nVSplitPos = getLimitedValue< sal_Int32, double >( xData->mfSplitY + 0.5, 0, SAL_MAX_INT32 );
+            nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_SPLIT : API_SPLITMODE_NONE;
+        }
+
+        // active pane
+        switch( xData->mnActivePaneId )
+        {
+            // no horizontal split -> always use left panes
+            // no vertical split -> always use *bottom* panes
+            case XML_topLeft:
+                nActivePane = (nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT;
+            break;
+            case XML_topRight:
+                nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ?
+                    ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_TOPLEFT) :
+                    ((nVSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMRIGHT : API_SPLITPANE_TOPRIGHT);
+            break;
+            case XML_bottomLeft:
+                nActivePane = API_SPLITPANE_BOTTOMLEFT;
+            break;
+            case XML_bottomRight:
+                nActivePane = (nHSplitMode == API_SPLITMODE_NONE) ? API_SPLITPANE_BOTTOMLEFT : API_SPLITPANE_BOTTOMRIGHT;
+            break;
+        }
     }
 
     // automatic grid color
-    if( xData->mbDefGridColor )
+    if( bChartSheet || xData->mbDefGridColor )
         xData->maGridColor.set( XML_auto, 0 );
 
     // write the sheet view settings into the property sequence
@@ -585,15 +622,15 @@ void SheetViewSettings::finalizeImport()
         << nHSplitPos
         << nVSplitPos
         << nActivePane
-        << xData->maFirstPos.Column
-        << xData->maFirstPos.Row
+        << aFirstPos.Column
+        << aFirstPos.Row
         << xData->maSecondPos.Column
         << ((nVSplitPos > 0) ? xData->maSecondPos.Row : xData->maFirstPos.Row)
         << getStyles().getColor( xData->maGridColor, API_RGB_TRANSPARENT )
         << API_ZOOMTYPE_PERCENT
         << static_cast< sal_Int16 >( xData->getNormalZoom() )
         << static_cast< sal_Int16 >( xData->getPageBreakZoom() )
-        << xData->isPageBreakPreview()
+        << (!bChartSheet && xData->isPageBreakPreview())
         << xData->mbShowFormulas
         << xData->mbShowGrid
         << xData->mbShowHeadings
