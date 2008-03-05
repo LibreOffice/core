@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:46:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ ModalDialog RID_DLG_FORMLINKS
 
         WordBreak = TRUE;
 
-        Text [ en-US ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
+        Text [ en-US ] = "Sub forms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the sub form match which columns in the master form.";
     };
 
     FixedText FT_DETAIL_LABEL
@@ -154,20 +154,17 @@ ModalDialog RID_DLG_FORMLINKS
 
     String STR_DETAIL_FORM
     {
-        Text [ en-US ] = "Subform";
+        Text [ en-US ] = "Sub Form";
     };
 
     String STR_MASTER_FORM
     {
-        Text [ en-US ] = "Master form";
+        Text [ en-US ] = "Master Form";
     };
 
-    String STR_ERROR_RETRIEVING_MASTER_COLUMNS
+    String STR_ERROR_RETRIEVING_COLUMNS
     {
-        Text [ en-US ] = "The columns of the master form could not be retrieved.";
-    };
-    String STR_ERROR_RETRIEVING_DETAIL_COLUMNS
-    {
-        Text [ en-US ] = "The columns of the sub form could not be retrieved.";
+        Text [ en-US ] = "The columns of '#' could not be retrieved.";
+        Text [ x-comment ] ="# will be replace with a name.";
     };
 };
