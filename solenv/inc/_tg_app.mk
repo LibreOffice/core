@@ -110,11 +110,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(APP1LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP1LINKRES:b).rc
 .IF "$(APP1ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP1ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1ICON)" != ""
 .IF "$(APP1VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
@@ -312,11 +308,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(APP2LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP2LINKRES:b).rc
 .IF "$(APP2ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP2ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2ICON)" != ""
 .IF "$(APP2VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
@@ -514,11 +506,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(APP3LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP3LINKRES:b).rc
 .IF "$(APP3ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP3ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3ICON)" != ""
 .IF "$(APP3VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
@@ -716,11 +704,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(APP4LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP4LINKRES:b).rc
 .IF "$(APP4ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP4ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4ICON)" != ""
 .IF "$(APP4VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
@@ -918,11 +902,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(APP5LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP5LINKRES:b).rc
 .IF "$(APP5ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP5ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5ICON)" != ""
 .IF "$(APP5VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
@@ -1120,11 +1100,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(APP6LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP6LINKRES:b).rc
 .IF "$(APP6ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP6ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6ICON)" != ""
 .IF "$(APP6VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
@@ -1322,11 +1298,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(APP7LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP7LINKRES:b).rc
 .IF "$(APP7ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP7ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7ICON)" != ""
 .IF "$(APP7VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
@@ -1524,11 +1496,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(APP8LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP8LINKRES:b).rc
 .IF "$(APP8ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP8ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8ICON)" != ""
 .IF "$(APP8VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
@@ -1726,11 +1694,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(APP9LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP9LINKRES:b).rc
 .IF "$(APP9ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP9ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9ICON)" != ""
 .IF "$(APP9VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
@@ -1928,11 +1892,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(APP10LINKRES)" != ""
     @@-$(RM) $(MISC)$/$(APP10LINKRES:b).rc
 .IF "$(APP10ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-echo 1 ICON "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-echo 1 ICON $(EMQ)"$(APP10ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10ICON)" != ""
 .IF "$(APP10VERINFO)" != ""
     @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
