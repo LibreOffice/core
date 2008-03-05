@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Groups.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
     DBG_CTOR( rpt_OGroups,NULL);
 }
 //--------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 OGroups::~OGroups()
 {
     DBG_DTOR( rpt_OGroups,NULL);
@@ -87,6 +89,8 @@ void SAL_CALL OGroups::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 void SAL_CALL OGroups::disposing()
 {
     ::std::for_each(m_aGroups.begin(),m_aGroups.end(),::boost::mem_fn(&com::sun::star::report::XGroup::dispose));

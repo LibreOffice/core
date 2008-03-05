@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Functions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,8 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
     DBG_CTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 OFunctions::~OFunctions()
 {
     DBG_DTOR( rpt_OFunctions,NULL);
@@ -90,6 +92,8 @@ void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 void SAL_CALL OFunctions::disposing()
 {
     ::std::for_each(m_aFunctions.begin(),m_aFunctions.end(),::boost::mem_fn(&com::sun::star::report::XFunction::dispose));
