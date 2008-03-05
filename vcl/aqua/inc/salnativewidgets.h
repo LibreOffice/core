@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:30:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,5 +73,7 @@
 
 // extra border for focus ring
 #define FOCUS_RING_WIDTH 4
+
+#define CLIP_FUZZ 1
 
 #endif  // _SV_NATIVEWIDGETS_H
