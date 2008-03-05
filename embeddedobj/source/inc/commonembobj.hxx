@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:05:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ protected:
     ::rtl::OUString m_aClassName;
 
     ::rtl::OUString m_aDocServiceName;
+    ::rtl::OUString m_aPresetFilterName;
 
     sal_Int64 m_nMiscStatus;
 
@@ -220,6 +221,7 @@ private:
                 const ::rtl::OUString& aNewName );
 
     ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
+    ::rtl::OUString GetPresetFilterName() { return m_aPresetFilterName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,
@@ -236,6 +238,7 @@ private:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
+    ::rtl::OUString GetFilterName( sal_Int32 nVersion );
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
