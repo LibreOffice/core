@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:48:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,13 @@ PPTShape::~PPTShape()
 {
 }
 
-void PPTShape::addShape( const oox::core::XmlFilterBase& rFilterBase, const Reference< XModel > &rxModel, const oox::ppt::SlidePersist& rSlidePersist, const oox::drawingml::ThemePtr pThemePtr,
-                    std::map< OUString, ::oox::drawingml::ShapePtr > & aShapeMap, const Reference< XShapes >& rxShapes, const awt::Rectangle* pShapeRect )
+void PPTShape::addShape(
+        const oox::core::XmlFilterBase& rFilterBase,
+        const SlidePersist& rSlidePersist,
+        const oox::drawingml::ThemePtr& rxTheme,
+        const Reference< XShapes >& rxShapes,
+        const awt::Rectangle* pShapeRect,
+        ::oox::drawingml::ShapeIdMap* pShapeMap )
 {
     // only placeholder from layout are being inserted
     if ( mnSubType && ( meShapeLocation == Master ) )
@@ -80,7 +85,7 @@ void PPTShape::addShape( const oox::core::XmlFilterBase& rFilterBase, const Refe
         if( sServiceName.getLength() )
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
-            Reference< lang::XMultiServiceFactory > xServiceFact( rxModel, UNO_QUERY_THROW );
+            Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
             switch( mnSubType )
             {
                 case XML_ctrTitle :
@@ -153,17 +158,17 @@ void PPTShape::addShape( const oox::core::XmlFilterBase& rFilterBase, const Refe
                 aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
             setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxModel, pThemePtr, rxShapes, pShapeRect ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect ) );
 
-            if( msId.getLength() )
+            if( pShapeMap && msId.getLength() )
             {
-                aShapeMap[ msId ] = shared_from_this();
+                (*pShapeMap)[ msId ] = shared_from_this();
             }
 
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChilds( rFilterBase, *this, rxModel, pThemePtr, aShapeMap, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ) );
+                addChilds( rFilterBase, *this, rxTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
     }
     catch( const Exception&  )
