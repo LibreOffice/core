@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:35:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2559,7 +2559,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
             rESh.SetModified();
     }
     if ( ( nDiffFlags & SFX_PRINTER_OPTIONS ) == SFX_PRINTER_OPTIONS )
-        ::SetPrinter( pNew, FALSE );
+        ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, FALSE );
 
     const BOOL bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? TRUE : FALSE;
     const BOOL bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? TRUE : FALSE;
