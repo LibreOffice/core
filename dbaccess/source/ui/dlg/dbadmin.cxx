@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:11:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:56:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,9 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
             break;
         case DST_MYSQL_JDBC:
             addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLJDBC);
+            break;
+        case DST_MYSQL_NATIVE:
+            addDetailPage(PAGE_MYSQL_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateMySQLNATIVE);
             break;
         case DST_ORACLE_JDBC:
             addDetailPage(PAGE_ORACLE_JDBC, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateOracleJDBC);
