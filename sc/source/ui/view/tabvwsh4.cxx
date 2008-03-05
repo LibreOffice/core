@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:51:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1214,7 +1214,7 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets() || pPrinter->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG );
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     for ( SCTAB i=0; i<nTabCount; i++ )
