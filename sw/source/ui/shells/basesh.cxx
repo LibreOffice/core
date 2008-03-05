@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:26:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1561,7 +1561,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     aSet.Put( aMgr.GetAttrSet() );
                 }
                 else
-                    rSh.GetAttr( aSet );
+                    rSh.GetCurAttr( aSet );
 #if OSL_DEBUG_LEVEL > 1
 
                 const SvxShadowItem& rShItem = (const SvxShadowItem&)aSet.Get(nWhich);
@@ -2180,7 +2180,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
                                                     RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                                                     RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
                                                     0L);
-                    rSh.GetAttr( aLangSet );
+                    rSh.GetCurAttr( aLangSet );
 
                     sal_Int32 nWesternSize =
                             pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_DEFAULT,
@@ -2244,7 +2244,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
-    rSh.GetAttr( rSet );
+    rSh.GetCurAttr( rSet );
 }
 
 void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
@@ -2268,7 +2268,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                 {
                     pFntCoreSet = new SfxItemSet( *rSet.GetPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
-                    rSh.GetAttr( *pFntCoreSet );
+                    rSh.GetCurAttr( *pFntCoreSet );
                     nScriptType = rSh.GetScriptType();
                     // #i42732# input language should be preferred over
                     // current cursor position to detect script type
@@ -2318,7 +2318,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
         default:
             if( bFirst )
             {
-                rSh.GetAttr( rSet );
+                rSh.GetCurAttr( rSet );
                 bFirst = FALSE;
             }
         }
@@ -2365,7 +2365,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         if( nSelType & nsSelectionType::SEL_GRF || nsSelectionType::SEL_FRM & nSelType )
             rSh.GetFlyFrmAttr( aCoreSet );
         else
-            rSh.GetAttr( aCoreSet );
+            rSh.GetCurAttr( aCoreSet );
         aBrushItem = (const SvxBrushItem&)aCoreSet.Get(RES_BACKGROUND);
     }
 
@@ -2418,7 +2418,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         if( (nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType) )
             rSh.GetFlyFrmAttr( aCoreSet );
         else
-            rSh.GetAttr( aCoreSet );
+            rSh.GetCurAttr( aCoreSet );
         aBrushItem = (const SvxBrushItem&)aCoreSet.Get(RES_BACKGROUND);
     }
 
@@ -2525,7 +2525,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     }
     else
         // Umrandungsattribute ganz normal ueber Shell holen
-        rSh.GetAttr( rSet );
+        rSh.GetCurAttr( rSet );
     if ( bPrepare )
         ::PrepareBoxInfo( rSet, rSh );
     // switch the border toolbox controller mode
@@ -2616,7 +2616,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             else
             {
                 // Umrandungsattribute ganz normal ueber Shell setzen
-                rSh.GetAttr( aSet );
+                rSh.GetCurAttr( aSet );
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2682,7 +2682,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             else
             {
                 // Umrandungsattribute ganz normal ueber Shell setzen
-                rSh.GetAttr( aSet );
+                rSh.GetCurAttr( aSet );
 
                 pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
