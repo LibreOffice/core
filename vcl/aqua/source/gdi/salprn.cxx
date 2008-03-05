@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,7 +471,6 @@ BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
     // set filename
     if( pFileName )
     {
-        AquaLog( "printing to file: %s\n", rtl::OUStringToOString( *pFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         [mpPrintInfo setJobDisposition: NSPrintSaveJob];
         NSString* pPath = CreateNSString( *pFileName );
         [pPrintDict setObject: pPath forKey: NSPrintSavePath];
