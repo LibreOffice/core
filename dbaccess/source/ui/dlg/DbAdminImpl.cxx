@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:43:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,6 +542,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 }
             }
             break;
+        case DST_MYSQL_NATIVE:
         case DST_MYSQL_JDBC:
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
@@ -1096,6 +1097,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     switch( eType )
     {
+        case DST_MYSQL_NATIVE:
         case DST_MYSQL_JDBC:
             nPortNumberId = DSID_MYSQL_PORTNUMBER;
             break;
