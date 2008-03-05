@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:07:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,6 +634,13 @@ BOOL Application::IsShutDown()
 BOOL Application::IsInModalMode()
 {
     return (ImplGetSVData()->maAppData.mnModalMode != 0);
+}
+
+// -----------------------------------------------------------------------
+
+USHORT Application::GetModalModeCount()
+{
+    return ImplGetSVData()->maAppData.mnModalMode;
 }
 
 // -----------------------------------------------------------------------
