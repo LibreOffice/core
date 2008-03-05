@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrcommon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:50:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,12 @@ namespace pcr
     //= HelpIdUrl
     //========================================================================
     //------------------------------------------------------------------------
-    sal_uInt32 HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
+    SmartId HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-        sal_uInt32 nHelpId = 0;
+        SmartId aSmartHelpId( _rHelpURL );
         if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            nHelpId = _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32();
-        return nHelpId;
+            aSmartHelpId = SmartId( _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32() );
+        return aSmartHelpId;
     }
 
     //------------------------------------------------------------------------
