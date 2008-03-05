@@ -718,6 +718,9 @@ en-US = "No languages have been selected for installation. Click OK to select on
 [OOO_CONTROL_318]
 en-US = "No applications have been selected for installation. Click OK to select one or more applications for installation."
 
+[OOO_CONTROL_319]
+en-US  = "Create a start link on desktop"
+
 [OOO_CONTROL_LANG_1033]
 en-US = "English"
 
