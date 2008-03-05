@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framegrabber.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:41:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMgr;
     ::rtl::OUString                                                                     maURL;
     QTMovie*                                                                            mpMovie;
+    sal_Bool                                                                            mbInitialized;
+    long                                                                                mnVersion;
 };
 
 } // namespace quicktime

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: quicktimecommon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:42:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,5 +97,12 @@
 #define AVMEDIA_QUICKTIME_WINDOW_SERVICENAME "com.sun.star.media.Window_QuickTime"
 
 #define WM_GRAPHNOTIFY (WM_USER + 567)
+
+// Quicktime 7+ in Mac OS X 10.4
+#define QT701 0x07010000
+
+// Quicktime 6.4+ in Mac OS X 10.3
+#define QT64 0x06400000
+
 
 #endif // _QUICKTIMECOMMOM_HXX

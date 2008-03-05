@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framegrabber.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:41:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:27:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,33 @@ namespace avmedia { namespace quicktime {
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
-    ;
+    OSErr result;
+
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    // check the version of QuickTime installed
+    result = Gestalt(gestaltQuickTime,&mnVersion);
+     if ((result == noErr) && (mnVersion >= QT701))
+    {
+      // we have version 7.01 or later, initialize
+      mpMovie = [QTMovie movie];
+      [mpMovie retain];
+      mbInitialized = true;
+    }
+    [pool release];
 }
 
 // ------------------------------------------------------------------------------
 
 FrameGrabber::~FrameGrabber()
 {
-    ;
+    if( mbInitialized )
+    {
+        if( mpMovie )
+        {
+            [mpMovie release];
+            mpMovie = nil;
+        }
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -72,11 +91,12 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     bool bRet = false;
     maURL = rURL;
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    NSURL* aURL = [NSURL URLWithString:[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()] ];
+    NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+    NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
     // create the Movie
 
-        mpMovie = [[QTMovie movie] initWithURL:aURL error:nil];
+        mpMovie = [mpMovie initWithURL:aURL error:nil];
         if(mpMovie)
         {
             [mpMovie retain];
