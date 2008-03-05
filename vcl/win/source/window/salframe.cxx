@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:12:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3503,6 +3503,13 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         aWheelEvt.mnCode        = 0;
         aWheelEvt.mnDelta       = (short)HIWORD( wParam );
         aWheelEvt.mnNotchDelta  = aWheelEvt.mnDelta/WHEEL_DELTA;
+        if( aWheelEvt.mnNotchDelta == 0 )
+        {
+            if( aWheelEvt.mnDelta > 0 )
+                aWheelEvt.mnNotchDelta = 1;
+            else if( aWheelEvt.mnDelta < 0 )
+                aWheelEvt.mnNotchDelta = -1;
+        }
 
         if( nMsg == WM_MOUSEWHEEL )
         {
