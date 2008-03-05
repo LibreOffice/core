@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 15:24:01 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:50:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,6 @@ CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML
 JARFILES        = jcommon-1.0.10.jar libxml-0.9.9.jar pentaho-reporting-flow-engine-0.9.2.jar
 .ENDIF
 
-JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java FileRepository.java ManifestWriter.java
+JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java ManifestWriter.java
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
