@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CachedDataSequence.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:12:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #define _CHART_CACHEDDATASEQUENCE_HXX
 
 // helper classes
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -57,6 +57,7 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#include <com/sun/star/lang/XInitialization.hpp>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -88,12 +89,13 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper7<
     ::com::sun::star::chart2::data::XDataSequence,
     ::com::sun::star::chart2::data::XNumericalDataSequence,
     ::com::sun::star::chart2::data::XTextualDataSequence,
     ::com::sun::star::util::XCloneable,
     ::com::sun::star::util::XModifyBroadcaster,
+    ::com::sun::star::lang::XInitialization,
     ::com::sun::star::lang::XServiceInfo >
     CachedDataSequence_Base;
 }
@@ -108,6 +110,10 @@ public:
     /** constructs an empty sequence
      */
     CachedDataSequence();
+
+    explicit CachedDataSequence(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
 
     /** creates a sequence and initializes it with the given vector of floating
         point numbers
@@ -151,6 +157,8 @@ public:
      */
 //     void SetSourceIdentifier( const ::rtl::OUString & aId );
 
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( CachedDataSequence )
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 
@@ -201,9 +209,11 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-    void fireModifyEvent();
+    // ::com::sun::star::lang::XInitialization:
+    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
+        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
-    mutable ::osl::Mutex                  m_aMutex;
+    void fireModifyEvent();
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
