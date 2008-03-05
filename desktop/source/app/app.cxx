@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.215 $
+ *  $Revision: 1.216 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:28:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1768,7 +1768,8 @@ void Desktop::Main()
             (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
             (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
             (!bExistsRecoveryData                                                  ) &&
-            (!bExistsSessionData                                                   )
+            (!bExistsSessionData                                                   ) &&
+            (!Application::AnyInput( INPUT_APPEVENT )                              )
            )
         {
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
@@ -2847,7 +2848,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() || pArgs->IsServer() )
         return;
 
-    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean() )
+    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean() || Application::AnyInput( INPUT_APPEVENT ) )
         // soffice was started as tray icon ...
         return;
     {
@@ -3103,6 +3104,40 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         displayCmdlineHelp();
     }
 #endif
+    else if ( rAppEvent.GetEvent() == "SHOWDIALOG" )
+    {
+        // ignore all errors here. It's clicking a menu entry only ...
+        // The user will try it again, in case nothing happens .-)
+        try
+        {
+            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+            com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
+                xDesktop( xSMGR->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                ::com::sun::star::uno::UNO_QUERY );
+
+            // check provider ... we know it's weak reference only
+            if ( ! xDesktop.is())
+                return;
+
+            css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), css::uno::UNO_QUERY_THROW);
+            css::util::URL aCommand;
+            if( rAppEvent.GetData().EqualsAscii( "PREFERENCES" ) )
+                aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OptionsTreeDialog" ) );
+            else if( rAppEvent.GetData().EqualsAscii( "ABOUT" ) )
+                aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:About" ) );
+            if( aCommand.Complete.getLength() )
+            {
+                xParser->parseStrict(aCommand);
+
+                css::uno::Reference< css::frame::XDispatch > xDispatch = xDesktop->queryDispatch(aCommand, rtl::OUString(), 0);
+                if (xDispatch.is())
+                    xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
+            }
+        }
+        catch(const css::uno::Exception&)
+        {}
+    }
 }
 
 void Desktop::OpenSplashScreen()
