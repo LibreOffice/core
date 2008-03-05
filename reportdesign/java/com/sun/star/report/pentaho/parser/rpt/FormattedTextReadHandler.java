@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedTextReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.FormattedTextElement;
@@ -55,31 +54,31 @@ import org.xml.sax.SAXException;
  */
 public class FormattedTextReadHandler extends ElementReadHandler
 {
-  private FormattedTextElement element;
 
-  public FormattedTextReadHandler()
-  {
-    element = new FormattedTextElement();
-  }
+    private FormattedTextElement element;
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    super.startParsing(attrs);
-
-    String formula = attrs.getValue
-        (OfficeNamespaces.OOREPORT_NS, "formula");
-    if (formula != null)
+    public FormattedTextReadHandler()
     {
-      final FormulaExpression valueExpression = new FormulaExpression();
-      valueExpression.setFormula(formula);
-      element.setValueExpression(valueExpression);
+        element = new FormattedTextElement();
     }
+
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs) throws SAXException
+    {
+        super.startParsing(attrs);
+
+        String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
+        if (formula != null)
+        {
+            final FormulaExpression valueExpression = new FormulaExpression();
+            valueExpression.setFormula(formula);
+            element.setValueExpression(valueExpression);
+        }
 
     // * Print-Repeated-Values
     // * Print-In-First-New-Section
@@ -89,40 +88,39 @@ public class FormattedTextReadHandler extends ElementReadHandler
     // That property cannot be evaluated yet, as this would require us to
     // have a clue about pagebreaking. We dont have that - not yet and never
     // in the future, as pagebreaks are computed by OpenOffice instead
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
-    {
-      // expect a report control. The control will modifiy the current
-      // element (as we do not separate the elements that strictly ..)
-      if ("report-control".equals(tagName))
-      {
-        return new IgnoreAnyChildReadHandler();
-      }
-      if ("report-element".equals(tagName))
-      {
-        return new ReportElementReadHandler(element);
-      }
     }
-    return null;
-  }
 
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
+    {
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            // expect a report control. The control will modifiy the current
+            // element (as we do not separate the elements that strictly ..)
+            if ("report-control".equals(tagName))
+            {
+                return new IgnoreAnyChildReadHandler();
+            }
+            if ("report-element".equals(tagName))
+            {
+                return new ReportElementReadHandler(element);
+            }
+        }
+        return null;
+    }
 
-  public Element getElement()
-  {
-    return element;
-  }
+    public Element getElement()
+    {
+        return element;
+    }
 }

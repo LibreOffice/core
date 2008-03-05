@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RootTableReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -48,74 +46,72 @@ import org.xml.sax.SAXException;
 
 public class RootTableReadHandler extends ElementReadHandler
 {
-  private TableReadHandler sectionTableReadHandler;
-  private Section section;
 
-  public RootTableReadHandler()
-  {
-    section = new Section();
-  }
+    private TableReadHandler sectionTableReadHandler;
+    private Section section;
 
-  protected RootTableReadHandler(final Section section)
-  {
-    if (section == null)
+    public RootTableReadHandler()
     {
-      throw new NullPointerException();
+        section = new Section();
     }
-    this.section = section;
-  }
 
-
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.TABLE_NS.equals(uri))
+    protected RootTableReadHandler(final Section section)
     {
-      if ("table".equals(tagName))
-      {
-        sectionTableReadHandler = new TableReadHandler();
-        return sectionTableReadHandler;
-      }
+        if (section == null)
+        {
+            throw new NullPointerException();
+        }
+        this.section = section;
     }
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      if ("conditional-print-expression".equals(tagName))
-      {
-        return new ConditionalPrintExpressionReadHandler(section);
-      }
+        if (OfficeNamespaces.TABLE_NS.equals(uri))
+        {
+            if ("table".equals(tagName))
+            {
+                sectionTableReadHandler = new TableReadHandler();
+                return sectionTableReadHandler;
+            }
+        }
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        {
+            if ("conditional-print-expression".equals(tagName))
+            {
+                return new ConditionalPrintExpressionReadHandler(section);
+            }
+        }
+        return null;
     }
-    return null;
-  }
 
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    if (sectionTableReadHandler != null)
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
     {
-      section.addNode(sectionTableReadHandler.getElement());
+        if (sectionTableReadHandler != null)
+        {
+            section.addNode(sectionTableReadHandler.getElement());
+        }
     }
-  }
 
-
-  public Element getElement()
-  {
-    return section;
-  }
+    public Element getElement()
+    {
+        return section;
+    }
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CoveredCellReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.table;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
@@ -49,16 +47,16 @@ import org.jfree.report.structure.Section;
  */
 public class CoveredCellReadHandler extends ElementReadHandler
 {
-  private Element coveredCell;
 
-  public CoveredCellReadHandler()
-  {
-    coveredCell = new Section();
-  }
+    private Element coveredCell;
 
+    public CoveredCellReadHandler()
+    {
+        coveredCell = new Section();
+    }
 
-  public Element getElement()
-  {
-    return coveredCell;
-  }
+    public Element getElement()
+    {
+        return coveredCell;
+    }
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConditionalPrintExpressionReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -52,41 +50,42 @@ import org.xml.sax.SAXException;
  * @since 02.03.2007
  */
 public class ConditionalPrintExpressionReadHandler
-    extends AbstractXmlReadHandler
+        extends AbstractXmlReadHandler
 {
-  private Element element;
 
-  public ConditionalPrintExpressionReadHandler(final Element element)
-  {
-    if (element == null)
-    {
-      throw new NullPointerException();
-    }
-    this.element = element;
-  }
+    private Element element;
 
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    super.startParsing(attrs);
-    final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
-    if (formula != null)
+    public ConditionalPrintExpressionReadHandler(final Element element)
     {
-      final FormulaFunction valueExpression = new FormulaFunction();
-      valueExpression.setFormula(formula);
-      element.setDisplayCondition(valueExpression);
+        if (element == null)
+        {
+            throw new NullPointerException();
+        }
+        this.element = element;
     }
 
-  }
+    protected void startParsing(final Attributes attrs) throws SAXException
+    {
+        super.startParsing(attrs);
+        final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
+        if (formula != null)
+        {
+            final FormulaFunction valueExpression = new FormulaFunction();
+            valueExpression.setFormula(formula);
+            element.setDisplayCondition(valueExpression);
+        }
 
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject()
-      throws SAXException
-  {
-    return element;
-  }
+    }
+
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject()
+            throws SAXException
+    {
+        return element;
+    }
 }
