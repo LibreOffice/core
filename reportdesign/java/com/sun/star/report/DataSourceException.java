@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSourceException.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 package com.sun.star.report;
-
-import java.security.PrivilegedActionException;
 
 /**
  * A general exception to indicate that there was an error while accessing the
@@ -46,60 +43,61 @@ import java.security.PrivilegedActionException;
  */
 public class DataSourceException extends Exception
 {
-  /**
-   * Constructs a new exception with <code>null</code> as its detail message.
-   * The cause is not initialized, and may subsequently be initialized by a call
-   * to {@link #initCause}.
-   */
-  public DataSourceException()
-  {
-    super();
-  }
 
-  /**
-   * Constructs a new exception with the specified detail message.  The cause is
-   * not initialized, and may subsequently be initialized by a call to {@link
-   * #initCause}.
-   *
-   * @param message the detail message. The detail message is saved for later
-   *                retrieval by the {@link #getMessage()} method.
-   */
-  public DataSourceException(String message)
-  {
-    super(message);
-  }
+    /**
+     * Constructs a new exception with <code>null</code> as its detail message.
+     * The cause is not initialized, and may subsequently be initialized by a call
+     * to {@link #initCause}.
+     */
+    public DataSourceException()
+    {
+        super();
+    }
 
-  /**
-   * Constructs a new exception with the specified detail message and cause.
-   * <p>Note that the detail message associated with <code>cause</code> is
-   * <i>not</i> automatically incorporated in this exception's detail message.
-   *
-   * @param message the detail message (which is saved for later retrieval by
-   *                the {@link #getMessage()} method).
-   * @param cause   the cause (which is saved for later retrieval by the {@link
-   *                #getCause()} method).  (A <tt>null</tt> value is permitted,
-   *                and indicates that the cause is nonexistent or unknown.)
-   * @since 1.4
-   */
-  public DataSourceException(String message, Throwable cause)
-  {
-    super(message, cause);
-  }
+    /**
+     * Constructs a new exception with the specified detail message.  The cause is
+     * not initialized, and may subsequently be initialized by a call to {@link
+     * #initCause}.
+     *
+     * @param message the detail message. The detail message is saved for later
+     *                retrieval by the {@link #getMessage()} method.
+     */
+    public DataSourceException(String message)
+    {
+        super(message);
+    }
 
-  /**
-   * Constructs a new exception with the specified cause and a detail message of
-   * <tt>(cause==null ? null : cause.toString())</tt> (which typically contains
-   * the class and detail message of <tt>cause</tt>). This constructor is useful
-   * for exceptions that are little more than wrappers for other throwables (for
-   * example, {@link PrivilegedActionException}).
-   *
-   * @param cause the cause (which is saved for later retrieval by the {@link
-   *              #getCause()} method).  (A <tt>null</tt> value is permitted,
-   *              and indicates that the cause is nonexistent or unknown.)
-   * @since 1.4
-   */
-  public DataSourceException(Throwable cause)
-  {
-    super(cause);
-  }
+    /**
+     * Constructs a new exception with the specified detail message and cause.
+     * <p>Note that the detail message associated with <code>cause</code> is
+     * <i>not</i> automatically incorporated in this exception's detail message.
+     *
+     * @param message the detail message (which is saved for later retrieval by
+     *                the {@link #getMessage()} method).
+     * @param cause   the cause (which is saved for later retrieval by the {@link
+     *                #getCause()} method).  (A <tt>null</tt> value is permitted,
+     *                and indicates that the cause is nonexistent or unknown.)
+     * @since 1.4
+     */
+    public DataSourceException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    /**
+     * Constructs a new exception with the specified cause and a detail message of
+     * <tt>(cause==null ? null : cause.toString())</tt> (which typically contains
+     * the class and detail message of <tt>cause</tt>). This constructor is useful
+     * for exceptions that are little more than wrappers for other throwables (for
+     * example, {@link PrivilegedActionException}).
+     *
+     * @param cause the cause (which is saved for later retrieval by the {@link
+     *              #getCause()} method).  (A <tt>null</tt> value is permitted,
+     *              and indicates that the cause is nonexistent or unknown.)
+     * @since 1.4
+     */
+    public DataSourceException(Throwable cause)
+    {
+        super(cause);
+    }
 }
