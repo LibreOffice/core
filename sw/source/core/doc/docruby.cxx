@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:36:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         if( pEntry->GetRubyAttr().GetText().Len() )
                             Insert( aPam, pEntry->GetRubyAttr(), 0 );
                         else
-                            ResetAttr( aPam, TRUE, &aDelArr );
+                            ResetAttrs( aPam, TRUE, &aDelArr );
                     }
 
                     if( aCheckEntry.GetText() != pEntry->GetText() &&
