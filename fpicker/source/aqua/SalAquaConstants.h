@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaConstants.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:58:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,30 @@
 #define kControlPropertySubType 'SuTy'
 #define kPopupControlPropertyTitleWidth 'PoTW'
 
-#define kAquaSpaceBetweenControls 8
-#define kAquaSpaceInsideGroup 16
+#define kAquaSpaceBetweenControls (8)
+#define kAquaSpaceBetweenPopupMenus (10)
 
-#define kAquaNavigationServicesMinWidth 400
-#define kAquaNavigationServicesPopupControlWidth 250
+#define kAquaSpaceInsideGroupH (16)
+#define kAquaSpaceInsideGroupV (11)
+
+#define kAquaSpaceBoxFrameViewDiffTop (7)
+#define kAquaSpaceBoxFrameViewDiffLeft (7)
+#define kAquaSpaceBoxFrameViewDiffBottom (9)
+#define kAquaSpaceBoxFrameViewDiffRight (7)
+
+#define kAquaSpaceButtonFrameBoundsDiff (6)
+#define kAquaSpaceSwitchButtonFrameBoundsDiff (2)
+
+#define kAquaSpacePopupMenuFrameBoundsDiffTop (2)
+#define kAquaSpacePopupMenuFrameBoundsDiffBottom (4)
+#define kAquaSpacePopupMenuFrameBoundsDiffV (kAquaSpacePopupMenuFrameBoundsDiffTop + kAquaSpacePopupMenuFrameBoundsDiffBottom)
+#define kAquaSpacePopupMenuFrameBoundsDiffLeft (3)
+
+#define kAquaSpaceLabelFrameBoundsDiffH (3)
+#define kAquaSpaceLabelPopupDiffV (6)
+#define kAquaSpaceAfterPopupButtonsV (20)
+
+#define kAquaPopupButtonDefaultHeight (26)
 
 #endif //_SALAQUACONSTANTS_H_
 
