@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     return TRUE;
 }
 
-void SwDoc::RstTxtAttr(const SwPaM &rRg, BOOL bInclRefToxMark )
+void SwDoc::RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark )
 {
     SwHistory* pHst = 0;
     SwDataChanged aTmp( rRg, 0 );
@@ -412,7 +412,7 @@ void SwDoc::RstTxtAttr(const SwPaM &rRg, BOOL bInclRefToxMark )
     SetModified();
 }
 
-void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
+void SwDoc::ResetAttrs( const SwPaM &rRg, BOOL bTxtAttr,
                         const SvUShortsSort* pAttrs )
 {
     SwPaM* pPam = (SwPaM*)&rRg;
@@ -1205,6 +1205,28 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
         rFmt.SetAttr( rSet );
     SetModified();
 }
+
+// --> OD 2008-02-12 #newlistlevelattrs#
+void SwDoc::ResetAttrAtFormat( const USHORT nWhichId,
+                               SwFmt& rChangedFormat )
+{
+    SwUndo* pUndo = 0;
+    if ( DoesUndo() )
+        pUndo = new SwUndoFmtResetAttr( rChangedFormat, nWhichId );
+
+    const BOOL bAttrReset = rChangedFormat.ResetAttr( nWhichId );
+
+    if ( bAttrReset )
+    {
+        if ( pUndo )
+            AppendUndo( pUndo );
+
+        SetModified();
+    }
+    else if ( pUndo )
+        delete pUndo;
+}
+// <--
 
 int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
                                 SvxTabStopItem& rChgTabStop )
