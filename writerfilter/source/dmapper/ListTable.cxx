@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:39:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #endif
 #include <doctok/sprmids.hxx>
 #include <ooxml/resourceids.hxx>
+#include <ConversionHelper.hxx>
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
 #endif
@@ -247,8 +248,6 @@ class ListPropertyMap : public PropertyMap
     ::rtl::OUString                                 sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int32                                       nXChFollow;      //LN_IXCHFOLLOW
     ::rtl::OUString                                 sBulletChar;
-    ::rtl::OUString                                 sBulletFont;
-    PropertyMapPtr                                  pProperties;    //LN_LISTLEVEL
 public:
     ListPropertyMap() :
         nIStartAt(-1)
@@ -260,12 +259,11 @@ public:
         ,nFPrevSpace(-1)
         ,nFWord6(-1)
         ,nXChFollow(-1)
-        ,pProperties(new PropertyMap)
         {}
     ~ListPropertyMap(){}
 
-    PropertyMapPtr  GetProperties() { return pProperties; }
-    uno::Sequence< beans::PropertyValue >  GetPropertyValues();
+    using PropertyMap::GetPropertyValues;
+    uno::Sequence< beans::PropertyValue >  GetPropertyValues( PropertyValueVector_t& rCharStyleProperties  );
 };
 /*-- 26.06.2006 13:44:57---------------------------------------------------
 
@@ -273,7 +271,7 @@ public:
 #define MAKE_PROPVAL(NameId, Value) \
     beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
 
-uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
+uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues( PropertyValueVector_t& rCharStyleProperties )
 {
     const sal_Int16 aWWToUnoAdjust[] =
     {
@@ -283,7 +281,7 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
     };
 
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    vector< beans::PropertyValue > aNumberingProperties;
+    PropertyValueVector_t aNumberingProperties;
 
     if( nIStartAt >= 0)
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_START_WITH, (sal_Int16)nIStartAt) );
@@ -298,8 +296,6 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
     // todo: this is not the bullet char
     if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && sBulletChar.getLength() )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, sBulletChar.copy(0,1)));
-    if( sBulletFont.getLength())
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_FONT_NAME, sBulletFont));
 
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
@@ -320,21 +316,36 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
 //    TODO: sRGBXchNums;     array of inherited numbers
 
 //    TODO: nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
-    if(pProperties)
-    {
+//    if(pProperties)
+//    {
 
-        _PropertyMap::const_iterator aMapIter = pProperties->begin();
-        _PropertyMap::const_iterator aEndIter = pProperties->end();
+        _PropertyMap::const_iterator aMapIter = /*pProperties->*/begin();
+        _PropertyMap::const_iterator aEndIter = /*pProperties->*/end();
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
-            aNumberingProperties.push_back(
-                    beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+            switch( aMapIter->first.eId )
+            {
+                case PROP_FIRST_LINE_OFFSET:
+                case PROP_LEFT_MARGIN:
+                    aNumberingProperties.push_back(
+                        beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                break;
+                case PROP_CHAR_FONT_NAME:
+                    aNumberingProperties.push_back(
+                        beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                break;
+                default:
+                {
+                    rCharStyleProperties.push_back(beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                }
+
+            }
         }
-    }
+//    }
     uno::Sequence< beans::PropertyValue > aRet(aNumberingProperties.size());
     beans::PropertyValue* pValues = aRet.getArray();
-    vector< beans::PropertyValue >::const_iterator aIt = aNumberingProperties.begin();
-    vector< beans::PropertyValue >::const_iterator aEndIt = aNumberingProperties.end();
+    PropertyValueVector_t::const_iterator aIt = aNumberingProperties.begin();
+    PropertyValueVector_t::const_iterator aEndIt = aNumberingProperties.end();
     for(sal_uInt32 nIndex = 0; aIt != aEndIt; ++aIt,++nIndex)
     {
         pValues[nIndex] = *aIt;
@@ -450,11 +461,6 @@ void ListTable::attribute(Id nName, Value & rVal)
                 m_pImpl->m_pCurrentEntry->pCurrentProperties->sBulletChar = rVal.getString();
             }
         }
-        break;
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_Fonts_ascii :
-            if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
-                m_pImpl->m_pCurrentEntry->pCurrentProperties->sBulletFont += rVal.getString();
         break;
 //        case NS_rtf::LN_ISTD: break;
         /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
@@ -919,12 +925,38 @@ void ListTable::attribute(Id nName, Value & rVal)
             m_pImpl->m_pCurrentEntry->nListId = nVal;
         }
         break;
+        case NS_ooxml::LN_CT_Ind_left:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
+                PROP_LEFT_MARGIN, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Ind_hanging:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
+                PROP_FIRST_LINE_OFFSET, true, uno::makeAny( - ConversionHelper::convertTwipToMM100(nIntValue ) ));
+        break;
+//        case NS_ooxml::LN_CT_Ind_firstLine:
+//            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+//            m_pImpl->m_pCurrentEntry->pCurrentProperties->Insert(
+//                PROP_FIRST_LINE_OFFSET, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+//        break;
+        case NS_ooxml::LN_CT_Lvl_ilvl: //overrides previous level - unsupported
+        case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
+        case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
+        break;
         default:
         {
-            //---->debug
-            int nVal = rVal.getInt();
-            ++nVal;
-            //<----debug
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "ListTable::attribute() - Id: ");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
+            sMessage += ::rtl::OString(" / 0x");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
+            sMessage += ::rtl::OString(" value: ");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
+            sMessage += ::rtl::OString(" / 0x");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 16 );
+            OSL_ENSURE( false, sMessage.getStr()); //
+#endif
         }
     }
 }
@@ -1017,7 +1049,6 @@ void ListTable::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_Lvl_lvlText:
             case NS_ooxml::LN_CT_Lvl_rPr : //contains LN_EG_RPrBase_rFonts
-            case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if(pProperties.get())
@@ -1032,13 +1063,32 @@ void ListTable::sprm(Sprm & rSprm)
                     pProperties->resolve(*this);
             }
             break;
-            case NS_sprm::LN_CHps:    // sprmCHps
-                //TODO: how to handle numbering symbol size?
+            case NS_ooxml::LN_CT_Lvl_lvlJc:
+                //todo: ????
             break;
+            case NS_ooxml::LN_CT_Lvl_pPr:
+            case NS_ooxml::LN_CT_PPrBase_ind:
+            {
+                //todo: how to handle paragraph properties within numbering levels (except LeftIndent and FirstLineIndent)?
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                    pProperties->resolve(*this);
+            }
+            break;
+            case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
+            case NS_ooxml::LN_EG_RPrBase_color:
+            case NS_ooxml::LN_EG_RPrBase_u:
+            case NS_sprm::LN_CHps:    // sprmCHps
+            case NS_ooxml::LN_EG_RPrBase_lang:
+            case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
+                //no break!
             default:
                 if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
-                    m_pImpl->m_rDMapper.sprm( rSprm,
-                        m_pImpl->m_pCurrentEntry->pCurrentProperties->GetProperties(), SPRM_LIST);
+                {
+                    m_pImpl->m_rDMapper.PushListProperties( m_pImpl->m_pCurrentEntry->pCurrentProperties );
+                    m_pImpl->m_rDMapper.sprm( rSprm );
+                    m_pImpl->m_rDMapper.PopListProperties();
+                }
         }
     }
 }
@@ -1078,7 +1128,7 @@ void    ListTable::ApplyLevelValues( sal_Int32 nId, sal_Int32 nIntValue)
             m_pImpl->m_pCurrentEntry->pCurrentProperties->nXChFollow = nIntValue;
         break;
         default:
-            OSL_ASSERT("this line should never be reached");
+            OSL_ENSURE( false, "this line should never be reached");
     }
 }
 /*-- 23.06.2006 12:04:33---------------------------------------------------
@@ -1136,7 +1186,17 @@ uno::Reference< container::XIndexReplace > ListTable::GetNumberingRules(sal_Int3
                     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                     while(aIter != aEnd)
                     {
-                        uno::Sequence< beans::PropertyValue> aValues = (*aIter)->GetPropertyValues();
+                        PropertyValueVector_t aCharStyleProperties;
+                        uno::Sequence< beans::PropertyValue> aValues = (*aIter)->GetPropertyValues(aCharStyleProperties);
+                        if( aCharStyleProperties.size() )
+                        {
+                            //create (or find) a character style containing the character attributes of the symbol
+                            //and apply it to the numbering level
+                            ::rtl::OUString sStyle = m_pImpl->m_rDMapper.getOrCreateCharStyle( aCharStyleProperties );
+                            aValues.realloc( aValues.getLength() + 1);
+                            aValues[aValues.getLength() - 1].Name = aPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
+                            aValues[aValues.getLength() - 1].Value <<= sStyle;
+                        }
                         //now parse the text to find %n from %1 to %nLevel+1
                         //everything before the first % and the last %x is prefix and suffix
                         ::rtl::OUString sLevelText( (*aIter)->sBulletChar );
@@ -1192,8 +1252,10 @@ uno::Reference< container::XIndexReplace > ListTable::GetNumberingRules(sal_Int3
                     }
 
                 }
-                catch( const uno::Exception& )
+                catch( const uno::Exception& rEx)
                 {
+                    (void)rEx;
+                    OSL_ENSURE( false, "ListTable::GetNumberingRules");
                 }
             }
             xRet = (*aIt)->m_xNumRules;
