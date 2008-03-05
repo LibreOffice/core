@@ -1,4 +1,4 @@
-/* RCS  $Id: ruletab.c,v 1.4 2006-06-29 11:32:26 ihi Exp $
+/* RCS  $Id: ruletab.c,v 1.5 2008-03-05 18:40:54 kz Exp $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -29,12 +29,20 @@
  * may be overridden inside the .STARTUP makefile, they are here
  * strictly so that dmake can parse the STARTUP makefile */
 
-#include <stdio.h>
+#include "extern.h"
+
+#if !defined(MAXIMUM_WAIT_OBJECTS)
+#define MAXIMUM_WAIT_OBJECTS 1
+#endif
+
+/* To stringify the result of the expansion of a macro argument
+ * use two levels of macros. */
+#define dmstr2(s) dmstr1(s)
+#define dmstr1(s) #s
 
 static char *_rules[] = {
     "MAXLINELENGTH := 32766",
-    "MAXPROCESSLIMIT := 4",
-    "MAXPROCESS := 1",
+    "MAXPROCESSLIMIT := " dmstr2(MAXIMUM_WAIT_OBJECTS) ,
     ".IMPORT .IGNORE: DMAKEROOT",
     ".MAKEFILES : makefile.mk makefile",
     ".SOURCE    : .NULL",
