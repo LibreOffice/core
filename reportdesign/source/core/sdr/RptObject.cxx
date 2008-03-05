@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 #ifndef _REPORT_RPTUIOBJ_HXX
 #include "RptObject.hxx"
 #endif
@@ -177,8 +178,13 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
             return OBJ_DLG_IMAGECONTROL;
         if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
             return OBJ_DLG_FORMATTEDFIELD;
+        if ( xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ) )
+            return OBJ_OLE2;
         if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
             return OBJ_CUSTOMSHAPE;
+        if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
+            return OBJ_DLG_SUBREPORT;
+        return OBJ_OLE2;
     }
     return 0;
 }
@@ -212,6 +218,10 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_CUSTOMSHAPE:
             pNewObj = OCustomShape::Create( _xComponent );
+            break;
+        case OBJ_DLG_SUBREPORT:
+        case OBJ_OLE2:
+            pNewObj = OOle2Obj::Create( _xComponent );
             break;
         default:
             OSL_ENSURE(0,"Unknown object id");
@@ -948,7 +958,170 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
 {
     return OObjectBase::getUnoShapeOf( *this );
 }
+//----------------------------------------------------------------------------
+// OOle2Obj
+//----------------------------------------------------------------------------
+TYPEINIT1(OOle2Obj, SdrOle2Obj);
+DBG_NAME( rpt_OOle2Obj );
+OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent)
+          :SdrOle2Obj()
+          ,OObjectBase(_xComponent)
+{
+    DBG_CTOR( rpt_OOle2Obj, NULL);
 
+    // start listening
+    mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+    m_bIsListening = sal_True;
+    //uno::Reference< embed::XEmbeddedObject > xEmbed(_xComponent,uno::UNO_QUERY);
+    //OSL_ENSURE(xEmbed.is(),"This is no embedded object!");
+
+    //SetObjRef(xEmbed);
+}
+//----------------------------------------------------------------------------
+OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName)
+          :SdrOle2Obj()
+          ,OObjectBase(_sComponentName)
+{
+    DBG_CTOR( rpt_OOle2Obj, NULL);
+}
+// -----------------------------------------------------------------------------
+OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_)
+          :SdrOle2Obj(rNewObjRef,rNewObjName,rNewRect,bFrame_)
+          ,OObjectBase(_sComponentName)
+{
+}
+//----------------------------------------------------------------------------
+OOle2Obj::~OOle2Obj()
+{
+    DBG_DTOR( rpt_OOle2Obj, NULL);
+}
+//----------------------------------------------------------------------------
+SdrPage* OOle2Obj::GetImplPage() const
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    return GetPage();
+}
+//----------------------------------------------------------------------------
+void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    SetSnapRect( _rRect );
+}
+//----------------------------------------------------------------------------
+sal_Int32 OOle2Obj::GetStep() const
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    // get step property
+    sal_Int32 nStep = 0;
+    OSL_ENSURE(0,"Who called me!");
+    return nStep;
+}
+
+//----------------------------------------------------------------------------
+void OOle2Obj::NbcMove( const Size& rSize )
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+
+    if ( m_bIsListening )
+    {
+        // stop listening
+        OObjectBase::EndListening(sal_False);
+
+        if ( m_xReportComponent.is() )
+        {
+            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
+            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
+        }
+
+        // set geometry properties
+        SetPropsFromRect(GetLogicRect());
+
+        // start listening
+        OObjectBase::StartListening();
+    }
+    else
+        SdrOle2Obj::NbcMove( rSize );
+}
+
+//----------------------------------------------------------------------------
+
+void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    SdrOle2Obj::NbcResize( rRef, xFract, yFract );
+
+    // stop listening
+    OObjectBase::EndListening(sal_False);
+
+    // set geometry properties
+    SetPropsFromRect(GetLogicRect());
+
+    // start listening
+    OObjectBase::StartListening();
+}
+//----------------------------------------------------------------------------
+void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
+{
+    SdrOle2Obj::NbcSetLogicRect(rRect);
+    // stop listening
+    OObjectBase::EndListening(sal_False);
+
+    // set geometry properties
+    SetPropsFromRect(rRect);
+
+    // start listening
+    OObjectBase::StartListening();
+}
+//----------------------------------------------------------------------------
+
+FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    FASTBOOL bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
+    if ( bResult )
+    {
+        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+        if ( pRptModel )
+        {
+            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            if ( !m_xReportComponent.is() )
+                m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
+        }
+        // set geometry properties
+        SetPropsFromRect(GetLogicRect());
+    }
+
+    return bResult;
+}
+//----------------------------------------------------------------------------
+SdrObject* OOle2Obj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
+{
+    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+    if ( IsInside(aOutRect,rPnt,nTol) )
+        return const_cast<OOle2Obj*>(this);
+
+    return SdrOle2Obj::CheckHit( rPnt, nTol, pSet );
+}
+// -----------------------------------------------------------------------------
+uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
+{
+    return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);
+}
+
+// -----------------------------------------------------------------------------
+uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
+{
+    uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
+    if ( !m_xReportComponent.is() )
+    {
+        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+        OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        m_xReportComponent.set(xShape,uno::UNO_QUERY);
+    }
+    return xShape;
+}
 // -----------------------------------------------------------------------------
 uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XReportDefinition>& _xReport)
 {
