@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControlHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:57:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,50 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #endif
+
 #ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
+
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+
+#ifndef _CFSTRINGUTILITIES_HXX_
+#include "CFStringUtilities.hxx"
 #endif
-#ifndef _CONTROLHELPER_HXX_
-#include "ControlHelper.hxx"
-#endif
+
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "resourceprovider.hxx"
 #endif
 
+#ifndef _NSSTRING_OOOADDITIONS_HXX_
+#include "NSString_OOoAdditions.hxx"
+#endif
+
+#include "ControlHelper.hxx"
+
 #pragma mark DEFINES
 #define CLASS_NAME "ControlHelper"
+#define POPUP_WIDTH_MIN 200
+#define POPUP_WIDTH_MAX 350
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
+using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::rtl;
 
 #pragma mark Constructor / Destructor
@@ -71,10 +87,13 @@ using namespace ::rtl;
 // Constructor / Destructor
 //------------------------------------------------------------------------------------
 ControlHelper::ControlHelper()
-: m_nLastCustomizeTryWidth(0)
-, m_nLastCustomizeTryHeight(0)
+: m_pUserPane(NULL)
+, m_pFilterControl(nil)
 , m_bUserPaneNeeded( false )
-, m_bIsFilterPopupPresent(false)
+, m_bIsUserPaneLaidOut(false)
+, m_bIsFilterControlNeeded(false)
+, m_bAutoFilenameExtension(true)
+, m_pFilterHelper(NULL)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
@@ -83,9 +102,6 @@ ControlHelper::ControlHelper()
     for( i = 0; i < TOGGLE_LAST; i++ ) {
         m_bToggleVisibility[i] = false;
     }
-
-    //  for( i = 0; i < BUTTON_LAST; i++ )
-    //      m_pButtons[i] = NULL;
 
     for( i = 0; i < LIST_LAST; i++ ) {
         m_bListVisibility[i] = false;
@@ -98,18 +114,32 @@ ControlHelper::~ControlHelper()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
     if (NULL != m_pUserPane) {
-        DisposeControl(m_pUserPane);
+        [m_pUserPane release];
     }
 
-    for(std::list<ControlRef>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); control++) {
-        ControlRef pControl = (*control);
-        ControlActionUPP pAction = GetControlAction(pControl);
-        if (NULL != pAction) {
-            DisposeControlActionUPP(pAction);
+    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); control++) {
+        NSControl* pControl = (*control);
+        NSString* sLabelName = m_aMapListLabels[pControl];
+        if (sLabelName != nil) {
+            [sLabelName release];
         }
-        DisposeControl(*control);
+        if ([pControl class] == [NSPopUpButton class]) {
+            NSTextField* pField = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            if (pField != nil) {
+                [pField release];
+            }
+        }
+        [pControl release];
     }
+
+    if (m_pFilterControl != NULL) {
+        [m_pFilterControl setTarget:nil];
+    }
+
+    [pool release];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
@@ -118,7 +148,7 @@ ControlHelper::~ControlHelper()
 //------------------------------------------------
 // XInitialization delegate
 //------------------------------------------------
-void ControlHelper::initialize(sal_Int16 nTemplateId)
+void ControlHelper::initialize( sal_Int16 nTemplateId )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "templateId", nTemplateId);
 
@@ -169,21 +199,32 @@ void ControlHelper::initialize(sal_Int16 nTemplateId)
 // XFilePickerControlAccess functions
 //------------------------------------------------------------------------------------
 
-void ControlHelper::enableControl(sal_Int16 nControlId, sal_Bool bEnable)
+void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bEnable ) const
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", bEnable);
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ControlRef pControl;
+    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
+        OSL_TRACE(" autoextension checkbox cannot be changed");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
+    }
+    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
+        OSL_TRACE(" preview checkbox cannot be changed");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
+    }
 
-    if( ( pControl = getControl(nControlId)) ) {
+    NSControl* pControl = getControl(nControlId);
+
+    if( pControl != nil ) {
         if( bEnable ) {
             OSL_TRACE( "enable" );
         } else {
             OSL_TRACE( "disable" );
         }
-        HIViewSetEnabled(pControl, bEnable);
+        [pControl setEnabled:bEnable];
     } else {
         OSL_TRACE("enable unknown control %d", nControlId );
     }
@@ -191,71 +232,63 @@ void ControlHelper::enableControl(sal_Int16 nControlId, sal_Bool bEnable)
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-OUString ControlHelper::getLabel(sal_Int16 nControlId)
+OUString ControlHelper::getLabel( sal_Int16 nControlId )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ControlRef pControl;
+    NSControl* pControl = getControl( nControlId );
 
-    if( !( pControl = getControl( nControlId ) ) ) {
-        OSL_TRACE("Get label on unknown control %d", nControlId);
+    if( pControl == nil ) {
+        OSL_TRACE("Get label for unknown control %d", nControlId);
         return OUString();
     }
 
-    CFStringRef sLabel;
-    CopyControlTitleAsCFString(pControl, &sLabel);
-    rtl::OUString retVal = CFStringToOUString(sLabel);
-    CFRelease(sLabel);
+    rtl::OUString retVal;
+    if ([pControl class] == [NSPopUpButton class]) {
+        NSString *temp = m_aMapListLabels[pControl];
+        if (temp != nil)
+            retVal = [temp OUString];
+    }
+    else {
+        NSString* sLabel = [[pControl cell] title];
+        retVal = [sLabel OUString];
+    }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
     return retVal;
 }
 
-void ControlHelper::setLabel( sal_Int16 nControlId, const CFStringRef aLabel )
+void ControlHelper::setLabel( sal_Int16 nControlId, const NSString* aLabel )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "label", aLabel);
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ControlRef pControl = getControl(nControlId);
-    if (NULL != pControl) {
-        ControlType aSubType;
-        GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),NULL,&aSubType);
-        if (aSubType == POPUPMENU) {
-            MenuRef rMenu = GetControlPopupMenuHandle(pControl);
-            //for the sizes to be calculated correctly, a menu item must be present in the menu
-            CFStringRef dummy = CFSTR("hi");
-            AppendMenuItemTextWithCFString(rMenu, dummy, 0, 0, 0);
-            //dummy is no longer needed
-            CFRelease(dummy);
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
-            SetControlTitleWithCFString(pControl, NULL);
+    NSControl* pControl = getControl(nControlId);
 
-            Rect sizeWoTitle;
-            GetBestControlRect(pControl,&sizeWoTitle,NULL);
-            //...and set the title here
-            SetControlTitleWithCFString(pControl,aLabel);
-            Rect sizeWithTitle;
-            GetBestControlRect(pControl,&sizeWithTitle,NULL);
+    if (nil != pControl) {
+        if ([pControl class] == [NSPopUpButton class]) {
+            NSString *sOldName = m_aMapListLabels[pControl];
+            if (sOldName != NULL && sOldName != aLabel) {
+                [sOldName release];
+            }
 
-            //now we no longer need the dummy menu item
-            DeleteMenuItem(rMenu, 1);
-
-            //get the title's size
-            int nTitleWidth = sizeWithTitle.right - sizeWoTitle.right;
-            SetControlProperty(pControl,kAppFourCharCode,kPopupControlPropertyTitleWidth,sizeof(nTitleWidth),&nTitleWidth);
-
-        } else if (aSubType == CHECKBOX) {
-            SetControlTitleWithCFString(pControl,aLabel);
+            m_aMapListLabels[pControl] = [aLabel retain];
+        } else if ([pControl class] == [NSButton class]) {
+            [[pControl cell] setTitle:aLabel];
         }
     } else {
         OSL_TRACE("Control not found to set label for");
     }
 
     layoutControls();
+
+    [pool release];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
@@ -266,50 +299,67 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ControlRef pControl;
+    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
+        /* see comment in the header file */
+        //rValue >>= m_bAutoFilenameExtension;
+        OSL_TRACE(" value is a bool: %d", m_bAutoFilenameExtension);
+    }
+    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
+        OSL_TRACE(" value for preview is unchangeable");
+    }
+    else {
+        NSControl* pControl = getControl( nControlId );
 
-    if( !( pControl = getControl( nControlId ) ) ) {
-        OSL_TRACE("enable unknown control %d", nControlId);
-    } else {
-        ControlType aSubType;
-        GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),NULL,&aSubType);
-        if( aSubType == CHECKBOX ) {
-            sal_Bool bChecked = false;
-            rValue >>= bChecked;
-            OSL_TRACE(" value is a bool: %d", bChecked);
-            SetControlValue(pControl, bChecked);
-        } else if( aSubType == POPUPMENU ) {
-            HandleSetListValue(pControl, nControlAction, rValue);
-        } else
-        {
-            OSL_TRACE("Can't set value on button / list %d %d",
-                      nControlId, nControlAction);
+        if( pControl == nil ) {
+            OSL_TRACE("enable unknown control %d", nControlId);
+        } else {
+            if( [pControl class] == [NSPopUpButton class] ) {
+                HandleSetListValue(pControl, nControlAction, rValue);
+            } else if( [pControl class] == [NSButton class] ) {
+                sal_Bool bChecked = false;
+                rValue >>= bChecked;
+                OSL_TRACE(" value is a bool: %d", bChecked);
+                [(NSButton*)pControl setState:(bChecked ? NSOnState : NSOffState)];
+            } else
+            {
+                OSL_TRACE("Can't set value on button / list %d %d",
+                          nControlId, nControlAction);
+            }
         }
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-uno::Any ControlHelper::getValue(sal_Int16 nControlId, sal_Int16 nControlAction)
+uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     uno::Any aRetval;
 
-    ControlRef pControl;
+    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
+        aRetval <<= m_bAutoFilenameExtension;
+        OSL_TRACE("value is a bool (autoextension): %d", m_bAutoFilenameExtension);
+    }
+    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_LINK) {
+        OSL_TRACE(" TEST do nothing");
+    }
+    else {
+        NSControl* pControl = getControl( nControlId );
 
-    if( !( pControl = getControl( nControlId ) ) ) {
-        OSL_TRACE("get value for unknown control %d", nControlId);
-    } else {
-        ControlType aSubType;
-        GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),NULL,&aSubType);
-        if( aSubType == CHECKBOX ) {
-            sal_Bool bValue = (sal_Bool)GetControlValue(pControl);
-            aRetval <<= bValue;
-            OSL_TRACE("value is a bool: %d", bValue);
-        } else if( aSubType == POPUPMENU ) {
-            aRetval = HandleGetListValue(pControl, nControlAction);
+        if( pControl == nil ) {
+            OSL_TRACE("get value for unknown control %d", nControlId);
+            aRetval <<= sal_True;
+        } else {
+            if( [pControl class] == [NSPopUpButton class] ) {
+                aRetval = HandleGetListValue(pControl, nControlAction);
+            } else if( [pControl class] == [NSButton class] ) {
+                //NSLog(@"control: %@", [[pControl cell] title]);
+                sal_Bool bValue = [(NSButton*)pControl state] == NSOnState ? sal_True : sal_False;
+                aRetval <<= bValue;
+                OSL_TRACE("value is a bool (checkbox): %d", bValue);
+            }
         }
     }
 
@@ -318,263 +368,159 @@ uno::Any ControlHelper::getValue(sal_Int16 nControlId, sal_Int16 nControlAction)
     return aRetval;
 }
 
-#pragma mark NavigationServices callback delegates
-//------------------------------------------------------------------------------------
-// NavigationServices callback delegates
-//------------------------------------------------------------------------------------
-void ControlHelper::handleStart(NavCBRecPtr callBackParms)
+void ControlHelper::createUserPane()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    OSStatus status = noErr;
-
-    if (NULL != m_pUserPane) {
-        layoutControls();
-        for (::std::list<ControlRef>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-            ControlRef pControl = *child;
-            EmbedControl(pControl, m_pUserPane);
-        }
-
-        status = NavCustomControl(callBackParms->context,kNavCtlAddControl,&m_pUserPane);
-        if (status != noErr) {
-            OSL_TRACE("NavigationServices refused to add the user pane");
-        }
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-void ControlHelper::handleCustomize(NavCBRecPtr callBackParms)
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    if (true == m_bUserPaneNeeded && NULL == m_pUserPane) {
-        createUserPane(callBackParms->window);
-    }
-
-    if (NULL == m_pUserPane) {
-        //nothing to do
+    if (m_bUserPaneNeeded == false) {
+        OSL_TRACE("no user pane needed");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
-    if (callBackParms->customRect.right == 0 && callBackParms->customRect.bottom == 0) {
-        //this is the first try, let's try normal sized controls
-        Rect normalSize;// = m_pUserPane->getSize(SalAquaControlRefWrapper::NORMAL_SIZE);
-        GetBestControlRect(m_pUserPane,&normalSize,NULL);
-        m_nLastCustomizeTryWidth = normalSize.right - normalSize.left;
-        m_nLastCustomizeTryHeight = normalSize.bottom - normalSize.top;
-        callBackParms->customRect.right = callBackParms->customRect.left + m_nLastCustomizeTryWidth;
-        callBackParms->customRect.bottom = callBackParms->customRect.top + m_nLastCustomizeTryHeight;
-    } else {
-        int nSuggestedWidth = callBackParms->customRect.right - callBackParms->customRect.left;
-        int nSuggestedHeight = callBackParms->customRect.bottom - callBackParms->customRect.top;
-        if (nSuggestedWidth >= m_nLastCustomizeTryWidth && nSuggestedHeight >= m_nLastCustomizeTryHeight) {
-            //everything was accepted
-            return;
-        } else {
-            //TODO implement small and mini behavior
-            //this can be done in a separate child workspace sometime
-        }
+    if (nil != m_pUserPane) {
+        OSL_TRACE("user pane already exists");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
     }
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
+    if (m_bIsFilterControlNeeded == true && m_pFilterControl == nil) {
+        createFilterControl();
+    }
 
-void ControlHelper::handleEvent(NavCBRecPtr callBackParms, NavEventCallbackMessage aLatestEvent)
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "latestEvent", aLatestEvent);
+    NSRect minRect = NSMakeRect(0,0,300,33);
+    m_pUserPane = [[NSView alloc] initWithFrame:minRect];
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    int currentHeight = kAquaSpaceBoxFrameViewDiffTop + kAquaSpaceBoxFrameViewDiffBottom;
+    int currentWidth = 300;
 
-    NavEventData data = callBackParms->eventData;
-    NavEventDataInfo info = data.eventDataParms;
-    EventRecord *event = info.event;
-    EventKind aEventKind = event->what;
-    EventModifiers modifiers = event->modifiers;
+    BOOL bPopupControlPresent = NO;
+    BOOL bButtonControlPresent = NO;
 
-    if (aEventKind == updateEvt) {
-        OSL_TRACE("UPDATE event");
-        // the following is a little hacky because normally Apple says in her
-        // docs that we don't have to care about drawing our custom controls
-        // once they are added to the dialog. But this is definitely not true
-        // because without this hack controls would suddenly disappear if one
-        // control in the user pane area gets clicked.
-        bool display;
-        ControlRef pControl = NULL;
+    int nCheckboxMaxWidth = 0;
+    int nPopupMaxWidth = 0;
+    int nPopupLabelMaxWidth = 0;
 
-        for (::std::list<ControlRef>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-            pControl = *child;
-            if (NULL == pControl)
-                continue;
-            display = HIViewGetNeedsDisplay(pControl) || (aLatestEvent == kNavCBAdjustRect);
-            if (!display) {
-                OSL_TRACE("REFRESHING CONTROL MYSELF");
-                Draw1Control(pControl);
+    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+        OSL_TRACE("currentHeight: %d", currentHeight);
+
+        NSControl* pControl = *child;
+
+        //let the control calculate its size
+        [pControl sizeToFit];
+
+        NSRect frame = [pControl frame];
+        OSL_TRACE("frame for control %s is {%f, %f, %f, %f}", [[pControl description] UTF8String], frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+
+        int nControlHeight = frame.size.height;
+        int nControlWidth = frame.size.width;
+
+        // Note: controls are grouped by kind, first all popup menus, then checkboxes
+        if ([pControl class] == [NSPopUpButton class]) {
+            if (bPopupControlPresent == YES) {
+                //this is not the first popup
+                currentHeight += kAquaSpaceBetweenPopupMenus;
             }
-        }
-
-        return;
-    }
-
-    if (aEventKind != mouseDown) {
-        return;
-    }
-
-    Rect globWinBounds;
-    GetWindowBounds(callBackParms->window,kWindowContentRgn,&globWinBounds);
-
-    MacOSPoint mousePt;
-    GetMouse(&mousePt);
-    SInt16 partResult;
-    ControlRef pControl = FindControlUnderMouse(mousePt,callBackParms->window,&partResult);
-
-    if (!IsControlEnabled(pControl))
-        return;
-    //    OSL_TRACE("partResult: %d", partResult);
-    //
-    ControlType nSubType = NONE;
-    GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(ControlType),NULL,&nSubType);
-
-    if (NONE == nSubType) {
-        //do nothing
-        return;
-    }
-
-    if (nSubType == CHECKBOX) {
-        SInt16 oldValue = GetControlValue(pControl);
-        bool tracking = true;
-        SetControlProperty(pControl,kAppFourCharCode,kControlPropertyTracking, sizeof(bool),&tracking);
-        ControlPartCode lastCode = -1;
-        SetControlProperty(pControl, kAppFourCharCode,kControlPropertyLastPartCode, sizeof(ControlPartCode), &lastCode);
-        //ControlPartCode part = TrackControl(pControl,mousePt,(ControlActionUPP)-1);
-        ControlPartCode part = HandleControlClick(pControl,mousePt,modifiers,(ControlActionUPP)-1);
-        SetControlProperty(pControl, kAppFourCharCode,kControlPropertyLastPartCode, sizeof(ControlPartCode), &lastCode);
-        tracking = false;
-        SetControlProperty(pControl,kAppFourCharCode,kControlPropertyTracking, sizeof(bool),&tracking);
-        if (part == 0) {
-            SInt16 newValue = GetControlValue(pControl);
-            if (newValue == oldValue) {
-                //hit control handler was not called
-                MacOSPoint mouseUpPt;
-                GetMouse(&mouseUpPt);
-                if (mouseUpPt.h == mousePt.h && mouseUpPt.v == mousePt.v) {
-                    SetControlValue(pControl,!newValue);
-                }
+            else if (child != m_aActiveControls.begin()){
+                currentHeight += kAquaSpaceBetweenControls;
             }
-        } else {
-            SetControlValue(pControl,1 - GetControlValue(pControl));
-        }
-    } else if (nSubType == POPUPMENU) {
-        Rect localBounds;
-        GetControlBounds(pControl,&localBounds);
-        Rect upBounds;
-        GetControlBounds(m_pUserPane,&upBounds);
-        localBounds.left += upBounds.left;
-        localBounds.top += upBounds.top;
-        OSL_TRACE("  localBounds t:%d l:%d b:%d r:%d", localBounds.top, localBounds.left, localBounds.bottom, localBounds.right);
 
-        int nTitleWidth;
-        GetControlProperty(pControl, kAppFourCharCode, kPopupControlPropertyTitleWidth,sizeof(nTitleWidth),NULL,&nTitleWidth);
-        //if we are hit in the popup's title, then do nothing
-        if (localBounds.left + nTitleWidth > mousePt.h) {
-            return;
-        }
+            bPopupControlPresent = YES;
 
-        //we are hit in the menu, so display the menu
-        MenuRef pMenu = GetControlPopupMenuHandle(pControl);
-        SInt16 nSelectedItem = GetControlValue(pControl);
-        CheckMenuItem(pMenu,nSelectedItem,TRUE);
+            // we have to add the label text width
+            NSString *label = m_aMapListLabels[pControl];
 
-        int menuLeftPoint = globWinBounds.left + localBounds.left + nTitleWidth - 22 + 9;
-        int menuTopPoint = localBounds.top + globWinBounds.top + 1;
+            NSTextField *textField = createLabelWithString(label);
+            [textField sizeToFit];
+            m_aMapListLabelFields[(NSPopUpButton*)pControl] = textField;
+            [m_pUserPane addSubview:textField];
 
-        OSL_TRACE("  menuLeft: %d", menuLeftPoint);
+            NSRect tfRect = [textField frame];
+            OSL_TRACE("frame for textfield %s is {%f, %f, %f, %f}", [[textField description] UTF8String], tfRect.origin.x, tfRect.origin.y, tfRect.size.width, tfRect.size.height);
 
-        long index = PopUpMenuSelect(pMenu, menuTopPoint, menuLeftPoint, GetControlValue(pControl));
-        short high = (index & 0xFF00) >> 16;
-        short low = (index & 0x00FF);
-        OSL_TRACE(" item selected: %d %d", high, low);
-        if (low != 0) {
-            if (low != nSelectedItem)
-                CheckMenuItem(pMenu,nSelectedItem,FALSE);
-            SetControlValue(pControl,low);
-            OSL_TRACE(" popup menu value: %d", GetControlValue(pControl));
-        }
-    }
+            int tfWidth = tfRect.size.width;
 
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-void ControlHelper::handleAdjustRect(NavCBRecPtr callBackParms)
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    if (NULL != m_pUserPane) {
-        SetControlBounds(m_pUserPane,&(callBackParms->customRect));
-    }
-    layoutControls();
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
-void ControlHelper::createUserPane(WindowRef parent)
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
-    if (NULL != m_pUserPane) {
-        return;
-    }
-
-    OSStatus status = noErr;
-
-    int currenttop = 0;
-    //NavServices will never be smaller
-    int maxWidth = kAquaNavigationServicesMinWidth;
-
-    for (::std::list<ControlRef>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        ControlRef pControl = *child;
-
-        Rect bestSize;
-        status = GetBestControlRect(pControl,&bestSize,NULL);
-        int nControlHeight = bestSize.bottom - bestSize.top;
-        int nControlWidth = bestSize.right - bestSize.left;
-        if ((nControlWidth + 2 * kAquaSpaceInsideGroup) > maxWidth) {
-            maxWidth = nControlWidth;
-        }
-
-        if (pControl == *(m_aActiveControls.begin())) {
-            //first control
-            if (true == m_bIsFilterPopupPresent) {
-                //in this case we already have a control in the user pane: the file formats popup control
-                // and the user pane is already spaced correctly
-                //currenttop += kAquaSpaceBetweenControls;
-            } else {
-                currenttop += kAquaSpaceInsideGroup;//from top
+            if (nPopupLabelMaxWidth < tfWidth) {
+                nPopupLabelMaxWidth = tfWidth;
             }
+
+            frame.origin.x += (kAquaSpaceBetweenControls - kAquaSpaceLabelFrameBoundsDiffH - kAquaSpacePopupMenuFrameBoundsDiffLeft) + tfWidth;
+
+            if (nControlWidth < POPUP_WIDTH_MIN) {
+                nControlWidth = POPUP_WIDTH_MIN;
+                frame.size.width = nControlWidth;
+                [pControl setFrame:frame];
+            }
+
+            if (nControlWidth > POPUP_WIDTH_MAX) {
+                nControlWidth = POPUP_WIDTH_MAX;
+                frame.size.width = nControlWidth;
+                [pControl setFrame:frame];
+            }
+
+            //set the max size
+            if (nPopupMaxWidth < nControlWidth) {
+                nPopupMaxWidth = nControlWidth;
+            }
+
+            nControlWidth += tfWidth + kAquaSpaceBetweenControls - kAquaSpaceLabelFrameBoundsDiffH - kAquaSpacePopupMenuFrameBoundsDiffLeft;
+            if (nControlHeight < kAquaPopupButtonDefaultHeight) {
+                //maybe the popup has no menu item yet, so set a default height
+                nControlHeight = kAquaPopupButtonDefaultHeight;
+            }
+
+            nControlHeight -= kAquaSpacePopupMenuFrameBoundsDiffV;
         }
-        else {
-            //we already have a control
-            currenttop += kAquaSpaceBetweenControls;//in-between space before
+        else if ([pControl class] == [NSButton class]) {
+            if (child != m_aActiveControls.begin()){
+                currentHeight += kAquaSpaceBetweenControls;
+            }
+
+            if (nCheckboxMaxWidth < nControlWidth) {
+                nCheckboxMaxWidth = nControlWidth;
+            }
+
+            bButtonControlPresent = YES;
+            nControlWidth -= 2 * kAquaSpaceSwitchButtonFrameBoundsDiff;
+            nControlHeight -= 2 * kAquaSpaceSwitchButtonFrameBoundsDiff;
         }
 
-        //set the top value
-        bestSize.top = currenttop;
-        bestSize.bottom = currenttop + nControlHeight;
-        bestSize.left = kAquaSpaceInsideGroup;
-        bestSize.right = kAquaSpaceInsideGroup + nControlWidth;
+        // if ((nControlWidth + 2 * kAquaSpaceInsideGroupH) > currentWidth) {
+        //     currentWidth = nControlWidth + 2 * kAquaSpaceInsideGroupH;
+        // }
 
-        currenttop += nControlHeight;
+        currentHeight += nControlHeight;
+
+        [m_pUserPane addSubview:pControl];
     }
-    //from bottom
-    currenttop += kAquaSpaceInsideGroup;
 
-    //ok, we have all controls
-    Rect upRect = { 0, 0, currenttop, maxWidth };
-    status = CreateUserPaneControl(parent,&upRect,0x16,&m_pUserPane);
+    OSL_TRACE("height after adding all controls: %d", currentHeight);
+
+    if (bPopupControlPresent && bButtonControlPresent)
+    {
+        //after a popup button (array) and before a different kind of control we need some extra space instead of the standard
+        currentHeight -= kAquaSpaceBetweenControls;
+        currentHeight += kAquaSpaceAfterPopupButtonsV;
+        OSL_TRACE("popup extra space added, currentHeight: %d", currentHeight);
+    }
+
+    int nLongestPopupWidth = nPopupMaxWidth + nPopupLabelMaxWidth + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
+
+    currentWidth = nLongestPopupWidth > nCheckboxMaxWidth ? nLongestPopupWidth : nCheckboxMaxWidth;
+    OSL_TRACE("longest control width: %d", currentWidth);
+
+    currentWidth += 2* kAquaSpaceInsideGroupH;
+
+    if (currentWidth < minRect.size.width)
+        currentWidth = minRect.size.width;
+
+    if (currentHeight < minRect.size.height)
+        currentHeight = minRect.size.height;
+
+    NSRect upRect = NSMakeRect(0, 0, currentWidth, currentHeight );
+    OSL_TRACE("setting user pane rect to {%f, %f, %f, %f}",upRect.origin.x, upRect.origin.y, upRect.size.width, upRect.size.height);
+
+    [m_pUserPane setFrame:upRect];
 
     layoutControls();
 
@@ -585,84 +531,34 @@ void ControlHelper::createUserPane(WindowRef parent)
 //------------------------------------------------------------------------------------
 // Private / Misc
 //------------------------------------------------------------------------------------
-void SalAquaCheckboxAction(ControlRef pControl, ControlPartCode partCode)
-{
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "partCode", partCode);
-
-    ControlPartCode lastCode;
-    GetControlProperty(pControl,kAppFourCharCode,kControlPropertyLastPartCode,sizeof(ControlPartCode),NULL,&lastCode);
-
-    bool tracking;
-    GetControlProperty(pControl,kAppFourCharCode,kControlPropertyTracking,sizeof(bool),NULL, &tracking);
-    if (true == tracking) {
-        if (lastCode == -1) {
-            //first run
-            HiliteControl(pControl, kControlCheckBoxPart);
-        }
-        lastCode = partCode;
-        SetControlProperty(pControl,kAppFourCharCode,kControlPropertyLastPartCode,sizeof(ControlPartCode),&lastCode);
-    } else {
-        //keep initial state
-        if (partCode != 0)
-            SetControlValue(pControl, !GetControlValue(pControl));
-        lastCode = -1;
-        SetControlProperty(pControl, kAppFourCharCode, kControlPropertyLastPartCode, sizeof(ControlPartCode), &lastCode);
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__);
-}
-
 void ControlHelper::createControls()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    OSStatus status = noErr;
     CResourceProvider aResProvider;
-    Rect dummyRect = { 0, 0, 0, 0 };
-
-#define MENUOFFSET 1024
     for (int i = 0; i < LIST_LAST; i++) {
         if (true == m_bListVisibility[i]) {
             m_bUserPaneNeeded = true;
 
-            int elementName = getControlElementName(POPUPMENU, i);
-            CFStringRef sLabel = aResProvider.getResString(elementName);
+            int elementName = getControlElementName([NSPopUpButton class], i);
+            NSString* sLabel = aResProvider.getResString(elementName);
 
-            MenuRef rMenu;
-            int menuId = MENUOFFSET + i;
-            status = CreateNewMenu(menuId, 0, &rMenu);
-            InsertMenu(rMenu, -1);
-
-            //we create the popup menu control without title
-            status = CreatePopupButtonControl(NULL,&dummyRect,NULL, menuId, TRUE, -1,teFlushDefault,0,&m_pListControls[i]);
-
-            ControlType aSubType = POPUPMENU;
-            SetControlProperty(m_pListControls[i],kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),&aSubType);
+            m_pListControls[i] = [NSPopUpButton new];
 
 #define MAP_LIST_( elem ) \
-case elem: \
-    setLabel(ExtendedFilePickerElementIds::LISTBOX_##elem, sLabel); \
-    break
+ case elem: \
+     setLabel(ExtendedFilePickerElementIds::LISTBOX_##elem, sLabel); \
+     break
 
             switch(i) {
                 MAP_LIST_(VERSION);
                 MAP_LIST_(TEMPLATE);
                 MAP_LIST_(IMAGE_TEMPLATE);
             }
-            CFRelease(sLabel);
 
             m_aActiveControls.push_back(m_pListControls[i]);
-
-            Rect size;
-            GetBestControlRect(m_pListControls[i],&size,NULL);
-            if (size.right < kAquaNavigationServicesPopupControlWidth) {
-                size.right = kAquaNavigationServicesPopupControlWidth;
-                SetControlBounds(m_pListControls[i], &size);
-            }
-            //we don't have any menu items in the beginning, so let's disable the control
-            //HIViewSetEnabled(m_pListControls[i],false);
         } else {
-            m_pListControls[i] = NULL;
+            m_pListControls[i] = nil;
         }
     }
 
@@ -670,21 +566,29 @@ case elem: \
         if (true == m_bToggleVisibility[i]) {
             m_bUserPaneNeeded = true;
 
-            int elementName = getControlElementName(CHECKBOX, i);
-            CFStringRef sLabel = aResProvider.getResString(elementName);
+            int elementName = getControlElementName([NSButton class], i);
+            NSString* sLabel = aResProvider.getResString(elementName);
 
-            status = CreateCheckBoxControl(NULL, &dummyRect, sLabel, FALSE, FALSE, &m_pToggles[i]);
-            CFRelease(sLabel);
+            NSButton *button = [NSButton new];
+            [button setTitle:sLabel];
+
+            [button setButtonType:NSSwitchButton];
+
+            [button setState:NSOffState];
+
+            m_pToggles[i] = button;
+
             m_aActiveControls.push_back(m_pToggles[i]);
-
-            ControlType aSubType = CHECKBOX;
-            SetControlProperty(m_pToggles[i],kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),&aSubType);
-
-            ControlActionUPP pControlAction = NewControlActionUPP(SalAquaCheckboxAction);
-            SetControlAction(m_pToggles[i], pControlAction);
         } else {
-            m_pToggles[i] = NULL;
+            m_pToggles[i] = nil;
         }
+    }
+
+    //preview is always on with Mac OS X
+    NSControl *pPreviewBox = m_pToggles[PREVIEW];
+    if (pPreviewBox != nil) {
+        [pPreviewBox setEnabled:NO];
+        [(NSButton*)pPreviewBox setState:NSOnState];
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -701,38 +605,30 @@ case elem: \
     DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn); \
     return nReturn
 
-int ControlHelper::getControlElementName(ControlType type, int nControlId)
+int ControlHelper::getControlElementName(const Class aClazz, const int nControlId) const
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "type", type, "controlId", nControlId);
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "aClazz", [[aClazz description] UTF8String], "controlId", nControlId);
 
     int nReturn = -1;
-    switch (type) {
-        case CHECKBOX:
-        {
-            switch (nControlId) {
-                TOGGLE_ELEMENT( AUTOEXTENSION );
-                TOGGLE_ELEMENT( PASSWORD );
-                TOGGLE_ELEMENT( FILTEROPTIONS );
-                TOGGLE_ELEMENT( READONLY );
-                TOGGLE_ELEMENT( LINK );
-                TOGGLE_ELEMENT( PREVIEW );
-                TOGGLE_ELEMENT( SELECTION );
-            }
-            break;
+    if (aClazz == [NSButton class])
+    {
+        switch (nControlId) {
+            TOGGLE_ELEMENT( AUTOEXTENSION );
+            TOGGLE_ELEMENT( PASSWORD );
+            TOGGLE_ELEMENT( FILTEROPTIONS );
+            TOGGLE_ELEMENT( READONLY );
+            TOGGLE_ELEMENT( LINK );
+            TOGGLE_ELEMENT( PREVIEW );
+            TOGGLE_ELEMENT( SELECTION );
         }
-        case POPUPMENU:
-        {
-            switch (nControlId) {
-                LIST_ELEMENT( VERSION );
-                LIST_ELEMENT( TEMPLATE );
-                LIST_ELEMENT( IMAGE_TEMPLATE );
-            }
-            break;
+    }
+    else if (aClazz == [NSPopUpButton class])
+    {
+        switch (nControlId) {
+            LIST_ELEMENT( VERSION );
+            LIST_ELEMENT( TEMPLATE );
+            LIST_ELEMENT( IMAGE_TEMPLATE );
         }
-        case NONE:
-            break;
-        default:
-            break;
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, nReturn);
@@ -740,12 +636,21 @@ int ControlHelper::getControlElementName(ControlType type, int nControlId)
     return nReturn;
 }
 
-void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int16 nControlAction, const uno::Any& rValue)
+void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int16 nControlAction, const uno::Any& rValue)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
 
-    MenuRef rMenu = GetControlPopupMenuHandle(pControl);
-    if (NULL == rMenu) {
+    if ([pControl class] != [NSPopUpButton class]) {
+        OSL_TRACE("not a popup menu");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
+    }
+
+    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
+    NSMenu *rMenu = [pButton menu];
+    if (nil == rMenu) {
+        OSL_TRACE("button has no menu");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
@@ -757,22 +662,9 @@ void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int1
             OUString sItem;
             rValue >>= sItem;
 
-            int nMenuItems = CountMenuItems(rMenu);
-            if (nMenuItems == 0) {
-                //HIViewSetEnabled(pControl, true);
-            }
-
-            CFStringRef sCFItem = CFStringCreateWithOUString(sItem);
+            NSString* sCFItem = [NSString stringWithOUString:sItem];
             OSL_TRACE("Adding menu item: %s", OUStringToOString(sItem, RTL_TEXTENCODING_UTF8).getStr());
-            AppendMenuItemTextWithCFString(rMenu,sCFItem,0,0,NULL);
-            SetControlMaximum(pControl,CountMenuItems(rMenu));
-            CFRelease(sCFItem);
-            //gtk_combo_box_append_text(pWidget, rtl::OUStringToOString(sItem, RTL_TEXTENCODING_UTF8).getStr());
-            //                 if (!bVersionWidthUnset)
-            //                 {
-            //                     //                    HackWidthToFirst(pWidget);
-            //                     bVersionWidthUnset = true;
-            //                 }
+            [pButton addItemWithTitle:sCFItem];
         }
             break;
         case ControlActions::ADD_ITEMS:
@@ -783,16 +675,10 @@ void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int1
             sal_Int32 nItemCount = aStringList.getLength();
             for (sal_Int32 i = 0; i < nItemCount; ++i)
             {
-                int nMenuItems = CountMenuItems(rMenu);
-                if (nMenuItems == 0) {
-                    //HIViewSetEnabled(pControl, true);
-                }
-                CFStringRef sCFItem = CFStringCreateWithOUString(aStringList[i]);
+                NSString* sCFItem = [NSString stringWithOUString:aStringList[i]];
                 OSL_TRACE("Adding menu item: %s", OUStringToOString(aStringList[i], RTL_TEXTENCODING_UTF8).getStr());
-                AppendMenuItemTextWithCFString(rMenu,sCFItem,0,0,NULL);
-                CFRelease(sCFItem);
+                [pButton addItemWithTitle:sCFItem];
             }
-            SetControlMaximum(pControl,CountMenuItems(rMenu));
         }
             break;
         case ControlActions::DELETE_ITEM:
@@ -800,27 +686,21 @@ void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int1
             OSL_TRACE("DELETE_ITEM");
             sal_Int32 nPos = -1;
             rValue >>= nPos;
-            //in a MenuRef the first element has position 1
-            OSL_TRACE("Deleteing item at position %d", (nPos + 1));
-            DeleteMenuItem(rMenu,nPos + 1);
-            int nMenuItems = CountMenuItems(rMenu);
-            SetControlMaximum(pControl, nMenuItems);
-            if (nMenuItems == 0) {
-                //HIViewSetEnabled(pControl, false);
-            }
+            OSL_TRACE("Deleting item at position %d", (nPos));
+            [rMenu removeItemAtIndex:nPos];
         }
             break;
         case ControlActions::DELETE_ITEMS:
         {
             OSL_TRACE("DELETE_ITEMS");
-            int nItems = CountMenuItems(rMenu);
-            if (nItems == 0)
+            int nItems = [rMenu numberOfItems];
+            if (nItems == 0) {
+                OSL_TRACE("no menu items to delete");
+                DBG_PRINT_EXIT(CLASS_NAME, __func__);
                 return;
-            DeleteMenuItems(rMenu,1, nItems);
-            int nMenuItems = CountMenuItems(rMenu);
-            SetControlMaximum(pControl, nMenuItems);
-            if (nMenuItems == 0) {
-                //HIViewSetEnabled(pControl, false);
+            }
+            for(sal_Int32 i = 0; i < nItems; i++) {
+                [rMenu removeItemAtIndex:i];
             }
         }
             break;
@@ -828,9 +708,8 @@ void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int1
         {
             sal_Int32 nPos = -1;
             rValue >>= nPos;
-            OSL_TRACE("Selecting item at position %d", (nPos + 1));
-            //in a MenuRef the first element has position 1
-            SetControlValue(pControl, nPos + 1);
+            OSL_TRACE("Selecting item at position %d", nPos);
+            [pButton selectItemAtIndex:nPos];
         }
             break;
         default:
@@ -844,14 +723,23 @@ void ControlHelper::HandleSetListValue(const ControlRef pControl, const sal_Int1
 }
 
 
-uno::Any ControlHelper::HandleGetListValue(const ControlRef pControl, const sal_Int16 nControlAction) const
+uno::Any ControlHelper::HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction) const
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlAction", nControlAction);
 
     uno::Any aAny;
 
-    MenuRef rMenu = GetControlPopupMenuHandle(pControl);
-    if (NULL == rMenu) {
+    if ([pControl class] != [NSPopUpButton class]) {
+        OSL_TRACE("not a popup button");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return aAny;
+    }
+
+    NSPopUpButton *pButton = (NSPopUpButton*)pControl;
+    NSMenu *rMenu = [pButton menu];
+    if (nil == rMenu) {
+        OSL_TRACE("button has no menu");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return aAny;
     }
 
@@ -862,17 +750,15 @@ uno::Any ControlHelper::HandleGetListValue(const ControlRef pControl, const sal_
             OSL_TRACE("GET_ITEMS");
             uno::Sequence< OUString > aItemList;
 
-            int nItems = CountMenuItems(rMenu);
+            int nItems = [rMenu numberOfItems];
             if (nItems > 0) {
                 aItemList.realloc(nItems);
             }
-            for (int i = 1; i <= nItems; i++) {
-                CFStringRef sCFItem;
-                CopyMenuItemTextAsCFString(rMenu, i, &sCFItem);
-                if (NULL != sCFItem) {
-                    aItemList[i - 1] = CFStringToOUString(sCFItem);
+            for (int i = 0; i < nItems; i++) {
+                NSString* sCFItem = [pButton itemTitleAtIndex:i];
+                if (nil != sCFItem) {
+                    aItemList[i] = [sCFItem OUString];
                     OSL_TRACE("Return value[%d]: %s", (i - 1), OUStringToOString(aItemList[i - 1], RTL_TEXTENCODING_UTF8).getStr());
-                    CFRelease(sCFItem);
                 }
             }
 
@@ -882,24 +768,20 @@ uno::Any ControlHelper::HandleGetListValue(const ControlRef pControl, const sal_
         case ControlActions::GET_SELECTED_ITEM:
         {
             OSL_TRACE("GET_SELECTED_ITEM");
-            int nIndex = GetControlValue(pControl);
-            CFStringRef sCFItem;
-            CopyMenuItemTextAsCFString(rMenu, nIndex, &sCFItem);
-            if (NULL != sCFItem) {
-                OUString sString = CFStringToOUString(sCFItem);
+            NSString* sCFItem = [pButton titleOfSelectedItem];
+            if (nil != sCFItem) {
+                OUString sString = [sCFItem OUString];
                 OSL_TRACE("Return value: %s", OUStringToOString(sString, RTL_TEXTENCODING_UTF8).getStr());
                 aAny <<= sString;
-                CFRelease(sCFItem);
             }
         }
             break;
         case ControlActions::GET_SELECTED_ITEM_INDEX:
         {
             OSL_TRACE("GET_SELECTED_ITEM_INDEX");
-            //menu indexes start at 1, so we have to subtract 1
-            int nActive = GetControlValue(pControl) - 1;
+            sal_Int32 nActive = [pButton indexOfSelectedItem];
             OSL_TRACE("Return value: %d", nActive);
-            aAny <<= static_cast< sal_Int32 >(nActive);
+            aAny <<= nActive;
         }
             break;
         default:
@@ -914,11 +796,11 @@ uno::Any ControlHelper::HandleGetListValue(const ControlRef pControl, const sal_
 
 
 // cf. offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl
-ControlRef ControlHelper::getControl( const sal_Int16 nControlId)
+NSControl* ControlHelper::getControl( const sal_Int16 nControlId ) const
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
 
-    ControlRef pWidget = NULL;
+    NSControl* pWidget = nil;
 
 #define MAP_TOGGLE( elem ) \
 case ExtendedFilePickerElementIds::CHECKBOX_##elem: \
@@ -942,11 +824,6 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
 
     switch( nControlId )
     {
-        case AUTOEXTENSION:
-        {
-            //handle differently on MacOSX
-            break;
-        }
             MAP_TOGGLE( PASSWORD );
             MAP_TOGGLE( FILTEROPTIONS );
             MAP_TOGGLE( READONLY );
@@ -975,87 +852,216 @@ void ControlHelper::layoutControls()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    if (NULL == m_pUserPane) {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if (nil == m_pUserPane) {
+        OSL_TRACE("no user pane to layout");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
     }
 
-    OSStatus status = noErr;
-    Rect userPaneRect;
-    GetControlBounds(m_pUserPane,&userPaneRect);
-    int nUsableWidth = userPaneRect.right - userPaneRect.left - 2 * kAquaSpaceInsideGroup;
+    if (m_bIsUserPaneLaidOut == true) {
+        OSL_TRACE("user pane already laid out");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
+    }
 
-    int currenttop = 0;
+    NSRect userPaneRect = [m_pUserPane frame];
+    OSL_TRACE("userPane frame: {%f, %f, %f, %f}",userPaneRect.origin.x, userPaneRect.origin.y, userPaneRect.size.width, userPaneRect.size.height);
+
+    int nUsableWidth = userPaneRect.size.width;
+
+    //NOTE: NSView's coordinate system starts in the lower left hand corner but we start adding controls from the top,
+    // so we subtract from the vertical position as we make our way down the pane.
+    int currenttop = userPaneRect.size.height;
     int nCheckboxMaxWidth = 0;
+    int nPopupMaxWidth = 0;
+    int nPopupLabelMaxWidth = 0;
 
-    for (::std::list<ControlRef>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        ControlRef pControl = *child;
+    //first loop to determine max sizes
+    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+        NSControl* pControl = *child;
 
-        Rect bestSize;
-        status = GetBestControlRect(pControl,&bestSize,NULL);
-        int nControlHeight = bestSize.bottom - bestSize.top;
-        int nControlWidth = bestSize.right - bestSize.left;
+        NSRect controlRect = [pControl frame];
+        int nControlWidth = controlRect.size.width;
 
-        if (pControl == *(m_aActiveControls.begin())) {
-            //first control
-            if (true == m_bIsFilterPopupPresent) {
-                //in this case we already have a control in the user pane: the file formats popup control
-                // and the user pane is already spaced correctly
-                //currenttop += kAquaSpaceBetweenControls;
-            } else {
-                currenttop += kAquaSpaceInsideGroup;//from top
+        Class aSubType = [pControl class];
+        if (aSubType == [NSPopUpButton class]) {
+            if (nPopupMaxWidth < nControlWidth) {
+                nPopupMaxWidth = nControlWidth;
             }
-        }
-        else {
-            //we already have a control
-            currenttop += kAquaSpaceBetweenControls;//in-between space before
-        }
-
-        ControlType aSubType;
-        GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),NULL,&aSubType);
-        if (aSubType == POPUPMENU) {
-            int nTitleWidth;
-            GetControlProperty(pControl,kAppFourCharCode,kPopupControlPropertyTitleWidth,sizeof(nTitleWidth),NULL,&nTitleWidth);
-            if (nControlWidth < kAquaNavigationServicesPopupControlWidth + nTitleWidth)
-                nControlWidth = kAquaNavigationServicesPopupControlWidth + nTitleWidth;
-            //let's center popups
-            bestSize.left = kAquaSpaceInsideGroup + (nUsableWidth - nControlWidth) / 2;
-            bestSize.right = bestSize.left + nControlWidth;
+            NSTextField *label = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            NSRect labelFrame = [label frame];
+            int nLabelWidth = labelFrame.size.width;
+            if (nPopupLabelMaxWidth < nLabelWidth) {
+                nPopupLabelMaxWidth = nLabelWidth;
+            }
         } else {
-            //for checkboxes first determine max. width
             if (nCheckboxMaxWidth < nControlWidth) {
                 nCheckboxMaxWidth = nControlWidth;
             }
         }
-
-        //set the top value
-        bestSize.top = currenttop;
-        bestSize.bottom = currenttop + nControlHeight;
-        SetControlBounds(pControl, &bestSize);
-
-        currenttop += nControlHeight;
     }
 
-    int nCheckboxLeft = kAquaSpaceInsideGroup + (nUsableWidth - nCheckboxMaxWidth) / 2;
-    //second run to set checkbox dimensions
-    for (::std::list<ControlRef>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        ControlRef pControl = *child;
+    int nLongestPopupWidth = nPopupMaxWidth + nPopupLabelMaxWidth + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
+    OSL_TRACE("longest popup width: %d", nLongestPopupWidth);
 
-        ControlType aSubType;
-        GetControlProperty(pControl,kAppFourCharCode,kControlPropertySubType,sizeof(aSubType),NULL,&aSubType);
-        if (aSubType != CHECKBOX) {
-            //nothing to do for other types
-            continue;
+    NSControl* previousControl = nil;
+
+    int nDistBetweenControls = 0;
+
+    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+        NSControl* pControl = *child;
+
+        //get the control's bounds
+        NSRect controlRect = [pControl frame];
+        int nControlHeight = controlRect.size.height;
+        int nControlWidth = controlRect.size.width;
+
+        //subtract the height from the current vertical position, because the control's bounds origin rect will be its lower left hand corner
+        currenttop -= nControlHeight;
+
+        Class aSubType = [pControl class];
+
+        //add space between the previous control and this control according to Apple's HIG
+        nDistBetweenControls = getVerticalDistance(previousControl, pControl);
+        OSL_TRACE("vertical distance: %d", nDistBetweenControls);
+        currenttop -= nDistBetweenControls;
+
+        previousControl = pControl;
+
+        if (aSubType == [NSPopUpButton class]) {
+            //move vertically up some pixels to space the controls between their real (visual) bounds
+            currenttop += kAquaSpacePopupMenuFrameBoundsDiffTop;//from top
+
+            //get the corresponding popup label
+            NSTextField *label = m_aMapListLabelFields[(NSPopUpButton*)pControl];
+            NSRect labelFrame = [label frame];
+            int totalWidth = nPopupMaxWidth + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
+            OSL_TRACE("totalWidth: %d", totalWidth);
+            //let's center popups
+            int left = (nUsableWidth + nLongestPopupWidth) / 2 - totalWidth;
+            OSL_TRACE("left: %d", left);
+            labelFrame.origin.x = left;
+            labelFrame.origin.y = currenttop + kAquaSpaceLabelPopupDiffV;
+            OSL_TRACE("setting label at: {%f, %f, %f, %f}",labelFrame.origin.x, labelFrame.origin.y, labelFrame.size.width, labelFrame.size.height);
+            [label setFrame:labelFrame];
+
+            controlRect.origin.x = left + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpaceLabelFrameBoundsDiffH - kAquaSpacePopupMenuFrameBoundsDiffLeft;
+            controlRect.origin.y = currenttop;
+            controlRect.size.width = nPopupMaxWidth;
+            OSL_TRACE("setting popup at: {%f, %f, %f, %f}",controlRect.origin.x, controlRect.origin.y, controlRect.size.width, controlRect.size.height);
+            [pControl setFrame:controlRect];
+
+            //add some space to place the vertical position right below the popup's visual bounds
+            currenttop += kAquaSpacePopupMenuFrameBoundsDiffBottom;
+        } else {
+            currenttop += kAquaSpaceSwitchButtonFrameBoundsDiff;//from top
+
+            nControlWidth = nCheckboxMaxWidth;
+            int left = (nUsableWidth - nCheckboxMaxWidth) / 2;
+            controlRect.origin.x = left;
+            controlRect.origin.y = currenttop;
+            controlRect.size.width = nPopupMaxWidth;
+            [pControl setFrame:controlRect];
+            OSL_TRACE("setting checkbox at: {%f, %f, %f, %f}",controlRect.origin.x, controlRect.origin.y, controlRect.size.width, controlRect.size.height);
+
+            currenttop += kAquaSpaceSwitchButtonFrameBoundsDiff;
+        }
+    }
+
+    m_bIsUserPaneLaidOut = true;
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+}
+
+void ControlHelper::createFilterControl() {
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
+    CResourceProvider aResProvider;
+    NSString* sLabel = aResProvider.getResString(CommonFilePickerElementIds::LISTBOX_FILTER_LABEL);
+
+    m_pFilterControl = [NSPopUpButton new];
+
+    [m_pFilterControl setAction:@selector(filterSelectedAtIndex:)];
+    [m_pFilterControl setTarget:m_pDelegate];
+
+    NSMenu *menu = [m_pFilterControl menu];
+
+    for (NSStringList::iterator iter = m_pFilterHelper->getFilterNames()->begin(); iter != m_pFilterHelper->getFilterNames()->end(); iter++) {
+        NSString *filterName = *iter;
+        OSL_TRACE("adding filter name: %s", [filterName UTF8String]);
+        if ([filterName isEqualToString:@"-"]) {
+            [menu addItem:[NSMenuItem separatorItem]];
+        }
+        else {
+            [m_pFilterControl addItemWithTitle:filterName];
+        }
+    }
+
+    // always add the filter as first item
+    m_aActiveControls.push_front(m_pFilterControl);
+    m_aMapListLabels[m_pFilterControl] = [sLabel retain];
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+}
+
+NSTextField* ControlHelper::createLabelWithString(const NSString* labelString) {
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "label", labelString);
+
+    NSTextField *textField = [NSTextField new];
+    [textField setEditable:NO];
+    [textField setSelectable:NO];
+    [textField setDrawsBackground:NO];
+    [textField setBordered:NO];
+    [[textField cell] setTitle:labelString];
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+    return textField;
+}
+
+int ControlHelper::getVerticalDistance(const NSControl* first, const NSControl* second)
+{
+    if (first == nil) {
+        return kAquaSpaceBoxFrameViewDiffTop;
+    }
+    else if (second == nil) {
+        return kAquaSpaceBoxFrameViewDiffBottom;
+    }
+    else {
+        Class firstClass = [first class];
+        Class secondClass = [second class];
+
+        if (firstClass == [NSPopUpButton class]) {
+            if (secondClass == [NSPopUpButton class]) {
+                return kAquaSpaceBetweenPopupMenus;
+            }
+            else {
+                return kAquaSpaceAfterPopupButtonsV;
+            }
         }
 
-        Rect bestSize;
-        status = GetBestControlRect(pControl,&bestSize,NULL);
-        int nControlWidth = bestSize.right - bestSize.left;
-
-        bestSize.left = nCheckboxLeft;
-        bestSize.right = bestSize.left + nControlWidth;
-        SetControlBounds(pControl, &bestSize);
+        return kAquaSpaceBetweenControls;
     }
+}
+
+void ControlHelper::updateFilterUI()
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
+    if (m_bIsFilterControlNeeded == false || m_pFilterHelper == NULL) {
+        OSL_TRACE("no filter control needed or no filter helper present");
+        DBG_PRINT_EXIT(CLASS_NAME, __func__);
+        return;
+    }
+
+    int index = m_pFilterHelper->getCurrentFilterIndex();
+
+    if (m_pFilterControl == nil) {
+        createFilterControl();
+    }
+
+    [m_pFilterControl selectItemAtIndex:index];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
