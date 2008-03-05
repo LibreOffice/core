@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:12:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,6 +598,15 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
                              maThresRes.mnThresLogToPixX );
 }
 
+float OutputDevice::ImplFloatLogicWidthToDevicePixel( float fLogicWidth) const
+{
+    if( !mbMap)
+        return fLogicWidth;
+    // TODO: consolidate the calculation into one multiplication
+    float fPixelWidth = (fLogicWidth * mnDPIX * maMapRes.mnMapScNumX) / maMapRes.mnMapScDenomX;
+    return fPixelWidth;
+}
+
 // -----------------------------------------------------------------------
 
 long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
@@ -608,6 +617,14 @@ long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
     return ImplLogicToPixel( nHeight, mnDPIY,
                              maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                              maThresRes.mnThresLogToPixY );
+}
+
+float OutputDevice::ImplFloatLogicHeightToDevicePixel( float fLogicHeight) const
+{
+    if( !mbMap)
+        return fLogicHeight;
+    float fPixelHeight = (fLogicHeight * mnDPIY * maMapRes.mnMapScNumY) / maMapRes.mnMapScDenomY;
+    return fPixelHeight;
 }
 
 // -----------------------------------------------------------------------
@@ -622,6 +639,14 @@ long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
                              maThresRes.mnThresPixToLogX );
 }
 
+float OutputDevice::ImplFloatDevicePixelToLogicWidth( float fPixelWidth) const
+{
+    if( !mbMap)
+        return fPixelWidth;
+    float fLogicHeight = (fPixelWidth * maMapRes.mnMapScDenomX) / (mnDPIX * maMapRes.mnMapScNumX);
+    return fLogicHeight;
+}
+
 // -----------------------------------------------------------------------
 
 long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
@@ -633,6 +658,15 @@ long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
                              maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                              maThresRes.mnThresPixToLogY );
 }
+
+float OutputDevice::ImplFloatDevicePixelToLogicHeight( float fPixelHeight) const
+{
+    if( !mbMap)
+        return fPixelHeight;
+    float fLogicHeight = (fPixelHeight * maMapRes.mnMapScDenomY) / (mnDPIY * maMapRes.mnMapScNumY);
+    return fLogicHeight;
+}
+
 
 // -----------------------------------------------------------------------
 
