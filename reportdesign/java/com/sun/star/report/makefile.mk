@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:14:30 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:28:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ JAVAFILES       :=	DataRow.java\
                     ReportExpressionMetaData.java\
                     ReportFunction.java\
                     ReportJob.java\
+                    ReportJobFactory.java\
                     ReportJobDefinition.java\
                     ImageService.java\
                     SOImageService.java\
