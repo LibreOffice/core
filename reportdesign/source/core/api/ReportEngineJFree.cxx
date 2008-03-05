@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportEngineJFree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:44:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <connectivity/statementcomposer.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
@@ -121,6 +120,8 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
     DBG_CTOR( rpt_OReportEngineJFree,NULL);
 }
 // -----------------------------------------------------------------------------
+// TODO: VirtualFunctionFinder: This is virtual function!
+//
 OReportEngineJFree::~OReportEngineJFree()
 {
     DBG_DTOR( rpt_OReportEngineJFree,NULL);
@@ -132,7 +133,6 @@ void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
 {
     ReportEnginePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
-    ::comphelper::disposeComponent(m_xRowSet);
     m_xActiveConnection.clear();
 }
 // -----------------------------------------------------------------------------
@@ -190,24 +190,9 @@ void SAL_CALL OReportEngineJFree::setReportDefinition( const uno::Reference< rep
         {
             prepareSet(PROPERTY_REPORTDEFINITION, uno::makeAny(m_xReport), uno::makeAny(_report), &l);
             m_xReport = _report;
-            ::comphelper::disposeComponent(m_xRowSet);
-            m_xRowSet.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RowSet"))
-                ,m_xContext),uno::UNO_QUERY);
         }
-        setRowSetProperties();
     }
     l.notify();
-}
-// -----------------------------------------------------------------------------
-void OReportEngineJFree::setRowSetProperties()
-{
-    if ( m_xReport.is() && m_xRowSet.is() )
-    {
-        uno::Reference< beans::XPropertySet> xRowSetProp(m_xRowSet,uno::UNO_QUERY);
-        xRowSetProp->setPropertyValue(PROPERTY_COMMAND,m_xReport->getPropertyValue(PROPERTY_COMMAND));
-        xRowSetProp->setPropertyValue(PROPERTY_COMMANDTYPE,m_xReport->getPropertyValue(PROPERTY_COMMANDTYPE));
-        xRowSetProp->setPropertyValue(PROPERTY_FILTER,m_xReport->getPropertyValue(PROPERTY_FILTER));
-    }
 }
 // -----------------------------------------------------------------------------
 uno::Reference< task::XStatusIndicator > SAL_CALL OReportEngineJFree::getStatusIndicator() throw (uno::RuntimeException)
@@ -232,7 +217,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
-        if ( !m_xReport.is() || !m_xRowSet.is() || !m_xActiveConnection.is() )
+        if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
         try
@@ -250,17 +235,10 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(5/*6*/);
             sal_Int32 nPos = 0;
-
-            //aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Key"));
-            //::rtl::OUString sKey;// = StorageContainer::registerStorage(m_xReport);
-            //aConvertedProperties[nPos++].Value <<= sKey;
-
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStorage"));
             aConvertedProperties[nPos++].Value <<= xTemp;
-
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStorage"));
 
-            //! TODO: has to be changed into a temp storage later on
             const static String s_sExt = String::CreateFromAscii(".rpt");
             String sName = m_xReport->getName();
             ::utl::TempFile aFile(sName,sal_False,&s_sExt);
@@ -272,76 +250,27 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
                 static const ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
                 xStorageProp->setPropertyValue( sPropName, uno::makeAny(m_xReport->getMimeType()));
             }
-            /*::rtl::OUString sStyles(RTL_CONSTASCII_USTRINGPARAM("styles.xml"));
-            xTemp->copyElementTo(sStyles,xOut,sStyles);*/
 
             aConvertedProperties[nPos++].Value <<= xOut;
 
-            aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mimetype"));
-            aConvertedProperties[nPos++].Value <<= m_xReport->getMimeType();
+            aConvertedProperties[nPos].Name = PROPERTY_REPORTDEFINITION;
+            aConvertedProperties[nPos++].Value <<= m_xReport;
 
-            aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
-            aConvertedProperties[nPos++].Value <<= m_xRowSet;
+            aConvertedProperties[nPos].Name = PROPERTY_ACTIVECONNECTION;
+            aConvertedProperties[nPos++].Value <<= m_xActiveConnection;
 
             // create job factory and initialize
             const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW));
             uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
             if ( m_xReport->getCommand().getLength() )
             {
-                uno::Reference< beans::XPropertySet> xRowSetProp(m_xRowSet,uno::UNO_QUERY_THROW);
-                xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::makeAny(m_xActiveConnection));
-
-                ::rtl::OUString sOrder = getOrderStatement();
-                if (sOrder.getLength() > 0)
-                {
-                    sal_Int32 nCommandType = 0;
-                    xRowSetProp->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nCommandType;
-                    if (nCommandType != sdb::CommandType::TABLE)
-                    {
-                        rtl::OUString sOldCommand;
-                        xRowSetProp->getPropertyValue(PROPERTY_COMMAND) >>= sOldCommand;
-                        dbtools::StatementComposer aComposer(m_xActiveConnection, sOldCommand, nCommandType, sal_True );
-
-                        uno::Reference< sdb::XSingleSelectQueryComposer > xComposer( aComposer.getComposer() );
-                        if ( xComposer.is() )
-                        {
-                            rtl::OUString sCurrentSQL = xComposer->getQuery();
-                            // Magic here, read the nice documentation out of the IDL.
-                            xComposer->setQuery(sCurrentSQL);
-                            rtl::OUString sOldOrder = xComposer->getOrder();
-                            if (sOldOrder.getLength() > 0)
-                            {
-                                sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-                                sOrder += sOldOrder;
-                                xComposer->setOrder(rtl::OUString());
-                                rtl::OUString sQuery = xComposer->getQuery();
-                                xRowSetProp->setPropertyValue(PROPERTY_COMMAND, uno::makeAny(sQuery));
-                                xRowSetProp->setPropertyValue(PROPERTY_COMMANDTYPE, uno::makeAny(sdb::CommandType::COMMAND));
-                            }
-                        }
-                    }
-                }
-                // we have to set the order everytime, at least we clear the old one.
-                xRowSetProp->setPropertyValue(PROPERTY_ORDER,uno::makeAny(sOrder));
-                xRowSetProp->setPropertyValue(PROPERTY_APPLYFILTER,uno::makeAny(m_xReport->getFilter().getLength() != 0));
-
-                uno::Reference<sdb::XCompletedExecution> xExecute( m_xRowSet, uno::UNO_QUERY );
-                if ( xExecute.is() )
-                {
-                    uno::Reference<task::XInteractionHandler> xHandler(
-                             m_xContext->getServiceManager()->createInstanceWithContext(
-                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))
-                             ,m_xContext),
-                                        uno::UNO_QUERY);
-                    xExecute->executeWithCompletion(xHandler);
-                }
-                else
-                    m_xRowSet->execute();
                 xJob->execute(aConvertedProperties);
+                if ( xStorageProp.is() )
+                {
+                    //xStorageProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sOutputName;
+                    sOutputName = aFile.GetURL();
+                }
             }
-
-            if ( xStorageProp.is() )
-                sOutputName = aFile.GetURL();
 
             uno::Reference<embed::XTransactedObject> xTransact(xOut,uno::UNO_QUERY);
             if ( sOutputName.getLength() && xTransact.is() )
