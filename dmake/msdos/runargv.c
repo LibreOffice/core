@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.5 2007-10-15 15:43:15 ihi Exp $
+/* RCS  $Id: runargv.c,v 1.6 2008-03-05 18:35:53 kz Exp $
 --
 -- SYNOPSIS
 --      Run a sub process.
@@ -22,6 +22,12 @@
 -- LOG
 --      Use cvs log to obtain detailed change logs.
 */
+
+#if defined(USE_CREATEPROCESS)
+/* MSVC6.0 and newer and MinGW use the parallel build enabled runargv(). */
+Force a compile-time blowup.
+This file should not be used, use unix/runargv.c instead.
+#endif
 
 #include <process.h>
 #include <errno.h>
