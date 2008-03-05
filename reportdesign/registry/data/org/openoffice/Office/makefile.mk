@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-04 08:55:12 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:51:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,9 @@ PACKAGE=org.openoffice.Office
 # --- Targets ------------------------------------------------------
 
 XCUFILES= \
-    DataAccess.xcu
+    DataAccess.xcu \
+    ReportDesign.xcu
 
 MODULEFILES=
-
-LOCALIZEDFILES= \
-    DataAccess.xcu
 
 .INCLUDE :  target.mk
