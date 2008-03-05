@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:05:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SHAPE              , "com.sun.star.report.S
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FIXEDLINE          , "com.sun.star.report.FixedLine");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SECTION            , "com.sun.star.report.Section");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_GROUP              , "com.sun.star.report.Group");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_OLEOBJECT          , "com.sun.star.report.OleObject");
 
 //============================================================
 //= property names
@@ -191,6 +192,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FILTER,           "Filter");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_MULTILINE,        "MultiLine");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ESCAPEPROCESSING, "EscapeProcessing");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ACTIVECONNECTION, "ActiveConnection");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DATASOURCENAME,   "DataSourceName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMULA,          "Formula");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_INITIALFORMULA,   "InitialFormula");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PREEVALUATED,     "PreEvaluated");
@@ -240,4 +242,3 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_UNVISITEDCHARSTYLENAME, "UnvisitedCharStyl
 
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORDER, "Order");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFILTER, "ApplyFilter");
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:04:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ DECLARE_CONSTASCII_USTRING(SERVICE_REPORTDEFINITION);
 DECLARE_CONSTASCII_USTRING(SERVICE_SHAPE);
 DECLARE_CONSTASCII_USTRING(SERVICE_SECTION);
 DECLARE_CONSTASCII_USTRING(SERVICE_GROUP);
+DECLARE_CONSTASCII_USTRING(SERVICE_OLEOBJECT);
 //============================================================
 //= property names
 //============================================================
@@ -199,6 +200,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_ESCAPEPROCESSING    );
 
 DECLARE_CONSTASCII_USTRING(PROPERTY_MULTILINE           );
 DECLARE_CONSTASCII_USTRING(PROPERTY_ACTIVECONNECTION    );
+DECLARE_CONSTASCII_USTRING(PROPERTY_DATASOURCENAME      );
 DECLARE_CONSTASCII_USTRING(PROPERTY_FORMULA             );
 DECLARE_CONSTASCII_USTRING(PROPERTY_INITIALFORMULA      );
 DECLARE_CONSTASCII_USTRING(PROPERTY_PREEVALUATED        );
