@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:51:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,11 @@ USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
     USHORT nNumId = USHRT_MAX;
     String sPrefix(CREATE_CONST_ASC("WW8TempExport"));
     sPrefix += String::CreateFromInt32( nUniqueList++ );
-    SwNumRule* pMyNumRule = new SwNumRule(pDoc->GetUniqueNumRuleName(&sPrefix));
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    SwNumRule* pMyNumRule =
+            new SwNumRule( pDoc->GetUniqueNumRuleName(&sPrefix),
+                           SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+    // <--
     pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );
 
     for (USHORT i=0;i<MAXLEVEL;i++)
