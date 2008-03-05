@@ -1,4 +1,4 @@
-/* RCS  $Id: rmprq.c,v 1.1.1.1 2000-09-22 15:33:27 hr Exp $
+/* RCS  $Id: rmprq.c,v 1.2 2008-03-05 18:35:28 kz Exp $
 --
 -- SYNOPSIS
 --      Remove prerequisites code.
@@ -24,6 +24,12 @@
 -- LOG
 --      Use cvs log to obtain detailed change logs.
 */
+
+#if defined(USE_CREATEPROCESS)
+/* MSVC6.0 and newer and MinGW use the parallel build enabled runargv(). */
+Force a compile-time blowup.
+This file should not be used, use unix/rmprq.c instead.
+#endif
 
 #include "extern.h"
 
