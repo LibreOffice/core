@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-30 13:22:58 $
+#   last change: $Author: kz $ $Date: 2008-03-05 17:25:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -404,6 +404,7 @@ sub prepare_non_advertised_files
         if ( $styles =~ /\bNON_ADVERTISED\b/ )
         {
             my $fileid = $folderitem->{'FileID'};
+            if ( $folderitem->{'ComponentIDFile'} ) { $fileid = $folderitem->{'ComponentIDFile'}; }
             my $onefile = installer::worker::find_file_by_id($filesref, $fileid);
 
             # Attention: If $onefile with "FileID" is not found, this is not always an error.
