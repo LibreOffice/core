@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:40:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_STRIKEOUT:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharStrikeout")); break;
             case PROP_CHAR_CONTOURED:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharContoured")); break;
             case PROP_CHAR_SHADOWED:   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharShadowed")); break;
-            case PROP_CHAR_CASEMAP:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCaseMap")); break;
+            case PROP_CHAR_CASE_MAP:   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCaseMap")); break;
             case PROP_CHAR_COLOR:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharColor")); break;
             case PROP_CHAR_RELIEF:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRelief")); break;
             case PROP_CHAR_UNDERLINE:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharUnderline")); break;
@@ -295,10 +295,17 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TABS_RELATIVE_TO_INDENT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabsRelativeToIndent")); break;
             case PROP_PREFIX           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Prefix")); break;
             case PROP_SUFFIX           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Suffix")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles")); break;
+            case PROP_DROP_CAP_FORMAT  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DropCapFormat")); break;
+            case PROP_REFERENCE_FIELD_PART :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldPart")); break;
+            case PROP_SOURCE_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SourceName")); break;
+            case PROP_REFERENCE_FIELD_SOURCE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldSource")); break;
+            case PROP_WIDTH_TYPE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WidthType")); break;
+            case  PROP_TEXT_RANGE:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextRange")); break;
+            case PROP_SERVICE_CHAR_STYLE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle")); break;
+            case PROP_SERVICE_PARA_STYLE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.ParagraphStyle")); break;
+            case PROP_CHARACTER_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles")); break;
+            case PROP_PARAGRAPH_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
