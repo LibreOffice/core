@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:23:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:01:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
 #endif
 
 using namespace ::com::sun::star;
