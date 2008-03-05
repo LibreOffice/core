@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 18:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -51,6 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::drawing;
 
 namespace oox { namespace drawingml {
 
@@ -67,17 +70,16 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
 }
 
 void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet ) const
+    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
     const OUString sType = CREATE_OUSTRING( "Type" );
     if ( maShapePresetType.getLength() )
     {
-
         // XEnhancedCustomShapeDefaulter TODO
-//      const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY ) ;                                                                        // REMOVE THIS
-//      SdrObjCustomShape* pCustoObj = const_cast< SdrObjCustomShape* >( dynamic_cast< SdrObjCustomShape* >( GetSdrObjectFromXShape( xShape ) ) ) ;     // REMOVE THIS
-//      if ( pCustoObj )                                                                                                                                // REMOVE THIS
-//          pCustoObj->MergeDefaultAttributes( &sType );                                                                                                // REMOVE THIS
+        //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
+        Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
+        if( xDefaulter.is() )
+            xDefaulter->createCustomShapeDefaults( maShapePresetType );
 
         const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
         uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
