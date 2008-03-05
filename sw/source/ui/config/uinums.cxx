@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:29:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,8 +273,8 @@ void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nI
 
 /*------------------------------------------------------------------------*/
 
-SwNumRulesWithName::SwNumRulesWithName(const SwNumRule &rCopy,
-                                        const String &rName)
+SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
+                                        const String &rName )
     : aName(rName)
 {
     for( USHORT n = 0; n < MAXLEVEL; ++n )
@@ -362,7 +362,9 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, USHORT nVersion )
 
 void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
-    rChg = SwNumRule( aName );
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    rChg = SwNumRule( aName, SvxNumberFormat::LABEL_ALIGNMENT );
+    // <--
     rChg.SetAutoRule( FALSE );
     _SwNumFmtGlobal* pFmt;
     for( USHORT n = 0; n < MAXLEVEL; ++n )
