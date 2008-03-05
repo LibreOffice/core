@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:00:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,14 @@ public:
 
     virtual uno::Reference<xml::sax::XParser> getParser();
     virtual uno::Reference<xml::sax::XFastParser> getFastParser();
+    virtual uno::Reference<io::XInputStream> getDocumentStream();
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<uno::XComponentContext> getContext();
     ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
     virtual uno::Reference<xml::sax::XFastTokenHandler>
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
+
+    void setInputStream(uno::Reference<io::XInputStream> rxInputStream);
 };
 }}
 #endif // INCLUDED_OOXML_STREAM_IMPL_HXX
