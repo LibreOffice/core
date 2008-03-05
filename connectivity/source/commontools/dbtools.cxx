@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:48:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "connectivity/CommonTools.hxx"
 #include "diagnose_ex.h"
 #include "TConnection.hxx"
+#include "connectivity/ParameterCont.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow.hpp>
@@ -1682,32 +1683,6 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
     return bSuccessfullyReRouted;
 }
 
-//==================================================================
-// OParameterContinuation
-//==================================================================
-class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
-{
-    Sequence< PropertyValue >       m_aValues;
-
-protected:
-    virtual ~OParameterContinuation();
-public:
-    OParameterContinuation() { }
-
-    Sequence< PropertyValue >   getValues() const { return m_aValues; }
-
-// XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
-};
-
-OParameterContinuation::~OParameterContinuation()
-{
-}
-//------------------------------------------------------------------
-void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
-{
-    m_aValues = _rValues;
-}
 //..................................................................
 
 
