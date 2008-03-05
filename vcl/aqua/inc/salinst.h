@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:36:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ public:
 };
 
 #define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+
 
 // -------------------
 // - SalInstanceData -
@@ -152,12 +153,17 @@ public:
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
 
+    // check whether a particular string is passed on the command line
+    // this is needed to avoid duplicate open events through a) command line and b) NSApp's openFile
+    static bool isOnCommandLine( const rtl::OUString& );
+
     void wakeupYield();
 
  public:
     friend class AquaSalFrame;
 
     void PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData );
+    void delayedSettingsChanged( bool bInvalidate );
 
     bool isNSAppThread() const;
 
@@ -170,6 +176,14 @@ public:
     static NSMenu* GetDynamicDockMenu();
 };
 
+// helper class: inverted solar guard
+class YieldMutexReleaser
+{
+    ULONG mnCount;
+    public:
+    YieldMutexReleaser();
+    ~YieldMutexReleaser();
+};
 
 // helper class
 rtl::OUString GetOUString( CFStringRef );
