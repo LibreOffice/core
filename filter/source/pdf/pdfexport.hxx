@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:03:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ public:
                                 MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions, sal_Int32 nPageCount );
 
     sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
+
+    void                    showErrors( const std::set<vcl::PDFWriter::ErrorCode>& );
 };
 
 #endif
