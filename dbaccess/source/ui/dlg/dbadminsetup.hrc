@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:11:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@
 #define RB_CONNECTVIAJDBC           2
 #define RB_REGISTERDATASOURCE       3
 #define RB_DONTREGISTERDATASOURCE   4
+#define RB_CONNECTVIANATIVE         5
 
 #define CB_WIZ_USESSL                       1
 #define CB_STARTTABLEWIZARD                 2
