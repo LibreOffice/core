@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeStyleReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 17:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,8 @@ package com.sun.star.report.pentaho.parser.style;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.OfficeParserUtil;
 import com.sun.star.report.pentaho.model.OfficeStyle;
 import org.jfree.report.structure.Element;
-import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
