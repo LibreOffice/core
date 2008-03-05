@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:41:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,25 +75,46 @@ StyleSheetEntry::StyleSheetEntry() :
         {
         }
 
+/*-- 06.02.2008 11:30:46---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+struct ListCharStylePropertyMap_t
+{
+    ::rtl::OUString         sCharStyleName;
+    PropertyValueVector_t   aPropertyValues;
+
+    ListCharStylePropertyMap_t(const ::rtl::OUString& rCharStyleName, const PropertyValueVector_t& rPropertyValues):
+        sCharStyleName( rCharStyleName ),
+        aPropertyValues( rPropertyValues )
+        {}
+};
+typedef std::vector< ListCharStylePropertyMap_t > ListCharStylePropertyVector_t;
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
+    uno::Reference< text::XTextDocument>    m_xTextDocument;
     uno::Reference< beans::XPropertySet>    m_xTextDefaults;
     std::vector< StyleSheetEntry >          m_aStyleSheetEntries;
     StyleSheetEntry                         *m_pCurrentEntry;
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
     PropertyMapPtr                          m_pCurrentProps;
     StringPairMap_t                         m_aStyleNameMap;
-    StyleSheetTable_Impl(DomainMapper& rDMapper);
+    ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
+
+
+    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument);
+
+    ::rtl::OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 };
 /*-- 15.11.2007 08:30:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper) :
+StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument ) :
             m_rDMapper( rDMapper ),
+            m_xTextDocument( xTextDocument ),
             m_pCurrentEntry(0),
             m_pDefaultParaProps(new PropertyMap),
             m_pDefaultCharProps(new PropertyMap)
@@ -104,11 +125,57 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper) :
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
 }
+/*-- 06.02.2008 11:45:21---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
+{
+    ::rtl::OUString sRet;
+    ListCharStylePropertyVector_t::const_iterator aListVectorIter = m_aListCharStylePropertyVector.begin();
+    while( aListVectorIter != m_aListCharStylePropertyVector.end() )
+    {
+        //if size is identical
+        if( aListVectorIter->aPropertyValues.size() == rPropValues.size() )
+        {
+            bool bBreak = false;
+            //then search for all contained properties
+            PropertyValueVector_t::const_iterator aList1Iter = rPropValues.begin();
+            while( aList1Iter != rPropValues.end() && !bBreak)
+            {
+                //find the property
+                bool bElementFound = false;
+                PropertyValueVector_t::const_iterator aList2Iter = aListVectorIter->aPropertyValues.begin();
+                while( aList2Iter != aListVectorIter->aPropertyValues.end() && !bBreak )
+                {
+                    if( aList2Iter->Name == aList1Iter->Name )
+                    {
+                        bElementFound = true;
+                        if( aList2Iter->Value != aList1Iter->Value )
+                            bBreak = true;
+                        break;
+                    }
+                    ++aList2Iter;
+                }
+                //set break flag if property hasn't been found
+                if(!bElementFound )
+                {
+                    bBreak = true;
+                    break;
+                }
+                ++aList1Iter;
+            }
+            if( !bBreak )
+                return aListVectorIter->sCharStyleName;
+        }
+        ++aListVectorIter;
+    }
+    return sRet;
+}
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper) :
-    m_pImpl( new StyleSheetTable_Impl(rDMapper) )
+StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument) :
+    m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
 {
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -767,7 +834,10 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
     //append it to the table
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
     if( !m_pImpl->m_rDMapper.IsOOXMLImport() || m_pImpl->m_pCurrentEntry->sStyleName.getLength() >0)
+    {
+        m_pImpl->m_pCurrentEntry->sConvertedStyleName = ConvertStyleName( m_pImpl->m_pCurrentEntry->sStyleName );
         m_pImpl->m_aStyleSheetEntries.push_back( *m_pImpl->m_pCurrentEntry );
+    }
     else
     {
         //TODO: this entry contains the default settings - they have to be added to the settings
@@ -830,18 +900,19 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
 /*-- 21.06.2006 13:35:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTextDocument, FontTablePtr rFontTable)
+void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
     try
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< lang::XMultiServiceFactory > xDocFactory( xTextDocument, uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameContainer> xCharStyles;
         uno::Reference<container::XNameContainer> xParaStyles;
 
-        xStyleFamilies->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"))) >>= xCharStyles;
-        xStyleFamilies->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"))) >>= xParaStyles;
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
+        xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
             std::vector< StyleSheetEntry >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
@@ -859,8 +930,8 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     bInsert = true;
                     xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
                                 bParaStyle ?
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.ParagraphStyle")) :
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle"))),
+                                    rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
+                                    rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )),
                                     uno::UNO_QUERY_THROW);
                 }
                 if( aIt->sBaseStyleIdentifier.getLength() )
@@ -872,7 +943,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     }
                     catch( const uno::RuntimeException& )
                     {
-                        OSL_ASSERT("Styles parent could not be set");
+                        OSL_ENSURE( false, "Styles parent could not be set");
                     }
                 }
                 else if( bParaStyle )
@@ -926,15 +997,32 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                 {
                     uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
                     if( sConvertedStyleName.equalsAscii( "Contents Heading" ) ||
-                    sConvertedStyleName.equalsAscii( "User Index Heading" ) ||
-                    sConvertedStyleName.equalsAscii( "Index Heading" ))
+                        sConvertedStyleName.equalsAscii( "User Index Heading" ) ||
+                        sConvertedStyleName.equalsAscii( "Index Heading" ))
                     {
                         //left margin is set to NULL by default
                         uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
-                        xState1->setPropertyToDefault(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_PARA_LEFT_MARGIN ));
+                        xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
                     }
                     else if( sConvertedStyleName.equalsAscii( "Text body" ) )
-                        xState->setPropertyToDefault(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_PARA_BOTTOM_MARGIN ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
+                    else if( sConvertedStyleName.equalsAscii( "Heading 1" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 2" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 3" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 4" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 5" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 6" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 7" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 8" ) ||
+                            sConvertedStyleName.equalsAscii( "Heading 9" ) )
+                    {
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_COMPLEX ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_ASIAN ));
+                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_COMPLEX ));
+                    }
                 }
 
                 if(bAddFollowStyle || aPropValues.getLength())
@@ -971,7 +1059,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     catch( const beans::UnknownPropertyException& rUnknown)
                     {
                         (void) rUnknown;
-                        OSL_ASSERT("Some style properties could not be set");
+                        OSL_ENSURE( false, "Some style properties could not be set");
                     }
                 }
                 if(bInsert)
@@ -983,7 +1071,7 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
     catch( uno::Exception& rEx)
     {
         (void)rEx;
-        OSL_ASSERT("Styles could not be imported completely");
+        OSL_ENSURE( false, "Styles could not be imported completely");
     }
 }
 /*-- 22.06.2006 15:56:56---------------------------------------------------
@@ -1002,6 +1090,39 @@ const StyleSheetEntry* StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUStri
     }
     return pRet;
 }
+/*-- 28.12.2007 14:45:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const StyleSheetEntry* StyleSheetTable::FindStyleSheetByStyleName(const ::rtl::OUString& sIndex)
+{
+    const StyleSheetEntry* pRet = 0;
+    for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    {
+        if( m_pImpl->m_aStyleSheetEntries[nPos].sStyleName == sIndex)
+        {
+            pRet = &m_pImpl->m_aStyleSheetEntries[nPos];
+            break;
+        }
+    }
+    return pRet;
+}
+/*-- 28.12.2007 14:45:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const StyleSheetEntry* StyleSheetTable::FindStyleSheetByConvertedStyleName(const ::rtl::OUString& sIndex)
+{
+    const StyleSheetEntry* pRet = 0;
+    for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    {
+        if( m_pImpl->m_aStyleSheetEntries[nPos].sConvertedStyleName == sIndex)
+        {
+            pRet = &m_pImpl->m_aStyleSheetEntries[nPos];
+            break;
+        }
+    }
+    return pRet;
+}
+
 /*-- 17.07.2006 11:47:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1250,7 +1371,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ASSERT("setPropertyValue exception");
+                    OSL_ENSURE( false, "setPropertyValue exception");
                 }
             }
         }
@@ -1265,7 +1386,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ASSERT("setPropertyValue exception");
+                    OSL_ENSURE( false, "setPropertyValue exception");
                 }
             }
         }
@@ -1273,6 +1394,74 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     catch( const uno::Exception& )
     {
     }
+}
+/*-- 05.02.2008 10:27:36---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+{
+    //find out if any of the styles already has the required properties then return it's name
+    ::rtl::OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
+    if( sListLabel.getLength() )
+        return sListLabel;
+    const char cListLabel[] = "ListLabel ";
+    uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameContainer> xCharStyles;
+    xStyleFamilies->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"))) >>= xCharStyles;
+    //search for all character styles with the name sListLabel + <index>
+    sal_Int32 nStyleFound = 0;
+    uno::Sequence< ::rtl::OUString > aStyleNames = xCharStyles->getElementNames();
+    const ::rtl::OUString* pStyleNames = aStyleNames.getConstArray();
+    for( sal_Int32 nStyle = 0; nStyle < aStyleNames.getLength(); ++nStyle )
+    {
+        if( pStyleNames[nStyle].matchAsciiL( cListLabel, sizeof( cListLabel ) - 1  ))
+        {
+            ::rtl::OUString sSuffix = pStyleNames[nStyle].copy( sizeof( cListLabel ) - 1 );
+            sal_Int32 nSuffix = sSuffix.toInt32();
+            if( nSuffix > 0 )
+            {
+                if( nSuffix > nStyleFound )
+                    nStyleFound = nSuffix;
+            }
+        }
+    }
+    sListLabel = ::rtl::OUString::createFromAscii( cListLabel );
+    sListLabel += ::rtl::OUString::valueOf( ++nStyleFound );
+    //create a new one otherwise
+    uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    try
+    {
+        uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
+            rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
+        //uno::Reference< container::XNamed >xNamed( xStyle, uno::UNO_QUERY_THROW );
+        //xNamed->setName( sListLabel );
+        uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
+        PropertyValueVector_t::const_iterator aCharPropIter = rCharProperties.begin();
+        while( aCharPropIter != rCharProperties.end())
+        {
+            try
+            {
+                xStyleProps->setPropertyValue( aCharPropIter->Name, aCharPropIter->Value );
+            }
+            catch( const uno::Exception& rEx )
+            {
+                (void)rEx;
+                OSL_ENSURE( false, "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
+            }
+            ++aCharPropIter;
+        }
+        xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
+        m_pImpl->m_aListCharStylePropertyVector.push_back( ListCharStylePropertyMap_t( sListLabel, rCharProperties ));
+    }
+    catch( const uno::Exception& rEx )
+    {
+        (void)rEx;
+        OSL_ENSURE( false, "Exception in StyleSheetTable::getOrCreateCharStyle");
+    }
+
+    return sListLabel;
 }
 
 }//namespace dmapper
