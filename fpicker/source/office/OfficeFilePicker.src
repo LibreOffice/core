@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:06:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-05 16:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,11 @@ String STR_SVT_FILEPICKER_IMAGE_TEMPLATE
 String STR_SVT_FILEPICKER_SELECTION
 {
     Text [ en-US ] = "~Selection" ;
+};
+
+String STR_SVT_FILEPICKER_FILTER_TITLE
+{
+    Text [ en-US ] = "File ~type:" ;
 };
 
 String STR_SVT_FOLDERPICKER_DEFAULT_TITLE
