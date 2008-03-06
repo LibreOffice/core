@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:08:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
+#endif
+
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
 #endif
 
 #ifndef _SVARRAY_HXX //autogen
@@ -95,6 +99,7 @@ class ScConditionEntry
     double              nVal2;
     String              aStrVal1;       // eingegeben oder berechnet
     String              aStrVal2;
+    ScGrammar::Grammar  eTempGrammar;   // grammar to be used on (re)compilation, e.g. in XML import
     BOOL                bIsStr1;        // um auch leere Strings zu erkennen
     BOOL                bIsStr2;
     ScTokenArray*       pFormula1;      // eingegebene Formel
@@ -110,8 +115,8 @@ class ScConditionEntry
     BOOL                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
-    void    Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish,
-                        BOOL bCompileXML, BOOL bTextToReal );
+    void    Compile( const String& rExpr1, const String& rExpr2,
+                        const ScGrammar::Grammar eGrammar, BOOL bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
     BOOL    IsValid( double nArg ) const;
@@ -126,7 +131,7 @@ public:
             ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish, BOOL bCompileXML );
+                                const ScGrammar::Grammar eGrammar );
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -152,8 +157,7 @@ public:
     void            SetFormula2( const ScTokenArray& rArray );
 
     String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
-                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE,
-                                    BOOL bTextToReal = FALSE ) const;
+                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT ) const;
 
     ScTokenArray*   CreateTokenArry( USHORT nPos ) const;
 
@@ -188,7 +192,7 @@ public:
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
                                 const String& rStyle,
-                                BOOL bCompileEnglish = FALSE, BOOL bCompileXML = FALSE );
+                                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
