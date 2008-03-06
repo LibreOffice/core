@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditorScriptContext.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:00:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.Type;
 
@@ -89,6 +90,13 @@ public class EditorScriptContext implements XScriptContext
              m_xDeskTop.getCurrentComponent() );
 
         return xModel;
+    }
+
+    public XScriptInvocationContext getInvocationContext()
+    {
+        XScriptInvocationContext xContext = ( XScriptInvocationContext ) UnoRuntime.queryInterface(
+                XScriptInvocationContext.class, getDocument() );
+        return xContext;
     }
 
     /**
