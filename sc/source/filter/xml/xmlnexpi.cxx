@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:51:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "xmlcelli.hxx"
 #include "docuno.hxx"
 #include "global.hxx"
+#include "document.hxx"
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -131,6 +132,11 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    // A simple table:cell-range-address is not a formula expression, stored
+    // without [] brackets but with dot, .A1
+    pNamedExpression->eGrammar = ScGrammar::mergeToGrammar(
+            GetScImport().GetDocument()->GetStorageGrammar(),
+            ScAddress::CONV_OOO);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -197,6 +203,8 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    const ScGrammar::Grammar eStorageGrammar = pNamedExpression->eGrammar =
+        GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetNamedExpressionAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -216,7 +224,16 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
             break;
             case XML_TOK_NAMED_EXPRESSION_ATTR_EXPRESSION :
             {
-                pNamedExpression->sContent = sValue;
+                rtl::OUString sFormula;
+                sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
+                    _GetKeyByAttrName( sValue, &sFormula, sal_False );
+
+                if (ScXMLImport::IsAcceptedFormulaNamespace( nFormulaPrefix,
+                            sValue, pNamedExpression->eGrammar,
+                            eStorageGrammar))
+                    pNamedExpression->sContent = sFormula;
+                else
+                    pNamedExpression->sContent = sValue;
             }
             break;
             case XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS :
