@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:38:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_VERB_HPP_
 #include <com/sun/star/frame/status/Verb.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 
 class SfxMacro;
