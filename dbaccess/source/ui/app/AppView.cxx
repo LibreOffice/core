@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:47:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,11 +550,11 @@ void OApplicationView::clearPages(sal_Bool _bTaskAlso)
     getDetailView()->clearPages(_bTaskAlso);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::changeContainer(ElementType _eType)
+void OApplicationView::selectContainer(ElementType _eType)
 {
     OSL_ENSURE(m_pWin && getPanel(),"Detail view is NULL! -> GPF");
     WaitObject aWO(this);
-    getPanel()->changeContainer(_eType);
+    getPanel()->selectContainer(_eType);
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry* OApplicationView::getEntry( const Point& _aPosPixel ) const
