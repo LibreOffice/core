@@ -1,13 +1,11 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
 Icon=calc
 Type=Application
-InitialPreference=2
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Spreadsheets;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Spreadsheets;
 Exec=openoffice -calc %U
-MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/msexcel;application/vnd.ms-excel
+MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/msexcel;application/vnd.ms-excel;
 Name=%PRODUCTNAME Calc
 GenericName=Spreadsheet
 Comment=Perform calculation, analyze information and manage lists in spreadsheets by using Calc.
