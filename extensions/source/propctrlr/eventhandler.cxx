@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -78,6 +79,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <map>
+#include <algorithm>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
@@ -135,6 +137,10 @@ namespace pcr
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::util::XModifiable;
     using ::com::sun::star::beans::PropertyChangeEvent;
+    using ::com::sun::star::frame::XFrame;
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::XController;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     /** === end UNO using === **/
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -876,12 +882,17 @@ namespace pcr
 
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
-        SfxItemSet aItems( SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
-        aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, m_bIsDialogElement ) );
         if ( !pFactory )
             return InteractiveSelectionResult_Cancelled;
+
         ::std::auto_ptr< VclAbstractDialog > pDialog( pFactory->CreateSvxMacroAssignDlg(
-            PropertyHandlerHelper::getDialogParentWindow( m_aContext ), aItems, pEventHolder.get(), nInitialSelection ) );
+            PropertyHandlerHelper::getDialogParentWindow( m_aContext ),
+            impl_getContextFrame_nothrow(),
+            m_bIsDialogElement,
+            pEventHolder.get(),
+            nInitialSelection
+        ) );
+
         if ( !pDialog.get() )
             return InteractiveSelectionResult_Cancelled;
 
@@ -935,6 +946,25 @@ namespace pcr
     sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
+    }
+
+    //------------------------------------------------------------------------
+    Reference< XFrame > EventHandler::impl_getContextFrame_nothrow() const
+    {
+        Reference< XFrame > xContextFrame;
+
+        try
+        {
+            Reference< XModel > xContextDocument( m_aContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY_THROW );
+            Reference< XController > xController( xContextDocument->getCurrentController(), UNO_SET_THROW );
+            xContextFrame.set( xController->getFrame(), UNO_SET_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return xContextFrame;
     }
 
     //--------------------------------------------------------------------
