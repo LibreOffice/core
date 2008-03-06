@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:53:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     return pDlgWin;
 }
 
-SdrView* BasicIDEShell::GetCurDlgView()
+SdrView* BasicIDEShell::GetCurDlgView() const
 {
     if ( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
         return NULL;
