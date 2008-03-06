@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:02:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@
 #define STR_AUTOLAYOUT_HANDOUT4     (RID_APP_START+234)
 #define STR_AUTOLAYOUT_HANDOUT6     (RID_APP_START+235)
 #define STR_AUTOLAYOUT_NOTES        (RID_APP_START+236)
-
+#define STR_AUTOLAYOUT_HANDOUT9     (RID_APP_START+237)
 
 #define STR_TRANSFORM               (RID_APP_START+240)
 
