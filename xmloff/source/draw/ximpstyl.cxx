@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:12:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,6 +643,9 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 break;
             case 4:
                 mnTypeId = 25; // AUTOLAYOUT_HANDOUT4
+                break;
+            case 9:
+                mnTypeId = 31; // AUTOLAYOUT_HANDOUT9
                 break;
             default:
                 mnTypeId = 26; // AUTOLAYOUT_HANDOUT6
