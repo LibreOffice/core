@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:19:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,10 +170,12 @@ enum SvxChartKindError
     CHERROR_SIGMA,
     CHERROR_PERCENT,
     CHERROR_BIGERROR,
-    CHERROR_CONST
+    CHERROR_CONST,
+    CHERROR_STDERROR,
+    CHERROR_RANGE
 };
 
-#define CHERROR_COUNT   (CHERROR_CONST + 1)
+#define CHERROR_COUNT   (CHERROR_RANGE + 1)
 
 enum SvxChartIndicate
 {
