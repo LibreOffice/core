@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:37:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,7 @@
 
 #include "docuno.hxx"
 #include "unonames.hxx"
-
-//#define SC_NUMBERFORMAT "NumberFormat"
-#define SC_CONDITIONALFORMAT "ConditionalFormat"
+#include "document.hxx"
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -385,14 +383,19 @@ void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::Propert
 }
 
 void XMLTableStyleContext::SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-    const rtl::OUString& sFormula) const
+    const rtl::OUString& sFormula, bool bPreParse) const
 {
     sal_Int32 nLength(aProps.getLength());
     aProps.realloc(nLength + 1);
     aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
-    rtl::OUString sRealFormula(sFormula);
-    ScXMLConverter::ParseFormula(sRealFormula);
-    aProps[nLength].Value <<= sRealFormula;
+    if (bPreParse)
+    {
+        rtl::OUString sRealFormula(sFormula);
+        ScXMLConverter::ParseFormula(sRealFormula);
+        aProps[nLength].Value <<= sRealFormula;
+    }
+    else
+        aProps[nLength].Value <<= sFormula;
 }
 
 void XMLTableStyleContext::SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
@@ -431,6 +434,15 @@ void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::s
     }
 }
 
+void XMLTableStyleContext::SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const ScGrammar::Grammar eGrammar) const
+{
+    sal_Int32 nLength(aProps.getLength());
+    aProps.realloc(nLength + 1);
+    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR));
+    aProps[nLength].Value <<= static_cast<sal_Int32>(eGrammar);
+}
+
 void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
@@ -441,6 +453,8 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
         if (xConditionalEntries.is())
         {
+            const ScGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+            ScGrammar::Grammar eGrammar = eStorageGrammar;
             // ToDo: erase all blanks in the condition, but not in formulas or strings
             rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
             rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
@@ -520,9 +534,16 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
                 {
                     SetOperator(aProps, sheet::ConditionOperator_FORMULA);
                     sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                    SetFormula1(aProps, sCondition);
+                    rtl::OUString sFormula;
+                    sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
+                        _GetKeyByAttrName( sCondition, &sFormula, sal_False );
+                    if (ScXMLImport::IsAcceptedFormulaNamespace( nFormulaPrefix,
+                                sCondition, eGrammar, eStorageGrammar))
+                        sCondition = sFormula;
+                    SetFormula1(aProps, sCondition, false);
                 }
             }
+            SetGrammar( aProps, eGrammar);
             xConditionalEntries->addNew(aProps);
             aAny <<= xConditionalEntries;
         }
@@ -629,7 +650,7 @@ void XMLTableStyleContext::FillPropertySet(
             }
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
-                aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
+                aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
                 std::vector<ScXMLMapContent>::iterator aItr(aMaps.begin());
                 std::vector<ScXMLMapContent>::iterator aEndItr(aMaps.end());
                 while(aItr != aEndItr)
