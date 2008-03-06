@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:45:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,11 +115,14 @@ public:
 class SvxMacroTabPage : public _SvxMacroTabPage
 {
 public:
-    SvxMacroTabPage( Window* pParent, const ResId& rId,
-                    const SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
+    SvxMacroTabPage(
+        Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+        const SfxItemSet& rSet,
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace,
+        sal_uInt16 nSelectedIndex
+    );
     virtual ~SvxMacroTabPage();
-
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
 };
 
 // class SvxMacroAssignDlg --------------------------------------------------
@@ -161,7 +164,13 @@ private:
 class SVX_DLLPUBLIC SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 {
 public:
-    SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
+    SvxMacroAssignDlg(
+        Window* pParent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+        const SfxItemSet& rSet,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,
+        sal_uInt16 nSelectedIndex
+    );
     virtual ~SvxMacroAssignDlg();
 };
 
