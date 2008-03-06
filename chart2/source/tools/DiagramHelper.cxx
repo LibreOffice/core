@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include "macros.hxx"
 #include "DataSeriesHelper.hxx"
 #include "AxisHelper.hxx"
-#include "CachedDataSequence.hxx"
 #include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "CommonConverters.hxx"
