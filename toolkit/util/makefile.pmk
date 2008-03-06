@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:25:33 $
+#   last change: $Author: kz $ $Date: 2008-03-06 11:55:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,3 +40,10 @@ CFLAGS += -fvisibility=hidden
 .ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
 CFLAGS += -xldscope=hidden
 .ENDIF
+
+# FIXME: sprinkle some TOOLKIT_DLLPUBLIC
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+CFLAGS+=-I$(PRJ)/inc/layout
+CFLAGS+=-DENABLE_LAYOUT=1 -DTEST_LAYOUT=1
+.ENDIF # ENABLE_LAYOUT == TRUE
