@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:00:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,12 +231,6 @@ const SfxConstant __FAR_DATA aConstants[] =
 };
 */
 //========================================================================
-
-StarBASIC* SfxApplication::GetBasic_Impl() const
-{
-    BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
-    return pBasMgr ? pBasMgr->GetLib(0) : NULL;
-}
 
 //------------------------------------------------------------------------
 String lcl_GetVersionString(ResMgr* /*pAppData_ImplResMgr*/)
