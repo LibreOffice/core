@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:48:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                             const String& rExpr1, const String& rExpr2,
                             ScDocument* pDocument, const ScAddress& rPos,
-                            BOOL bCompileEnglish, BOOL bCompileXML ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
+                            const ScGrammar::Grammar eGrammar ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
     nKey( 0 ),
     eDataMode( eMode ),
     eErrorStyle( SC_VALERR_STOP ),
@@ -717,7 +717,8 @@ bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
     if( NULL == pDocument )
         return false;
 
-    ScFormulaCell aValidationSrc( pDocument, rPos, &rTokArr, MM_FORMULA);
+    ScFormulaCell aValidationSrc( pDocument, rPos, &rTokArr,
+            ScGrammar::GRAM_DEFAULT, MM_FORMULA);
 
     // Make sure the formula gets interpreted and a result is delivered,
     // regardless of the AutoCalc setting.
