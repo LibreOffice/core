@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:33:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,93 +36,48 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include "databasecontext.hxx"
-#include "datasource.hxx"
+#include "apitools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
+#include "databasecontext.hxx"
+#include "databasedocument.hxx"
+#include "datasource.hxx"
 #include "dbastrings.hrc"
-#include "apitools.hxx"
 #include "module_dba.hxx"
 
-#ifndef _COM_SUN_STAR_REGISTRY_INVALIDREGISTRYEXCEPTION_HPP_
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+/** === being UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
-#include <com/sun/star/task/InteractionClassification.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
-#include <com/sun/star/ucb/IOErrorCode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
-#include <comphelper/enumhelper.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
-#include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX //autogen
-#include <tools/debug.hxx>
-#endif
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef COMPHELPER_EVENTLISTENERHELPER_HXX
-#include <comphelper/evtlistenerhlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
-#include <com/sun/star/document/XImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
-#endif
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/task/InteractionClassification.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+/** === end UNO includes === **/
+
+#include <basic/basmgr.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/evtlistenerhlp.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <svtools/filenotation.hxx>
-#ifndef _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
-#include "databasedocument.hxx"
-#endif
+#include <svtools/pathoptions.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/fsys.hxx>
+#include <tools/urlobj.hxx>
+#include <ucbhelper/content.hxx>
+#include <unotools/confignode.hxx>
+#include <unotools/sharedunocomponent.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -188,11 +143,13 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
     ,m_aContext( _rxContext )
     ,m_aContainerListeners(m_aMutex)
 {
+    ::basic::BasicManagerRepository::registerCreationListener( *this );
 }
 
 //--------------------------------------------------------------------------
 ODatabaseContext::~ODatabaseContext()
 {
+    ::basic::BasicManagerRepository::revokeCreationListener( *this );
 }
 
 // Helper
@@ -343,7 +300,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
                 _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
             );
     }
-    catch(InteractiveIOException e)
+    catch ( const InteractiveIOException& e )
     {
         if  (   ( e.Code == IOErrorCode_NO_FILE )
             ||  ( e.Code == IOErrorCode_NOT_EXISTING )
@@ -360,67 +317,72 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
             throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), makeAny( aError ) );
         }
-        throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), makeAny( e ) );
+        throw WrappedTargetException( _sURL, Reference< XNamingService >( this ), ::cppu::getCaughtException() );
     }
-    catch(Exception e)
+    catch( const Exception& )
     {
-        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), makeAny( e ) );
+        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), ::cppu::getCaughtException() );
     }
 
-    Reference< XInterface > xExistent;
+    ::rtl::Reference< ODatabaseModelImpl > pExistent;
     ObjectCache::iterator aFind = m_aDatabaseObjects.find(_sURL);
+
     if ( aFind != m_aDatabaseObjects.end() ) // we found a object registered under the URL
-    { // register it under the new name
-        m_aDatabaseObjects.insert(ObjectCache::value_type(_rName,aFind->second));
-        xExistent = aFind->second->getDataSource();
-        m_aDatabaseObjects.erase(aFind);
+    {   // register it under the new name
+        pExistent = aFind->second;
+        m_aDatabaseObjects.insert( ObjectCache::value_type( _rName, pExistent.get() ) );
+        m_aDatabaseObjects.erase( aFind );
     }
-    if ( !xExistent.is() )
+
+    if ( !pExistent.get() )
     {
-        ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), this ) );
-        xExistent = pImpl->getDataSource().get();
+        pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), this ) );
 
         Sequence< PropertyValue > aArgs(1);
         aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
         aArgs[0].Value <<= _sURL;
 
-        Reference<XModel> xModel = pImpl->createNewModel_deliverOwnership();
+        Reference< XModel > xModel = pExistent->createNewModel_deliverOwnership();
         DBG_ASSERT( xModel.is(), "ODatabaseContext::loadObjectFromURL: no model?" );
         // calls registerPrivate in attachResource
-        xModel->attachResource(_sURL,aArgs);
+        xModel->attachResource( _sURL, aArgs );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
     }
 
-    setTransientProperties(_sURL,xExistent);
-    return xExistent;
+    setTransientProperties( _sURL, *pExistent );
+
+    return pExistent->getDataSource();
 }
 // -----------------------------------------------------------------------------
-void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, const Reference< XInterface > & _rxObject)
+void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
 {
-    // check if we have any session persistent properties to initialize the new object with
-    if ( m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_sURL) )
-    {   // yes, we do ....
-        Reference< XPropertySet > xDSProps(_rxObject, UNO_QUERY);
-        if (xDSProps.is())
+    if ( m_aDatasourceProperties.end() == m_aDatasourceProperties.find(_sURL) )
+        return;
+    try
+    {
+        ::rtl::OUString sAuthFailedPassword;
+        Reference< XPropertySet > xDSProps( _rDataSourceModel.getDataSource(), UNO_QUERY_THROW );
+        const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
+        const PropertyValue* pProp = rSessionPersistentProps.getConstArray();
+        const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
+        for ( ; pProp != pPropsEnd; ++pProp )
         {
-            const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
-            const PropertyValue* pSessionPersistentProps = rSessionPersistentProps.getConstArray();
-            try
+            if ( pProp->Name.equalsAscii( "AuthFailedPassword" ) )
             {
-
-                for (sal_Int32 i=0; i<rSessionPersistentProps.getLength(); ++i, ++pSessionPersistentProps)
-                {
-                    xDSProps->setPropertyValue(pSessionPersistentProps->Name, pSessionPersistentProps->Value);
-                }
+                OSL_VERIFY( pProp->Value >>= sAuthFailedPassword );
             }
-            catch(Exception&)
+            else
             {
-                DBG_ERROR("ODatabaseContext::setTransientProperties: could not set a session-persistent property on the data source!");
+                xDSProps->setPropertyValue( pProp->Name, pProp->Value );
             }
         }
-        else
-            DBG_ERROR("ODatabaseContext::setTransientProperties: missing an interface!");
+
+        _rDataSourceModel.m_sFailedPassword = sAuthFailedPassword;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -471,7 +433,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl)
 {
     Reference< XPropertySet > xSource(_rModelImpl.getDataSource(),UNO_QUERY);
-    Sequence< PropertyValue > aRememberProps;
+    ::comphelper::NamedValueCollection aRememberProps;
 
     try
     {
@@ -486,30 +448,38 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
         if (aProperties.getLength())
         {
             const Property* pProperties = aProperties.getConstArray();
-            for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
+            for ( sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties )
             {
-                if  (   ((pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0)
-                    &&  ((pProperties->Attributes & PropertyAttribute::READONLY) == 0)
+                if  (   ( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
+                    &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
                     )
                 {
                     // found such a property
-                    sal_Int32 nTilNow = aRememberProps.getLength();
-                    aRememberProps.realloc(nTilNow + 1);
-                    aRememberProps[nTilNow] = PropertyValue(pProperties->Name, 0, xSource->getPropertyValue(pProperties->Name), PropertyState_DIRECT_VALUE);
+                    aRememberProps.put( pProperties->Name, xSource->getPropertyValue( pProperties->Name ) );
                 }
             }
         }
     }
-    catch(Exception&)
+    catch ( const Exception& )
     {
-        DBG_ERROR("ODatabaseContext::disposing(EventObject): could not collect the session-persistent properties!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( m_aDatabaseObjects.find( _rModelImpl.m_sRealFileURL ) != m_aDatabaseObjects.end() )
-        m_aDatasourceProperties[_rModelImpl.m_sRealFileURL] = aRememberProps;
-    else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
-        m_aDatasourceProperties[_rModelImpl.m_sName] = aRememberProps;
+    // additionally, remember the "failed password", which is not available as property
+    // #i86178# / 2008-02-19 / frank.schoenheit@sun.com
+    aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
+    ::rtl::OUString sDocumentURL( _rModelImpl.getURL() );
+    if ( m_aDatabaseObjects.find( sDocumentURL ) != m_aDatabaseObjects.end() )
+    {
+        m_aDatasourceProperties[ sDocumentURL ] = aRememberProps.getPropertyValues();
+    }
+    else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
+    {
+        m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
+    }
+    else
+        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: don't know this data source!s" );
 }
 
 //------------------------------------------------------------------------------
@@ -683,9 +653,7 @@ void ODatabaseContext::registerPrivate(const ::rtl::OUString& _sName
     if ( m_aDatabaseObjects.find(_sName) == m_aDatabaseObjects.end() )
     {
         m_aDatabaseObjects.insert(ObjectCache::value_type(_sName,_pModelImpl.get()));
-
-        Reference<XDataSource> xDs = _pModelImpl->getDataSource();
-        setTransientProperties(_sName,xDs);
+        setTransientProperties( _sName, *_pModelImpl );
     }
 }
 // -----------------------------------------------------------------------------
@@ -723,7 +691,17 @@ Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
+
+// -----------------------------------------------------------------------------
+void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
+{
+    // if it's a database document whose BasicManager has just been created, add the global
+    // DatabaseDocument variable to its scope.
+    Reference< XOfficeDatabaseDocument > xDatabaseDocument( _rxForDocument, UNO_QUERY );
+    if ( xDatabaseDocument.is() )
+        _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
-
