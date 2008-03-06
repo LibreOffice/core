@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:23:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
             throw(::com::sun::star::lang::WrappedTargetException,
                   ::com::sun::star::uno::RuntimeException);
 
-    virtual void implSetStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage );
+    virtual void onNewRootStorage();
 
 
     // OldBasicPassword interface
