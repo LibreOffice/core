@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:14:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,18 +118,18 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocFrequency,       {{ Reference, Reference                   },   false }},
     { ocFTest,           {{ ForceArray, ForceArray                 },   false }},
     { ocGeoMean,         {{ Reference                              },   true }},
-    { ocGGT,             {{ Reference                              },   true }},
+    { ocGCD,             {{ Reference                              },   true }},
     { ocGreater,         {{ Array, Array                           },   false }},
     { ocGreaterEqual,    {{ Array, Array                           },   false }},
     { ocGrowth,          {{ Reference, Reference, Reference, Value },   false }},
     { ocHarMean,         {{ Reference                              },   true }},
     { ocHLookup,         {{ Value, Reference, Value, Value         },   false }},
-    { ocIKV,             {{ Reference, Value                       },   false }},
+    { ocIRR,             {{ Reference, Value                       },   false }},
     { ocIndex,           {{ Reference, Value, Value, Value         },   false }},
     { ocIntercept,       {{ ForceArray, ForceArray                 },   false }},
     { ocIntersect,       {{ Reference, Reference                   },   false }},
     { ocIsRef,           {{ Reference                              },   false }},
-    { ocKGV,             {{ Reference                              },   true }},
+    { ocLCM,             {{ Reference                              },   true }},
     { ocKurt,            {{ Reference                              },   true }},
     { ocLarge,           {{ Reference, Value                       },   false }},
     { ocLess,            {{ Array, Array                           },   false }},
@@ -151,7 +151,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocMul,             {{ Array, Array                           },   false }},
     { ocMultiArea,       {{ Reference                              },   true }},
     { ocN,               {{ Reference                              },   false }},
-    { ocNBW,             {{ Value, Reference                       },   true }},
+    { ocNPV,             {{ Value, Reference                       },   true }},
     { ocNeg,             {{ Array                                  },   false }},
     { ocNot,             {{ Array                                  },   false }},
     { ocNotEqual,        {{ Array, Array                           },   false }},
