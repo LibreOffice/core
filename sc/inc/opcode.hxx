@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:09:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ enum OpCodeEnum
         ocTrunc             = SC_OPCODE_TRUNC,
         ocLog               = SC_OPCODE_LOG,
         ocPower             = SC_OPCODE_POWER,
-        ocGGT               = SC_OPCODE_GGT,
-        ocKGV               = SC_OPCODE_KGV,
+        ocGCD               = SC_OPCODE_GGT,
+        ocLCM               = SC_OPCODE_KGV,
         ocMod               = SC_OPCODE_MOD,
         ocSumProduct        = SC_OPCODE_SUM_PRODUCT,
         ocSumSQ             = SC_OPCODE_SUM_SQ,
@@ -218,8 +218,8 @@ enum OpCodeEnum
         ocAverage           = SC_OPCODE_AVERAGE,
         ocCount             = SC_OPCODE_COUNT,
         ocCount2            = SC_OPCODE_COUNT_2,
-        ocNBW               = SC_OPCODE_NBW,
-        ocIKV               = SC_OPCODE_IKV,
+        ocNPV               = SC_OPCODE_NBW,
+        ocIRR               = SC_OPCODE_IKV,
         ocMIRR              = SC_OPCODE_MIRR,
         ocISPMT             = SC_OPCODE_ISPMT,
         ocVar               = SC_OPCODE_VAR,
