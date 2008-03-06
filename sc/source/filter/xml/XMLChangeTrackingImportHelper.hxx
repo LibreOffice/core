@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:33:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,18 +53,20 @@ struct ScMyActionInfo
 
 struct ScMyCellInfo
 {
-    ScBaseCell*     pCell;
-    rtl::OUString   sFormulaAddress;
-    rtl::OUString   sFormula;
-    String          sInputString;
-    double          fValue;
-    sal_Int32       nMatrixCols;
-    sal_Int32       nMatrixRows;
-    sal_uInt16      nType;
-    sal_uInt8       nMatrixFlag;
+    ScBaseCell*        pCell;
+    rtl::OUString      sFormulaAddress;
+    rtl::OUString      sFormula;
+    String             sInputString;
+    double             fValue;
+    sal_Int32          nMatrixCols;
+    sal_Int32          nMatrixRows;
+    ScGrammar::Grammar eGrammar;
+    sal_uInt16         nType;
+    sal_uInt8          nMatrixFlag;
 
     ScMyCellInfo();
-    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula, const rtl::OUString& sInputString,
+    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
+                const ScGrammar::Grammar eGrammar, const rtl::OUString& sInputString,
                 const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
                 const sal_Int32 nMatrixRows);
     ~ScMyCellInfo();
