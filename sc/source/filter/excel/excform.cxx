@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:23:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,8 +179,12 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
         {
             if( eErr != ConvOK )
                 ExcelToSc::SetError( *pZelle, eErr );
+#if 0
             else
                 ExcelToSc::SetCurVal( *pZelle, rCurVal );
+#else
+            (void)rCurVal;
+#endif
         }
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );
@@ -356,7 +360,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool >> aStack;
                 break;
             case 0x11: // Range                                 [314 265]
-                PushRangeOperator();
+                aStack >> nMerk0;
+                aPool << aStack << ocRange << nMerk0;
+                aPool >> aStack;
                 break;
             case 0x12: // Unary Plus                            [312 264]
                 aPool << ocAdd << aStack;
@@ -439,6 +445,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x1C: // Error Value                           [314 266]
             {
                 aIn >> nByte;
+#if 0   // erAck
+                aPool.StoreError( XclTools::GetScErrorCode( nByte ) );
+#else
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -454,7 +463,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool << eOc;
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
-
+#endif
                 aPool >> aStack;
             }
                 break;
@@ -1702,37 +1711,6 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
 }
 
 
-void ExcelToSc::PushRangeOperator()
-{
-    // #i48496# try to convert the term singleref:singleref to a range reference
-    bool bIsConstRange = false;
-    TokenId nTokId0, nTokId1;
-    aStack >> nTokId0;
-    aStack >> nTokId1;
-
-    if( (aPool.GetType( nTokId0 ) == T_RefC) && (aPool.GetType( nTokId1 ) == T_RefC) )
-    {
-        const SingleRefData* pRef1 = aPool.GetSRD( nTokId1 );
-        const SingleRefData* pRef2 = aPool.GetSRD( nTokId0 );
-        if( pRef1 && pRef2 )
-        {
-            ComplRefData aRangeRef;
-            aRangeRef.InitFlags();
-            aRangeRef.Ref1 = *pRef1;
-            aRangeRef.Ref2 = *pRef2;
-            aStack << aPool.Store( aRangeRef );
-            bIsConstRange = true;
-        }
-    }
-
-    if( !bIsConstRange )
-    {
-        aPool << nTokId1 << ocRange << nTokId0;
-        aPool >> aStack;
-    }
-}
-
-
 const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 {
     UINT16                  nError;
@@ -1767,7 +1745,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
     const ScTokenArray*     pErgebnis = aPool[ aStack.Get() ];
     if( nError )
-        ( ( ScTokenArray* ) pErgebnis )->SetError( nError );
+        ( ( ScTokenArray* ) pErgebnis )->SetCodeError( nError );
 
     ( ( ScTokenArray* ) pErgebnis )->SetRecalcModeNormal();
 
@@ -1819,6 +1797,7 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, XclImpStream& aIn, 
 }
 
 
+#if 0
 BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
 {
     UINT16  nInd;
@@ -1840,7 +1819,7 @@ BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
 
     if( ( UINT16 ) ~nInd )
         // Wert ist Float
-        rCell.SetDouble( rfCurVal );
+        rCell.SetHybridDouble( rfCurVal );
     else
     {
         switch( nType )
@@ -1853,7 +1832,7 @@ BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
                     rfCurVal = 1.0;
                 else
                     rfCurVal = 0.0;
-                rCell.SetDouble( rfCurVal );
+                rCell.SetHybridDouble( rfCurVal );
                 break;
             case 2:     // Error
                 rCell.SetErrCode( XclTools::GetScErrorCode( nVal ) );
@@ -1863,6 +1842,7 @@ BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
 
     return bString;
 }
+#endif
 
 
 void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
