@@ -145,10 +145,24 @@ my %msvs_net_2003_ea = (
     'dll_path' => 'Visual Studio .NET Enterprise Architect 2003 - English', # testme ...
     'dll_suffix' => '71'
 );
+my %msvs_express_2005 = (
+    'ver' => '8.0',
+    'key' => 'Microsoft/VCExpress/8.0/Setup/VS/ProductDir',
+    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
+    'dll_path' => '../SDK/v2.0/Bin',
+    'dll_suffix' => '80'
+);
+my %msvc_express_2005 = (
+    'ver' => '8.0',
+    'key' => 'Microsoft/VCExpress/8.0/Setup/VC/ProductDir',
+    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
+    'dll_path' => '../SDK/v2.0/Bin',
+    'dll_suffix' => '80'
+);
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_net_2003_ea, \%msvs_net_2003, \%msvs_net_2002, \%msvc6 );
+    my @ms_versions = ( \%msvs_express_2005, \%msvs_net_2003_ea, \%msvs_net_2003, \%msvs_net_2002, \%msvc6 );
 
     for $ver (@ms_versions)
     {
@@ -163,7 +177,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_net_2003, \%msvc_net_2002, \%msvc6 );
+    my @ms_versions = ( \%msvc_express_2005, \%msvc_net_2003, \%msvc_net_2002, \%msvc6 );
 
     for $ver (@ms_versions)
     {
