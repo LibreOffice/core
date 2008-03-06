@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:10:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,8 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
@@ -166,7 +168,7 @@ DBG_NAME(SfxObjectShell)
 #include "sfxslots.hxx"
 
 extern svtools::AsynchronLink* pPendingCloser;
-static WeakReference< XModel > xWorkingDoc;
+static WeakReference< XInterface > s_xCurrentComponent;
 
 //=========================================================================
 
@@ -237,20 +239,11 @@ void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
-    // am I "ThisComponent" in AppBasic?
-    StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-    if ( pBas && SFX_APP()->Get_Impl()->m_xThisDocument == _rEvent.Source )
+    // am I ThisComponent in AppBasic?
+    if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
-        // remove "ThisComponent" reference from AppBasic
-        SFX_APP()->Get_Impl()->m_xThisDocument = NULL;
-        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
-        if ( pCompVar )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
-            ::com::sun::star::uno::Any aComponent;
-            aComponent <<= xInterface;
-            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
-        }
+        // remove ThisComponent reference from AppBasic
+        SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
 
     if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
@@ -293,7 +286,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bPreparedForClose( sal_False )
     ,bWaitingForPicklist( sal_False )
     ,bModuleSearched( sal_False )
-    ,bIsBasicDefault( sal_True )
     ,bIsHelpObjSh( sal_False )
     ,bForbidCaching( sal_False )
     ,bForbidReload( sal_False )
@@ -758,10 +750,48 @@ sal_uInt16 SfxObjectShell::PrepareClose
 }
 
 //--------------------------------------------------------------------
+namespace
+{
+    static BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
+    {
+        if ( !_rDocument.pImp->m_bNoBasicCapabilities )
+        {
+            if ( !_rDocument.pImp->bBasicInitialized )
+                const_cast< SfxObjectShell& >( _rDocument ).InitBasicManager_Impl();
+            return _rDocument.pImp->pBasicManager->get();
+        }
+
+        // assume we do not have Basic ourself, but we can refer to another
+        // document which does (by our model's XScriptInvocationContext::getScriptContainer).
+        // In this case, we return the BasicManager of this other document.
+
+        OSL_ENSURE( !Reference< XEmbeddedScripts >( _rDocument.GetModel(), UNO_QUERY ).is(),
+            "lcl_getBasicManagerForDocument: inconsistency: no Basic, but an XEmbeddedScripts?" );
+        Reference< XModel > xForeignDocument;
+        Reference< XScriptInvocationContext > xContext( _rDocument.GetModel(), UNO_QUERY );
+        if ( xContext.is() )
+        {
+            xForeignDocument.set( xContext->getScriptContainer(), UNO_QUERY );
+            OSL_ENSURE( xForeignDocument.is() && xForeignDocument != _rDocument.GetModel(),
+                "lcl_getBasicManagerForDocument: no Basic, but providing ourself as script container?" );
+        }
+
+        BasicManager* pBasMgr = NULL;
+        if ( xForeignDocument.is() )
+            pBasMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xForeignDocument );
+
+        return pBasMgr;
+    }
+}
+
+//--------------------------------------------------------------------
 
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
-    return HasBasic() ? pImp->pBasicManager->get() : SFX_APP()->GetBasicManager();
+    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+    if ( !pBasMgr )
+        pBasMgr = SFX_APP()->GetBasicManager();
+    return pBasMgr;
 }
 
 //--------------------------------------------------------------------
@@ -814,14 +844,30 @@ namespace
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
-    return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
+    if ( !pImp->m_bNoBasicCapabilities )
+        return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
+
+    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+    if ( pBasMgr )
+        return pBasMgr->GetDialogLibraryContainer().get();
+
+    OSL_ENSURE( false, "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+    return SFX_APP()->GetDialogContainer();
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
-    return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
+    if ( !pImp->m_bNoBasicCapabilities )
+        return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
+
+    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+    if ( pBasMgr )
+        return pBasMgr->GetScriptLibraryContainer().get();
+
+    OSL_ENSURE( false, "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+    return SFX_APP()->GetBasicContainer();
 }
 
 //--------------------------------------------------------------------
@@ -1027,7 +1073,7 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 
 //--------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetModel()
+const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& SfxObjectShell::GetModel() const
 {
     return pImp->xModel;
 }
@@ -1051,32 +1097,31 @@ void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
     pImp->nStyleFilter = nSet;
 }
 
-void SfxObjectShell::SetWorkingDocument( const Reference< XModel >& _rxDocument )
+void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    xWorkingDoc = _rxDocument;
-    StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-    if ( pBas )
-    {
-        SFX_APP()->Get_Impl()->m_xThisDocument = _rxDocument;
-        Any aComponent;
-        aComponent <<= _rxDocument;
-        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-        if ( pCompVar )
-        {
-            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
-        }
-        else
-        {
-            SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
-            xUnoObj->SetFlag( SBX_DONTSTORE );
-            pBas->Insert( xUnoObj );
-        }
-    }
+    if ( _rxComponent.get() == s_xCurrentComponent.get().get() )
+        // nothing to do
+        return;
+    // note that "_rxComponent.get() == s_xCurrentComponent.get().get()" is /sufficient/, but not
+    // /required/ for "_rxComponent == s_xCurrentComponent.get()".
+    // In other words, it's still possible that we here do something which is not necessary,
+    // but we should have filtered quite some unnecessary calls already.
+
+    s_xCurrentComponent = _rxComponent;
+
+    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+    if ( pAppMgr )
+        pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
+
+#if OSL_DEBUG_LEVEL > 0
+    const char* pComponentImplName = _rxComponent.get() ? typeid( *_rxComponent.get() ).name() : "void";
+    OSL_TRACE( "current component is a %s\n", pComponentImplName );
+#endif
 }
 
-Reference< XModel > SfxObjectShell::GetWorkingDocument()
+Reference< XInterface > SfxObjectShell::GetCurrentComponent()
 {
-    return xWorkingDoc;
+    return s_xCurrentComponent;
 }
 
 
