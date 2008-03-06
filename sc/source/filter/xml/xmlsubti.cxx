@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:31:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #endif
 #ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
+#endif
+#ifndef SC_CELLSUNO_HXX
+#include "cellsuno.hxx"
 #endif
 #ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
 #include "XMLStylesImportHelper.hxx"
@@ -667,7 +670,7 @@ void ScMyTables::DeleteTable()
         ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
         while(aItr != aEndItr)
         {
-            SetMatrix(aItr->aRange, aItr->sFormula);
+            SetMatrix(aItr->aRange, aItr->sFormula, aItr->eGrammar);
             ++aItr;
         }
         aMatrixRangeList.clear();
@@ -783,7 +786,7 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }
 
-void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula)
+void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammar)
 {
     DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
     DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
@@ -793,7 +796,7 @@ void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal
     aRange.EndColumn = nEndColumn;
     aRange.EndRow = nEndRow;
     aRange.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
-    ScMatrixRange aMRange(aRange, rFormula);
+    ScMatrixRange aMRange(aRange, rFormula, eGrammar);
     aMatrixRangeList.push_back(aMRange);
 }
 
@@ -814,7 +817,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
             }
             else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))
             {
-                SetMatrix(aItr->aRange, aItr->sFormula);
+                SetMatrix(aItr->aRange, aItr->sFormula, aItr->eGrammar);
                 aItr = aMatrixRangeList.erase(aItr);
             }
             else if (nColumn < aItr->aRange.StartColumn)
@@ -831,7 +834,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
     return bResult;
 }
 
-void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula)
+void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammar)
 {
     uno::Reference <table::XCellRange> xMatrixCellRange(
         GetCurrentXCellRange()->getCellRangeByPosition(rRange.StartColumn, rRange.StartRow,
@@ -840,6 +843,12 @@ void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUS
     {
         uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
         if (xArrayFormulaRange.is())
-            xArrayFormulaRange->setArrayFormula(rFormula);
+        {
+            ScCellRangeObj* pCellRangeObj =
+                static_cast<ScCellRangeObj*>(ScCellRangesBase::getImplementation(
+                            xMatrixCellRange));
+            if (pCellRangeObj)
+                pCellRangeObj->SetArrayFormulaWithGrammar( rFormula, eGrammar);
+        }
     }
 }
