@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:10:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:57:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,6 @@ public:
     SvtHelpOptions*                     pHelpOptions;
 
     // "current" functionality
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                                        m_xThisDocument;
     SfxProgress*                        pProgress;
     ISfxTemplateCommon*                 pTemplateCommon;
 
