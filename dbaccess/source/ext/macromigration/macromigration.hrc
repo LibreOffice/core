@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: macromigration.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:03:13 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_MACROMIGRATION_HRC
+#define DBACCESS_MACROMIGRATION_HRC
+
+// height and width of tab pages
+#define TAB_PAGE_WIDTH  280
+#define TAB_PAGE_HEIGHT 185
+
+// margin between the tab page and its content
+#define TAB_PAGE_CONTENT_MARGIN 12
+
+// dimensions of certain control types
+#define FIXED_TEXT_HEIGHT       8
+#define INPUT_HEIGHT            12
+#define PROGRESS_HEIGHT         12
+#define BUTTON_WIDTH            50
+#define BUTTON_HEIGHT           14
+
+// spacing after the header on each page
+#define SPACING_AFTER_HEADER    6
+// spacing between related controls
+#define SPACING_RELATED         3
+// spacing between unrelated controls
+#define SPACING_UNRELATED       6
+
+// the position of the first control after the header
+#define CONTENT_POS_X           ( TAB_PAGE_CONTENT_MARGIN + FIXED_TEXT_HEIGHT + SPACING_AFTER_HEADER )
+
+//... fixed texts  .......................................................
+
+#define FT_HEADER                   1
+#define FT_INTRODUCTION             2
+#define FT_EXPLANATION              3
+#define FT_SAVE_AS_LABEL            4
+#define FT_START_MIGRATION          5
+#define FT_CURRENT_OBJECT_LABEL     6
+#define FT_CURRENT_OBJECT           7
+#define FT_CURRENT_PROGRESS_LABEL     8
+#define FT_CURRENT_PROGRESS           9
+#define FT_ALL_PROGRESS_LABEL       10
+#define FT_CHANGES_LABEL            11
+#define FT_OBJECT_COUNT             12
+#define FT_OBJECT_COUNT_PROGRESS    13
+#define FT_MIGRATION_DONE           14
+#define FT_CLOSE_DOC_ERROR          15
+
+//... windows ............................................................
+
+#define WND_CURRENT_PROGRESS    1
+#define WND_ALL_PROGRESS        2
+
+//... edits ..............................................................
+
+#define ED_SAVE_AS_LOCATION     1
+#define ED_CHANGES              2
+
+//... buttons ............................................................
+
+#define PB_BROWSE_SAVE_AS_LOCATION  1
+
+//... strings ............................................................
+
+#define STR_STATE_CLOSE_SUB_DOCS    1
+#define STR_STATE_BACKUP_DBDOC      2
+#define STR_STATE_MIGRATE           3
+#define STR_STATE_SUMMARY           4
+
+#endif // DBACCESS_MACROMIGRATION_HRC
