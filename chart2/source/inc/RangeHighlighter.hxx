@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RangeHighlighter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:21:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -114,6 +117,8 @@ private:
     void fillRangesForDataSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries );
     void fillRangesForCategories( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > & xAxis );
     void fillRangesForDataPoint( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xDataSeries, sal_Int32 nIndex );
+    void fillRangesForErrorBars( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xErrorBar,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xDataSeries );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >
         m_xSelectionSupplier;
