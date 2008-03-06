@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:12:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bPreparedForClose : 1,
                         bWaitingForPicklist : 1,// Muss noch in die Pickliste
                         bModuleSearched : 1,
-                        bIsBasicDefault : 1,
                         bIsHelpObjSh : 1,
                         bForbidCaching : 1,
                         bForbidReload : 1,
