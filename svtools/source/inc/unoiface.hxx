@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:37:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,9 @@ public:
 
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setFocus(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -180,6 +183,9 @@ public:
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException);
 
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -229,6 +235,9 @@ protected:
     ::com::sun::star::uno::Any  convertEffectiveValue(const ::com::sun::star::uno::Any& rValue);
 
     virtual void    SetWindow(Window* _pWindow);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -296,6 +305,9 @@ protected:
 
     // VCLXImageConsumer overridables
     virtual void    ImplSetNewImage();
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -335,6 +347,9 @@ public:
     sal_Int16 SAL_CALL getDecimalDigits(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 // ----------------------------------------------------
@@ -376,6 +391,9 @@ public:
     sal_Int16 SAL_CALL getDecimalDigits(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -415,6 +433,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -428,7 +449,9 @@ public:
 
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 #endif  // _SVT_UNOIFACE_HXX
-
