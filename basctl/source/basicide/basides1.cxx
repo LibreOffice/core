@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 15:42:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,13 +1147,13 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         {
             SetWindow( pCurWin );
             if ( pCurWin->GetDocument().isDocument() )
-                SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocument() );
+                SfxObjectShell::SetCurrentComponent( pCurWin->GetDocument().getDocument() );
         }
         else
         {
             SetWindow( pModulLayout );
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-            SfxObjectShell::SetWorkingDocument( NULL );
+            SfxObjectShell::SetCurrentComponent( NULL );
         }
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
@@ -1362,24 +1362,23 @@ void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &
     }
 }
 
+Reference< XModel > BasicIDEShell::GetCurrentDocument() const
+{
+    Reference< XModel > xDocument;
+    if ( pCurWin && pCurWin->GetDocument().isDocument() )
+        xDocument = pCurWin->GetDocument().getDocument();
+    return xDocument;
+}
+
 void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
 {
+    SfxViewShell::Activate( bMDI );
+
     if ( bMDI )
     {
-        if ( pCurWin && pCurWin->GetDocument().isDocument() )
-            SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocument() );
-
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
 
-/*
-        // Accelerator hauptsaechlich aus kompatibilitaetsgruenden in
-        // ExtraData statt in ViewShell
-        Accelerator* pAccel = IDE_DLL()->GetExtraData()->GetAccelerator();
-        DBG_ASSERT( pAccel, "Accel?!" );
-        pAccel->SetSelectHdl( LINK( this, BasicIDEShell, AccelSelectHdl ) );
-        Application::InsertAccel( pAccel );
-*/
         ShowObjectDialog( TRUE, FALSE );
     }
 }
@@ -1411,12 +1410,6 @@ void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
                 break;
             }
         }
-/*
-        Accelerator* pAccel = IDE_DLL()->GetExtraData()->GetAccelerator();
-        DBG_ASSERT( pAccel, "Accel?!" );
-        pAccel->SetSelectHdl( Link() );
-        Application::RemoveAccel( pAccel );
-*/
 
         ShowObjectDialog( FALSE, FALSE );
     }
