@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:17:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef __com_sun_star_sdb_DefinitionContainer_idl__
 #include <com/sun/star/sdb/DefinitionContainer.idl>
+#endif
+#ifndef __com_sun_star_sdb_DefinitionContent_idl__
+#include <com/sun/star/sdb/DefinitionContent.idl>
 #endif
 
 
@@ -76,6 +79,20 @@
 service DocumentContainer
 {
     service DefinitionContainer;
+
+    /** provides functionality for treating the container as part of a hierarchy
+        of a database document's sub documents.
+
+        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
+        the ones already supported by the DefinitionContent:
+        <ul>
+            <li><strong>open</strong>: provides a <type scope="com::sun::star::ucb::">XDynamicResultSet</type>
+                to enumerate the content of the document container.</li>
+            <li><strong>delete</strong>: deletes the document container, including all contained documents.</li>
+        </ul>
+    */
+    service DefinitionContent;
 
     /** can be used to load the document inside.
         <p>
