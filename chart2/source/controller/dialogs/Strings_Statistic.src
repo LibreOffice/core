@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_Statistic.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:42:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,12 @@ String STR_INDICATE_DOWN
 String STR_INDICATE_UP
 {
     Text [ en-US ] = "Positive" ;
+};
+
+// used for own data in error bar dialog
+String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
+{
+    Text [ en-US ] = "From Data Table" ;
 };
 
 //------------------------------------------------------------------------
