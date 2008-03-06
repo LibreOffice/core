@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:44:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,24 +420,28 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             rValue >>= m_bCreatePDF;
             m_bROCreatePDF = bRO;
         }
+        break;
 
         case PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO:
         {
             rValue >>= m_bRemoveInfo;
             m_bRORemoveInfo = bRO;
         }
+        break;
 
         case PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD:
         {
             rValue >>= m_bRecommendPwd;
             m_bRORecommendPwd = bRO;
         }
+        break;
 
         case PROPERTYHANDLE_CTRLCLICK_HYPERLINK:
         {
             rValue >>= m_bCtrlClickHyperlink;
             m_bROCtrlClickHyperlink = bRO;
         }
+        break;
 
         case PROPERTYHANDLE_MACRO_SECLEVEL:
         {
