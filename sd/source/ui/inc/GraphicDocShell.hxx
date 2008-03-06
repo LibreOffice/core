@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicDocShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:33:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,8 @@ public:
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_DRAW);
+        DocumentType=DOCUMENT_TYPE_DRAW,
+        BOOL bScriptSupport=TRUE);
 
     virtual ~GraphicDocShell (void);
 };
