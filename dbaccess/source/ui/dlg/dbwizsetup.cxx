@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,8 +287,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
     :svt::RoadmapWizard( _pParent, ModuleRes(DLG_DATABASE_WIZARD),
-                        WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP,
-                        ModuleRes( STR_ROADMAPHEADER ), sal_True)
+                        WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
 
     , m_pOutSet(NULL)
     , m_eType( DST_UNKNOWN )
@@ -340,6 +339,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     ShowButtonFixedLine(sal_True);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, sal_True);
+    enableAutomaticNextButtonState();
 
     declareAuthDepPath( DST_ADO,                ADO_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_DBASE,              DBASE_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
@@ -382,7 +382,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _eType ) != AuthNone;
 
     // collect the elements of the path
-    Path aPath;
+    WizardPath aPath;
 
     va_list aStateList;
     va_start( aStateList, _nFirstState );
@@ -401,7 +401,8 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
 }
 
-String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
+String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
+{
     String sRoadmapItem;
     switch( _nState )
     {
