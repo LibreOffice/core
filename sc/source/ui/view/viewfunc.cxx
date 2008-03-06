@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:42:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                 {   // probieren, mit erster Parser-Korrektur neu zu parsen
                     pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
                 }
-                if ( !pArr->GetError() )
+                if ( !pArr->GetCodeError() )
                 {
                     bAddEqual = TRUE;
                     aComp.CompileTokenArray();
@@ -533,7 +533,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             // Zellen RPN geloescht und der Fehler explizit gesetzt werden, da
             // via FormulaCell copy-ctor und Interpreter das, wenn moeglich,
             // wieder glattgebuegelt wird, zu intelligent.. z.B.: =1))
-            USHORT nError = pArr->GetError();
+            USHORT nError = pArr->GetCodeError();
             if ( !nError )
             {
                 //  #68693# update list of recent functions with all functions that
@@ -566,7 +566,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                 }
             }
 
-            ScFormulaCell aCell( pDoc, aPos, pArr, 0 );
+            ScFormulaCell aCell( pDoc, aPos, pArr, ScGrammar::GRAM_DEFAULT, MM_NONE );
             delete pArr;
             BOOL bAutoCalc = pDoc->GetAutoCalc();
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -867,7 +867,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
         SCCOL nCol = pData->GetCurX();
         SCROW nRow = pData->GetCurY();
         SCTAB nTab = pData->GetTabNo();
-        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, ScAddress::CONV_UNSPECIFIED, MM_FORMULA );
+        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, ScGrammar::GRAM_DEFAULT, MM_FORMULA );
 
         SCSIZE nSizeX;
         SCSIZE nSizeY;
@@ -887,7 +887,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange))
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE );
+        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE, ScGrammar::GRAM_DEFAULT );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }
