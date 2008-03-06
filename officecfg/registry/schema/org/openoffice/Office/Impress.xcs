@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:31:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1160,6 +1160,53 @@
 					</info>
 					<value>false</value>
 				</prop>
+        <prop oor:name="HandoutHorizontal" oor:type="xs:boolean">
+          <!-- UIHints: File - Print - [Section] Print content - [Radio buttons] Horizontal(TRUE)/Vertical(FALSE) -->
+          <info>
+            <desc>Indicates whether the slide thumbnails on the printed handouts are ordered horizontal or vertical</desc>
+            <label>Handout orientation</label>
+          </info>
+          <value>false</value>
+        </prop>       <prop oor:name="PagesPerHandout" oor:type="xs:int">
+          <!-- UIHints: File - Print - [Section] Print content - [ListBox] Slides per page -->
+          <info>
+            <desc>Specifies the number of slide thumbnails printed on each handout page.</desc>
+            <label>Slides per page</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="1">
+              <info>
+                <desc>One slide</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Two slides</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Three slides, including lines for notes</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="4">
+              <info>
+                <desc>Four slides</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="6">
+              <info>
+                <desc>Six slides</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>Nine slides</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>0</value>
+        </prop>
 			</group>
 		</group>
 		<group oor:name="Filter">
