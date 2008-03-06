@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:13:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,10 +87,35 @@ namespace comphelper { namespace string {
    @return
    The resulting string, in which the replacement has taken place.
 */
-COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplace(
+COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplaceAsciiL(
     rtl::OUString const & source, char const * from, sal_Int32 fromLength,
     rtl::OUString const & to, sal_Int32 beginAt = 0,
     sal_Int32 * replacedAt = NULL);
+
+/** does an in-place replacement of the first occurance of a sub string with
+    another string
+
+    @param source
+        the string to search and replace in.
+    @param asciiPattern
+        the ASCII sub string to search for. Must point to a 0-terminated string.
+    @param replace
+        The string to use as replacement.
+    @param beginAt
+        The index at which to begin the search.  Must be between zero and the length
+        of source, inclusive.
+
+    @param replacedAt
+        If non-null, receives the starting index at which the replacement took place
+        or -1 if from was not found.
+
+    @return
+        a reference to <code>source</code>
+*/
+COMPHELPER_DLLPUBLIC ::rtl::OUString&
+    searchAndReplaceAsciiI( ::rtl::OUString & source, sal_Char const * asciiPattern,
+                            ::rtl::OUString const & replace, sal_Int32 beginAt = 0,
+                            sal_Int32 * replacedAt = NULL );
 
 /** Convert a sequence of strings to a single comma separated string.
 
