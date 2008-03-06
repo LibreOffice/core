@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptProvider.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@ package com.sun.star.script.framework.provider;
 
 import com.sun.star.container.XNameContainer;
 
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XInitialization;
@@ -48,24 +49,16 @@ import com.sun.star.util.XMacroExpander;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.Property;
 
-import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
-
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.reflection.InvocationTargetException;
-import com.sun.star.script.CannotConvertException;
 
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.provider.XScriptProvider;
@@ -90,7 +83,6 @@ import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.ucb.XSimpleFileAccess;
 
 import com.sun.star.sdbc.XRow;
 
@@ -100,6 +92,9 @@ import com.sun.star.script.framework.browse.DialogFactory;
 import com.sun.star.deployment.XPackage;
 
 
+import com.sun.star.document.XScriptInvocationContext;
+import com.sun.star.frame.XTransientDocumentsDocumentContentFactory;
+import com.sun.star.uno.TypeClass;
 import java.util.*;
 public abstract class ScriptProvider
     implements XScriptProvider, XBrowseNode, XPropertySet, XInvocation,
@@ -113,11 +108,11 @@ public abstract class ScriptProvider
     public final static String CLASSPATH = "classpath";
 
     protected String language;
-    protected String contextUrl;
 
     protected XComponentContext m_xContext;
     protected XMultiComponentFactory m_xMultiComponentFactory;
     protected XModel m_xModel;
+    protected XScriptInvocationContext m_xInvocContext;
     protected ParcelContainer m_container;
 
     // proxies to helper objects which implement interfaces
@@ -174,7 +169,7 @@ public abstract class ScriptProvider
     {
         if ( m_xScriptContext == null )
         {
-            m_xScriptContext = ScriptContext.createContext( m_xModel, m_xContext, m_xMultiComponentFactory );
+            m_xScriptContext = ScriptContext.createContext( m_xModel, m_xInvocContext, m_xContext, m_xMultiComponentFactory );
         }
         return m_xScriptContext;
     }
@@ -185,65 +180,91 @@ public abstract class ScriptProvider
         boolean isPkgProvider = false;
         if( aArguments.length == 1 )
         {
-            if (AnyConverter.isString(aArguments[0]) == true)
+            String contextUrl = null;
+            if ( AnyConverter.getType(aArguments[0]).getTypeClass().equals(TypeClass.INTERFACE) )
             {
-                String sCtxUrl = AnyConverter.toString(aArguments[0]);
-                LogUtils.DEBUG("creating Application, path: " + sCtxUrl );
-                contextUrl = sCtxUrl;
-                // TODO no support for packages in documents yet
-                if ( sCtxUrl.startsWith( "vnd.sun.star.tdoc" ) )
+                // try whether it denotes a XScriptInvocationContext
+                m_xInvocContext = (XScriptInvocationContext)UnoRuntime.queryInterface(
+                        XScriptInvocationContext.class, aArguments[0]);
+                if ( m_xInvocContext != null )
                 {
-                    m_container = new ParcelContainer( m_xContext, contextUrl, language );
-                    m_xModel = getModelFromDocUrl( sCtxUrl );
+                    // if so, obtain the document - by definition, this must be
+                    // the ScriptContainer
+                    m_xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+                            m_xInvocContext.getScriptContainer() );
                 }
                 else
                 {
+                    // otherwise, check whether it's an XModel
+                    m_xModel = (XModel)UnoRuntime.queryInterface( XModel.class,
+                            m_xInvocContext.getScriptContainer() );
+                }
+                if ( m_xModel == null )
+                {
+                    throw new com.sun.star.uno.Exception(
+                        "ScriptProvider argument must be either a string, a valid XScriptInvocationContext, " +
+                        "or an XModel", this);
+                }
 
-                    if ( sCtxUrl.startsWith( "share" ) )
+                contextUrl = getDocUrlFromModel( m_xModel );
+                m_container = new ParcelContainer( m_xContext, contextUrl, language  );
+            }
+            else if (AnyConverter.isString(aArguments[0]) == true)
+            {
+                String originalContextURL = AnyConverter.toString(aArguments[0]);
+                LogUtils.DEBUG("creating Application, path: " + originalContextURL );
+                contextUrl = originalContextURL;
+                // TODO no support for packages in documents yet
+                if ( originalContextURL.startsWith( "vnd.sun.star.tdoc" ) )
+                {
+                    m_container = new ParcelContainer( m_xContext, contextUrl, language  );
+                    m_xModel = getModelFromDocUrl( originalContextURL );
+                }
+                else
+                {
+                    if ( originalContextURL.startsWith( "share" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
                     }
-                    else if ( sCtxUrl.startsWith( "user" ) )
+                    else if ( originalContextURL.startsWith( "user" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                     }
 
-                    if ( sCtxUrl.endsWith( "uno_packages") )
+                    if ( originalContextURL.endsWith( "uno_packages") )
                     {
                         isPkgProvider = true;
                     }
-                    if ( sCtxUrl.endsWith( "uno_packages") &&  !sCtxUrl.equals( contextUrl ) )
+                    if ( originalContextURL.endsWith( "uno_packages") &&  !originalContextURL.equals( contextUrl  ) )
                     {
-                        contextUrl = PathUtils.make_url( contextUrl, "uno_packages" );
+                        contextUrl = PathUtils.make_url( contextUrl, "uno_packages"  );
                     }
                     if ( isPkgProvider )
                     {
-                        m_container = new UnoPkgContainer( m_xContext, contextUrl, language );
+                        m_container = new UnoPkgContainer( m_xContext, contextUrl, language  );
                     }
                     else
                     {
-                        m_container = new ParcelContainer( m_xContext, contextUrl, language );;
+                        m_container = new ParcelContainer( m_xContext, contextUrl, language  );
                     }
                 }
-                LogUtils.DEBUG("Modified Application path is: " + contextUrl );
-                LogUtils.DEBUG("isPkgProvider is: " + isPkgProvider );
-
-
-                // TODO should all be done in this class instead of
-                // deleagation????
-                m_xBrowseNodeProxy = new ProviderBrowseNode( this,
-                    m_container, m_xContext );
-
-                m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
-                m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
-
-
             }
             else
             {
                 throw new com.sun.star.uno.RuntimeException(
                     "ScriptProvider created with invalid argument");
             }
+
+            LogUtils.DEBUG("Modified Application path is: " + contextUrl );
+            LogUtils.DEBUG("isPkgProvider is: " + isPkgProvider );
+
+            // TODO should all be done in this class instead of
+            // deleagation????
+            m_xBrowseNodeProxy = new ProviderBrowseNode( this,
+                m_container, m_xContext );
+
+            m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
+            m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
         }
         else
         {
@@ -625,8 +646,42 @@ public abstract class ScriptProvider
         }
         // TODO see if we want to remove the ParcelContainer is no Parcels/Libraries left
     }
-private  XModel getModelFromDocUrl( String docUrl )
-{
+
+    private String getDocUrlFromModel( XModel document )
+    {
+        XTransientDocumentsDocumentContentFactory factory = null;
+        try
+        {
+            factory = (XTransientDocumentsDocumentContentFactory)UnoRuntime.queryInterface(
+                    XTransientDocumentsDocumentContentFactory.class,
+                        m_xMultiComponentFactory.createInstanceWithContext(
+                            "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
+                            m_xContext
+                        )
+                    );
+        }
+        catch (Exception ex)
+        {
+        }
+
+        if ( factory == null )
+            throw new com.sun.star.uno.RuntimeException( "ScriptProvider: unable to create a TDOC context factory.", this );
+
+        try
+        {
+            XContent content = factory.createDocumentContent( document );
+            return content.getIdentifier().getContentIdentifier();
+        }
+        catch( Exception ex )
+        {
+        }
+
+        LogUtils.DEBUG("unable to determine the model's TDOC URL");
+        return "";
+    }
+
+    private  XModel getModelFromDocUrl( String docUrl )
+    {
         LogUtils.DEBUG("getModelFromDocUrl - searching for match for ->" + docUrl + "<-" );
         XModel xModel = null;
         try
