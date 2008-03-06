@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:27:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,38 +1148,41 @@ sal_Bool SfxObjectShell::DoSave()
             else
                 bOk = sal_True;
 
-            try
+            if ( HasBasic() )
             {
-                // The basic and dialogs related contents are still not able to proceed with save operation ( saveTo only )
-                // so since the document storage is locked a workaround has to be used
+                try
+                {
+                    // The basic and dialogs related contents are still not able to proceed with save operation ( saveTo only )
+                    // so since the document storage is locked a workaround has to be used
 
-                uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
-                if ( !xTmpStorage.is() )
-                    throw uno::RuntimeException();
+                    uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                    DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
+                    if ( !xTmpStorage.is() )
+                        throw uno::RuntimeException();
 
-                ::rtl::OUString aBasicStorageName( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) );
-                ::rtl::OUString aDialogsStorageName( RTL_CONSTASCII_USTRINGPARAM( "Dialogs" ) );
-                if ( GetMedium()->GetStorage()->hasByName( aBasicStorageName ) )
-                    GetMedium()->GetStorage()->copyElementTo( aBasicStorageName, xTmpStorage, aBasicStorageName );
-                if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
-                    GetMedium()->GetStorage()->copyElementTo( aDialogsStorageName, xTmpStorage, aDialogsStorageName );
+                    ::rtl::OUString aBasicStorageName( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) );
+                    ::rtl::OUString aDialogsStorageName( RTL_CONSTASCII_USTRINGPARAM( "Dialogs" ) );
+                    if ( GetMedium()->GetStorage()->hasByName( aBasicStorageName ) )
+                        GetMedium()->GetStorage()->copyElementTo( aBasicStorageName, xTmpStorage, aBasicStorageName );
+                    if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
+                        GetMedium()->GetStorage()->copyElementTo( aDialogsStorageName, xTmpStorage, aDialogsStorageName );
 
-                GetBasicManager();
+                    GetBasicManager();
 
-                // disconnect from the current storage
-                pImp->pBasicManager->setStorage( xTmpStorage );
+                    // disconnect from the current storage
+                    pImp->pBasicManager->setStorage( xTmpStorage );
 
-                // store to the current storage
-                pImp->pBasicManager->storeLibrariesToStorage( GetMedium()->GetStorage() );
+                    // store to the current storage
+                    pImp->pBasicManager->storeLibrariesToStorage( GetMedium()->GetStorage() );
 
-                // connect to the current storage back
-                pImp->pBasicManager->setStorage( GetMedium()->GetStorage() );
-            }
-            catch( uno::Exception& )
-            {
-                SetError( ERRCODE_IO_GENERAL );
-                bOk = sal_False;
+                    // connect to the current storage back
+                    pImp->pBasicManager->setStorage( GetMedium()->GetStorage() );
+                }
+                catch( uno::Exception& )
+                {
+                    SetError( ERRCODE_IO_GENERAL );
+                    bOk = sal_False;
+                }
             }
         }
 
@@ -3048,11 +3051,14 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
         SetupStorage( xStorage, nVersion, bTemplate );
 
-        // Initialize Basic
-        GetBasicManager();
+        if ( HasBasic() )
+        {
+            // Initialize Basic
+            GetBasicManager();
 
-        // Save dialog/script container
-        pImp->pBasicManager->storeLibrariesToStorage( xStorage );
+            // Save dialog/script container
+            pImp->pBasicManager->storeLibrariesToStorage( xStorage );
+        }
 
         return SaveAs( rMedium );
     }
@@ -3570,6 +3576,9 @@ void SfxObjectShell::UpdateLinks()
 
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
+    if ( !HasBasic() )
+        return sal_True;
+
     if ( !pImp->pBasicManager->isValid() )
         GetBasicManager();
     uno::Sequence< rtl::OUString > sModules;
