@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:04:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::comphelper;
+
 //============================================================================
 // PropBrwMgr
 //============================================================================
@@ -161,29 +169,42 @@ SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
 //----------------------------------------------------------------------------
 
-PropBrwMgr::PropBrwMgr( Window *pParent_, sal_uInt16 nId,
+PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow(pParent_, nId)
+              :SfxChildWindow( _pParent, nId )
 {
-    // my UNO representation
-    m_xUnoRepresentation = VCLUnoHelper::CreateControlContainer(pParent_);
+    // set current selection
+    SfxViewShell* pShell = SfxViewShell::Current();
+    pWindow = new PropBrw(
+        ::comphelper::getProcessServiceFactory(),
+        pBindings,
+        this,
+        _pParent,
+        pShell ? pShell->GetCurrentDocument() : Reference< XModel >()
+        );
 
-    pWindow = new PropBrw(::comphelper::getProcessServiceFactory(),pBindings, this, pParent_);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
 
-    // set current selection
-    SfxViewShell* pShell = SfxViewShell::Current();
-    if( pShell )
+    ((PropBrw*)pWindow)->Update( pShell );
+}
+
+//----------------------------------------------------------------------------
+void PropBrw::Update( const SfxViewShell* _pShell )
+{
+    const BasicIDEShell* pBasicIDEShell = dynamic_cast< const BasicIDEShell* >( _pShell );
+    OSL_ENSURE( pBasicIDEShell || !_pShell, "PropBrw::Update: invalid shell!" );
+    if ( pBasicIDEShell )
     {
-        if( pShell->IsA( TYPE( BasicIDEShell )) )
-            ((PropBrw*)pWindow)->Update( ((BasicIDEShell*)pShell)->GetCurDlgView() );
-        else
-        {
-            SdrView* pDrawView = pShell->GetDrawView();
-            if( pDrawView )
-                ((PropBrw*)pWindow)->Update( pDrawView );
-        }
+        ImplUpdate( pBasicIDEShell->GetCurrentDocument(), pBasicIDEShell->GetCurDlgView() );
+    }
+    else if ( _pShell )
+    {
+        ImplUpdate( NULL, _pShell->GetDrawView() );
+    }
+    else
+    {
+        ImplUpdate( NULL, NULL );
     }
 }
 
@@ -201,14 +222,6 @@ const long WIN_BORDER = 2;
 const long MIN_WIN_SIZE_X = 50;
 const long MIN_WIN_SIZE_Y = 50;
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::comphelper;
-
 //----------------------------------------------------------------------------
 
 //============================================================================
@@ -219,12 +232,13 @@ DBG_NAME(PropBrw)
 
 //----------------------------------------------------------------------------
 
-PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
-                 SfxBindings *pBindings_, SfxChildWindow *pMgr, Window* pParent)
-          :SfxFloatingWindow(pBindings_, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
-          ,m_bInitialStateChange(sal_True)
-          ,m_xORB(_xORB)
-          ,pView( NULL )
+PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
+            const Reference< XModel >& _rxContextDocument )
+    :SfxFloatingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
+    ,m_bInitialStateChange(sal_True)
+    ,m_xORB(_xORB)
+    ,m_xContextDocument( _rxContextDocument )
+    ,pView( NULL )
 {
     DBG_CTOR(PropBrw,NULL);
 
@@ -248,91 +262,109 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
         m_xMeAsFrame.clear();
     }
 
-    if (m_xMeAsFrame.is())
+    ImplReCreateController();
+}
+
+//----------------------------------------------------------------------------
+
+void PropBrw::ImplReCreateController()
+{
+    OSL_PRECOND( m_xMeAsFrame.is(), "PropBrw::ImplCreateController: no frame for myself!" );
+    if ( !m_xMeAsFrame.is() )
+        return;
+
+    if ( m_xBrowserController.is() )
+        ImplDestroyController();
+
+    try
     {
-        try
+        Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
+        Reference< XComponentContext > xOwnContext(
+            xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+            UNO_QUERY_THROW );
+
+        // a ComponentContext for the
+        ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
-            Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
-            Reference< XComponentContext > xOwnContext(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-                UNO_QUERY_THROW );
+            ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
+            ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_xContextDocument ) )
+        };
+        Reference< XComponentContext > xInspectorContext(
+            ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+            xOwnContext ) );
 
-            // a ComponentContext for the
-            ::cppu::ContextEntry_Init aHandlerContextInfo[] =
+        // create a property browser controller
+        Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
+        static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.awt.PropertyBrowserController");
+        m_xBrowserController = Reference< XPropertySet >(
+            xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
+        );
+        if ( !m_xBrowserController.is() )
+        {
+            ShowServiceNotAvailableError( GetParent(), s_sControllerServiceName, sal_True );
+        }
+        else
+        {
+            Reference< XController > xAsXController( m_xBrowserController, UNO_QUERY );
+            DBG_ASSERT(xAsXController.is(), "PropBrw::PropBrw: invalid controller object!");
+            if (!xAsXController.is())
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) )
-            };
-            Reference< XComponentContext > xInspectorContext(
-                ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
-                xOwnContext ) );
-
-            // create a property browser controller
-            Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
-            static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.awt.PropertyBrowserController");
-            m_xBrowserController = Reference< XPropertySet >(
-                xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
-            );
-            if (!m_xBrowserController.is())
-            {
-                ShowServiceNotAvailableError(pParent, s_sControllerServiceName, sal_True);
+                ::comphelper::disposeComponent(m_xBrowserController);
+                m_xBrowserController.clear();
             }
             else
             {
-                Reference< XController > xAsXController(m_xBrowserController, UNO_QUERY);
-                DBG_ASSERT(xAsXController.is(), "PropBrw::PropBrw: invalid controller object!");
-                if (!xAsXController.is())
-                {
-                    ::comphelper::disposeComponent(m_xBrowserController);
-                    m_xBrowserController.clear();
-                }
-                else
-                {
-                    xAsXController->attachFrame(m_xMeAsFrame);
-                    m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
-                    DBG_ASSERT(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
-                }
+                xAsXController->attachFrame(m_xMeAsFrame);
+                m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
+                DBG_ASSERT(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
             }
         }
-        catch (Exception&)
+
+        Point aPropWinPos = Point( WIN_BORDER, WIN_BORDER );
+        Size  aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
+        aPropWinSize.Width() -= (2*WIN_BORDER);
+        aPropWinSize.Height() -= (2*WIN_BORDER);
+
+        if ( m_xBrowserComponentWindow.is() )
         {
-            DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
-            try
-            {
-                ::comphelper::disposeComponent(m_xBrowserController);
-                ::comphelper::disposeComponent(m_xBrowserComponentWindow);
-            }
-            catch(Exception&) { }
-            m_xBrowserController.clear();
-            m_xBrowserComponentWindow.clear();
+            m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
+                ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT |
+                ::com::sun::star::awt::PosSize::X | ::com::sun::star::awt::PosSize::Y);
+            m_xBrowserComponentWindow->setVisible(sal_True);
         }
     }
-
-    Point aPropWinPos = Point( WIN_BORDER, WIN_BORDER );
-    aPropWinSize.Width() -= (2*WIN_BORDER);
-    aPropWinSize.Height() -= (2*WIN_BORDER);
-
-    if (m_xBrowserComponentWindow.is())
+    catch (Exception&)
     {
-        m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
-            ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT |
-            ::com::sun::star::awt::PosSize::X | ::com::sun::star::awt::PosSize::Y);
-        m_xBrowserComponentWindow->setVisible(sal_True);
+        DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+        try
+        {
+            ::comphelper::disposeComponent(m_xBrowserController);
+            ::comphelper::disposeComponent(m_xBrowserComponentWindow);
+        }
+        catch(Exception&)
+        {
+        }
+
+        m_xBrowserController.clear();
+        m_xBrowserComponentWindow.clear();
     }
+
+    Resize();
 }
 
 //----------------------------------------------------------------------------
 
 PropBrw::~PropBrw()
 {
-    if (m_xBrowserController.is())
-        implDetachController();
+    if ( m_xBrowserController.is() )
+        ImplDestroyController();
 
     DBG_DTOR(PropBrw,NULL);
 }
 
 //----------------------------------------------------------------------------
 
-void PropBrw::implDetachController()
+void PropBrw::ImplDestroyController()
 {
     implSetNewObject( Reference< XPropertySet >() );
 
@@ -343,15 +375,23 @@ void PropBrw::implDetachController()
     if ( xAsXController.is() )
         xAsXController->attachFrame( NULL );
 
+    try
+    {
+        ::comphelper::disposeComponent( m_xBrowserController );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
     m_xBrowserController.clear();
-    m_xMeAsFrame.clear();
 }
 
 //----------------------------------------------------------------------------
 
 sal_Bool PropBrw::Close()
 {
-    implDetachController();
+    ImplDestroyController();
 
     if( IsRollUp() )
         RollDown();
@@ -585,8 +625,23 @@ void PropBrw::Resize()
 
 //----------------------------------------------------------------------------
 
-void PropBrw::Update( SdrView* pNewView )
+void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView* pNewView )
 {
+    Reference< XModel > xContextDocument( _rxContextDocument );
+
+    // if we should simply "empty" ourself, assume the context document didn't change
+    if ( !pNewView )
+    {
+        OSL_ENSURE( !_rxContextDocument.is(), "PropBrw::ImplUpdate: no view, but a document?!" );
+        xContextDocument = m_xContextDocument;
+    }
+
+    if ( xContextDocument != m_xContextDocument )
+    {
+        m_xContextDocument = xContextDocument;
+        ImplReCreateController();
+    }
+
     try
     {
         if ( pView )
@@ -597,8 +652,8 @@ void PropBrw::Update( SdrView* pNewView )
 
         if ( !pNewView )
             return;
-        else
-            pView = pNewView;
+
+        pView = pNewView;
 
         // set focus on initialization
         if ( m_bInitialStateChange )
