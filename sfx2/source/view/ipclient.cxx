@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:33:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ throw (::com::sun::star::uno::RuntimeException)
         uno::Reference< frame::XModel > xDocument;
         if ( m_pClient->GetViewShell()->GetObjectShell() )
             xDocument = m_pClient->GetViewShell()->GetObjectShell()->GetModel();
-        SfxObjectShell::SetWorkingDocument( xDocument );
+        SfxObjectShell::SetCurrentComponent( xDocument );
     }
     else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
     {
