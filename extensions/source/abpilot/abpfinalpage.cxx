@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpfinalpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:04:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,12 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 
 //.........................................................................
 namespace abp
@@ -99,21 +104,14 @@ namespace abp
         ,m_aNameLabel           ( this, ModuleRes( FT_NAME_EXPL ) )
         ,m_aName                ( this, ModuleRes( ET_DATASOURCENAME ) )
         ,m_aDuplicateNameError  ( this, ModuleRes( FT_DUPLICATENAME ) )
-        ,m_bCheckFileName       (sal_True)
+        ,m_aLocationController( ::comphelper::ComponentContext( _pParent->getORB() ), m_aLocation, m_aBrowse )
     {
         FreeResource();
 
         m_aName.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aLocation.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
-        m_aBrowse.SetClickHdl( LINK( this, FinalPage, OnBrowse ) );
         m_aRegisterName.SetClickHdl( LINK( this, FinalPage, OnRegister ) );
         m_aRegisterName.Check(TRUE);
-
-        const SfxFilter* pFilter = lcl_getBaseFilter();
-        if ( pFilter )
-        {
-            m_aLocation.SetFilter(pFilter->GetDefaultExtension());
-        }
     }
 
     //---------------------------------------------------------------------
@@ -155,8 +153,7 @@ namespace abp
         }
         OSL_ENSURE( aURL.GetProtocol() != INET_PROT_NOT_VALID ,"No valid file name!");
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-        OFileNotation aFileNotation( rSettings.sDataSourceName );
-        m_aLocation.SetText(aFileNotation.get(OFileNotation::N_SYSTEM));
+        m_aLocationController.setURL( rSettings.sDataSourceName );
         String sName = aURL.getName( );
         xub_StrLen nPos = sName.Search(String(aURL.GetExtension()));
         if ( nPos != STRING_NOTFOUND )
@@ -177,26 +174,16 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool FinalPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool FinalPage::commitPage( CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
-        OFileNotation aFileNotation( m_aLocation.GetText() );
-        ::rtl::OUString sURL = aFileNotation.get(OFileNotation::N_URL);
-        // check if the name exists
-        if ( m_bCheckFileName )
-        {
-            if ( ::utl::UCBContentHelper::Exists( sURL ) )
-            {
-                QueryBox aBox( this, WB_YES_NO, ModuleRes( RID_STR_ALREADYEXISTOVERWRITE ) );
-                if ( aBox.Execute() != RET_YES )
-                    return sal_False;
-            }
-        }
+        if ( !m_aLocationController.prepareCommit() )
+            return sal_False;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sDataSourceName = sURL;
+        rSettings.sDataSourceName = m_aLocationController.getURL();
         rSettings.bRegisterDataSource = m_aRegisterName.IsChecked();
         if ( rSettings.bRegisterDataSource )
             rSettings.sRegisteredDataSourceName = m_aName.GetText();
@@ -212,11 +199,6 @@ namespace abp
         // get the names of all data sources
         ODataSourceContext aContext( getORB() );
         aContext.getDataSourceNames( m_aInvalidDataSourceNames );
-
-        // in real, the data source which this dialog should create, is already part of the context
-        // as it's name is - of course - a valid name, we have to remove it from the bag
-//      DBG_ASSERT( getDialog()->getDataSource().getName() == getSettings().sDataSourceName,
-//          "FinalPage::ActivatePage: inconsistent names!" );
 
         // give the name edit the focus
         m_aLocation.GrabFocus();
@@ -237,9 +219,9 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool FinalPage::determineNextButtonState()
+    bool FinalPage::canAdvance() const
     {
-        return sal_False;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -257,45 +239,12 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( FinalPage, OnNameModified, Edit*, _pEdit)
+    IMPL_LINK( FinalPage, OnNameModified, Edit*, /**/ )
     {
-        if ( _pEdit == &m_aLocation )
-            m_bCheckFileName = sal_True;
-
         implCheckName();
         return 0L;
     }
-    // -----------------------------------------------------------------------------
-    IMPL_LINK( FinalPage, OnBrowse, PushButton*, EMPTYARG )
-    {
-        OFileNotation aOldFile( m_aLocation.GetText() );
-        WinBits nBits(WB_STDMODAL|WB_SAVEAS);
-        ::sfx2::FileDialogHelper aFileDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,this);
-        aFileDlg.SetDisplayDirectory( aOldFile.get(OFileNotation::N_URL) );
 
-        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
-        OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
-        if ( pFilter )
-        {
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-            aFileDlg.SetCurrentFilter(pFilter->GetFilterName());
-        }
-
-        if ( aFileDlg.Execute() == ERRCODE_NONE )
-        {
-            INetURLObject aURL( aFileDlg.GetPath() );
-            if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            {
-                OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                m_aLocation.SetText(aFileNotation.get(OFileNotation::N_SYSTEM));
-                implCheckName();
-                m_bCheckFileName = sal_False;
-            }
-        }
-
-        return 0L;
-    }
     // -----------------------------------------------------------------------------
     IMPL_LINK( FinalPage, OnRegister, CheckBox*, EMPTYARG )
     {
