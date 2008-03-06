@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:44:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bCanAxisLabelsBeStaggered(false)
         , m_bHasNumberProperties(false)
         , m_bProvidesStartingAngle(false)
+        , m_xChartDocument( 0 )
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
@@ -159,6 +160,7 @@ rtl::OUString ObjectPropertiesDialogParameter::getLocalizedName() const
 
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
+    m_xChartDocument.set( xChartModel, uno::UNO_QUERY );
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
@@ -183,6 +185,11 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         }
     }
     m_bHasLineProperties     = true; //@todo ask object
+
+    if( OBJECTTYPE_DATA_ERRORS == m_eObjectType )
+        m_bHasStatisticProperties = true;
+    else if( OBJECTTYPE_DATA_CURVE == m_eObjectType )
+        m_bHasRegressionProperties = true;
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
     {
@@ -273,6 +280,10 @@ bool ObjectPropertiesDialogParameter::ProvidesStartingAngle() const
 {
     return m_bProvidesStartingAngle;
 }
+uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDocument() const
+{
+    return m_xChartDocument;
+}
 
 //const USHORT nNoArrowDlg          = 1100;
 const USHORT nNoArrowNoShadowDlg    = 1101;
@@ -351,8 +362,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
-            if( m_pParameter->HasStatisticProperties() )
-                AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
+//             if( m_pParameter->HasStatisticProperties() )
+//                 AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
             if( m_pParameter->HasGeometryProperties() )
                 AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
             if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() )
@@ -374,19 +385,22 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
         }
 
-        case OBJECTTYPE_GRID:
-        case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
+            AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            break;
+
+        case OBJECTTYPE_GRID:
+        case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
         case OBJECTTYPE_DATA_STOCK_RANGE:
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
             break;
 
         case OBJECTTYPE_DATA_CURVE:
-            OSL_ASSERT( m_pParameter->HasRegressionProperties());
             AddTabPage(TP_TRENDLINE, String(SchResId(STR_PAGE_TRENDLINE_TYPE)), TrendlineTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
             break;
@@ -535,6 +549,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             {
                 pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
                 pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_Y );
+                pTabPage->SetChartDocumentForRangeChoosing( m_pParameter->getDocument());
             }
             break;
         }
