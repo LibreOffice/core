@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:40:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include "PrintManager.hxx"
 
@@ -84,7 +88,11 @@
 #include <svx/svdopage.hxx>
 #endif
 #include <svx/svdpagv.hxx>
+#include <svx/svditer.hxx>
+
 #include "strings.hrc"
+
+#include <svx/svdopath.hxx>
 
 #ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
@@ -98,6 +106,8 @@
 #include <svtools/intitem.hxx>
 #endif
 #include <svx/paperinf.hxx>
+#include <svx/xlnclit.hxx>
+#include "printdialog.hxx"
 
 namespace sd {
 
@@ -231,9 +241,9 @@ USHORT PrintManager::SetPrinterOptDlg (
 
 PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
 {
-    PrintDialog* pDlg;
+    const bool bImpress = mrBase.GetDocument()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
-    pDlg = new PrintDialog( pParent, false );
+    SdPrintDialog* pDlg = SdPrintDialog::Create(pParent,bImpress);
 
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell!=NULL && ! pShell->ISA(OutlineViewShell))
@@ -276,6 +286,20 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
         pDlg->EnableRange( PRINTDIALOG_SELECTION );
         // According #79749 always check PRINTDIALOG_ALL
         // pDlg->CheckRange( PRINTDIALOG_SELECTION );
+    }
+
+    if( bImpress )
+    {
+        const SdOptionsPrintItem* pPrintOpts = 0;
+
+        SfxPrinter* pPrinter = mrBase.GetPrinter(FALSE);
+        if( pPrinter )
+        {
+            const SfxPoolItem* pPoolItem = 0;
+            if(pPrinter->GetOptions().GetItemState(ATTR_OPTIONS_PRINT, FALSE, &pPoolItem ) == SFX_ITEM_SET )
+                pPrintOpts = dynamic_cast< const SdOptionsPrintItem* >( pPoolItem );
+        }
+        pDlg->Init( pPrintOpts );
     }
 
     return pDlg;
@@ -327,12 +351,18 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
         rOutliner.SetControlWord( nCntrl );
 
         // old place of FitPageToPrinterWithDialog().
-        SdOptionsPrintItem* pPrintOpts = NULL;
-        if (pPrinter->GetOptions().GetItemState(
-            ATTR_OPTIONS_PRINT, FALSE,
-            (const SfxPoolItem**) &pPrintOpts ) != SFX_ITEM_SET )
+        SdOptionsPrintItem* pPrintOpts = 0;
+
+        const SfxPoolItem* pPoolItem = 0;
+        if (pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, &pPoolItem ) == SFX_ITEM_SET )
+            pPrintOpts = dynamic_cast< SdOptionsPrintItem* >( const_cast< SfxPoolItem* >( pPoolItem ) ) ;
+
+        if( dynamic_cast<SdPrintDialog*>(pDlg) && static_cast<SdPrintDialog*>(pDlg)->Fill( pPrintOpts ) )
         {
-            pPrintOpts = NULL;
+            SfxItemSet aNewOptions( pPrinter->GetOptions() );
+            aNewOptions.Put( *pPrintOpts );
+            pPrinter->SetOptions( aNewOptions );
+            pPrintOpts = dynamic_cast< SdOptionsPrintItem* >( const_cast< SfxPoolItem* >( pPrinter->GetOptions().GetItem( ATTR_OPTIONS_PRINT ) ) );
         }
 
         // Wenn wir im Gliederungsmodus sind, muss das Model auf Stand gebracht werden
@@ -360,6 +390,8 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
         BOOL                bPrintHandout = FALSE;
         BOOL                bPrintDraw = FALSE;
         BOOL                bPrintNotes = FALSE;
+        BOOL                bHandoutHorizontal = TRUE;
+        USHORT              nSlidesPerHandout = 6;
 
         Orientation eOldOrientation = pPrinter->GetOrientation();
 
@@ -380,7 +412,11 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 bPrintOutline = TRUE;
 
             if( pPrintOpts->GetOptionsPrint().IsHandout() )
+            {
                 bPrintHandout = TRUE;
+                bHandoutHorizontal = pPrintOpts->GetOptionsPrint().IsHandoutHorizontal();
+                nSlidesPerHandout = pPrintOpts->GetOptionsPrint().GetHandoutPages();
+            }
 
             if( pPrintOpts->GetOptionsPrint().IsDraw() )
                 bPrintDraw = TRUE;
@@ -531,6 +567,10 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 nCollateCopies > 1 ? 1 : nCopies,
                 nProgressOffset,
                 nTotal);
+
+            if( bPrintHandout )
+                InitHandoutTemplate( aInfo, nSlidesPerHandout, bHandoutHorizontal );
+
             for( USHORT n = 1; n <= nCollateCopies; n++ )
             {
                 if ( bPrintOutline )
@@ -544,7 +584,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
                 if ( bPrintHandout )
                 {
-                    PrintHandout(aInfo, nPage);
+                    PrintHandout(aInfo, nPage );
                     aInfo.mnProgressOffset += (nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies));
                 }
                 if( bPrintDraw )
@@ -1027,9 +1067,7 @@ void PrintManager::PrintOutline (
 
 
 
-void PrintManager::PrintHandout (
-    PrintInfo& rInfo,
-    USHORT nPage)
+void PrintManager::PrintHandout( PrintInfo& rInfo, USHORT nPage )
 {
     SdPage* pPage = rInfo.mrViewShell.GetDoc()->GetSdPage(0, PK_HANDOUT);
     SdPage& rMaster = (SdPage&)pPage->TRG_GetMasterPage();
@@ -1099,7 +1137,6 @@ void PrintManager::PrintHandout (
         else
             pPrintView = new DrawView (rInfo.mrViewShell.GetDocSh(), &rInfo.mrPrinter, NULL);
 
-        sd::ShapeList& rShapeList = rMaster.GetPresentationShapeList();
         USHORT  nPageCount = rInfo.mnProgressOffset;
 
         rInfo.mrViewShell.WriteFrameViewData();
@@ -1109,49 +1146,78 @@ void PrintManager::PrintHandout (
         if ( rInfo.mpPrintOpts )
             bPrintExcluded = rInfo.mpPrintOpts->GetOptionsPrint().IsHiddenPages();
 
+        std::vector< SdPage* > aPagesVector;
         while ( nPage < rInfo.mnPageMax )
         {
-            SdrObject* pIter = rShapeList.getNextShape(0);
-            while( pIter && (nPage < rInfo.mnPageMax) )
+            nPage++;
+            if( rInfo.mrSelPages.IsSelected(nPage) )
             {
-                SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
-                if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
+                SdPage* pTemp = pDocument->GetSdPage(nPage-1, PK_STANDARD);
+                if( !pTemp->IsExcluded() || bPrintExcluded )
+                    aPagesVector.push_back( pTemp );
+            }
+        }
+
+        std::vector< SdrPageObj* > aPageObjVector;
+        SdrObjListIter aShapeIter( *pPage );
+        while( aShapeIter.IsMore() )
+        {
+            SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(aShapeIter.Next());
+            if( pPageObj )
+                aPageObjVector.push_back( pPageObj );
+        }
+
+        if( aPageObjVector.empty() )
+            return;
+
+/*
+        sal_Int32 nHandoutPageCount = aPagesVector.size() / aPageObjVector.size();
+        sal_Int32 nHandoutPage = 0;
+*/
+        std::vector< SdPage* >::iterator aPageIter( aPagesVector.begin() );
+        while( aPageIter != aPagesVector.end() )
+        {
+            std::vector< SdrPageObj* >::iterator aPageObjIter( aPageObjVector.begin() );
+
+            while( (aPageObjIter != aPageObjVector.end()) && (aPageIter != aPagesVector.end()) )
+            {
+                SdrPageObj* pPageObj = (*aPageObjIter++);
+                pPageObj->SetReferencedPage( (*aPageIter++) );
+            }
+
+            // if there are more page objects than pages left, set the rest to invisible
+            int nHangoverCount = 0;
+            while(aPageObjIter != aPageObjVector.end())
+            {
+                (*aPageObjIter++)->SetReferencedPage(0L);
+                nHangoverCount++;
+            }
+
+            if( nHangoverCount )
+            {
+                int nSkip = aPageObjVector.size() - nHangoverCount;
+                aShapeIter.Reset();
+                while( aShapeIter.IsMore() )
                 {
-                    if (rInfo.mrSelPages.IsSelected(nPage+1) )
+                    SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( aShapeIter.Next() );
+                    if( pPathObj )
                     {
-                        //rProgress.SetState( nPageCount, nTotal );
-                        //rProgress.SetStateText( nPageCount, nPage+1, nTotal );
-
-                        String aTmp = UniString::CreateFromInt32( nPage+1 );
-                        aTmp += String( SdResId( STR_PRINT_HANDOUT ) );
-                        rInfo.mrProgress.SetStateText( nPageCount, aTmp, rInfo.mnTotal );
-
-                        nPageCount = nPageCount + rInfo.mnCopies;
-
-                        SdPage* pPg = pDocument->GetSdPage(nPage, PK_STANDARD);
-
-                        if ( !pPg->IsExcluded() || bPrintExcluded )
+                        if( nSkip )
                         {
-                            (pPageObj)->SetReferencedPage(pPg);
-                            pIter = rShapeList.getNextShape(pIter);
+                            nSkip--;
+                        }
+                        else
+                        {
+                            pPathObj->SetMergedItem( XLineStyleItem(XLINE_NONE) );
                         }
                     }
-                    nPage++;
-                }
-                else
-                {
-                    pIter = rShapeList.getNextShape(pIter);
                 }
             }
 
-            while( pIter )
-            {
-                SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
-                if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
-                    pPageObj->SetReferencedPage(0L);
-
-                pIter = rShapeList.getNextShape(pIter);
-            }
+            // todo progress
+            String aTmp = UniString::CreateFromInt32( nPage );
+            aTmp += String( SdResId( STR_PRINT_HANDOUT ) );
+            rInfo.mrProgress.SetStateText( nPageCount, aTmp, rInfo.mnTotal );
 
             rInfo.mrViewShell.SetPrintedHandoutPageNum(rInfo.mrViewShell.GetPrintedHandoutPageNum() + 1);
 
@@ -1162,8 +1228,7 @@ void PrintManager::PrintHandout (
             pPageView->SetVisibleLayers(rInfo.mrViewShell.GetFrameView()->GetVisibleLayers() );
             pPageView->SetPrintableLayers(rInfo.mrViewShell.GetFrameView()->GetPrintableLayers() );
 
-            pPrintView->CompleteRedraw(&rInfo.mrPrinter, Rectangle(Point(0,0),
-                                pPage->GetSize()));
+            pPrintView->CompleteRedraw(&rInfo.mrPrinter, Rectangle(Point(0,0), pPage->GetSize()));
 
             if ( rInfo.mrTimeDateStr.Len() )
             {
@@ -1174,20 +1239,18 @@ void PrintManager::PrintHandout (
             }
             rInfo.mrPrinter.EndPage();
             pPrintView->HideSdrPage(); // pPrintView->GetPageView(pPage));
-        }
 
-        USHORT nRealPage = 0;
-        SdrObject* pIter = 0;
-        while( (pIter = rShapeList.getNextShape(pIter)) != 0 )
-        {
-            SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(pIter);
-            if( pPageObj && (rMaster.GetPresObjKind(pPageObj) == PRESOBJ_HANDOUT) )
+            if( nHangoverCount )
             {
-                SdPage* pRealPage = 0;
-                if( nRealPage < pDocument->GetSdPageCount( PK_STANDARD ) )
-                    pRealPage = pDocument->GetSdPage(nRealPage++,PK_STANDARD);
-                pPageObj->SetReferencedPage(pRealPage);
+                aShapeIter.Reset();
+                while( aShapeIter.IsMore() )
+                {
+                    SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( aShapeIter.Next() );
+                    if( pPathObj )
+                        pPathObj->SetMergedItem( XLineStyleItem(XLINE_SOLID) );
+                }
             }
+
         }
 
         rInfo.mrViewShell.SetPrintedHandoutPageNum(1);
@@ -1710,6 +1773,72 @@ bool PrintManager::IsScreenFormat (void)
 }
 
 
+void PrintManager::InitHandoutTemplate( PrintInfo& /*rInfo*/, USHORT nSlidesPerHandout, BOOL bHandoutHorizontal )
+{
+    AutoLayout eLayout = AUTOLAYOUT_HANDOUT6;
+    switch( nSlidesPerHandout )
+    {
+    case 1: eLayout = AUTOLAYOUT_HANDOUT1; break;
+    case 2: eLayout = AUTOLAYOUT_HANDOUT2; break;
+    case 3: eLayout = AUTOLAYOUT_HANDOUT3; break;
+    case 4: eLayout = AUTOLAYOUT_HANDOUT4; break;
+    case 9: eLayout = AUTOLAYOUT_HANDOUT9; break;
+    }
 
+    if( !mrBase.GetDocument() )
+        return;
+
+    SdDrawDocument& rModel = *mrBase.GetDocument();
+
+    // first, prepare handout page (not handout master)
+
+    SdPage* pHandout = rModel.GetSdPage(0, PK_HANDOUT);
+    if( !pHandout )
+        return;
+
+    // delete all previous shapes from handout page
+    while( pHandout->GetObjCount() )
+    {
+        SdrObject* pObj = pHandout->NbcRemoveObject(0);
+        if( pObj )
+            SdrObject::Free( pObj  );
+    }
+
+    const bool bDrawLines = eLayout == AUTOLAYOUT_HANDOUT3;
+
+    std::vector< Rectangle > aAreas;
+    SdPage::CalculateHandoutAreas( rModel, eLayout, bHandoutHorizontal, aAreas );
+
+    std::vector< Rectangle >::iterator iter( aAreas.begin() );
+    while( iter != aAreas.end() )
+    {
+        pHandout->NbcInsertObject( new SdrPageObj((*iter++)) );
+
+        if( bDrawLines && (iter != aAreas.end())  )
+        {
+            Rectangle aRect( (*iter++) );
+
+            basegfx::B2DPolygon aPoly;
+            aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );
+            aPoly.insert(1, basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
+
+            basegfx::B2DHomMatrix aMatrix;
+            aMatrix.translate( 0.0, static_cast< double >( aRect.GetHeight() / 7 ) );
+
+            basegfx::B2DPolyPolygon aPathPoly;
+            for( sal_uInt16 nLine = 0; nLine < 7; nLine++ )
+            {
+                aPoly.transform( aMatrix );
+                aPathPoly.append( aPoly );
+            }
+
+            SdrPathObj* pPathObj = new SdrPathObj(OBJ_PATHLINE, aPathPoly );
+            pPathObj->SetMergedItem( XLineStyleItem(XLINE_SOLID) );
+            pPathObj->SetMergedItem( XLineColorItem(String(), Color(COL_BLACK)));
+
+            pHandout->NbcInsertObject( pPathObj );
+        }
+    }
+}
 
 } // end of namespace sd
