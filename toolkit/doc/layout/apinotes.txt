@@ -1,0 +1,76 @@
+Notes on API wrapper pieces ...
+
+SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
+	Dialog( pParent, SVX_RES( RID_SVXDLG_ZOOM ) ),
+
+What do we do ?
+	+ lots of potential VCL/Svx/Sfx etc. top-levels ...
+
+	+ Create the window & the 1st member: 'FooHandle' ?
+	    + Multiply inherited ?
+	+ object from where ?
+
+	+ Default:
+	    + a pseudo-Dialog / wrapper ...
+	    + load using layout (etc.)
+		+ register an SID table ?
+		    + necessary ?
+		+ SIDs ? - post it ...
+
+
+	+ [ Otherwise ... hook up via a helper /
+	    constructor member ... ]
+
+* Fixed:
+    + OKButton / CancelButton
+	+ don't chain to PushButton::Click
+	    + if there is no ClickHdl set ... [ !urgh! ...]
+
+    * FIXME:
+	other widgets ...
+	* How do we cope ? *
+	....
+	    + priorities ? Layout ?
+	    + de-coupling ?
+	    + native widgets ?
+	    + hmm...
+	+ custom widgets ?
+	    + 'OKButton' ... (?) :-)
+	    + 'CancelButton'
+	    + 'HelpButton' ...
+	+ a VCL hack ...
+	    + create an 'addLayout()' method ?
+	    + [ like cl's ? ]
+	+ implement this ...
+
+** Lifecycle ?
+    + how do we track the 'Impl'
+      vs. the pImpl vs. (etc.)
+	+ held by mutual references ?
+
+    + pointer to the widget itself passed in ? 
+	+ MI ?
+    + when the widget dies - just NULL the
+      listener's back-ptr ?
+
+    + Locking [!?] - how / why / what / who ?
+	+ urgh ...
+	+ threading bits ...
+
+    + SID table (?) ...
+	+ [ necessary ? - just use the SID name as the XML attr ? ]
+	+ LAYOUT_ID(a) -> "#a" - stringified ...
+
+** FIXME:
+    + we need a decent MetricField implementation
+	+ it is more than a SpinField
+	+ need to move the 'Border' property down (etc.)
+	+ re-arrange the properties to be next to the impls.
+	  in awt ...
+
+    + fix the 
+
+XCurrencyField (huh)
+    needs implementing for VCLXMetricField (non-existent) ...
+    copy the code from XCurrencyField ? make a sub-class there ?
+
