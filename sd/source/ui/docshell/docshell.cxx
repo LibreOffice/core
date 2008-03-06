@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:55:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ void DrawDocShell::Construct()
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
-                               DocumentType eDocumentType) :
+                               DocumentType eDocumentType,BOOL bScriptSupport) :
     SfxObjectShell(eMode),
     mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(NULL),
@@ -243,6 +243,8 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
+    if ( !bScriptSupport )
+        SetHasNoBasic();
     Construct();
 }
 
