@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:34:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,8 +170,8 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
 
 protected:
-        virtual sal_Bool determineNextButtonState();
-        virtual void     ActivatePage();
+        virtual bool    canAdvance() const;
+        virtual void    ActivatePage();
 public:
         SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeOutputPage();
