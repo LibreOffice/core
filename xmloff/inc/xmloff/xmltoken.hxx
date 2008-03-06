@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 10:32:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2995,6 +2995,10 @@ namespace xmloff { namespace token {
         XML_NOTHING,
         XML_LIST_TAB_STOP_POSITION,
         // <--
+        XML_STANDARD_ERROR,
+        XML_CELL_RANGE,
+        XML_ERROR_LOWER_RANGE,
+        XML_ERROR_UPPER_RANGE,
         XML_TOKEN_END
     };
 
