@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:58:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,8 +880,12 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             xPopupMenu->insertSeparator( -1 );
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
             xPopupMenu->insertSeparator( -1 );
+            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorbar"));
+            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorbar"));
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue"));
+            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue"));
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline"));
+            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline"));
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation"));
             xPopupMenu->insertSeparator( -1 );
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
@@ -1136,7 +1140,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if( ! bReturn && nCode == KEY_DELETE )
+    if( ! bReturn &&
+        (nCode == KEY_DELETE || nCode == KEY_BACKSPACE ))
     {
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
