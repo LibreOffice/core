@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:08:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ public:
 
     ByteString* GetGroupID(std::deque<ByteString> &groupid);
     void        Print( XMLNode *pCur = NULL, USHORT nLevel = 0 );
-    void        SearchL10NElements( XMLParentNode *pCur  , int pos = 0);
+    virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
     void        View();
 //  void static Signal_handler(int signo);//void*,oslSignalInfo * pInfo);
@@ -250,9 +250,10 @@ public:
 
     /// returns file name
     const String &GetName() { return sFileName; }
+    void          SetName( const String &rFilename ) { sFileName = rFilename; }
     const std::vector<ByteString> getOrder(){ return order; }
 
-private:
+protected:
     // writes a string as UTF8 with dos line ends to a given stream
     void        WriteString( ofstream &rStream, const String &sString );
 
@@ -542,7 +543,8 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
-        const String &rFileName // the file name
+        const String &rFileName,    // the file name
+        XMLFile *pXMLFileIn         // the XMLFile
     );
 
     /// parse a memory stream, returns NULL on criticall errors
