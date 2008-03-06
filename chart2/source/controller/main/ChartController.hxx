@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:57:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,6 +614,11 @@ private:
     void SAL_CALL       executeDispatch_InsertMeanValues();
     void SAL_CALL       executeDispatch_InsertTrendline();
     void SAL_CALL       executeDispatch_InsertTrendlineEquation();
+    void SAL_CALL       executeDispatch_InsertYErrorbar();
+
+    void SAL_CALL       executeDispatch_DeleteMeanValue();
+    void SAL_CALL       executeDispatch_DeleteTrendline();
+    void SAL_CALL       executeDispatch_DeleteYErrorbar();
 
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
     void SAL_CALL       executeDispatch_EditText();
@@ -681,6 +686,8 @@ private:
     void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
                             const ::Point & aPosition );
     void impl_SetMousePointer( const MouseEvent & rEvent );
+
+    void impl_ClearSelection();
 };
 
 //.............................................................................
