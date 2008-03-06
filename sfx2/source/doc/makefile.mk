@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 15:08:50 $
+#   last change: $Author: kz $ $Date: 2008-03-06 19:54:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES =	\
         $(SLO)$/oleprops.obj \
         $(SLO)$/iframe.obj \
         $(SLO)$/applet.obj \
-        $(SLO)$/commitlistener.obj \
         $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
@@ -78,7 +77,6 @@ SLOFILES =	\
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
         $(SLO)$/sfxbasemodel.obj \
-        $(SLO)$/stormodifylistener.obj \
         $(SLO)$/guisaveas.obj\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
@@ -86,7 +84,9 @@ SLOFILES =	\
         $(SLO)$/opostponedtruncationstream.obj \
         $(SLO)$/docinsert.obj \
         $(SLO)$/docmacromode.obj \
-        $(SLO)$/SfxDocumentMetaData.obj
+        $(SLO)$/SfxDocumentMetaData.obj \
+        $(SLO)$/sfxmodelfactory.obj \
+        $(SLO)$/docstoragemodifylistener.obj
 
 # --- Tagets -------------------------------------------------------
 
