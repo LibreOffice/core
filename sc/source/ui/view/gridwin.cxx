@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:35:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3896,16 +3896,23 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     String aItem;
                     aSource.Format( aItem, SCA_VALID | SCA_TAB_3D, pSourceDoc );
 
-                    //! use tokens
+                    // TODO: we could define ocQuote for "
+                    String aQuote( '"' );
                     String aFormula( '=' );
-                    aFormula += ScCompiler::GetNativeSymbol(ocDde);
-                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
+                    aFormula += ScCompiler::GetNativeSymbol( ocDde);
+                    aFormula += ScCompiler::GetNativeSymbol( ocOpen);
+                    aFormula += aQuote;
                     aFormula += aApp;
-                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+                    aFormula += aQuote;
+                    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+                    aFormula += aQuote;
                     aFormula += aTopic;
-                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+                    aFormula += aQuote;
+                    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+                    aFormula += aQuote;
                     aFormula += aItem;
-                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
+                    aFormula += aQuote;
+                    aFormula += ScCompiler::GetNativeSymbol( ocClose);
 
                     pView->DoneBlockMode();
                     pView->InitBlockMode( nDestPosX, nDestPosY, nThisTab );
