@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 14:22:35 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:04:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,10 @@ DELAYLOADOBJ=
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
 
-dot=.
-LIBSALCPPRT=$(0)
-UWINAPILIB=$(0)
+LIBSALCPPRT=
+UWINAPILIB=
 
-CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=$(EMQ)".$(EMQ)"
+CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
