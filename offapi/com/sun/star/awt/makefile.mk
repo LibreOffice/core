@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 15:11:34 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:42:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,17 @@ IDLFILES=\
     XWindowListener2.idl\
     XWindowPeer.idl\
     XMenuExtended.idl
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+IDLFILES+=\
+    MaxChildrenException.idl\
+    XDialog2.idl\
+    XLayoutContainer.idl\
+    XLayoutFlow.idl\
+    XLayoutFlowContainer.idl\
+    XLayoutRoot.idl\
+    XLayoutUnit.idl
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # ------------------------------------------------------------------
 
