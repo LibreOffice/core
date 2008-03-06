@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:02:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,10 +370,10 @@
 #define STR_NOREGISTEREDDRIVER              RID_STR_GEN_START + 19
 #define STR_DATASOURCE_DELETED              RID_STR_GEN_START + 20
 #define STR_QUERY_UNDO_MODIFYSQLEDIT        RID_STR_GEN_START + 21
-    // FREE
-#define STR_QRY_TITLE                       RID_STR_GEN_START + 23
-#define STR_VIEW_TITLE                      RID_STR_GEN_START + 24
-    // FREE
+#define STR_QRY_TITLE                       RID_STR_GEN_START + 22
+#define STR_VIEW_TITLE                      RID_STR_GEN_START + 23
+#define STR_SUB_DOCS_WITH_SCRIPTS           RID_STR_GEN_START + 24
+#define STR_SUB_DOCS_WITH_SCRIPTS_DETAIL    RID_STR_GEN_START + 25
 #define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STR_GEN_START + 26
 #define STR_COULDNOTCONNECT_DATASOURCE      RID_STR_GEN_START + 27
 #define STR_NO_TABLE_FORMAT_INSIDE          RID_STR_GEN_START + 28
@@ -387,9 +387,7 @@
 #define STR_FOLDER_LABEL                    RID_STR_GEN_START + 36
 #define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_GEN_START + 37
 #define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STR_GEN_START + 38
-
-#define RID_STR_ERROR_NO_REPORT_INSTALLED       RID_STR_GEN_START + 39
-
+    // FREE
 #define RID_STR_EXTENSION_NOT_PRESENT       RID_STR_GEN_START + 40
 #define RID_STR_EXTENSION_NAME              RID_STR_GEN_START + 41
 
