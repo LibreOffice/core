@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedDataCaptionProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:21:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ public:
     virtual sal_Int32 getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const;
     virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, sal_Int32 aNewValue ) const;
 
-    explicit WrappedDataCaptionProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );//if !spChart2ModelContact.get() this property does belong to a single series and not to the whole diagram
+    explicit WrappedDataCaptionProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+                                         tSeriesOrDiagramPropertyType ePropertyType );
     virtual ~WrappedDataCaptionProperty();
 };
 
@@ -120,12 +121,13 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
 }
 
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
+                                    , tSeriesOrDiagramPropertyType ePropertyType )
 {
     //if !spChart2ModelContact.get() is then the created properties do belong to a single series or single datapoint
     //otherwise they do belong to the whole diagram
 
-    rList.push_back( new WrappedDataCaptionProperty( spChart2ModelContact ) );
+    rList.push_back( new WrappedDataCaptionProperty( spChart2ModelContact, ePropertyType ) );
 }
 
 }//anonymous namespace
@@ -148,9 +150,10 @@ void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rO
 //-----------------------------------------------------------------------------
 
 //static
-void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList )
+void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
+                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    lcl_addWrappedProperties( rList, ::boost::shared_ptr< Chart2ModelContact >() );
+    lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
 //-----------------------------------------------------------------------------
@@ -160,16 +163,18 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< W
 void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    lcl_addWrappedProperties( rList, spChart2ModelContact );
+    lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-WrappedDataCaptionProperty::WrappedDataCaptionProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedDataCaptionProperty::WrappedDataCaptionProperty(
+      ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
+    , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( C2U("DataCaption")
-            , uno::makeAny( sal_Int32(0) ), spChart2ModelContact )
+            , uno::makeAny( sal_Int32(0) ), spChart2ModelContact, ePropertyType )
 {
 }
 WrappedDataCaptionProperty::~WrappedDataCaptionProperty()

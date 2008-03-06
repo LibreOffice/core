@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedStatisticProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:24:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@ class WrappedStatisticProperties
 {
 public:
     static void addProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
-    static void addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList );
+    static void addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
+                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     static void addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
