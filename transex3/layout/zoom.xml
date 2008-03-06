@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="dialog" _title="Set Zoom" _label="boe" optimumsize="true"
+         help-id="SID_ATTR_ZOOM"
+             has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5" border="5">
+    <fixedline id="FL_ZOOM" _text="Zoom factor" _tooltip="bah" cnt:expand="true"/>
+    <radiobutton radiogroup="zoom" id="BTN_WHOLE_PAGE" _label="Whole Page"/>
+    <radiobutton radiogroup="zoom" id="BTN_PAGE_WIDTH" _label="Page Width"/>
+    <radiobutton radiogroup="zoom" id="BTN_OPTIMAL"   _label="Optimal"/>
+    <radiobutton radiogroup="zoom" id="BTN_200"   _label="200 %"/>
+    <radiobutton radiogroup="zoom" id="BTN_150"   _label="15~0 %"/>
+    <radiobutton radiogroup="zoom" id="BTN_100"   _label="100 %"/>
+    <radiobutton radiogroup="zoom" id="BTN_75"    _label="75 %"/>
+    <radiobutton radiogroup="zoom" id="BTN_50"    _label="50 %"/>
+    <hbox cnt:expand="false" cnt:fill="true">
+        <align cnt:expand="false" cnt:fill="true">
+        <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom" id="BTN_USER" _label="Variable"/>
+        </align>
+        <flow cnt:padding="10" cnt:expand="false"/>
+        <metricfield id="ED_USER" value-step="1"
+             repeat="true" has_border="true" spin="true"
+             text="100%" unit="13" custom-unit-text="%"
+             right="true"
+             cnt:expand="false"/>
+    </hbox>
+        <fixedline cnt:padding="1" id="FL_BOTTOM"/>
+    <dialogbuttonhbox border="5" spacing="5">
+        <flow/>
+        <okbutton     id="BTN_ZOOM_OK"/>
+        <cancelbutton id="BTN_ZOOM_CANCEL"/>
+        <helpbutton   id="BTN_ZOOM_HELP"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>
