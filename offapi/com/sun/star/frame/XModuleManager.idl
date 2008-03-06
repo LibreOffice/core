@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XModuleManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:52:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                    </li>
                </ul>
 
-       @throw  <type scope="com::sun::star::lang">IllegalArgumentException</type>
+       @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
                if the parameter Module is:
                <ul>
                    <li>an empty one</li>
@@ -102,7 +102,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                    <li>or does not provide the needed interface XServiceInfo.</li>
                </ul>
 
-       @throw  <type>UnknownModuleException</type>
+       @throws <type>UnknownModuleException</type>
                if the given module could not be identified.
                Note: If the module represent a XFrame instance with does not contain
                a document, this exception is thrown too!
