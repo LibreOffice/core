@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:01:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,9 @@ private:
         the first page of the document is used to determine the size.
     */
     bool IsScreenFormat (void);
+
+    /** creates the needed shapes on the handout page for the given layout */
+    void InitHandoutTemplate( PrintInfo& rInfo, USHORT nSlidesPerHandout, BOOL bHandoutHorizontal );
 };
 
 } // end of namespace sd
