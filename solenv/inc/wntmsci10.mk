@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:35:25 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:15:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,12 +150,8 @@ CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
-CFLAGSPROF=-Gh -Zd -Fd$(MISC)\_ooo_st_$(TARGET).PDB
-.IF "$(PDBTARGET)"!=""
-CFLAGSDEBUG=-Zi -Fd$(MISC)\$(PDBTARGET).PDB
-.ELSE
-CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
-.ENDIF
+CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
+CFLAGSDEBUG=-Zi -Fd$(MISC)$/$(@:b).pdb
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
