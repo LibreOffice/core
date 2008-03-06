@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    AddressSourceType TypeSelectionPage::getSelectedType()
+    AddressSourceType TypeSelectionPage::getSelectedType() const
     {
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
@@ -210,14 +210,14 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TypeSelectionPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool TypeSelectionPage::commitPage( CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
 
         if (AST_INVALID == getSelectedType( ))
         {
-            if (_eReason != IWizardPage::CR_VALIDATE_NOUI)
+            if ( _eReason != eValidateNoUI )
             {
                 ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
                 aError.Execute();
@@ -232,9 +232,9 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TypeSelectionPage::determineNextButtonState()
+    bool TypeSelectionPage::canAdvance() const
     {
-        return  AddressBookSourcePage::determineNextButtonState()
+        return  AddressBookSourcePage::canAdvance()
             &&  (AST_INVALID != getSelectedType());
     }
 
@@ -242,7 +242,7 @@ namespace abp
     IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
-        implCheckNextButton();
+        updateDialogTravelUI();
         return 0L;
     }
 
