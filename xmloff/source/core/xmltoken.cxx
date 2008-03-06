@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:34:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 10:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2978,11 +2978,25 @@ namespace xmloff { namespace token {
         TOKEN( "character-set",         XML_CHARACTER_SET ),
         TOKEN( "application-connection-settings",         XML_APPLICATION_CONNECTION_SETTINGS ),
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
+<<<<<<< xmltoken.cxx
         TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
         // --> OD 2007-09-14 #i81002#
         TOKEN( "number-no-superior", XML_NUMBER_NO_SUPERIOR ),
         TOKEN( "number-all-superior", XML_NUMBER_ALL_SUPERIOR ),
         // <--
+=======
+        // --> OD 2008-01-15 #newlistlevelattrs#
+        TOKEN( "list-level-position-and-space-mode", XML_LIST_LEVEL_POSITION_AND_SPACE_MODE ),
+        TOKEN( "label-width-and-position",           XML_LABEL_WIDTH_AND_POSITION ),
+        TOKEN( "label-alignment",                    XML_LABEL_ALIGNMENT ),
+        TOKEN( "list-level-label-alignment",         XML_LIST_LEVEL_LABEL_ALIGNMENT ),
+        TOKEN( "label-followed-by",                  XML_LABEL_FOLLOWED_BY ),
+        TOKEN( "listtab",                            XML_LISTTAB ),
+        TOKEN( "space",                              XML_SPACE ),
+        TOKEN( "nothing",                            XML_NOTHING ),
+        TOKEN( "list-tab-stop-position",             XML_LIST_TAB_STOP_POSITION ),
+        // <--
+>>>>>>> 1.115.32.1
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
