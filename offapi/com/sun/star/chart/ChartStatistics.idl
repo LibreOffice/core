@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartStatistics.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:10:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <com/sun/star/chart/ChartRegressionCurveType.idl>
 #endif
 
+#include <com/sun/star/chart/ErrorBarStyle.idl>
 
 //=============================================================================
 
@@ -104,6 +105,8 @@ published service ChartStatistics
 
     /** determines the type of error to indicate.
 
+        @deprecated
+
         @see ChartErrorCategory
         @see PercentageError
         @see ErrorMargin
@@ -112,6 +115,13 @@ published service ChartStatistics
         @see ErrorIndicator
      */
     [property] com::sun::star::chart::ChartErrorCategory ErrorCategory;
+
+    /** determines the style of the error bars. Use this instead of
+        ErrorCategory
+
+         @see ErrorBarStyle
+     */
+    [optional, property] long ErrorBarStyle;
 
     //-------------------------------------------------------------------------
 
@@ -161,6 +171,17 @@ published service ChartStatistics
      */
     [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
 
+    /** contains a cell range string for positve error bars. This
+        property is used when the <type>ErrorBarCategory</type> is set
+        to <member>ErrorBarCategory::FROM_DATA</member>.
+     */
+    [optional, property] string ErrorBarRangePositive;
+
+    /** contains a cell range string for negative error bars. This
+        property is used when the <type>ErrorBarCategory</type> is set
+        to <member>ErrorBarCategory::FROM_DATA</member>.
+     */
+    [optional, property] string ErrorBarRangeNegative;
 };
 
 //=============================================================================
