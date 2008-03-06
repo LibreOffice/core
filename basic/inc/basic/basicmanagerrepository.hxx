@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:49:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ namespace basic
             Note that this listener is <em>not</em> called when somebody else
             creates BasicManager instances.
 
-            If the same listener is createed multiple times, it is also notified
+            If the same listener is registered multiple times, it is also notified
             multiple times, and needs to be revoked once for each registration.
         */
         static  void    registerCreationListener(
