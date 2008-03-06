@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 11:41:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ STD_RES_FILE_PATCH( gid_File_Res_Chartcontroller, chartcontroller )
 STD_RES_FILE( gid_File_Res_Dba, dba)
 
 STD_RES_FILE_PATCH( gid_File_Res_Sdbt, sdbt)
+
+STD_RES_FILE_PATCH( gid_File_Res_Dbmm, dbmm)
 
 STD_RES_FILE_PATCH( gid_File_Res_Dbw, dbw )
 
