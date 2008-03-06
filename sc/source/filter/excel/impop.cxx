@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:31:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:41:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ void ImportExcel::ReadBoolErr()
         double fValue;
         const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
         ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pScTokArr );
-        pCell->SetDouble( fValue );
+        pCell->SetHybridDouble( fValue );
         GetDoc().PutCell( aScPos, pCell );
     }
 }
