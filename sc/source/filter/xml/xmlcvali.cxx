@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:50:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "xmlcvali.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
+#include "document.hxx"
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -69,18 +70,19 @@ using namespace xmloff::token;
 
 class ScXMLContentValidationContext : public SvXMLImportContext
 {
-    rtl::OUString   sName;
-    rtl::OUString   sHelpTitle;
-    rtl::OUString   sHelpMessage;
-    rtl::OUString   sErrorTitle;
-    rtl::OUString   sErrorMessage;
-    rtl::OUString   sErrorMessageType;
-    rtl::OUString   sBaseCellAddress;
-    rtl::OUString   sCondition;
-    sal_Int16       nShowList;
-    sal_Bool        bAllowEmptyCell;
-    sal_Bool        bDisplayHelp;
-    sal_Bool        bDisplayError;
+    rtl::OUString      sName;
+    rtl::OUString      sHelpTitle;
+    rtl::OUString      sHelpMessage;
+    rtl::OUString      sErrorTitle;
+    rtl::OUString      sErrorMessage;
+    rtl::OUString      sErrorMessageType;
+    rtl::OUString      sBaseCellAddress;
+    rtl::OUString      sCondition;
+    ScGrammar::Grammar eGrammar;
+    sal_Int16          nShowList;
+    sal_Bool           bAllowEmptyCell;
+    sal_Bool           bDisplayHelp;
+    sal_Bool           bDisplayError;
 
     SvXMLImportContextRef           xEventContext;
 
@@ -262,6 +264,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     bDisplayHelp(sal_False),
     bDisplayError(sal_False)
 {
+    const ScGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -281,7 +284,9 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 {
                     sal_uInt16 nCondPrefix = GetImport().GetNamespaceMap().
                             _GetKeyByAttrName( sValue, &sCondition, sal_False );
-                    if ( nCondPrefix == XML_NAMESPACE_UNKNOWN || nCondPrefix == XML_NAMESPACE_NONE )    // #i56720#
+
+                    if (!ScXMLImport::IsAcceptedFormulaNamespace( nCondPrefix,
+                                sValue, eGrammar, eStorageGrammar))
                         sCondition = sValue;
                 }
             break;
@@ -557,6 +562,7 @@ void ScXMLContentValidationContext::EndElement()
     }
 
     ScMyImportValidation aValidation;
+    aValidation.eGrammar = eGrammar;
     aValidation.sName = sName;
     aValidation.sBaseCellAddress = sBaseCellAddress;
     aValidation.sImputTitle = sHelpTitle;
@@ -564,10 +570,6 @@ void ScXMLContentValidationContext::EndElement()
     aValidation.sErrorTitle = sErrorTitle;
     aValidation.sErrorMessage = sErrorMessage;
     GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
-    if (aValidation.sFormula1.getLength())
-        ScXMLConverter::ParseFormula(aValidation.sFormula1);
-    if (aValidation.sFormula2.getLength())
-        ScXMLConverter::ParseFormula(aValidation.sFormula2);
     GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowImputMessage = bDisplayHelp;
