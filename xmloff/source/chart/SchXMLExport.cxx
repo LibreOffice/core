@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:31:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,9 @@ void lcl_fillCategoriesIntoStringVector(
     const Reference< chart2::data::XDataSequence > & xCategories,
     ::std::vector< OUString > & rOutCategories )
 {
+    OSL_ASSERT( xCategories.is());
+    if( !xCategories.is())
+        return;
     Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xCategories, uno::UNO_QUERY );
     if( xTextualDataSequence.is())
     {
@@ -573,7 +576,7 @@ double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > 
         ::std::copy( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
                      ::std::back_inserter( aResult ));
     }
-    else
+    else if( xSeq.is())
     {
         Sequence< uno::Any > aAnies( xSeq->getData());
         aResult.resize( aAnies.getLength());
@@ -589,8 +592,11 @@ struct lcl_TableData
     typedef ::std::vector< ::std::vector< double > > tTwoDimNumberContainer;
 
     tTwoDimNumberContainer aDataInRows;
+    tStringContainer       aDataRangeRepresentations;
     tStringContainer       aFirstRowStrings;
+    tStringContainer       aFirstRowRangeRepresentations;
     tStringContainer       aFirstColumnStrings;
+    tStringContainer       aFirstColumnRangeRepresentations;
 };
 
 // ::std::bind2nd( ::std::mem_fun_ref( &T::resize ), nSize ) does not work
@@ -604,11 +610,75 @@ template< class T >
         typename T::size_type m_nSize;
     };
 
+
+typedef ::std::map< sal_Int32, SchXMLExportHelper::tLabelValuesDataPair >
+    lcl_DataSequenceMap;
+
+struct lcl_SequenceToMapElement :
+    public ::std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
+{
+    lcl_SequenceToMapElement( sal_Int32 nOffset = 0 ) :
+            m_nOffset( nOffset )
+    {}
+    result_type operator() ( const argument_type & rContent )
+    {
+        sal_Int32 nIndex = -1;
+        if( rContent.second.is())
+        {
+            OUString aRangeRep( rContent.second->getSourceRangeRepresentation());
+            if( aRangeRep.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("categories")))
+            {
+                OSL_ASSERT( m_nOffset > 0 );
+                nIndex = 0;
+            }
+            else
+                nIndex = aRangeRep.toInt32() + m_nOffset;
+        }
+        else if( rContent.first.is())
+            nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32() + m_nOffset;
+        return result_type( nIndex, rContent );
+    }
+private:
+    sal_Int32 m_nOffset;
+};
+
+void lcl_PrepareInternalSequencesForTableExport(
+    SchXMLExportHelper::tDataSequenceCont & rInOutSequences, bool bHasCategories )
+{
+    lcl_DataSequenceMap aIndexSequenceMap;
+    const sal_Int32 nOffset = bHasCategories ? 1 : 0;
+    ::std::transform( rInOutSequences.begin(), rInOutSequences.end(),
+                      ::std::inserter( aIndexSequenceMap, aIndexSequenceMap.begin()),
+                      lcl_SequenceToMapElement( nOffset ));
+
+    rInOutSequences.clear();
+    sal_Int32 nIndex = 0;
+    for( lcl_DataSequenceMap::const_iterator aIt = aIndexSequenceMap.begin();
+         aIt != aIndexSequenceMap.end(); ++aIt, ++nIndex )
+    {
+        if( aIt->first < 0 )
+            continue;
+        // fill empty columns
+        for( ; nIndex < aIt->first; ++nIndex )
+            rInOutSequences.push_back(
+                SchXMLExportHelper::tDataSequenceCont::value_type( 0, 0 ));
+        OSL_ASSERT( nIndex == aIt->first );
+        rInOutSequences.push_back( aIt->second );
+    }
+}
+
+
 lcl_TableData lcl_getDataForLocalTable(
-    SchXMLExportHelper::tDataSequenceCont aSequencesToExport, bool bHasCategoryLabels,
-    bool bSwap )
+    const SchXMLExportHelper::tDataSequenceCont & aPassedSequences, bool bHasCategoryLabels,
+    bool bSwap,
+    bool bHasOwnData,
+    const Reference< chart2::data::XRangeXMLConversion > & xRangeConversion )
 {
     lcl_TableData aResult;
+
+    SchXMLExportHelper::tDataSequenceCont aSequencesToExport( aPassedSequences );
+    if( bHasOwnData )
+        lcl_PrepareInternalSequencesForTableExport( aSequencesToExport, bHasCategoryLabels );
 
     SchXMLExportHelper::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
     SchXMLExportHelper::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
@@ -645,6 +715,16 @@ lcl_TableData lcl_getDataForLocalTable(
         if( bHasCategoryLabels )
         {
             lcl_fillCategoriesIntoStringVector( aIt->second, rCategories );
+            if( aIt->second.is())
+            {
+                OUString aRange( aIt->second->getSourceRangeRepresentation());
+                if( xRangeConversion.is())
+                    aRange = xRangeConversion->convertRangeToXML( aRange );
+                if( bSwap )
+                    aResult.aFirstRowRangeRepresentations.push_back( aRange );
+                else
+                    aResult.aFirstColumnRangeRepresentations.push_back( aRange );
+            }
             ++aIt;
         }
         else
@@ -655,14 +735,25 @@ lcl_TableData lcl_getDataForLocalTable(
         }
     }
 
+    // iterate over all sequences
     size_t nSeqIdx = 0;
     for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
     {
+        OUString aRange;
         if( aIt->first.is())
+        {
             rLabels[nSeqIdx] = lcl_getLabelString( aIt->first );
+            aRange = aIt->first->getSourceRangeRepresentation();
+            if( xRangeConversion.is())
+                aRange = xRangeConversion->convertRangeToXML( aRange );
+        }
         else if( aIt->second.is())
             rLabels[nSeqIdx] = lcl_flattenStringSequence(
                 aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+        if( bSwap )
+            aResult.aFirstColumnRangeRepresentations.push_back( aRange );
+        else
+            aResult.aFirstRowRangeRepresentations.push_back( aRange );
 
         ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
         if( bSwap )
@@ -673,6 +764,14 @@ lcl_TableData lcl_getDataForLocalTable(
             for( sal_Int32 nIdx=0; nIdx<nSize; ++nIdx )
                 aResult.aDataInRows[nIdx][nSeqIdx] = aNumbers[nIdx];
         }
+
+        if( aIt->second.is())
+        {
+            aRange =  aIt->second->getSourceRangeRepresentation();
+            if( xRangeConversion.is())
+                aRange = xRangeConversion->convertRangeToXML( aRange );
+        }
+        aResult.aDataRangeRepresentations.push_back( aRange );
     }
 
     return aResult;
@@ -690,12 +789,60 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     }
 }
 
+::std::vector< Reference< chart2::data::XDataSequence > >
+    lcl_getErrorBarSequences( const Reference< beans::XPropertySet > & xErrorBarProp )
+{
+    ::std::vector< Reference< chart2::data::XDataSequence > > aResult;
+    Reference< chart2::data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
+    if( !xErrorBarDataSource.is())
+        return aResult;
+
+    const OUString aRolePrefix( RTL_CONSTASCII_USTRINGPARAM( "error-bars-" ));
+//     const OUString aXRolePrefix( aRolePrefix + OUString( RTL_CONSTASCII_USTRINGPARAM( "x-" )));
+//     const OUString aYRolePrefix( aRolePrefix + OUString( RTL_CONSTASCII_USTRINGPARAM( "y-" )));
+//     const OUString aPositivePostfix( RTL_CONSTASCII_USTRINGPARAM( "positive" ));
+//     const OUString aNegativePostfix( RTL_CONSTASCII_USTRINGPARAM( "negative" ));
+
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+        xErrorBarDataSource->getDataSequences());
+    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    {
+        try
+        {
+            if( aSequences[nI].is())
+            {
+                Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+                Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
+                OUString aRole;
+                if( ( xSeqProp->getPropertyValue(
+                          OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ))) >>= aRole ) &&
+                    aRole.match( aRolePrefix ))
+                {
+                    aResult.push_back( xSequence );
+                }
+            }
+        }
+        catch( uno::Exception & rEx )
+        {
+#ifdef DBG_UTIL
+            String aStr( rEx.Message );
+            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR1( "chart:exporting error bar ranges: %s", aBStr.GetBuffer());
+#else
+            (void)rEx; // avoid warning
+#endif
+        }
+    }
+
+    return aResult;
+}
+
 } // anonymous namespace
 
 struct SchXMLDataPointStruct
 {
-    OUString maStyleName;
-    sal_Int32       mnRepeat;
+    OUString   maStyleName;
+    sal_Int32  mnRepeat;
 
     SchXMLDataPointStruct() : mnRepeat( 1 ) {}
 };
@@ -1245,7 +1392,23 @@ void SchXMLExportHelper::exportTable()
     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, msTableName );
     SvXMLElementExport aTable( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
 
-    lcl_TableData aData( lcl_getDataForLocalTable( m_aDataSequencesToExport, mbHasCategoryLabels, !mbRowSourceColumns ));
+    bool bHasOwnData = false;
+    Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
+    Reference< chart2::data::XRangeXMLConversion > xRangeConversion;
+    if( xNewDoc.is())
+    {
+        bHasOwnData = xNewDoc->hasInternalDataProvider();
+        xRangeConversion.set( xNewDoc->getDataProvider(), uno::UNO_QUERY );
+    }
+
+    lcl_TableData aData( lcl_getDataForLocalTable(
+                             m_aDataSequencesToExport, mbHasCategoryLabels, !mbRowSourceColumns, bHasOwnData, xRangeConversion ));
+
+    lcl_TableData::tStringContainer::const_iterator aDataRangeIter( aData.aDataRangeRepresentations.begin());
+    const lcl_TableData::tStringContainer::const_iterator aDataRangeEndIter( aData.aDataRangeRepresentations.end());
+    lcl_TableData::tStringContainer::const_iterator aFirstColumnRangeIter( aData.aFirstColumnRangeRepresentations.begin());
+    const lcl_TableData::tStringContainer::const_iterator aFirstColumnRangeEndIter( aData.aFirstColumnRangeRepresentations.end());
+
     // declare columns
     {
         SvXMLElementExport aHeaderColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, sal_True, sal_True );
@@ -1267,42 +1430,72 @@ void SchXMLExportHelper::exportTable()
             SvXMLElementExport aEmptyParagraph( mrExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_True );
         }
 
+        lcl_TableData::tStringContainer::const_iterator aFirstRowRangeIter( aData.aFirstRowRangeRepresentations.begin());
+        const lcl_TableData::tStringContainer::const_iterator aFirstRowRangeEndIter( aData.aFirstRowRangeRepresentations.end());
         for( lcl_TableData::tStringContainer::const_iterator aIt( aData.aFirstRowStrings.begin());
              aIt != aData.aFirstRowStrings.end(); ++aIt )
         {
             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
             SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
+            // write the original range name as id into the local table
+            // to allow a correct re-association when copying via clipboard
+            if( !bHasOwnData && aFirstRowRangeIter != aFirstRowRangeEndIter )
+            {
+                if( (*aFirstRowRangeIter).getLength())
+                    mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aFirstRowRangeIter );
+                ++aFirstRowRangeIter;
+            }
             exportText( *aIt );
         }
+        OSL_ASSERT( bHasOwnData || aFirstRowRangeIter == aFirstRowRangeEndIter );
     } // closing row and header-rows elements
 
     // value rows
-    SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, sal_True, sal_True );
-    lcl_TableData::tStringContainer::const_iterator aFirstColIt( aData.aFirstColumnStrings.begin());
-    for( lcl_TableData::tTwoDimNumberContainer::const_iterator aColIt( aData.aDataInRows.begin());
-         aColIt != aData.aDataInRows.end(); ++aColIt )
     {
-        SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
+        SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROWS, sal_True, sal_True );
+        lcl_TableData::tStringContainer::const_iterator aFirstColIt( aData.aFirstColumnStrings.begin());
+        for( lcl_TableData::tTwoDimNumberContainer::const_iterator aColIt( aData.aDataInRows.begin());
+             aColIt != aData.aDataInRows.end(); ++aColIt )
         {
-            mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
-            SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
-            if( aFirstColIt != aData.aFirstColumnStrings.end())
+            SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
             {
-                exportText( *aFirstColIt );
-                ++aFirstColIt;
+                mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING );
+                SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
+                if( aFirstColIt != aData.aFirstColumnStrings.end())
+                {
+                    // write the original range name as id into the local table
+                    // to allow a correct re-association when copying via clipboard
+                    if( !bHasOwnData && aFirstColumnRangeIter != aFirstColumnRangeEndIter )
+                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aFirstColumnRangeIter++ );
+                    exportText( *aFirstColIt );
+                    ++aFirstColIt;
+                }
+            }
+            for( lcl_TableData::tTwoDimNumberContainer::value_type::const_iterator aInnerIt( aColIt->begin());
+                 aInnerIt != aColIt->end(); ++aInnerIt )
+            {
+                SvXMLUnitConverter::convertDouble( msStringBuffer, *aInnerIt );
+                msString = msStringBuffer.makeStringAndClear();
+                mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
+                mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
+                SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
+                // write the original range name as id into the local table to
+                // allow a correct re-association when copying via clipboard
+                if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
+                    ( mbRowSourceColumns || (aInnerIt == aColIt->begin())) )
+                {
+                    if( (*aDataRangeIter).getLength())
+                        mrExport.AddAttribute( XML_NAMESPACE_TEXT, XML_ID, *aDataRangeIter );
+                    ++aDataRangeIter;
+                }
+                exportText( msString, false ); // do not convert tabs and lfs
             }
         }
-        for( lcl_TableData::tTwoDimNumberContainer::value_type::const_iterator aInnerIt( aColIt->begin());
-             aInnerIt != aColIt->end(); ++aInnerIt )
-        {
-            SvXMLUnitConverter::convertDouble( msStringBuffer, *aInnerIt );
-            msString = msStringBuffer.makeStringAndClear();
-            mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
-            mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
-            SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
-            exportText( msString, false ); // do not convert tabs and lfs
-        }
     }
+
+    // if range iterator was used it should have reached its end
+    OSL_ASSERT( bHasOwnData || (aDataRangeIter == aDataRangeEndIter) );
+    OSL_ASSERT( bHasOwnData || (aFirstColumnRangeIter == aFirstColumnRangeEndIter) );
 }
 
 void SchXMLExportHelper::exportPlotArea(
@@ -2295,6 +2488,7 @@ void SchXMLExportHelper::exportSeries(
                     sal_Bool bHasMeanValueLine = false;
                     chart::ChartRegressionCurveType eRegressionType( chart::ChartRegressionCurveType_NONE );
                     chart::ChartErrorIndicatorType eErrorType( chart::ChartErrorIndicatorType_NONE );
+                    sal_Int32 nErrorBarStyle( chart::ErrorBarStyle::NONE );
                     Reference< beans::XPropertySet > xPropSet;
                     tLabelValuesDataPair aSeriesLabelValuesPair;
 
@@ -2362,6 +2556,10 @@ void SchXMLExportHelper::exportSeries(
                                     aAny = xPropSet->getPropertyValue(
                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorIndicator" )));
                                     aAny >>= eErrorType;
+
+                                    aAny = xPropSet->getPropertyValue(
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorBarStyle" )));
+                                    aAny >>= nErrorBarStyle;
                                 }
                                 catch( beans::UnknownPropertyException & rEx )
                                 {
@@ -2530,7 +2728,8 @@ void SchXMLExportHelper::exportSeries(
                         exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
                     }
 
-                    if( eErrorType != chart::ChartErrorIndicatorType_NONE &&
+                    if( nErrorBarStyle != chart::ErrorBarStyle::NONE &&
+                        eErrorType != chart::ChartErrorIndicatorType_NONE &&
                         xPropSet.is() &&
                         mxExpPropMapper.is() )
                     {
@@ -2550,6 +2749,19 @@ void SchXMLExportHelper::exportSeries(
 
                         if( xStatProp.is() )
                         {
+                            if( bExportContent &&
+                                nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
+                            {
+                                // register data ranges for error bars for export in local table
+                                ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
+                                    lcl_getErrorBarSequences( xStatProp ));
+                                for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
+                                         aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
+                                {
+                                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
+                                }
+                            }
+
                             aPropertyStates = mxExpPropMapper->Filter( xStatProp );
 
                             if( aPropertyStates.size() > 0 )
