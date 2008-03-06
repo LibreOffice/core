@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:20:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& 
         throw IllegalArgumentException();
 
     mxStorage = _rxRootStorage;
-    implSetStorage( _rxRootStorage );
+    onNewRootStorage();
 }
 
 void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XStorage >& _rxRootStorage ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
@@ -563,7 +563,7 @@ void SAL_CALL SfxLibraryContainer::storeLibraries(  ) throw (WrappedTargetExcept
     LibraryContainerMethodGuard aGuard( *this );
     try
     {
-        storeLibraries_Impl( NULL, sal_False );
+        storeLibraries_Impl( mxStorage, sal_False );
     }
     catch( const Exception& )
     {
@@ -1701,15 +1701,16 @@ void SfxLibraryContainer::implImportLibDescriptor
 // Methods of new XLibraryStorage interface?
 void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& xStorage, sal_Bool bComplete )
 {
-    Sequence< OUString > aNames = maNameContainer.getElementNames();
-    const OUString* pNames = aNames.getConstArray();
-    sal_Int32 i, nNameCount = aNames.getLength();
+    const Sequence< OUString > aNames = maNameContainer.getElementNames();
+    sal_Int32 nNameCount = aNames.getLength();
+    const OUString* pName = aNames.getConstArray();
+    const OUString* pNamesEnd = aNames.getConstArray() + nNameCount;
 
     // Don't count libs from shared index file
     sal_Int32 nLibsToSave = nNameCount;
-    for( i = 0 ; i < nNameCount ; i++ )
+    for( ; pName != pNamesEnd; ++pName )
     {
-        SfxLibrary* pImplLib = getImplLib( pNames[ i ] );
+        SfxLibrary* pImplLib = getImplLib( *pName );
         if( pImplLib->mbSharedIndexFile )
             nLibsToSave--;
     }
@@ -1724,12 +1725,25 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
     if( bStorage )
     {
+        // when we save to our root storage, ensure the libs are all loaded. Else the below cleaning
+        // of the target storage will loose them.
+        if ( xStorage == mxStorage )
+        {
+            pName = aNames.getConstArray();
+            for ( ; pName != pNamesEnd; ++pName )
+            {
+                if ( !isLibraryLoaded( *pName ) )
+                    loadLibrary( *pName );
+            }
+        }
+
         // first of all, clean the target library storage, since the storing procedure must do overwrite
-        try {
+        try
+        {
             if ( xStorage->hasByName( maLibrariesDir ) )
                 xStorage->removeElement( maLibrariesDir );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
             return;
@@ -1739,10 +1753,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         if( nNameCount == 1 )
         {
             // Must be standard lib
-            Any aLibAny = maNameContainer.getByName( pNames[0] );
+            Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;
             aLibAny >>= xNameAccess;
-            if( !xNameAccess->hasElements() )
+            if( aNames[0].equalsAscii( "Standard" ) && !xNameAccess->hasElements() )
                 return;
         }
 
@@ -1759,21 +1773,26 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             return;
         }
 
-        try {
-            xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
+        try
+        {
+            if ( ( mxStorage != xStorage ) && ( mxStorage->hasByName( maLibrariesDir ) ) )
+                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
         }
-        catch( uno::Exception& )
-        {}
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     int iArray = 0;
-    for( i = 0 ; i < nNameCount ; i++ )
+    pName = aNames.getConstArray();
+    for( ; pName != pNamesEnd; ++pName )
     {
-        SfxLibrary* pImplLib = getImplLib( pNames[ i ] );
+        SfxLibrary* pImplLib = getImplLib( *pName );
         if( pImplLib->mbSharedIndexFile )
             continue;
         ::xmlscript::LibDescriptor& rLib = pLibArray->mpLibs[iArray];
-        rLib.aName = pNames[ i ];
+        rLib.aName = *pName;
         iArray++;
 
         rLib.bLink = pImplLib->mbLink;
