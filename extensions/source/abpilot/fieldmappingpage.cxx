@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,6 @@ namespace abp
     {
         AddressBookSourcePage::initializePage();
         implUpdateHint();
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool FieldMappingPage::commitPage(COMMIT_REASON _eReason)
-    {
-        return AddressBookSourcePage::commitPage(_eReason);
     }
 
     //---------------------------------------------------------------------
