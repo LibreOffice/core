@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:06:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     DECL_LINK(MoveHdl_Impl, void*);
 
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
 public:
         SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);
