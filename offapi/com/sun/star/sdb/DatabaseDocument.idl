@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseDocument.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:51:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,9 @@
 
  module com {  module sun {  module star {  module sdb {
 
-/** specifies documents which belong to a database access bean.
-
-    <p>
-    These documents typically process information from a connected
-    data source. A
-    <type scope="com::sun::star::sdb">DatabaseDocument</type>
-    could be a form or a report.
-    </p>
+/** specifies a link to a document associated with a database document
     @since OOo 2.0.0
+    @deprecated
  */
 published service DatabaseDocument
 {
