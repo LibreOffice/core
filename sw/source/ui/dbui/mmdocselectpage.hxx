@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:07:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
     DECL_LINK(DocSelectHdl, RadioButton*);
     DECL_LINK(FileSelectHdl, PushButton*);
 
-    virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
 public:
         SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);
