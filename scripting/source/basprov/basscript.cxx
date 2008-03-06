@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:26:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,13 @@
 #ifndef _SB_SBMETH_HXX
 #include <basic/sbmeth.hxx>
 #endif
+#ifndef _BASMGR_HXX
+#include <basic/basmgr.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #endif
+
 #include <map>
 
 
@@ -68,7 +72,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
-
+using namespace ::com::sun::star::document;
 
 extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 extern void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
@@ -85,13 +89,28 @@ namespace basprov
     // BasicScriptImpl
     // =============================================================================
 
+    // -----------------------------------------------------------------------------
+
     BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod )
-        :m_xMethod( xMethod ), m_funcName( funcName )
+        :m_xMethod( xMethod )
+        ,m_funcName( funcName )
+        ,m_documentBasicManager( NULL )
+        ,m_xDocumentScriptContext()
     {
     }
 
     // -----------------------------------------------------------------------------
 
+    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod,
+        BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext )
+        :m_xMethod( xMethod )
+        ,m_funcName( funcName )
+        ,m_documentBasicManager( &documentBasicManager )
+        ,m_xDocumentScriptContext( documentScriptContext )
+    {
+    }
+
+    // -----------------------------------------------------------------------------
     BasicScriptImpl::~BasicScriptImpl()
     {
     }
@@ -168,7 +187,18 @@ namespace basprov
 
             // call method
             SbxVariableRef xReturn = new SbxVariable;
-            ErrCode nErr = m_xMethod->Call( xReturn );
+            ErrCode nErr = SbxERR_OK;
+            {
+                // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
+                Any aOldThisComponent;
+                if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
+                    aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
+
+                nErr = m_xMethod->Call( xReturn );
+
+                if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
+                    m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
+            }
             if ( nErr != SbxERR_OK )
             {
                 // TODO: throw InvocationTargetException ?
