@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:09:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,6 @@ namespace dbaui
         Window*         m_pErrorMessageParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                        m_xDatabaseContext;
         ::rtl::OUString m_sContextInformation;
 
     public:
@@ -80,7 +78,7 @@ namespace dbaui
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
-        sal_Bool    isValid() const { return m_xDatabaseContext.is(); }
+        sal_Bool    isValid() const { return m_xORB.is(); }
 
         /// create a data source connection
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
@@ -90,9 +88,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     connect(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource
                             , sal_Bool _bShowError = sal_True) const;
-
-    private:
-        void implConstruct();
     };
 
 //.........................................................................
