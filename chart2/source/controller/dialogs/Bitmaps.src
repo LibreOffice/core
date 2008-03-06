@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:39:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,52 +446,85 @@ Bitmap BMP_STOCK_4
 //---------------------
 //---------------------
 //error indicator
-Bitmap BMP_INDICATE_BOTH_VERTI
+Image BMP_INDICATE_BOTH_VERTI
 {
-    File = "errorbothverti_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorbothverti_30.png" ;
+    };
 };
-Bitmap BMP_INDICATE_DOWN
+Image BMP_INDICATE_DOWN
 {
-    File = "errordown_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errordown_30.png" ;
+    };
 };
-Bitmap BMP_INDICATE_UP
+Image BMP_INDICATE_UP
 {
-    File = "errorup_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorup_30.png" ;
+    };
 };
-Bitmap BMP_INDICATE_BOTH_HORI
+Image BMP_INDICATE_BOTH_HORI
 {
-    File = "errorbothhori_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorbothhori_30.png" ;
+    };
 };
-Bitmap BMP_INDICATE_RIGHT
+Image BMP_INDICATE_RIGHT
 {
-    File = "errorright_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorright_30.png" ;
+    };
 };
-Bitmap BMP_INDICATE_LEFT
+Image BMP_INDICATE_LEFT
 {
-    File = "errorleft_30.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorleft_30.png" ;
+    };
 };
 
 //---------------------
 //regression curves
-Bitmap BMP_REGRESSION_NONE
+Image BMP_REGRESSION_NONE
 {
-    File = "regno.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regno.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_LINEAR
+Image BMP_REGRESSION_LINEAR
 {
-    File = "reglin.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "reglin.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_LOG
+Image BMP_REGRESSION_LOG
 {
-    File = "reglog.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "reglog.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_EXP
+Image BMP_REGRESSION_EXP
 {
-    File = "regexp.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regexp.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_POWER
+Image BMP_REGRESSION_POWER
 {
-    File = "regpow.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regpow.bmp" ;
+    };
 };
 //---------------------
 Image IMG_SELECTRANGE
