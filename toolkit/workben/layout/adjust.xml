@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+    id="window1" title="Text Editor" optimumsize="true"
+    has_border="true" sizeable="true" moveable="true">
+    <vbox>
+    <!-- Ver Top -->
+    <hbox>
+        <align v-align="0" h-align="0" v-fill="0" h-fill="0">
+        <pushbutton label="Top Left" />
+        </align>
+        <align>
+        <pushbutton label="Top Middle" v-align="0" h-align="0.5" v-fill="0" h-fill="0" />
+        </align>
+        <align>
+        <pushbutton label="Top Right" v-align="0" h-align="1" v-fill="0" h-fill="0" />
+        </align>
+    </hbox>
+    <!-- Ver Middle -->
+    <hbox>
+        <align>
+        <pushbutton label="Middle Left" v-align="0.5" h-align="0" v-fill="0" h-fill="0" />
+        </align>
+        <align>
+        <pushbutton label="Middle Middle" v-align="0.5" h-align="0.5" v-fill="0" h-fill="0" />
+        </align>
+        <align>
+        <pushbutton label="Middle Right" v-align="0.5" h-align="1" v-fill="0" h-fill="0" />
+        </align>
+    </hbox>
+    <!-- Ver Bottom -->
+    <hbox>
+        <align>
+        <pushbutton label="Bottom Left" v-align="1" h-align="0" v-fill="0" h-fill="0" />
+        </align>
+        <align>
+        <pushbutton label="Bottom Middle" v-align="1" h-align="0.5" v-fill="0" h-fill="0" />
+        </align>
+        <align>
+        <pushbutton label="Bottom Right" v-align="1" h-align="1" v-fill="0" h-fill="0" />
+        </align>
+    </hbox>
+    </vbox>
+</dialog>

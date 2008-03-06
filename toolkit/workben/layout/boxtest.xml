@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Box Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <hbox cnt:expand="false" cnt:fill="false">
+            <pushbutton label="XML Left"
+                        cnt:expand="false" cnt:fill="false"/>
+            <pushbutton label="XML Middle"
+                                cnt:expand="true" cnt:fill="false"/>
+            <pushbutton label="XML Right"
+                                cnt:expand="true" cnt:fill="true"/>
+            </hbox>
+        <hbox cnt:expand="true" cnt:fill="false">
+            <pushbutton label="XML Left"
+                        cnt:expand="false" cnt:fill="false"/>
+                    <pushbutton label="XML Middle"
+                                cnt:expand="true" cnt:fill="false"/>
+                    <pushbutton label="XML Right"
+                                cnt:expand="true" cnt:fill="true"/>
+            </hbox>
+        <hbox cnt:expand="true" cnt:fill="true">
+            <pushbutton label="XML Left"
+                        cnt:expand="false" cnt:fill="false"/>
+                    <pushbutton label="XML Middle"
+                                cnt:expand="true" cnt:fill="false"/>
+                    <pushbutton label="XML Right"
+                                cnt:expand="true" cnt:fill="true"/>
+            </hbox>
+    </vbox>
+</dialog>
