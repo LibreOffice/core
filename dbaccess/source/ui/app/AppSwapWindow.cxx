@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:59:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,24 @@ ElementType OApplicationSwapWindow::getElementType() const
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
     return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
+
+// -----------------------------------------------------------------------------
+bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
+{
+    if ( m_eLastType == _eType )
+        return true;
+
+    if ( m_rBorderWin.getView()->getElementNotification()->onContainerSelect( _eType ) )
+    {
+        if ( _eType != E_NONE )
+            m_eLastType = _eType;
+        return true;
+    }
+
+    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
+    return false;
+}
+
 // -----------------------------------------------------------------------------
 IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
 {
@@ -193,26 +211,18 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
     if ( pEntry )
         eType = *static_cast<ElementType*>(pEntry->GetUserData());
 
-    if ( m_eLastType != eType && eType != E_NONE )
-    {
-        if ( m_rBorderWin.getView()->getElementNotification()->onContainerSelect(eType) )
-            m_eLastType = eType;
-        else
-        {
-            PostUserEvent(LINK(this, OApplicationSwapWindow, ChangeToLastSelected));
-        }
-    }
+    onContainerSelected( eType );
 
     return 1L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK(OApplicationSwapWindow, ChangeToLastSelected, void*, EMPTYARG)
 {
-    changeContainer(m_eLastType);
+    selectContainer(m_eLastType);
     return 0L;
 }
 // -----------------------------------------------------------------------------
-void OApplicationSwapWindow::changeContainer(ElementType _eType)
+void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
     ULONG nCount = m_aIconControl.GetEntryCount();
     SvxIconChoiceCtrlEntry* pEntry = NULL;
@@ -223,11 +233,9 @@ void OApplicationSwapWindow::changeContainer(ElementType _eType)
             break;
         pEntry = NULL;
     }
+
     if ( pEntry )
-    {
         m_aIconControl.SetCursor(pEntry);
-        OnContainerSelectHdl(&m_aIconControl);
-    }
-    else
-        m_eLastType = E_NONE;
+
+    onContainerSelected( _eType );
 }
