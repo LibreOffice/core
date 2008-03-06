@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bitmaps_HC.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:40:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,52 +446,85 @@ Bitmap BMP_STOCK_4_HC
 //---------------------
 //---------------------
 //error indicator
-Bitmap BMP_INDICATE_BOTH_VERTI_HC
+Image BMP_INDICATE_BOTH_VERTI_HC
 {
-    File = "errorbothverti_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorbothverti_30_h.png" ;
+    };
 };
-Bitmap BMP_INDICATE_DOWN_HC
+Image BMP_INDICATE_DOWN_HC
 {
-    File = "errordown_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errordown_30_h.png" ;
+    };
 };
-Bitmap BMP_INDICATE_UP_HC
+Image BMP_INDICATE_UP_HC
 {
-    File = "errorup_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorup_30_h.png" ;
+    };
 };
-Bitmap BMP_INDICATE_BOTH_HORI_HC
+Image BMP_INDICATE_BOTH_HORI_HC
 {
-    File = "errorbothhori_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorbothhori_30_h.png" ;
+    };
 };
-Bitmap BMP_INDICATE_RIGHT_HC
+Image BMP_INDICATE_RIGHT_HC
 {
-    File = "errorright_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorright_30_h.png" ;
+    };
 };
-Bitmap BMP_INDICATE_LEFT_HC
+Image BMP_INDICATE_LEFT_HC
 {
-    File = "errorleft_30_h.png" ;
+    ImageBitmap = Bitmap
+    {
+        File = "errorleft_30_h.png" ;
+    };
 };
 
 //---------------------
 //regression curves
-Bitmap BMP_REGRESSION_NONE_HC
+Image BMP_REGRESSION_NONE_HC
 {
-    File = "regno_h.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regno_h.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_LINEAR_HC
+Image BMP_REGRESSION_LINEAR_HC
 {
-    File = "reglin_h.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "reglin_h.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_LOG_HC
+Image BMP_REGRESSION_LOG_HC
 {
-    File = "reglog_h.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "reglog_h.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_EXP_HC
+Image BMP_REGRESSION_EXP_HC
 {
-    File = "regexp_h.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regexp_h.bmp" ;
+    };
 };
-Bitmap BMP_REGRESSION_POWER_HC
+Image BMP_REGRESSION_POWER_HC
 {
-    File = "regpow_h.bmp" ;
+    ImageBitmap = Bitmap
+    {
+        File = "regpow_h.bmp" ;
+    };
 };
 //---------------------
 Image IMG_SELECTRANGE_HC
