@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:14:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#include <sfx2/sfxmodelfactory.hxx>
+
 #include "smdll.hxx"
 #include "document.hxx"
 #include "unomodel.hxx"
@@ -64,7 +66,7 @@ extern Sequence< OUString > SAL_CALL
 extern OUString SAL_CALL
         SmDocument_getImplementationName() throw();
 extern Reference< XInterface >SAL_CALL
-        SmDocument_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
+        SmDocument_createInstance(const Reference< XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags) throw( Exception );
 
 //MathML import
 extern Sequence< OUString > SAL_CALL
@@ -310,7 +312,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
         else if( SmDocument_getImplementationName().equalsAsciiL(
             pImplementationName, strlen(pImplementationName)) )
         {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            xFactory = ::sfx2::createSfxModelFactory( xServiceManager,
             SmDocument_getImplementationName(),
             SmDocument_createInstance,
             SmDocument_getSupportedServiceNames() );
