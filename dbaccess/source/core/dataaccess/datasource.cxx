@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:49:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -265,16 +268,13 @@ namespace dbaccess
     //============================================================
     class OAuthenticationContinuation : public OInteraction< XInteractionSupplyAuthentication >
     {
-        sal_Bool    m_bDatasourceReadonly : 1;  // if sal_True, the data source using this continuation
-                                                // is readonly, which means that no user can be set and
-                                                // the password can't be remembered
         sal_Bool    m_bRemberPassword : 1;      // remember the password for this session ?
 
         ::rtl::OUString     m_sUser;            // the user
         ::rtl::OUString     m_sPassword;        // the user's password
 
     public:
-        OAuthenticationContinuation(sal_Bool _bReadOnlyDS = sal_False);
+        OAuthenticationContinuation();
 
         sal_Bool SAL_CALL canSetRealm(  ) throw(RuntimeException);
         void SAL_CALL setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException);
@@ -295,9 +295,8 @@ namespace dbaccess
     };
 
     //--------------------------------------------------------------------------
-    OAuthenticationContinuation::OAuthenticationContinuation(sal_Bool _bReadOnlyDS)
-        :m_bDatasourceReadonly(_bReadOnlyDS)
-        ,m_bRemberPassword(sal_True)    // TODO: a meaningfull default
+    OAuthenticationContinuation::OAuthenticationContinuation()
+        :m_bRemberPassword(sal_True)    // TODO: a meaningfull default
     {
     }
 
@@ -316,7 +315,9 @@ namespace dbaccess
     //--------------------------------------------------------------------------
     sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
     {
-        return !m_bDatasourceReadonly;
+        // we alwas allow this, even if the database document is read-only. In this case,
+        // it's simply that the user cannot store the new user name.
+        return sal_True;
     }
 
     //--------------------------------------------------------------------------
@@ -341,7 +342,7 @@ namespace dbaccess
     Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
     {
         Sequence< RememberAuthentication > aReturn(1);
-        _reDefault = aReturn[0] = (m_bDatasourceReadonly ? RememberAuthentication_NO : RememberAuthentication_SESSION);
+        _reDefault = aReturn[0] = RememberAuthentication_SESSION;
         return aReturn;
     }
 
@@ -762,8 +763,11 @@ void ODatabaseSource::disposing()
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
-    Reference< XDriverManager > xManager(m_pImpl->m_xServiceFactory->createInstance(SERVICE_SDBC_CONNECTIONPOOL)
-        , UNO_QUERY);
+
+    Reference< XDriverManager > xManager;
+    if ( !m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.ConnectionPool", xManager ) )
+        // no connection pool installed, fall back to driver manager
+        m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.DriverManager", xManager );
 
     ::rtl::OUString sUser(_rUid);
     ::rtl::OUString sPwd(_rPwd);
@@ -902,9 +906,6 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
     sal_Bool bModified(sal_False);
     if ( m_pImpl.is() )
     {
-        if (m_pImpl->m_bReadOnly)
-            throw IllegalArgumentException();
-
         switch (nHandle)
         {
             case PROPERTY_ID_TABLEFILTER:
@@ -1236,15 +1237,21 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         // build an interaction request
         // two continuations (Ok and Cancel)
         OInteractionAbort* pAbort = new OInteractionAbort;
-        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation(m_pImpl->m_bReadOnly);
+        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
+
+        // the name which should be referred in the login dialog
+        ::rtl::OUString sServerName( m_pImpl->m_sName );
+        INetURLObject aURLCheck( sServerName );
+        if ( aURLCheck.GetProtocol() != INET_PROT_NOT_VALID )
+            sServerName = aURLCheck.getName();
 
         // the request
         AuthenticationRequest aRequest;
-        aRequest.ServerName = m_pImpl->m_sName;
+        aRequest.ServerName = sServerName;
         aRequest.HasRealm = aRequest.HasAccount = sal_False;
         aRequest.HasUserName = aRequest.HasPassword = sal_True;
         aRequest.UserName = m_pImpl->m_sUser;
-        aRequest.Password = m_pImpl->m_aPassword;
+        aRequest.Password = m_pImpl->m_sFailedPassword.getLength() ? m_pImpl->m_sFailedPassword : m_pImpl->m_aPassword;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
         Reference< XInteractionRequest > xRequest(pRequest);
         // some knittings
@@ -1275,6 +1282,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
             m_pImpl->m_aPassword = pAuthenticate->getPassword();
             bNewPasswordGiven = sal_True;
         }
+        m_pImpl->m_sFailedPassword = ::rtl::OUString();
     }
 
     try
@@ -1284,13 +1292,17 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     catch(Exception&)
     {
         if (bNewPasswordGiven)
+        {
+            m_pImpl->m_sFailedPassword = m_pImpl->m_aPassword;
             // assume that we had an authentication problem. Without this we may, after an unsucessful connect, while
             // the user gave us a password an the order to remember it, never allow an password input again (at least
             // not without restarting the session)
             m_pImpl->m_aPassword = ::rtl::OUString();
+        }
         throw;
     }
 }
+
 // -----------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUString& user, const rtl::OUString& password)
 {
@@ -1301,7 +1313,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
     if ( xSdbcConn.is() )
     {
         // build a connection server and return it (no stubs)
-        xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_xServiceFactory);
+        xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_aContext.getLegacyServiceFactory());
     }
     return xConn;
 }
@@ -1319,7 +1331,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     { // create a new proxy for the connection
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
-            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager(m_pImpl->m_xServiceFactory);
+            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext.getLegacyServiceFactory() );
             m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
         }
         xConn = m_pImpl->m_pSharedConnectionManager->getConnection(
@@ -1353,7 +1365,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     if ( !xContainer.is() )
     {
         TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
-        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, rContainerData, sal_False );
+        xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
     return xContainer;
@@ -1369,7 +1381,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
     if ( !xContainer.is() )
     {
         TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_TABLE ) );
-        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, rContainerData, sal_True );
+        xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_True );
         m_pImpl->m_xTableDefinitions = xContainer;
     }
     return xContainer;
@@ -1478,9 +1490,9 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
     return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY );
 }
 // -----------------------------------------------------------------------------
-Reference< XInterface > ODatabaseSource::getThis()
+Reference< XInterface > ODatabaseSource::getThis() const
 {
-    return *this;
+    return *const_cast< ODatabaseSource* >( this );
 }
 // -----------------------------------------------------------------------------
 //........................................................................
