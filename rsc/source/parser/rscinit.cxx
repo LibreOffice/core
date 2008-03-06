@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:06:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,10 +324,16 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nCenterId, sal::static_int_cast<INT32>(WB_CENTER) );
     nRightId        = pHS->getID( "WB_RIGHT" );
     aWinBits.SetConstant( nRightId, sal::static_int_cast<INT32>(WB_RIGHT) );
-    nHscrollId      = pHS->getID( "WB_HSCROLL" );
-    aWinBits.SetConstant( nHscrollId, sal::static_int_cast<INT32>(WB_HSCROLL) );
-    nVscrollId      = pHS->getID( "WB_VSCROLL" );
-    aWinBits.SetConstant( nVscrollId, sal::static_int_cast<INT32>(WB_VSCROLL) );
+    nTopId          = pHS->getID( "WB_TOP" );
+    aWinBits.SetConstant( nTopId, sal::static_int_cast<INT32>(WB_TOP) );
+    nVCenterId      = pHS->getID( "WB_VCENTER" );
+    aWinBits.SetConstant( nVCenterId, sal::static_int_cast<INT32>(WB_VCENTER) );
+    nBottomId       = pHS->getID( "WB_BOTTOM" );
+    aWinBits.SetConstant( nBottomId, sal::static_int_cast<INT32>(WB_BOTTOM) );
+    nHScrollId      = pHS->getID( "WB_HSCROLL" );
+    aWinBits.SetConstant( nHScrollId, sal::static_int_cast<INT32>(WB_HSCROLL) );
+    nVScrollId      = pHS->getID( "WB_VSCROLL" );
+    aWinBits.SetConstant( nVScrollId, sal::static_int_cast<INT32>(WB_VSCROLL) );
     nSortId         = pHS->getID( "WB_SORT" );
     aWinBits.SetConstant( nSortId, sal::static_int_cast<INT32>(WB_SORT) );
     nDefaultId          = pHS->getID( "WB_DEFBUTTON" );
@@ -352,10 +358,6 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nSimpleModeId, sal::static_int_cast<INT32>(WB_SIMPLEMODE) );
     nDragId             = pHS->getID( "WB_DRAG" );
     aWinBits.SetConstant( nDragId, sal::static_int_cast<INT32>(WB_DRAG) );
-    nSaveAsId           = pHS->getID( "WB_SAVEAS" );
-    aWinBits.SetConstant( nSaveAsId, sal::static_int_cast<INT32>(WB_SAVEAS) );
-    nOpenId             = pHS->getID( "WB_OPEN" );
-    aWinBits.SetConstant( nOpenId, sal::static_int_cast<INT32>(WB_OPEN) );
     nScrollId           = pHS->getID( "WB_SCROLL" );
     aWinBits.SetConstant( nScrollId, sal::static_int_cast<INT32>(WB_SCROLL) );
     nZoomableId         = pHS->getID( "WB_ZOOMABLE" );
@@ -364,6 +366,8 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nHideWhenDeactivateId, 0 /*WB_HIDEWHENDEACTIVATE*/ );
     nAutoHScrollId      = pHS->getID( "WB_AUTOHSCROLL" );
     aWinBits.SetConstant( nAutoHScrollId, sal::static_int_cast<INT32>(WB_AUTOHSCROLL) );
+    nAutoVScrollId      = pHS->getID( "WB_AUTOVSCROLL" );
+    aWinBits.SetConstant( nAutoVScrollId, sal::static_int_cast<INT32>(WB_AUTOVSCROLL) );
     nDDExtraWidthId     = pHS->getID( "WB_DDEXTRAWIDTH" );
     aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
     nWordBreakId        = pHS->getID( "WB_WORDBREAK" );
@@ -525,18 +529,8 @@ void RscTypCont::Init()
     pRoot->Insert( pClassButton );
 
     /********** C H E C K B O X ******************************************/
-    // Klasse anlegen
-    nId = pHS->getID( "CheckBox" );
-    pClassCheckBox = new RscClass( nId, RSC_CHECKBOX, pClassButton );
-    pClassCheckBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassCheckBox );
+    pClassCheckBox = InitClassCheckBox( pClassButton );
     pRoot->Insert( pClassCheckBox );
-
-    // Variablen anlegen
-    INS_WINBIT(pClassCheckBox,WordBreak)
-
-    nId = aNmTb.Put( "Check", VARNAME );
-    pClassCheckBox->SetVariable( nId, &aBool );
 
     /********** P U S H B U T T O N **************************************/
     // Klasse anlegen
@@ -572,18 +566,8 @@ void RscTypCont::Init()
 }
 {
     /********** R A D I O B U T T O N ************************************/
-    // Klasse anlegen
-    nId = pHS->getID( "RadioButton" );
-    pClassRadioButton = new RscClass( nId, RSC_RADIOBUTTON, pClassButton );
-    pClassRadioButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassRadioButton );
+    pClassRadioButton = InitClassRadioButton( pClassButton );
     pRoot->Insert( pClassRadioButton );
-
-    // Variablen anlegen
-    INS_WINBIT(pClassRadioButton,WordBreak)
-
-    nId = aNmTb.Put( "Check", VARNAME );
-    pClassRadioButton->SetVariable( nId, &aBool );
 
     /********** I m a g e R a d i o B u t t o n **************************/
     nId = pHS->getID( "ImageRadioButton" );
