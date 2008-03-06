@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Wizard_TitlesAndObjects.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:50:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ public:
     virtual ~TitlesAndObjectsTabPage();
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( COMMIT_REASON eReason );
-    virtual sal_Bool    determineNextButtonState();
+    virtual sal_Bool    commitPage( CommitPageReason eReason );
+    virtual bool        canAdvance() const;
 
 protected:
     void commitToModel();
