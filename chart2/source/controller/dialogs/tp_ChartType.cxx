@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1144,7 +1144,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-sal_Bool ChartTypeTabPage::commitPage( COMMIT_REASON /*eReason*/ )
+sal_Bool ChartTypeTabPage::commitPage( CommitPageReason /*eReason*/ )
 {
     //commit changes to model
     if( !m_bDoLiveUpdate && m_pCurrentMainType )
