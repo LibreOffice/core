@@ -1,9 +1,8 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
-Icon=printeradmin.png
+Icon=printeradmin
 Type=Application
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=openoffice-printeradmin
 Name=%PRODUCTNAME Printer Administration
