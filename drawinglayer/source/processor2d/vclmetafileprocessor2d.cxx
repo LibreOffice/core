@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-03-06 04:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,13 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// for StructureTagPrimitive support in sd's unomodel.cxx
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_STRUCTURETAGPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1713,6 +1720,30 @@ namespace drawinglayer
                 {
                     // point array
                     RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate), false);
+                    break;
+                }
+                case PRIMITIVE2D_ID_STRUCTURETAGRIMITIVE2D :
+                {
+                    // structured tag primitive
+                    const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate = static_cast< const primitive2d::StructureTagPrimitive2D& >(rCandidate);
+                    const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
+                    const bool bTagUsed(vcl::PDFWriter::NonStructElement != rTagElement);
+
+                    if(mpPDFExtOutDevData &&  bTagUsed)
+                    {
+                        // write start tag
+                        mpPDFExtOutDevData->BeginStructureElement(rTagElement);
+                    }
+
+                    // proccess childs normally
+                    process(rStructureTagCandidate.getChildren());
+
+                    if(mpPDFExtOutDevData &&  bTagUsed)
+                    {
+                        // write end tag
+                        mpPDFExtOutDevData->EndStructureElement();
+                    }
+
                     break;
                 }
                 default :

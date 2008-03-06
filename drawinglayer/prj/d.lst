@@ -34,6 +34,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\shadowprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\shadowprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\structuretagprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\structuretagprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\texteffectprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\texteffectprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\textlayoutdevice.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textlayoutdevice.hxx
 ..\inc\drawinglayer\primitive2d\textprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textprimitive2d.hxx

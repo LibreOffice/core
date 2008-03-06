@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawinglayer_primitivetypes2d.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 08:20:14 $
+ *  last change: $Author: aw $ $Date: 2008-03-06 04:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@
 #define PRIMITIVE2D_ID_EXECUTEPRIMITIVE2D                   (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 46)
 #define PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 47)
 #define PRIMITIVE2D_ID_CHARTPRIMITIVE2D                     (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 48)
+#define PRIMITIVE2D_ID_STRUCTURETAGRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 49)
 
 //////////////////////////////////////////////////////////////////////////////
 
