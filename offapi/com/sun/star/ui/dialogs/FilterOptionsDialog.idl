@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterOptionsDialog.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:36:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,20 +52,20 @@ module com { module sun { module star { module ui { module dialogs {
 /** This service enables a filter developer to register a dialog to query
     for user options before the filter operation is performed.
 
-    The user options are stored inside the <type scope="com::sun::star::document">MediaDescriptor</type>
+    <p>The user options are stored inside the <type scope="com::sun::star::document">MediaDescriptor</type>
     and can be queried from the <type scope="com::sun::star::document">MediaDescriptor</type> by
-    the component that implements <type scope="com::sun::star::document">XFilter</type>.
+    the component that implements <type scope="com::sun::star::document">XFilter</type>.</p>
 
-    The application will set the <type scope="com::sun::star::document">MediaDescriptor</type>
+    <p>The application will set the <type scope="com::sun::star::document">MediaDescriptor</type>
     using the interface <type scope="com::sun::star::beans">XPropertyAccess</type> and then
-    call <method>XExecutableDialog::execute<method>.
+    call <method>XExecutableDialog::execute<method>.</p>
 
-    If that method returns <code>ExecutableDialogResults::OK</code>,
+    <p>If that method returns <code>ExecutableDialogResults::OK</code>,
     the application will retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
     back using the interface <type scope="com::sun::star::beans">XPropertyAccess</type>. The filter
-    operation is than continued, using the new <type scope="com::sun::star::document">MediaDescriptor</type>.
+    operation is than continued, using the new <type scope="com::sun::star::document">MediaDescriptor</type>.</p>
 
-    Otherwise, the filter operation is canceled.
+    <p>Otherwise, the filter operation is canceled.</p>
 
     @since OOo 1.1.2
  */
