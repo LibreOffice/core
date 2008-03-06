@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:55:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,9 @@ public:
                                     const ScRange& rRange, BOOL bSTotal = FALSE,
                                     BOOL bTextAsZero = FALSE );
     void            GetCurNumFmtInfo( short& nType, ULONG& nIndex );
+    /// Does NOT reset rValue if no value found!
     BOOL            GetFirst(double& rValue, USHORT& rErr);
+    /// Does NOT reset rValue if no value found!
     BOOL            GetNext(double& rValue, USHORT& rErr)
                     {
                         return bNextValid ? ( bNextValid = FALSE, rValue = fNextValue,
@@ -156,7 +158,9 @@ private:
 public:
                     ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable,
                                          const ScQueryParam& aParam);
+    /// Does NOT reset rValue if no value found!
     BOOL            GetFirst(double& rValue, USHORT& rErr);
+    /// Does NOT reset rValue if no value found!
     BOOL            GetNext(double& rValue, USHORT& rErr);
     void            GetCurNumFmtInfo( short& nType, ULONG& nIndex )
                         { nType = nNumFmtType; nIndex = nNumFmtIndex; }
