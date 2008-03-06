@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:54:35 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:32:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@ LIBTARGET=no
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # --- Files --------------------------------------------------------
 
