@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:24:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2203,7 +2203,7 @@ void ScColumn::CompileAll()
                 SCROW nRow = pItems[i].nRow;
                 // fuer unbedingtes kompilieren
                 // bCompile=TRUE und pCode->nError=0
-                ((ScFormulaCell*)pCell)->GetCode()->SetError( 0 );
+                ((ScFormulaCell*)pCell)->GetCode()->SetCodeError( 0 );
                 ((ScFormulaCell*)pCell)->SetCompile( TRUE );
                 ((ScFormulaCell*)pCell)->CompileTokenArray();
                 if ( nRow != pItems[i].nRow )
