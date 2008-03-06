@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:09:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #include "address.hxx"
 #endif
 
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #endif
@@ -71,6 +75,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -87,17 +94,21 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
+#endif
 
 class ScDocShell;
 class ScRangeData;
 class ScTokenArray;
 
 
-class ScNamedRangeObj : public ::cppu::WeakImplHelper5<
+class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRange,
                             ::com::sun::star::sheet::XFormulaTokens,
                             ::com::sun::star::sheet::XCellRangeReferrer,
                             ::com::sun::star::beans::XPropertySet,
+                            ::com::sun::star::lang::XUnoTunnel,
                             ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -109,7 +120,8 @@ private:
     ScRangeData*            GetRangeData_Impl();
     void                    Modify_Impl( const String* pNewName,
                                         const ScTokenArray* pNewTokens, const String* pNewContent,
-                                        const ScAddress* pNewPos, const sal_uInt16* pNewType );
+                                        const ScAddress* pNewPos, const sal_uInt16* pNewType,
+                                        const ScGrammar::Grammar eGrammar );
 
 public:
                             ScNamedRangeObj(ScDocShell* pDocSh, const String& rNm);
@@ -186,12 +198,26 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
+                            // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+                                    sal_Int8 >& aIdentifier )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static ScNamedRangeObj* getImplementation( const com::sun::star::uno::Reference<
+                                    com::sun::star::uno::XInterface> xObj );
+
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // methods accessible via getImplementation()
+            void            SetContentWithGrammar( const ::rtl::OUString& aContent,
+                                    const ScGrammar::Grammar eGrammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
