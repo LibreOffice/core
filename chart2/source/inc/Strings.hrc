@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:59:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:10:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,7 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//free 21 267
-//next is 270
+//next is 277
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -180,7 +179,11 @@
 #define STR_DATA_ROLE_X                     (RID_APP_START + 242)
 #define STR_DATA_ROLE_Y                     (RID_APP_START + 243)
 #define STR_DATA_ROLE_X_ERROR               (RID_APP_START + 244)
+#define STR_DATA_ROLE_X_ERROR_POSITIVE      (RID_APP_START + 272)
+#define STR_DATA_ROLE_X_ERROR_NEGATIVE      (RID_APP_START + 273)
 #define STR_DATA_ROLE_Y_ERROR               (RID_APP_START + 245)
+#define STR_DATA_ROLE_Y_ERROR_POSITIVE      (RID_APP_START + 274)
+#define STR_DATA_ROLE_Y_ERROR_NEGATIVE      (RID_APP_START + 275)
 #define STR_DATA_ROLE_FIRST                 (RID_APP_START + 246)
 #define STR_DATA_ROLE_LAST                  (RID_APP_START + 247)
 #define STR_DATA_ROLE_MIN                   (RID_APP_START + 248)
@@ -193,6 +196,8 @@
 #define STR_DATA_SELECT_RANGE_FOR_SERIES    (RID_APP_START + 252)
 #define STR_DATA_SELECT_RANGE_FOR_CATEGORIES (RID_APP_START + 253)
 #define STR_DATA_SELECT_RANGE_FOR_DATALABELS (RID_APP_START + 195)
+#define STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS (RID_APP_START + 21)
+#define STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS (RID_APP_START + 267)
 
 //-----------------------------------------------------------------------------
 //chart objects
@@ -281,6 +286,7 @@
 
 #define STR_PAGE_TRENDLINE_TYPE              (RID_APP_START + 89)
 #define STR_PAGE_YERROR_BARS                 (RID_APP_START + 206)
+#define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA (RID_APP_START + 276)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
