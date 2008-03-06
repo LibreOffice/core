@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:11:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,19 +65,23 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
 
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
+#include <comphelper/componentcontext.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/salctype.hxx>
@@ -117,8 +121,7 @@
 #include "appdata.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "commitlistener.hxx"
-#include "stormodifylistener.hxx"
+#include "sfx2/docstoragemodifylistener.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/msgpool.hxx>
@@ -137,10 +140,11 @@ using namespace ::com::sun::star::uno;
 //  impl. declarations
 //________________________________________________________________________________________________________
 
-struct IMPL_SfxBaseModel_DataContainer
+struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 {
     // counter for SfxBaseModel instances created.
     static sal_Int64                                        g_nInstanceCounter      ;
+    ::osl::Mutex&                                           m_rMutex                ;
     SfxObjectShellRef                                       m_pObjectShell          ;
     ::rtl::OUString                                         m_sURL                  ;
     ::rtl::OUString                                         m_sRuntimeUID           ;
@@ -163,16 +167,17 @@ struct IMPL_SfxBaseModel_DataContainer
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
-    OStorageModifyListen_Impl*                              m_pStorageModifyListen;
+    ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
     ::rtl::OUString                                 m_sModuleIdentifier;
     ::rtl::OUString                                 m_sExternalTitle;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& aMutex, SfxObjectShell* pObjectShell )
-            :   m_pObjectShell          ( pObjectShell  )
-            ,   m_aInterfaceContainer( aMutex )
+            :   m_rMutex                ( aMutex        )
+            ,   m_pObjectShell          ( pObjectShell  )
+            ,   m_aInterfaceContainer   ( aMutex        )
             ,   m_nControllerLockCount  ( 0             )
-            ,   m_bClosed           ( sal_False     )
-            ,   m_bClosing          ( sal_False     )
+            ,   m_bClosed               ( sal_False     )
+            ,   m_bClosing              ( sal_False     )
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
@@ -182,7 +187,18 @@ struct IMPL_SfxBaseModel_DataContainer
         // set own Runtime UID
         m_sRuntimeUID = rtl::OUString::valueOf( g_nInstanceCounter );
     }
-} ;
+
+    virtual ~IMPL_SfxBaseModel_DataContainer()
+    {
+    }
+
+    // ::sfx2::IModifiableDocument
+    virtual void storageIsModified()
+    {
+        if ( m_pObjectShell.Is() && !m_pObjectShell->IsModified() )
+            m_pObjectShell->SetModified( sal_True );
+    }
+};
 
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
@@ -424,70 +440,10 @@ SfxBaseModel::~SfxBaseModel()
 
 uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( uno::RuntimeException )
 {
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    if ( !m_bSupportEmbeddedScripts && rType.equals( XEMBEDDEDSCRIPTS::static_type() ) )
+        return Any();
 
-    // Ask for my own supported interfaces ...
-    uno::Any aReturn( ::cppu::queryInterface(    rType                                           ,
-                                               static_cast< XTYPEPROVIDER*          > ( this )  ,
-                                               static_cast< XCHILD*             > ( this )  ,
-                                            static_cast< document::XDocumentInfoSupplier* > ( this )  ,
-                                               static_cast< XEVENTLISTENER*     > ( this )  ,
-                                            static_cast< frame::XModel*                > ( this )  ,
-                                               static_cast< XMODIFIABLE*            > ( this )  ,
-                                            static_cast< XCOMPONENT*            > ( this )  ,
-                                               static_cast< XPRINTABLE*         > ( this )  ,
-                                            static_cast< script::XStarBasicAccess*      > ( this )  ,
-                                            static_cast< XSTORABLE*             > ( this )  ,
-                                            static_cast< XLOADABLE*             > ( this )  ,
-                                            static_cast< util::XCloseable*            > ( this )  ) );
-
-    if ( aReturn.hasValue() == sal_False )
-    {
-        aReturn = ::cppu::queryInterface(   rType                                           ,
-                                            static_cast< XMODIFYBROADCASTER*    > ( this )  ,
-                                            static_cast< XTRANSFERABLE*    > ( this )  ,
-                                               static_cast< XPRINTJOBBROADCASTER*   > ( this )  ,
-                                                static_cast< XCLOSEBROADCASTER*     > ( this )  ,
-                                            static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
-                                               static_cast< XEVENTBROADCASTER*      > ( this )  ,
-                                               static_cast< XVISUALOBJECT*          > ( this )  ,
-                                               static_cast< XUNOTUNNEL*             > ( this )  ,
-                                            static_cast< ui::XUIConfigurationManagerSupplier* > ( this ) ,
-                                               static_cast< XDOCUMENTSUBSTORAGESUPPLIER* > ( this ) ,
-                                            static_cast< script::provider::XScriptProviderSupplier* > ( this )    ,
-                                               static_cast< XEVENTSSUPPLIER*        > ( this ) ) ;
-    }
-
-    if ( aReturn.hasValue() == sal_False )
-    {
-        aReturn = ::cppu::queryInterface(   rType                                           ,
-                                            static_cast< document::XDocumentPropertiesSupplier* > ( this )  ,
-                                            static_cast< XSTORABLE2*            > ( this )  ,
-                                            static_cast< XMODULE*               > ( this )  ,
-                                            static_cast< XMODEL2*               > ( this )  ,
-                                               static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   ,
-                                               static_cast< XMODIFIABLE2*          > ( this )   );
-
-    }
-
-    if ( ( aReturn.hasValue() == sal_False ) && m_bSupportEmbeddedScripts )
-    {
-        aReturn = ::cppu::queryInterface(   rType                                           ,
-                                            static_cast< XEMBEDDEDSCRIPTS*      > ( this )  );
-    }
-
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue() == sal_True )
-    {
-        // ... return this information.
-        return aReturn ;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return OWeakObject::queryInterface( rType ) ;
-    }
+    return SfxBaseModel_Base::queryInterface( rType );
 }
 
 //________________________________________________________________________________________________________
@@ -522,58 +478,20 @@ void SAL_CALL SfxBaseModel::release() throw( )
 
 uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
-
-    if ( pTypeCollection == NULL )
+    uno::Sequence< UNOTYPE > aTypes( SfxBaseModel_Base::getTypes() );
+    if ( !m_bSupportEmbeddedScripts )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        ::osl::MutexGuard aGuard( MUTEX::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
-        {
-            // Create a static typecollection ...
-            static ::cppu::OTypeCollection aTypeCollectionFirst( ::getCppuType(( const uno::Reference< XTYPEPROVIDER          >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XCHILD                 >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< document::XDocumentInfoSupplier  >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XEVENTLISTENER         >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< frame::XModel                 >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XMODIFIABLE2            >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XPRINTABLE             >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XSTORABLE2             >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XLOADABLE              >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< util::XCloseable             >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< script::XStarBasicAccess       >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XEVENTBROADCASTER      >*)NULL ) );
-
-            static ::cppu::OTypeCollection aTypeCollection     ( ::getCppuType(( const uno::Reference< XVIEWDATASUPPLIER      >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XTRANSFERABLE          >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XPRINTJOBBROADCASTER   >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XEVENTSSUPPLIER        >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XVISUALOBJECT          >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XUNOTUNNEL             >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< ui::XUIConfigurationManagerSupplier >*)NULL ),
-                                                         ::getCppuType(( const uno::Reference< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XSTORAGEBASEDDOCUMENT >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< script::provider::XScriptProviderSupplier >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< XCLOSEBROADCASTER      >*)NULL ) ,
-                                                         aTypeCollectionFirst.getTypes()                                   );
-
-            static ::cppu::OTypeCollection aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
-                                                          ::getCppuType(( const REFERENCE< XMODEL2      >*)NULL ) ,
-                                                          ::getCppuType(( const REFERENCE< XEMBEDDEDSCRIPTS >*)NULL ) ,
-                                                         ::getCppuType(( const uno::Reference< document::XDocumentPropertiesSupplier  >*)NULL ) ,
-                                                         aTypeCollection.getTypes()                                   );
-
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection2 ;
-        }
+        // remove XEmbeddedScripts type from the sequence
+        Sequence< UNOTYPE > aStrippedTypes( aTypes.getLength() - 1 );
+        ::std::remove_copy_if(
+            aTypes.getConstArray(),
+            aTypes.getConstArray() + aTypes.getLength(),
+            aStrippedTypes.getArray(),
+            ::std::bind2nd( ::std::equal_to< UNOTYPE >(), XEMBEDDEDSCRIPTS::static_type() )
+        );
+        aTypes = aStrippedTypes;
     }
-
-    return pTypeCollection->getTypes() ;
+    return aTypes;
 }
 
 //________________________________________________________________________________________________________
@@ -747,10 +665,9 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         return;
     }
 
-    if ( m_pData->m_pStorageModifyListen )
+    if ( m_pData->m_pStorageModifyListen.is() )
     {
-        m_pData->m_pStorageModifyListen->OwnerIsDisposed();
-        m_pData->m_pStorageModifyListen->release();
+        m_pData->m_pStorageModifyListen->dispose();
         m_pData->m_pStorageModifyListen = NULL;
     }
 
@@ -2306,6 +2223,44 @@ uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::g
 }
 
 //--------------------------------------------------------------------------------------------------------
+//  XScriptInvocationContext
+//--------------------------------------------------------------------------------------------------------
+
+Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContainer() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    Reference< document::XEmbeddedScripts > xDocumentScripts;
+
+    try
+    {
+        Reference< frame::XModel > xDocument( this );
+        xDocumentScripts.set( xDocument, uno::UNO_QUERY );
+        while ( !xDocumentScripts.is() && xDocument.is() )
+        {
+            Reference< container::XChild > xDocAsChild( xDocument, uno::UNO_QUERY );
+            if ( !xDocAsChild.is() )
+            {
+                xDocument = NULL;
+                break;
+            }
+
+            xDocument.set( xDocAsChild->getParent(), uno::UNO_QUERY );
+            xDocumentScripts.set( xDocument, uno::UNO_QUERY );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        xDocumentScripts = NULL;
+    }
+
+    return xDocumentScripts;
+}
+
+//--------------------------------------------------------------------------------------------------------
 //  XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
@@ -2871,25 +2826,14 @@ void SfxBaseModel::ListenForStorage_Impl( const uno::Reference< embed::XStorage 
     uno::Reference< util::XModifiable > xModifiable( xStorage, uno::UNO_QUERY );
     if ( xModifiable.is() )
     {
-        if ( m_pData->m_pStorageModifyListen == NULL )
+        if ( !m_pData->m_pStorageModifyListen.is() )
         {
-            m_pData->m_pStorageModifyListen = new OStorageModifyListen_Impl( *this );
-            m_pData->m_pStorageModifyListen->acquire();
+            m_pData->m_pStorageModifyListen = new ::sfx2::DocumentStorageModifyListener( m_pData->m_rMutex, *m_pData );
         }
 
         // no need to deregister the listening for old storage since it should be disposed automatically
-        xModifiable->addModifyListener( static_cast< util::XModifyListener* >(
-                                                m_pData->m_pStorageModifyListen ) );
+        xModifiable->addModifyListener( m_pData->m_pStorageModifyListen.get() );
     }
-}
-
-void SfxBaseModel::StorageIsModified_Impl()
-{
-    // this call can only be called by listener that listens for commit of substorages of models storage
-    // there must be no locking, listener does it
-
-    if ( !impl_isDisposed() && m_pData->m_pObjectShell.Is() && !m_pData->m_pObjectShell->IsModified() )
-        m_pData->m_pObjectShell->SetModified( sal_True );
 }
 
 uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
@@ -2908,19 +2852,6 @@ uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const :
             try
             {
                 xResult = xStorage->openStorageElement( aStorageName, nMode );
-#if 0
-                uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, uno::UNO_QUERY );
-                if ( xBroadcaster.is() )
-                {
-                    if ( m_pData->m_pChildCommitListen == NULL )
-                    {
-                        m_pData->m_pChildCommitListen = new OChildCommitListen_Impl( *this );
-                        m_pData->m_pChildCommitListen->acquire();
-                    }
-                    xBroadcaster->addTransactionListener( static_cast< embed::XTransactionListener* >(
-                                                                            m_pData->m_pChildCommitListen ) );
-                }
-#endif
             }
             catch ( uno::Exception& )
             {
@@ -2979,27 +2910,32 @@ uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getSc
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw lang::DisposedException();
-    uno::Reference< script::provider::XScriptProvider > xSp;
 
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+    uno::Reference< script::provider::XScriptProvider > xScriptProvider;
 
-    uno::Reference< XComponentContext > xCtx(
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
+    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+    Reference< script::provider::XScriptProviderFactory > xScriptProviderFactory(
+        aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), uno::UNO_QUERY_THROW );
 
-    if ( xCtx.is() )
+    try
     {
-        uno::Reference < script::provider::XScriptProviderFactory > xFac(
-            xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
-        if ( xFac.is() )
-        {
-            Any aContext;
-            uno::Reference< frame::XModel > xModel( (frame::XModel*)this );
-            aContext <<= xModel;
-            xSp.set( xFac->createScriptProvider( aContext ) );
-        }
+        Reference< XScriptInvocationContext > xScriptContext( this );
+        xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( xScriptContext ) ), uno::UNO_SET_THROW );
     }
-    return xSp;
+    catch( const uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( const lang::IllegalArgumentException& )
+    {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString(),
+            *this,
+            ::cppu::getCaughtException()
+        );
+    }
+
+    return xScriptProvider;
 }
 
 //____________________________________________________________________________________________________
@@ -3095,34 +3031,31 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
         {
             uno::Reference< XSTORAGE > xConfigStorage;
 
-            // in case of embedded object the module configuration should be used
-            if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+            // First try to open with READWRITE and then READ
+            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
+            if ( xConfigStorage.is() )
             {
-                rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
-                // First try to open with READWRITE and then READ
-                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
-                if ( xConfigStorage.is() )
+                rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
+                rtl::OUString aUIConfigMediaType(
+                        RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ) );
+                rtl::OUString aMediaType;
+                uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
+                Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
                 {
-                    rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
-                    rtl::OUString aUIConfigMediaType(
-                            RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ) );
-                    rtl::OUString aMediaType;
-                    uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
-                    Any a = xPropSet->getPropertyValue( aMediaTypeProp );
-                    if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
-                    {
-                        a <<= aUIConfigMediaType;
-                        xPropSet->setPropertyValue( aMediaTypeProp, a );
-                    }
+                    a <<= aUIConfigMediaType;
+                    xPropSet->setPropertyValue( aMediaTypeProp, a );
                 }
-                else
-                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
-
             }
+            else
+                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
 
             // initialize ui configuration manager with document substorage
             xUIConfigStorage->setStorage( xConfigStorage );
 
+            // embedded objects did not support local configuration data until OOo 3.0, so there's nothing to
+            // migrate
             if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 // Import old UI configuration from OOo 1.x
