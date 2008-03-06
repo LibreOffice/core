@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:09:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,10 @@ TokenPool::TokenPool( void )
     nP_Dbl = 8;
     pP_Dbl = new double[ nP_Dbl ];
 
+    // Sammelstelle fuer error codes
+    nP_Err = 8;
+    pP_Err = new USHORT[ nP_Err ];
+
     // Sammelstellen fuer Referenzen
     nP_RefTr = 32;
     ppP_RefTr = new SingleRefData *[ nP_RefTr ];
@@ -130,6 +134,7 @@ TokenPool::~TokenPool()
     delete[] pType;
     delete[] pSize;
     delete[] pP_Dbl;
+    delete[] pP_Err;
 
     for( n = 0 ; n < nP_RefTr ; n++/*, pAktTr++*/ )
     {
@@ -202,6 +207,22 @@ void TokenPool::GrowDouble( void )
 
     delete[] pP_Dbl;
     pP_Dbl = pP_DblNew;
+}
+
+
+void TokenPool::GrowError( void )
+{
+    UINT16      nP_ErrNew = nP_Err * 2;
+
+    USHORT*     pP_ErrNew = new USHORT[ nP_ErrNew ];
+
+    for( UINT16 nL = 0 ; nL < nP_Err ; nL++ )
+        pP_ErrNew[ nL ] = pP_Err[ nL ];
+
+    nP_Err = nP_ErrNew;
+
+    delete[] pP_Err;
+    pP_Err = pP_ErrNew;
 }
 
 
@@ -331,6 +352,11 @@ void TokenPool::GetElement( const UINT16 nId )
             case T_D:
                 pScToken->AddDouble( pP_Dbl[ pElement[ nId ] ] );
                 break;
+            case T_Err:
+#if 0   // erAck
+                pScToken->AddError( pP_Err[ pElement[ nId ] ] );
+#endif
+                break;
             case T_RefC:
                 pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) nId ] ] );
                 break;
@@ -351,12 +377,9 @@ void TokenPool::GetElement( const UINT16 nId )
                 EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
-                {
-                        ScToken *pTok = pScToken->AddExternal( p->aText );
-                        pTok->NewOpCode (p->eId);
+                        pScToken->AddExternal( p->aText, p->eId );
                 }
                 break;
-                }
             case T_Nlf:
                 {
                 UINT16          n = pElement[ nId ];
@@ -411,6 +434,11 @@ void TokenPool::GetElementRek( const UINT16 nId )
                 case T_D:
                     pScToken->AddDouble( pP_Dbl[ pElement[ *pAkt ] ] );
                     break;
+                case T_Err:
+#if 0   // erAck
+                    pScToken->AddError( pP_Err[ pElement[ *pAkt ] ] );
+#endif
+                    break;
                 case T_RefC:
                     pScToken->AddSingleReference( *ppP_RefTr[ pElement[ *pAkt ] ] );
                     break;
@@ -431,10 +459,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     EXTCONT*    p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                     if( p )
-                    {
-                        ScToken *pTok = pScToken->AddExternal( p->aText );
-                        pTok->NewOpCode (p->eId);
-                    }
+                        pScToken->AddExternal( p->aText, p->eId );
                     }
                     break;
                 case T_Nlf:
@@ -504,6 +529,28 @@ const TokenId TokenPool::Store( const double& rDouble )
 
     nElementAkt++;
     nP_DblAkt++;
+
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+}
+
+
+const TokenId TokenPool::StoreError( USHORT nError )
+{
+    if( nElementAkt >= nElement )
+        GrowElement();
+
+    if( nP_ErrAkt >= nP_Err )
+        GrowError();
+
+    pElement[ nElementAkt ] = nP_ErrAkt;    // Index in Error-Array
+    pType[ nElementAkt ] = T_Err;           // Typinfo Error eintragen
+
+    pP_Err[ nP_ErrAkt ] = nError;
+
+    pSize[ nElementAkt ] = 1;           // eigentlich Banane
+
+    nElementAkt++;
+    nP_ErrAkt++;
 
     return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
@@ -682,7 +729,7 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
 
 void TokenPool::Reset( void )
 {
-    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
 }
 
 
