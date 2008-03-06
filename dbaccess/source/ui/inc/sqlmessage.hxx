@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:33:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ class OSQLMessageBox : public ButtonDialog
     FixedImage      m_aInfoImage;
     FixedText       m_aTitle;
     FixedText       m_aMessage;
+    ::rtl::OUString m_sHelpURL;
 
     ::std::auto_ptr< SQLMessageBox_Impl >   m_pImpl;
 
@@ -92,40 +93,28 @@ public:
 
 public:
     /** display an SQLException with auto-recognizing a main and a detailed message
-        <p/>
-        The first two messages from the exception chain are used as main and detailed message (recognizing the
-        detailed field of an <type scope="com::sun::star::sdb">SQLContext</type>).
-        <br/>
-        If only one message is present, a default title ("error reading ...") is used
-    */
-    OSQLMessageBox(Window* _pParent,
-                const ::com::sun::star::sdbc::SQLException& _rError,
-                WinBits _nStyle = WB_OK | WB_DEF_OK,
-                MessageType _eImage = Error);
 
-    /** display an SQLException with auto-recognizing a main and a detailed message
-        <p/>
         The first two messages from the exception chain are used as main and detailed message (recognizing the
         detailed field of an <type scope="com::sun::star::sdb">SQLContext</type>).
-        <br/>
-        If only one message is present, a default title ("error reading ...") is used
     */
-    OSQLMessageBox(Window* _pParent,
-                const dbtools::SQLExceptionInfo& _rException,
-                WinBits _nStyle = WB_OK | WB_DEF_OK,
-                MessageType _eImage = AUTO);
+    OSQLMessageBox(
+        Window* _pParent,
+        const dbtools::SQLExceptionInfo& _rException,
+        WinBits _nStyle = WB_OK | WB_DEF_OK,
+        const ::rtl::OUString& _rHelpURL = ::rtl::OUString()
+    );
 
     /** display a database related error message
         <p/>
         @param  rTitle      the title to display
         @param  rMessage    the detailed message to display
-        @param  eImage      determines the image to use. AUTO is disallowed in this constructor version
+        @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
     */
     OSQLMessageBox(Window* pParent,
                 const UniString& rTitle,
                 const UniString& rMessage,
                 WinBits nStyle = WB_OK | WB_DEF_OK,
-                MessageType eImage = Info,
+                MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 
     ~OSQLMessageBox();
