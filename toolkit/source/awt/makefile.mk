@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 11:39:34 $
+#   last change: $Author: kz $ $Date: 2008-03-06 11:39:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,20 @@ SLOFILES=   \
 SRS1NAME=$(TARGET)
 SRC1FILES=\
             xthrobber.src
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+
+SECOND_BUILD=layout
+layout_SLOFILES=\
+    $(SLO)/vclxbutton.obj\
+    $(SLO)/vclxdialog.obj\
+    $(SLO)/vclxfixedline.obj\
+    $(SLO)/vclxproxy.obj\
+    $(SLO)/vclxscroller.obj\
+    $(SLO)/vclxsplitter.obj\
+    $(SLO)/vclxtabcontrol.obj
+
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # --- Targets ------------------------------------------------------
 
