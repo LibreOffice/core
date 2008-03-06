@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:29:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,10 @@
 
 #ifndef SC_TABOPPARAMS_HXX
 #include "tabopparams.hxx"
+#endif
+
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
 #endif
 
 #include <memory>
@@ -345,6 +349,15 @@ private:
     LanguageType        eCjkLanguage;                   // default language for asian text
     LanguageType        eCtlLanguage;                   // default language for complex text
     CharSet             eSrcSet;                        // Einlesen: Quell-Zeichensatz
+
+    /** The compiler grammar used in document storage. GRAM_PODF for ODF 1.1
+        documents, GRAM_ODFF for ODF 1.2 documents. */
+    ScGrammar::Grammar  eStorageGrammar;
+
+    /** The compiler grammar used in ODF import after brackets had been
+        stripped (which they shouldn't, but until that's fixed) by the XML
+        importer. */
+    ScGrammar::Grammar  eXmlImportGrammar;
 
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     ULONG               nXMLImportedFormulaCount;        // progress count during XML import
@@ -746,7 +759,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,
                                         const String& rFormula,
-                                        const ScTokenArray* p = NULL );
+                                        const ScTokenArray* p = NULL,
+                                        const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT );
     void            InsertTableOp(const ScTabOpParam& rParam,   // Mehrfachoperation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
@@ -759,10 +773,12 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat );
     sal_uInt32      GetNumberFormat( const ScAddress& ) const;
-                    /// if no number format attribute is set the calculated
-                    /// number format of the formula cell is returned
+                    /** If no number format attribute is set and the cell
+                        pointer passed is of type formula cell, the calculated
+                        number format of the formula cell is returned. pCell
+                        may be NULL. */
     void            GetNumberFormatInfo( short& nType, ULONG& nIndex,
-                        const ScAddress& rPos, const ScFormulaCell& rFCell ) const;
+                        const ScAddress& rPos, const ScBaseCell* pCell ) const;
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula,
                                 BOOL bAsciiExport = FALSE ) const;
     BOOL            GetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt& rNote);
@@ -1710,6 +1726,12 @@ public:
                         { bStyleSheetUsageInvalid = TRUE; }
     void GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
+
+    /** Should only be GRAM_PODF or GRAM_ODFF. */
+    void                SetStorageGrammar( ScGrammar::Grammar eGrammar );
+    ScGrammar::Grammar  GetStorageGrammar() const
+                            { return eStorageGrammar; }
+
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );
     void    ImplLoadViewOptions( SvStream& rStream );
