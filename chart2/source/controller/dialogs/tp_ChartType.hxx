@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:44:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ public:
     virtual ~ChartTypeTabPage();
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( COMMIT_REASON eReason );
+    virtual sal_Bool    commitPage( CommitPageReason eReason );
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const;
