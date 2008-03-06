@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:33:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,14 @@ ScMyCellInfo::ScMyCellInfo()
     fValue(0.0),
     nMatrixCols(0),
     nMatrixRows(0),
+    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
     nType(NUMBERFORMAT_ALL),
     nMatrixFlag(MM_NONE)
 {
 }
 
-ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula, const rtl::OUString& rInputString,
+ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
+            const ScGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,
             const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
             const sal_Int32 nTempMatrixRows)
     : pCell(pTempCell),
@@ -94,6 +96,7 @@ ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaA
     fValue(rValue),
     nMatrixCols(nTempMatrixCols),
     nMatrixRows(nTempMatrixRows),
+    eGrammar( eTempGrammar),
     nType(nTempType),
     nMatrixFlag(nTempMatrixFlag)
 {
@@ -114,7 +117,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
             ScAddress aPos;
             sal_Int32 nOffset(0);
             ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
-            pCell = new ScFormulaCell(pDoc, aPos, sFormula, ScAddress::CONV_OOO, nMatrixFlag);
+            pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
 
@@ -810,11 +813,15 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         {
                             sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();
                             String sFormula;
-                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula, ScAddress::CONV_OOO);
+                            // With GRAM_ODFF reference detection is faster on compilation.
+                            /* FIXME: new cell should be created with a clone
+                             * of the token array instead. Any reason why this
+                             * wasn't done? */
+                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula, ScGrammar::GRAM_ODFF);
                             rtl::OUString sOUFormula(sFormula);
                             rtl::OUString sOUFormula2(sOUFormula.copy(2, sOUFormula.getLength() - 3));
                             String sFormula2(sOUFormula2);
-                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, ScAddress::CONV_OOO, nMatrixFlag);
+                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, ScGrammar::GRAM_ODFF, nMatrixFlag);
                             if (pNewCell)
                             {
                                 if (nMatrixFlag == MM_FORMULA)
