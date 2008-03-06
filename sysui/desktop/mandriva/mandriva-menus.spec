@@ -327,7 +327,7 @@ fi
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
-/usr/share/applications/%unixfilename-extension.desktop
+/usr/share/applications/%unixfilename-extensionmgr.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop
