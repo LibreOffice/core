@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:27:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:17:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,8 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 // sheet::XNamedRange
 
 void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* pNewTokens, const String* pNewContent,
-                                    const ScAddress* pNewPos, const sal_uInt16* pNewType )
+                                    const ScAddress* pNewPos, const sal_uInt16* pNewType,
+                                    const ScGrammar::Grammar eGrammar )
 {
     if (pDocShell)
     {
@@ -159,8 +160,8 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                 String aInsName(pOld->GetName());
                 if (pNewName)
                     aInsName = *pNewName;
-                String aContent;                // Inhalt immer ueber Strings ->
-                pOld->GetEnglishSymbol(aContent);       //  keine Probleme mit geaenderter Position etc.
+                String aContent;                            // Content string based =>
+                pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
                 if (pNewContent)
                     aContent = *pNewContent;
                 ScAddress aPos(pOld->GetPos());
@@ -174,7 +175,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                 if ( pNewTokens )
                     pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
                 else
-                    pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, sal_True );
+                    pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
                 pNew->SetIndex( pOld->GetIndex() );
 
                 pNewRanges->AtFree( nPos );
@@ -209,7 +210,8 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
     //! Formeln anpassen ?????
 
     String aNewStr(aNewName);
-    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL );
+    // GRAM_PODF_A1 for API compatibility.
+    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
 
     if ( aName != aNewStr )                 // some error occured...
         throw uno::RuntimeException();      // no other exceptions specified
@@ -221,7 +223,8 @@ rtl::OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException
        String aContent;
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
-        pData->GetEnglishSymbol(aContent);
+        // GRAM_PODF_A1 for API compatibility.
+        pData->GetSymbol( aContent, ScGrammar::GRAM_PODF_A1);
     return aContent;
 }
 
@@ -230,7 +233,16 @@ void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
 {
     ScUnoGuard aGuard;
     String aContStr(aContent);
-    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL );
+    // GRAM_PODF_A1 for API compatibility.
+    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
+}
+
+void ScNamedRangeObj::SetContentWithGrammar( const ::rtl::OUString& aContent,
+                                    const ScGrammar::Grammar eGrammar )
+                                throw(::com::sun::star::uno::RuntimeException)
+{
+    String aContStr(aContent);
+    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL, eGrammar );
 }
 
 table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
@@ -264,7 +276,8 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
 {
     ScUnoGuard aGuard;
     ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
-    Modify_Impl( NULL, NULL, NULL, &aPos, NULL );
+    // GRAM_PODF_A1 for API compatibility.
+    Modify_Impl( NULL, NULL, NULL, &aPos, NULL, ScGrammar::GRAM_PODF_A1 );
 }
 
 sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
@@ -294,7 +307,8 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType ) throw(uno::RuntimeE
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType );
+    // GRAM_PODF_A1 for API compatibility.
+    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType, ScGrammar::GRAM_PODF_A1 );
 }
 
 // XFormulaTokens
@@ -318,7 +332,8 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
     ScUnoGuard aGuard;
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
-    Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL );
+    // GRAM_PODF_A1 for API compatibility.
+    Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, ScGrammar::GRAM_PODF_A1 );
 }
 
 
@@ -423,6 +438,48 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames(
     return aRet;
 }
 
+
+// XUnoTunnel
+
+sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+{
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
+}
+
+// static
+const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
+{
+    static uno::Sequence<sal_Int8> * pSeq = 0;
+    if( !pSeq )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// static
+ScNamedRangeObj* ScNamedRangeObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
+{
+    ScNamedRangeObj* pRet = NULL;
+    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    if (xUT.is())
+        pRet = reinterpret_cast<ScNamedRangeObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
+    return pRet;
+}
+
 //------------------------------------------------------------------------
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
@@ -505,8 +562,9 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         if (pNames && !pNames->SearchName(aNameStr, nIndex))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
+            // GRAM_PODF_A1 for API compatibility.
             ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
-                                                aPos, nNewType, sal_True );
+                                                aPos, nNewType, ScGrammar::GRAM_PODF_A1 );
             if ( pNewRanges->Insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);
