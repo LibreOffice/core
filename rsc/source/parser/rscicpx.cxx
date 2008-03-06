@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:00:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,6 +346,24 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     nId = aNmTb.Put( "UniqueId", VARNAME );
     pClassWindow->SetVariable( nId, &aLong, NULL, 0, WINDOW_UNIQUEID );
 
+    // BorderStyle
+    RscEnum* pBorderStyleEnum = new RscEnum( pHS->getID( "WindowBorderStyle" ), RSC_NOTYPE );
+    aBaseLst.Insert( pBorderStyleEnum, LIST_APPEND );
+
+    // Konstanten in Tabelle stellen
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NORMAL" ),    WINDOW_BORDER_NORMAL );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MONO" ),      WINDOW_BORDER_MONO );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_ACTIVE" ),    WINDOW_BORDER_ACTIVE );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_DOUBLEOUT" ), WINDOW_BORDER_DOUBLEOUT );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MENU" ),      WINDOW_BORDER_MENU );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NOBORDER" ),  WINDOW_BORDER_NOBORDER );
+
+    // Variable einfuegen
+    nId = aNmTb.Put( "BorderStyle", VARNAME );
+    pClassWindow->SetVariable( nId, pBorderStyleEnum, NULL,
+                                    0,
+                                    WINDOW_BORDER_STYLE );
+
     return( pClassWindow );
 }
 
@@ -468,6 +486,32 @@ RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
 }
 
 /*************************************************************************
+|*    RscTypCont::InitClassCheckBox()
+*************************************************************************/
+RscTop * RscTypCont::InitClassCheckBox( RscTop * pSuper )
+{
+    Atom        nId;
+    RscTop *    pClassCheckBox;
+
+    // Klasse anlegen
+    nId = pHS->getID( "CheckBox" );
+    pClassCheckBox = new RscClass( nId, RSC_CHECKBOX, pSuper );
+    pClassCheckBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
+    aNmTb.Put( nId, CLASSNAME, pClassCheckBox );
+
+    // Variablen anlegen
+    INS_WINBIT( pClassCheckBox, WordBreak )
+    INS_WINBIT( pClassCheckBox, Top )
+    INS_WINBIT( pClassCheckBox, VCenter )
+    INS_WINBIT( pClassCheckBox, Bottom )
+
+    nId = aNmTb.Put( "Check", VARNAME );
+    pClassCheckBox->SetVariable( nId, &aBool );
+
+    return pClassCheckBox;
+}
+
+/*************************************************************************
 |*    RscTypCont::InitClassPushButton()
 *************************************************************************/
 RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
@@ -482,6 +526,9 @@ RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
     aNmTb.Put( nId, CLASSNAME, pClassPushButton );
 
     InsWinBit( pClassPushButton, "DefButton", nDefaultId );
+    INS_WINBIT( pClassPushButton, Top )
+    INS_WINBIT( pClassPushButton, VCenter )
+    INS_WINBIT( pClassPushButton, Bottom )
 
     return pClassPushButton;
 }
@@ -644,9 +691,10 @@ RscTop * RscTypCont::InitClassMultiLineEdit( RscTop * pSuper )
 
     aNmTb.Put( nId, CLASSNAME, pClassMultiLineEdit );
 
-    InsWinBit( pClassMultiLineEdit, "HScroll", nHscrollId );
-    InsWinBit( pClassMultiLineEdit, "VScroll", nVscrollId );
+    INS_WINBIT( pClassMultiLineEdit, HScroll );
+    INS_WINBIT( pClassMultiLineEdit, VScroll );
     INS_WINBIT( pClassMultiLineEdit, IgnoreTab );
+    INS_WINBIT( pClassMultiLineEdit, AutoVScroll )
 
     return pClassMultiLineEdit;
 }
@@ -702,9 +750,9 @@ RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
     nId = aNmTb.Put( "VisibleSize", VARNAME );
     pClassScrollBar->SetVariable( nId, &aShort );
 
-    InsWinBit( pClassScrollBar, "HScroll", nHscrollId );
-    InsWinBit( pClassScrollBar, "VScroll", nVscrollId );
-    INS_WINBIT(pClassScrollBar,Drag)
+    INS_WINBIT( pClassScrollBar, HScroll );
+    INS_WINBIT( pClassScrollBar, VScroll );
+    INS_WINBIT( pClassScrollBar, Drag )
 
     return pClassScrollBar;
 }
@@ -726,8 +774,8 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     // Variablen anlegen
     INS_WINBIT(pClassListBox,Sort)
     INS_WINBIT(pClassListBox,DropDown)
-    InsWinBit( pClassListBox, "HScroll", nHscrollId );
-    InsWinBit( pClassListBox, "VScroll", nVscrollId );
+    INS_WINBIT(pClassListBox,HScroll);
+    INS_WINBIT(pClassListBox,VScroll);
     INS_WINBIT(pClassListBox,AutoSize)
     INS_WINBIT(pClassListBox,AutoHScroll)
     INS_WINBIT(pClassListBox,DDExtraWidth)
@@ -780,8 +828,8 @@ RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )
     // Variablen anlegen
     INS_WINBIT(pClassComboBox,DropDown)
     INS_WINBIT(pClassComboBox,Sort)
-    InsWinBit( pClassComboBox, "HScroll", nHscrollId );
-    InsWinBit( pClassComboBox, "VScroll", nVscrollId );
+    INS_WINBIT(pClassComboBox,HScroll);
+    INS_WINBIT(pClassComboBox,VScroll);
     INS_WINBIT(pClassComboBox,AutoSize)
     INS_WINBIT(pClassComboBox,AutoHScroll)
     INS_WINBIT(pClassComboBox,DDExtraWidth)
@@ -813,6 +861,9 @@ RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
     INS_WINBIT(pClassFixedText,WordBreak)
     INS_WINBIT(pClassFixedText,LeftLabel)
     INS_WINBIT(pClassFixedText,NoLabel)
+    INS_WINBIT(pClassFixedText,Top)
+    INS_WINBIT(pClassFixedText,VCenter)
+    INS_WINBIT(pClassFixedText,Bottom)
 
     return pClassFixedText;
 }
@@ -859,6 +910,32 @@ RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage 
     pClassFixedImage->SetVariable( nId, pClassImage, 0, 0, RSC_FIXEDIMAGE_IMAGE );
 
     return pClassFixedImage;
+}
+
+/*************************************************************************
+|*    RscTypCont::InitClassImageRadioButton()
+*************************************************************************/
+RscTop * RscTypCont::InitClassRadioButton( RscTop * pSuper )
+{
+    Atom        nId;
+    RscTop *    pClassRadioButton;
+
+    // Klasse anlegen
+    nId = pHS->getID( "RadioButton" );
+    pClassRadioButton = new RscClass( nId, RSC_RADIOBUTTON, pSuper );
+    pClassRadioButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
+    aNmTb.Put( nId, CLASSNAME, pClassRadioButton );
+
+    // Variablen anlegen
+    INS_WINBIT( pClassRadioButton, WordBreak )
+    INS_WINBIT( pClassRadioButton, Top )
+    INS_WINBIT( pClassRadioButton, VCenter )
+    INS_WINBIT( pClassRadioButton, Bottom )
+
+    nId = aNmTb.Put( "Check", VARNAME );
+    pClassRadioButton->SetVariable( nId, &aBool );
+
+    return pClassRadioButton;
 }
 
 /*************************************************************************
@@ -1246,8 +1323,8 @@ RscTop * RscTypCont::InitClassSplitter( RscTop * pSuper )
 
     aNmTb.Put( nId, CLASSNAME, pClassSplitter );
 
-    InsWinBit( pClassSplitter, "HScroll", nHscrollId );
-    InsWinBit( pClassSplitter, "VScroll", nVscrollId );
+    INS_WINBIT(pClassSplitter,HScroll);
+    INS_WINBIT(pClassSplitter,VScroll);
 
     return pClassSplitter;
 }
