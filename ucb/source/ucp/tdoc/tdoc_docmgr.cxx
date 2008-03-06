@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:26:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,11 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     if ( aId.getLength() == 0 )
     {
         // fallback: generate UID from document's this pointer.
-        sal_Int64 nId = reinterpret_cast< sal_Int64 >( xDoc.get() );
+        // normalize the interface pointer first. Else, calls with different
+        // interfaces to the same object (say, XFoo and XBar) will produce
+        // different IDs
+        uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
+        sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
         aId = rtl::OUString::valueOf( nId );
     }
 
