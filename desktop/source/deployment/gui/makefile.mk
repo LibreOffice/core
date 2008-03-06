@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:48:15 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:28:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ ENABLE_EXCEPTIONS = TRUE
 NO_BSYMBOLIC = TRUE
 USE_PCH :=
 ENABLE_PCH :=
+PRJINC:=..$/..
 
 .IF "$(GUI)"=="OS2"
 TARGET = deplgui
