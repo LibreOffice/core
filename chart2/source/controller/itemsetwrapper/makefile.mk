@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 11:53:13 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:52:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ SLOFILES=   	$(SLO)$/ItemConverter.obj \
                 $(SLO)$/StatisticsItemConverter.obj \
                 $(SLO)$/TitleItemConverter.obj \
                 $(SLO)$/RegressionCurveItemConverter.obj \
-                $(SLO)$/RegressionEquationItemConverter.obj
+                $(SLO)$/RegressionEquationItemConverter.obj \
+                $(SLO)$/ErrorBarItemConverter.obj
 
 # --- Targets -----------------------------------------------------------------
 
