@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeries.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:00:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,15 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     return aPropSeq;
 }
 
+void lcl_SetParent(
+    const uno::Reference< uno::XInterface > & xChildInterface,
+    const uno::Reference< uno::XInterface > & xParentInterface )
+{
+    uno::Reference< container::XChild > xChild( xChildInterface, uno::UNO_QUERY );
+    if( xChild.is())
+        xChild->setParent( xParentInterface );
+}
+
 typedef ::std::map< sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
     lcl_tDataPointMap;
 
@@ -107,10 +116,7 @@ void lcl_CloneAttributedDataPoints(
                 xPoint.set( xCloneable->createClone(), uno::UNO_QUERY );
                 if( xPoint.is())
                 {
-                    Reference< container::XChild > xChild( xPoint, uno::UNO_QUERY );
-                    if( xChild.is())
-                        xChild->setParent( xSeries );
-
+                    lcl_SetParent( xPoint, xSeries );
                     rDestination.insert( lcl_tDataPointMap::value_type( (*aIt).first, xPoint ));
                 }
             }
@@ -180,13 +186,27 @@ void DataSeries::Init( const DataSeries & rOther )
     if( ! rOther.m_aDataSequences.empty())
         EventListenerHelper::addListenerToAllElements( m_aDataSequences, this );
 
+    Reference< uno::XInterface > xThisInterface( static_cast< ::cppu::OWeakObject * >( this ));
     if( ! rOther.m_aAttributedDataPoints.empty())
     {
         lcl_CloneAttributedDataPoints(
-            rOther.m_aAttributedDataPoints, m_aAttributedDataPoints,
-            Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject * >( this )));
+            rOther.m_aAttributedDataPoints, m_aAttributedDataPoints, xThisInterface );
         ModifyListenerHelper::addListenerToAllMapElements( m_aAttributedDataPoints, m_xModifyEventForwarder );
     }
+
+    // add as parent to error bars
+    Reference< beans::XPropertySet > xPropertySet;
+    uno::Any aValue;
+
+    getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X );
+    if( ( aValue >>= xPropertySet )
+        && xPropertySet.is())
+        lcl_SetParent( xPropertySet, xThisInterface );
+
+    getFastPropertyValue( aValue, DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y );
+    if( ( aValue >>= xPropertySet )
+        && xPropertySet.is())
+        lcl_SetParent( xPropertySet, xThisInterface );
 }
 
 DataSeries::~DataSeries()
