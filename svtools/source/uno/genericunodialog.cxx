@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:23:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,50 +36,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
-#include "genericunodialog.hxx"
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
+#include "svtools/genericunodialog.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
+#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
-// --- needed because of the solar mutex
-#ifndef _VOS_MUTEX_HXX_
+#include <toolkit/awt/vclxwindow.hxx>
+#include <cppuhelper/extract.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <comphelper/property.hxx>
+#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
+#include <vcl/msgbox.hxx>
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-// ---
-
-#define THISREF()   static_cast< XServiceInfo* >(this)
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::ucb;
 
 //.........................................................................
 namespace svt
@@ -94,7 +70,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _r
         ,m_bExecuting(sal_False)
         ,m_bCanceled(sal_False)
         ,m_bTitleAmbiguous(sal_True)
-        ,m_xORB(_rxORB)
+        ,m_bInitialized( false )
+        ,m_bNeedInitialization( false )
+        ,m_xORB( _rxORB )
 {
     registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
@@ -109,6 +87,8 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bExecuting(sal_False)
         ,m_bCanceled(sal_False)
         ,m_bTitleAmbiguous(sal_True)
+        ,m_bInitialized( false )
+        ,m_bNeedInitialization( false )
         ,m_xORB( _rxContext->getServiceManager(), UNO_QUERY_THROW )
         ,m_xContext(_rxContext)
 {
@@ -121,10 +101,11 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
 //-------------------------------------------------------------------------
 OGenericUnoDialog::~OGenericUnoDialog()
 {
-    if (m_pDialog)
+    if ( m_pDialog )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_pDialog)
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pDialog )
             destroyDialog();
     }
 }
@@ -147,15 +128,10 @@ Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (Runtim
 //-------------------------------------------------------------------------
 Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
 {
-    Sequence<Type> aTypes = OGenericUnoDialogBase::getTypes();
-
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 3);
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast<Reference<XFastPropertySet>*>(NULL));
-    aTypes.getArray()[nLen++] = ::getCppuType(static_cast<Reference<XMultiPropertySet>*>(NULL));
-
-    return aTypes;
+    return ::comphelper::concatSequences(
+        OGenericUnoDialogBase::getTypes(),
+        ::comphelper::OPropertyContainer::getTypes()
+    );
 }
 
 //-------------------------------------------------------------------------
@@ -191,8 +167,6 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         if (m_pDialog)
             m_pDialog->SetText(String(m_sTitle));
     }
-
-    // TODO : need to be a dispose listener on the interface ...
 }
 
 //-------------------------------------------------------------------------
@@ -219,6 +193,8 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
 //-------------------------------------------------------------------------
 void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) throw(RuntimeException)
 {
+    UnoDialogEntryGuard aGuard( *this );
+
     try
     {
         setPropertyValue(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
@@ -228,8 +204,9 @@ void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) thro
         // allowed to pass
         throw;
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
         // not allowed to pass
     }
 }
@@ -278,10 +255,13 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
     Dialog* pDialogToExecute = NULL;
     // create the dialog, if neccessary
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        UnoDialogEntryGuard aGuard( *this );
 
         if (m_bExecuting)
-            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already executing the dialog (recursive call)")), THISREF());
+            throw RuntimeException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "already executing the dialog (recursive call)" ) ),
+                    *this
+                  );
 
         m_bCanceled = sal_False;
         m_bExecuting = sal_True;
@@ -320,7 +300,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 //-------------------------------------------------------------------------
 void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    UnoDialogEntryGuard aGuard( *this );
     if (!m_bExecuting)
         throw RuntimeException();
 
@@ -347,7 +327,6 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 //-------------------------------------------------------------------------
 void OGenericUnoDialog::implInitialize(const Any& _rValue)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
     try
     {
         PropertyValue aProperty;
@@ -370,15 +349,20 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
 //-------------------------------------------------------------------------
 void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bInitialized )
+        throw AlreadyInitializedException( ::rtl::OUString(), *this );
+
     const Any* pArguments = aArguments.getConstArray();
     for (sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)
         implInitialize(*pArguments);
+
+    m_bInitialized = true;
 }
 
 //-------------------------------------------------------------------------
 void OGenericUnoDialog::destroyDialog()
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     delete m_pDialog;
     m_pDialog = NULL;
 }
