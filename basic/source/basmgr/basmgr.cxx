@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:58:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,6 @@ StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYAL
 StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
 
 DECLARE_LIST( BasErrorLst, BasicError* )
-
 
 //----------------------------------------------------------------------------
 // BasicManager impl data
@@ -892,8 +891,8 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         }
     }
 
-    InsertGlobalUNOConstant( "BasicLibraries", makeAny( mpImpl->maContainerInfo.mxScriptCont ) );
-    InsertGlobalUNOConstant( "DialogLibraries", makeAny( mpImpl->maContainerInfo.mxDialogCont ) );
+    SetGlobalUNOConstant( "BasicLibraries", makeAny( mpImpl->maContainerInfo.mxScriptCont ) );
+    SetGlobalUNOConstant( "DialogLibraries", makeAny( mpImpl->maContainerInfo.mxDialogCont ) );
 }
 
 BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, BOOL bDocMgr ) : mbDocMgr( bDocMgr )
@@ -1812,21 +1811,27 @@ BasicError* BasicManager::GetNextError()
     return pErrorMgr->GetNextError();
 }
 
-void BasicManager::InsertGlobalUNOConstant( const sal_Char* _pAsciiName, const Any& _rValue )
+Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const Any& _rValue )
 {
+    Any aOldValue;
+
     StarBASIC* pStandardLib = GetStdLib();
-    OSL_PRECOND( pStandardLib, "BasicManager::InsertGlobalUNOConstant: no lib to insert into!" );
-    OSL_PRECOND( _rValue.hasValue(), "BasicManager::InsertGlobalUNOConstant: empty constants not allowed!" );
-    if ( !pStandardLib || !_rValue.hasValue() )
-        return;
+    OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
+    if ( !pStandardLib )
+        return aOldValue;
 
-    sal_Bool bWasModified = pStandardLib->IsModified();
+    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
 
-    SbxObjectRef xUnoObj = GetSbUnoObject( ::rtl::OUString::createFromAscii( _pAsciiName ), _rValue );
+    // obtain the old value
+    SbxVariable* pVariable = pStandardLib->Find( sVarName, SbxCLASS_OBJECT );
+    if ( pVariable )
+        aOldValue = sbxToUnoValue( pVariable );
+
+    SbxObjectRef xUnoObj = GetSbUnoObject( sVarName, _rValue );
     xUnoObj->SetFlag( SBX_DONTSTORE );
     pStandardLib->Insert( xUnoObj );
 
-    pStandardLib->SetModified( bWasModified );
+    return aOldValue;
 }
 
 bool BasicManager::LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames )
