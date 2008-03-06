@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:24:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:30:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
+, m_bEmbeddedScriptSupport( sal_True )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_False )
 , m_bLinkHasPassword( sal_False )
@@ -112,6 +113,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
+, m_bEmbeddedScriptSupport( sal_True )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_True )
 , m_bLinkHasPassword( sal_False )
