@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAcceleratorConfiguration.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:10:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ interface XAcceleratorConfiguration
 
         @return The registered command for the specified key event.
 
-        @throw  <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws ::com::sun::star::container::NoSuchElementException
                 if the key event is an invalid one or does not exists
                 inside this configuration set.
      */
@@ -164,7 +164,7 @@ interface XAcceleratorConfiguration
         @param  sCommand
                 the new command for the specified key event.
 
-        @throw  <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
                 if the key event isnt a valid one. Commands can be
                 checked only, if they are empty. Because every URL schema can be used
                 by commands in general, so its not possible to validate it.
@@ -179,7 +179,7 @@ interface XAcceleratorConfiguration
         @param  aKeyEvent
                 the key event, which should be removed.
 
-        @throw  <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws ::com::sun::star::container::NoSuchElementException
                 if the key event does not exists inside this configuration set.
      */
     void removeKeyEvent( [in] com::sun::star::awt::KeyEvent aKeyEvent )
@@ -202,11 +202,11 @@ interface XAcceleratorConfiguration
         @return A list of <type scope="com::sun::star::awt">KeyEvent</type> structures,
                 where the pecified command is registered for.
 
-        @throw  A <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
                 if the specified command is empty. It cant be checked, if a command
                 is valid - because every URL schema can be used here.
 
-        @throw  A <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws ::com::sun::star::container::NoSuchElementException
                 if the specified command isnt empty but does not
                 occure inside this configuration set.
      */
@@ -246,7 +246,7 @@ interface XAcceleratorConfiguration
                 If a command does not exists inside this configuration set, the
                 corresponding any value will be empty.
 
-        @throw  <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
                 if at least one of the specified commands is empty.
                 It cant be checked, if a command is valid -
                 because every URL schema can be used here.
@@ -274,10 +274,10 @@ interface XAcceleratorConfiguration
         @param  sCommand
                 the command, which should be removed from any key binding.
 
-        @throw  <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        @throws ::com::sun::star::lang::IllegalArgumentException
                 if the specified command is empty.
 
-        @throw  <type scope="com::sun::star::container">NoSuchElementException</type>
+        @throws ::com::sun::star::container::NoSuchElementException
                 if the specified command isnt used inside this configuration set.
      */
     void removeCommandFromAllKeyEvents( [in] string sCommand )
