@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,8 @@ public:
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
-        , bool bIsStockChart );
+        , bool bIsStockChart
+        , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex );
 
     static void setStylesToStatisticsObjects( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
