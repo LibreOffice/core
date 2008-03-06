@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:27:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -321,9 +324,9 @@ public:
                                          sal_Bool bOnlyVisible = sal_True );
     static SfxObjectShell*      Current();
     static sal_uInt16           Count();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                                GetWorkingDocument();
-    static void                 SetWorkingDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                                GetCurrentComponent();
+    static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
     virtual void                Invalidate(USHORT nId = 0);
 
@@ -433,6 +436,15 @@ public:
 
     ErrCode     CallXScript(
         const String& rScriptURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
+        ::com::sun::star::uno::Any& aRet,
+        ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
+    );
+
+    static ErrCode  CallXScript(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxScriptContext,
+        const ::rtl::OUString& rScriptURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
@@ -630,7 +642,8 @@ public:
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
     void                        SetModel( SfxBaseModel* pModel );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
+                                GetModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
     void                        SetBaseModel( SfxBaseModel* pModel );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel();
