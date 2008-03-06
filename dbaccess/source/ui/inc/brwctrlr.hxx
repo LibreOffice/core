@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:02:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,21 +74,20 @@ namespace dbaui
 
     // =========================================================================
 
-    typedef ::cppu::ImplHelper9 <   ::com::sun::star::sdb::XSQLErrorListener
-                                ,   ::com::sun::star::form::XDatabaseParameterListener
-                                ,   ::com::sun::star::form::XConfirmDeleteListener
-                                ,   ::com::sun::star::form::XLoadListener
-                                ,   ::com::sun::star::form::XResetListener
-                                ,   ::com::sun::star::awt::XFocusListener
-                                ,   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::beans::XPropertyChangeListener
-                                ,   ::com::sun::star::frame::XModule
-                                >   SbaXDataBrowserController_Base;
+    typedef ::cppu::ImplInheritanceHelper9  <   OGenericUnoController
+                                            ,   ::com::sun::star::sdb::XSQLErrorListener
+                                            ,   ::com::sun::star::form::XDatabaseParameterListener
+                                            ,   ::com::sun::star::form::XConfirmDeleteListener
+                                            ,   ::com::sun::star::form::XLoadListener
+                                            ,   ::com::sun::star::form::XResetListener
+                                            ,   ::com::sun::star::awt::XFocusListener
+                                            ,   ::com::sun::star::container::XContainerListener
+                                            ,   ::com::sun::star::beans::XPropertyChangeListener
+                                            ,   ::com::sun::star::frame::XModule
+                                            >   SbaXDataBrowserController_Base;
 
-    class SbaXDataBrowserController
-                    :public OGenericUnoController
-                    ,public SbaXDataBrowserController_Base
-                    ,public SbaGridListener
+    class SbaXDataBrowserController :public SbaXDataBrowserController_Base
+                                    ,public SbaGridListener
     {
     // ==========
     // attributes
@@ -171,8 +170,6 @@ namespace dbaui
 
         // UNO
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire(  ) throw ();
-        virtual void SAL_CALL release(  ) throw ();
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -201,7 +198,6 @@ namespace dbaui
         virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::frame::XController
-        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
@@ -241,14 +237,16 @@ namespace dbaui
 
     protected:
         virtual ~SbaXDataBrowserController();
-        // --------------------
-        // our own overridables
+
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+
+        virtual void    startFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+        virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm();
             // our default implementation simply instantiates a stardiv.one.form.component.Form service
