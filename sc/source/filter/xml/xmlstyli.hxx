@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:38:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,13 @@ class XMLTableStyleContext : public XMLPropStyleContext
     void SetStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& sApplyStyle) const;
     void SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormula) const;
+        const rtl::OUString& sFormula, bool bPreParse = true) const;
     void SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& sFormula) const;
     void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& sFormulas) const;
+    void SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const ScGrammar::Grammar eGrammar) const;
 
     void GetConditionalFormat(
         ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
