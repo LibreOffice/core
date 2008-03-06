@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:54:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:04:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #include <vector>
 #include "xmlsubti.hxx"
 #include "global.hxx"
+#include "grammar.hxx"
+
 #ifndef _XMLSTYLE_HXX
 #include "xmlstyle.hxx"
 #endif
@@ -627,11 +629,12 @@ struct tScMyCellRange
 
 struct ScMyNamedExpression
 {
-    rtl::OUString   sName;
-    rtl::OUString   sContent;
-    rtl::OUString   sBaseCellAddress;
-    rtl::OUString   sRangeType;
-    sal_Bool        bIsExpression;
+    rtl::OUString      sName;
+    rtl::OUString      sContent;
+    rtl::OUString      sBaseCellAddress;
+    rtl::OUString      sRangeType;
+    ScGrammar::Grammar eGrammar;
+    sal_Bool           bIsExpression;
 };
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
@@ -658,6 +661,7 @@ struct ScMyImportValidation
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
+    ScGrammar::Grammar                              eGrammar;
     sal_Int16                                       nShowList;
     sal_Bool                                        bShowErrorMessage;
     sal_Bool                                        bShowImputMessage;
@@ -1009,6 +1013,47 @@ public:
     void SetNamedRanges();
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
+
+
+    /** If namespace prefix is an accepted formula namespace.
+
+        For an accepted namespace (return <TRUE/>), the formula text is the
+        part without the namespace tag (aFormula of the _GetKeyByAttrName()
+        example below).
+
+        For an invalid namespace (not defined in the file,
+        XML_NAMESPACE_UNKNOWN; may also be the result of no namespace with
+        colon in the formula text, in that case text has to start with
+        character '=') or no namespace tag (XML_NAMESPACE_NONE) the full text
+        (rValue) should be used (return <FALSE/>).
+
+        @param nFormulaPrefix
+            The result of a _GetKeyByAttrName( rValue, aFormula, sal_False)
+            call.
+
+        @param rValue
+            The attribute's string (formula text) including the namespace, if
+            any.
+
+        @param rGrammar
+            Return value set to ScGrammar::GRAM_ODFF or ScGrammar::GRAM_PODF or
+            eStorageGrammar, according to the namespace or absence thereof
+            encountered.
+
+        @param eStorageGrammar
+            Default storage grammar of the document, ScGrammar::GRAM_ODFF for
+            ODF 1.2 and later documents, ScGrammar::GRAM_PODF for ODF 1.x
+            documents.
+
+        @return
+            <TRUE/> if an accepted namespace (XML_NAMESPACE_OF or
+            XML_NAMESPACE_OOOC), else <FALSE/>.
+     */
+
+    static bool IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
+            const rtl::OUString & rValue, ScGrammar::Grammar& rGrammar,
+            const ScGrammar::Grammar eStorageGrammar );
+
 };
 
 #endif
