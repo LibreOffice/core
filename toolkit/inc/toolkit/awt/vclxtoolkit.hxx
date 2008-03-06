@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:08:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,10 @@
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>
 #endif
+
+#include <toolkit/dllapi.h>
+
+TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType );
 
 class Window;
 class VCLXWindow;
