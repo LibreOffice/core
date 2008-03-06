@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.232 $
+ *  $Revision: 1.233 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:45:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,7 @@ File gid_File_Share_Xdg_Extension
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Xdg;
     Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "extension.desktop";
+    Name = "extensionmgr.desktop";
 End
 
 #ifdef ENABLE_GTK
