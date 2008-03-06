@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartItemPool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 16:02:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,9 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_STAT_BIGERROR            - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_BIGERROR);
     ppPoolDefaults[SCHATTR_STAT_CONSTPLUS           - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_CONSTPLUS);
     ppPoolDefaults[SCHATTR_STAT_CONSTMINUS          - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_CONSTMINUS);
-    ppPoolDefaults[SCHATTR_STAT_REGRESSTYPE         - SCHATTR_START] = new SvxChartRegressItem  (CHREGRESS_NONE, SCHATTR_STAT_REGRESSTYPE);
     ppPoolDefaults[SCHATTR_STAT_INDICATE            - SCHATTR_START] = new SvxChartIndicateItem (CHINDICATE_NONE, SCHATTR_STAT_INDICATE);
+    ppPoolDefaults[SCHATTR_STAT_RANGE_POS           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_POS, String());
+    ppPoolDefaults[SCHATTR_STAT_RANGE_NEG           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_NEG, String());
 
     ppPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);
     ppPoolDefaults[SCHATTR_TEXT_OVERLAP             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_OVERLAP,FALSE);
@@ -224,6 +225,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, FALSE );
 
     ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_FOR_ALL_SERIES, 0);
+    ppPoolDefaults[SCHATTR_REGRESSION_TYPE          - SCHATTR_START] = new SvxChartRegressItem  (CHREGRESS_NONE, SCHATTR_REGRESSION_TYPE);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_EQUATION, 0);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_COEFF, 0);
 
