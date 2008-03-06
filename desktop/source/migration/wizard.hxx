@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:31:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ protected:
     virtual void     enterState(WizardState _nState);
 
     // from svt::RoadmapWizard
-    virtual String       getStateDisplayName( WizardState _nState );
+    virtual String       getStateDisplayName( WizardState _nState ) const;
 };
 }
 #endif
