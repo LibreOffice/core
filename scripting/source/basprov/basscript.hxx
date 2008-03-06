@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basscript.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:24:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPT_HPP_
 #include <com/sun/star/script/provider/XScript.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -47,6 +50,8 @@
 #include <basic/sbmeth.hxx>
 #endif
 
+
+class BasicManager;
 
 //.........................................................................
 namespace basprov
@@ -64,10 +69,23 @@ namespace basprov
     class BasicScriptImpl : public BasicScriptImpl_BASE
     {
     private:
-        SbMethodRef m_xMethod;
-        ::rtl::OUString m_funcName;
+        SbMethodRef         m_xMethod;
+        ::rtl::OUString     m_funcName;
+        BasicManager*       m_documentBasicManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >
+                            m_xDocumentScriptContext;
+
     public:
-        BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod );
+        BasicScriptImpl(
+            const ::rtl::OUString& funcName,
+            SbMethodRef xMethod
+        );
+        BasicScriptImpl(
+            const ::rtl::OUString& funcName,
+            SbMethodRef xMethod,
+            BasicManager& documentBasicManager,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >& documentScriptContext
+        );
         virtual ~BasicScriptImpl();
 
         // XScript
