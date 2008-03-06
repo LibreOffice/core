@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:58:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 #include <tools/string.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -79,13 +80,18 @@ uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNam
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & )
+                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     SdDLL::Init();
+
+    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
+    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
+
     SfxObjectShell* pShell =
-        new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD);
+        new ::sd::GraphicDocShell(
+            eCreateMode, FALSE, DOCUMENT_TYPE_DRAW, bScriptSupport );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
@@ -106,12 +112,18 @@ uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServi
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &  )
+                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     SdDLL::Init();
-    SfxObjectShell* pShell = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD);
+
+    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
+    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
+
+    SfxObjectShell* pShell =
+        new ::sd::DrawDocShell(
+            eCreateMode, FALSE, DOCUMENT_TYPE_IMPRESS, bScriptSupport );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
