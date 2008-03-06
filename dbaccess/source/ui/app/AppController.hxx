@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:51:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,68 +36,31 @@
 #ifndef DBAUI_APPCONTROLLER_HXX
 #define DBAUI_APPCONTROLLER_HXX
 
-#ifndef DBAUI_GENERICCONTROLLER_HXX
-#include "genericcontroller.hxx"
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-#ifndef _TRANSFER_HXX
-#include <svtools/transfer.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _SOT_STORAGE_HXX
-#include <sot/storage.hxx>
-#endif
-#ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
-#include "IAppElementNotification.hxx"
-#endif
-/** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_XDATABASEDOCUMENTUI_HPP_
-#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
-#endif
-/** === end UNO includes === **/
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
-#include "dsntypes.hxx"
-#endif
-#ifndef DBUI_TABLECOPYHELPER_HXX
-#include "TableCopyHelper.hxx"
-#endif
-#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
-#include "linkeddocuments.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
-#include "documentcontroller.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "documentcontroller.hxx"
+#include "dsntypes.hxx"
+#include "genericcontroller.hxx"
+#include "IAppElementNotification.hxx"
+#include "linkeddocuments.hxx"
 #include "moduledbu.hxx"
-#endif
+#include "TableCopyHelper.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/stl_types.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <sot/storage.hxx>
+#include <svtools/transfer.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+#include <vcl/timer.hxx>
 
 #include <memory>
 
@@ -113,6 +76,7 @@ FORWARD_DECLARE_INTERFACE(container,XContainer)
 FORWARD_DECLARE_INTERFACE(util,XNumberFormatter)
 FORWARD_DECLARE_INTERFACE(util,XCloseable)
 FORWARD_DECLARE_INTERFACE(ucb,XContent)
+
 //........................................................................
 namespace dbaui
 {
@@ -123,7 +87,7 @@ namespace dbaui
     class OApplicationController;
     class OApplicationView;
     class OLinkedDocumentsAccess;
-    typedef OGenericUnoController                   OApplicationController_CBASE;
+    typedef OGenericUnoController   OApplicationController_CBASE;
     typedef ::cppu::ImplHelper3 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::sdb::application::XDatabaseDocumentUI
@@ -137,7 +101,6 @@ namespace dbaui
             ,public IContainerFoundListener
             ,public IViewChangeListener
     {
-        friend class OConnectionChangeBroadcaster;
     public:
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > TContainer;
         typedef ::std::vector< TContainer >                                                 TContainerVector;
@@ -158,6 +121,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDataSource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 m_xModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >
+                                m_xDocumentModify;
         ModelControllerConnector
                                 m_aModelConnector;
         TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
@@ -168,12 +133,13 @@ namespace dbaui
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         mutable ::rtl::OUString m_sDatabaseName;
         sal_Int32               m_nAsyncDrop;
+        OAsyncronousLink        m_aControllerConnectedEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
-        ElementType             m_eOldType;
-        sal_Bool                m_bPreviewEnabled;          // true when the preview should enabled
+        ElementType             m_eCurrentType;
         sal_Bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
-        sal_Bool                m_bSuspended        : 1;    // is true when the controller was already suspended
+        sal_Bool                m_bSuspended;               // is true when the controller was already suspended
 
+    private:
 
         OApplicationView*       getContainer() const;
 
@@ -381,18 +347,6 @@ namespace dbaui
         */
         void askToReconnect();
 
-        /** suspend one document.
-            @return
-                <TRUE/> if the document could be suspended, otherwise <FALSE/>.
-        */
-        sal_Bool suspendDocument(const TDocuments::value_type& _xComponent,sal_Bool _bSuspend);
-
-        /** suspend all open documents.
-            @return
-                <TRUE/> if all documents could be suspended, otherwise <FALSE/>.
-        */
-        sal_Bool suspendDocuments(sal_Bool bSuspend);
-
         /** add event listener and remember the document
             @param  _xDocument
                 the new document, may be <NULL/>
@@ -445,14 +399,23 @@ namespace dbaui
         /** select the give entry
         */
         void selectEntry(const ElementType _eType,const ::rtl::OUString& _sName);
-    protected:
-        // ----------------------------------------------------------------
-        // initalizing members
-        /** forces usage of a connection which we do not own
-            <p>To be used from within XInitialization::initialize only.</p>
-        */
-        void                    initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
 
+        /** called when we just connected to a new, non-NULL model
+
+            In particular, this is called *after* the controller has been announced to the model
+            (XModel::connectController)
+        */
+        void onConnectedModel();
+
+        /// determines whether the given table name denotes a view which can be altered
+        bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
+
+        /** does the macro/script migration, where macros/scripts in forms/reports are moved
+            to the database document itself.
+        */
+        void    impl_migrateScripts_nothrow();
+
+    protected:
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
@@ -468,7 +431,6 @@ namespace dbaui
         // OGenericUnoController
         virtual void            updateTitle( );
         virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
-        virtual void            impl_initialize();
 
         virtual ~OApplicationController();
 
@@ -492,9 +454,6 @@ namespace dbaui
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
 
-        // ::com::sun::star::frame::XFrameActionListener
-        virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
-
         // ::com::sun::star::container::XContainerListener
         virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
@@ -507,8 +466,10 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getApplicationMainWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL connect(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XSelectionSupplier
         virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -555,6 +516,7 @@ namespace dbaui
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnAsyncDrop, void* );
         DECL_LINK( OnCreateWithPilot, void* );
+        DECL_LINK( OnFirstControllerConnected, void* );
 
         // IContainerFoundListener
         virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
@@ -579,9 +541,6 @@ namespace dbaui
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
-
-    private:
-        bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
     };
 
 //........................................................................
