@@ -1,0 +1,161 @@
+-*-outline-*-
+
+* CWS
+** 3.0 feature freeze: March 6
+** cleanups
+*** remove stuff
+**** vclxproxy -> move into source/awt widgets 
+**** toplevel dialog/container?
+
+* portability
+** --enable-layout does not compile on Sun
+
+TODO: Try not including layout-pre.hxx twice, but use
+layout-pre-header.hxx and layout-pre-source.hxx (both include an
+un-multiple-inclusion-shielded layout-pre.hxx).
+
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 412: Error: layout is not a member of layout.
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 412: Error: Formal argument 1 of type layout::RadioButton* in call to SvxZoomDialog::UserHdl(layout::RadioButton*) is being passed RadioButton*.
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 431: Error: layout is not a member of layout.
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 431: Error: Formal argument 1 of type layout::MetricField* in call to SvxZoomDialog::SpinHdl(layout::MetricField*) is being passed MetricField*.
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 441: Error: layout is not a member of layout.
+"/export/home/fstrba/devel-cvs/ooo-build/build/ooh680-m1/layout/workben/zoom.cxx", line 441: Error: Formal argument 1 of type layout::Button* in call to SvxZoomDialog::OKHdl(layout::Button*) is being passed Button*.
+6 Error(s) detected.
+
+    #412
+    ( ( layout :: layout :: RadioButton * ) pCaller ) ; } long SvxZoomDialog :: UserHdl ( layout :: RadioButton * pBtn )
+    {
+    fprintf ( ( & __iob [ 2 ] ) , "SvxZoomDialog::UserHdl\n" ) ;
+    bModified |= 1 ;
+    if ( pBtn == & aUserBtn )
+    {
+    aUserEdit . Enable ( ) ;
+    aUserEdit . GrabFocus ( ) ;
+    }
+    else
+    aUserEdit . Disable ( ) ;
+    return 0 ;
+    }
+** LayoutDialogs compilation errors on Windows (--disable-layout?)
+in VCL headers there, need to include more headers to also get stuff like HWND defined.
+
+* code
+** features
+*** support cnt:cnt:? 
+*** support using label (verb) on yes/ok no/cancel buttons for some platforms
+but keep using yes/no on Windows, eg?
+*** remove -DTEST_LAYOUT=1 from util/makefile.mk
+
+** fixes
+*** mpRadioGroup HACK --> use radiogroup property
+*** toolkit/source/awt/vclxwindow.cxx
+   empty-out VCLXWindow::getMinimumSize
+*** missing properties
+	'title' -> 'Set Zoom'
+Missing prop Title
+Missing prop ValueStep
+Missing prop Radiogroup
+Missing prop Default
+*** bug in wordcountdialog: right alignment of numbers `jump' when resizing
+       the dialog.  the 0 and 00 are never exactly aligned.
+*** look into code duplication: source/core/*.
+*** Remove magic constants
+fHorAlign = fVerAlign = 0.5; --> float const [CENTER?] = 0.5;
+
+*** remove stuff?
+
+*** box.hxx: use vbox/hbox polymorphism instead of if (mbHorizontal)
+
+* i18n
+    + forget java property files nonsense
+	- dump old wiki pointers into layout/doc for reference
+    + share code with vcl/source/gdi/impimagetree.cxx
+    + 'layout.zip'?
+    + support multiple translatable attributes
+    + ? rewrite tralay from scratch (in python, perl, c++?) ?
+
+
+* distributing: [LayoutDialogs]
+git diff 5db78fc5 layout scp2 > layout-dialogs-layout.diff
+git diff 5db78fc5 |grep -v gitignore | grep 'git a'|grep -Ev 'a/(layout|scp2)/'|sed -e's@.*git a/@@' -e 's@/.*@@' | sort -u | tr '\n' ' '
+git diff 5db78fc5 $(git diff 5db78fc5 |grep -v gitignore | grep 'git a'| grep -Ev 'a/(layout|scp2)/' | sed -e's@.*git a/@@' -e 's@/.*@@' | sort -u | tr '\n' ' ') > layout-dialogs.diff
+
+Soo...
+
+m237: fc105178
+
+#git diff  offapi toolkit > layout-dialogs-offapi-toolkit.diff
+
+git diff fc105178 layout | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-layout.diff
+git diff fc105178 config_office scp2 | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-config_office-scp2.diff
+git diff fc105178 svx sw | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-svx-sw.diff
+
+m241: 5e9b2546
+m241': b8e24264
+m241'': 53ddc663
+m1: fbde8234
+m1': d1f42c99
+m1'': 1a8dec5c
+m1'''': c93389f7
+
+* porting
+** Zoom dialog
+*** list of radio buttons indented: workben/zoom-indent.xml ?
+** Word Count dialog
+** 'Format' dialog
+TODO
+
+
+* play with / improve Ricardo's editor
+** broken after new uno registration
+	+ this is not meant to be a production level tool, but still,
+	  it can be improved I think :-)
+
+* improve Kohei's converter (poke him on IRC (afternoons) about this)
+
+** current hack: workben/run-s2x
+
+   . Imported into layout
+
+	+ Kohei wrote the start of a nice script to convert ugly,
+	  obsolete resource files to nice new XML files ;-)
+		+ unfortunately it is buggy.
+		+ see ooo-build/scratch/layout-src2xml/*
+		+ we should move this into the git repo.
+	+ bug to fix: case problems in XML
+		+ XML produced has wrong case items, and names are
+		  different to those we (and AWT) expects ->
+		  de-stdlycapsise
+		+ cf. layout/source/core/helper.cxx:
+			toUnoNaming, anyFromString
+			setProperties
+			+ NB. we want to have nice 'clean' looking non-stdlycaps XML
+		+ also toolkit/source/awt/vclxwindows.cxx /ImplGetPropertyIds/
+		+ also toolkit/source/helper/property.cxx
+	+ bug to fix: property name problems
+		+ often the resource name strings (cf. legacy resource
+		  compiler in rsc/) don't match the awt toolkit properties
+		+ ie. need to map Label="foo" to Text="foo" (or whatever).
+
+* OLD notes
+
++ Before OOoCon
+    + editor polish
+	+ cut / paste
+	+ export xml
+	+ "import .src"
+	[ use native VCL menus ... ]
+    + dialogs:
+	+ porting 'Format' dialog.
+	+ wrapper code - improving ...
+    + XML fixes
+	+ "load" command for shared fragments
+    + slides:
+	+ UNO object hierarchy for a given window ...
+
++ Later
+    + dual-compile code under VCL & 'layout' and compare
+      event ordering (eg.).
+	+ test-tool
+    + scrolled-pane impl.
+
