@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:25:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ protected:
     ::rtl::OUString m_aContainerName;
     ::rtl::OUString m_aDefaultParentBaseURL;
     ::rtl::OUString m_aModuleName;
+    sal_Bool        m_bEmbeddedScriptSupport;
 
     Interceptor* m_pInterceptor;
 
