@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,11 +715,6 @@ void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQ
 void OContentHelper::notifyDataSourceModified()
 {
     ::dbaccess::notifyDataSourceModified(m_xParentContainer,sal_True);
-}
-// -----------------------------------------------------------------------------
-Reference< XStorage> OContentHelper::getStorage() const
-{
-    return NULL;
 }
 //........................................................................
 }   // namespace dbaccess
