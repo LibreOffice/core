@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:24:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,8 +143,15 @@
 #ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
 #include "defaultobjectnamecheck.hxx"
 #endif
-
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 //........................................................................
 namespace dbaui
@@ -163,34 +170,34 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
+using ::com::sun::star::util::XCloseable;
 //........................................................................
 // -----------------------------------------------------------------------------
 
 class CloseChecker : public ::cppu::WeakImplHelper1< com::sun::star::lang::XEventListener >
 {
-    sal_Bool m_bClosed;
+    bool    m_bClosed;
+
 public:
     CloseChecker()
-            :m_bClosed(sal_False)
-        {
-            // DBG_CTOR(CloseChecker,NULL);
-
-        }
-    virtual ~CloseChecker()
-        {
-            // DBG_DTOR(CloseChecker,NULL);
-        }
-
-    sal_Bool isClosed()
+        :m_bClosed( false )
     {
-        return m_bClosed;
     }
-    // interface ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
-        {
-            (void)Source;
-            m_bClosed = sal_True;
-        }
+
+    virtual ~CloseChecker()
+    {
+    }
+
+    bool isClosed()
+    {
+        return true;
+    }
+
+    // interface XEventListener
+    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException )
+    {
+        m_bClosed = true;
+    }
 
 };
 // -----------------------------------------------------------------------------
@@ -416,6 +423,15 @@ Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
 }
 
 // -----------------------------------------------------------------------------
+Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Sequence< Reference< XComponent > > aComponents( m_aDocuments.size() );
+    ::std::transform( m_aDocuments.begin(), m_aDocuments.end(), aComponents.getArray(), ::std::select1st< TDocuments::value_type >() );
+    return aComponents;
+}
+
+// -----------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -439,6 +455,103 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
     return isConnected();
 }
 
+// -----------------------------------------------------------------------------
+namespace
+{
+    static Reference< XController > lcl_getController( const OApplicationController::TDocuments::iterator& _docPos )
+    {
+        Reference< XController > xController;
+
+        Reference< XComponent > xComponent( _docPos->first );
+        Reference< XModel > xModel( xComponent, UNO_QUERY );
+        if ( xModel.is() )
+            xController = xModel->getCurrentController();
+        else
+        {
+            xController.set( xComponent, UNO_QUERY );
+            if ( !xController.is() )
+            {
+                Reference<XFrame> xFrame( xComponent, UNO_QUERY );
+                if ( xFrame.is() )
+                    xController = xFrame->getController();
+            }
+        }
+        return xController;
+    }
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    try
+    {
+        typedef ::std::vector< Reference< XComponent > > ComponentArray;
+        ComponentArray aClosedComponents;
+
+        TDocuments aDocuments( m_aDocuments );
+        for (   TDocuments::iterator doc = aDocuments.begin();
+                doc != aDocuments.end();
+                ++doc
+            )
+        {
+            Reference< XController > xController( lcl_getController( doc ) );
+            OSL_ENSURE( xController.is(), "OApplicationController::closeSubComponents: did not find the sub controller!" );
+
+            // suspend the controller in the document
+            if  (   !xController.is()
+                ||  !xController->suspend( sal_True )
+                )
+                // break complete operation, no sense in continueing
+                break;
+
+            // revoke event listener
+            Reference< XComponent > xDocument = doc->first;
+            if ( xDocument.is() )
+                xDocument->removeEventListener( static_cast< XFrameActionListener* >( this ) );
+
+            bool bClosedSubDoc = false;
+            try
+            {
+                Reference< XCloseable > xCloseable( xController->getFrame(), UNO_QUERY_THROW );
+                xCloseable->close( sal_True );
+                bClosedSubDoc = true;
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            if ( !bClosedSubDoc )
+                // no sense in continueing with the other docs
+                break;
+
+            aClosedComponents.push_back( doc->first );
+        }
+
+        // now remove all the components which we could successfully close
+        // (this might be none, or all, or something inbetween) from m_aDocuments
+        for (   ComponentArray::const_iterator comp = aClosedComponents.begin();
+                comp != aClosedComponents.end();
+                ++comp
+            )
+        {
+            TDocuments::iterator pos = m_aDocuments.find( *comp );
+            OSL_ENSURE( pos != m_aDocuments.end(),
+                "OApplicationController::closeSubComponents: closed a component which doesn't exist anymore!" );
+            if ( pos !=m_aDocuments.end() )
+                m_aDocuments.erase( pos );
+        }
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return m_aDocuments.empty();
+}
 
 // -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
@@ -450,32 +563,17 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     {
         try
         {
-            Sequence<PropertyValue> aFields;
-            m_xDataSource->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aFields;
-            PropertyValue *pIter = aFields.getArray();
-            PropertyValue *pEnd = pIter + aFields.getLength();
-            const static ::rtl::OUString s_sPreview(RTL_CONSTASCII_USTRINGPARAM("Preview"));
-            for (; pIter != pEnd && pIter->Name != s_sPreview; ++pIter)
-                ;
-
-            if ( pIter == pEnd )
-            {
-                sal_Int32 nLen = aFields.getLength();
-                aFields.realloc( nLen + 1 );
-                pIter = aFields.getArray() + nLen;
-                pIter->Name = s_sPreview;
-            }
-            sal_Int32 nOldMode = 0;
-            pIter->Value >>= nOldMode;
+            ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
+            sal_Int32 nOldMode = aLayoutInfo.getOrDefault( "Preview", _nMode );
             if ( nOldMode != _nMode )
             {
-                pIter->Value <<= _nMode;
-                m_xDataSource->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aFields));
+                aLayoutInfo.put( "Preview", _nMode );
+                m_xDataSource->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aLayoutInfo.getPropertyValues() ) );
             }
         }
-        catch(Exception)
+        catch ( const Exception& )
         {
-            OSL_ENSURE(0,"Exception caught!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     InvalidateFeature(SID_DB_APP_DISABLE_PREVIEW);
@@ -511,7 +609,7 @@ void OApplicationController::askToReconnect()
             switch (aQry.Execute())
             {
                 case RET_YES:
-                    suspendDocuments(sal_True);
+                    closeSubComponents();
                     break;
                 default:
                     bClear = sal_False;
@@ -523,124 +621,13 @@ void OApplicationController::askToReconnect()
             ElementType eType = getContainer()->getElementType();
             disconnect();
             getContainer()->getDetailView()->clearPages(sal_False);
-            getContainer()->changeContainer(E_NONE); // invalidate the old selection
-            getContainer()->changeContainer(eType); // reselect the current one again
+            getContainer()->selectContainer(E_NONE); // invalidate the old selection
+            m_eCurrentType = E_NONE;
+            getContainer()->selectContainer(eType); // reselect the current one again
         }
     }
 }
-// -----------------------------------------------------------------------------
-sal_Bool OApplicationController::suspendDocument(const TDocuments::value_type& _aComponent,sal_Bool _bSuspend)
-{
-    sal_Bool bSuspended = sal_True;
-    Reference<XController> xController;
-    Reference<XModel> xModel(_aComponent.first,UNO_QUERY);
-    if ( xModel.is() )
-        xController = xModel->getCurrentController();
-    else
-    {
-        xController.set(_aComponent.first,UNO_QUERY);
-        if ( !xController.is() )
-        {
-            Reference<XFrame> xFrame(_aComponent.first,UNO_QUERY);
-            if ( xFrame.is() )
-                xController = xFrame->getController();
-        }
-    }
 
-    if ( xController.is() && xController != *this )
-    {
-        Reference< XCommandProcessor > xContent(_aComponent.second,UNO_QUERY);
-        if ( xContent.is() )
-        {
-            if ( _bSuspend )
-            {
-                Command aCommand;
-                aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown"));
-                xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()) >>= bSuspended;
-            }
-        }
-        else
-            bSuspended = xController->suspend(_bSuspend);
-    }
-
-    return bSuspended;
-}
-
-// -----------------------------------------------------------------------------
-sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
-{
-    sal_Bool bSubSuspended = sal_True;
-    Reference<XModel> xModel;
-    sal_Int32 nSuspendPos = 1;
-
-    try
-    {
-        TDocuments aCopy = m_aDocuments;
-        TDocuments::iterator aIter = aCopy.begin();
-        TDocuments::iterator aEnd = aCopy.end();
-        for (; aIter != aEnd && bSubSuspended; ++aIter,++nSuspendPos)
-            bSubSuspended = suspendDocument(*aIter,bSuspend);
-    }
-    catch(Exception)
-    {
-    }
-    if ( bSubSuspended && !m_aDocuments.empty() )
-    {
-        try
-        {
-            TDocuments::iterator document = m_aDocuments.begin();
-            TDocuments::iterator documentEnd = m_aDocuments.end();
-            for (; document != documentEnd ;  ++document)
-            {
-                Reference< XComponent > xDocument = document->first;
-                if ( xDocument.is() )
-                    xDocument->removeEventListener(static_cast<XFrameActionListener*>(this));
-
-                Reference<XFrame> xFrame(document->first,UNO_QUERY);
-                if ( xFrame.is() )
-                {
-                    Reference<XController> xController = xFrame->getController();
-                    if ( xController.is() )
-                    {
-                        Reference< com::sun::star::util::XCloseable> xCloseable(xController->getFrame(),UNO_QUERY);
-                        if ( xCloseable.is() )
-                            xCloseable->close(sal_True);
-                    }
-                }
-            }
-            document = m_aDocuments.begin();
-            // first of all we have to set the second to NULL
-            for (; document != documentEnd ;  )
-            {
-                TDocuments::iterator aPos = document++;
-                aPos->second = NULL; // this may also dispose the document
-            }
-        }
-        catch(Exception)
-        {
-        }
-        if ( bSubSuspended )
-        {
-            // remove the document only at save or discard, but not at cancel state.
-            m_aDocuments.clear();
-        }
-    }
-    else // resuspend the documents again
-    {
-        TDocuments::iterator aIter = m_aDocuments.begin();
-        TDocuments::iterator aEnd = m_aDocuments.end();
-        try
-        {
-            for (; aIter != aEnd && nSuspendPos ; ++aIter,--nSuspendPos)
-                suspendDocument(*aIter,!bSuspend);
-        }
-        catch(Exception)
-        {
-        }
-    }
-
-    return bSubSuspended;
-}
 // -----------------------------------------------------------------------------
 ::rtl::OUString OApplicationController::getStrippedDatabaseName() const
 {
@@ -786,7 +773,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::E
             eResult = aSendMail.AttachDocument(aDocTypeString,xModel,componentIter->first);
         }
         if ( !aSendMail.IsEmpty() )
-            aSendMail.Send( m_xCurrentFrame );
+            aSendMail.Send( getFrame() );
     }
 }
 // -----------------------------------------------------------------------------
