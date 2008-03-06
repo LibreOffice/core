@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-20 13:58:48 $
+#   last change: $Author: kz $ $Date: 2008-03-06 19:24:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ SLOFILES=\
         $(SLO)$/asynclink.obj \
         $(SLO)$/urlcontrol.obj \
         $(SLO)$/fileurlbox.obj \
-        $(SLO)$/wizardheader.obj \
         $(SLO)$/ctrltool.obj  \
         $(SLO)$/ctrlbox.obj  \
         $(SLO)$/stdctrl.obj  \
