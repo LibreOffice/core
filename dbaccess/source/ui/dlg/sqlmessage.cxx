@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:58:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,6 +514,7 @@ namespace
         case BUTTON_OK:     nButtonID = BUTTONID_OK; break;
         case BUTTON_CANCEL: nButtonID = BUTTONID_CANCEL; break;
         case BUTTON_RETRY:  nButtonID = BUTTONID_RETRY; break;
+        case BUTTON_HELP:   nButtonID = BUTTONID_HELP; break;
         default:
             OSL_ENSURE( false, "lcl_addButton: invalid button id!" );
             break;
@@ -673,6 +674,16 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
         AddButton( BUTTON_OK, BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
     }
 
+    if ( m_sHelpURL.getLength() )
+    {
+        lcl_addButton( *this, BUTTON_HELP, false );
+
+        SmartId aHelpId( m_sHelpURL );
+        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
+            aHelpId = SmartId( m_sHelpURL.copy( 4 ).toInt32() );
+
+        SetSmartHelpId( aHelpId );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -720,29 +731,19 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLException& _rError, WinBits _nStyle, MessageType _eImage)
-    :ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-    ,m_aInfoImage(this)
-    ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-    ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-    ,m_pImpl( new SQLMessageBox_Impl( SQLExceptionInfo( _rError ) ) )
-{
-    Construct( _nStyle, _eImage );
-}
-
-//------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, MessageType _eImage)
+OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const ::rtl::OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
     ,m_aMessage( this, WB_WORDBREAK | WB_LEFT )
+    ,m_sHelpURL( _rHelpURL )
     ,m_pImpl( new SQLMessageBox_Impl( _rException ) )
 {
-    Construct( _nStyle, _eImage );
+    Construct( _nStyle, AUTO );
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eImage, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
@@ -756,7 +757,7 @@ OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, cons
 
     m_pImpl.reset( new SQLMessageBox_Impl( SQLExceptionInfo( aError ) ) );
 
-    Construct( _nStyle, _eImage );
+    Construct( _nStyle, _eType );
 }
 
 //--------------------------------------------------------------------------
