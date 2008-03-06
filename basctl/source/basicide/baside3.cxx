@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:03:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:11:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -698,7 +698,7 @@ void DialogWindow::DisableBrowser()
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( 0 );
+        ((PropBrw*)(pChildWin->GetWindow()))->Update( NULL );
 }
 
 void DialogWindow::UpdateBrowser()
@@ -707,7 +707,7 @@ void DialogWindow::UpdateBrowser()
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
+        ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
 static ::rtl::OUString aResourceResolverPropName =
