@@ -6,4 +6,7 @@ ti	toolkit\source\helper					nmake	-	all	ti_helper  ti_inc NULL
 ti	toolkit\source\awt						nmake	-	all	ti_awt  ti_inc NULL
 ti	toolkit\source\controls					nmake	-	all	ti_controls  ti_inc NULL
 ti	toolkit\source\controls\tree			nmake	-	all	ti_tree  NULL
-ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_helper ti_tree NULL
+ti	toolkit\source\layout    nmake	-	all	ti_layout NULL
+ti	toolkit\source\vclcompat nmake	-	all	ti_vclcompat NULL
+ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_layout ti_helper ti_tree ti_vclcompat NULL
+ti	toolkit\workben\layout   nmake	-	all	ti_layout_workben ti_util NULL
