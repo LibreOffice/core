@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Tools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:58:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 // #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
@@ -544,13 +545,22 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
         if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
             return true;
         if( (OBJECTTYPE_DATA_CURVE_EQUATION == aObjectType) || (OBJECTTYPE_DATA_CURVE == aObjectType) ||
-            (OBJECTTYPE_DATA_AVERAGE_LINE == aObjectType))
+            (OBJECTTYPE_DATA_AVERAGE_LINE == aObjectType) || (OBJECTTYPE_DATA_ERRORS == aObjectType))
             return true;
         if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
             return true;
     }
 
     return false;
+}
+
+void ChartController::impl_ClearSelection()
+{
+    if( m_aSelection.hasSelection())
+    {
+        m_aSelection.clearSelection();
+        impl_notifySelectionChangeListeners();
+    }
 }
 
 bool ChartController::executeDispatch_Delete()
@@ -566,7 +576,7 @@ bool ChartController::executeDispatch_Delete()
             return false;
 
         //remove chart object
-        m_aSelection.clearSelection();
+        impl_ClearSelection();
 
         uno::Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
         if( !xChartDoc.is() )
@@ -670,6 +680,30 @@ bool ChartController::executeDispatch_Delete()
                 break;
             }
 
+            case OBJECTTYPE_DATA_ERRORS:
+            {
+                uno::Reference< beans::XPropertySet > xErrorBarProp(
+                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                if( xErrorBarProp.is())
+                {
+                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    // using assignment for broken gcc 3.3
+                    UndoGuard aUndoGuard = UndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_INDICATOR )))),
+                        m_xUndoManager, xModel );
+                    {
+                        ControllerLockGuard aCtlLockGuard( xModel );
+                        xErrorBarProp->setPropertyValue(
+                            C2U("ErrorBarStyle"),
+                            uno::makeAny( ::com::sun::star::chart::ErrorBarStyle::NONE ));
+                    }
+                    bReturn = true;
+                    aUndoGuard.commitAction();
+                }
+                break;
+            }
+
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_LABEL:
             {
@@ -713,7 +747,7 @@ bool ChartController::executeDispatch_Delete()
         uno::Reference< drawing::XShape > xShape( m_aSelection.getSelectedAdditionalShape() );
         if( xShape.is() )
         {
-            m_aSelection.clearSelection();
+            impl_ClearSelection();
             {
                 ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
                 if( m_pDrawViewWrapper )
