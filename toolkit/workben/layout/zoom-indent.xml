@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="dialog" title="Set Zoom" optimumsize="true"
+         help-id="SID_ATTR_ZOOM"
+             has_border="true" sizeable="true" moveable="true">
+    <hbox border="5" spacing="0">
+        <vbox spacing="0">
+        <fixedline id="FixedLine" text="Zoom factor" cnt:expand="true"/>
+        <hbox> <!-- for left margin !-->
+        <vbox cnt:padding="13" spacing="4" cnt:expand="true">
+            <radiobutton radiogroup="zoom" id="WholePage" label="Whole Page"/>
+            <radiobutton radiogroup="zoom" id="PageWidth" label="Page Width"/>
+            <radiobutton radiogroup="zoom" id="Optimal"   label="Optimal"/>
+            <radiobutton radiogroup="zoom" id="Zoom200"   label="~200 %"/>
+            <radiobutton radiogroup="zoom" id="Zoom150"   label="15~0 %"/>
+            <radiobutton radiogroup="zoom" id="Zoom100"   label="~100 %"/>
+            <radiobutton radiogroup="zoom" id="Zoom75"    label="~75 %"/>
+            <radiobutton radiogroup="zoom" id="Zoom50"    label="~50 %"/>
+            <hbox cnt:expand="false">
+            <align cnt:expand="false">
+                <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom" id="BtnUser" label="~Variable"/>
+            </align>
+            <flow cnt:padding="10" cnt:expand="false"/>
+            <metricfield id="User" value-step="1"
+                     repeat="true" has_border="true" spin="true"
+                     text="100%" unit="11" custom-unit-text="%"
+                     right="true"/>
+            <flow cnt:padding="10" cnt:expand="true"/>
+            </hbox>
+        </vbox>
+        </hbox>
+    </vbox>
+    <vbox border="6" spacing="4">
+        <okbutton     id="OkButton"     cnt:expand="false" default="true"/>
+        <cancelbutton id="CancelButton" cnt:expand="false"/>
+        <helpbutton   id="HelpButton"   cnt:expand="false"/>
+    </vbox>
+    </hbox>
+</modaldialog>

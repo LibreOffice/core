@@ -1,0 +1,20 @@
+
+
+<modaldialog sizeable="true" height="142" help-id="SID_ATTR_ZOOM" moveable="true" output-size="true" id="RID_SVXDLG_ZOOM" sv-look="true" text="Zoom" width="160" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <vbox>
+        <fixedline height="8" id="FL_ZOOM" text="Zoom factor" width="92" x="6" y="3"/>
+        <okbutton def-button="true" height="14" id="BTN_ZOOM_OK" width="50" x="104" y="6"/>
+        <radiobutton height="10" id="BTN_WHOLE_PAGE" width="80" x="12" y="14"/>
+        <cancelbutton height="14" id="BTN_ZOOM_CANCEL" width="50" x="104" y="23"/>
+        <radiobutton height="10" id="BTN_PAGE_WIDTH" width="80" x="12" y="27"/>
+        <radiobutton height="10" id="BTN_OPTIMAL" width="80" x="12" y="40"/>
+        <helpbutton height="14" id="BTN_ZOOM_HELP" width="50" x="104" y="43"/>
+        <radiobutton height="10" id="BTN_200" label="~200 %" width="80" x="12" y="53"/>
+        <radiobutton height="10" id="BTN_150" label="15~0 %" width="80" x="12" y="66"/>
+        <radiobutton height="10" id="BTN_100" label="~100 %" width="80" x="12" y="79"/>
+        <radiobutton height="10" id="BTN_75" label="~75 %" width="80" x="12" y="92"/>
+        <radiobutton height="10" id="BTN_50" label="~50 %" width="80" x="12" y="105"/>
+        <metricfield has_border="true" custom-unit-text="%" group="true" height="12" left="true" repeat="true" id="ED_USER" spin="true" step-size="1" unit="FUNIT_CUSTOM" width="36" x="56" y="120"/>
+        <radiobutton height="10" id="BTN_USER" label="~Variable" width="42" x="12" y="121"/>
+    </vbox>
+</modaldialog>

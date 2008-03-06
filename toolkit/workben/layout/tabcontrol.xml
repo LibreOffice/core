@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="TabControl Test" optimumsize="true"
+        has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <tabcontrol>
+-           <pushbutton label="Child 1" cnt:title="Page 1" />
+            <edit has_border="true" text="Child 2" cnt:title="Page 2" />
+            <vbox cnt:title="Page 3">
+                <pushbutton label="Child 3"/>
+                <edit has_border="true" text="Child 4" />
+            </vbox>
+        </tabcontrol>
+        <okbutton cnt:expand="false" />
+    </vbox>
+</dialog>

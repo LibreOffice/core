@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             help-id="HID_DLG_WORDCOUNT"
+             id="dialog"
+             sizeable="true" moveable="true" optimumsize="true"
+             has_border="true" sv-look="true" _title="Word Count">
+    <vbox border="5" spacing="5">
+        <fixedline id="FL_CURRENT" _text="Current selection"/>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <hbox>
+            <fixedtext id="FT_CURRENTWORD" _label="Words:"/>
+            <flow cnt:padding="60"/>
+            <fixedtext id="FI_CURRENTWORD" right="true" _label="0"/>
+        </hbox>
+        <hbox>
+            <fixedtext id="FT_CURRENTCHARACTER" _label="Characters:"/>
+            <flow cnt:padding="60"/>
+            <fixedtext id="FI_CURRENTCHARACTER" right="true" _label="00"/>
+        </hbox>
+        </vbox>
+    </hbox>
+    <!-- if we could do cnt:cnt:padding="-13" here, we would not have to close
+         and reope the hbox/vbox thing !-->
+        <fixedline id="FL_DOC" _text="Whole document"/>
+    <hbox>
+        <vbox cnt:padding="13" spacing="5">
+        <hbox>
+            <fixedtext id="FT_DOCWORD" _label="Words:"/>
+            <fixedtext id="FI_DOCWORD" right="true" _label="000"/>
+        </hbox>
+        <hbox>
+            <fixedtext id="FT_DOCCHARACTER" _label="Characters:"/>
+            <fixedtext id="FI_DOCCHARACTER" right="true" _label="0000"/>
+        </hbox>
+        </vbox>
+    </hbox>
+        <fixedline cnt:padding="1" id="FL_BOTTOM"/>
+    <dialogbuttonhbox spacing="5">
+            <flow/>
+            <okbutton id="PB_OK"/>
+            <helpbutton id="PB_HELP"/>
+        </dialogbuttonhbox>
+    </vbox>
+</modaldialog>

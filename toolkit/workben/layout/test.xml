@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             title="Interactable Containers" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true">
+    <tabcontrol>
+        <tabpage cnt:title="Page">
+            <pushbutton label="Test" />
+        </tabpage>
+    </tabcontrol>
+</dialog>

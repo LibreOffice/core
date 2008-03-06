@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="dialog" optimumsize="true"
+         help-id="SID_ATTR_ZOOM"
+             has_border="true" sizeable="true" moveable="true">
+     <title id="tit" xml-lang="en-US">Set Zoom</title>
+     <vbox spacing="5" border="5">
+        <fixedline id="FL_ZOOM" cnt:expand="true" xml-lang="en-US">Zoom factor</fixedline>
+    <radiobutton radiogroup="zoom" id="BTN_WHOLE_PAGE" xml-lang="en-US">Whole Page</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_PAGE_WIDTH" xml-lang="en-US">Page Width</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_OPTIMAL"  xml-lang="en-US">Optimal</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_200"  xml-lang="en-US">200 %</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_150"  xml-lang="en-US">15~0 %</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_100"  xml-lang="en-US">100 %</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_75"   xml-lang="en-US">75 %</radiobutton>
+    <radiobutton radiogroup="zoom" id="BTN_50"   xml-lang="en-US">50 %</radiobutton>
+    <hbox cnt:expand="false" cnt:fill="true">
+        <align cnt:expand="false" cnt:fill="true">
+            <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom" id="BTN_USER" xml-lang="en-US">Variable</radiobutton>
+        </align>
+        <flow cnt:padding="10" cnt:expand="false"/>
+        <metricfield id="ED_USER" value-step="1"
+             repeat="true" has_border="true" spin="true"
+             text="100%" unit="13" custom-unit-text="%"
+             right="true"
+             cnt:expand="false"/>
+    </hbox>
+        <fixedline cnt:padding="1" id="FL_BOTTOM"/>
+    <dialogbuttonhbox border="5" spacing="5">
+        <flow/>
+        <okbutton     id="BTN_ZOOM_OK"/>
+        <cancelbutton id="BTN_ZOOM_CANCEL"/>
+        <helpbutton   id="BTN_ZOOM_HELP"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>
