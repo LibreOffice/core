@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:57:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,12 @@
 #include "ObjectIdentifier.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "RegressionCurveItemConverter.hxx"
+#include "StatisticsHelper.hxx"
+#include "ErrorBarItemConverter.hxx"
+#include "MultipleItemConverter.hxx"
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #include <svx/ActionDescriptionProvider.hxx>
@@ -324,7 +328,9 @@ void SAL_CALL ChartController::executeDispatch_InsertYErrorbars()
 
         //prepare and open dialog
         ::vos::OGuard aGuard( Application::GetSolarMutex());
-        InsertErrorBarsDialog aDlg( m_pChartWindow, aItemSet);
+        InsertErrorBarsDialog aDlg(
+            m_pChartWindow, aItemSet,
+            uno::Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY ));
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, rtl::OUString() ) );
 
@@ -460,6 +466,56 @@ void SAL_CALL ChartController::executeDispatch_InsertTrendline()
     }
 }
 
+void SAL_CALL ChartController::executeDispatch_InsertYErrorbar()
+{
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is())
+    {
+        UndoLiveUpdateGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_INDICATOR )))),
+            m_xUndoManager, m_aModel->getModel() );
+
+        // add error bars with standard deviation
+        uno::Reference< beans::XPropertySet > xErrorBarProp(
+            StatisticsHelper::addErrorBars( xSeries, m_xCC, ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION ));
+
+        // get an appropriate item converter
+        wrapper::ErrorBarItemConverter aItemConverter(
+            m_aModel->getModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+            m_pDrawModelWrapper->getSdrModel(),
+            uno::Reference< lang::XMultiServiceFactory >( m_aModel->getModel(), uno::UNO_QUERY ));
+
+        // open dialog
+        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemConverter.FillItemSet( aItemSet );
+        ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
+            ObjectIdentifier::createClassifiedIdentifierWithParent(
+                OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), m_aSelection.getSelectedCID()));
+        aDialogParameter.init( m_aModel->getModel() );
+        ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
+        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+                              uno::Reference< util::XNumberFormatsSupplier >( m_aModel->getModel(), uno::UNO_QUERY ));
+        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, m_aSelection.getSelectedCID()));
+
+        // note: when a user pressed "OK" but didn't change any settings in the
+        // dialog, the SfxTabDialog returns "Cancel"
+        if( aDlg.Execute() == RET_OK || aDlg.DialogWasClosedWithOK())
+        {
+            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            if( pOutItemSet )
+            {
+                ControllerLockGuard aCLGuard( m_aModel->getModel());
+                aItemConverter.ApplyItemSet( *pOutItemSet );
+            }
+            aUndoGuard.commitAction();
+        }
+    }
+}
+
 void SAL_CALL ChartController::executeDispatch_InsertTrendlineEquation()
 {
     uno::Reference< chart2::XRegressionCurve > xRegCurve(
@@ -480,6 +536,52 @@ void SAL_CALL ChartController::executeDispatch_InsertTrendlineEquation()
         }
     }
 }
+
+void SAL_CALL ChartController::executeDispatch_DeleteMeanValue()
+{
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
+            m_xUndoManager, m_aModel->getModel());
+        RegressionCurveHelper::removeMeanValueLine( xRegCurveCnt );
+        aUndoGuard.commitAction();
+    }
+}
+
+void SAL_CALL ChartController::executeDispatch_DeleteTrendline()
+{
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
+            m_xUndoManager, m_aModel->getModel());
+        RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCurveCnt );
+        aUndoGuard.commitAction();
+    }
+}
+
+void SAL_CALL ChartController::executeDispatch_DeleteYErrorbar()
+{
+    uno::Reference< chart2::XDataSeries > xDataSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()));
+    if( xDataSeries.is())
+    {
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
+            m_xUndoManager, m_aModel->getModel());
+        StatisticsHelper::removeErrorBars( xDataSeries );
+        aUndoGuard.commitAction();
+    }
+}
+
 
 //.............................................................................
 } //namespace chart
