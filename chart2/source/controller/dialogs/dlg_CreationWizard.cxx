@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_CreationWizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:32:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
                 : svt::RoadmapWizard( pParent, SchResId(DLG_CHART_WIZARD)
                     , ( nOnePageOnlyIndex >= 0 && nOnePageOnlyIndex < nPageCount )
                         ?  WZB_HELP | WZB_CANCEL | WZB_FINISH
-                        :  WZB_HELP | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH , SchResId( STR_WIZARD_ROADMAP_TITLE )
+                        :  WZB_HELP | WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH
                   )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
@@ -206,7 +206,7 @@ sal_Bool CreationWizard::leaveState( WizardState /*_nState*/ )
     return m_bCanTravel;
 }
 
-svt::WizardTypes::WizardState CreationWizard::determineNextState(WizardState nCurrentState)
+svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nCurrentState ) const
 {
     if( !m_bCanTravel )
         return WZS_INVALID_STATE;
@@ -242,7 +242,7 @@ void CreationWizard::setValidPage( TabPage * /* pTabPage */ )
     m_bCanTravel = true;
 }
 
-String CreationWizard::getStateDisplayName( WizardState nState )
+String CreationWizard::getStateDisplayName( WizardState nState ) const
 {
     USHORT nResId = 0;
     switch( nState )
