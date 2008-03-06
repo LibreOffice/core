@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#include "../app/desktop.hrc"
-#include "../inc/helpid.hrc"
+#include "desktop.hrc"
+#include "helpid.hrc"
 
 #define TP_WIDTH 220
 #define TP_HEIGHT 205
