@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DefinitionContent.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:51:03 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DefinitionContent_idl__
+#define __com_sun_star_sdb_DefinitionContent_idl__
+
+#ifndef __com_sun_star_ucb_Content_idl__
+#include <com/sun/star/ucb/Content.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module sdb {
+
+//=============================================================================
+
+/** defines the basic functionality for an object in the hierarchy of sub documents
+    of a <type>OfficeDatabaseDocument</type>.
+
+    @see DocumentDefinition
+    @see DocumentContainer
+ */
+service DefinitionContent
+{
+    /** provides the functionality for treating the object as part of a hierarchy
+        of objects.
+
+        <p>The following commands are commonly supported by the <type scope="com::sun::star::ucb">XCommandProcessor</type>
+        implementation of a <code>DefinitionContent</code>:
+        <ul>
+            <li><strong>getPropertyValues</strong></li>
+            <li><strong>setPropertyValues</strong></li>
+            <li><strong>getPropertysetInfo</strong></li>
+        </ul>
+        </p>
+
+        <p>Additional commands might be supported by derived services.</p>
+    */
+    service ::com::sun::star::ucb::Content;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
+
