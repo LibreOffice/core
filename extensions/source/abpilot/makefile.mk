@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:32:07 $
+#   last change: $Author: kz $ $Date: 2008-03-06 18:38:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,8 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(COMPHELPERLIB)	\
         $(TKLIB)			\
-        $(UNOTOOLSLIB)		
+        $(UNOTOOLSLIB)		\
+        $(SVXLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
