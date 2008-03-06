@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:23:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,7 @@ public:
 
         /* elements must be sequential and changes should be reflected in ScCompiler::pCharTables */
         CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */
+        CONV_ODF,           /* ['doc'#sheet.A1:sheet2.B2] */
         CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
         CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
         CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
