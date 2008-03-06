@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:28:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,8 +247,8 @@ namespace basic
         /** initializes the given library containers, which belong to a document
         */
         void    impl_initDocLibraryContainers_nothrow(
-                    Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries,
-                    Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries
+                    const Reference< XPersistentLibraryContainer >& _rxBasicLibraries,
+                    const Reference< XPersistentLibraryContainer >& _rxDialogLibraries
                 );
 
         // OEventListenerAdapter overridables
@@ -374,7 +374,7 @@ namespace basic
 
         // StarDesktop
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        pBasicManager->InsertGlobalUNOConstant(
+        pBasicManager->SetGlobalUNOConstant(
             "StarDesktop",
             makeAny( xSMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ) )
          );
@@ -439,20 +439,20 @@ namespace basic
     }
 
     //--------------------------------------------------------------------
-    void ImplRepository::impl_initDocLibraryContainers_nothrow( Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries, Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries )
+    void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference< XPersistentLibraryContainer >& _rxBasicLibraries, const Reference< XPersistentLibraryContainer >& _rxDialogLibraries )
     {
-        OSL_PRECOND( _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is(),
+        OSL_PRECOND( _rxBasicLibraries.is() && _rxDialogLibraries.is(),
             "ImplRepository::impl_initDocLibraryContainers_nothrow: illegal library containers, this will crash!" );
 
         try
         {
             // ensure there's a standard library in the basic container
             ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-            if ( !_out_rxBasicLibraries->hasByName( aStdLibName ) )
-                _out_rxBasicLibraries->createLibrary( aStdLibName );
+            if ( !_rxBasicLibraries->hasByName( aStdLibName ) )
+                _rxBasicLibraries->createLibrary( aStdLibName );
             // as well as in the dialog container
-            if ( !_out_rxDialogLibraries->hasByName( aStdLibName ) )
-                _out_rxDialogLibraries->createLibrary( aStdLibName );
+            if ( !_rxDialogLibraries->hasByName( aStdLibName ) )
+                _rxDialogLibraries->createLibrary( aStdLibName );
         }
         catch( const Exception& )
         {
@@ -532,7 +532,7 @@ namespace basic
         pBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic
-        pBasicManager->InsertGlobalUNOConstant( "ThisComponent", makeAny( _rxDocumentModel ) );
+        pBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxDocumentModel ) );
 
         // notify
         impl_notifyCreationListeners( _rxDocumentModel, *pBasicManager );
@@ -575,7 +575,7 @@ namespace basic
         {
             Reference< XEmbeddedScripts > xScripts( _rxDocument, UNO_QUERY_THROW );
             _out_rxBasicLibraries.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
-            _out_rxDialogLibraries.set(xScripts->getDialogLibraries(), UNO_QUERY_THROW );
+            _out_rxDialogLibraries.set( xScripts->getDialogLibraries(), UNO_QUERY_THROW );
         }
         catch( const Exception& )
         {
