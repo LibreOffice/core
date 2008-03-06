@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:42:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,16 +147,16 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OTableSelectionPage::determineNextButtonState()
+    bool OTableSelectionPage::canAdvance() const
     {
-        if (!OControlWizardPage::determineNextButtonState())
-            return sal_False;
+        if (!OControlWizardPage::canAdvance())
+            return false;
 
         if (0 == m_aDatasource.GetSelectEntryCount())
-            return sal_False;
+            return false;
 
         if (0 == m_aTable.GetSelectEntryCount())
-            return sal_False;
+            return false;
 
         return sal_True;
     }
@@ -211,7 +211,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OTableSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OTableSelectionPage::commitPage( CommitPageReason _eReason )
     {
         if (!OControlWizardPage::commitPage(_eReason))
             return sal_False;
@@ -291,7 +291,7 @@ namespace dbp
         {
         }
 
-        implCheckNextButton();
+        updateDialogTravelUI();
 
         return 0L;
     }
@@ -538,7 +538,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ODBFieldPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool ODBFieldPage::commitPage( CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return sal_False;
