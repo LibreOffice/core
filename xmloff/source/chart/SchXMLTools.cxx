@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -361,8 +362,23 @@ void CreateCategories(
                                     GetNewLabeledDataSequence());
                                 try
                                 {
-                                    xLabeledSeq->setValues(
-                                        xDataProvider->createDataSequenceByRangeRepresentation( rRangeAddress ));
+                                    OUString aConvertedRange( rRangeAddress );
+                                    bool bRangeConverted = false;
+                                    if( ! (xNewDoc->hasInternalDataProvider() &&
+                                           aConvertedRange.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("categories"))))
+                                    {
+                                        Reference< chart2::data::XRangeXMLConversion > xXMLConv( xDataProvider, uno::UNO_QUERY );
+                                        if( xXMLConv.is())
+                                        {
+                                            aConvertedRange = xXMLConv->convertRangeFromXML( rRangeAddress );
+                                            bRangeConverted = true;
+                                        }
+                                    }
+                                    Reference< chart2::data::XDataSequence > xSeq(
+                                        xDataProvider->createDataSequenceByRangeRepresentation( aConvertedRange ));
+                                    xLabeledSeq->setValues( xSeq );
+                                    if( bRangeConverted )
+                                        setXMLRangePropertyAtDataSequence( xSeq, rRangeAddress );
                                 }
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
@@ -502,6 +518,61 @@ Reference< chart2::XRegressionCurve > getRegressionCurve(
         }
     }
     return xResult;
+}
+
+void setXMLRangePropertyAtDataSequence(
+    const Reference< chart2::data::XDataSequence > & xDataSequence,
+    const OUString & rXMLRange )
+{
+    if( !xDataSequence.is())
+        return;
+    try
+    {
+        const OUString aXMLRangePropName( RTL_CONSTASCII_USTRINGPARAM( "CachedXMLRange" ));
+        Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
+        Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
+        if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
+            xProp->setPropertyValue( aXMLRangePropName, uno::makeAny( rXMLRange ));
+    }
+    catch( const uno::Exception & ex )
+    {
+        (void)ex; // avoid warning for pro build
+        OSL_ENSURE( false, ::rtl::OUStringToOString(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
+                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
+}
+
+bool getXMLRangePropertyFromDataSequence(
+    const Reference< chart2::data::XDataSequence > & xDataSequence,
+    OUString & rOutXMLRange,
+    bool bClearProp /* = false */)
+{
+    bool bResult = false;
+    if( xDataSequence.is())
+    {
+        try
+        {
+            const OUString aXMLRangePropName( RTL_CONSTASCII_USTRINGPARAM( "CachedXMLRange" ));
+            Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
+            Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
+            bResult =
+                ( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ) &&
+                  ( xProp->getPropertyValue( aXMLRangePropName ) >>= rOutXMLRange ) &&
+                  rOutXMLRange.getLength());
+            // clear the property after usage
+            if( bClearProp && bResult )
+                xProp->setPropertyValue( aXMLRangePropName, uno::Any( OUString()));
+        }
+        catch( const uno::Exception & ex )
+        {
+            (void)ex; // avoid warning for pro build
+            OSL_ENSURE( false, ::rtl::OUStringToOString(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
+                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        }
+    }
+    return bResult;
 }
 
 } // namespace SchXMLTools
