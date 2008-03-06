@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:01:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
                     nTab++;
                     if ( nTab > nEndTab )
                     {
-                        rValue = 0.0;
+                        // rValue = 0.0;    //! do not change caller's value!
                         rErr = 0;
                         return FALSE;               // Ende und Aus
                     }
@@ -524,7 +524,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                 nCol++;
                 if ( nCol > aParam.nCol2 )
                 {
-                    rValue = 0.0;
+                    // rValue = 0.0;    // do not change caller's value!
                     rErr = 0;
                     return FALSE;               // Ende und Aus
                 }
@@ -567,7 +567,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                                 rValue = ((ScFormulaCell*)pCell)->GetValue();
                                 pDoc->GetNumberFormatInfo( nNumFmtType,
                                     nNumFmtIndex, ScAddress( nCol, nRow, nTab ),
-                                    *((ScFormulaCell*)pCell) );
+                                    pCell );
                                 rErr = ((ScFormulaCell*)pCell)->GetErrCode();
                                 return TRUE;    // gefunden
                             }
