@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:46:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,11 @@
 #ifndef CHART2_STATISTICSHELPER_HXX
 #define CHART2_STATISTICSHELPER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 
 namespace chart
 {
@@ -60,6 +62,72 @@ public:
 
     // also called "Standard deviation of the mean (SDOM)"
     static double getStandardError( const ::com::sun::star::uno::Sequence< double > & rData );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XLabeledDataSequence >
+        getErrorLabeledDataSequenceFromDataSource(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+            bool bPositiveValue,
+            bool bYError = true );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence >
+        getErrorDataSequenceFromDataSource(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+            bool bPositiveValue,
+            bool bYError = true );
+
+    static double getErrorFromDataSource(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+        sal_Int32 nIndex,
+        bool bPositiveValue,
+        bool bYError = true );
+
+    static void setErrorDataSequence(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
+        const ::rtl::OUString & rNewRange,
+        bool bPositiveValue,
+        bool bYError = true,
+        ::rtl::OUString * pXMLRange = 0 );
+
+    /// @return the newly created or existing error bar object
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >
+        addErrorBars(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext > & xContext,
+            sal_Int32 nStyle,
+            bool bYError = true );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >
+        getErrorBars(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+            bool bYError = true );
+
+    static bool hasErrorBars(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        bool bYError = true );
+
+    static void removeErrorBars(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        bool bYError = true );
+
+    static bool usesErrorBarRanges(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        bool bYError = true );
 
 private:
     // not implemented
