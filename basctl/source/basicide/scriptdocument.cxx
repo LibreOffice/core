@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdocument.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:24:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1332,9 +1332,12 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, false ) );
-            if ( xLib.is() )
-                aModuleNames = xLib->getElementNames();
+            if ( hasLibrary( _eType, _rLibName ) )
+            {
+                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, false ) );
+                if ( xLib.is() )
+                    aModuleNames = xLib->getElementNames();
+            }
         }
         catch( const Exception& )
         {
