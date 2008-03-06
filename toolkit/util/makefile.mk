@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:26:45 $
+#   last change: $Author: kz $ $Date: 2008-03-06 11:55:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,32 @@ RESLIB1IMAGES=$(PRJ)$/source$/awt
 RES1FILELIST=$(SRS)$/awt.srs
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+
+TARGET2 = tklayout
+LIB2FILES= \
+    $(SLB)$/layout_awt.lib \
+    $(SLB)$/layoutcore.lib \
+    $(SLB)$/vclcompat.lib
+
+LIB2TARGET= $(SLB)$/$(TARGET2).lib
+SHL2TARGET= $(TARGET2)$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= $(TARGET2)
+
+SHL2LIBS= $(LIB2TARGET)
+
+SHL2STDLIBS=  \
+    $(UNOTOOLSLIB) \
+    $(TKLIB) \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
+    $(VCLLIB) \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(SALLIB) \
+
+.ENDIF # ENABLE_LAYOUT == "TRUE"
 
 # --- Footer -------------------------------------------------------------
 .INCLUDE :	target.mk
