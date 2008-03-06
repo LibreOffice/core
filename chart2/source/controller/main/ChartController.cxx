@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:57:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1094,8 +1094,16 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))
          this->executeDispatch_InsertTrendline();
+    else if( aCommand.equals("DeleteTrendline"))
+         this->executeDispatch_DeleteTrendline();
     else if( aCommand.equals("InsertMeanValue"))
         this->executeDispatch_InsertMeanValue();
+    else if( aCommand.equals("DeleteMeanValue"))
+        this->executeDispatch_DeleteMeanValue();
+    else if( aCommand.equals("InsertYErrorbar"))
+        this->executeDispatch_InsertYErrorbar();
+    else if( aCommand.equals("DeleteYErrorbar"))
+        this->executeDispatch_DeleteYErrorbar();
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
     //format objects
@@ -1409,7 +1417,8 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("InsertAxis") )         ( C2U("InsertGrids") )          ( C2U("InsertStatistics") )
         ( C2U("InsertSymbol") )       ( C2U("InsertTrendline") )      ( C2U("InsertTrendlineEquation") )
         ( C2U("InsertTrendlines") )   ( C2U("InsertMeanValue") )      ( C2U("InsertMeanValues") )
-        ( C2U("InsertYErrorbars") )
+        ( C2U("InsertYErrorbars") )   ( C2U("InsertYErrorbar") )
+        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteYErrorbar") )
         //format objects
 //MENUCHANGE            ( C2U("SelectSourceRanges") )
         ( C2U("DiagramObjects") )     ( C2U("TransformDialog") )
