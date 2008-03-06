@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:10:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:46:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 String RID_KEEP_PASSWORD
 {
-    Text [ en-US ] = "~Remember password till end of session";
+    Text [ en-US ] = "~Remember password until end of session";
 };
 
 String RID_SAVE_PASSWORD
