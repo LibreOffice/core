@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:38:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:00:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ namespace dbaccess
 //=                   document
 //==========================================================================
 
-    typedef ::cppu::ImplHelper1<        ::com::sun::star::embed::XComponentSupplier
-                                >   ODocumentDefinition_Base;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::embed::XComponentSupplier
+                            >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
         :public OContentHelper
@@ -140,7 +140,11 @@ public:
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage() const;
+    /** returns the forms/reports container storage, depending on m_bForm. Our own storage
+        inside this container storage is the one with the name as indicated by m_pImpl->m_aProps.sPersistentName.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        getContainerStorage() const;
 
     sal_Bool save(sal_Bool _bApprove);
     sal_Bool saveAs();
@@ -255,6 +259,10 @@ private:
     void updateDocumentTitle();
 
     void registerProperties();
+
+    /** determines whether the document we represent supports embedded scripts and macros
+    */
+    sal_Bool objectSupportsEmbeddedScripts() const;
 
     //-------------------------------------------------------------------------
     //- commands
