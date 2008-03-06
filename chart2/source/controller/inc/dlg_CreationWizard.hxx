@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_CreationWizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:58:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,10 +84,10 @@ public:
 
 protected:
     virtual sal_Bool        leaveState( WizardState _nState );
-    virtual WizardState     determineNextState(WizardState nCurrentState);
+    virtual WizardState     determineNextState(WizardState nCurrentState) const;
     virtual void            enterState(WizardState nState);
 
-    virtual String  getStateDisplayName( WizardState nState );
+    virtual String  getStateDisplayName( WizardState nState ) const;
 
 private:
     //no default constructor
