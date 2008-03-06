@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:07:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"         // ScRangeList
 #endif
+
+#include "grammar.hxx"
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -756,6 +758,9 @@ protected:
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
 
+            void            SetArrayFormula_Impl( const rtl::OUString& aFormula,
+                                                    const ScGrammar::Grammar eGrammar )
+                                throw(::com::sun::star::uno::RuntimeException);
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -772,6 +777,11 @@ public:
     virtual void SAL_CALL   release() throw();
 
     virtual void            RefChanged();
+
+                            // via getImplementation()
+    virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& aFormula,
+                                    const ScGrammar::Grammar )
+                                throw(::com::sun::star::uno::RuntimeException);
 
     // XCellRange ist Basisklasse von XSheetCellRange und XSheetOperation
 //  operator XCellRangeRef() const  { return (XSheetCellRange*)this; }
@@ -986,6 +996,8 @@ public:
                             // not meant for any other purpose.
     void                    SetFormulaResultString( const ::rtl::OUString& rResult );
     void                    SetFormulaResultDouble( double fResult );
+    void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
+                                                    const ScGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
 
                             // XText
