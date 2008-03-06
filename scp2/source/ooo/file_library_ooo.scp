@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.278 $
+ *  $Revision: 1.279 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 11:41:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -573,6 +573,8 @@ End
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sdbt, sdbt)
+
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbmm, dbmm)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbacfg, dbacfg)
 
