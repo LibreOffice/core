@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:50:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 #ifndef SCH_XMLIMPORT_HXX_
 #include "SchXMLImport.hxx"
 #endif
+// #include "SchXMLChartContext.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-// #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
-// #include <com/sun/star/chart/ChartDataRowSource.hpp>
-// #endif
+
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #include "transporttypes.hxx"
 
@@ -83,6 +83,7 @@ public:
         USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
 // ----------------------------------------
@@ -104,16 +105,23 @@ public:
     /// The data for the ChartDocument is applied linearly
     static void applyTableSimple(
         const SchXMLTable& rTable,
-        com::sun::star::uno::Reference< com::sun::star::chart::XChartDataArray > xData );
+        const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataArray > & xData );
 
     /** The data for the ChartDocument is applied by reading the
         table, the addresses of series, the addresses of labels,
         the cell-range-address for the categories
      */
     static void applyTable( const SchXMLTable& rTable,
-                            const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
-//    ::com::sun::star::chart::ChartDataRowSource eDataRowSource );
+
+    /** Second part of applyTable that has to be called after the data series
+        got their styles set.  This function reorders local data to fit the
+        correct data structure.
+     */
+    static void postProcessTable( const SchXMLTable& rTable,
+                                  const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+                                  com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc,
+                                  ::com::sun::star::chart::ChartDataRowSource eDataRowSource );
 };
 
 // ========================================
@@ -217,6 +225,7 @@ private:
     SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
     rtl::OUString maCellContent;
+    rtl::OUString maRangeId;
     sal_Bool mbReadPara;
 
 public:
