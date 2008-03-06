@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:53:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ namespace dbaui
             ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
 
         sal_Int32 nPos = _rDispatchArguments.getLength();
-        _rDispatchArguments.realloc( _rDispatchArguments.getLength() + 4 + (m_bTable ? 3 : 0) );
+        _rDispatchArguments.realloc( _rDispatchArguments.getLength() + 3 + ( m_bTable ? 3 : 0 ) );
 
         _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND_TYPE;
         _rDispatchArguments[nPos++].Value <<= (m_bTable ? CommandType::TABLE : CommandType::QUERY);
@@ -368,10 +368,7 @@ namespace dbaui
         _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND;
         _rDispatchArguments[nPos++].Value <<= _rQualifiedName;
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_SHOWTREEVIEW;
-        _rDispatchArguments[nPos++].Value <<= sal_False;
-
-        _rDispatchArguments[nPos  ].Name = PROPERTY_SHOWTREEVIEWBUTTON;
+        _rDispatchArguments[nPos  ].Name = PROPERTY_ENABLE_BROWSER;
         _rDispatchArguments[nPos++].Value <<= sal_False;
 
         if ( m_bTable )
