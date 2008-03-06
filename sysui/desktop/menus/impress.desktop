@@ -1,13 +1,11 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
 Icon=impress
 Type=Application
-InitialPreference=2
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Presentations;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Presentations;
 Exec=openoffice -impress %U
-MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint;application/vnd.ms-powerpoint
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint;application/vnd.ms-powerpoint;
 Name=%PRODUCTNAME Impress
 GenericName=Presentation
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
