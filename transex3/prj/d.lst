@@ -18,6 +18,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\ulfex %_DEST%\bin%_EXT%\ulfex
 ..\%__SRC%\bin\txtconv.exe %_DEST%\bin%_EXT%\txtconv.exe
 ..\%__SRC%\bin\txtconv %_DEST%\bin%_EXT%\txtconv
+..\%__SRC%\bin\tralay.exe %_DEST%\bin%_EXT%\tralay.exe
+..\%__SRC%\bin\tralay %_DEST%\bin%_EXT%\tralay
 
 ..\%__SRC%\class\converter\converter.jar %_DEST%\bin%_EXT%\converter.jar
 ..\%__SRC%\doc\converter_javadoc.zip %_DEST%\bin%_EXT%\converter_javadoc.zip
@@ -30,6 +32,7 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
 ..\inc\transex3\directory.hxx %_DEST%\inc%_EXT%\transex3\directory.hxx
 ..\inc\transex3\file.hxx %_DEST%\inc%_EXT%\transex3\file.hxx
+..\inc\transex3\vosapp.hxx %_DEST%\inc%_EXT%\transex3\vosapp.hxx
 
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
