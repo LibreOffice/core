@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 15:42:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -906,7 +906,7 @@ void SfxViewShell::Activate( BOOL bMDI )
         if ( pSh->GetModel().is() )
             pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame()->GetController() );
 
-        SfxObjectShell::SetWorkingDocument( pSh->GetModel() );
+        SetCurrentDocument();
     }
 }
 
@@ -1808,6 +1808,28 @@ void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
 SfxObjectShell* SfxViewShell::GetObjectShell()
 {
     return pFrame ? pFrame->GetObjectShell() : NULL;
+}
+
+//--------------------------------------------------------------------
+
+Reference< XModel > SfxViewShell::GetCurrentDocument() const
+{
+    Reference< XModel > xDocument;
+
+    const SfxObjectShell* pDocShell( const_cast< SfxViewShell* >( this )->GetObjectShell() );
+    OSL_ENSURE( pDocShell, "SfxViewFrame::GetCurrentDocument: no DocShell!?" );
+    if ( pDocShell )
+        xDocument = pDocShell->GetModel();
+    return xDocument;
+}
+
+//--------------------------------------------------------------------
+
+void SfxViewShell::SetCurrentDocument() const
+{
+    uno::Reference< frame::XModel > xDocument( GetCurrentDocument() );
+    if ( xDocument.is() )
+        SfxObjectShell::SetCurrentComponent( xDocument );
 }
 
 //--------------------------------------------------------------------
