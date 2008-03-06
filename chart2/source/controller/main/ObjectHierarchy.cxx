@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectHierarchy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:55:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -397,9 +397,9 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             (xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp) &&
                             xErrorBarProp.is())
                         {
-                            chart2::ErrorBarStyle eStyle = chart2::ErrorBarStyle_NONE;
-                            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= eStyle ) &&
-                                ( eStyle != chart2::ErrorBarStyle_NONE ) )
+                            sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle ) &&
+                                ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
                             {
                                 aSeriesSubContainer.push_back(
                                     ObjectIdentifier::createClassifiedIdentifierWithParent(
