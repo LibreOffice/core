@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Wizard_TitlesAndObjects.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:52:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ void TitlesAndObjectsTabPage::initializePage()
     m_bCommitToModel = true;
 }
 
-sal_Bool TitlesAndObjectsTabPage::commitPage( COMMIT_REASON /*eReason*/ )
+sal_Bool TitlesAndObjectsTabPage::commitPage( CommitPageReason /*eReason*/ )
 {
     if( m_apTitleResources->IsModified() ) //titles may have changed in the meanwhile
         commitToModel();
@@ -184,9 +184,9 @@ IMPL_LINK( TitlesAndObjectsTabPage, ChangeHdl, void *, EMPTYARG )
     return 0;
 }
 
-sal_Bool TitlesAndObjectsTabPage::determineNextButtonState()
+bool TitlesAndObjectsTabPage::canAdvance() const
 {
-    return sal_False;
+    return false;
 }
 
 
