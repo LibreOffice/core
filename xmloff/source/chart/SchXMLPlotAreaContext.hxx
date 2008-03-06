@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef _SCH_XMLPLOTAREACONTEXT_HXX_
 #define _SCH_XMLPLOTAREACONTEXT_HXX_
 
+#include "SchXMLImport.hxx"
 #include "SchXMLChartContext.hxx"
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -87,6 +88,31 @@ private:
 
 class SchXMLPlotAreaContext : public SvXMLImportContext
 {
+public:
+    SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
+                           SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                           ::com::sun::star::uno::Sequence<
+                               ::com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
+                           ::rtl::OUString& rCategoriesAddress,
+                           ::rtl::OUString& rChartAddress,
+                           sal_Bool & rHasOwnTable,
+                           sal_Bool & rAllRangeAddressesAvailable,
+                           sal_Bool & rColHasLabels,
+                           sal_Bool & rRowHasLabels,
+                           ::com::sun::star::chart::ChartDataRowSource & rDataRowSource,
+                           SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
+                           const ::rtl::OUString& aChartTypeServiceName,
+                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+                           const ::com::sun::star::awt::Size & rChartSize );
+    virtual ~SchXMLPlotAreaContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual SvXMLImportContext* CreateChildContext(
+        USHORT nPrefix,
+        const rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
 private:
     SchXMLImportHelper& mrImportHelper;
     ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
@@ -122,31 +148,6 @@ private:
     sal_Int32 mnCurrentDataIndex;
     bool mbGlobalChartTypeUsedBySeries;
     ::com::sun::star::awt::Size maChartSize;
-
-public:
-    SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
-                           SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                           ::com::sun::star::uno::Sequence<
-                               ::com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
-                           ::rtl::OUString& rCategoriesAddress,
-                           ::rtl::OUString& rChartAddress,
-                           sal_Bool & rHasOwnTable,
-                           sal_Bool & rAllRangeAddressesAvailable,
-                           sal_Bool & rColHasLabels,
-                           sal_Bool & rRowHasLabels,
-                           ::com::sun::star::chart::ChartDataRowSource & rDataRowSource,
-                           SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
-                           const ::rtl::OUString& aChartTypeServiceName,
-                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                           const ::com::sun::star::awt::Size & rChartSize );
-    virtual ~SchXMLPlotAreaContext();
-
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
-        const rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
 };
 
 // ----------------------------------------
