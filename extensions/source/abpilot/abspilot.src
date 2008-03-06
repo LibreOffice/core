@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Closeable       = TRUE ;
     Hide            = TRUE;
 
-#if defined( ABP_USE_ROADMAP )
     String STR_SELECT_ABTYPE
     {
         Text [ en-US ] = "Address book type";
@@ -75,12 +74,6 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     {
         Text [ en-US ] = "Data Source Title";
     };
-
-    String STR_ROADMAP_TITLE
-    {
-        Text [ en-US ] = "Address Book Data Source";
-    };
-#endif
 };
 
 //........................................................................
@@ -88,10 +81,6 @@ TabPage RID_PAGE_SELECTABTYPE
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-#if !defined( ABP_USE_ROADMAP )
-    Text [ en-US ] = "Welcome to the Address Data Source Wizard.";
-#endif
 
     FixedText FT_TYPE_HINTS
     {
@@ -197,10 +186,6 @@ TabPage RID_PAGE_ADMININVOKATION
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-#if !defined( ABP_USE_ROADMAP )
-    Text [ en-US ] = "Additional Settings";
-#endif
-
     FixedText FT_ADMINEXPLANATION
     {
         Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
@@ -235,10 +220,6 @@ TabPage RID_PAGE_TABLESELECTION_AB
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-#if !defined( ABP_USE_ROADMAP )
-    Text [ en-US ] = "Select Table";
-#endif
-
     FixedText FL_TOOMUCHTABLES
     {
         Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
@@ -265,10 +246,6 @@ TabPage RID_PAGE_FIELDMAPPING
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-#if !defined( ABP_USE_ROADMAP )
-    Text [ en-US ] = "Field Assignment";
-#endif
 
     FixedText FT_FIELDASSIGMENTEXPL
     {
@@ -300,10 +277,6 @@ TabPage RID_PAGE_FINAL
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-#if !defined( ABP_USE_ROADMAP )
-    Text [ en-US ] = "Data Source Name";
-#endif
 
     FixedText FT_FINISH_EXPL
     {
@@ -433,9 +406,3 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
-
-String RID_STR_ALREADYEXISTOVERWRITE
-{
-    Text [ en-US ] = "The file already exists. Overwrite?" ;
-};
-
