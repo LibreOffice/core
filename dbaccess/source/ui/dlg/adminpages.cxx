@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:08:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,10 +239,7 @@ namespace dbaui
         ::std::for_each(aControlList.begin(),aControlList.end(),TDeleteWrapperFunctor());
         aControlList.clear();
     }
-    // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::enableHeader( const Bitmap& /*_rBitmap*/, sal_Int32 /*_nPixelHeight*/, GrantAccess )
-    {
-    }
+
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::initializePage()
     {
@@ -251,7 +248,7 @@ namespace dbaui
             Reset(*m_pItemSetHelper->getOutputSet());
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::commitPage(COMMIT_REASON /*_eReason*/)
+    sal_Bool OGenericAdministrationPage::commitPage( CommitPageReason )
     {
         return sal_True;
     }
