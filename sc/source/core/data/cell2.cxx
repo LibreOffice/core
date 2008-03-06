@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:23:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,100 +238,34 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
 
 //---------------------------------------------------------------------
 
-void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML,
-                                       ScAddress::Convention conv ) const
+BOOL ScFormulaCell::IsEmpty()
 {
-    rtl::OUStringBuffer rBuffer( rFormula );
-    GetEnglishFormula( rBuffer, bCompileXML, conv );
-    rFormula = rBuffer;
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
+        Interpret();
+    return aResult.GetCellResultType() == svEmptyCell;
 }
 
-
-void ScFormulaCell::GetEnglishFormulaForPof( rtl::OUStringBuffer &rBuffer,
-        const ScAddress &rPos, BOOL bCompileXML ) const
+BOOL ScFormulaCell::IsEmptyDisplayedAsString()
 {
-    ScTokenArray *pCompileCode = pCode;
-    if (bCompileXML)
-    {
-        /* Scan pCode [ token array ! ] for missing args &
-           re-write if present */
-        if (pCode->NeedsPofRewrite())
-            pCompileCode = pCode->RewriteMissingToPof();
-    }
-
-    ScCompiler aComp( pDocument, rPos, *pCompileCode );
-    aComp.SetCompileEnglish( TRUE );
-    aComp.SetCompileXML( bCompileXML );
-    aComp.CreateStringFromTokenArray( rBuffer );
-
-    if ( pCompileCode != pCode )
-        delete pCompileCode;
-}
-
-void ScFormulaCell::GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML,
-                                       ScAddress::Convention conv ) const
-{
-    //! mit GetFormula zusammenfassen !!!
-
-    if( pCode->GetError() && !pCode->GetLen() )
-    {
-        rBuffer = rtl::OUStringBuffer( ScGlobal::GetErrorString( pCode->GetError()));
-        return;
-    }
-    else if( cMatrixFlag == MM_REFERENCE )
-    {
-        // Referenz auf eine andere Zelle, die eine Matrixformel enthaelt
-        pCode->Reset();
-        ScToken* p = pCode->GetNextReferenceRPN();
-        if( p )
-        {
-            ScBaseCell* pCell;
-            SingleRefData& rRef = p->GetSingleRef();
-            rRef.CalcAbsIfRel( aPos );
-            if ( rRef.Valid() )
-                pCell = pDocument->GetCell( ScAddress( rRef.nCol,
-                    rRef.nRow, rRef.nTab ) );
-            else
-                pCell = NULL;
-            if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-            {
-                ((ScFormulaCell*)pCell)->GetEnglishFormula( rBuffer, bCompileXML, conv);
-                return;
-            }
-            else
-                GetEnglishFormulaForPof( rBuffer, aPos, bCompileXML);
-        }
-        else
-        {
-            DBG_ERROR("ScFormulaCell::GetEnglishFormula: Keine Matrix");
-        }
-    }
-    else
-        GetEnglishFormulaForPof( rBuffer, aPos, bCompileXML);
-
-    sal_Unicode ch('=');
-    rBuffer.insert( 0, &ch, 1 );
-    if( cMatrixFlag )
-    {
-        sal_Unicode ch2('{');
-        rBuffer.insert( 0, &ch2, 1);
-        rBuffer.append( sal_Unicode('}'));
-    }
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
+        Interpret();
+    return aResult.IsEmptyDisplayedAsString();
 }
 
 BOOL ScFormulaCell::IsValue()
 {
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
-    return bIsValue;
+    return aResult.IsValue();
 }
 
 double ScFormulaCell::GetValue()
 {
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
-    if ( !pCode->GetError() || pCode->GetError() == errDoubleRef)
-        return nErgValue;
+    if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
+            !aResult.GetResultError())
+        return aResult.GetDouble();
     return 0.0;
 }
 
@@ -341,15 +275,16 @@ double ScFormulaCell::GetValueAlways()
 
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
-    return nErgValue;
+    return aResult.GetDouble();
 }
 
 void ScFormulaCell::GetString( String& rString )
 {
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
-    if ( !pCode->GetError() || pCode->GetError() == errDoubleRef)
-        rString = aErgString;
+    if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
+            !aResult.GetResultError())
+        rString = aResult.GetString();
     else
         rString.Erase();
 }
@@ -358,14 +293,14 @@ const ScMatrix* ScFormulaCell::GetMatrix()
 {
     if ( pDocument->GetAutoCalc() )
     {
-        // war !bDirty gespeichert aber zugehoerige Matrixzelle bDirty?
-        // => wir brauchen pMatrix
-        if ( !xMatrix && cMatrixFlag == MM_FORMULA )
+        // Was stored !bDirty but an accompanying matrix cell was bDirty?
+        // => we need to get the matrix.
+        if (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix().Is())
             bDirty = TRUE;
         if ( IsDirtyOrInTableOpDirty() )
             Interpret();
     }
-    return xMatrix;
+    return aResult.GetMatrix();
 }
 
 BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
@@ -540,7 +475,21 @@ USHORT ScFormulaCell::GetErrCode()
 {
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
-    return pCode->GetError();
+    /* FIXME: If ScTokenArray::SetCodeError() was really only for code errors
+     * and not also abused for signaling other error conditions we could bail
+     * out even before attempting to interpret broken code. */
+    USHORT nErr =  pCode->GetCodeError();
+    if (nErr)
+        return nErr;
+    return aResult.GetResultError();
+}
+
+USHORT ScFormulaCell::GetRawError()
+{
+    USHORT nErr =  pCode->GetCodeError();
+    if (nErr)
+        return nErr;
+    return aResult.GetResultError();
 }
 
 BOOL ScFormulaCell::HasOneReference( ScRange& r ) const
@@ -825,8 +774,9 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             //  (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
             //  is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
 
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos, pOld, cMatrixFlag );
-            pFCell->nErgValue = MINDOUBLE;      // to recognize it as changed later (Cut/Paste!)
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
+                    pOld, eTempGrammar, cMatrixFlag );
+            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
             pUndoDoc->PutCell( aUndoPos, pFCell );
         }
         bValChanged = FALSE;
@@ -1036,7 +986,7 @@ void ScFormulaCell::UpdateCompile( BOOL bForceIfNameInUse )
     if ( bForceIfNameInUse && !bCompile )
         bCompile = pCode->HasNameOrColRowName();
     if ( bCompile )
-        pCode->SetError( 0 );   // damit auch wirklich kompiliert wird
+        pCode->SetCodeError( 0 );   // make sure it will really be compiled
     CompileTokenArray();
 }
 
@@ -1167,8 +1117,9 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if (pUndoDoc)
         {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld, cMatrixFlag );
-            pFCell->nErgValue = MINDOUBLE;      // damit spaeter changed (Cut/Paste!)
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld,
+                    eTempGrammar, cMatrixFlag);
+            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
             pUndoDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pFCell );
         }
 
@@ -1367,7 +1318,7 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
         if ( bRecompile )
         {
             String aFormula;
-            GetFormula( aFormula, ScAddress::CONV_OOO);
+            GetFormula( aFormula, ScGrammar::GRAM_NATIVE);
             if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
             {
                 if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
@@ -1378,14 +1329,13 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
-            aErgString = aFormula;
-            nErgConv = ScAddress::CONV_OOO;
+            SetHybridFormula( aFormula, ScGrammar::GRAM_NATIVE);
         }
     }
-    else if ( !pCode->GetLen() && aErgString.Len() )
+    else if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
     {
-        Compile( aErgString );
-        aErgString.Erase();
+        Compile( aResult.GetHybridFormula(), FALSE, eTempGrammar );
+        aResult.SetToken( NULL);
         SetDirty();
     }
 }
@@ -1415,7 +1365,7 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
         if ( bRecompile )
         {
             String aFormula;
-            GetFormula( aFormula, ScAddress::CONV_OOO);
+            GetFormula( aFormula, ScGrammar::GRAM_NATIVE);
             if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
             {
                 if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
@@ -1426,14 +1376,13 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
             pCode->Clear();
-            aErgString = aFormula;
-            nErgConv = ScAddress::CONV_OOO;
+            SetHybridFormula( aFormula, ScGrammar::GRAM_NATIVE);
         }
     }
-    else if ( !pCode->GetLen() && aErgString.Len() )
+    else if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
     {
-        Compile( aErgString );
-        aErgString.Erase();
+        Compile( aResult.GetHybridFormula(), FALSE, eTempGrammar );
+        aResult.SetToken( NULL);
         SetDirty();
     }
 }
