@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:26:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
@@ -92,7 +92,7 @@ namespace dbp
                         _rxConn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >());
 
         // OControlWizardPage overridables
-        virtual sal_Bool determineNextButtonState();
+        virtual bool    canAdvance() const;
     };
 
     //=====================================================================
@@ -147,7 +147,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void initializePage();
-        virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool commitPage( CommitPageReason _eReason );
 
         // own overridables
         virtual String& getDBFieldSetting() = 0;
