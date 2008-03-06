@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:31:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace dbp
     protected:
         // OWizardMachine overridables
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
-        virtual WizardState         determineNextState( WizardState _nCurrentState );
+        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
         virtual void                enterState( WizardState _nState );
         virtual sal_Bool            leaveState( WizardState _nState );
 
@@ -141,8 +141,8 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
-        sal_Bool            determineNextButtonState();
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     protected:
         DECL_LINK( OnTableDoubleClicked, ListBox* );
@@ -175,8 +175,8 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
-        sal_Bool            determineNextButtonState();
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
     };
 
     //=====================================================================
@@ -202,8 +202,8 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
-        sal_Bool            determineNextButtonState();
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     private:
         void implCheckFinish();
@@ -226,7 +226,7 @@ namespace dbp
         virtual void ActivatePage();
 
         // OWizardPage overridables
-        virtual sal_Bool determineNextButtonState();
+        virtual bool    canAdvance() const;
 
         // ODBFieldPage overridables
         virtual String& getDBFieldSetting();
