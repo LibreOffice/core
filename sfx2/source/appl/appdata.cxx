@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:09:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ using ::basic::BasicManagerRepository;
 using ::basic::BasicManagerCreationListener;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::uno::XInterface;
 
 class SfxBasicManagerCreationListener : public ::basic::BasicManagerCreationListener
 {
@@ -135,7 +136,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pSaveOptions( 0 ),
         pUndoOptions( 0 ),
         pHelpOptions( 0 ),
-        m_xThisDocument( ),
         pProgress(0),
         pTemplateCommon( 0 ),
         nDocModalMode(0),
@@ -212,10 +212,6 @@ void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicMan
 
     // global constants, additionally to the ones already added by createApplicationBasicManager:
     // ThisComponent
-    Reference< XModel > xCurrentDoc;
-    SfxObjectShell* pDoc = SfxObjectShell::Current();
-    if ( pDoc )
-        xCurrentDoc = pDoc->GetModel();
-    _rBasicManager.InsertGlobalUNOConstant( "ThisComponent", makeAny( xCurrentDoc ) );
-    m_xThisDocument = xCurrentDoc;
+    Reference< XInterface > xCurrentComponent = SfxObjectShell::GetCurrentComponent();
+    _rBasicManager.SetGlobalUNOConstant( "ThisComponent", makeAny( xCurrentComponent ) );
 }
