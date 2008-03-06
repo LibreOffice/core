@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:34:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XMultiServiceFactory >& _r
 {
     registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
         &m_aException, ::getCppuType(static_cast<SQLException*>(NULL)));
+    registerProperty( PROPERTY_HELP_URL, PROPERTY_ID_HELP_URL, PropertyAttribute::TRANSIENT,
+        &m_sHelpURL, ::getCppuType( &m_sHelpURL ) );
 }
 
 //-------------------------------------------------------------------------
@@ -169,8 +171,8 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
 //------------------------------------------------------------------------------
 Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 {
-    if (m_aException.hasValue())
-        return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ) );
+    if ( m_aException.hasValue() )
+        return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ), WB_OK | WB_DEF_OK, m_sHelpURL );
 
     OSL_ENSURE(sal_False, "OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
     return new OSQLMessageBox(_pParent, SQLException());
