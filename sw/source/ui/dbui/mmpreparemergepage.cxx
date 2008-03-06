@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:35:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,10 +217,10 @@ void  SwMailMergePrepareMergePage::ActivatePage()
 /*-- 13.05.2004 15:38:32---------------------------------------------------
     merge the data into a new file
   -----------------------------------------------------------------------*/
-sal_Bool  SwMailMergePrepareMergePage::commitPage(COMMIT_REASON _eReason)
+sal_Bool  SwMailMergePrepareMergePage::commitPage( CommitPageReason _eReason )
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if(CR_TRAVEL_NEXT == _eReason && !rConfigItem.IsMergeDone())
+    if(eTravelForward == _eReason && !rConfigItem.IsMergeDone())
     {
         m_pWizard->CreateTargetDocument();
         m_pWizard->SetRestartPage(MM_MERGEPAGE);
