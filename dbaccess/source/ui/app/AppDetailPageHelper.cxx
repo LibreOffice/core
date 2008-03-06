@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:39:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1005,8 +1005,10 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
     {
         m_ePreviewMode = _eMode;
 
+        getBorderWin().getView()->getViewChangeListener()->previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
+
         sal_uInt16 nSelectedAction = SID_DB_APP_DISABLE_PREVIEW;
-        switch(m_ePreviewMode)
+        switch ( m_ePreviewMode )
         {
             case E_PREVIEWNONE:
                 nSelectedAction = SID_DB_APP_DISABLE_PREVIEW;
@@ -1021,8 +1023,6 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
                     m_ePreviewMode = E_PREVIEWNONE;
                 break;
         }
-
-        getBorderWin().getView()->getViewChangeListener()->previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
 
         m_aMenu->CheckItem(nSelectedAction);
         m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
