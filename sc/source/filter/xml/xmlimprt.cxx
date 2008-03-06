@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-03 07:21:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #include "xmlimprt.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
+#include "nameuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 #include "unoguard.hxx"
@@ -2521,11 +2522,21 @@ void ScXMLImport::SetNamedRanges()
                     if (ScRangeStringConverter::GetAddressFromString(
                         aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
                     {
-                        sTempContent = (*aItr)->sContent;
-                        ScXMLConverter::ParseFormula(sTempContent, (*aItr)->bIsExpression);
                         uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
                         if (xNamedRange.is())
-                            xNamedRange->setContent(sTempContent);
+                        {
+                            LockSolarMutex();
+                            ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
+                            if (pNamedRangeObj)
+                            {
+                                sTempContent = (*aItr)->sContent;
+                                // Get rid of leading sheet dots in simple ranges.
+                                if (!(*aItr)->bIsExpression)
+                                    ScXMLConverter::ParseFormula( sTempContent, false);
+                                pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
+                            }
+                            UnlockSolarMutex();
+                        }
                     }
                     delete *aItr;
                     aItr = pNamedExpressions->erase(aItr);
@@ -2688,3 +2699,36 @@ void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
     }
 }
 
+// static
+bool ScXMLImport::IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
+        const rtl::OUString & rValue, ScGrammar::Grammar& rGrammar,
+        const ScGrammar::Grammar eStorageGrammar )
+{
+#if 0
+    bool bNamespace_OF = (nFormulaPrefix == XML_NAMESPACE_OF);
+#else
+    /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, activate
+     * XML_NAMESPACE_OF. */
+    bool bNamespace_OF = false;
+#endif
+    bool bNamespace_OOOC = (nFormulaPrefix == XML_NAMESPACE_OOOC);
+    // An invalid namespace can occur from a colon in the formula text if no
+    // namespace tag was added. First character in string has to be '=' in that
+    // case.
+    bool bNoNamespace = (nFormulaPrefix == XML_NAMESPACE_NONE ||
+            (nFormulaPrefix == XML_NAMESPACE_UNKNOWN && rValue.toChar() == '='));
+
+    if (bNamespace_OF)
+        rGrammar = ScGrammar::GRAM_ODFF;
+    else if (bNamespace_OOOC || (bNoNamespace && eStorageGrammar == ScGrammar::GRAM_PODF))
+        // There may be documents in the wild that stored no namespace in ODF 1.x
+        rGrammar = ScGrammar::GRAM_PODF;
+    else if (bNoNamespace)
+        // The default for ODF 1.2 and later without namespace is 'of:' ODFF
+        rGrammar = ScGrammar::GRAM_ODFF;
+    else
+        // Whatever ...
+        rGrammar = eStorageGrammar;
+
+    return bNamespace_OF || bNamespace_OOOC;
+}
