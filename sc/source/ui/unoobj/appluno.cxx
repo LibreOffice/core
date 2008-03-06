@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:40:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 
 #ifndef _SFX_APP_HXX
 #include <sfx2/app.hxx>
+#endif
+#ifndef SFX2_SFXMODELFACTORY_HXX
+#include <sfx2/sfxmodelfactory.hxx>
 #endif
 
 #ifndef SC_AFMTUNO_HXX
@@ -101,7 +104,7 @@ using namespace com::sun::star;
 extern uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
 extern rtl::OUString SAL_CALL ScDocument_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
-            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags ) throw( uno::Exception );
 
 // Calc XML import
 extern uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
@@ -508,7 +511,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 ScXMLOasisExport_Settings_getSupportedServiceNames() );
 
     if ( aImpl == ScDocument_getImplementationName() )
-        xFactory.set(cppu::createSingleFactory(
+        xFactory.set(sfx2::createSfxModelFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScDocument_getImplementationName(),
                 ScDocument_createInstance,
