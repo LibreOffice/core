@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:57:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@
 #endif
 
 #include <vector>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::std;
@@ -144,6 +145,8 @@ public:
 
     /// @return the index of the newly appended column
     sal_Int32 appendColumn();
+    /// @return the index of the newly appended row
+    sal_Int32 appendRow();
 
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
@@ -481,6 +484,12 @@ sal_Int32 InternalData::appendColumn()
 {
     insertColumn( getColumnCount() - 1 );
     return getColumnCount() - 1;
+}
+
+sal_Int32 InternalData::appendRow()
+{
+    insertRow( getRowCount() - 1 );
+    return getRowCount() - 1;
 }
 
 void InternalData::insertRow( sal_Int32 nAfterIndex )
@@ -1216,11 +1225,21 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
         sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
         return createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ));
     }
-    // else
+    else if( aRangeRepresentation.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "last" )))
+    {
+        sal_Int32 nIndex = (m_bDataInColumns
+                            ? getInternalData().getColumnCount()
+                            : getInternalData().getRowCount()) - 1;
+        return createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+    }
+    else if( aRangeRepresentation.getLength())
+    {
+        // data
+        sal_Int32 nIndex = aRangeRepresentation.toInt32();
+        return createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+    }
 
-    // data
-    sal_Int32 nIndex = aRangeRepresentation.toInt32();
-    return createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+    return Reference< chart2::data::XDataSequence >();
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
@@ -1380,6 +1399,15 @@ void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
         decreaseMapReferences( nAtIndex + 1, getInternalData().getRowCount());
         getInternalData().deleteRow( nAtIndex );
     }
+}
+
+void SAL_CALL InternalDataProvider::appendSequence()
+    throw (uno::RuntimeException)
+{
+    if( m_bDataInColumns )
+        getInternalData().appendColumn();
+    else
+        getInternalData().appendRow();
 }
 
 void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
