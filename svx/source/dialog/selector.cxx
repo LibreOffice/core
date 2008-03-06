@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:35:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,27 +65,32 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
+#include <com/sun/star/container/XChild.hpp>
+/** === end UNO includes === **/
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::container;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -93,23 +98,7 @@ using namespace ::com::sun::star::frame;
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
-#define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
-
 SV_IMPL_PTRARR(SvxGroupInfoArr_Impl, SvxGroupInfoPtr);
-
-class TestOUString : public OUString
-{
-public:
-
-    TestOUString() : OUString()
-    { OSL_TRACE("Creating empty TestOUString"); }
-
-    TestOUString( OUString value ) : OUString( value )
-    { OSL_TRACE("Creating nontempty OUString: %s", PRTSTR(value)); }
-
-    ~TestOUString()
-    { OSL_TRACE("Destroying TestOUString: %s", PRTSTR(*this)); }
-};
 
 /*
  * The implementations of SvxConfigFunctionListBox_Impl and
@@ -326,6 +315,60 @@ void SvxConfigGroupListBox_Impl::ClearAll()
     Clear();
 }
 
+//-----------------------------------------------
+namespace
+{
+    //...........................................
+    /** examines a component whether it supports XEmbeddedScripts, or provides access to such a
+        component by implementing XScriptInvocationContext.
+        @return
+            the model which supports the embedded scripts, or <NULL/> if it cannot find such a
+            model
+    */
+    static Reference< XModel > lcl_getDocumentWithScripts_throw( const Reference< XInterface >& _rxComponent )
+    {
+        Reference< XEmbeddedScripts > xScripts( _rxComponent, UNO_QUERY );
+        if ( !xScripts.is() )
+        {
+            Reference< XScriptInvocationContext > xContext( _rxComponent, UNO_QUERY );
+            if ( xContext.is() )
+                xScripts.set( xContext->getScriptContainer(), UNO_QUERY );
+        }
+
+        return Reference< XModel >( xScripts, UNO_QUERY );
+    }
+
+    //...........................................
+    static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
+    {
+        Reference< XModel > xDocument;
+
+        // examine our associated frame
+        try
+        {
+            OSL_ENSURE( _rxFrame.is(), "lcl_getScriptableDocument_nothrow: you need to pass a frame to this dialog/tab page!" );
+            if ( _rxFrame.is() )
+            {
+                // first try the model in the frame
+                Reference< XController > xController( _rxFrame->getController(), UNO_SET_THROW );
+                xDocument = lcl_getDocumentWithScripts_throw( xController->getModel() );
+
+                if ( !xDocument.is() )
+                {
+                    // if there is no suitable document in the frame, try the controller
+                    xDocument = lcl_getDocumentWithScripts_throw( _rxFrame->getController() );
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return xDocument;
+    }
+}
+
 void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvLBoxEntry* _pParentEntry, bool _bCheapChildsOnDemand )
 {
     OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox_Impl::fillScriptList: invalid root node!" );
@@ -341,22 +384,21 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
             BOOL bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
 
-            OUString sDisplayTitle;
-            OUString sModelTitle;
-            Reference< XModel > xCurrentDoc( SfxObjectShell::GetWorkingDocument() );
-            if ( xCurrentDoc.is() )
+            /* To mimic current starbasic behaviour we
+            need to make sure that only the current document
+            is displayed in the config tree. Tests below
+            set the bDisplay flag to FALSE if the current
+            node is a first level child of the Root and is NOT
+            either the current document, user or share */
+            OUString sCurrentDocTitle;
+            Reference< XModel > xWorkingDocument = lcl_getScriptableDocument_nothrow( m_xFrame );
+            if ( xWorkingDocument.is() )
             {
-                sDisplayTitle = sModelTitle = ::comphelper::DocumentInfo::getDocumentTitle( xCurrentDoc );
+                sCurrentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xWorkingDocument );
             }
 
             for ( long n = 0; n < children.getLength(); n++ )
             {
-                /* To mimic current starbasic behaviour we
-                need to make sure that only the current document
-                is displayed in the config tree. Tests below
-                set the bDisplay flag to FALSE if the current
-                node is a first level child of the Root and is NOT
-                either the current document, user or share */
                 Reference< browse::XBrowseNode >& theChild = children[n];
                 //#139111# some crash reports show that it might be unset
                 if ( !theChild.is() )
@@ -370,11 +412,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                         // then the user & share are added at depth=1
                     )
                 {
-                    if ( sUIName.equals( sModelTitle ) )
-                    {
-                        sUIName = sDisplayTitle;
-                    }
-                    else if ( sUIName.equalsAscii( "user" ) )
+                    if ( sUIName.equalsAscii( "user" ) )
                     {
                         sUIName = m_sMyMacros;
                         bIsRootNode = sal_True;
@@ -384,7 +422,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                         sUIName = m_sProdMacros;
                         bIsRootNode = sal_True;
                     }
-                    else
+                    else if ( !sUIName.equals( sCurrentDocTitle ) )
                     {
                         bDisplay = FALSE;
                     }
@@ -1193,11 +1231,11 @@ SvxScriptSelectorDialog::GetSelectedId()
 }
 
 String
-SvxScriptSelectorDialog::GetScriptURL()
+SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
 
-    SvLBoxEntry *pEntry = aCommands.GetLastSelectedEntry();
+    SvLBoxEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->aCommands.GetLastSelectedEntry();
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
