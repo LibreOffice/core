@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:50:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,42 +36,24 @@
 #ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #define DBAUI_SINGLEDOCCONTROLLER_HXX
 
-#ifndef DBAUI_GENERICCONTROLLER_HXX
-#include "genericcontroller.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
-#include <comphelper/propertycontainer.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef DBAUI_IENVIRONMENT_HXX
-#include "IEnvironment.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
 #include "documentcontroller.hxx"
-#endif
-#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
+#include "genericcontroller.hxx"
+#include "IEnvironment.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
-#endif
-#ifndef _UNDO_HXX
+#include <cppuhelper/implbase1.hxx>
 #include <svtools/undo.hxx>
-#endif
 
 #include <memory>
 
@@ -84,28 +66,31 @@ namespace dbaui
     //= OSingleDocumentController
     //====================================================================
     class OSingleDocumentController;
-    typedef OGenericUnoController                   OSingleDocumentController_CBASE;
+
+    typedef ::cppu::ImplInheritanceHelper1  <   OGenericUnoController
+                                            ,   ::com::sun::star::document::XScriptInvocationContext
+                                            >   OSingleDocumentController_Base;
 
     struct OSingleDocumentControllerImpl;
     class DBACCESS_DLLPUBLIC OSingleDocumentController
-            :public OSingleDocumentController_CBASE
+            :public OSingleDocumentController_Base
             ,public IEnvironment
     {
-        friend class OConnectionChangeBroadcaster;
     private:
         ::std::auto_ptr<OSingleDocumentControllerImpl> m_pImpl;
-
 
     protected:
         SfxUndoManager  m_aUndoManager;
 
-    protected:
-        // ----------------------------------------------------------------
-        // initalizing members
+    private:
         /** forces usage of a connection which we do not own
-            <p>To be used from within XInitialization::initialize only.</p>
+            <p>To be used from within XInitialization::initialize, resp. impl_initialize, only.</p>
         */
         void        initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+
+    protected:
+        // OGenericUnoController - initialization
+        virtual void impl_initialize();
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
@@ -137,15 +122,18 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                     getMetaData( ) const;
+
         // ----------------------------------------------------------------
-        // access to the data source
+        // access to the data source / document
         ::rtl::OUString getDataSourceName() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
                     getDataSource() const;
         sal_Bool    haveDataSource() const;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                    getDatabaseDocument() const;
 
-        /** provides to the SDB-level database meta data of the current connection
+        /** provides access to the SDB-level database meta data of the current connection
         */
         const ::dbtools::DatabaseMetaData& getSdbMetaData() const;
 
@@ -166,8 +154,8 @@ namespace dbaui
         */
         virtual void getError(::com::sun::star::sdbc::SQLException& _rException ) const;
 
-        /** @retrun
-            returns <TRUE/> when an error was set otherwise <FALSE/>
+        /** @return
+                <TRUE/> when an error was set otherwise <FALSE/>
         */
         virtual sal_Bool hasError() const;
 
@@ -188,8 +176,9 @@ namespace dbaui
 
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XScriptInvocationContext
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         OSingleDocumentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
@@ -208,15 +197,20 @@ namespace dbaui
         virtual sal_Bool Construct(Window* pParent);
 
     protected:
-        // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
         // XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
+
+        // XInterface
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        OSingleDocumentController();    // never implemented
     };
 
 //........................................................................
