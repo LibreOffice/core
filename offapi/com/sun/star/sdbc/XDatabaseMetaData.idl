@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:38:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1400,7 +1400,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param tableNamePattern
             a table name pattern
         @param types
-            a list of table types to include; <NULL/> returns all types
+            a list of table types to include
         @returns
             each row is a table description
         @throws SQLException
@@ -2586,7 +2586,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param typeNamePattern
             a type name pattern; may be a fully-qualified name
         @param types
-            a list of user-named types to include (OBJECT, STRUCT, or DISTINCT); <NULL/> returns all types
+            a list of user-named types to include (OBJECT, STRUCT, or DISTINCT)
         @returns
             each row is a type description
         @throws SQLException
