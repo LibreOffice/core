@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Location.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:46:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ LocationTabPage::~LocationTabPage()
 {
 }
 
-sal_Bool LocationTabPage::determineNextButtonState()
+bool LocationTabPage::canAdvance() const
 {
-    return sal_False;
+    return false;
 }
 
 //.............................................................................

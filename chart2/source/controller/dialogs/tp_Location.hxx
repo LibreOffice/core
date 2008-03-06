@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Location.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:46:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext );
     virtual ~LocationTabPage();
 
-    virtual sal_Bool    determineNextButtonState();
+    virtual bool        canAdvance() const;
 
 protected:
     FixedLine     m_aFL_Table;
