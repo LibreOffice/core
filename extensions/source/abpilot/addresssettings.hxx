@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresssettings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,9 @@ namespace abp
         ::rtl::OUString     sDataSourceName;
         ::rtl::OUString     sRegisteredDataSourceName;
         ::rtl::OUString     sSelectedTable;
+        bool                bIgnoreNoTable;
         MapString2String    aFieldMapping;
-        sal_Bool            bRegisterDataSource;
+        bool                bRegisterDataSource;
     };
 
 //.........................................................................

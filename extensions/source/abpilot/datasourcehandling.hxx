@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,10 @@ namespace abp
             <p>to be called when <method>isConnection</method> returns <TRUE/> only</p>
         */
         const StringBag&    getTableNames() const SAL_THROW (( ));
+
+        /** determines whether a given table exists
+        */
+        bool    hasTable( const ::rtl::OUString& _rTableName ) const;
 
         /// return the intern data source object
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const SAL_THROW (( ));
