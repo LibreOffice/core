@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTransformation.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:06:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ interface XTransformation : ::com::sun::star::uno::XInterface
                 sequence is equal to the dimension of the output
                 coordinate system.
 
-        @throw ::com::sun::star::lang::IllegalArgumentException if the
-               dimension of the input vector is not equal to the
+        @throws ::com::sun::star::lang::IllegalArgumentException
+               if the dimension of the input vector is not equal to the
                dimension given in <member>getSourceDimension</member>.
      */
     sequence< double > transform( [in] sequence< double > aValues )
