@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:23:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbChangeReadOnlyEnabled( false ),
         mnNamedRangesLockCount( 0 )
 {
+    SetStorageGrammar( ScGrammar::GRAM_STORAGE_DEFAULT);
+
     eSrcSet = gsl_getSystemTextEncoding();
 
     if ( eMode == SCDOCMODE_DOCUMENT )
@@ -257,6 +259,24 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );
+}
+
+
+void ScDocument::SetStorageGrammar( ScGrammar::Grammar eGrammar )
+{
+    DBG_ASSERT(
+            eGrammar == ScGrammar::GRAM_ODFF ||
+            eGrammar == ScGrammar::GRAM_PODF,
+            "ScDocument::SetStorageGrammar: wrong storage grammar");
+
+    eStorageGrammar = eGrammar;
+
+    // FIXME: the XML import shouldn't strip brackets, the compiler should
+    // digest them instead, which could also speedup reference recognition
+    // during import.
+
+    eXmlImportGrammar = ScGrammar::mergeToGrammar( eGrammar,
+            ScAddress::CONV_OOO);
 }
 
 
@@ -715,7 +735,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                     LoadAreaLinks(rStream);
                     break;
                 case SCID_RANGENAME:
-                    pRangeName->Load(rStream, nVersion );
+                    DBG_ERRORFILE( "REMOVED_BINFILTER SCID_RANGENAME");
                     break;
                 case SCID_DBAREAS:
                     pDBCollection->Load( rStream );
@@ -1048,8 +1068,7 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
             rStream << (BYTE) eLinkMode;
         }
 
-        rStream << (USHORT) SCID_RANGENAME;
-        pRangeName->Store( rStream );
+        DBG_ERRORFILE( "REMOVED_BINFILTER SCID_RANGENAME");
 
         rStream << (USHORT) SCID_DBAREAS;
         pDBCollection->Store( rStream );
