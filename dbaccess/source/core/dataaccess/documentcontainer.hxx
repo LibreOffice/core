@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ public:
 
     // helper
     ::rtl::Reference<OContentHelper> getContent(const ::rtl::OUString& _sName) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getContainerStorage() const;
 
 protected:
     virtual ~ODocumentContainer();
