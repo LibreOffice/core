@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:30:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,13 +291,17 @@ ViewRedirector::~ViewRedirector()
 // different, overload the method and at least do what the method does.
 void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
 {
+    bool bDoPaintObject = true;
+
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
 
-    if(pObject)
+    if(pObject && pObject->GetPage() )
     {
         OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
 
-        if( (pObject->GetPage() == NULL) || !pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true ) )
+        bDoPaintObject = pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true );
+
+        if(!bDoPaintObject && !(( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
             return;
 
         bool bPaintOutline = false;
@@ -337,10 +341,15 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                     }
                 }
             }
+            else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
+            {
+                if( !bIsPrinting )
+                    bPaintOutline = true;
+            }
 
             if( bPaintOutline && !bIsPrinting )
             {
-                SdrTextObj* pTextObj = (SdrTextObj*)pObject;
+//              SdrTextObj* pTextObj = (SdrTextObj*)pObject;
 
                 // leere Praesentationsobjekte bekommen einen grauen Rahmen
                 svtools::ColorConfig aColorConfig;
@@ -365,8 +374,19 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                     }
                     pOutDev->Pop();
 
-                    const GeoStat& aGeo = pTextObj->GetGeoStat();
-                    const Rectangle &aRect = pTextObj->GetGeoRect();
+                    Rectangle aRect;
+                    GeoStat aGeo;
+
+                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
+                    if( pTextObj )
+                    {
+                        aGeo = pTextObj->GetGeoStat();
+                        aRect = pTextObj->GetGeoRect();
+                    }
+                    else
+                    {
+                        aRect = pObject->GetCurrentBoundRect();
+                    }
 
                     if( aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 )
                     {
@@ -384,7 +404,7 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                         rDisplayInfo.GetExtendedOutputDevice()->DrawRect(aRect);
 
                         // now paint the placeholder description, but only on the masterpage
-                        if( !bMasterObj && (pTextObj->GetPage()->IsMasterPage()) )
+                        if( !bMasterObj && (pObject->GetPage()->IsMasterPage()) )
                         {
                             String aOut;
                             switch( eKind )
@@ -392,7 +412,7 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                                 case PRESOBJ_TITLE:
                                 {
                                     static String aTitleAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_TITLE ) );
-                                    if( ((SdPage*)pTextObj->GetPage())->GetPageKind() == PK_STANDARD)
+                                    if( ((SdPage*)pObject->GetPage())->GetPageKind() == PK_STANDARD)
                                         aOut = aTitleAreaStr;
                                     break;
                                 }
@@ -431,7 +451,7 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
                                     static String aNumberAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_NUMBER ) );
                                     static String aSlideAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_SLIDE ) );
 
-                                    if( ((SdPage*)pTextObj->GetPage())->GetPageKind() == PK_STANDARD)
+                                    if( ((SdPage*)pObject->GetPage())->GetPageKind() == PK_STANDARD)
                                         aOut = aSlideAreaStr;
                                     else
                                         aOut = aNumberAreaStr;
@@ -443,7 +463,7 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
 
                             if( aOut.Len() )
                             {
-                                SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)pTextObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                                SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)pObject->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
                                 pOutDev->Push();
 
@@ -473,7 +493,8 @@ void ViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, :
     }
 
     // draw object in any case
-    rOriginal.PaintObject(rDisplayInfo);
+    if( bDoPaintObject )
+        rOriginal.PaintObject(rDisplayInfo);
 }
 
 /*************************************************************************
