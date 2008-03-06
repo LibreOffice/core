@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:34:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
 #include <comphelper/mimeconfighelper.hxx>
+#endif
+#ifndef INCLUDED_COMPHELPER_STRING_HXX
+#include <comphelper/string.hxx>
 #endif
 #ifndef CONNECTIVITY_SQLERROR_HXX
 #include <connectivity/sqlerror.hxx>
@@ -253,14 +256,14 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             // -----------------------------------------------------------------------------
             sPersistentName = sBaseName;
             sPersistentName += ::rtl::OUString::valueOf(sal_Int32(rDefinitions.size() + 1));
-            Reference<XNameAccess> xElements(getStorage(),UNO_QUERY);
+            Reference<XNameAccess> xElements(getContainerStorage(),UNO_QUERY);
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
-                aIni[0] <<= getStorage();
+                aIni[0] <<= getContainerStorage();
                 aIni[1] <<= sPersistentName;
                 Command aCommand;
                 aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("copyTo"));
@@ -273,7 +276,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
 
             if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                ODocumentDefinition::GetDocumentServiceFromMediaType( getStorage(), sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
+                ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
@@ -530,40 +533,43 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         Any aContent;
         Reference< XNameContainer > xNameContainer(this);
         ::rtl::OUString sName;
-        if ( lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
+        if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
-            Reference< XCommandProcessor > xContent(aContent,UNO_QUERY);
-            if ( xContent.is() )
-            {
-                Command aCommand;
-
-                static const ::rtl::OUString s_sOpenMode = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
-                const PropertyValue* pIter = Arguments.getConstArray();
-                const PropertyValue* pEnd     = pIter + Arguments.getLength();
-                for( ; pIter != pEnd ; ++pIter)
-                {
-                    if ( pIter->Name == s_sOpenMode )
-                    {
-                        pIter->Value >>= aCommand.Name;
-                        break;
-                    }
-                }
-                if ( !aCommand.Name.getLength() ) // default mode
-                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
-                OpenCommandArgument2 aOpenCommand;
-                aOpenCommand.Mode = OpenMode::DOCUMENT;
-
-                Sequence< PropertyValue > aArguments(Arguments);
-                sal_Int32 nLen = aArguments.getLength();
-                aArguments.realloc(nLen + 1);
-
-                aArguments[nLen].Value <<= aOpenCommand;
-                aCommand.Argument <<= aArguments;
-                xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
-            }
+            ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to find the document '$name$'." ) ) );
+                // TODO: resource
+            ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
+            throw IllegalArgumentException( sMessage, *this, 1 );
         }
-        else
-            throw IllegalArgumentException();
+
+        Reference< XCommandProcessor > xContent(aContent,UNO_QUERY);
+        if ( xContent.is() )
+        {
+            Command aCommand;
+
+            static const ::rtl::OUString s_sOpenMode = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
+            const PropertyValue* pIter = Arguments.getConstArray();
+            const PropertyValue* pEnd     = pIter + Arguments.getLength();
+            for( ; pIter != pEnd ; ++pIter)
+            {
+                if ( pIter->Name == s_sOpenMode )
+                {
+                    pIter->Value >>= aCommand.Name;
+                    break;
+                }
+            }
+            if ( !aCommand.Name.getLength() ) // default mode
+                aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+            OpenCommandArgument2 aOpenCommand;
+            aOpenCommand.Mode = OpenMode::DOCUMENT;
+
+            Sequence< PropertyValue > aArguments(Arguments);
+            sal_Int32 nLen = aArguments.getLength();
+            aArguments.realloc(nLen + 1);
+
+            aArguments[nLen].Value <<= aOpenCommand;
+            aCommand.Argument <<= aArguments;
+            xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
+        }
     }
     catch(NoSuchElementException)
     {
@@ -676,7 +682,7 @@ void SAL_CALL ODocumentContainer::commit(  ) throw (::com::sun::star::io::IOExce
         if ( xTrans.is() )
             xTrans->commit();
     }
-    Reference<XTransactedObject> xTrans(getStorage(),UNO_QUERY);
+    Reference<XTransactedObject> xTrans(getContainerStorage(),UNO_QUERY);
     if ( xTrans.is() )
         xTrans->commit();
 }
@@ -692,12 +698,12 @@ void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOExce
         if ( xTrans.is() )
             xTrans->revert();
     }
-    Reference<XTransactedObject> xTrans(getStorage(),UNO_QUERY);
+    Reference<XTransactedObject> xTrans(getContainerStorage(),UNO_QUERY);
     if ( xTrans.is() )
         xTrans->revert();
 }
 // -----------------------------------------------------------------------------
-Reference< XStorage> ODocumentContainer::getStorage() const
+Reference< XStorage> ODocumentContainer::getContainerStorage() const
 {
     return  m_pImpl->m_pDataSource
         ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bFormsContainer ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
