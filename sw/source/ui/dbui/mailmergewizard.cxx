@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:32:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ using namespace ::com::sun::star;
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
                         SW_RES(DLG_MAILMERGEWIZARD),
-                        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, SW_RES( STR_ROADMAP_TITLE )),
+                        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP),
         m_pSwView(&rView),
         m_rConfigItem(rItem),
         m_sStarting(        SW_RES( ST_STARTING      )),
@@ -243,7 +243,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 /*-- 04.06.2004 12:54:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-String  SwMailMergeWizard::getStateDisplayName( WizardState _nState )
+String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
 {
     String sRet;
     switch(_nState)
@@ -297,7 +297,7 @@ void SwMailMergeWizard::UpdateRoadmap()
             !m_rConfigItem.IsIndividualGreeting(sal_False)||
                     m_rConfigItem.IsGreetingFieldsAssigned();
     bool bEnableOutputTypePage = (nCurPage != MM_DOCUMENTSELECTPAGE) ||
-            static_cast<svt::OWizardPage*>(pCurPage)->commitPage(IWizardPage::CR_VALIDATE);
+            static_cast<svt::OWizardPage*>(pCurPage)->commitPage( eValidate );
 
     for(sal_uInt16 nPage = MM_DOCUMENTSELECTPAGE; nPage <= MM_OUTPUTPAGE; ++nPage)
     {
