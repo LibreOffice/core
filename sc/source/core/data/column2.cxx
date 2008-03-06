@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:16:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,7 @@ void ScColumn::LoadData( SvStream& rStream )
                 break;
             case CELLTYPE_FORMULA:
                 {
-                    ScFormulaCell* pCell = new ScFormulaCell(
-                                            pDocument, ScAddress( nCol, nNewRow, nTab ), rStream, aHdr );
-                    Append( nNewRow, pCell);
+                    DBG_ERRORFILE( "REMOVED_BINFILTER");
                 }
                 break;
             case CELLTYPE_NOTE:
@@ -387,8 +385,7 @@ void ScColumn::SaveData( SvStream& rStream ) const
                     ((ScEditCell*)pCell)->Save( rStream );
                     break;
                 case CELLTYPE_FORMULA:
-                    rStream << (BYTE) eCellType;
-                    ((ScFormulaCell*)pCell)->Save( rStream, aHdr );
+                    DBG_ERRORFILE( "REMOVED_BINFILTER");
                     break;
                 case CELLTYPE_NOTE:
                     rStream << (BYTE) eCellType;
