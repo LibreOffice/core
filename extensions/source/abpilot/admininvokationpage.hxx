@@ -4,9 +4,9 @@
  *
  *  $RCSfile: admininvokationpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:06:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,10 @@ namespace abp
     protected:
         // TabDialog overridables
         virtual void        ActivatePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
         virtual void        initializePage();
 
         // OImportPage overridables
-        virtual sal_Bool    determineNextButtonState();
+        virtual bool        canAdvance() const;
 
     private:
         DECL_LINK( OnInvokeAdminDialog, void* );
