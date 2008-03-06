@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:21:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ public:
     virtual void setTitle(const ::rtl::OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
     virtual sal_Bool saveDatasource();
-    virtual String  getStateDisplayName( WizardState _nState );
+    virtual String  getStateDisplayName( WizardState _nState ) const;
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
     */
@@ -154,7 +154,6 @@ public:
 protected:
     /// to override to create new pages
     virtual TabPage*    createPage(WizardState _nState);
-//  virtual ::svt::WizardTypes::WizardState determineNextState(::svt::WizardTypes::WizardState _nCurrentState);
     virtual sal_Bool    leaveState(WizardState _nState);
     virtual void enterState(WizardState _nState);
     virtual ::svt::IWizardPage* getWizardPage(TabPage* _pCurrentPage) const;
