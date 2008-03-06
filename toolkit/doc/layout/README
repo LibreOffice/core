@@ -1,0 +1,26 @@
+Layout engine for OpenOffice.org  -  Work in Progress
+
+Simple dialogs have been ported now: zoom and wordcount.
+
+Code lives in "layout" CWS.
+
+* Ceckout layout cws.
+
+* Configure using --enable-layout.
+
+* dmake all
+
+* dmake install DESTDIR=$(pwd)/ooo-layout/
+
+* Source refresh in workben/layout, do something like
+
+    cd toolkit/workben/layout && . ./refresh --inst .../ooo-layout/
+
+Integration into OOo:
+
+* After instaling, run
+
+  cd ooo-cvs/program
+  ./soffice.bin
+
+  Start a [Writer] document and choose View/Zoom or Extra/Word count.
