@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    WizardTypes::WizardState OListComboWizard::determineNextState(WizardState _nCurrentState)
+    WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -351,10 +351,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentTableSelection::determineNextButtonState()
+    bool OContentTableSelection::canAdvance() const
     {
-        if (!OLCPage::determineNextButtonState())
-            return sal_False;
+        if (!OLCPage::canAdvance())
+            return false;
 
         return 0 != m_aSelectTable.GetSelectEntryCount();
     }
@@ -362,7 +362,7 @@ namespace dbp
     //---------------------------------------------------------------------
     IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, /*_pListBox*/ )
     {
-        implCheckNextButton();
+        updateDialogTravelUI();
         return 0L;
     }
 
@@ -398,14 +398,14 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentTableSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OContentTableSelection::commitPage( CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
-        if (!rSettings.sListContentTable.Len() && (IWizardPage::CR_TRAVEL_PREVIOUS != _eReason))
+        if (!rSettings.sListContentTable.Len() && (eTravelBackward != _eReason))
             // need to select a table
             return sal_False;
 
@@ -451,10 +451,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentFieldSelection::determineNextButtonState()
+    bool OContentFieldSelection::canAdvance() const
     {
-        if (!OLCPage::determineNextButtonState())
-            return sal_False;
+        if (!OLCPage::canAdvance())
+            return false;
 
         return 0 != m_aSelectTableField.GetSelectEntryCount();
     }
@@ -470,13 +470,13 @@ namespace dbp
     //---------------------------------------------------------------------
     IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
-        implCheckNextButton();
+        updateDialogTravelUI();
         m_aDisplayedField.SetText(m_aSelectTableField.GetSelectEntry());
         return 0L;
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentFieldSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OContentFieldSelection::commitPage( CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
@@ -532,10 +532,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OLinkFieldsPage::determineNextButtonState()
+    bool OLinkFieldsPage::canAdvance() const
     {
         // we're on the last page here, no travelNext allowed ...
-        return sal_False;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -554,7 +554,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OLinkFieldsPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OLinkFieldsPage::commitPage( CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
@@ -589,10 +589,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OComboDBFieldPage::determineNextButtonState()
+    bool OComboDBFieldPage::canAdvance() const
     {
         // we're on the last page here, no travelNext allowed ...
-        return sal_False;
+        return false;
     }
 
 //.........................................................................
