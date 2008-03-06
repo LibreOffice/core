@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,8 +371,8 @@ namespace pcr
         DEF_INFO_2( SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES,             DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( EDITABLE,          EDITABLE,           EDITABLE,                        DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,        DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( NOLABEL,        NOLABEL,         NOLABEL,        DIALOG_VISIBLE, COMPOSEABLE )
+        DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,                      DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( NOLABEL,           NOLABEL,            NOLABEL,                         DIALOG_VISIBLE, COMPOSEABLE )
         };
 
         s_pPropertyInfos = aPropertyInfos;
