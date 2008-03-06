@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRegressionCurveCalculator.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 19:14:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
             If <it>x</it> is element of the domain of the regression
             curve function, the result is its value.
 
-        @throw com::sun::star::lang::IllegalArgumentException
+        @throws com::sun::star::lang::IllegalArgumentException
             If <it>x</it> is not part of the domain of the regression
             function.
      */
