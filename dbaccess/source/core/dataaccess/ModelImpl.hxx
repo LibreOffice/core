@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:31:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,9 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/docmacromode.hxx>
+#include <sfx2/docstoragemodifylistener.hxx>
 #include <tools/string.hxx>
+#include <unotools/sharedunocomponent.hxx>
 #include <vos/ref.hxx>
 
 #include <memory>
@@ -115,8 +117,8 @@ class OSharedConnectionManager;
 class SharedMutex
 {
 private:
-    oslInterlockedCount m_refCount;
-    ::osl::Mutex        m_aMutex;
+    oslInterlockedCount     m_refCount;
+    mutable ::osl::Mutex    m_aMutex;
 
 public:
     SharedMutex();
@@ -124,7 +126,7 @@ public:
     void SAL_CALL acquire();
     void SAL_CALL release();
 
-    inline ::osl::Mutex&   getMutex() { return m_aMutex; }
+    inline ::osl::Mutex&   getMutex() const { return m_aMutex; }
 
 private:
     ~SharedMutex();
@@ -135,11 +137,14 @@ private:
 //============================================================
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
 
+typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedStorage;
+
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
 class ODatabaseModelImpl    :public ::rtl::IReference
                             ,public ::sfx2::IMacroDocumentAccess
+                            ,public ::sfx2::IModifiableDocument
 {
 public:
     enum ObjectType
@@ -160,29 +165,38 @@ private:
     TStorages                                                                   m_aStorages;
     ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
 
-public:
-    OWeakConnectionArray                                                                m_aConnections;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
 
-public:
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
+    SharedStorage                                                               m_xDocumentStorage;
+    ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
 
     /// the URL the document was loaded from
-    ::rtl::OUString                                     m_sFileURL;
+    ::rtl::OUString                                     m_sDocFileLocation;
 
     /// do we have any object (forms/reports) which contains macros?
     bool                                                m_bHasAnyObjectWithMacros;
 
+    /// true if setting the Modified flag of the document is currently locked
+    bool                                                m_bModificationLock;
+
     /** the URL which the document should report as it's URL
 
-        This might differ from ->m_sFileURL in case the document was loaded
-        as part of a crash recovery process. In this case, ->m_sFileURL points to
+        This might differ from ->m_sDocFileLocation in case the document was loaded
+        as part of a crash recovery process. In this case, ->m_sDocFileLocation points to
         the temporary file where the DB had been saved to, after a crash.
-        ->m_sRealFileURL then is the URL of the document which actually had
+        ->m_sDocumentURL then is the URL of the document which actually had
         been recovered.
     */
-    ::rtl::OUString                                     m_sRealFileURL;
+    ::rtl::OUString                                     m_sDocumentURL;
+
+public:
+    OWeakConnectionArray                                                        m_aConnections;
+    const ::comphelper::ComponentContext                                        m_aContext;
+
+public:
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                                                         m_xNumberFormatsSupplier;
@@ -190,6 +204,7 @@ public:
     ::rtl::OUString                                     m_sName;        // transient, our creator has to tell us the title
     ::rtl::OUString                                     m_sUser;
     ::rtl::OUString                                     m_aPassword;    // transient !
+    ::rtl::OUString                                     m_sFailedPassword;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                         m_aLayoutInformation;
     sal_Int32                                           m_nLoginTimeout;
@@ -205,16 +220,12 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                                         m_aArgs;
-
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>               m_xSharedConnectionManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                   m_xStorage;
-
     ODatabaseContext*                                   m_pDBContext;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
+                                                        m_xSharedConnectionManager;
     oslInterlockedCount                                 m_refCount;
     sal_uInt16                                          m_nControllerLockCount;
-    sal_Bool                                            m_bOwnStorage;
 
     void reset();
 
@@ -233,11 +244,10 @@ public:
     */
     sal_Bool    commitEmbeddedStorage( sal_Bool _bPreventRootCommits = sal_False );
 
-    /** commits all storages
+    /** commits all storages storages which have been obtained via getStorage
     */
     void commitStorages()
             SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
-
 
     ODatabaseModelImpl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
@@ -258,7 +268,8 @@ public:
 
     void dispose();
 
-    ::rtl::OUString getURL();
+    inline ::rtl::OUString getURL() const       { return m_sDocumentURL;     }
+    inline ::rtl::OUString getLocation() const  { return m_sDocFileLocation; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 // helper
@@ -297,7 +308,9 @@ public:
 
     void clearConnections();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage();
+            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getOrCreateRootStorage();
+    inline  ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
+    inline  void resetRootStroage() { impl_switchToStorage_throw( NULL ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */
@@ -305,7 +318,7 @@ public:
 
     /** returns the model, if there already exists one
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel_noCreate();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel_noCreate() const;
 
     /** returns a new ->ODatabaseDocument
 
@@ -322,7 +335,7 @@ public:
 
         Only to be called when the model is being disposed
     */
-    void    modelIsDisposing( ResetModelAccess ) { m_xModel = ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >(); }
+    void    modelIsDisposing( ResetModelAccess );
 
     DocumentStorageAccess*
             getDocumentStorageAccess();
@@ -356,6 +369,17 @@ public:
     static ::rtl::OUString
                     getObjectContainerStorageName( const ObjectType _eType );
 
+    /** revokes the data source registration at the database context
+    */
+    void            revokeDataSource() const;
+
+    /** determines whether a given object storage contains macros
+    */
+    static bool     objectHasMacros(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
+                        const ::rtl::OUString& _rPersistentName
+                    );
+
     /** determines whether the database document has any object (form/report) which contains macros
 
         In such a case, *all* objects in the document keep the macro capability, and the database document
@@ -384,6 +408,49 @@ public:
     */
     void            resetMacroExecutionMode();
 
+    /** ensures that ->m_xBasicLibraries resp. m_xDialogLibraries exists
+
+        @return
+            the requested library container. Is never <NULL/>.
+
+        @throws RuntimeException
+            if something does wrong, which indicates a server error in the installation
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+            getLibraryContainer( bool _bScript );
+
+    /** lets our library containers store themself into the given root storage
+    */
+    void    storeLibraryContainersTo( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxToRootStorage );
+
+    /** rebases the document to the given storage
+
+        No actual committing, copying, saving, whatsoever happens. The storage is just remembered as the documents
+        new storage, nothing more.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given storage is <NULL/>
+        @throws ::com::sun::star::lang::RuntimeException
+            if any of the invoked operations does so
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+            switchToStorage(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
+            );
+
+    /** switches to the given document location/URL
+
+        The document location is the URL of the file from which the document has been loaded.
+        The document URL is the "intended location" of the document. It differs from the location
+        if and only if the document was loaded as part of a document recovery process. In this case,
+        the location points to some temporary file, but the URL is the URL of the file which has been
+        just recovered. The next store operation would operate on the URL, not the location.
+    */
+    void    switchToURL(
+                const ::rtl::OUString& _rDocumentLocation,
+                const ::rtl::OUString& _rDocumentURL
+            );
+
 public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getImposedMacroExecMode() const;
@@ -395,8 +462,18 @@ public:
     virtual sal_Int16 getScriptingSignatureState() const;
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
 
+    // IModifiableDocument
+    virtual void storageIsModified();
+
+    // don't use directly, use the ModifyLock class instead
+    void    lockModify()              { m_bModificationLock = true; }
+    void    unlockModify()            { m_bModificationLock = false; }
+    bool    isModifyLocked() const    { return m_bModificationLock; }
+
 private:
     void    impl_construct_nothrow();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+            impl_switchToStorage_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage );
 };
 
 /** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl
@@ -413,15 +490,15 @@ protected:
 
     /** returns the component itself
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() const = 0;
 
-    inline ::osl::Mutex& getMutex()
+    inline ::osl::Mutex& getMutex() const
     {
         return m_xMutex->getMutex();
     }
 
 public:
-    struct GuardAccess { friend class ModelMethodGuard; private: GuardAccess() { } };
+    struct GuardAccess { friend class ModelMethodGuard; friend class ModifyLock; private: GuardAccess() { } };
 
     /** returns the mutex used for thread safety
 
@@ -429,7 +506,7 @@ public:
             if m_pImpl is <NULL/>. Usually, you will set this member in your derived
             component's <code>dispose</code> method to <NULL/>.
     */
-    inline ::osl::Mutex& getMutex( GuardAccess )
+    inline ::osl::Mutex& getMutex( GuardAccess ) const
     {
         return getMutex();
     }
@@ -438,11 +515,39 @@ public:
         return m_pImpl;
     }
 
-    void checkDisposed()
+    inline void checkDisposed() const
     {
         if ( !m_pImpl.is() )
             throw ::com::sun::star::lang::DisposedException( ::rtl::OUString::createFromAscii( "Component is already disposed." ), getThis() );
     }
+
+    inline void lockModify( GuardAccess )
+    {
+        m_pImpl->lockModify();
+    }
+
+    inline void unlockModify( GuardAccess )
+    {
+        m_pImpl->unlockModify();
+    }
+};
+
+class ModifyLock
+{
+public:
+    ModifyLock( ModelDependentComponent& _component )
+        :m_rComponent( _component )
+    {
+        m_rComponent.lockModify( ModelDependentComponent::GuardAccess() );
+    }
+
+    ~ModifyLock()
+    {
+        m_rComponent.unlockModify( ModelDependentComponent::GuardAccess() );
+    }
+
+private:
+    ModelDependentComponent&    m_rComponent;
 };
 
 /** a guard for public methods of objects dependent on a ODatabaseModelImpl instance
@@ -464,7 +569,7 @@ public:
         @throws ::com::sun::star::lang::DisposedException
             If the given component is already disposed
     */
-    ModelMethodGuard( ModelDependentComponent& _component )
+    ModelMethodGuard( const ModelDependentComponent& _component )
         :BaseMutexGuard( _component.getMutex( ModelDependentComponent::GuardAccess() ) )
     {
         _component.checkDisposed();
