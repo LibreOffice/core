@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,10 @@
 // overall. Please have this in mind when changing anything
 #define ID_TREE_EDIT_DATABASE                1
 #define ID_TREE_CLOSE_CONN                   2
-#define ID_TREE_REBUILD_CONN                 3
+    // FREE
 #define ID_TREE_ADMINISTRATE                 4
-// free
-// free
-// free
+#define ID_MIGRATE_SCRIPTS                   5
+
 #define ID_REPORT_NEW_TEXT                  14
 #define ID_FORM_NEW_TEXT                    15
 #define ID_FORM_NEW_CALC                    16
