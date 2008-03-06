@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:46:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish = FALSE, BOOL bCompileXML = FALSE );
+                                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
