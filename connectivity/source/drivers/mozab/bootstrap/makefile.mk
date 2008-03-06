@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:56:25 $
+#   last change: $Author: kz $ $Date: 2008-03-06 14:43:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ CDEFS+=	    -DMOZILLA_CLIENT \
             -DXP_UNIX
 .IF "$(OS)" == "LINUX"
 CFLAGS +=   -fPIC -g
-CDEFS+=     -DOSTYPE=\"Linux2.2.14-5\" -DOJI
+CDEFS+=     -DOJI
 
 CFLAGSCXX += \
             -fno-rtti -Wconversion -Wpointer-arith \
