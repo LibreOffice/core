@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:54:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2304,22 +2304,27 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         break;
     case table::CellContentType_FORMULA :
         {
-            ScBaseCell* pBaseCell = GetDocument() ? GetDocument()->GetCell(aCellPos) : NULL;
+            ScBaseCell* pBaseCell = pDoc ? pDoc->GetCell(aCellPos) : NULL;
             if (pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 rtl::OUStringBuffer sFormula;
                 ScFormulaCell* pFormulaCell((ScFormulaCell*) pBaseCell);
                 if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                 {
-                    pFormulaCell->GetEnglishFormula(sFormula, sal_True);
+                    const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+                    /* FIXME: when support for ODF 1.2 and ODFF is ready in
+                     * xmloff, this should be XML_NAMESPACE_OF instead of
+                     * XML_NAMESPACE_NONE! */
+                    sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
+                    pFormulaCell->GetFormula(sFormula, eGrammar);
                     rtl::OUString sOUFormula(sFormula.makeStringAndClear());
                     if (!bIsMatrix)
                     {
-                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sOUFormula, sal_False ));
+                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula, sal_False ));
                     }
                     else
                     {
-                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sOUFormula.copy(1, sOUFormula.getLength() - 2), sal_False ));
+                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sOUFormula.copy(1, sOUFormula.getLength() - 2), sal_False ));
                     }
                 }
                 if (pFormulaCell->IsValue())
@@ -3234,8 +3239,8 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                 String sName(sOUName);
                                 pNamedRanges->SearchName(sName, nRangeIndex);
                                 ScRangeData* pNamedRange((*pNamedRanges)[nRangeIndex]); //should get directly and not with ScDocument
-                                String sContent(xNamedRange->getContent());
-                                pNamedRange->GetEnglishSymbol(sContent, sal_True);
+                                String sContent;
+                                pNamedRange->GetSymbol(sContent, pDoc->GetStorageGrammar());
                                 rtl::OUString sOUTempContent(sContent);
                                 uno::Reference <table::XCellRange> xCellRange(xCellRangeReferrer->getReferredCells());
                                 if(xCellRange.is())
