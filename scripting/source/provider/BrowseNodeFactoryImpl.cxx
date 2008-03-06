@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 13:58:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
+#include <tools/diagnose_ex.h>
 
 #include "BrowseNodeFactoryImpl.hxx"
 #include "ActiveMSPList.hxx"
@@ -358,15 +360,17 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
                 sal_Bool bHidden  = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_HIDDEN(),  bDefault );
                 sal_Bool bPreview = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_PREVIEW(), bDefault );
                 if( !bHidden && !bPreview )
-                    locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
+                {
+                    Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );
+                    if ( xScripts.is() )
+                        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >(
+                            xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
+                }
             }
         }
-        catch( Exception& e )
+        catch( const Exception& )
         {
-            (void)e;
-            OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
-                ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
     }
