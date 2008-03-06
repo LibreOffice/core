@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:08:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,9 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
 #include <com/sun/star/frame/status/Visibility.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
@@ -166,7 +168,7 @@ const ::rtl::OUString& getConfirmDeletionURL()
 DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
-    :OGenericUnoController_COMPBASE(m_aMutex)
+    :OGenericUnoController_Base(m_aMutex)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -174,10 +176,10 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xServiceFactory(_rM)
+    ,m_aCurrentFrame( *this )
     ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
-    ,m_bFrameUiActive(sal_False)
     ,m_bCurrentlyModified(sal_False)
 {
     DBG_CTOR(OGenericUnoController,NULL);
@@ -188,7 +190,30 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     }
     catch(Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
+}
+
+// -----------------------------------------------------------------------------
+OGenericUnoController::OGenericUnoController()
+    :OGenericUnoController_Base(m_aMutex)
+#ifdef DBG_UTIL
+    ,m_bDescribingSupportedFeatures( false )
+#endif
+    ,m_aSelectionListeners(m_aMutex)
+    ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
+    ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
+    ,m_aCurrentFrame( *this )
+    ,m_pView(NULL)
+    ,m_bPreview(sal_False)
+    ,m_bReadOnly(sal_False)
+    ,m_bCurrentlyModified(sal_False)
+{
+    OSL_ENSURE( false, "OGenericUnoController::OGenericUnoController: illegal call!" );
+    // This ctor only exists because the MSVC compiler complained about an unresolved external
+    // symbol. It should not be used at all. Since using it yields strange runtime problems,
+    // we simply abort here.
+    abort();
 }
 
 // -----------------------------------------------------------------------------
@@ -232,7 +257,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
 //------------------------------------------------------------------------------
 IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
 {
-    if ( !OGenericUnoController_COMPBASE::rBHelper.bInDispose && !OGenericUnoController_COMPBASE::rBHelper.bDisposed )
+    if ( !OGenericUnoController_Base::rBHelper.bInDispose && !OGenericUnoController_Base::rBHelper.bDisposed )
         InvalidateFeature_Impl();
     return 0L;
 }
@@ -315,73 +340,37 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 }
 
 //------------------------------------------------------------------------------
-Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
-{
-    Any aReturn = OGenericUnoController_COMPBASE::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OGenericUnoController_CTRBASE::queryInterface(_rType);
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::acquire(  ) throw ()
 {
-    OGenericUnoController_COMPBASE::acquire();
+    OGenericUnoController_Base::acquire();
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::release(  ) throw ()
 {
-    OGenericUnoController_COMPBASE::release();
-}
-
-//------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OGenericUnoController::getTypes(  ) throw (RuntimeException)
-{
-    return ::comphelper::concatSequences(
-        OGenericUnoController_COMPBASE::getTypes(),
-        OGenericUnoController_CTRBASE::getTypes()
-    );
-}
-
-//------------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL OGenericUnoController::getImplementationId(  ) throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    OGenericUnoController_Base::release();
 }
 
 // -------------------------------------------------------------------------
-sal_Bool OGenericUnoController::startFrameListening( )
+void OGenericUnoController::startFrameListening( const Reference< XFrame >& _rxFrame )
 {
-    if ( m_xCurrentFrame.is() )
-        m_xCurrentFrame->addFrameActionListener( static_cast< XFrameActionListener* >( this ) );
-    return m_xCurrentFrame.is();
+    if ( _rxFrame.is() )
+        _rxFrame->addFrameActionListener( this );
 }
 
 // -------------------------------------------------------------------------
-void OGenericUnoController::stopFrameListening( )
+void OGenericUnoController::stopFrameListening( const Reference< XFrame >& _rxFrame )
 {
-    if ( m_xCurrentFrame.is() )
-        m_xCurrentFrame->removeFrameActionListener( static_cast< XFrameActionListener* >( this ) );
+    if ( _rxFrame.is() )
+        _rxFrame->removeFrameActionListener( this );
 }
 
 // -------------------------------------------------------------------------
 void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeException )
 {
     // our frame ?
-    Reference< XFrame >  xSourceFrame(Source.Source, UNO_QUERY);
-    if ( xSourceFrame == m_xCurrentFrame )
-        stopFrameListening( );
+    if ( Source.Source == getFrame() )
+        stopFrameListening( getFrame() );
 }
 //------------------------------------------------------------------------
 void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeException )
@@ -399,26 +388,29 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
     InvalidateFeature(ID_BROWSER_UNDO);
 }
 // -----------------------------------------------------------------------
-void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) throw( RuntimeException )
+void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) throw( RuntimeException )
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    stopFrameListening( );
 
-    m_xCurrentFrame = xFrame;
+    stopFrameListening( m_aCurrentFrame.getFrame() );
+    Reference< XFrame > xFrame = m_aCurrentFrame.attachFrame( _rxFrame );
+    startFrameListening( xFrame );
 
-    if ( startFrameListening( ) )
-        m_bFrameUiActive = m_xCurrentFrame->isActive();
-    loadMenu(xFrame);
-    if ( m_xCurrentFrame.is() )
+    loadMenu( xFrame );
+
+    if ( xFrame.is() )
         updateTitle();
+
     if ( getView() )
-        getView()->attachFrame(xFrame);
+        getView()->attachFrame( xFrame );
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::updateTitle()
 {
 }
+
 // -----------------------------------------------------------------------------
 struct CommandCollector : public ::std::unary_function< SupportedFeatures::value_type, void>
 {
@@ -821,6 +813,13 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
         ,m_aFeaturesToInvalidate.end());
 }
 
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::dispose(  ) throw (RuntimeException)
+{
+    // disambiguate
+    OGenericUnoController_Base::WeakComponentImplHelperBase::dispose();
+}
+
 // -----------------------------------------------------------------------
 void OGenericUnoController::disposing()
 {
@@ -846,31 +845,34 @@ void OGenericUnoController::disposing()
 
     // check out from all the objects we are listening
     // the frame
-    stopFrameListening( );
+    stopFrameListening( m_aCurrentFrame.getFrame() );
+    m_aCurrentFrame.attachFrame( NULL );
+
     m_xMasterDispatcher = NULL;
     m_xSlaveDispatcher = NULL;
-    m_xCurrentFrame = NULL;
     m_xServiceFactory = NULL;
 }
 
-// -----------------------------------------------------------------------
-void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener) throw(RuntimeException)
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    OGenericUnoController_COMPBASE::addEventListener(aListener);
+    // disambiguate
+    OGenericUnoController_Base::WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
-// -----------------------------------------------------------------------
-void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener) throw(RuntimeException)
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    OGenericUnoController_COMPBASE::removeEventListener(aListener);
+    // disambiguate
+    OGenericUnoController_Base::WeakComponentImplHelperBase::removeEventListener( xListener );
 }
 
 //------------------------------------------------------------------------------
 void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    if ((XFrame*)aEvent.Frame.get() == (XFrame*)m_xCurrentFrame.get())
-        m_bFrameUiActive =  ( FrameAction_FRAME_UI_ACTIVATED == aEvent.Action )
-                        ||  ( FrameAction_FRAME_ACTIVATED == aEvent.Action );
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( aEvent.Frame == m_aCurrentFrame.getFrame() )
+        m_aCurrentFrame.frameAction( aEvent.Action );
 }
 
 //------------------------------------------------------------------------------
@@ -1067,11 +1069,11 @@ void OGenericUnoController::closeTask()
 // -----------------------------------------------------------------------------
 IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
 {
-    if(!OGenericUnoController_COMPBASE::rBHelper.bInDispose)
+    if ( !OGenericUnoController_Base::rBHelper.bInDispose )
     {
         try
         {
-            Reference< util::XCloseable > xCloseable( m_xCurrentFrame, UNO_QUERY_THROW );
+            Reference< util::XCloseable > xCloseable( m_aCurrentFrame.getFrame(), UNO_QUERY_THROW );
             xCloseable->close( sal_False ); // false - holds the owner ship for this frame inside this object!
         }
         catch( const Exception& )
@@ -1090,11 +1092,27 @@ Any SAL_CALL OGenericUnoController::getViewData(void) throw( RuntimeException )
 void SAL_CALL OGenericUnoController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
 {
 }
+
+// -----------------------------------------------------------------------------
+Reference< XModel > SAL_CALL OGenericUnoController::getModel(void) throw( RuntimeException )
+{
+    return Reference< XModel >();
+}
+
+// -----------------------------------------------------------------------------
+Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return m_aCurrentFrame.getFrame();
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException )
 {
+    OSL_ENSURE( false, "OGenericUnoController::attachModel: not supported!" );
     return sal_False;
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
 {
@@ -1253,32 +1271,26 @@ void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL 
     URL aURL;
     aURL.Complete = suURL;
 
-    if (m_xUrlTransformer.is())
-        m_xUrlTransformer->parseStrict(aURL);
-
-    openHelpAgent(aURL);
+    openHelpAgent( aURL );
 }
 
 void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
-    {
-        URL aURL = createHelpAgentURL(lcl_getModuleHelpModuleName( getFrame() ),_nHelpId);
-        if (m_xUrlTransformer.is())
-            m_xUrlTransformer->parseStrict(aURL);
-
-    openHelpAgent(aURL);
+{
+    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _nHelpId ) );
 }
 
-void OGenericUnoController::openHelpAgent(URL aURL)
+void OGenericUnoController::openHelpAgent( const URL& _rURL )
 {
     try
     {
-        // URL aURL = createHelpAgentURL(lcl_getModuleHelpModuleName( getFrame() ),_nHelpId);
-        // if (m_xUrlTransformer.is())
-        //  m_xUrlTransformer->parseStrict(aURL);
+        URL aURL( _rURL );
 
-        Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
+        if ( m_xUrlTransformer.is() )
+            m_xUrlTransformer->parseStrict(aURL);
+
+        Reference< XDispatchProvider > xDispProv( m_aCurrentFrame.getFrame(), UNO_QUERY );
         Reference< XDispatch > xHelpDispatch;
-        if (xDispProv.is())
+        if ( xDispProv.is() )
             xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
         OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
         if (xHelpDispatch.is())
@@ -1295,14 +1307,16 @@ void OGenericUnoController::openHelpAgent(URL aURL)
 Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
 {
     Reference< ::com::sun::star::awt::XWindow> xWindow;
+
     // get the top most window
-    if ( m_xCurrentFrame.is() )
+    Reference< XFrame > xFrame( m_aCurrentFrame.getFrame() );
+    if ( xFrame.is() )
     {
-        xWindow = m_xCurrentFrame->getContainerWindow();
-        Reference<XFrame> xFrame = m_xCurrentFrame;
+        xWindow = xFrame->getContainerWindow();
+
         while ( xFrame.is() && !xFrame->isTop() )
         {
-            xFrame.set(xFrame->getCreator(),UNO_QUERY);
+            xFrame.set( xFrame->getCreator(), UNO_QUERY );
         }
         if ( xFrame.is() )
             xWindow = xFrame->getContainerWindow();
@@ -1310,19 +1324,19 @@ Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostCont
     return xWindow;
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::setTitle(const ::rtl::OUString& _sName)
+void OGenericUnoController::setTitle( const ::rtl::OUString& _sName )
 {
     try
     {
-        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE) )
+        Reference< XPropertySet > xFrameProps( getFrame(), UNO_QUERY );
+        if ( xFrameProps.is() && xFrameProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_TITLE ) )
         {
-            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(_sName));
+            xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( _sName ) );
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while setting the title!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1337,6 +1351,19 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return GetState( _nCommandId ).bEnabled;
 }
+
+// -----------------------------------------------------------------------------
+sal_Bool OGenericUnoController::isDataSourceReadOnly() const
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XController > SAL_CALL OGenericUnoController::getXController() throw( RuntimeException )
+{
+    return this;
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
 {
@@ -1436,5 +1463,4 @@ void SAL_CALL OGenericUnoController::removeSelectionChangeListener( const Refere
 {
     m_aSelectionListeners.removeInterface(xListener);
 }
-// -----------------------------------------------------------------------------
 
