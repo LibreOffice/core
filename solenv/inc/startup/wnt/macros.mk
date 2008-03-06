@@ -35,8 +35,6 @@ SHELL *:= $(COMSPEC)
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR        := \\
-# See iz61212 for the reason why PWD is overwritten
-   PWD:=$(shell @echo %_cwd)
 
 .ELSE	# Non 4nt case
 
@@ -63,7 +61,7 @@ SHELL *:= $(COMSPEC)
 
 .ENDIF
 
-.EXPORT : GUWCMD PWD
+.EXPORT : GUWCMD
 
 .IF $(USE_SHELL) == 4nt
 
