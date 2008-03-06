@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:02:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,19 +91,19 @@ namespace abp
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
 
         // retrieves the currently selected type
-        AddressSourceType   getSelectedType();
+        AddressSourceType   getSelectedType() const;
 
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
         // TabDialog overridables
         virtual void        ActivatePage();
         virtual void        DeactivatePage();
 
         // OImportPage overridables
-        virtual sal_Bool    determineNextButtonState();
+        virtual bool        canAdvance() const;
 
     private:
         DECL_LINK( OnTypeSelected, void* );
