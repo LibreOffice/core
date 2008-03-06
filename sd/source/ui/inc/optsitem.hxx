@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:36:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:34:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,6 +618,8 @@ private:
     BOOL    bBack               : 1;    // Print/Page/BookletFront
     BOOL    bCutPage            : 1;    // NOT persistent !!!
     BOOL    bPaperbin           : 1;    // Print/Other/FromPrinterSetup
+    BOOL    mbHandoutHorizontal : 1;    // Order Page previews on Handout Pages horizontal
+    UINT16  mnHandoutPages;             // Number of page previews on handout page (only 1/2/4/6/9 are supported)
     UINT16  nQuality;                   // Print/Other/Quality
 
 protected:
@@ -655,6 +657,8 @@ public:
     BOOL    IsCutPage() const { Init(); return (BOOL) bCutPage; }
     BOOL    IsPaperbin() const { Init(); return (BOOL) bPaperbin; }
     UINT16  GetOutputQuality() const { Init(); return nQuality; }
+    BOOL    IsHandoutHorizontal() const { Init(); return mbHandoutHorizontal; }
+    UINT16  GetHandoutPages() const { Init(); return mnHandoutPages; }
 
     void    SetDraw( BOOL bOn = TRUE ) { if( bDraw != bOn ) { OptionsChanged(); bDraw = bOn; } }
     void    SetNotes( BOOL bOn = TRUE ) { if( bNotes != bOn ) { OptionsChanged(); bNotes = bOn; } }
@@ -675,6 +679,8 @@ public:
     void    SetCutPage( BOOL bOn = TRUE ) { if( bCutPage != bOn ) { OptionsChanged(); bCutPage = bOn; } }
     void    SetPaperbin( BOOL bOn = TRUE ) { if( bPaperbin != bOn ) { OptionsChanged(); bPaperbin = bOn; } }
     void    SetOutputQuality( UINT16 nInQuality ) { if( nQuality != nInQuality ) { OptionsChanged(); nQuality = nInQuality; } }
+    void    SetHandoutHorizontal( BOOL bHandoutHorizontal ) { if( mbHandoutHorizontal != bHandoutHorizontal ) { OptionsChanged(); mbHandoutHorizontal = bHandoutHorizontal; } }
+    void    SetHandoutPages( UINT16 nHandoutPages ) { if( nHandoutPages != mnHandoutPages ) { OptionsChanged(); mnHandoutPages = nHandoutPages; } }
 };
 
 // -----------------------------------------------------------------------------
