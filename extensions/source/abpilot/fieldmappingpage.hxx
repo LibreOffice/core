@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:08:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ namespace abp
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
 
         // TabDialog overridables
         virtual void        ActivatePage();
