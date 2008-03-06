@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:17:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,7 @@ enum SdDocumentSettingsPropertyHandles
     // --> PB 2004-08-23 #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
     // <--
+    ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
 };
 
 #define MID_PRINTER 1
@@ -221,12 +222,12 @@ enum SdDocumentSettingsPropertyHandles
     {
         static PropertyMapEntry aImpressSettingsInfoMap[] =
         {
-#ifndef SVX_LIGHT
             { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
-#endif
+            { MAP_LEN("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    &::getCppuType((const sal_Int16*)0),    0,  MID_PRINTER },
+            { MAP_LEN("HandoutsHorizontal"),    HANDLE_HANDOUTHORIZONTAL,   &::getBooleanCppuType(),                0,  MID_PRINTER },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -526,6 +527,32 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     bOk = sal_True;
                 }
                 break;
+            case HANDLE_SLIDESPERHANDOUT:
+                {
+                    sal_Int16 nValue = 0;
+                    if( (*pValues >>= nValue) && (nValue >= 1) && (nValue <= 9) )
+                    {
+                        if( static_cast<sal_Int16>( aPrintOpts.GetHandoutPages() ) != nValue )
+                        {
+                            aPrintOpts.SetHandoutPages( static_cast< UINT16 >( nValue ) );
+                            bOptionsChanged = true;
+                        }
+                        bOk = sal_True;
+                    }
+                }
+                break;
+            case HANDLE_HANDOUTHORIZONTAL:
+                if( *pValues >>= bValue )
+                {
+                    if( aPrintOpts.IsHandoutHorizontal() != bValue )
+                    {
+                        aPrintOpts.SetHandoutHorizontal( bValue );
+                        bOptionsChanged = true;
+                    }
+                    bOk = sal_True;
+                }
+                break;
+
             case HANDLE_PRINTPAGENAME:
                 if( *pValues >>= bValue )
                 {
@@ -1025,6 +1052,12 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_PRINTOUTLINE:
                 *pValue <<= (sal_Bool)aPrintOpts.IsOutline();
+                break;
+            case HANDLE_SLIDESPERHANDOUT:
+                *pValue <<= (sal_Int16)aPrintOpts.GetHandoutPages();
+                break;
+            case HANDLE_HANDOUTHORIZONTAL:
+                *pValue <<= (sal_Bool)aPrintOpts.IsHandoutHorizontal();
                 break;
             case HANDLE_PRINTPAGENAME:
                 *pValue <<= (sal_Bool)aPrintOpts.IsPagename();
