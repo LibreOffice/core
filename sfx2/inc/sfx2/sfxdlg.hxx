@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:26:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,10 @@ namespace sfx2
     class SvLinkManager;
 }
 
+namespace com { namespace sun { namespace star { namespace frame {
+    class XModel;
+} } } }
+
 class SfxAbstractTabDialog : public VclAbstractDialog
 {
 public:
@@ -128,7 +132,7 @@ class SfxAbstractLinksDialog : public VclAbstractDialog
 class AbstractScriptSelectorDialog : public VclAbstractDialog
 {
 public:
-    virtual String              GetScriptURL() = 0;
+    virtual String              GetScriptURL() const = 0;
     virtual void                SetRunLabel() = 0;
 };
 
@@ -165,7 +169,10 @@ public:
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
-            Window* pParent, BOOL bShowSlots = FALSE ) = 0;
+            Window* pParent,
+            BOOL bShowSlots,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+        ) = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
         Window* pParent, com::sun::star::uno::Any aException ) = 0;
