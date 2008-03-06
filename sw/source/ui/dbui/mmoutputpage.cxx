@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:04:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -550,9 +550,9 @@ void SwMailMergeOutputPage::ActivatePage()
 /*-- 05.07.2004 13:54:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeOutputPage::determineNextButtonState()
+bool SwMailMergeOutputPage::canAdvance() const
 {
-    return sal_False;
+    return false;
 }
 /*-- 02.04.2004 13:15:44---------------------------------------------------
 
