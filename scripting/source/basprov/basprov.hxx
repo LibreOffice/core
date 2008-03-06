@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:23:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -86,10 +89,11 @@ namespace basprov
     private:
         BasicManager*   m_pAppBasicManager;
         BasicManager*   m_pDocBasicManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerApp;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerDoc;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-     ::rtl::OUString  m_sScriptingContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >             m_xLibContainerApp;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >             m_xLibContainerDoc;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >    m_xInvocationContext;
+        ::rtl::OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
         ::rtl::OUString m_sCtxLocation;
