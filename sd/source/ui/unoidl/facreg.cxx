@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:25:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,10 @@
 #include <uno/lbnames.h>
 #endif
 
+#ifndef SFX2_SFXMODELFACTORY_HXX
+#include <sfx2/sfxmodelfactory.hxx>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
 #endif
@@ -67,11 +71,11 @@ using namespace com::sun::star;
 
 // Forward declarations of the factories.
 
-extern uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
 extern OUString SdDrawingDocument_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException );
 
-extern uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
 extern OUString SdPresentationDocument_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException );
 
@@ -364,7 +368,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                     break;
 
                 case SdDrawingDocumentFactory:
-                    xFactory = ::cppu::createSingleFactory(
+                    xFactory = ::sfx2::createSfxModelFactory(
                         xMSF,
                         SdDrawingDocument_getImplementationName(),
                         SdDrawingDocument_createInstance,
@@ -372,7 +376,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                     break;
 
                 case SdPresentationDocumentFactory:
-                    xFactory = ::cppu::createSingleFactory(
+                    xFactory = ::sfx2::createSfxModelFactory(
                         xMSF,
                         SdPresentationDocument_getImplementationName(),
                         SdPresentationDocument_createInstance,
