@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:38:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
             IncToken( eParam[ 0 ] );
             IncToken( eParam[ 1 ] );
             break;
-        case ocIKV:
+        case ocIRR:
         {
-            DBG_ASSERT( nAnz == 2, "+LotusToSc::DoFunc(): ocIKV hat nur 2 Parameter!" );
+            DBG_ASSERT( nAnz == 2, "+LotusToSc::DoFunc(): ocIRR hat nur 2 Parameter!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -1027,10 +1027,10 @@ DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
         ocMin,              //   83 Min()
         ocMax,              //   84 Max()
         ocVLookup,          //   85 Vlookup()
-        ocNBW,              //   86 Npv()
+        ocNPV,              //   86 Npv()
         ocVar,              //   87 Var()
         ocNormDist,         //   88 Std()
-        ocIKV,              //   89 Irr()
+        ocIRR,              //   89 Irr()
         ocHLookup,          //   90 Hlookup()
         ocDBSum,            //   91 XlfDsum
         ocDBAverage,        //   92 XlfDaverage
@@ -1558,10 +1558,10 @@ DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
         ocMin,              //   83 Min()
         ocMax,              //   84 Max()
         ocVLookup,          //   85 Vlookup()
-        ocNBW,              //   86 Npv()
+        ocNPV,              //   86 Npv()
         ocVar,              //   87 Var()
         ocStDev,            //   88 Std()
-        ocIKV,              //   89 Irr()
+        ocIRR,              //   89 Irr()
         ocHLookup,          //   90 Hlookup()
         ocDBSum,            //   91 XlfDsum
         ocDBAverage,        //   92 XlfDaverage
