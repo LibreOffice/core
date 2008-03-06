@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:40:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -716,7 +716,7 @@ String DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
     OSL_ASSERT( m_apDataBrowserModel.get());
     if( nColumnId > 0 )
-        return String( m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 ));
+        return String( m_apDataBrowserModel->getRoleOfColumn( static_cast< sal_Int32 >( nColumnId ) - 1 ));
     return String();
 }
 
@@ -768,7 +768,8 @@ double DataBrowser::GetCellNumber( long nRow, USHORT nColumnId ) const
     if(( nColumnId >= 1 ) && ( nRow >= 0 ) &&
         m_apDataBrowserModel.get())
     {
-        fResult = m_apDataBrowserModel->getCellNumber( nColumnId - 1, nRow );
+        fResult = m_apDataBrowserModel->getCellNumber(
+            static_cast< sal_Int32 >( nColumnId ) - 1, nRow );
     }
 
     return fResult;
