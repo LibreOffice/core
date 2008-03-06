@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLParagraphContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,26 +39,51 @@
 #include "SchXMLImport.hxx"
 #include "SchXMLParagraphContext.hxx"
 
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
+#include <xmloff/nmspmap.hxx>
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
                                                 const OUString& rLocalName,
-                                                OUString& rText ) :
+                                                OUString& rText,
+                                                OUString * pOutId /* = 0 */ ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
-        mrText( rText )
+        mrText( rText ),
+        mpId( pOutId )
 {
 }
 
 SchXMLParagraphContext::~SchXMLParagraphContext()
 {}
+
+void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // remember the id. It is used for storing the original cell range string in
+    // a local table (cached data)
+    if( mpId )
+    {
+        sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+        rtl::OUString aValue;
+
+        for( sal_Int16 i = 0; i < nAttrCount; i++ )
+        {
+            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            rtl::OUString aLocalName;
+            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+            if( nPrefix == XML_NAMESPACE_TEXT &&
+                IsXMLToken( aLocalName, XML_ID ) )
+            {
+                (*mpId) = xAttrList->getValueByIndex( i );
+                break;   // we only need this attribute
+            }
+        }
+    }
+}
 
 void SchXMLParagraphContext::EndElement()
 {
