@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:08:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,10 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
     aCbxNotes.SetClickHdl( aLink );
     aCbxHandout.SetClickHdl( aLink );
     aCbxOutline.SetClickHdl( aLink );
+
+#ifndef QUARTZ
+    SetDrawMode();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -312,8 +316,13 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (SfxAllItemSet aSet)
+void SdPrintOptions::PageCreated (SfxAllItemSet
+#ifdef QUARTZ
+                                  aSet
+#endif
+                                  )
 {
+#ifdef QUARTZ
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
     {
@@ -321,5 +330,8 @@ void SdPrintOptions::PageCreated (SfxAllItemSet aSet)
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
             SetDrawMode();
     }
+#else
+    SetDrawMode();
+#endif
 }
 
