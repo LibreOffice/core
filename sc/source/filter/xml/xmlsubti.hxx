@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:38:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@
 #include "XMLTableShapeResizer.hxx"
 #endif
 
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
+#endif
+
 class ScXMLImport;
 
 typedef std::vector<sal_Int32> ScMysalIntVec;
@@ -122,9 +126,11 @@ public:
 struct ScMatrixRange
 {
     rtl::OUString sFormula;
+    ScGrammar::Grammar eGrammar;
     com::sun::star::table::CellRangeAddress aRange;
-    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula) :
+    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammarP) :
         sFormula(rFormula),
+        eGrammar(eGrammarP),
         aRange(rRange)
     {
     }
@@ -200,9 +206,17 @@ public:
                                                 com::sun::star::table::CellAddress& rEndAddress,
                                                 sal_Int32 nEndX, sal_Int32 nEndY);
 
-    void                                AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula);
+    void                                AddMatrixRange( sal_Int32 nStartColumn,
+                                                sal_Int32 nStartRow,
+                                                sal_Int32 nEndColumn,
+                                                sal_Int32 nEndRow,
+                                                const rtl::OUString& rFormula,
+                                                const ScGrammar::Grammar );
+
     sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
-    void                                SetMatrix(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula);
+    void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
+                                                const rtl::OUString& rFormula,
+                                                const ScGrammar::Grammar );
 };
 
 #endif
