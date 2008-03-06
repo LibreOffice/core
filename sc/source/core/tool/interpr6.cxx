@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:17:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
