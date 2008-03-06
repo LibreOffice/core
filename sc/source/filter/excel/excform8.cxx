@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:24:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x11: // Range                                 [314 265]
-                PushRangeOperator();
+                aStack >> nMerk0;
+                aPool << aStack << ocRange << nMerk0;
+                aPool >> aStack;
                 break;
             case 0x12: // Unary Plus                            [312 264]
                 aPool << ocAdd << aStack;
@@ -334,6 +336,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x1C: // Error Value                           [314 266]
             {
                 aIn >> nByte;
+#if 0   // erAck
+                aPool.StoreError( XclTools::GetScErrorCode( nByte ) );
+#else
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -349,7 +354,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << eOc;
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
-
+#endif
                 aPool >> aStack;
             }
                 break;
