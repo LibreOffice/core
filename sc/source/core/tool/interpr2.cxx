@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:22:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,10 +178,10 @@ void ScInterpreter::ScGetDateValue()
         if (eType == NUMBERFORMAT_DATE || eType == NUMBERFORMAT_DATETIME)
             PushDouble(fVal);
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
     else
-        SetIllegalArgument();
+        PushIllegalArgument();
 }
 
 void ScInterpreter::ScGetDayOfWeek()
@@ -262,7 +262,7 @@ void ScInterpreter::ScGetDate()
         INT16 nMonth = (INT16) ::rtl::math::approxFloor(GetDouble());
         INT16 nYear  = (INT16) ::rtl::math::approxFloor(GetDouble());
         if (nYear < 0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             PushDouble(GetDate(nYear, nMonth, nDay));
@@ -330,7 +330,9 @@ void ScInterpreter::ScGetDiffDate360()
         double nDate2 = GetDouble();
         double nDate1 = GetDouble();
         double fSign;
-        if (nGlobalError == 0)
+        if (nGlobalError)
+            PushError( nGlobalError);
+        else
         {
             if (nDate2 < nDate1)
             {
@@ -379,8 +381,6 @@ void ScInterpreter::ScGetDiffDate360()
                  - (double) aDate1.GetDay() - (double) aDate1.GetMonth() * 30.0
                  - (double)aDate1.GetYear() * 360.0) );
         }
-        else
-            SetIllegalParameter();
     }
 }
 
@@ -395,10 +395,10 @@ void ScInterpreter::ScGetTimeValue()
         if (eType == NUMBERFORMAT_TIME || eType == NUMBERFORMAT_DATETIME)
             PushDouble(fVal);
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
     else
-        SetIllegalArgument();
+        PushIllegalArgument();
 }
 
 void ScInterpreter::ScPlusMinus()
@@ -435,7 +435,7 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
         {
             INT32 nDec = (INT32) ::rtl::math::approxFloor(GetDouble());
             if( nDec < -20 || nDec > 20 )
-                SetIllegalArgument();
+                PushIllegalArgument();
             else
                 fVal = ::rtl::math::round( GetDouble(), (short)nDec, eMode );
         }
@@ -469,7 +469,7 @@ void ScInterpreter::ScCeil()
         if ( fDec == 0.0 )
             PushInt(0);
         else if (fVal*fDec < 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
         {
             if ( !bAbs && fVal < 0.0 )
@@ -491,7 +491,7 @@ void ScInterpreter::ScFloor()
         if ( fDec == 0.0 )
             PushInt(0);
         else if (fVal*fDec < 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
         {
             if ( !bAbs && fVal < 0.0 )
@@ -553,7 +553,7 @@ void ScInterpreter::ScLog()
         if (nVal > 0.0 && nBase > 0.0 && nBase != 1.0)
             PushDouble(log(nVal) / log(nBase));
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -563,7 +563,7 @@ void ScInterpreter::ScLn()
     if (fVal > 0.0)
         PushDouble(log(fVal));
     else
-        SetIllegalArgument();
+        PushIllegalArgument();
 }
 
 void ScInterpreter::ScLog10()
@@ -572,13 +572,13 @@ void ScInterpreter::ScLog10()
     if (fVal > 0.0)
         PushDouble(log10(fVal));
     else
-        SetIllegalArgument();
+        PushIllegalArgument();
 }
 
-void ScInterpreter::ScNBW()
+void ScInterpreter::ScNPV()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    BYTE nParamCount = GetByte();
+    short nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 31 ) )
     {
         double nVal = 0.0;
@@ -591,8 +591,10 @@ void ScInterpreter::ScNBW()
         {
             double  nCount = 1.0;
             double  nZins = GetDouble();
+            --nParamCount;
+            size_t nRefInList = 0;
             ScRange aRange;
-            for (short i = 2; i <= (short) nParamCount; i++)
+            while (nParamCount-- > 0)
             {
                 switch (GetStackType())
                 {
@@ -609,10 +611,11 @@ void ScInterpreter::ScNBW()
                     }
                     break;
                     case svDoubleRef :
+                    case svRefList :
                     {
                         USHORT nErr = 0;
                         double nCellVal;
-                        PopDoubleRef( aRange );
+                        PopDoubleRef( aRange, nParamCount, nRefInList);
                         ScValueIterator aValIter(pDok, aRange, glSubTotal);
                         if (aValIter.GetFirst(nCellVal, nErr))
                         {
@@ -639,7 +642,7 @@ void ScInterpreter::ScNBW()
 #pragma optimize("",off)
 #endif
 
-void ScInterpreter::ScIKV()
+void ScInterpreter::ScIRR()
 {
     double fSchaetzwert;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
@@ -661,11 +664,9 @@ void ScInterpreter::ScIKV()
     {
         case svDoubleRef :
         break;
-        case svDouble :
-        case svSingleRef :
         default:
         {
-            SetError(errIllegalParameter);
+            PushIllegalParameter();
             return;
         }
     }
@@ -704,10 +705,7 @@ void ScInterpreter::ScIKV()
     if (fEps < SCdEpsilon)
         PushDouble(x);
     else
-    {
-        SetError(errNoConvergence);
-        PushInt(0);
-    }
+        PushError( errNoConvergence);
 }
 #if defined(WIN) && defined(MSC)
 #pragma optimize("",on)
@@ -731,7 +729,7 @@ void ScInterpreter::ScMIRR()
         PopDoubleRef( aRange );
 
         if( nGlobalError )
-            SetIllegalParameter();
+            PushError( nGlobalError);
         else
         {
             ScValueIterator aValIter( pDok, aRange, glSubTotal );
@@ -753,7 +751,7 @@ void ScInterpreter::ScMIRR()
                 bLoop = aValIter.GetNext( fCellValue, nIterError );
             }
             if( nIterError )
-                SetError( nIterError );
+                PushError( nIterError );
             else
             {
                 double fResult = -fNPV_reinvest / fNPV_invest;
@@ -776,7 +774,7 @@ void ScInterpreter::ScISPMT()
         double fRate = GetDouble();
 
         if( nGlobalError )
-            SetIllegalParameter();
+            PushError( nGlobalError);
         else
             PushDouble( fInvest * fRate * (fPeriod / fTotal - 1.0) );
     }
@@ -876,7 +874,7 @@ void ScInterpreter::ScGDA()
         double nWert    = GetDouble();
         if (nWert < 0.0 || nRest < 0.0 || nFaktor <= 0.0 || nRest > nWert
                         || nPeriode < 1.0 || nPeriode > nDauer)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
             PushDouble(ScGetGDA(nWert, nRest, nDauer, nPeriode, nFaktor));
     }
@@ -900,7 +898,7 @@ void ScInterpreter::ScGDA2()
     if (nMonate < 1.0 || nMonate > 12.0 || nDauer > 1200.0 || nRest < 0.0 ||
         nPeriode > (nDauer + 1.0) || nRest > nWert || nWert < 0.0)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     double nAbRate = 1.0 - pow(nRest / nWert, 1.0 / nDauer);
@@ -1001,7 +999,7 @@ void ScInterpreter::ScVDB()
         fWert   = GetDouble();
         if (fAnfang < 0.0 || fEnde < fAnfang || fEnde > fDauer || fWert < 0.0
                           || fRest > fWert || fFaktor <= 0.0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             double fIntStart = ::rtl::math::approxFloor(fAnfang);
@@ -1284,7 +1282,7 @@ void ScInterpreter::ScZinsZ()
     nZr   = GetDouble();
     nZins = GetDouble();
     if (nZr < 1.0 || nZr > nZzr)
-        SetIllegalParameter();
+        PushIllegalArgument();
     else
         PushDouble(ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz));
 }
@@ -1305,7 +1303,7 @@ void ScInterpreter::ScKapz()
     nZr   = GetDouble();
     nZins = GetDouble();
     if (nZr < 1.0 || nZr > nZzr)
-        SetIllegalParameter();
+        PushIllegalArgument();
     else
     {
         nZinsz = ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz);
@@ -1327,7 +1325,7 @@ void ScInterpreter::ScKumZinsZ()
         fZins   = GetDouble();
         if (fAnfang < 1.0 || fEnde < fAnfang || fZins <= 0.0 ||
             fEnde > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             ULONG nAnfang = (ULONG) fAnfang;
@@ -1367,7 +1365,7 @@ void ScInterpreter::ScKumKapZ()
         fZins   = GetDouble();
         if (fAnfang < 1.0 || fEnde < fAnfang || fZins <= 0.0 ||
             fEnde > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
@@ -1402,7 +1400,7 @@ void ScInterpreter::ScEffektiv()
         double fPerioden = GetDouble();
         double fNominal = GetDouble();
         if (fPerioden < 1.0 || fNominal <= 0.0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             fPerioden = ::rtl::math::approxFloor(fPerioden);
@@ -1419,7 +1417,7 @@ void ScInterpreter::ScNominal()
         double fPerioden = GetDouble();
         double fEffektiv = GetDouble();
         if (fPerioden < 1.0 || fEffektiv <= 0.0)
-            SetIllegalParameter();
+            PushIllegalArgument();
         else
         {
             fPerioden = ::rtl::math::approxFloor(fPerioden);
@@ -1661,129 +1659,245 @@ void ScInterpreter::ScBackSolver()
 
 void ScInterpreter::ScIntersect()
 {
-    SCCOL nCol11;
-    SCROW nRow11;
-    SCTAB nTab11;
-    SCCOL nCol21;
-    SCROW nRow21;
-    SCTAB nTab21;
-    SCCOL nCol12;
-    SCROW nRow12;
-    SCTAB nTab12;
-    SCCOL nCol22;
-    SCROW nRow22;
-    SCTAB nTab22;
-    SCCOL nCol1;
-    SCROW nRow1;
-    SCTAB nTab1;
-    SCCOL nCol2;
-    SCROW nRow2;
-    SCTAB nTab2;
-    BYTE eStackVar = sal::static_int_cast<BYTE>( GetStackType() );
-    if (eStackVar == svDoubleRef)
-        PopDoubleRef(nCol11, nRow11, nTab11, nCol21, nRow21, nTab21);
-    else if (eStackVar == svSingleRef)
+    ScTokenRef x2 = PopToken();
+    ScTokenRef x1 = PopToken();
+    if (nGlobalError || !x1 || !x2)
     {
-        PopSingleRef(nCol11, nRow11, nTab11);
-        nCol21 = nCol11;
-        nRow21 = nRow11;
-        nTab21 = nTab11;
-    }
-    else
-    {
-        SetError(errNoRef);
-        PushInt(0);
+        PushIllegalArgument();
         return;
     }
-    eStackVar = sal::static_int_cast<BYTE>( GetStackType() );
-    if (eStackVar == svDoubleRef)
-        PopDoubleRef(nCol12, nRow12, nTab12, nCol22, nRow22, nTab22);
-    else if (eStackVar == svSingleRef)
+    StackVar sv1 = x1->GetType();
+    StackVar sv2 = x2->GetType();
+    if ((sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
+        (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
     {
-        PopSingleRef(nCol12, nRow12, nTab12);
-        nCol22 = nCol12;
-        nRow22 = nRow12;
-        nTab22 = nTab12;
-    }
-    else
-    {
-        SetError(errNoRef);
-        PushInt(0);
+        PushIllegalArgument();
         return;
     }
-    nCol1 = Max(nCol11, nCol12);
-    nRow1 = Max(nRow11, nRow12);
-    nTab1 = Max(nTab11, nTab12);
-    nCol2 = Min(nCol21, nCol22);
-    nRow2 = Min(nRow21, nRow22);
-    nTab2 = Min(nTab21, nTab22);
-    if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
+    if (sv1 == svRefList || sv2 == svRefList)
     {
-        SetError(errNoRef);
-        PushInt(0);
+        // Now this is a bit nasty but it simplifies things, and having
+        // intersections with lists isn't too common, if at all..
+        // Convert a reference to list.
+        ScTokenRef xt[2] = { x1, x2 };
+        StackVar sv[2] = { sv1, sv2 };
+        for (size_t i=0; i<2; ++i)
+        {
+            if (sv[i] == svSingleRef)
+            {
+                ComplRefData aRef;
+                aRef.Ref1 = aRef.Ref2 = xt[i]->GetSingleRef();
+                xt[i] = new ScRefListToken;
+                xt[i]->GetRefList()->push_back( aRef);
+            }
+            else if (sv[i] == svDoubleRef)
+            {
+                ComplRefData aRef = xt[i]->GetDoubleRef();
+                xt[i] = new ScRefListToken;
+                xt[i]->GetRefList()->push_back( aRef);
+            }
+        }
+        x1 = xt[0], x2 = xt[1];
+
+        x1->CalcAbsIfRel( aPos);
+        x2->CalcAbsIfRel( aPos);
+        ScTokenRef xRes = new ScRefListToken;
+        ScRefList* pRefList = xRes->GetRefList();
+        ScRefList::const_iterator end1( x1->GetRefList()->end());
+        ScRefList::const_iterator end2( x2->GetRefList()->end());
+        for (ScRefList::const_iterator it1( x1->GetRefList()->begin());
+                it1 != end1; ++it1)
+        {
+            const SingleRefData& r11 = (*it1).Ref1;
+            const SingleRefData& r12 = (*it1).Ref2;
+            for (ScRefList::const_iterator it2( x2->GetRefList()->begin());
+                    it2 != end2; ++it2)
+            {
+                const SingleRefData& r21 = (*it2).Ref1;
+                const SingleRefData& r22 = (*it2).Ref2;
+                SCCOL nCol1 = ::std::max( r11.nCol, r21.nCol);
+                SCROW nRow1 = ::std::max( r11.nRow, r21.nRow);
+                SCTAB nTab1 = ::std::max( r11.nTab, r21.nTab);
+                SCCOL nCol2 = ::std::min( r12.nCol, r22.nCol);
+                SCROW nRow2 = ::std::min( r12.nRow, r22.nRow);
+                SCTAB nTab2 = ::std::min( r12.nTab, r22.nTab);
+                if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
+                    ;   // nothing
+                else
+                {
+                    ComplRefData aRef;
+                    aRef.InitRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                    pRefList->push_back( aRef);
+                }
+            }
+        }
+        size_t n = pRefList->size();
+        if (!n)
+            PushError( errNoRef);
+        else if (n == 1)
+        {
+            const ComplRefData& rRef = (*pRefList)[0];
+            if (rRef.Ref1 == rRef.Ref2)
+                PushTempToken( new ScSingleRefToken( rRef.Ref1));
+            else
+                PushTempToken( new ScDoubleRefToken( rRef));
+        }
+        else
+            PushTempToken( xRes);
     }
-    else if (nCol2 == nCol1 && nRow2 == nRow1 && nTab2 == nTab1)
-        PushSingleRef(nCol1, nRow1, nTab1);
     else
-        PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+    {
+        ScToken* pt[2] = { x1, x2 };
+        StackVar sv[2] = { sv1, sv2 };
+        SCCOL nC1[2], nC2[2];
+        SCROW nR1[2], nR2[2];
+        SCTAB nT1[2], nT2[2];
+        for (size_t i=0; i<2; ++i)
+        {
+            switch (sv[i])
+            {
+                case svSingleRef:
+                case svDoubleRef:
+                    pt[i]->CalcAbsIfRel( aPos);
+                    {
+                        const SingleRefData& r = pt[i]->GetSingleRef();
+                        nC1[i] = r.nCol;
+                        nR1[i] = r.nRow;
+                        nT1[i] = r.nTab;
+                    }
+                    if (sv[i] == svDoubleRef)
+                    {
+                        const SingleRefData& r = pt[i]->GetSingleRef2();
+                        nC2[i] = r.nCol;
+                        nR2[i] = r.nRow;
+                        nT2[i] = r.nTab;
+                    }
+                    else
+                    {
+                        nC2[i] = nC1[i];
+                        nR2[i] = nR1[i];
+                        nT2[i] = nT1[i];
+                    }
+                    break;
+                default:
+                    ;   // nothing, prevent compiler warning
+            }
+        }
+        SCCOL nCol1 = ::std::max( nC1[0], nC1[1]);
+        SCROW nRow1 = ::std::max( nR1[0], nR1[1]);
+        SCTAB nTab1 = ::std::max( nT1[0], nT1[1]);
+        SCCOL nCol2 = ::std::min( nC2[0], nC2[1]);
+        SCROW nRow2 = ::std::min( nR2[0], nR2[1]);
+        SCTAB nTab2 = ::std::min( nT2[0], nT2[1]);
+        if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
+            PushError( errNoRef);
+        else if (nCol2 == nCol1 && nRow2 == nRow1 && nTab2 == nTab1)
+            PushSingleRef( nCol1, nRow1, nTab1);
+        else
+            PushDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+    }
+}
+
+
+void ScInterpreter::ScRangeFunc()
+{
+    ScTokenRef x2 = PopToken();
+    ScTokenRef x1 = PopToken();
+    if (nGlobalError || !x1 || !x2)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    ScTokenRef xRes = ScToken::ExtendRangeReference( *x1, *x2, aPos, false);
+    if (!xRes)
+        PushIllegalArgument();
+    else
+        PushTempToken( xRes);
+    return;
+}
+
+
+void ScInterpreter::ScUnionFunc()
+{
+    ScTokenRef x2 = PopToken();
+    ScTokenRef x1 = PopToken();
+    if (nGlobalError || !x1 || !x2)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    StackVar sv1 = x1->GetType();
+    StackVar sv2 = x2->GetType();
+    if ((sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
+            (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
+    {
+        PushIllegalArgument();
+        return;
+    }
+    ScTokenRef xRes;
+    // Append to an existing RefList if there is one.
+    if (sv1 == svRefList)
+    {
+        xRes = x1;
+        sv1 = svUnknown;    // mark as handled
+    }
+    else if (sv2 == svRefList)
+    {
+        xRes = x2;
+        sv2 = svUnknown;    // mark as handled
+    }
+    else
+        xRes = new ScRefListToken;
+    ScRefList* pRes = xRes->GetRefList();
+    ScToken* pt[2] = { x1, x2 };
+    StackVar sv[2] = { sv1, sv2 };
+    for (size_t i=0; i<2; ++i)
+    {
+        if (pt[i] == xRes)
+            continue;
+        switch (sv[i])
+        {
+            case svSingleRef:
+                {
+                    ComplRefData aRef;
+                    aRef.Ref1 = aRef.Ref2 = pt[i]->GetSingleRef();
+                    pRes->push_back( aRef);
+                }
+                break;
+            case svDoubleRef:
+                pRes->push_back( pt[i]->GetDoubleRef());
+                break;
+            case svRefList:
+                {
+                    const ScRefList* p = pt[i]->GetRefList();
+                    ScRefList::const_iterator it( p->begin());
+                    ScRefList::const_iterator end( p->end());
+                    for ( ; it != end; ++it)
+                    {
+                        pRes->push_back( *it);
+                    }
+                }
+                break;
+            default:
+                ;   // nothing, prevent compiler warning
+        }
+    }
+    ValidateRef( *pRes);    // set #REF! if needed
+    PushTempToken( xRes);
+    return;
 }
 
 
 void ScInterpreter::ScCurrent()
 {
-    switch ( GetStackType() )
+    ScTokenRef xTok( PopToken());
+    if (xTok)
     {
-        case svDouble :
-        {
-            double nVal = PopDouble();
-            PushDouble( nVal );
-            PushDouble( nVal );
-        }
-        break;
-        case svString :
-        {
-            const String& rStr = PopString();
-            PushString( rStr );
-            PushString( rStr );
-        }
-        break;
-        case svDoubleRef :
-        case svSingleRef :
-        {
-            ScAddress aAdr;
-            if ( !PopDoubleRefOrSingleRef( aAdr ) )
-            {
-                PushInt(0);
-                break;
-            }
-            ScBaseCell* pCell = GetCell( aAdr );
-            // NoteCell entsteht auch durch Referenz auf leere Zelle
-            if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
-            {
-                if ( HasCellValueData( pCell ) )
-                {
-                    double nVal = GetCellValue( aAdr, pCell );
-                    PushDouble( nVal );
-                    PushDouble( nVal );
-                }
-                else
-                {
-                    String aStr;
-                    GetCellString( aStr, pCell );
-                    PushString( aStr );
-                    PushString( aStr );
-                }
-            }
-            else
-            {
-                PushSingleRef( aAdr.Col(), aAdr.Row(), aAdr.Tab() );
-                PushSingleRef( aAdr.Col(), aAdr.Row(), aAdr.Tab() );
-            }
-        }
-        break;
-        default:
-            SetIllegalParameter();
+        PushTempToken( xTok);
+        PushTempToken( xTok);
     }
+    else
+        PushError( errUnknownStackVariable);
 }
 
 void ScInterpreter::ScStyle()
@@ -1822,7 +1936,7 @@ void ScInterpreter::ScStyle()
         PushDouble(0.0);
     }
     else
-        SetIllegalParameter();
+        PushIllegalParameter();
 }
 
 ScDdeLink* lcl_GetDdeLink( SvxLinkManager* pLinkMgr,
@@ -1870,7 +1984,7 @@ void ScInterpreter::ScDde()
         SvxLinkManager* pLinkMgr = pDok->GetLinkManager();
         if (!pLinkMgr)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
 
@@ -1892,7 +2006,7 @@ void ScInterpreter::ScDde()
         //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
-        BOOL bWasError = ( pMyFormulaCell->GetCode()->GetError() != 0 );
+        BOOL bWasError = ( pMyFormulaCell->GetRawError() != 0 );
 
         if (!pLink)
         {
@@ -1920,8 +2034,8 @@ void ScInterpreter::ScDde()
         //  (z.B. zirkulaere Referenz) entstanden ist, der vorher nicht da war,
         //  das Fehler-Flag zuruecksetzen:
 
-        if ( pMyFormulaCell->GetCode()->GetError() && !bWasError )
-            pMyFormulaCell->GetCode()->SetError(0);
+        if ( pMyFormulaCell->GetRawError() && !bWasError )
+            pMyFormulaCell->SetErrCode(0);
 
             //  Wert abfragen
 
@@ -1937,10 +2051,10 @@ void ScInterpreter::ScDde()
                 PushMatrix( pNewMat );
             }
             else
-                PushError();
+                PushIllegalArgument();
         }
         else
-            SetNA();
+            PushNA();
 
         pDok->DisableIdle( bOldDis );
     }
@@ -2057,10 +2171,7 @@ void ScInterpreter::ScBase()
                 }
             }
             if ( fVal )
-            {
-                SetError( errStringOverflow );
-                PushInt(0);
-            }
+                PushError( errStringOverflow );
             else
             {
                 if ( nBuf - (p - pBuf) <= nMinLen )
@@ -2071,7 +2182,7 @@ void ScInterpreter::ScBase()
                 delete [] pBuf;
         }
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -2116,7 +2227,7 @@ void ScInterpreter::ScDecimal()
                         ;       // 101b und F00Dh sind ok
                     else
                     {
-                        SetIllegalArgument();
+                        PushIllegalArgument();
                         return ;
                     }
                 }
@@ -2128,7 +2239,7 @@ void ScInterpreter::ScDecimal()
             PushDouble( fVal );
         }
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -2141,7 +2252,7 @@ void ScInterpreter::ScConvert()
         String aFromUnit( GetString() );
         double fVal = GetDouble();
         if ( nGlobalError )
-            SetIllegalArgument();
+            PushError( nGlobalError);
         else
         {   // erst die angegebene Reihenfolge suchen, wenn nicht gefunden den Kehrwert
             double fConv;
@@ -2150,7 +2261,7 @@ void ScInterpreter::ScConvert()
             else if ( ScGlobal::GetUnitConverter()->GetValue( fConv, aToUnit, aFromUnit ) )
                 PushDouble( fVal / fConv );
             else
-                SetNA();
+                PushNA();
         }
     }
 }
@@ -2164,7 +2275,7 @@ void ScInterpreter::ScRoman()
         double fMode = (nParamCount == 2) ? ::rtl::math::approxFloor( GetDouble() ) : 0.0;
         double fVal = ::rtl::math::approxFloor( GetDouble() );
         if( nGlobalError )
-            SetIllegalParameter();
+            PushError( nGlobalError);
         else if( (fMode >= 0.0) && (fMode < 5.0) && (fVal >= 0.0) && (fVal < 4000.0) )
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
@@ -2209,7 +2320,7 @@ void ScInterpreter::ScRoman()
             PushString( aRoman );
         }
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -2235,7 +2346,7 @@ void ScInterpreter::ScArabic()
 {
     String aRoman( GetString() );
     if( nGlobalError )
-        SetIllegalParameter();
+        PushError( nGlobalError);
     else
     {
         aRoman.ToUpperAscii();
@@ -2282,7 +2393,7 @@ void ScInterpreter::ScArabic()
         if( bValid )
             PushInt( nValue );
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -2432,7 +2543,7 @@ void ScInterpreter::ScBahtText()
         double fValue = GetDouble();
         if( nGlobalError )
         {
-            SetIllegalParameter();
+            PushError( nGlobalError);
             return;
         }
 
@@ -2581,6 +2692,6 @@ void ScInterpreter::ScGetPivotData()
     }
 
 failed :
-    SetError( errNoRef );
+    PushError( errNoRef );
 }
 
