@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:58:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
 #include <ide_pch.hxx>
-
 
 #include <vector>
 #include <algorithm>
@@ -49,6 +47,8 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
@@ -344,11 +344,33 @@ bool BasicIDE::RenameModule( Window* pErrorParent, const ScriptDocument& rDocume
                                 // document basic
                                 aLocation = String::CreateFromAscii("document");
 
-                                if ( rxLimitToDocument.is() && ( rxLimitToDocument != aDocument.getDocument() ) )
+                                if ( rxLimitToDocument.is() )
                                 {
-                                    // error
-                                    bError = TRUE;
-                                    ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
+                                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
+
+                                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
+                                    if ( !xScripts.is() )
+                                    {   // the document itself does not support embedding scripts
+                                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
+                                        if ( xContext.is() )
+                                            xScripts = xContext->getScriptContainer();
+                                        if ( xScripts.is() )
+                                        {   // but it is able to refer to a document which actually does support this
+                                            xLimitToDocument.set( xScripts, UNO_QUERY );
+                                            if ( !xLimitToDocument.is() )
+                                            {
+                                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
+                                                xLimitToDocument = rxLimitToDocument;
+                                            }
+                                        }
+                                    }
+
+                                    if ( xLimitToDocument != aDocument.getDocument() )
+                                    {
+                                        // error
+                                        bError = TRUE;
+                                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
+                                    }
                                 }
                             }
                             else
