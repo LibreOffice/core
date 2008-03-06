@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,12 @@
 #include <comphelper/documentinfo.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -64,6 +66,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
 using namespace ::scripting_util;
 
@@ -123,12 +126,9 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 throw ( Exception, RuntimeException )
 {
     if ( m_bInitialised )
-    {
-        return ;
-    }
+        return;
 
     m_bIsValid = false;
-
 
     sal_Int32 len = args.getLength();
     if ( len > 1  )
@@ -142,46 +142,68 @@ throw ( Exception, RuntimeException )
 
     if ( len != 0 )
     {
-        Any stringAny = makeAny( ::rtl::OUString() );
-
         // check if first parameter is a string
         // if it is, this implies that this is a MSP created
         // with a user or share ctx ( used for browse functionality )
-
         //
-        if ( args[ 0 ].getValueType() ==  ::getCppuType((const ::rtl::OUString* ) NULL ) )
+        if ( args[ 0 ] >>= m_sCtxString )
         {
-             args[ 0 ] >>= m_sCtxString;
             invokeArgs[ 0  ] = args[ 0 ];
-            if ( m_sCtxString.indexOf( OUSTR("vnd.sun.star.tdoc") ) == 0 )
+            if ( m_sCtxString.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.tdoc" ) ) == 0 )
             {
                 m_xModel =  MiscUtils::tDocUrlToModel( m_sCtxString );
             }
-
         }
-        else if (  args[ 0 ].getValueType() == ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
-
+        else if ( args[ 0 ] >>= m_xInvocationContext )
         {
+            m_xModel.set( m_xInvocationContext->getScriptContainer(), UNO_QUERY_THROW );
+        }
+        else
+        {
+            args[ 0 ] >>= m_xModel;
+        }
+
+        if ( m_xModel.is() )
+        {
+            // from the arguments, we were able to deduce a model. That alone doesn't
+            // suffice, we also need an XEmbeddedScripts which actually indicates support
+            // for embeddeding scripts
+            Reference< XEmbeddedScripts > xScripts( m_xModel, UNO_QUERY );
+            if ( !xScripts.is() )
+            {
+                throw lang::IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "The given document does not support embedding scripts into it, and cannot be associated with such a document."
+                    ) ),
+                    *this,
+                    1
+                );
+            }
+
             try
             {
-                m_xModel.set( args[ 0 ], UNO_QUERY_THROW );
                 m_sCtxString =  MiscUtils::xModelToTdocUrl( m_xModel, m_xContext );
-                Any propValURL = makeAny( m_sCtxString );
-                invokeArgs[ 0 ] <<= propValURL;
+            }
+            catch ( const Exception& )
+            {
+                Any aError( ::cppu::getCaughtException() );
+
+                ::rtl::OUStringBuffer buf;
+                buf.appendAscii( "MasterScriptProvider::initialize: caught " );
+                buf.append     ( aError.getValueTypeName() );
+                buf.appendAscii( ":" );
+
+                Exception aException; aError >>= aException;
+                buf.append     ( aException.Message );
+                throw lang::WrappedTargetException( buf.makeStringAndClear(), *this, aError );
             }
 
-            catch ( beans::UnknownPropertyException & e )
-            {
-                ::rtl::OUString temp = OUSTR(
-                                       "MasterScriptProvider::initialize: caught UnknownPropertyException: " );
-                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-            }
-            catch ( RuntimeException & e )
-            {
-                ::rtl::OUString temp = OUSTR( "MasterScriptProvider::initialize: " );
-                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-            }
+            if ( m_xInvocationContext.is() && m_xInvocationContext != m_xModel )
+                invokeArgs[ 0 ] <<= m_xInvocationContext;
+            else
+                invokeArgs[ 0 ] <<= m_sCtxString;
         }
+
         ::rtl::OUString pkgSpec = OUSTR("uno_packages");
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
@@ -331,9 +353,11 @@ throw ( provider::ScriptFrameworkErrorException,
     // ** Special case is BASIC, all calls to getScript will be handled
     // by the language script provider in the current location context
     // even if its different
-    if ( ( location.equals( OUSTR( "document" ) ) && m_xModel.is() )  ||
-         ( endsWith( m_sCtxString, location ) ) ||
-         ( language.equals( OUSTR( "Basic" ) ) )
+    if  (   (   location.equals( OUSTR( "document" ) )
+            &&  m_xModel.is()
+            )
+            ||  ( endsWith( m_sCtxString, location ) )
+            ||  ( language.equals( OUSTR( "Basic" ) ) )
          )
     {
         Reference< provider::XScriptProvider > xScriptProvider;
@@ -349,7 +373,7 @@ throw ( provider::ScriptFrameworkErrorException,
                     providerCache()->getProvider( serviceName ),
                     UNO_QUERY_THROW );
             }
-            catch( Exception& e )
+            catch( const Exception& e )
             {
                 throw provider::ScriptFrameworkErrorException(
                     e.Message, Reference< XInterface >(),
