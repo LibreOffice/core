@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowserModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:30:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include "PropertyHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
+#include "StatisticsHelper.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -59,6 +60,10 @@
 #include <rtl/math.hxx>
 
 #include <algorithm>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -777,7 +782,8 @@ void DataBrowserModel::updateFromModel()
                             DataSeriesHelper::getNumberFormatKeyFromAxis(
                                 aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 1 );
 
-                        for( sal_Int32 nSeqIdx=0; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
+                        sal_Int32 nSeqIdx=0;
+                        for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
                         {
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
@@ -805,6 +811,11 @@ void DataBrowserModel::updateFromModel()
                         {
                             (void)ex;
                         }
+
+                        // add ranges for error bars if present for a series
+                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ true ))
+                            addErrorBarRanges( aSeries[nSeriesIdx], nNumberFormatKey, nSeqIdx, nHeaderEnd );
+
                         m_aHeaders.push_back(
                             tDataHeader(
                                 aSeries[nSeriesIdx],
@@ -812,6 +823,7 @@ void DataBrowserModel::updateFromModel()
                                 bSwapXAndYAxis,
                                 nHeaderStart,
                                 nHeaderEnd - 1 ));
+
                         nHeaderStart = nHeaderEnd;
 
                         ::std::sort( m_aColumns.begin() + nStartColIndex, m_aColumns.end(), implColumnLess() );
@@ -824,6 +836,84 @@ void DataBrowserModel::updateFromModel()
 
 void DataBrowserModel::applyToModel()
 {
+}
+
+void DataBrowserModel::addErrorBarRanges(
+    const Reference< chart2::XDataSeries > & xDataSeries,
+    sal_Int32 nNumberFormatKey,
+    sal_Int32 & rInOutSequenceIndex,
+    sal_Int32 & rInOutHeaderEnd )
+{
+    try
+    {
+        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSequences;
+
+        // x error bars
+        // ------------
+        Reference< chart2::data::XDataSource > xErrorSource(
+            StatisticsHelper::getErrorBars( xDataSeries, /* bYError = */ false ), uno::UNO_QUERY );
+
+        // positive x error bars
+        Reference< chart2::data::XLabeledDataSequence > xErrorLSequence(
+            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+                xErrorSource,
+                /* bPositiveValue = */ true,
+                /* bYError = */ false ));
+        if( xErrorLSequence.is())
+            aSequences.push_back( xErrorLSequence );
+
+        // negative x error bars
+        xErrorLSequence.set(
+            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+                xErrorSource,
+                /* bPositiveValue = */ false,
+                /* bYError = */ false ));
+        if( xErrorLSequence.is())
+            aSequences.push_back( xErrorLSequence );
+
+        // y error bars
+        // ------------
+        xErrorSource.set(
+            StatisticsHelper::getErrorBars( xDataSeries, /* bYError = */ true ), uno::UNO_QUERY );
+
+        // positive y error bars
+        xErrorLSequence.set(
+            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+                xErrorSource,
+                /* bPositiveValue = */ true,
+                /* bYError = */ true ));
+        if( xErrorLSequence.is())
+            aSequences.push_back( xErrorLSequence );
+
+        // negative y error bars
+        xErrorLSequence.set(
+            StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+                xErrorSource,
+                /* bPositiveValue = */ false,
+                /* bYError = */ true ));
+        if( xErrorLSequence.is())
+            aSequences.push_back( xErrorLSequence );
+
+
+        for( ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aIt( aSequences.begin());
+             aIt != aSequences.end(); ++aIt )
+        {
+            m_aColumns.push_back(
+                tDataColumn(
+                    xDataSeries,
+                    rInOutSequenceIndex,
+                    lcl_getUIRoleName( *aIt ),
+                    *aIt,
+                    NUMBER,
+                    nNumberFormatKey ));
+            ++rInOutSequenceIndex;
+            ++rInOutHeaderEnd;
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 // static
