@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogModel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:13:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,11 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
     {
         aTranslationMap[ C2U( "categories" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_CATEGORIES )));
         aTranslationMap[ C2U( "error-bars-x" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR )));
+        aTranslationMap[ C2U( "error-bars-x-positive" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE )));
+        aTranslationMap[ C2U( "error-bars-x-negative" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE )));
         aTranslationMap[ C2U( "error-bars-y" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR )));
+        aTranslationMap[ C2U( "error-bars-y-positive" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE )));
+        aTranslationMap[ C2U( "error-bars-y-negative" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE )));
         aTranslationMap[ C2U( "label" ) ] =        OUString( String( ::chart::SchResId( STR_DATA_ROLE_LABEL )));
         aTranslationMap[ C2U( "values-first" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_FIRST )));
         aTranslationMap[ C2U( "values-last" ) ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_LAST )));
@@ -144,16 +148,20 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
     rOutMap.clear();
     sal_Int32 nIndex = 0;
 
-    rOutMap[ C2U( "label" ) ] =        ++nIndex;
-    rOutMap[ C2U( "categories" ) ] =   ++nIndex;
-    rOutMap[ C2U( "values-x" ) ] =     ++nIndex;
-    rOutMap[ C2U( "values-y" ) ] =     ++nIndex;
-    rOutMap[ C2U( "error-bars-x" ) ] = ++nIndex;
-    rOutMap[ C2U( "error-bars-y" ) ] = ++nIndex;
-    rOutMap[ C2U( "values-first" ) ] = ++nIndex;
-    rOutMap[ C2U( "values-min" ) ] =   ++nIndex;
-    rOutMap[ C2U( "values-max" ) ] =   ++nIndex;
-    rOutMap[ C2U( "values-last" ) ] =  ++nIndex;
+    rOutMap[ C2U( "label" ) ] =                 ++nIndex;
+    rOutMap[ C2U( "categories" ) ] =            ++nIndex;
+    rOutMap[ C2U( "values-x" ) ] =              ++nIndex;
+    rOutMap[ C2U( "values-y" ) ] =              ++nIndex;
+    rOutMap[ C2U( "error-bars-x" ) ] =          ++nIndex;
+    rOutMap[ C2U( "error-bars-x-positive" ) ] = ++nIndex;
+    rOutMap[ C2U( "error-bars-x-negative" ) ] = ++nIndex;
+    rOutMap[ C2U( "error-bars-y" ) ] =          ++nIndex;
+    rOutMap[ C2U( "error-bars-y-positive" ) ] = ++nIndex;
+    rOutMap[ C2U( "error-bars-y-negative" ) ] = ++nIndex;
+    rOutMap[ C2U( "values-first" ) ] =          ++nIndex;
+    rOutMap[ C2U( "values-min" ) ] =            ++nIndex;
+    rOutMap[ C2U( "values-max" ) ] =            ++nIndex;
+    rOutMap[ C2U( "values-last" ) ] =           ++nIndex;
 }
 
 struct lcl_DataSeriesContainerAppend : public
