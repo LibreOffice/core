@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:56:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,10 +489,8 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     return xRet;
 }
 
-void SfxDialogLibraryContainer::implSetStorage( const Reference< embed::XStorage >& xStorage )
+void SfxDialogLibraryContainer::onNewRootStorage()
 {
-    (void)xStorage;
-
     // the library container is not modified, go through the libraries and check whether they are modified
     Sequence< OUString > aNames = maNameContainer.getElementNames();
     const OUString* pNames = aNames.getConstArray();
