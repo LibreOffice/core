@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:29:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:49:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #define TP_HEIGHT 205
 
 #define DLG_FIRSTSTART_WIZARD   RID_FIRSTSTSTART_START+1
-#define STR_FIRSTSTART_TITLE    RID_FIRSTSTSTART_START+2
+    // FREE
 #define TP_WELCOME              RID_FIRSTSTSTART_START+3
 #define TP_REGISTRATION         RID_FIRSTSTSTART_START+4
 #define TP_MIGRATION            RID_FIRSTSTSTART_START+5
