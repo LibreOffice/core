@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:09:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,18 @@ public:
     inline static bool IsStringType( ScMatValType nType )
     {
         return (nType & SC_MATVAL_STRING) != 0;
+    }
+
+    /// Empty, but not empty path or any other type.
+    inline static bool IsEmptyType( ScMatValType nType )
+    {
+        return (nType & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY;
+    }
+
+    /// Empty path, but not empty or any other type.
+    inline static bool IsEmptyPathType( ScMatValType nType )
+    {
+        return (nType & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH;
     }
 
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
@@ -319,6 +331,7 @@ public:
 
 
 typedef ScSimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
+typedef ScSimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
 
 
 // Old values as used up to SO52.
