@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:27:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ struct ImplWizButtonData
 
 // =======================================================================
 
-void WizardDialog::ImplInitData(sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount)
+void WizardDialog::ImplInitData()
 {
     mpFirstPage     = NULL;
     mpFirstBtn      = NULL;
@@ -92,8 +92,21 @@ void WizardDialog::ImplInitData(sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCou
     mpViewWindow    = NULL;
     mnCurLevel      = 0;
     meViewAlign     = WINDOWALIGN_LEFT;
-    mbRoadmapMode   =  _bRoadmapMode;
-    mnLeftAlignCount = _nLeftAlignCount;
+    mbEmptyViewMargin =  false;
+    mnLeftAlignCount = 0;
+}
+
+// -----------------------------------------------------------------------
+void WizardDialog::SetLeftAlignedButtonCount( sal_Int16 _nCount )
+{
+    mnLeftAlignCount = _nCount;
+}
+
+// -----------------------------------------------------------------------
+
+void WizardDialog::SetEmptyViewMargin()
+{
+    mbEmptyViewMargin = true;
 }
 
 // -----------------------------------------------------------------------
@@ -214,7 +227,7 @@ void WizardDialog::ImplPosCtrls()
         }
         else if ( meViewAlign == WINDOWALIGN_LEFT )
         {
-            if (mbRoadmapMode)
+            if ( mbEmptyViewMargin )
             {
                 nViewOffX       = 0;
                 nViewOffY       = 0;
@@ -358,18 +371,18 @@ TabPage* WizardDialog::ImplGetPage( USHORT nLevel ) const
 
 // =======================================================================
 
-WizardDialog::WizardDialog( Window* pParent, WinBits nStyle, sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount ) :
+WizardDialog::WizardDialog( Window* pParent, WinBits nStyle ) :
     ModalDialog( pParent, nStyle )
 {
-    ImplInitData(_bRoadmapMode, _nLeftAlignCount);
+    ImplInitData();
 }
 
 // -----------------------------------------------------------------------
 
-WizardDialog::WizardDialog( Window* pParent, const ResId& rResId, sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount ) :
+WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
     ModalDialog( pParent, rResId )
 {
-    ImplInitData(_bRoadmapMode, _nLeftAlignCount);
+    ImplInitData();
 }
 
 // -----------------------------------------------------------------------
