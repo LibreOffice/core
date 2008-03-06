@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:42:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,99 +206,157 @@ BOOL SingleRefData::operator==( const SingleRefData& r ) const
 }
 
 
-// Abs-Refs muessen vorher aktualisiert werden!
-// wird in refupdat.cxx mit MoveRelWrap verwendet
-void ComplRefData::PutInOrder()
+static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
 {
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
     BOOL bTmp;
     BYTE nRelState1, nRelState2;
-    if ( Ref1.Flags.bRelName )
+    if ( rRef1.Flags.bRelName )
         nRelState1 =
-              ((Ref1.Flags.bTabRel & 0x01) << 2)
-            | ((Ref1.Flags.bRowRel & 0x01) << 1)
-            | ((Ref1.Flags.bColRel & 0x01));
+            ((rRef1.Flags.bTabRel & 0x01) << 2)
+            | ((rRef1.Flags.bRowRel & 0x01) << 1)
+            | ((rRef1.Flags.bColRel & 0x01));
     else
         nRelState1 = 0;
-    if ( Ref2.Flags.bRelName )
+    if ( rRef2.Flags.bRelName )
         nRelState2 =
-              ((Ref2.Flags.bTabRel & 0x01) << 2)
-            | ((Ref2.Flags.bRowRel & 0x01) << 1)
-            | ((Ref2.Flags.bColRel & 0x01));
+            ((rRef2.Flags.bTabRel & 0x01) << 2)
+            | ((rRef2.Flags.bRowRel & 0x01) << 1)
+            | ((rRef2.Flags.bColRel & 0x01));
     else
         nRelState2 = 0;
-    if ( (nCol1 = Ref1.nCol) > (nCol2 = Ref2.nCol) )
+    if ( (nCol1 = rRef1.nCol) > (nCol2 = rRef2.nCol) )
     {
-        Ref1.nCol = nCol2;
-        Ref2.nCol = nCol1;
-        nCol1 = Ref1.nRelCol;
-        Ref1.nRelCol = Ref2.nRelCol;
-        Ref2.nRelCol = nCol1;
-        if ( Ref1.Flags.bRelName && Ref1.Flags.bColRel )
+        rRef1.nCol = nCol2;
+        rRef2.nCol = nCol1;
+        nCol1 = rRef1.nRelCol;
+        rRef1.nRelCol = rRef2.nRelCol;
+        rRef2.nRelCol = nCol1;
+        if ( rRef1.Flags.bRelName && rRef1.Flags.bColRel )
             nRelState2 |= 1;
         else
             nRelState2 &= ~1;
-        if ( Ref2.Flags.bRelName && Ref2.Flags.bColRel )
+        if ( rRef2.Flags.bRelName && rRef2.Flags.bColRel )
             nRelState1 |= 1;
         else
             nRelState1 &= ~1;
-        bTmp = Ref1.Flags.bColRel;
-        Ref1.Flags.bColRel = Ref2.Flags.bColRel;
-        Ref2.Flags.bColRel = bTmp;
-        bTmp = Ref1.Flags.bColDeleted;
-        Ref1.Flags.bColDeleted = Ref2.Flags.bColDeleted;
-        Ref2.Flags.bColDeleted = bTmp;
+        bTmp = rRef1.Flags.bColRel;
+        rRef1.Flags.bColRel = rRef2.Flags.bColRel;
+        rRef2.Flags.bColRel = bTmp;
+        bTmp = rRef1.Flags.bColDeleted;
+        rRef1.Flags.bColDeleted = rRef2.Flags.bColDeleted;
+        rRef2.Flags.bColDeleted = bTmp;
     }
-    if ( (nRow1 = Ref1.nRow) > (nRow2 = Ref2.nRow) )
+    if ( (nRow1 = rRef1.nRow) > (nRow2 = rRef2.nRow) )
     {
-        Ref1.nRow = nRow2;
-        Ref2.nRow = nRow1;
-        nRow1 = Ref1.nRelRow;
-        Ref1.nRelRow = Ref2.nRelRow;
-        Ref2.nRelRow = nRow1;
-        if ( Ref1.Flags.bRelName && Ref1.Flags.bRowRel )
+        rRef1.nRow = nRow2;
+        rRef2.nRow = nRow1;
+        nRow1 = rRef1.nRelRow;
+        rRef1.nRelRow = rRef2.nRelRow;
+        rRef2.nRelRow = nRow1;
+        if ( rRef1.Flags.bRelName && rRef1.Flags.bRowRel )
             nRelState2 |= 2;
         else
             nRelState2 &= ~2;
-        if ( Ref2.Flags.bRelName && Ref2.Flags.bRowRel )
+        if ( rRef2.Flags.bRelName && rRef2.Flags.bRowRel )
             nRelState1 |= 2;
         else
             nRelState1 &= ~2;
-        bTmp = Ref1.Flags.bRowRel;
-        Ref1.Flags.bRowRel = Ref2.Flags.bRowRel;
-        Ref2.Flags.bRowRel = bTmp;
-        bTmp = Ref1.Flags.bRowDeleted;
-        Ref1.Flags.bRowDeleted = Ref2.Flags.bRowDeleted;
-        Ref2.Flags.bRowDeleted = bTmp;
+        bTmp = rRef1.Flags.bRowRel;
+        rRef1.Flags.bRowRel = rRef2.Flags.bRowRel;
+        rRef2.Flags.bRowRel = bTmp;
+        bTmp = rRef1.Flags.bRowDeleted;
+        rRef1.Flags.bRowDeleted = rRef2.Flags.bRowDeleted;
+        rRef2.Flags.bRowDeleted = bTmp;
     }
-    if ( (nTab1 = Ref1.nTab) > (nTab2 = Ref2.nTab) )
+    if ( (nTab1 = rRef1.nTab) > (nTab2 = rRef2.nTab) )
     {
-        Ref1.nTab = nTab2;
-        Ref2.nTab = nTab1;
-        nTab1 = Ref1.nRelTab;
-        Ref1.nRelTab = Ref2.nRelTab;
-        Ref2.nRelTab = nTab1;
-        if ( Ref1.Flags.bRelName && Ref1.Flags.bTabRel )
+        rRef1.nTab = nTab2;
+        rRef2.nTab = nTab1;
+        nTab1 = rRef1.nRelTab;
+        rRef1.nRelTab = rRef2.nRelTab;
+        rRef2.nRelTab = nTab1;
+        if ( rRef1.Flags.bRelName && rRef1.Flags.bTabRel )
             nRelState2 |= 4;
         else
             nRelState2 &= ~4;
-        if ( Ref2.Flags.bRelName && Ref2.Flags.bTabRel )
+        if ( rRef2.Flags.bRelName && rRef2.Flags.bTabRel )
             nRelState1 |= 4;
         else
             nRelState1 &= ~4;
-        bTmp = Ref1.Flags.bTabRel;
-        Ref1.Flags.bTabRel = Ref2.Flags.bTabRel;
-        Ref2.Flags.bTabRel = bTmp;
-        bTmp = Ref1.Flags.bTabDeleted;
-        Ref1.Flags.bTabDeleted = Ref2.Flags.bTabDeleted;
-        Ref2.Flags.bTabDeleted = bTmp;
-        bTmp = Ref1.Flags.bFlag3D;
-        Ref1.Flags.bFlag3D = Ref2.Flags.bFlag3D;
-        Ref2.Flags.bFlag3D = bTmp;
+        bTmp = rRef1.Flags.bTabRel;
+        rRef1.Flags.bTabRel = rRef2.Flags.bTabRel;
+        rRef2.Flags.bTabRel = bTmp;
+        bTmp = rRef1.Flags.bTabDeleted;
+        rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
+        rRef2.Flags.bTabDeleted = bTmp;
     }
-    Ref1.Flags.bRelName = ( nRelState1 ? TRUE : FALSE );
-    Ref2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
+    rRef1.Flags.bRelName = ( nRelState1 ? TRUE : FALSE );
+    rRef2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
 }
 
+
+void ComplRefData::PutInOrder()
+{
+    lcl_putInOrder( Ref1, Ref2);
+}
+
+
+static void lcl_adjustInOrder( SingleRefData & rRef1, SingleRefData & rRef2, bool bFirstLeader )
+{
+    // a1:a2:a3, bFirstLeader: rRef1==a1==r1, rRef2==a3==r2
+    //                   else: rRef1==a3==r2, rRef2==a2==r1
+    SingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
+    SingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
+    if (r1.Flags.bFlag3D && !r2.Flags.bFlag3D)
+    {
+        // [$]Sheet1.A5:A6 on Sheet2 do still refer only Sheet1.
+        r2.nTab = r1.nTab;
+        r2.nRelTab = r1.nRelTab;
+        r2.Flags.bTabRel = r1.Flags.bTabRel;
+    }
+    lcl_putInOrder( rRef1, rRef2);
+}
+
+
+ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress & rPos )
+{
+    CalcAbsIfRel( rPos);
+    SingleRefData aRef = rRef;
+    aRef.CalcAbsIfRel( rPos);
+    bool bInherit3D = Ref1.IsFlag3D() && !Ref2.IsFlag3D();
+    bool bInherit3Dtemp = bInherit3D && !rRef.IsFlag3D();
+    if (aRef.nCol < Ref1.nCol || aRef.nRow < Ref1.nRow || aRef.nTab < Ref1.nTab)
+    {
+        lcl_adjustInOrder( Ref1, aRef, true);
+        aRef = rRef;
+        aRef.CalcAbsIfRel( rPos);
+    }
+    if (aRef.nCol > Ref2.nCol || aRef.nRow > Ref2.nRow || aRef.nTab > Ref2.nTab)
+    {
+        if (bInherit3D)
+            Ref2.SetFlag3D( true);
+        lcl_adjustInOrder( aRef, Ref2, false);
+        if (bInherit3Dtemp)
+            Ref2.SetFlag3D( false);
+    }
+    // Force 3D if necessary. References to other sheets always.
+    if (Ref1.nTab != rPos.Tab())
+        Ref1.SetFlag3D( true);
+    // In the second part only if different sheet thus not inherited.
+    if (Ref2.nTab != Ref1.nTab)
+        Ref2.SetFlag3D( true);
+    // Merge Flag3D to Ref2 in case there was nothing to inherit and/or range
+    // wasn't extended as in A5:A5:Sheet1.A5 if on Sheet1.
+    if (!Ref1.IsFlag3D() && !Ref2.IsFlag3D() && rRef.IsFlag3D())
+        Ref2.SetFlag3D( true);
+    return *this;
+}
+
+
+ComplRefData& ComplRefData::Extend( const ComplRefData & rRef, const ScAddress & rPos )
+{
+    return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
+}
