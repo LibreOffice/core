@@ -43,6 +43,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Cal,
              gid_File_Res_Chartcontroller,
              gid_File_Res_Sdbt,
+             gid_File_Res_Dbmm,
              gid_File_Res_Dba,
              gid_File_Res_Dbw,
              gid_File_Res_Dkt,
