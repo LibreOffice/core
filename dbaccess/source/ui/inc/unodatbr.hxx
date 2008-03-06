@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:09:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,11 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -108,8 +111,9 @@ namespace dbaui
     class ImageProvider;
 
     // =====================================================================
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper3 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
+                                ,   ::com::sun::star::document::XScriptInvocationContext
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
@@ -122,6 +126,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xCurrentDatabaseDocument;
 
         ::osl::Mutex            m_aEntryMutex;
 
@@ -145,8 +150,8 @@ namespace dbaui
 
         ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
 
-        OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
-        OTableCopyHelper        m_aTableCopyHelper;
+        OTableCopyHelper::DropDescriptor    m_aAsyncDrop;
+        OTableCopyHelper                    m_aTableCopyHelper;
 
         ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
 
@@ -162,7 +167,8 @@ namespace dbaui
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
-
+        ::boost::optional< bool >
+                                m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
         /** updateTitle will be called when a new frame is attached
         */
@@ -238,6 +244,9 @@ namespace dbaui
 
         //IController
         virtual void notifyHiContrastChanged();
+
+        // XScriptInvocationContext
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         // SbaXDataBrowserController overridables
@@ -354,7 +363,6 @@ namespace dbaui
                 getImageProviderFor( SvLBoxEntry* _pAnyEntry );
 
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
-        void    implDirectSQL( SvLBoxEntry* _pApplyTo );
 
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
