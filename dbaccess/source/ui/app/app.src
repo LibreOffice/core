@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,8 +454,19 @@ String STR_FOLDER_LABEL
     Text [ en-US ] = "F~older name" ;
 };
 
-String RID_STR_ERROR_NO_REPORT_INSTALLED
+String STR_SUB_DOCS_WITH_SCRIPTS
 {
-    Text [ de ] ="Es wurde keine Report Designer Erweiterung gefunden, bitte installieren." ;
-    Text [ en-US ] = "There is no report designer extension found, please install." ;
+    Text [ en-US ] = "The document contains forms and/or reports with macros and/or scripts embedded.";
+};
+
+String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
+{
+    Text [ en-US ] = "Scripts and macros should nowadays be embedded into the database document itself.\n\n"
+
+                    "You can continue to use your document as before, however, you are encouraged to migrate "
+                    "your scripts and macros. The menu item 'Tools / Migrate Scripts and Macros ...' will "
+                    "assist you with this.\n\n"
+
+                    "Note that you won't be able to embed macros or scripts into the database document until "
+                    "this migration is done. ";
 };
