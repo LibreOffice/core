@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:21:58 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:46:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,11 @@ SHL2STDLIBS+= \
              $(SHLWAPILIB) \
              $(ADVAPI32LIB)
 .ENDIF # WNT
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+LINKFLAGS+= -L../$(PRJ)/layout/$(INPATH)/lib
+SHL2STDLIBS += -ltklayout$(UPD)$(DLLPOSTFIX)
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # ------------------------------------------------------------------------------
 
