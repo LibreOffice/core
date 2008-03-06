@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:54:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@ typedef sal_Int64 WinBits;
 #define WB_DROPDOWN             ((WinBits)0x08000000)
 #define WB_AUTOHSCROLL          ((WinBits)0x10000000)
 #define WB_DOCKABLE             ((WinBits)0x20000000)
+#define WB_AUTOVSCROLL          ((WinBits)0x40000000)
 
 #define WB_HIDE                 ((WinBits)0x80000000)
 #define WB_HSCROLL              WB_HORZ
@@ -164,11 +165,6 @@ typedef sal_Int64 WinBits;
 #define WB_HASBUTTONS           ((WinBits)0x00800000)
 #define WB_HASLINES             ((WinBits)0x01000000)
 #define WB_HASLINESATROOT       ((WinBits)0x02000000)
-
-// For FileOpen Dialog
-#define WB_PATH                 ((WinBits)0x00100000)
-#define WB_OPEN                 ((WinBits)0x00200000)
-#define WB_SAVEAS               ((WinBits)0x00400000)
 
 // --------------
 // - Help-Types -
@@ -273,6 +269,19 @@ enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
                        TOOLBOXITEM_SPACE, TOOLBOXITEM_SEPARATOR,
                        TOOLBOXITEM_BREAK };
 
+
+// ---------------
+// - BorderStyle -
+// ---------------
+
+typedef sal_uInt16 WindowBorderStyle;
+
+#define WINDOW_BORDER_NORMAL            ((WindowBorderStyle)0x0001)
+#define WINDOW_BORDER_MONO              ((WindowBorderStyle)0x0002)
+#define WINDOW_BORDER_ACTIVE            ((WindowBorderStyle)0x0004)
+#define WINDOW_BORDER_DOUBLEOUT         ((WindowBorderStyle)0x0008)
+#define WINDOW_BORDER_MENU              ((WindowBorderStyle)0x0010)
+#define WINDOW_BORDER_NOBORDER          ((WindowBorderStyle)0x1000)
 
 // ---------------
 // - WindowAlign -
