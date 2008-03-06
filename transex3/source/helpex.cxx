@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ int _cdecl main( int argc, char *argv[] )
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
         }
         else
-            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
+            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( '0' ), "help" );
     }else if ( sOutputFileX.Len() && sOutputFileY.Len() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
 
