@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:58:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,const Reference< XMultiServiceFactory >& _rxORB
                                ,const ::com::sun::star::uno::Any& _aDataSourceName
                                )
-    :OWizardMachine(_pParent, ModuleRes(DLG_DATABASE_TYPE_CHANGE), WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP, sal_True)
+    :OWizardMachine(_pParent, ModuleRes(DLG_DATABASE_TYPE_CHANGE), WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP )
     ,m_pOutSet(NULL)
     ,m_bResetting(sal_False)
     ,m_bApplied(sal_False)
@@ -150,6 +150,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     ShowButtonFixedLine(sal_True);
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, sal_False);
+    enableAutomaticNextButtonState( true );
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
@@ -190,7 +191,7 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     return 1L;
 }
 //-------------------------------------------------------------------------
-WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurrentState)
+WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
 {
     WizardTypes::WizardState nNextState = WZS_INVALID_STATE;
     switch(_nCurrentState)
