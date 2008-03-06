@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pres.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:23:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ enum AutoLayout
     AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE,
     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE,
     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART,
+    AUTOLAYOUT_HANDOUT9,
     AUTOLAYOUT__END
 };
 
