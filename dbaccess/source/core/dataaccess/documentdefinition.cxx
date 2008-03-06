@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:05:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
                 if ( pIter->Name.equalsAscii( "MacroExecutionMode" ) )
                 {
-                    sal_Int16 nMacroExecMode( *aDocumentMacroMode );
+                    sal_Int16 nMacroExecMode( !aDocumentMacroMode ? MacroExecMode::USE_CONFIG : *aDocumentMacroMode );
                     OSL_VERIFY( pIter->Value >>= nMacroExecMode );
                     aDocumentMacroMode.reset( nMacroExecMode );
                     continue;
@@ -898,13 +898,15 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     }
 
     // our database document's macro execution mode
-    // Note that we don't pass an interaction handler here. If the user has not been asked/notified
-    // by now (i.e. during loading the whole DB document), then this won't happen anymore.
+    sal_Int16 nImposedMacroExecMode( m_pImpl->m_pDataSource->getImposedMacroExecMode() );
+        // (caching it, since adjustMacroMode will overwrite it)
     bool bExecuteDBDocMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
+        // Note that we don't pass an interaction handler here. If the user has not been asked/notified
+        // by now (i.e. during loading the whole DB document), then this won't happen anymore.
 
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
-    if  (   ( m_pImpl->m_pDataSource->getImposedMacroExecMode() == MacroExecMode::USE_CONFIG )
+    if  (   ( nImposedMacroExecMode == MacroExecMode::USE_CONFIG )
         &&  bExecuteDBDocMacros
         )
     {
@@ -920,7 +922,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         //
         // The problem with this: If the to-be-opened sub document has macros embedded in
         // the content.xml (which is valid ODF, but normally not produced by OOo itself),
-        // then this has not been detecte while loading the database document - it would
+        // then this has not been detected while loading the database document - it would
         // be too expensive, as it effectively would require loading all forms/reports.
         //
         // So, in such a case, and with 2. above, we would silently execute those macros,
@@ -1090,7 +1092,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             // delete
             //////////////////////////////////////////////////////////////////
             closeObject();
-            Reference< XStorage> xStorage = getStorage();
+            Reference< XStorage> xStorage = getContainerStorage();
             if ( xStorage.is() )
                 xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
 
@@ -1194,7 +1196,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
 
     if ( !m_xEmbeddedObject.is() )
     {
-        Reference< XStorage> xStorage = getStorage();
+        Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
             Reference< XEmbedObjectCreator> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.EmbeddedObjectCreator" ), UNO_QUERY );
@@ -1377,7 +1379,7 @@ sal_Bool ODocumentDefinition::saveAs()
                 {
                     try
                     {
-                        Reference< XStorage> xStorage = getStorage();
+                        Reference< XStorage> xStorage = getContainerStorage();
                         const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
                         // -----------------------------------------------------------------------------
                         Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
@@ -1455,23 +1457,46 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    Reference< XFrame > lcl_getDatabaseDocumentFrame( ODatabaseModelImpl& _rImpl )
+    {
+        Reference< XModel > xDatabaseDocumentModel( _rImpl.getModel_noCreate() );
+
+        Reference< XController > xDatabaseDocumentController;
+        if ( xDatabaseDocumentModel.is() )
+            xDatabaseDocumentController = xDatabaseDocumentModel->getCurrentController();
+
+        Reference< XFrame > xFrame;
+        if ( xDatabaseDocumentController.is() )
+            xFrame = xDatabaseDocumentController->getFrame();
+
+        return xFrame;
+    }
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
+{
+//    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
+    // TODO: revert to the disabled code. The current version is just to be able
+    // to integrate an intermediate version of the CWS, which should behave as
+    // if no macros in DB docs are allowed
+    bool bAllowDocumentMacros = true;
+
+    // if *any* of the objects of the database document already has macros, we continue to allow it
+    // to have them, until the user did a migration.
+    // If there are no macros, yet, we don't allow to create them
+
+    return bAllowDocumentMacros;
+}
+
+// -----------------------------------------------------------------------------
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
         const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
 {
-    ::comphelper::NamedValueCollection aMediaDesc( _rAdditionalArgs );
-    {
-        Sequence<PropertyValue> aDocumentContext(2);
-        aDocumentContext[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
-        aDocumentContext[0].Value <<= _xConnection;
-
-        aDocumentContext[1].Name = PROPERTY_APPLYFORMDESIGNMODE;
-        aDocumentContext[1].Value <<= !_bReadOnly;
-
-        aMediaDesc.put( "ComponentData", aDocumentContext );
-    }
-
-    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
-
+    // .........................................................................
+    // (re-)create interceptor, and put it into the descriptor of the embedded object
     if ( m_pInterceptor )
     {
         m_pInterceptor->dispose();
@@ -1483,38 +1508,48 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     m_pInterceptor->acquire();
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
-    _out_rEmbeddedObjectDescriptor.realloc(2);
-    sal_Int32 nLen = 0;
-    _out_rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
-    _out_rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
+    ::comphelper::NamedValueCollection aEmbeddedDescriptor;
+    aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
 
-    uno::Sequence< uno::Any > aOutFrameProps(2);
-    PropertyValue aProp;
-    aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
-    aProp.Value <<= sal_True;
-    aOutFrameProps[0] <<= aProp;
+    // .........................................................................
+    // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
+    ::comphelper::NamedValueCollection OutplaceFrameProperties;
+    OutplaceFrameProperties.put( "TopWindow", (sal_Bool)sal_True );
 
-    Reference< XModel > xDatabaseDocumentModel;
+    Reference< XFrame > xParentFrame;
     if ( m_pImpl->m_pDataSource )
-        xDatabaseDocumentModel = m_pImpl->m_pDataSource->getModel_noCreate();
+        xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
+    OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );
+    if  ( xParentFrame.is() )
+        OutplaceFrameProperties.put( "ParentFrame", xParentFrame );
 
-    Reference< XController > xDatabaseDocumentController;
-    if ( xDatabaseDocumentModel.is() )
-        xDatabaseDocumentController = xDatabaseDocumentModel->getCurrentController();
+    aEmbeddedDescriptor.put( "OutplaceFrameProperties", OutplaceFrameProperties.getNamedValues() );
 
-    if ( xDatabaseDocumentController.is() )
+    // .........................................................................
+    // tell the embedded object to have (or not have) script support
+    aEmbeddedDescriptor.put( "EmbeddedScriptSupport", (sal_Bool)objectSupportsEmbeddedScripts() );
+
+    // .........................................................................
+    // pass the descriptor of the embedded object to the caller
+    aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
+
+    // .........................................................................
+    ::comphelper::NamedValueCollection aMediaDesc( _rAdditionalArgs );
+
+    // .........................................................................
+    // create the ComponentData, and put it into the document's media descriptor
     {
-        aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
-        aProp.Value <<= xDatabaseDocumentController->getFrame();
-        aOutFrameProps[1] <<= aProp;
+        ::comphelper::NamedValueCollection aComponentData;
+        aComponentData.put( "ActiveConnection", _xConnection );
+        aComponentData.put( "ApplyFormDesignMode", !_bReadOnly );
+        aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
     }
 
-    _out_rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceFrameProperties"));
-    _out_rEmbeddedObjectDescriptor[nLen++].Value <<= aOutFrameProps;
+    // .........................................................................
+    // put the common load arguments into the document's media descriptor
+    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
 
-    Sequence< PropertyValue > aLoadArgs;
-    aMediaDesc >>= aLoadArgs;
-    return aLoadArgs;
+    return aMediaDesc.getPropertyValues();
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _xConnection, const Sequence< sal_Int8 >& _aClassID,
@@ -1522,7 +1557,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 {
     if ( !m_xEmbeddedObject.is() )
     {
-        Reference< XStorage> xStorage = getStorage();
+        Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
             Reference< XEmbedObjectFactory> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.OOoEmbeddedObjectFactory" ), UNO_QUERY );
@@ -1761,7 +1796,7 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XStorage> ODocumentDefinition::getStorage() const
+Reference< XStorage> ODocumentDefinition::getContainerStorage() const
 {
     return  m_pImpl->m_pDataSource
         ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
