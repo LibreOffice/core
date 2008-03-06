@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:10:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
@@ -68,6 +71,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -107,6 +113,7 @@ namespace dbaui
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::frame;
     using namespace ::dbtools;
     using ::svt::OFileNotation;
 
@@ -118,7 +125,6 @@ namespace dbaui
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xORB(_rxORB)
     {
-        implConstruct();
     }
 
     //---------------------------------------------------------------------
@@ -128,27 +134,6 @@ namespace dbaui
         ,m_xORB(_rxORB)
         ,m_sContextInformation( _rContextInformation )
     {
-        implConstruct();
-    }
-
-    //---------------------------------------------------------------------
-    void ODatasourceConnector::implConstruct()
-    {
-        OSL_ENSURE(m_xORB.is(), "ODatasourceConnector::implConstruct: invalid ORB!");
-        if (m_xORB.is())
-        {
-            try
-            {
-                Reference< XInterface > xContext = m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT);
-                OSL_ENSURE(xContext.is(), "ODatasourceConnector::implConstruct: got no data source context!");
-                m_xDatabaseContext.set(xContext,UNO_QUERY);
-                OSL_ENSURE(m_xDatabaseContext.is() || !xContext.is(), "ODatasourceConnector::ODatasourceConnector: missing the XNameAccess interface on the data source context!");
-            }
-            catch(const Exception&)
-            {
-                OSL_ENSURE(sal_False, "ODatasourceConnector::implConstruct: caught an exception while creating the data source context!");
-            }
-        }
     }
 
     //---------------------------------------------------------------------
@@ -162,7 +147,7 @@ namespace dbaui
 
         // get the data source
         Reference< XDataSource > xDatasource(
-            getDataSourceByName_displayError( m_xDatabaseContext, _rDataSourceName, m_pErrorMessageParent, m_xORB, _bShowError ),
+            getDataSourceByName_displayError( _rDataSourceName, m_pErrorMessageParent, m_xORB, _bShowError ),
             UNO_QUERY
         );
         if ( xDatasource.is() )
@@ -208,13 +193,19 @@ namespace dbaui
             {   // password required, but empty -> connect using an interaction handler
                 Reference< XCompletedConnection > xConnectionCompletion( _xDataSource, UNO_QUERY_THROW );
 
-                // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler(m_xORB->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
-                if (!xHandler.is())
+                Reference< XModel > xModel( getDataSourceOrModel( _xDataSource ), UNO_QUERY_THROW );
+                ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+                Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+
+                if ( !xHandler.is() )
                 {
-                    ShowServiceNotAvailableError(m_pErrorMessageParent, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                    // instantiate the default SDB interaction handler
+                    xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+                    if ( !xHandler.is() )
+                        ShowServiceNotAvailableError(m_pErrorMessageParent, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
                 }
-                else
+
+                if ( xHandler.is() )
                 {
                     xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
