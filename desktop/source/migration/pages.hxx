@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 15:47:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ private:
     DECL_LINK(EndReachedHdl, LicenseView*);
     DECL_LINK(ScrolledHdl, LicenseView*);
 protected:
-    virtual sal_Bool determineNextButtonState();
+    virtual bool canAdvance() const;
     virtual void ActivatePage();
 };
 
@@ -131,7 +131,7 @@ private:
     sal_Bool m_bMigrationDone;
 public:
     MigrationPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool commitPage( CommitPageReason _eReason );
 
 protected:
     virtual void ActivatePage();
@@ -154,7 +154,7 @@ private:
 
 public:
     UserPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool commitPage( CommitPageReason _eReason );
 protected:
     virtual void ActivatePage();
 };
@@ -167,7 +167,7 @@ private:
     CheckBox m_cbUpdateCheck;
 public:
     UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool commitPage( CommitPageReason _eReason );
 
 protected:
     virtual void ActivatePage();
@@ -193,13 +193,13 @@ private:
     void impl_retrieveConfigurationData();
 
 protected:
-    virtual sal_Bool    determineNextButtonState();
-    virtual void        ActivatePage();
+    virtual bool canAdvance() const;
+    virtual void ActivatePage();
+
+    virtual sal_Bool commitPage( CommitPageReason _eReason );
 
 public:
-    RegistrationPage( Window* pParent, const ResId& rResid );
-
-    virtual sal_Bool    commitPage( COMMIT_REASON eReason );
+    RegistrationPage( Window* parent, const ResId& resid);
 
     enum RegistrationMode
     {
