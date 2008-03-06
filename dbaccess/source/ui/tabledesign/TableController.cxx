@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:55:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,13 +326,13 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
 
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = isEditable() && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
+            aReturn.bEnabled = isEditable() && m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
+            aReturn.bEnabled = m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = isEditable() && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isPasteAllowed();
+            aReturn.bEnabled = isEditable() && m_aCurrentFrame.isActive() && getView() && static_cast<OTableDesignView*>(getView())->isPasteAllowed();
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
@@ -617,28 +617,10 @@ void OTableController::impl_initialize()
 
         const NamedValueCollection& rArguments( getInitParams() );
 
-        Reference< XConnection > xConnection;
-        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
-        if ( xConnection.is() )
-            initializeConnection( xConnection );
-
         rArguments.get_ensureType( (::rtl::OUString)PROPERTY_CURRENTTABLE, m_sName );
 
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
-
-        sal_Bool bFirstTry = sal_False;
-        if (!isConnected())
-        {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-            reconnect(sal_False);
-            bFirstTry = sal_True;
-        }
-        if (!isConnected()) // so what should otherwise
-        {
-            if(!bFirstTry)
-                connectionLostMessage();
-            throw Exception();
-        }
 
         assignTable();
     }
