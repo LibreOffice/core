@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:07:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,8 @@ static snewfoil_value_info handout[] =
      AUTOLAYOUT_HANDOUT4},
     {BMP_FOILH_06, BMP_FOILH_06_H, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT6},
+    {BMP_FOILH_09, BMP_FOILH_09_H, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT9},
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
