@@ -1,13 +1,11 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
 Icon=base
 Type=Application
-InitialPreference=2
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-MoreApplications-Databases;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-MoreApplications-Databases;
 Exec=openoffice -base %U
-MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base
+MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
 Name=%PRODUCTNAME Base
 GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.

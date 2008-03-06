@@ -1,12 +1,10 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
 Icon=draw
 Type=Application
-InitialPreference=2
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Drawing;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Drawing;
 Exec=openoffice -draw %U
-MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw;
 Name=%PRODUCTNAME Draw
 Comment=Create and edit drawings, flow charts, and logos by using Draw.

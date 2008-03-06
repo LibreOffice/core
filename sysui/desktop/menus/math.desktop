@@ -1,12 +1,10 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
 Terminal=false
 Icon=math
 Type=Application
-InitialPreference=2
-Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other;
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other;
 Exec=openoffice -math %U
-MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math
+MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math;
 Name=%PRODUCTNAME Math
 Comment=Create and edit scientific formulas and equations by using Math.
