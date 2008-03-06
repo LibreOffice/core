@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,30 @@ namespace SchXMLTools
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > getRegressionCurve(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xDataSeries );
+
+    /** checks if the data sequence has the property "CachedXMLRange" (true for
+        internal data sequences), and if so sets this property to the range
+        given in rXMLRange
+     */
+    void setXMLRangePropertyAtDataSequence(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
+        const ::rtl::OUString & rXMLRange );
+
+    /** checks if the data sequence has the property "CachedXMLRange" (true for
+        internal data sequences), and if so retrieves this property and applies
+        it to the range given in rOutXMLRange.
+
+        @param bClearProp If true, the property is reset to its default after it
+                          was assigned to rOutXMLRange
+
+        @return true, if the property was found, assigned and is non-empty
+     */
+    bool getXMLRangePropertyFromDataSequence(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
+        ::rtl::OUString & rOutXMLRange,
+        bool bClearProp = false );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_
