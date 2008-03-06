@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:45:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,11 +113,6 @@ namespace dbaui
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
 
-        /// handle authentication requests
-        void    implHandle(
-                    const ::com::sun::star::ucb::AuthenticationRequest& _rAuthRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
-
         /// handle parameter requests
         void    implHandle(
                     const ::com::sun::star::sdb::ParametersRequest& _rParamRequest,
@@ -139,7 +134,6 @@ namespace dbaui
             DISAPPROVE,
             RETRY,
             ABORT,
-            SUPPLY_AUTHENTICATION,
             SUPPLY_PARAMETERS,
             SUPPLY_DOCUMENTSAVE
         };
