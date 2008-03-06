@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:22:24 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:14:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,6 @@ unzip_quiet_switch:=-qq
 tar_verbose_switch=v
 unzip_quiet_switch:=
 #.ENDIF			# "$(VERBOSE)"!=""
-
-# Clean PWD to let a build_action=dmake set it with new value. (See iz61212)
-.IF "$(USE_SHELL)"=="4nt"
-PWD:=
-.EXPORT : PWD
-.ENDIF          # "$(USE_SHELL)"=="4nt"
 
 .IF "$(ADDITIONAL_FILES)"!=""
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
