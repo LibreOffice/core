@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:12:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ enum E_TYPE
     T_Id,       // Id-Folge
     T_Str,      // String
     T_D,        // Double
+    T_Err,      // Error code
     T_RefC,     // Cell Reference
     T_RefA,     // Area Reference
     T_RN,       // Range Name
@@ -108,6 +109,10 @@ class TokenPool
         double*                     pP_Dbl;     // Pool fuer Doubles
         UINT16                      nP_Dbl;
         UINT16                      nP_DblAkt;
+
+        USHORT*                     pP_Err;     // Pool for error codes
+        UINT16                      nP_Err;
+        UINT16                      nP_ErrAkt;
 
         SingleRefData**             ppP_RefTr;  // Pool fuer Referenzen
         UINT16                      nP_RefTr;
@@ -156,6 +161,7 @@ class TokenPool
 
         void                        GrowString( void );
         void                        GrowDouble( void );
+        void                        GrowError( void );
         void                        GrowTripel( void );
         void                        GrowId( void );
         void                        GrowElement( void );
@@ -174,6 +180,7 @@ class TokenPool
         inline void                 operator >>( TokenStack& rStack );
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
+        const TokenId               StoreError( USHORT nError );
 
                                     // nur fuer Range-Names
         const TokenId               Store( const UINT16 nIndex );
