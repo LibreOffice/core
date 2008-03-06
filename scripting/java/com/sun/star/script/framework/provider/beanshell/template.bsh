@@ -20,23 +20,25 @@ import com.sun.star.frame.XModel;
     Methods available are: 
 
         XSCRIPTCONTEXT.getDocument() returns XModel
+        XSCRIPTCONTEXT.getInvocationContext() returns XScriptInvocationContext or NULL
         XSCRIPTCONTEXT.getDesktop() returns XDesktop
         XSCRIPTCONTEXT.getComponentContext() returns XComponentContext
 
     For more information on using this class see the scripting
     developer guides at:
 
-        http://framework.openoffice.org/scripting/index.html
+        http://api.openoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
 */
         
-import drafts.com.sun.star.script.provider.XScriptContext;
-
 // Hello World in BeanShell
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextRange;
 
-oDoc = XSCRIPTCONTEXT.getDocument();
+oDoc = UnoRuntime.queryInterface(XModel.class,XSCRIPTCONTEXT.getInvocationContext());
+if ( oDoc == null )
+  oDoc = XSCRIPTCONTEXT.getDocument();
+
 xTextDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,oDoc);
 xText = xTextDoc.getText();
 xTextRange = xText.getEnd();
