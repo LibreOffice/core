@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocRow,                8,      0,  1,  V, { R }, 0, 0 },
     { ocColumn,             9,      0,  1,  V, { R }, 0, 0 },
     { ocNotAvail,           10,     0,  0,  V, {}, 0, 0 },
-    { ocNBW,                11,     2,  30, V, { V, R }, 0, 0 },
+    { ocNPV,                11,     2,  30, V, { V, R }, 0, 0 },
     { ocStDev,              12,     1,  30, V, { R }, 0, 0 },
     { ocCurrency,           13,     1,  2,  V, { V }, 0, 0 },
     { ocFixed,              14,     1,  2,  V, { V, V, C, I }, 0, 0 },
@@ -137,7 +137,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocRMZ,                59,     3,  5,  V, { V }, 0, 0 },
     { ocZins,               60,     3,  6,  V, { V }, 0, 0 },
     { ocMIRR,               61,     3,  3,  V, { R, V }, 0, 0 },
-    { ocIKV,                62,     1,  2,  V, { R, V }, 0, 0 },
+    { ocIRR,                62,     1,  2,  V, { R, V }, 0, 0 },
     { ocRandom,             63,     0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE, 0 },
     { ocMatch,              64,     2,  3,  V, { V, R }, 0, 0 },
     { ocGetDate,            65,     3,  3,  V, { V }, 0, 0 },
