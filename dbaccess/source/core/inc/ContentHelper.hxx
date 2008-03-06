@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:40:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,9 +230,6 @@ namespace dbaccess
 
         // XRename
         virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-
-        // helper
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage() const;
 
         inline const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
