@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:43:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,13 +244,25 @@ private:
     Link                maActivateHdl;
     Link                maDeactivateHdl;
     sal_Int16           mnLeftAlignCount;
+    bool                mbEmptyViewMargin;
+
 protected:
-    sal_Bool            mbRoadmapMode;
     long                LogicalCoordinateToPixel(int iCoordinate);
+    /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
+
+        only to be used during construction, before any layouting happened
+    */
+    void                SetLeftAlignedButtonCount( sal_Int16 _nCount );
+    /** declares the view area to have an empty margin
+
+        Normally, the view area has a certain margin to the top/left/bottom/right of the
+        dialog. By calling this method, you can reduce this margin to 0.
+    */
+    void                SetEmptyViewMargin();
 
 #ifdef _SVT_WIZDLG_CXX
 private:
-    SVT_DLLPRIVATE void             ImplInitData(sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount);
+    SVT_DLLPRIVATE void             ImplInitData();
     SVT_DLLPRIVATE void             ImplCalcSize( Size& rSize );
     SVT_DLLPRIVATE void             ImplPosCtrls();
     SVT_DLLPRIVATE void             ImplPosTabPage();
@@ -259,8 +271,8 @@ private:
 #endif
 
 public:
-                        WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG, sal_Bool _RoadmapMode = sal_False, sal_Int16 _nLeftAlignCount = 0 );
-                        WizardDialog( Window* pParent, const ResId& rResId, sal_Bool _RoadmapMode = sal_False, sal_Int16 _nLeftAlignCount = 0);
+                        WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
+                        WizardDialog( Window* pParent, const ResId& rResId );
                         ~WizardDialog();
 
     virtual void        Resize();
