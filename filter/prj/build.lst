@@ -1,4 +1,4 @@
-fl	filter	:	svtools unotools goodies xmloff svx javaunohelper jvmaccess XALAN:xalan LIBXSLT:libxslt NULL
+fl	filter	:	svtools unotools goodies xmloff cppu tools cppuhelper sal svx javaunohelper jvmaccess XALAN:xalan LIBXSLT:libxslt NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
@@ -14,6 +14,7 @@ fl	filter\source\xsltfilter				nmake	-	all fl_xsltfilter		fl_inc NULL
 fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate fl_xsltfilter	fl_inc NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash		fl_inc NULL
 fl  filter\source\docbook                   nmake   -   all fl_docbook          fl_inc NULL
+fl  filter\source\t602                      nmake   -   all fl_t602             fl_inc NULL
 fl  filter\source\config\cache              nmake   -   all fl_config           fl_inc NULL
 fl  filter\source\config\tools\utils        nmake   -   all fl_fcfg_utils       fl_inc NULL
 fl  filter\source\config\tools\merge        nmake   -   all fl_fcfg_merge fl_fcfg_utils fl_xsltvalidate fl_inc NULL
