@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: roadmapskeleton.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:28:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "udlg_global.hrc"
+#include "roadmapskeleton.hrc"
+
+// -----------------------------------------------------------------------------
+ModalDialog DLG_ROADMAP_SKELETON
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE ;
+    Hide = TRUE;
+
+    Text[ en-US ]  = "Roadmap Skeleton Demo" ;
+
+    String STR_STATE_WELCOME
+    {
+        Text [ en-US ] = "Welcome";
+    };
+
+    String STR_STATE_PREPARE
+    {
+        Text [ en-US ] = "Prepare";
+    };
+
+    String STR_STATE_SETUP
+    {
+        Text [ en-US ] = "Setup";
+    };
+
+    String STR_STATE_FINISH
+    {
+        Text [ en-US ] = "Finish";
+    };
+};
+
+TabPage TP_WELCOME
+{
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+    Hide = TRUE;
+};
+
+TabPage TP_PREPARE
+{
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+    Hide = TRUE;
+};
+
+TabPage TP_SETUP
+{
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+    Hide = TRUE;
+};
+
+TabPage TP_FINISH
+{
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+    Hide = TRUE;
+};
