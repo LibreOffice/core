@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:44:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ void XclImpCrn::SetCell( const XclImpRoot& rRoot, SCTAB nScTab ) const
             case EXC_CACHEDVAL_ERROR:
             {
                 ScFormulaCell* pFmlaCell = new ScFormulaCell( rRoot.GetDocPtr(), aScPos, GetBoolErrFmla() );
-                pFmlaCell->SetDouble( GetBool() ? 1.0 : 0.0 );  // GetBool() returns false for error codes
+                pFmlaCell->SetHybridDouble( GetBool() ? 1.0 : 0.0 );  // GetBool() returns false for error codes
                 rRoot.GetDoc().PutCell( aScPos, pFmlaCell );
             }
             break;
