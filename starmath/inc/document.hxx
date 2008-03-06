@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:43:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ public:
     using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();
 
-                SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
+                SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const sal_Bool _bScriptSupport = sal_True);
     virtual     ~SmDocShell();
 
     void        LoadSymbols();
