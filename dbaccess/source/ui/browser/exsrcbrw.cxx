@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:40:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         if (m_xUrlTransformer.is())
             m_xUrlTransformer->assemble(aNewUrl);
 
-        Reference< ::com::sun::star::frame::XDispatchProvider >  xFrameDispatcher(m_xCurrentFrame, UNO_QUERY);
+        Reference< XDispatchProvider >  xFrameDispatcher( getFrame(), UNO_QUERY );
         if (xFrameDispatcher.is())
             xReturn = xFrameDispatcher->queryDispatch(aNewUrl, aTargetFrameName, FrameSearchFlag::PARENT);
 
