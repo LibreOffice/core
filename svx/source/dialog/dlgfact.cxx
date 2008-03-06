@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:20:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 // class ResId
 #include <tools/rc.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/app.hxx>
 
 //#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -119,7 +120,12 @@
 #include "selector.hxx" // for SvxScriptSelectorDialog
 #include "macropg.hxx" // for SvxMacroAssignDlg
 
-namespace css = ::com::sun::star;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::container;
+
+using ::com::sun::star::uno::Reference;
+
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl)
@@ -346,7 +352,7 @@ String  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
     return pDlg->GetCurrentSuggestion();
 }
 
-com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
+Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
 {
    return pDlg->GetObject();
 }
@@ -356,7 +362,7 @@ BOOL AbstractInsertObjectDialog_Impl::IsCreateNew()
     return pDlg->IsCreateNew();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
 {
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
@@ -380,7 +386,7 @@ ULONG AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper
 
 // for HangulHanjaConversionDialog end
 // for FmShowColsDialog begin
-void  AbstractFmShowColsDialog_Impl::SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
+void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
 {
      pDlg->SetColumns(xCols);
 }
@@ -780,7 +786,7 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 //for FmInputRecordNoDialog end
 
 //for SvxNewDictionaryDialog begin
-::com::sun::star::uno::Reference<
+::Reference<
         ::com::sun::star::linguistic2::XDictionary1 > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
 {
     return pDlg->GetNewDictionary();
@@ -1106,7 +1112,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
             bool bActivateLastSelection = false;
             if (nResId == SID_OPTIONS_TREEDIALOG)
                 bActivateLastSelection = true;
-            css::uno::Reference< css::frame::XFrame > xFrame;
+            Reference< frame::XFrame > xFrame;
             OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame, bActivateLastSelection );
             if (nResId == SID_OPTIONS_DATABASES)
             {
@@ -1136,7 +1142,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParen
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
-    Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const String& rParameter )
 {
     Dialog* pDlg = NULL;
@@ -1187,7 +1193,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pAttrSet,
-                                                const css::uno::Reference< css::frame::XFrame >& xViewFrame,
+                                                const Reference< frame::XFrame >& xViewFrame,
                                                 bool /*bEditFmt*/,
                                                 const String * )
 {
@@ -1410,11 +1416,11 @@ AbstractDialogFactory_Impl::CreateScriptErrorDialog(
 
 AbstractScriptSelectorDialog*
 AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
-    Window* pParent, BOOL bShowSlots )
+    Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& _rxFrame )
 {
     SvxScriptSelectorDialog* pDlg = NULL;
 
-    pDlg = new SvxScriptSelectorDialog( pParent, bShowSlots );
+    pDlg = new SvxScriptSelectorDialog( pParent, bShowSlots, _rxFrame );
 
     if (pDlg)
     {
@@ -1423,7 +1429,7 @@ AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
     return 0;
 }
 
-String AbstractScriptSelectorDialog_Impl::GetScriptURL()
+String AbstractScriptSelectorDialog_Impl::GetScriptURL() const
 {
     if (pDlg)
         return pDlg->GetScriptURL();
@@ -1751,7 +1757,7 @@ AbstractFmInputRecordNoDialog * AbstractDialogFactory_Impl::CreateFmInputRecordN
 
 //CHINA001  SvxNewDictionaryDialog begin
 AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( Window* pParent,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
+                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
                                             sal_uInt32 nResId )
 {
     SvxNewDictionaryDialog* pDlg=NULL;
@@ -1773,7 +1779,7 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
 //CHINA001  SvxEditDictionaryDialog begin
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
                                             const String& rName,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
+                                            ::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
 {
     Dialog* pDlg=NULL;
@@ -2117,37 +2123,37 @@ AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Wind
 }
 //CHINA001   SvxPostItDialog end
 
-VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg( Window* pParent,  SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
+class SvxMacroAssignDialog : public VclAbstractDialog
 {
-    Dialog* pDlg=NULL;
+public:
+    SvxMacroAssignDialog( Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
+            const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
+        :m_aItems( SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM )
+    {
+        m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
+        m_pDialog.reset( new SvxMacroAssignDlg( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
+    }
 
-    pDlg = new SvxMacroAssignDlg( pParent, rSet, xNameReplace, nSelectedIndex );
+    virtual USHORT Execute()
+    {
+        return m_pDialog->Execute();
+    }
 
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    virtual ~SvxMacroAssignDialog()
+    {
+    }
+
+private:
+    SfxItemSet                              m_aItems;
+    ::std::auto_ptr< SvxMacroAssignDlg >    m_pDialog;
+};
+
+VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg(
+    Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
+    const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
+{
+    return new SvxMacroAssignDialog( _pParent, _rxDocumentFrame, _bUnoDialogMode, _rxEvents, _nInitiallySelectedEvent );
 }
-
-//STRIP001 AbstractSvxSpellCheckDialog * AbstractDialogFactory_Impl::CreateSvxSpellCheckDialog( Window* pParent,  //add for SvxSpellCheckDialog
-//STRIP001 ::com::sun::star::uno::Reference<
-//STRIP001 ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
-//STRIP001 SvxSpellWrapper* pWrapper,
-//STRIP001 sal_uInt32 nResId)
-//STRIP001 {
-//STRIP001 SvxSpellCheckDialog* pDlg=NULL;
-//STRIP001 switch ( nResId )
-//STRIP001 {
-//STRIP001      case RID_SVXDLG_SPELLCHECK :
-//STRIP001 pDlg = new SvxSpellCheckDialog( pParent, xChecker,pWrapper);
-//STRIP001 break;
-//STRIP001      default:
-//STRIP001 break;
-//STRIP001  }
-//STRIP001
-//STRIP001 if ( pDlg )
-//STRIP001 return new AbstractSvxSpellCheckDialog_Impl( pDlg );
-//STRIP001 return 0;
-//STRIP001 }
 
 // Factories for TabPages
 CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
@@ -2314,7 +2320,7 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
 }
 
 SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
+            const Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList )
 {
     InsertObjectDialog_Impl* pDlg=0;
@@ -2336,7 +2342,7 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
-            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
+            const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
     InsertObjectDialog_Impl* pDlg=0;
     switch ( nSlotId )
