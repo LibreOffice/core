@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:25:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1756,7 +1756,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     s[0] = '=';
                     s[Len + 1] = 0;
                     ScFormulaCell* pCell = new ScFormulaCell( pDoc, ScAddress( Col, static_cast<SCROW> (Row), Tab ) );
-                    pCell->SetString( SC10TOSTRING( s ) );
+                    pCell->SetHybridFormula( SC10TOSTRING( s ), ScGrammar::GRAM_NATIVE );
                     pDoc->PutCell( Col, static_cast<SCROW> (Row), Tab, pCell, (BOOL)TRUE );
                     break;
                 }
