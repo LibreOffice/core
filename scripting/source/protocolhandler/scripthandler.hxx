@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripthandler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:20:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,41 +49,33 @@ namespace rtl
 class OUString;
 }
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
-{
-class Any;
-}
-namespace lang
-{
-class XMultiServiceFactory;
-class XSingleServiceFactory;
-}
-namespace frame
-{
-class XFrame;
-class XModel;
-class XDispatch;
-class XNotifyingDispatch;
-class XDispatchResultListener;
-struct DispatchDescriptor;
-}
-namespace beans
-{
-struct PropertyValue;
-}
-namespace util
-{
-struct URL;
-}
-}
-}
-}
+namespace com { namespace sun { namespace star {
+
+    namespace document {
+        class XScriptInvocationContext;
+    }
+    namespace uno {
+        class Any;
+    }
+    namespace lang {
+        class XMultiServiceFactory;
+        class XSingleServiceFactory;
+    }
+    namespace frame {
+        class XFrame;
+        class XModel;
+        class XDispatch;
+        class XNotifyingDispatch;
+        class XDispatchResultListener;
+        struct DispatchDescriptor;
+    }
+    namespace beans {
+        struct PropertyValue;
+    }
+    namespace util {
+        struct URL;
+    }
+} } }
 
 namespace scripting_protocolhandler
 {
@@ -97,11 +89,14 @@ public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
 {
 private:
     bool m_bInitialised;
-    css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
-    css::uno::Reference < css::frame::XFrame > m_xFrame;
-    css::uno::Reference < css::script::provider::XScriptProvider >
-    m_xScriptProvider;
-    void createScriptProvider( const ::rtl::OUString& url ) throw( css::uno::RuntimeException );
+    css::uno::Reference < css::lang::XMultiServiceFactory >         m_xFactory;
+    css::uno::Reference < css::frame::XFrame >                      m_xFrame;
+    css::uno::Reference < css::script::provider::XScriptProvider >  m_xScriptProvider;
+    css::uno::Reference< css::document::XScriptInvocationContext >  m_xScriptInvocation;
+
+    void createScriptProvider();
+    bool getScriptInvocation();
+
 public:
     ScriptProtocolHandler( const css::uno::Reference <
         css::lang::XMultiServiceFactory >& xFactory );
