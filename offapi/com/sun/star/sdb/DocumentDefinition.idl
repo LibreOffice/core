@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentDefinition.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:18:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,21 +38,48 @@
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
+#ifndef __com_sun_star_sdb_DefinitionContent_idl__
+#include <com/sun/star/sdb/DefinitionContent.idl>
+#endif
 
 module com { module sun { module star { module sdb {
 
-/** specifies documents which belong to a database source.
+/** specifies a sub document of a <type>OfficeDatabaseDocument</type>.
 
-    <p>
-    These documents typically process information from a connected
-    data source. A
-    <type>
-    Document
-    </type>
-    could be a form or a report.
+    <p>Usual instances of a <code>DocumentDefinition</code> are forms and reports.</p>
+
+    <p>Note that the <code>DocumentDefinition</code> does not denote the actual document
+    (i.e. an object supporting the <type scope="com::sun::star::frame">XModel</type> interface),
+    but only a shortcut to access and load those actual documents.</p>
 */
 service DocumentDefinition
 {
+    /** provides functionality for treating the object as part of a hierarchy
+        of a database document's sub documents.
+
+        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
+        the ones already supported by the DefinitionContent:
+        <ul>
+            <li><strong>open</strong>: loads the sub document in an own frame. The return value of
+                the <code>execute</code> method is the model of the loaded document.</li>
+            <li><strong>openDesign</strong>: opens the sub document in an own frame, in design mode.
+                The user can make changes to the document, and save those changes. The return value of
+                the <code>execute</code> method is the model of the loaded document.</li>
+            <li><strong>preview</strong>: retrieves an image showing a preview of the sub document.</li>
+            <li><strong>getDocumentInfo</strong>: retrieves the document information, as
+                <type scope="com::sun::star::document">XDocumentInfo</type> instance, of the sub document.</li>
+            <li><strong>delete</strong>: deletes the sub document from the database document.</li>
+            <li><strong>close</strong>: closes the sub document, if it had previously been opened
+                using either the <code>open</code> or <code>openDesign</code> command. The return value
+                of the <code>execute</code> command is a <code>boolean</code> value indicating whether
+                the sub document could be closed. Reasons for not closing the document include vetos by
+                third parties, for instance, because the user opened a dialog modal to the sub document,
+                or a long-running task such as printing is currently running.</li>
+        </ul>
+    */
+    service DefinitionContent;
+
     interface com::sun::star::beans::XPropertySet;
 
     /** is the name of the document. If the document is part of the container,
