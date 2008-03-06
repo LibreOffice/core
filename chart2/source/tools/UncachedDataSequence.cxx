@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UncachedDataSequence.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:04:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ enum
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE,
     PROP_HIDDEN,
-    PROP_HIDDEN_VALUES
+    PROP_HIDDEN_VALUES,
+    PROP_XML_RANGE
 };
 }  // anonymous namespace
 
@@ -156,6 +157,12 @@ void UncachedDataSequence::registerProperties()
                       0,   // PropertyAttributes
                       & m_aHiddenValues,
                       ::getCppuType( & m_aHiddenValues ) );
+
+    registerProperty( C2U( "CachedXMLRange" ),
+                      PROP_XML_RANGE,
+                      0,   // PropertyAttributes
+                      & m_aXMLRange,
+                      ::getCppuType( & m_aXMLRange ) );
 }
 
 // ================================================================================
