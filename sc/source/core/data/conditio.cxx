@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:17:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     nVal2(r.nVal2),
     aStrVal1(r.aStrVal1),
     aStrVal2(r.aStrVal2),
+    eTempGrammar(r.eTempGrammar),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
     pFormula1(NULL),
@@ -167,6 +168,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     nVal2(r.nVal2),
     aStrVal1(r.aStrVal1),
     aStrVal2(r.aStrVal2),
+    eTempGrammar(r.eTempGrammar),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
     pFormula1(NULL),
@@ -194,11 +196,12 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish, BOOL bCompileXML ) :
+                                const ScGrammar::Grammar eGrammar ) :
     eOp(eOper),
     nOptions(0),    // spaeter...
     nVal1(0.0),
     nVal2(0.0),
+    eTempGrammar(eGrammar),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
     pFormula1(NULL),
@@ -211,7 +214,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef2(FALSE),
     bFirstRun(TRUE)
 {
-    Compile( rExpr1, rExpr2, bCompileEnglish, bCompileXML, FALSE );
+    Compile( rExpr1, rExpr2, eGrammar, FALSE );
 
     //  Formelzellen werden erst bei IsValid angelegt
 }
@@ -223,6 +226,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     nOptions(0),    // spaeter...
     nVal1(0.0),
     nVal2(0.0),
+    eTempGrammar(ScGrammar::GRAM_DEFAULT),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
     pFormula1(NULL),
@@ -419,13 +423,11 @@ void ScConditionEntry::StoreCondition(SvStream& /* rStream */, ScMultipleWriteHe
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
-                                BOOL bEnglish, BOOL bCompileXML, BOOL bTextToReal )
+                                const ScGrammar::Grammar eGrammar, BOOL bTextToReal )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
-        ScCompiler aComp( pDoc, aSrcPos );
-        aComp.SetCompileEnglish( bEnglish );
-        aComp.SetCompileXML( bCompileXML );
+        ScCompiler aComp( pDoc, aSrcPos, eGrammar );
 
         if ( rExpr1.Len() )
         {
@@ -553,12 +555,11 @@ void ScConditionEntry::CompileXML()
         aSrcString.Erase();
     }
 
-    //  Convert the text tokens that were created during XML import into real tokens:
-    //  The stored string tokens contain english function names, but no XML-style references
+    //  Convert the text tokens that were created during XML import into real tokens.
 
-    Compile( GetExpression(aSrcPos, 0, 0, TRUE, FALSE, TRUE),
-             GetExpression(aSrcPos, 1, 0, TRUE, FALSE, TRUE),
-             TRUE, FALSE, TRUE );
+    Compile( GetExpression(aSrcPos, 0, 0, eTempGrammar),
+             GetExpression(aSrcPos, 1, 0, eTempGrammar),
+             eTempGrammar, TRUE );
 }
 
 void ScConditionEntry::SetSrcString( const String& rNew )
@@ -1005,22 +1006,19 @@ BOOL ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 }
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
-                                        ULONG nNumFmt, BOOL bEnglish,
-                                        BOOL bCompileXML, BOOL bTextToReal ) const
+                                        ULONG nNumFmt,
+                                        const ScGrammar::Grammar eGrammar ) const
 {
     String aRet;
 
-    if ( bEnglish && nNumFmt == 0 )
+    if ( ScGrammar::isEnglish( eGrammar) && nNumFmt == 0 )
         nNumFmt = pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US );
 
     if ( nIndex==0 )
     {
         if ( pFormula1 )
         {
-            ScCompiler aComp(pDoc, rCursor, *pFormula1);
-            aComp.SetCompileEnglish( bEnglish );
-            aComp.SetCompileXML( bCompileXML );
-            aComp.SetImportXML( bTextToReal );          // set only from CompileXML method
+            ScCompiler aComp(pDoc, rCursor, *pFormula1, eGrammar);
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr1)
@@ -1036,10 +1034,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
     {
         if ( pFormula2 )
         {
-            ScCompiler aComp(pDoc, rCursor, *pFormula2);
-            aComp.SetCompileEnglish( bEnglish );
-            aComp.SetCompileXML( bCompileXML );
-            aComp.SetImportXML( bTextToReal );          // set only from CompileXML method
+            ScCompiler aComp(pDoc, rCursor, *pFormula2, eGrammar);
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr2)
@@ -1244,8 +1239,8 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const String& rExpr1, const String& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
                                         const String& rStyle,
-                                        BOOL bCompileEnglish, BOOL bCompileXML ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
+                                        const ScGrammar::Grammar eGrammar ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
     aStyleName( rStyle ),
     pParent( NULL )
 {
