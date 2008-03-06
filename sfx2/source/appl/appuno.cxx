@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:05:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1769,8 +1769,6 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 {
 }
 
-extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
-
 // -----------------------------------------------------------------------
 ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
@@ -1879,8 +1877,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                     aQuotedArgs += ')';
                 }
 
-                SbxBaseRef xOldVar;
-                StarBASIC* pBas = NULL;
+                Any aOldThisComponent;
                 if ( pSh )
                 {
                     if ( pBasMgr != pAppMgr )
@@ -1888,25 +1885,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                         pSh->SetMacroMode_Impl( TRUE );
                     if ( pBasMgr == pAppMgr )
                     {
-                        // document is executed via AppBASIC, adjust "ThisComponent" variable
-                        pBas = pAppMgr->GetLib(0);
-                        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
-                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                                xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-                        ::com::sun::star::uno::Any aAny;
-                        aAny <<= xInterface;
-                        if ( pCompVar )
-                        {
-                            xOldVar = pCompVar->GetObject();
-                            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
-                        }
-                        else
-                        {
-                            SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
-                            xUnoObj->SetFlag( SBX_DONTSTORE );
-                            pBas->Insert( xUnoObj );
-                            pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
-                        }
+                        // document is executed via AppBASIC, adjust ThisComponent variable
+                        aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pSh->GetModel() ) );
                     }
                 }
 
@@ -1933,12 +1913,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 }
 
                 nErr = SbxBase::GetError();
-                if ( pBas )
+                if ( ( pBasMgr == pAppMgr ) && pSh )
                 {
-                    SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
-                    // reset "ThisComponent" to prior value
-                    if( pCompVar )
-                        pCompVar->PutObject( xOldVar );
+                    pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
                 }
 
                 if ( pSh && pSh->GetModel().is() )
