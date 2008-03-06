@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:28:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFX
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
-                                     DocumentType eDocType) :
-    DrawDocShell(eMode, bDataObject, eDocType)
+                                     DocumentType eDocType,BOOL bScriptSupport) :
+    DrawDocShell(eMode, bDataObject, eDocType, bScriptSupport)
 {
     SetStyleFamily( 2 ); // SFX_STYLE_FAMILY_PARA
 }
