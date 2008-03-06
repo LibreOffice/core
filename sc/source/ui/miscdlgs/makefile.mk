@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 15:47:12 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:23:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,6 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=miscdlgs
 LIBTARGET=no
-
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..$/pch$/ui_pch
 
 # --- Settings -----------------------------------------------------
 
