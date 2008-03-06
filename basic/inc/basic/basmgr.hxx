@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:58:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,9 +240,13 @@ public:
     BasicError*     GetFirstError();
     BasicError*     GetNextError();
 
-    /** inserts a global constant into the basic library, referring to some UNO object
+    /** sets a global constant in the basic library, referring to some UNO object, to a new value.
+
+        If a constant with this name already existed before, its value is changed, and the old constant is
+        returned. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
-    void            InsertGlobalUNOConstant( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rValue );
+    ::com::sun::star::uno::Any
+                    SetGlobalUNOConstant( const sal_Char* _pAsciiName, const ::com::sun::star::uno::Any& _rValue );
 
     /** determines whether there are password-protected modules whose size exceedes the
         legacy module size
