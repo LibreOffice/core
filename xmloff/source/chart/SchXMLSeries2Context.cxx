@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
             Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
-            mrAddresses.push_back( lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc ));
+            mrAddresses.push_back( xAttrList->getValueByIndex( i ));
         }
     }
 }
@@ -228,6 +228,31 @@ void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XProp
     uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSize")), pPropStyleContext, pStylesCtxt ) );
     if( !aASymbolSize.hasValue() )
         lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
+}
+
+void lcl_insertErrorBarLSequencesToMap(
+    tSchXMLLSequencesPerIndex & rInOutMap,
+    const uno::Reference< beans::XPropertySet > & xSeriesProp,
+    bool bYError = true )
+{
+    Reference< chart2::data::XDataSource > xErrorBarSource;
+    const OUString aPropName(
+        bYError
+        ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorBarY" ))
+        : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorBarX" )));
+    if( ( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBarSource ) &&
+        xErrorBarSource.is() )
+    {
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(
+            xErrorBarSource->getDataSequences());
+        for( sal_Int32 nIndex = 0; nIndex < aLSequences.getLength(); ++nIndex )
+        {
+            // use "0" as data index. This is ok, as it is not used for error bars
+            rInOutMap.insert(
+                tSchXMLLSequencesPerIndex::value_type(
+                    tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] ));
+        }
+    }
 }
 
 } // anonymous namespace
@@ -312,17 +337,11 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_SERIES_CELL_RANGE:
-                if( xRangeConversion.is())
-                    m_aSeriesRange = xRangeConversion->convertRangeFromXML( aValue );
-                else
-                    m_aSeriesRange = aValue;
+                m_aSeriesRange = aValue;
                 bHasRange = true;
                 break;
             case XML_TOK_SERIES_LABEL_ADDRESS:
-                if( xRangeConversion.is())
-                    m_aSeriesLabelRange = xRangeConversion->convertRangeFromXML( aValue );
-                else
-                    m_aSeriesLabelRange = aValue;
+                m_aSeriesLabelRange = aValue;
                 bHasLabelRange = true;
                 break;
             case XML_TOK_SERIES_ATTACHED_AXIS:
@@ -426,7 +445,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 if( bHasRange )
                     try
                     {
-                        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( m_aSeriesRange ));
+                        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( m_aSeriesRange, mxNewDoc )));
+                        SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, m_aSeriesRange );
                     }
                     catch( const lang::IllegalArgumentException & ex )
                     {
@@ -455,7 +475,11 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 {
                     try
                     {
-                        xLabeledSeq->setLabel( xDataProvider->createDataSequenceByRangeRepresentation( m_aSeriesLabelRange ));
+                        Reference< chart2::data::XDataSequence > xLabelSequence(
+                            xDataProvider->createDataSequenceByRangeRepresentation(
+                                lcl_ConvertRange( m_aSeriesLabelRange, mxNewDoc )));
+                        xLabeledSeq->setLabel( xLabelSequence );
+                        SchXMLTools::setXMLRangePropertyAtDataSequence( xLabelSequence, m_aSeriesLabelRange );
                     }
                     catch( const lang::IllegalArgumentException & ex )
                     {
@@ -467,9 +491,9 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 }
 
                 // Note: Even if we have no label, we have to register the label
-                // for creation, because internal data always has labels. If the
-                // don't exist in the original, auto-generated labels are used
-                // for the internal data.
+                // for creation, because internal data always has labels. If
+                // they don't exist in the original, auto-generated labels are
+                // used for the internal data.
                 maPostponedSequences.insert(
                     tSchXMLLSequencesPerIndex::value_type(
                         tSchXMLIndexWithPart( mrCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
@@ -602,7 +626,8 @@ void SchXMLSeries2Context::EndElement()
         Reference< chart2::data::XDataSequence > xSeq;
         try
         {
-            xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( aXValuesRange ));
+            xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( aXValuesRange, mxNewDoc )));
+            SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, aXValuesRange );
         }
         catch( const lang::IllegalArgumentException & ex )
         {
@@ -810,7 +835,8 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
-        , bool bIsStockChart )
+        , bool bIsStockChart
+        , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
 
@@ -847,6 +873,24 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                             dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
                     if( pPropStyleContext )
                     {
+                        // error bar style must be set before the other error
+                        // bar properties (which may be alphabetically before
+                        // this property)
+                        bool bHasErrorBarRangesFromData = false;
+                        {
+                            const ::rtl::OUString aErrorBarStylePropName( RTL_CONSTASCII_USTRINGPARAM("ErrorBarStyle"));
+                            uno::Any aErrorBarStyle(
+                                SchXMLTools::getPropertyFromContext( aErrorBarStylePropName, pPropStyleContext, pStylesCtxt ));
+                            if( aErrorBarStyle.hasValue())
+                            {
+                                xSeriesProp->setPropertyValue( aErrorBarStylePropName, aErrorBarStyle );
+                                sal_Int32 eEBStyle = chart::ErrorBarStyle::NONE;
+                                bHasErrorBarRangesFromData =
+                                    ( ( aErrorBarStyle >>= eEBStyle ) &&
+                                      eEBStyle == chart::ErrorBarStyle::FROM_DATA );
+                            }
+                        }
+
                         //don't set the style to the min max line series of a stock chart
                         //otherwise the min max line properties gets overwritten and the series becomes invisible typically
                         bool bIsMinMaxSeries = false;
@@ -861,6 +905,8 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                             pPropStyleContext->FillPropertySet( xSeriesProp );
                             if( iStyle->mbSymbolSizeForSeriesIsMissingInFile )
                                 lcl_setSymbolSizeIfNeeded( xSeriesProp, rImport );
+                            if( bHasErrorBarRangesFromData )
+                                lcl_insertErrorBarLSequencesToMap( rInOutLSequencesPerIndex, xSeriesProp );
                         }
                     }
                 }
