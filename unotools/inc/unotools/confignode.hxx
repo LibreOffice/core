@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:42:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,13 @@ namespace utl
         */
         OConfigurationNode  openNode(const ::rtl::OUString& _rPath) const throw();
 
-        /** create a new child node<p/>
+        OConfigurationNode  openNode( const sal_Char* _pAsciiPath ) const
+        {
+            return openNode( ::rtl::OUString::createFromAscii( _pAsciiPath ) );
+        }
+
+        /** create a new child node
+
             If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the
             method will fail.<br/>
             Unless the respective operations on the pure configuration API, the to-be-created node immediately
@@ -121,7 +127,14 @@ namespace utl
             @param      _rName      name for the new child. Must be level-1-depth.
         */
         OConfigurationNode  createNode(const ::rtl::OUString& _rName) const throw();
-        /** appends a node under a new name <p/>
+
+        OConfigurationNode  createNode( const sal_Char* _pAsciiName ) const
+        {
+            return createNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+        }
+
+        /** appends a node under a new name
+
             If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the
             method will fail.<br/>
             Unless the respective operations on the pure configuration API, the to-be-created node immediately
@@ -131,13 +144,25 @@ namespace utl
         */
         OConfigurationNode  appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw();
 
-        /** remove an existent child node<p/>
+        OConfigurationNode  appendNode( const sal_Char* _pAsciiName, const OConfigurationNode& _aNewNode ) const
+        {
+            return appendNode( ::rtl::OUString::createFromAscii( _pAsciiName ), _aNewNode );
+        }
+
+        /** remove an existent child nod
+
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
         sal_Bool            removeNode(const ::rtl::OUString& _rName) const throw();
 
-        /** retrieves the content of a descendant<p/>
+        sal_Bool            removeNode( const sal_Char* _pAsciiName ) const
+        {
+            return removeNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+        }
+
+        /** retrieves the content of a descendant
+
             the returned value may contain anything from an interface (if <arg>_rPath</arg> refers to inner node of
             the configuration tree) to any explicit value (e.g. string, integer) or even void.<br/>
             Unfortunately, this implies that if a void value is returned, you won't have a clue if this means
@@ -146,6 +171,12 @@ namespace utl
         ::com::sun::star::uno::Any
                             getNodeValue(const ::rtl::OUString& _rPath) const throw();
 
+        ::com::sun::star::uno::Any
+                            getNodeValue( const sal_Char* _pAsciiPath ) const
+        {
+            return getNodeValue( ::rtl::OUString::createFromAscii( _pAsciiPath ) );
+        }
+
         /** write a node value<p/>
             The value given is written into the node specified by the given relative path.<br/>
             In opposite to <method>getNodeValue</method>, _rName must refer to a leaf in the configuration tree, not an inner
@@ -153,6 +184,11 @@ namespace utl
             @return     sal_True if and only if the write was successfull.
         */
         sal_Bool            setNodeValue(const ::rtl::OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
+
+        sal_Bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
+        {
+            return setNodeValue( ::rtl::OUString::createFromAscii( _pAsciiPath ), _rValue );
+        }
 
         /// return the names of the existing children
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -181,16 +217,23 @@ namespace utl
         /// invalidate the object
         virtual void clear() throw();
 
-    // -----------------------
-    // meta informations about the node
+        // -----------------------
+        // meta informations about the node
+
         /// checks whether or not the object represents a set node.
         sal_Bool isSetNode() const;
+
         /// checks whether or not a direct child with a given name exists
         sal_Bool hasByName(const ::rtl::OUString& _rName) const throw();
+        sal_Bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( ::rtl::OUString::createFromAscii( _pAsciiName ) ); }
+
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
         sal_Bool hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw();
+        sal_Bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( ::rtl::OUString::createFromAscii( _pAsciiName ) ); }
+
         /// check if the objects represents a valid configuration node
         sal_Bool isValid() const { return m_xHierarchyAccess.is(); }
+
         /// check whether the object is read-only of updatable
         sal_Bool isReadonly() const { return !m_xReplaceAccess.is(); }
 
@@ -251,20 +294,28 @@ namespace utl
         OConfigurationTreeRoot(const OConfigurationTreeRoot& _rSource)
             :OConfigurationNode(_rSource), m_xCommitter(_rSource.m_xCommitter) { }
 
-        /** open a new top-level configuration node<p/>
+        /** open a new top-level configuration node
+
             opens a new node which is the root if an own configuration sub tree. This is what "top level" means: The
             node does not have a parent. It does not mean that the node represents a module tree (like org.openoffice.Office.Writer
             or such).<br/>
             In opposite to <method>createWithServiceFactory</method>, createWithProvider expects a configuration provider
             to work with.
-            @see    createWithServiceFactory
+
             @param      _rxConfProvider configuration provider to use when retrieving the node.
             @param      _rPath          path to the node the object should represent
             @param      _nDepth         depth for node retrieval
             @param      _eMode          specifies which privileges should be applied when retrieving the node
+
+            @see    createWithServiceFactory
         */
-        static OConfigurationTreeRoot createWithProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
-            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_PREFER_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
+        static OConfigurationTreeRoot createWithProvider(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
+                const ::rtl::OUString& _rPath,
+                sal_Int32 _nDepth = -1,
+                CREATION_MODE _eMode = CM_PREFER_UPDATABLE,
+                sal_Bool _bLazyWrite = sal_True
+            );
 
         /** open a new top-level configuration node<p/>
             opens a new node which is the root if an own configuration sub tree. This is what "top level" means: The
