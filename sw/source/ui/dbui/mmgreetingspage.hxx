@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:02:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     virtual void    UpdatePreview();
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+    virtual sal_Bool    commitPage( CommitPageReason _eReason );
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeGreetingsPage();
