@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:27:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,7 @@
 #define RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS         (RID_FORMS_START + 146)
 #define RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS         (RID_FORMS_START + 147)
 #define RID_STR_READONLY_VIEW                       (RID_FORMS_START + 148)
+#define RID_STR_ALREADYEXISTOVERWRITE               (RID_FORMS_START + 149)
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)
