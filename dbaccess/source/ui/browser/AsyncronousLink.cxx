@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AsyncronousLink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:55:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:12:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,54 +51,32 @@
 using namespace dbaui;
 DBG_NAME(OAsyncronousLink)
 //------------------------------------------------------------------
-OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, ::vos::OMutex* _pEventSafety, ::vos::OMutex* _pDestructionSafety)
+OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
     :m_aHandler(_rHandler)
-    ,m_pEventSafety(NULL)
-    ,m_pDestructionSafety(NULL)
-    ,m_bOwnMutexes(FALSE)
+    ,m_aEventSafety()
+    ,m_aDestructionSafety()
     ,m_nEventId(0)
 {
     DBG_CTOR(OAsyncronousLink,NULL);
-
-    if (_pEventSafety && _pDestructionSafety)
-    {
-        m_pEventSafety = _pEventSafety;
-        m_pDestructionSafety = _pDestructionSafety;
-        m_bOwnMutexes = FALSE;
-    }
-    else
-    {
-        m_pEventSafety = new ::vos::OMutex;
-        m_pDestructionSafety = new ::vos::OMutex;
-        m_bOwnMutexes = TRUE;
-    }
 }
 
 //------------------------------------------------------------------
 OAsyncronousLink::~OAsyncronousLink()
 {
     {
-        ::vos::OGuard aEventGuard(*m_pEventSafety);
-        if (m_nEventId)
+        ::osl::MutexGuard aEventGuard( m_aEventSafety );
+        if ( m_nEventId )
             Application::RemoveUserEvent(m_nEventId);
         m_nEventId = 0;
     }
 
     {
-        ::vos::OGuard aDestructionGuard(*m_pDestructionSafety);
+        ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
         // this is just for the case we're deleted while another thread just handled the event :
         // if this other thread called our link while we were deleting the event here, the
         // link handler blocked. With leaving the above block it continued, but now we are prevented
         // to leave this destructor 'til the link handler recognizes that nEvent == 0 and leaves.
     }
-    if (m_bOwnMutexes)
-    {
-        delete m_pEventSafety;
-        delete m_pDestructionSafety;
-    }
-    m_pEventSafety = NULL;
-    m_pDestructionSafety = NULL;
-
     DBG_DTOR(OAsyncronousLink,NULL);
 }
 
@@ -106,7 +84,7 @@ OAsyncronousLink::~OAsyncronousLink()
 //------------------------------------------------------------------
 void OAsyncronousLink::Call(void* /*_pArgument*/)
 {
-    ::vos::OGuard aEventGuard(*m_pEventSafety);
+    ::osl::MutexGuard aEventGuard( m_aEventSafety );
     if (m_nEventId)
         Application::RemoveUserEvent(m_nEventId);
     m_nEventId = Application::PostUserEvent(LINK(this, OAsyncronousLink, OnAsyncCall));
@@ -115,9 +93,9 @@ void OAsyncronousLink::Call(void* /*_pArgument*/)
 //------------------------------------------------------------------
 void OAsyncronousLink::CancelCall()
 {
-    ::vos::OGuard aEventGuard(*m_pEventSafety);
-    if (m_nEventId)
-        Application::RemoveUserEvent(m_nEventId);
+    ::osl::MutexGuard aEventGuard( m_aEventSafety );
+    if ( m_nEventId )
+        Application::RemoveUserEvent( m_nEventId );
     m_nEventId = 0;
 }
 
@@ -125,11 +103,11 @@ void OAsyncronousLink::CancelCall()
 IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
 {
     {
-        ::vos::OGuard aDestructionGuard(*m_pDestructionSafety);
+        ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
         {
-            ::vos::OGuard aEventGuard(*m_pEventSafety);
+            ::osl::MutexGuard aEventGuard( m_aEventSafety );
             if (!m_nEventId)
-                // our destructor deleted the event just while we we're waiting for m_pEventSafety
+                // our destructor deleted the event just while we we're waiting for m_aEventSafety
                 // -> get outta here
                 return 0;
             m_nEventId = 0;
