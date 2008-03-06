@@ -4,9 +4,9 @@
  *
  *  $RCSfile: admininvokationpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,6 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool AdminDialogInvokationPage::commitPage( COMMIT_REASON _eReason )
-    {
-        return AddressBookSourcePage::commitPage( _eReason );
-    }
-
-    //---------------------------------------------------------------------
     void AdminDialogInvokationPage::implTryConnect()
     {
         getDialog()->connectToDataSource( sal_True );
@@ -103,17 +97,17 @@ namespace abp
         implUpdateErrorMessage();
 
         // the status of the next button may have changed
-        implCheckNextButton();
+        updateDialogTravelUI();
 
         // automatically go to the next page (if successfully connected)
-        if ( determineNextButtonState() )
+        if ( canAdvance() )
             getDialog()->travelNext();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool AdminDialogInvokationPage::determineNextButtonState()
+    bool AdminDialogInvokationPage::canAdvance() const
     {
-        return AddressBookSourcePage::determineNextButtonState() && getDialog()->getDataSource().isConnected();
+        return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
 
     //---------------------------------------------------------------------
