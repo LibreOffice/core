@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:18:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,8 +218,7 @@ public:
         { m_pImageProvider = provider; }
 };
 
-class SVX_DLLPUBLIC SvxScriptSelectorDialog :
-    public ModelessDialog
+class SVX_DLLPUBLIC SvxScriptSelectorDialog : public ModelessDialog
 {
     FixedText                       aDialogDescription;
     FixedText                       aGroupText;
@@ -259,7 +258,7 @@ public:
         { aCategories.SetImageProvider( provider ); }
 
     USHORT      GetSelectedId();
-    String      GetScriptURL();
+    String      GetScriptURL() const;
     String      GetSelectedDisplayName();
     String      GetSelectedHelpText();
     void        SetRunLabel();
