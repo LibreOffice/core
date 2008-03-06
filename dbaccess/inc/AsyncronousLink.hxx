@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AsyncronousLink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:47:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 #ifndef DBAUI_ASYNCRONOUSLINK_HXX
 #define DBAUI_ASYNCRONOUSLINK_HXX
 
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#include "dbaccessdllapi.h"
+#include <osl/mutex.hxx>
 
 namespace dbaui
 {
@@ -55,37 +50,25 @@ namespace dbaui
         event while another thread tries to delete this event in the _destructor_ of the
         class).
     */
-    class DBACCESS_DLLPUBLIC OAsyncronousLink
+    class OAsyncronousLink
     {
-        Link                    m_aHandler;
+        Link                m_aHandler;
 
     protected:
-        ::vos::OMutex*      m_pEventSafety;
-        ::vos::OMutex*      m_pDestructionSafety;
-        BOOL                m_bOwnMutexes;
+        ::osl::Mutex        m_aEventSafety;
+        ::osl::Mutex        m_aDestructionSafety;
         ULONG               m_nEventId;
 
     public:
         /** constructs the object
             @param      _rHandler           The link to be called asyncronously
-            @param      _pEventSafety       A pointer to a mutex to be used for event safety. See below.
-            @param      _pDestructionSafety A pointer to a mutex to be used for destruction safety. See below.
-
-            For a really safe behaviour two mutexes are required. In case your class needs more than one
-            OAsyncronousLink instance, you may want to share these mutexes (and hold them as members of
-            your class). Thus, if _pEventSafety and _pDestructionSafety are both non-NULL, they will be
-            used for the thread-safety of the link. Otherwise the instance will create it's own mutexes.
-            <BR>
-            If you use this "mutex feature" be aware of the lifetime of all involved objects : the mutexes
-            you specify upon construction should live (at least) as long as the OAsyncronousLink object does.
         */
-        OAsyncronousLink(const Link& _rHandler, ::vos::OMutex* _pEventSafety = NULL, ::vos::OMutex* _pDestructionSafety = NULL);
+        OAsyncronousLink( const Link& _rHandler );
         virtual ~OAsyncronousLink();
 
         bool    IsRunning() const { return m_nEventId != 0; }
 
-
-        void Call(void* _pArgument = NULL);
+        void Call( void* _pArgument = NULL );
         void CancelCall();
 
     protected:
