@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:33:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,10 @@ namespace dbaui
             @param  _eType
                 Which container to show.
         */
-        void changeContainer(ElementType _eType);
+        void selectContainer(ElementType _eType);
+
+    private:
+        bool onContainerSelected( ElementType _eType );
     };
 // .............................................................
 } // namespace dbaui
