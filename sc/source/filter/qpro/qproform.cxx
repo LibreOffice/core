@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qproform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:13:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             IncToken( eParam[ 1 ] );
             break;
 
-        case ocIKV:
+        case ocIRR:
             nPush = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nPush;
@@ -501,10 +501,10 @@ static const struct
     { ocMin, FT_FuncVar },
     { ocMax, FT_FuncVar },
     { ocVLookup, FT_FuncFix3 },
-    { ocNBW, FT_FuncFix2 },
+    { ocNPV, FT_FuncFix2 },
     { ocVar, FT_FuncVar },
     { ocNormDist, FT_FuncVar },
-    { ocIKV, FT_FuncFix2 },
+    { ocIRR, FT_FuncFix2 },
     { ocHLookup, FT_FuncFix3 },
     { ocDBSum, FT_FuncFix3 },
     { ocDBAverage, FT_FuncFix3 },
@@ -558,7 +558,7 @@ static const struct
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },
     { ocGetActDate, FT_FuncFix0 },
-    { ocNBW, FT_FuncFix2 },
+    { ocNPV, FT_FuncFix2 },
     { ocNoName, FT_NotImpl },                // 0x90
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NOP },
@@ -605,11 +605,11 @@ DefTokenId QProToSc::IndexToDLLId( sal_uInt16 nIndex )
             break;
 
         case 0x0024:
-            eId = ocGGT;
+            eId = ocGCD;
             break;
 
         case 0x0025:
-            eId = ocKGV;
+            eId = ocLCM;
             break;
 
         case 0x0027:
