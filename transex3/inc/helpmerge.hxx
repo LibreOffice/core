@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:43:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ private:
 
 /// Copy fallback language String (ENUS,DE) into position of the numeric language iso code
 /// @PRECOND 0 < langIdx_in < MAX_IDX
-    void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
+    static void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
 
 /// Debugmethod, prints the content of the map to stdout
     static  void Dump(  LangHashMap* rElem_in , const ByteString sKey_in );
@@ -69,7 +69,8 @@ public:
 
 /// Method creates/append a SDF file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
-    bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in );
+    static bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in,
+                           const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1 );
 
     static  void parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
 
