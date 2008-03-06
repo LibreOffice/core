@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:05:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,7 @@ public:
 
 protected:
     // ModelDependentComponent overridables
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() const;
 
 private:
 // helper
