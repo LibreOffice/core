@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:21:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ public:
 protected:
     /// to override to create new pages
     virtual TabPage*    createPage(WizardState _nState);
-    virtual WizardState determineNextState(WizardState _nCurrentState);
+    virtual WizardState determineNextState(WizardState _nCurrentState) const;
     virtual sal_Bool    leaveState(WizardState _nState);
     virtual ::svt::IWizardPage* getWizardPage(TabPage* _pCurrentPage) const;
     virtual sal_Bool onFinish(sal_Int32 _nResult);
