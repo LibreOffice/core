@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptProviderForJava.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,45 +37,21 @@ package com.sun.star.script.framework.provider.java;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.comp.loader.FactoryHelper;
+import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
 
-import com.sun.star.beans.Property;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.reflection.InvocationTargetException;
-import com.sun.star.script.CannotConvertException;
-
-import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
-import java.net.URL;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
 
 import com.sun.star.script.provider.XScriptContext;
-import com.sun.star.script.provider.XScriptProvider;
 import com.sun.star.script.provider.XScript;
-import com.sun.star.script.browse.XBrowseNode;
-import com.sun.star.script.browse.BrowseNodeTypes;
-import com.sun.star.script.provider.ScriptErrorRaisedException;
 import com.sun.star.script.provider.ScriptExceptionRaisedException;
 import com.sun.star.script.provider.ScriptFrameworkErrorException;
 import com.sun.star.script.provider.ScriptFrameworkErrorType;
@@ -116,7 +92,7 @@ public class ScriptProviderForJava
             ScriptImpl script = null;
             try
             {
-                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xModel );
+                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xModel, m_xInvocContext );
                 return script;
             }
             catch ( com.sun.star.uno.RuntimeException re )
@@ -209,13 +185,15 @@ class ScriptImpl implements XScript
     private ScriptMetaData metaData;
     private XComponentContext m_xContext;
     private XModel m_xModel;
+    private XScriptInvocationContext m_xInvocContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private Resolver m_resolutionPolicy;
-    ScriptImpl( XComponentContext ctx, Resolver resolver, ScriptMetaData metaData, XModel xModel ) throws com.sun.star.uno.RuntimeException
+    ScriptImpl( XComponentContext ctx, Resolver resolver, ScriptMetaData metaData, XModel xModel, XScriptInvocationContext xInvocContext ) throws com.sun.star.uno.RuntimeException
     {
         this.metaData = metaData;
         this.m_xContext = ctx;
         this.m_xModel = xModel;
+        this.m_xInvocContext = xInvocContext;
         this.m_resolutionPolicy = resolver;
         try
         {
@@ -305,7 +283,7 @@ class ScriptImpl implements XScript
             LogUtils.DEBUG( "Parameter Mapping..." );
 
             // Setup Context Object
-            XScriptContext xSc = ScriptContext.createContext(m_xModel,
+            XScriptContext xSc = ScriptContext.createContext(m_xModel, m_xInvocContext,
                 m_xContext, m_xMultiComponentFactory);
             scriptDesc.addArgumentType( XScriptContext.class );
             invocationArgList.add( xSc );
