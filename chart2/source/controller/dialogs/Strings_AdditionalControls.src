@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_AdditionalControls.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:44:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,6 @@ String STR_BAR_GEOMETRY
 String STR_NUMBER_OF_LINES
 {
     Text [ en-US ] = "~Number of lines";
-};
-
-String STR_WIZARD_ROADMAP_TITLE
-{
-    Text [ en-US ] = "Steps";
 };
 
 String STR_TEXT_SEPARATOR
