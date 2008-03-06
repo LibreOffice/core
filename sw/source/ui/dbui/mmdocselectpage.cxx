@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:33:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,11 +235,11 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 /*-- 06.04.2004 12:52:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeDocSelectPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool SwMailMergeDocSelectPage::commitPage( CommitPageReason _eReason )
 {
     sal_Bool bReturn = sal_False;
-    bool bNext = _eReason == CR_TRAVEL_NEXT;
-    if(bNext || _eReason == CR_VALIDATE )
+    bool bNext = _eReason == eTravelForward;
+    if(bNext || _eReason == eValidate )
     {
         ::rtl::OUString sReloadDocument;
         bReturn = m_aCurrentDocRB.IsChecked() ||
