@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:34:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,6 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
-#ifndef INCLUDED_LIST
-#include <list>
-#define INCLUDED_LIST
-#endif
-
 #ifndef INCLUDED_FUNCTIONAL
 #include <functional>
 #define INCLUDED_FUNCTIONAL
@@ -60,7 +55,7 @@
 
 #include <list>
 #include <functional>
-
+#include <vector>
 
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -406,6 +401,8 @@ public:
 
     Rectangle   GetTitleRect() const;
     Rectangle   GetLayoutRect() const;
+
+    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas );
 
 private:
     /** clone the animations from this and set them to rTargetPage
