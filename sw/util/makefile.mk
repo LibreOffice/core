@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 10:50:37 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:33:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,11 @@ SHL3STDLIBS= \
             $(CPPULIB) \
             $(SALLIB) \
             $(SOTLIB)
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+LINKFLAGS+= -L../$(PRJ)/layout/$(INPATH)/lib
+SHL3STDLIBS += -ltklayout$(UPD)$(DLLPOSTFIX)
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
