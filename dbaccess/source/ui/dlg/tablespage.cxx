@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 //.........................................................................
@@ -406,14 +409,15 @@ DBG_NAME(OTableSubscriptionPage)
                         m_pTablesDlg->successfullyConnected();
                 }
             }
-            catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-            catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (const SQLException&)
+            {
+                aErrorInfo = ::cppu::getCaughtException();
+            }
 
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox(GetParent()->GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error);
+                OSQLMessageBox aMessageBox( GetParent()->GetParent(), aErrorInfo );
                 aMessageBox.Execute();
                 m_aTables.Enable(sal_False);
                 m_aTablesList.Enable(sal_False);
