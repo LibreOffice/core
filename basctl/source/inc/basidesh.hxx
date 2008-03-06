@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:25:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ public:
     TabBar*             GetTabBar()             { return (TabBar*)pTabBar; }
     IDEWindowTable&     GetIDEWindowTable()     { return aIDEWindowTable; }
 
-    SdrView*            GetCurDlgView();
+    SdrView*            GetCurDlgView() const;
 
     SfxUndoManager*     GetUndoManager();
 
@@ -243,6 +243,10 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
         const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
         const String& rDestLibName, const String& rDlgName );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                        GetCurrentDocument() const;
+
 };
 
 #endif // _BASIDESH_HXX
