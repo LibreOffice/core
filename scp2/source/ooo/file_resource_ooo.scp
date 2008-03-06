@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:08:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,4 +152,6 @@ STD_RES_FILE_PATCH( gid_File_Res_XMLSecurity, xmlsec )
 #endif
 
 STD_RES_FILE_PATCH( gid_File_Res_UpdChk, updchk )
+
+STD_RES_FILE_PATCH( gid_File_Res_T602Filter, t602filter )
 
