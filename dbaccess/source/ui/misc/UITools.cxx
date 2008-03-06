@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:51:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,9 @@
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -410,18 +413,18 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     return aInfo;
 }
 // -----------------------------------------------------------------------------
-Reference< XDataSource > getDataSourceByName_displayError( const Reference< XNameAccess >& _rxDBContext,
-    const ::rtl::OUString& _rDataSourceName, Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB,
-    bool _bDisplayError)
+Reference< XDataSource > getDataSourceByName_displayError( const ::rtl::OUString& _rDataSourceName,
+    Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB, bool _bDisplayError)
 {
-    OSL_PRECOND( _rxDBContext.is() && _rxORB.is(), "getDataSourceByName_displayError: invalid service factory!" );
+    ::comphelper::ComponentContext aContext( _rxORB );
+    Reference< XNameAccess > xDatabaseContext( aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
     Reference< XDataSource > xDatasource;
     Any aError;
     SQLExceptionInfo aSQLError;
     try
     {
-        _rxDBContext->getByName( _rDataSourceName ) >>= xDatasource;
+        xDatabaseContext->getByName( _rDataSourceName ) >>= xDatasource;
     }
     catch(const WrappedTargetException& e)
     {
