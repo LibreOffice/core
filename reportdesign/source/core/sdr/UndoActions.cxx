@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoActions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/singledoccontroller.hxx>
 #include <svx/unoshape.hxx>
+#include <vos/mutex.hxx>
 
 namespace rptui
 {
