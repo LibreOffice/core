@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:08:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,6 @@ public:
     SAL_DLLPRIVATE const String& GetLastDir_Impl() const;
     SAL_DLLPRIVATE void         SetLastDir_Impl( const String & );
     SAL_DLLPRIVATE void         PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBas );
-    SAL_DLLPRIVATE StarBASIC*   GetBasic_Impl() const;
 
     SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
     SAL_DLLPRIVATE FASTBOOL     IsInAsynchronCall_Impl() const;
