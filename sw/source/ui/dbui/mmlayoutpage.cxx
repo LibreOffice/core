@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:34:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,11 +321,11 @@ void SwMailMergeLayoutPage::ActivatePage()
 /*-- 11.05.2004 10:41:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeLayoutPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool SwMailMergeLayoutPage::commitPage( CommitPageReason _eReason )
 {
     //now insert the frame and the greeting
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if(CR_TRAVEL_NEXT == _eReason)
+    if(eTravelForward == _eReason)
     {
         long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
         long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
