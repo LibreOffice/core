@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:20:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
+#include <comphelper/stl_types.hxx>
 
 namespace func_provider
 {
@@ -60,8 +61,10 @@ namespace func_provider
 //=============================================================================
 
 
-typedef ::std::map < css::uno::Reference< css::frame::XModel >,
-                     css::uno::Reference< css::script::provider::XScriptProvider > > Model_map;
+typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
+                    ,   css::uno::Reference< css::script::provider::XScriptProvider >
+                    ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
+                    >   ScriptComponent_map;
 
 typedef ::std::hash_map< ::rtl::OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
@@ -78,11 +81,17 @@ public:
     ~ActiveMSPList();
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        createMSP( const ::rtl::OUString& context )
-            throw ( css::uno::RuntimeException );
+        getMSPFromStringContext( const ::rtl::OUString& context )
+            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+
     css::uno::Reference< css::script::provider::XScriptProvider >
-        createMSP( const css::uno::Any& context )
-            throw ( css::uno::RuntimeException );
+        getMSPFromAnyContext( const css::uno::Any& context )
+            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+
+    css::uno::Reference< css::script::provider::XScriptProvider >
+        getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context )
+            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+
     css::uno::Sequence< css::uno::Reference< css::script::provider::XScriptProvider > >
         getActiveProviders();
     //XEventListener
@@ -92,14 +101,19 @@ public:
         throw ( css::uno::RuntimeException );
 
 private:
-    void addActiveMSP( const css::uno::Reference< css::frame::XModel >& xModel,
+    void addActiveMSP( const css::uno::Reference< css::uno::XInterface >& xComponent,
                        const css::uno::Reference< css::script::provider::XScriptProvider >& msp );
     css::uno::Reference< css::script::provider::XScriptProvider >
-        createNewMSP( const ::rtl::OUString& )
-            throw ( css::uno::RuntimeException );
+        createNewMSP( const css::uno::Any& context );
+    css::uno::Reference< css::script::provider::XScriptProvider >
+        createNewMSP( const ::rtl::OUString& context )
+    {
+        return createNewMSP( css::uno::makeAny( context ) );
+    }
+
     void createNonDocMSPs();
     Msp_hash m_hMsps;
-    Model_map m_mModels;
+    ScriptComponent_map m_mScriptComponents;
     osl::Mutex m_mutex;
     ::rtl::OUString userDirString;
     ::rtl::OUString shareDirString;
