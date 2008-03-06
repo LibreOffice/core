@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:31:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,6 @@
 #ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
 #endif
-#ifndef SVTOOLS_WIZARDHEADER_HXX
-#include "wizardheader.hxx"
-#endif
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
-#endif
-
-#define HEADER_SIZE_Y   30
 
 //.........................................................................
 namespace svt
@@ -71,10 +63,7 @@ namespace svt
     //=====================================================================
     struct WizardPageImplData
     {
-        WizardHeader*       pHeader;
-
         WizardPageImplData()
-            :pHeader( NULL )
         {
         }
     };
@@ -99,64 +88,7 @@ namespace svt
     //---------------------------------------------------------------------
     OWizardPage::~OWizardPage()
     {
-        delete m_pImpl->pHeader;
         delete m_pImpl;
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OWizardPage::isHeaderEnabled( ) const
-    {
-        return NULL != m_pImpl->pHeader;
-    }
-
-    //---------------------------------------------------------------------
-    void OWizardPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, IWizardPage::GrantAccess )
-    {
-        //.................................................................
-        // create the header control
-        m_pImpl->pHeader = new WizardHeader( this );
-
-        // move it to the upper left corner
-        m_pImpl->pHeader->SetPosPixel( Point( 0, 0 ) );
-
-        // size it: as wide as we are, and 30 APPFONT units high
-        Size aHeaderSize( GetSizePixel().Width(), _nPixelHeight );
-        m_pImpl->pHeader->SetSizePixel( aHeaderSize );
-
-        // set bitmap / text of the control
-        m_pImpl->pHeader->setHeaderBitmap( _rBitmap );
-        m_pImpl->pHeader->setHeaderText( GetText() );
-
-        // show
-        m_pImpl->pHeader->Show( );
-
-        //.................................................................
-        // move all the other controls down
-        Point aChildPos;
-        // loop through the children
-        Window* pChildLoop = GetWindow( WINDOW_FIRSTCHILD );
-        while ( pChildLoop )
-        {
-            if ( pChildLoop != m_pImpl->pHeader )
-            {   // it's not the header itself
-                aChildPos = pChildLoop->GetPosPixel();
-                aChildPos.Y() += aHeaderSize.Height();
-                pChildLoop->SetPosPixel( aChildPos );
-            }
-
-            pChildLoop = pChildLoop->GetWindow( WINDOW_NEXT );
-        }
-    }
-
-    //---------------------------------------------------------------------
-    void OWizardPage::setHeaderText( const String& _rHeaderText )
-    {
-        if ( !isHeaderEnabled() )
-        {
-            DBG_ERROR( "OWizardPage::setHeaderText: have no header!" );
-            return;
-        }
-        m_pImpl->pHeader->setHeaderText( _rHeaderText );
     }
 
     //---------------------------------------------------------------------
@@ -168,25 +100,26 @@ namespace svt
     void OWizardPage::ActivatePage()
     {
         TabPage::ActivatePage();
-        implCheckNextButton();
+        updateDialogTravelUI();
     }
 
     //---------------------------------------------------------------------
-    void OWizardPage::implCheckNextButton()
+    void OWizardPage::updateDialogTravelUI()
     {
-        OWizardMachine * pWizardMachine = dynamic_cast< OWizardMachine* >(GetParent());
-        if( pWizardMachine )
-            pWizardMachine->enableButtons(WZB_NEXT, determineNextButtonState());
+        OWizardMachine* pWizardMachine = dynamic_cast< OWizardMachine* >( GetParent() );
+        OSL_ENSURE( pWizardMachine, "OWizardPage::updateDialogTravelUI: where am I?" );
+        if ( pWizardMachine )
+            pWizardMachine->updateTravelUI();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::determineNextButtonState()
+    bool OWizardPage::canAdvance() const
     {
-        return sal_True;
+        return true;
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage(IWizardPage::COMMIT_REASON)
+    sal_Bool OWizardPage::commitPage( CommitPageReason )
     {
         return sal_True;
     }
@@ -198,23 +131,19 @@ namespace svt
     {
         String                          sTitleBase;         // the base for the title
         ::std::stack< WizardState >     aStateHistory;      // the history of all states (used for implementing "Back")
-        Bitmap                          aHeaderBitmap;      // the bitmap to use for the page header
-
-        sal_Int32                       nHeaderHeight;      // the height (in pixels) of the page header
 
         WizardState                     nFirstUnknownPage;
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
-        sal_Bool                        bUsingHeaders;      // do we use page headers?
-        sal_Bool                        m_bCheckButtonStates;
+        sal_Bool                        m_bAutoNextButtonState;
 
-        bool                            m_bInCallOfLink;
+        bool                            m_bTravelingSuspended;
 
         WizardMachineImplData()
             :nFirstUnknownPage( 0 )
-            ,bUsingHeaders( sal_False )
-            ,m_bInCallOfLink( false )
+            ,m_bAutoNextButtonState( sal_False )
+            ,m_bTravelingSuspended( false )
         {
         }
     };
@@ -241,8 +170,8 @@ namespace svt
     //= OWizardMachine
     //=====================================================================
     //---------------------------------------------------------------------
-    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags, sal_Bool _bCheckButtonStates, sal_Bool _RoadmapMode, sal_Int16 _nLeftAlignCount )
-        :WizardDialog(_pParent, _rRes, _RoadmapMode, _nLeftAlignCount )
+    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
+        :WizardDialog( _pParent, _rRes )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
         ,m_pNextPage(NULL)
@@ -251,7 +180,6 @@ namespace svt
         ,m_pImpl( new WizardMachineImplData )
     {
         m_pImpl->sTitleBase = GetText();
-        m_pImpl->m_bCheckButtonStates = _bCheckButtonStates;
 
         // create the buttons according to the wizard button flags
         // the help button
@@ -338,43 +266,16 @@ namespace svt
     void OWizardMachine::implUpdateTitle()
     {
         String sCompleteTitle(m_pImpl->sTitleBase);
-        if ( !m_pImpl->bUsingHeaders )
-        {   // append the page title only if we're not using headers - in this case, the title
-            // would be part of the header
-            TabPage* pCurrentPage = GetPage(getCurrentState());
-            if ( pCurrentPage && pCurrentPage->GetText().Len() )
-            {
-                sCompleteTitle += String::CreateFromAscii(" - ");
-                sCompleteTitle += pCurrentPage->GetText();
-            }
+
+        // append the page title
+        TabPage* pCurrentPage = GetPage(getCurrentState());
+        if ( pCurrentPage && pCurrentPage->GetText().Len() )
+        {
+            sCompleteTitle += String::CreateFromAscii(" - ");
+            sCompleteTitle += pCurrentPage->GetText();
         }
+
         SetText(sCompleteTitle);
-    }
-
-    //---------------------------------------------------------------------
-    void OWizardMachine::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight )
-    {
-        if ( m_pImpl->bUsingHeaders )
-            // nothing to do
-            return;
-
-        // is the height defaulted?
-        if ( -1 == _nPixelHeight )
-        {
-            _nPixelHeight = LogicToPixel( Size( 0, 30 ), MAP_APPFONT ).Height();
-        }
-
-        m_pImpl->bUsingHeaders = sal_True;
-        m_pImpl->aHeaderBitmap = _rBitmap;
-        m_pImpl->nHeaderHeight = _nPixelHeight;
-
-#ifdef DBG_UTIL
-        for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
-        {
-            DBG_ASSERT( NULL == GetPage( i ), "OWizardMachine::enableHeader: there already are pages!" );
-            // this method has not to be called if there already have been created any pages
-        }
-#endif
     }
 
     //---------------------------------------------------------------------
@@ -400,14 +301,6 @@ namespace svt
         {
             TabPage* pNewPage = createPage(nCurrentLevel);
             DBG_ASSERT(pNewPage, "OWizardMachine::ActivatePage: invalid new page (NULL)!");
-
-            // announce our header bitmap to the page
-            if ( m_pImpl->bUsingHeaders )
-            {
-                IWizardPage* pHeader = getWizardPage(pNewPage);
-                if ( pHeader )
-                    pHeader->enableHeader( m_pImpl->aHeaderBitmap, m_pImpl->nHeaderHeight, IWizardPage::GrantAccess() );
-            }
 
             // fill up the page sequence of our base class (with dummies)
             while (m_pImpl->nFirstUnknownPage < nCurrentLevel)
@@ -524,9 +417,10 @@ namespace svt
         if ( pCurrentPage )
             pCurrentPage->initializePage();
 
-        if ( m_pImpl->m_bCheckButtonStates )
-            enableButtons(WZB_NEXT,WZS_INVALID_STATE != determineNextState(_nState) );
-        enableButtons(WZB_PREVIOUS,!m_pImpl->aStateHistory.empty());
+        if ( isAutomaticNextButtonStateEnabled() )
+            enableButtons( WZB_NEXT, canAdvance() );
+
+        enableButtons( WZB_PREVIOUS, !m_pImpl->aStateHistory.empty() );
 
         // set the new title - it depends on the current page (i.e. state)
         implUpdateTitle();
@@ -551,21 +445,19 @@ namespace svt
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnFinish, PushButton*, EMPTYARG)
     {
-        if( IsInCallOfLink() )
+        if ( isTravelingSuspended() )
             return 0;
-        SetInCallOfLink( true );
+        WizardTravelSuspension aTravelGuard( *this );
         if ( !prepareLeaveCurrentState( eFinish ) )
         {
-            SetInCallOfLink( false);
             return 0L;
         }
         long nRet = onFinish( RET_OK );
-        SetInCallOfLink( false);
         return nRet;
     }
 
     //---------------------------------------------------------------------
-    OWizardMachine::WizardState OWizardMachine::determineNextState( WizardState _nCurrentState )
+    OWizardMachine::WizardState OWizardMachine::determineNextState( WizardState _nCurrentState ) const
     {
         return _nCurrentState + 1;
     }
@@ -575,7 +467,7 @@ namespace svt
     {
         IWizardPage* pCurrentPage = getWizardPage(GetPage(getCurrentState()));
         if ( pCurrentPage )
-            return pCurrentPage->commitPage( ( IWizardPage::COMMIT_REASON )_eReason );
+            return pCurrentPage->commitPage( _eReason );
         return sal_True;
     }
 
@@ -758,47 +650,79 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    void OWizardMachine::enableAutomaticNextButtonState( bool _bEnable )
+    {
+        m_pImpl->m_bAutoNextButtonState = _bEnable;
+    }
+
+    //---------------------------------------------------------------------
+    bool OWizardMachine::isAutomaticNextButtonStateEnabled() const
+    {
+        return m_pImpl->m_bAutoNextButtonState;
+    }
+
+    //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnPrevPage, PushButton*, EMPTYARG)
     {
-        if( IsInCallOfLink() )
+        if ( isTravelingSuspended() )
             return 0;
-        SetInCallOfLink( true );
+        WizardTravelSuspension aTravelGuard( *this );
         sal_Int32 nRet = travelPrevious();
-        SetInCallOfLink( false );
         return nRet;
     }
 
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnNextPage, PushButton*, EMPTYARG)
     {
-        if( IsInCallOfLink() )
+        if ( isTravelingSuspended() )
             return 0;
-        SetInCallOfLink( true );
+        WizardTravelSuspension aTravelGuard( *this );
         sal_Int32 nRet = travelNext();
-        SetInCallOfLink( false );
         return nRet;
     }
+
     //---------------------------------------------------------------------
     IWizardPage* OWizardMachine::getWizardPage(TabPage* _pCurrentPage) const
     {
-        OWizardPage* pPage = static_cast<OWizardPage*>(_pCurrentPage);
+        OWizardPage* pPage = dynamic_cast< OWizardPage* >( _pCurrentPage );
         return pPage;
     }
-    /*-- 23.02.2005 10:50:17---------------------------------------------------
 
-    -----------------------------------------------------------------------*/
-    bool OWizardMachine::IsInCallOfLink() const
+    //---------------------------------------------------------------------
+    bool OWizardMachine::canAdvance() const
     {
-        return m_pImpl->m_bInCallOfLink;
+        return WZS_INVALID_STATE != determineNextState( getCurrentState() );
     }
 
-    /*-- 23.02.2005 10:48:01---------------------------------------------------
-
-      -----------------------------------------------------------------------*/
-    void OWizardMachine::SetInCallOfLink( bool bSet )
+    //---------------------------------------------------------------------
+    void OWizardMachine::updateTravelUI()
     {
-       DBG_ASSERT( bSet != m_pImpl->m_bInCallOfLink, "OWizardMachine::SetInCallOfLink - state already set" );
-       m_pImpl->m_bInCallOfLink = bSet;
+        OWizardPage* pPage = dynamic_cast< OWizardPage* >( GetPage( getCurrentState() ) );
+
+        bool bCanAdvance =
+                ( !pPage || pPage->canAdvance() )   // the current page allows to advance
+            &&  canAdvance();                       // the dialog as a whole allows to advance
+        enableButtons( WZB_NEXT, bCanAdvance );
+    }
+
+    //---------------------------------------------------------------------
+    bool OWizardMachine::isTravelingSuspended() const
+    {
+        return m_pImpl->m_bTravelingSuspended;
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardMachine::suspendTraveling( AccessGuard )
+    {
+        DBG_ASSERT( !m_pImpl->m_bTravelingSuspended, "OWizardMachine::suspendTraveling: already suspended!" );
+       m_pImpl->m_bTravelingSuspended = true;
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardMachine::resumeTraveling( AccessGuard )
+    {
+        DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "OWizardMachine::resumeTraveling: nothing to resume!" );
+       m_pImpl->m_bTravelingSuspended = false;
     }
 
 //.........................................................................
