@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:15:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -963,7 +963,8 @@ ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
 }
 
 
-ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos, const String& rText )
+ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
+        const String& rText, const ScGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -978,11 +979,10 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos, const Stri
         }
         else
         {
-            ScCompiler aComp( pDoc, rPos );
-            aComp.SetCompileEnglish( TRUE );
+            ScCompiler aComp( pDoc, rPos, eGrammar );
             pCode = aComp.CompileString( rText );
         }
-        pNewCell = new ScFormulaCell( pDoc, rPos, pCode, 0 );
+        pNewCell = new ScFormulaCell( pDoc, rPos, pCode, eGrammar, MM_NONE );
         delete pCode;   // Zell-ctor hat das TokenArray kopiert
     }
     else if ( rText.Len() > 1 && rText.GetChar(0) == '\'' )
@@ -1010,7 +1010,8 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos, const Stri
 
 
 BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
-                                BOOL bInterpret, BOOL bEnglish, BOOL bApi )
+                                BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+                                const ScGrammar::Grammar eGrammar )
 {
     //  SetCellText ruft PutCell oder SetNormalString
 
@@ -1023,7 +1024,7 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
             //  code moved to own method InterpretEnglishString because it is also used in
             //  ScCellRangeObj::setFormulaArray
 
-            pNewCell = InterpretEnglishString( rPos, rText );
+            pNewCell = InterpretEnglishString( rPos, rText, eGrammar );
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
@@ -2931,7 +2932,8 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                 const ScTokenArray* pTokenArray,
-                                const String& rString, BOOL bApi, BOOL bEnglish )
+                                const String& rString, BOOL bApi, BOOL bEnglish,
+                                const ScGrammar::Grammar eGrammar )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2973,25 +2975,28 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         // use TokenArray if given, string (and flags) otherwise
         if ( pTokenArray )
         {
-            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pTokenArray);
+            pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
+                    aMark, EMPTY_STRING, pTokenArray, eGrammar);
         }
         else if ( pDoc->IsImportingXML() )
         {
             ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString );
-            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
+            pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
+                    aMark, EMPTY_STRING, pCode, eGrammar);
             delete pCode;
             pDoc->IncXMLImportedFormulaCount( rString.Len() );
         }
         else if (bEnglish)
         {
-            ScCompiler aComp( pDoc, rRange.aStart );
-            aComp.SetCompileEnglish( TRUE );
+            ScCompiler aComp( pDoc, rRange.aStart, eGrammar);
             ScTokenArray* pCode = aComp.CompileString( rString );
-            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
+            pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
+                    aMark, EMPTY_STRING, pCode, eGrammar);
             delete pCode;
         }
         else
-            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,rString);
+            pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
+                    aMark, rString, NULL, eGrammar);
 
 //      if (bRecord)    // immer
         if (bUndo)
@@ -3926,11 +3931,12 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
-            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE );
+            // GRAM_PODF_A1 for API compatibility.
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE, ScGrammar::GRAM_PODF_A1 );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE, ScGrammar::GRAM_PODF_A1 );
             }
         }
 
