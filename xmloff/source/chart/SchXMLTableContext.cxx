@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:00:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,13 @@ using ::rtl::OUString;
 
 namespace
 {
+
+const OUString lcl_aLabelPrefix( RTL_CONSTASCII_USTRINGPARAM("label "));
+const OUString lcl_aCategoriesRange( RTL_CONSTASCII_USTRINGPARAM("categories"));
+
+typedef ::std::multimap< ::rtl::OUString, ::rtl::OUString >
+    lcl_tOriginalRangeToInternalRangeMap;
+
 Sequence< OUString > lcl_getCategoriesFromTable( const SchXMLTable & rTable, bool bHasLabels )
 {
     sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
@@ -163,30 +170,6 @@ std::vector< Reference< chart2::XAxis > > lcl_getAxesHoldingCategoriesFromDiagra
 
     return aRet;
 }
-
-struct lcl_setCategories : public ::std::unary_function< Reference< chart2::XAxis >, void >
-{
-    lcl_setCategories( const Reference< chart2::data::XDataProvider > & xProvider ) :
-            m_xProvider( xProvider )
-    {}
-    void operator() ( const Reference< chart2::XAxis > & xAxis )
-    {
-        if( xAxis.is() && m_xProvider.is())
-        {
-            chart2::ScaleData aSData( xAxis->getScaleData());
-            if( aSData.Categories.is())
-            {
-                aSData.Categories->setValues(
-                    m_xProvider->createDataSequenceByRangeRepresentation(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
-                xAxis->setScaleData( aSData );
-            }
-        }
-    }
-
-private:
-    Reference< chart2::data::XDataProvider > m_xProvider;
-};
 
 void lcl_ApplyColumnLabels(
     const ::std::vector< SchXMLCell > & rFirstRow,
@@ -254,6 +237,7 @@ struct lcl_ApplyRowsToData : public ::std::unary_function< ::std::vector< SchXML
             // label
             if( m_bHasHeader && m_nIndex < m_rRowLabels.getLength() && rRow.front().eType == SCH_CELL_TYPE_STRING )
                 m_rRowLabels[m_nIndex] = rRow.front().aString;
+
             // values
             if( m_nIndex < m_nOuterSize )
                 ::std::for_each( rRow.begin() + m_nOffset, rRow.end(), lcl_ApplyCellToData( m_rData[m_nIndex], m_rRowLabels ));
@@ -316,7 +300,7 @@ void lcl_applyXMLTableToInternalDataprovider(
         if( rTable.bHasHeaderRow )
             lcl_ApplyColumnLabels( rTable.aData.front(), aColumnLabels, nColOffset );
         ::std::for_each( rTable.aData.begin() + nRowOffset, rTable.aData.end(),
-                    lcl_ApplyRowsToData( aData, aRowLabels, nColOffset, rTable.bHasHeaderColumn ));
+                         lcl_ApplyRowsToData( aData, aRowLabels, nColOffset, rTable.bHasHeaderColumn ));
     }
 
     xDataArray->setData( aData );
@@ -325,6 +309,68 @@ void lcl_applyXMLTableToInternalDataprovider(
         xDataArray->setRowDescriptions( aRowLabels );
     if( rTable.bHasHeaderRow )
         xDataArray->setColumnDescriptions( aColumnLabels );
+}
+
+void lcl_fillRangeMapping(
+    const SchXMLTable & rTable,
+    lcl_tOriginalRangeToInternalRangeMap & rOutRangeMap,
+    chart::ChartDataRowSource eDataRowSource )
+{
+    sal_Int32 nRowOffset = ( rTable.bHasHeaderRow ? 1 : 0 );
+    sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
+
+    // Fill range mapping
+    const size_t nTableRowCount( rTable.aData.size());
+    for( size_t nRow = 0; nRow < nTableRowCount; ++nRow )
+    {
+        const ::std::vector< SchXMLCell > & rRow( rTable.aData[nRow] );
+        const size_t nTableColCount( rRow.size());
+        for( size_t nCol = 0; nCol < nTableColCount; ++nCol )
+        {
+            OUString aRangeId( rRow[nCol].aRangeId );
+            if( aRangeId.getLength())
+            {
+                if( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
+                {
+                    if( nCol == 0 && rTable.bHasHeaderColumn )
+                    {
+                        OSL_ASSERT( static_cast< sal_Int32 >( nRow ) == nRowOffset );
+                        rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                 aRangeId, lcl_aCategoriesRange ));
+                    }
+                    else
+                    {
+                        OUString aColNumStr = OUString::valueOf( static_cast< sal_Int32 >( nCol - nColOffset ));
+                        if( nRow == 0 && rTable.bHasHeaderRow )
+                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                     aRangeId, lcl_aLabelPrefix + aColNumStr ));
+                        else
+                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                     aRangeId, aColNumStr ));
+                    }
+                }
+                else // eDataRowSource == chart::ChartDataRowSource_ROWS
+                {
+                    if( nRow == 0 && rTable.bHasHeaderRow )
+                    {
+                        OSL_ASSERT( static_cast< sal_Int32 >( nCol ) == nColOffset );
+                        rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                 aRangeId, lcl_aCategoriesRange ));
+                    }
+                    else
+                    {
+                        OUString aRowNumStr = OUString::valueOf( static_cast< sal_Int32 >( nRow - nRowOffset ));
+                        if( nCol == 0 && rTable.bHasHeaderColumn )
+                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                     aRangeId, lcl_aLabelPrefix + aRowNumStr ));
+                        else
+                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
+                                                     aRangeId, aRowNumStr ));
+                    }
+                }
+            }
+        }
+    }
 }
 
 void lcl_copyProperties(
@@ -356,6 +402,44 @@ void lcl_copyProperties(
     {
         OSL_ENSURE( false, "Copying property sets failed!" );
     }
+}
+
+Reference< chart2::data::XDataSequence >
+    lcl_reassignDataSequence(
+        const Reference< chart2::data::XDataSequence > & xSequence,
+        const Reference< chart2::data::XDataProvider > & xDataProvider,
+        lcl_tOriginalRangeToInternalRangeMap & rRangeMap,
+        const OUString & rRange )
+{
+    Reference< chart2::data::XDataSequence > xResult( xSequence );
+    lcl_tOriginalRangeToInternalRangeMap::iterator aIt( rRangeMap.find( rRange ));
+    if( aIt != rRangeMap.end())
+    {
+        // set sequence with correct data
+        xResult.set( xDataProvider->createDataSequenceByRangeRepresentation( aIt->second ));
+        // remove translation, because it was used
+        rRangeMap.erase( aIt );
+    }
+
+    return xResult;
+}
+
+bool lcl_mapContainsRange(
+    lcl_tOriginalRangeToInternalRangeMap & rRangeMap,
+    const OUString & rRange )
+{
+    lcl_tOriginalRangeToInternalRangeMap::iterator aIt( rRangeMap.find( rRange ));
+    return ( aIt != rRangeMap.end());
+}
+
+bool lcl_tableOfRangeMatches(
+    const ::rtl::OUString & rRange,
+    const ::rtl::OUString & rTableName )
+{
+    // both strings are non-empty and the table name is part of the range
+    return ( (rRange.getLength() > 0) &&
+             (rTableName.getLength() > 0) &&
+             (rRange.indexOf( rTableName ) != -1 ));
 }
 
 } // anonymous namespace
@@ -420,6 +504,26 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // get table-name
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        if( nPrefix == XML_NAMESPACE_TABLE &&
+            IsXMLToken( aLocalName, XML_NAME ) )
+        {
+            mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
+            break;   // we only need this attribute
+        }
+    }
 }
 
 // ========================================
@@ -686,12 +790,10 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     SvXMLImportContext* pContext = 0;
 
     // <text:p> element
-    if( mbReadPara &&
-        nPrefix == XML_NAMESPACE_TEXT &&
+    if( nPrefix == XML_NAMESPACE_TEXT &&
         IsXMLToken( rLocalName, XML_P ) )
     {
-        // we have to read a string here (not a float)
-        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent );
+        pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
     }
     else
     {
@@ -705,6 +807,8 @@ void SchXMLTableCellContext::EndElement()
 {
     if( mbReadPara && maCellContent.getLength())
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aString = maCellContent;
+    if( maRangeId.getLength())
+        mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
 }
 
 // ========================================
@@ -713,7 +817,7 @@ void SchXMLTableCellContext::EndElement()
 // (this is just a workaround for clipboard handling in EA2)
 void SchXMLTableHelper::applyTableSimple(
     const SchXMLTable& rTable,
-    uno::Reference< chart::XChartDataArray > xData )
+    const uno::Reference< chart::XChartDataArray > & xData )
 {
     // interpret table like this:
     //
@@ -811,7 +915,6 @@ void SchXMLTableHelper::applyTableSimple(
 
 void SchXMLTableHelper::applyTable(
     const SchXMLTable& rTable,
-    const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     uno::Reference< chart2::XChartDocument > xChartDoc )
 {
     if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
@@ -821,9 +924,6 @@ void SchXMLTableHelper::applyTable(
     if( ! xDataArray.is())
         return;
     OSL_ASSERT( xDataProv.is());
-    Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
-    if( ! xDiagram.is())
-        return;
 
     // prerequisite for this method: all objects (data series, domains, etc.)
     // need their own range string.
@@ -838,53 +938,112 @@ void SchXMLTableHelper::applyTable(
     // apply all data read in the table to the chart data-array of the internal
     // data provider
     lcl_applyXMLTableToInternalDataprovider( rTable, xDataArray );
+}
+
+void SchXMLTableHelper::postProcessTable(
+    const SchXMLTable& rTable,
+    const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+    uno::Reference< chart2::XChartDocument > xChartDoc,
+    chart::ChartDataRowSource eDataRowSource )
+{
+    if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
+        return;
+    Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
+
+    // create a mapping from original ranges to new ranges
+    lcl_tOriginalRangeToInternalRangeMap aRangeMap;
+
+    lcl_fillRangeMapping( rTable, aRangeMap, eDataRowSource );
 
     bool bCategoriesApplied = false;
-    // apply the data to the objects that have been parsed and marked for
-    // getting the new data in ther rLSequencesPerIndex map.
-    for( tSchXMLLSequencesPerIndex::const_iterator aIt( rLSequencesPerIndex.begin());
-         aIt != rLSequencesPerIndex.end(); ++aIt )
+    // translate ranges (using the map created before)
+    for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin());
+         aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
     {
-        if( aIt->second.is())
+        if( aLSeqIt->second.is())
         {
-            if( aIt->first.second == SCH_XML_PART_VALUES )
+            // values/error bars/categories
+            if( aLSeqIt->first.second == SCH_XML_PART_VALUES ||
+                aLSeqIt->first.second == SCH_XML_PART_ERROR_BARS )
             {
-                if( aIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getValues());
+                OUString aRange;
+                if( xSeq.is() &&
+                    SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) &&
+                    lcl_mapContainsRange( aRangeMap, aRange ))
                 {
-                    Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getValues(), uno::UNO_QUERY );
-                    Reference< chart2::data::XDataSequence > xNewSequence(
-                        xDataProv->createDataSequenceByRangeRepresentation(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
-                    lcl_copyProperties(
-                        xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
-                    aIt->second->setValues( xNewSequence );
-                    bCategoriesApplied = true;
+                    Reference< chart2::data::XDataSequence > xNewSeq(
+                        lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
+                    if( xNewSeq != xSeq )
+                    {
+                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                                            Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                        aLSeqIt->second->setValues( xNewSeq );
+                    }
                 }
                 else
                 {
-                    Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getValues(), uno::UNO_QUERY );
-                    OUString aRep( OUString::valueOf( aIt->first.first ));
-                    Reference< chart2::data::XDataSequence > xNewSequence(
-                        xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                    lcl_copyProperties(
-                        xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
-                    aIt->second->setValues( xNewSequence );
+                    if( lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
+                    {
+                        if( aLSeqIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                            bCategoriesApplied = true;
+                    }
+                    else
+                    {
+                        if( aLSeqIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                        {
+                            Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
+                            Reference< chart2::data::XDataSequence > xNewSequence(
+                                xDataProv->createDataSequenceByRangeRepresentation(
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
+                            lcl_copyProperties(
+                                xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                            aLSeqIt->second->setValues( xNewSequence );
+                            bCategoriesApplied = true;
+                        }
+                        else
+                        {
+                            Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
+                            OUString aRep( OUString::valueOf( aLSeqIt->first.first ));
+                            Reference< chart2::data::XDataSequence > xNewSequence(
+                                xDataProv->createDataSequenceByRangeRepresentation( aRep ));
+                            lcl_copyProperties(
+                                xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
+                            aLSeqIt->second->setValues( xNewSequence );
+                        }
+                    }
                 }
             }
-            else
+            else // labels
             {
-                Reference< beans::XPropertySet > xOldSequenceProp( aIt->second->getLabel(), uno::UNO_QUERY );
-                OSL_ASSERT( aIt->first.second == SCH_XML_PART_LABEL );
-                // index -1 is for categories => shouldn't have a label
-                OSL_ASSERT( aIt->first.first >= 0 );
-                OUString aRep( RTL_CONSTASCII_USTRINGPARAM("label "));
-                aRep += OUString::valueOf( aIt->first.first );
+                OSL_ASSERT( aLSeqIt->first.second == SCH_XML_PART_LABEL );
+                // labels
+                Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getLabel());
+                OUString aRange;
+                if( xSeq.is() &&
+                    SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) &&
+                    lcl_mapContainsRange( aRangeMap, aRange ))
+                {
+                    Reference< chart2::data::XDataSequence > xNewSeq(
+                        lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
+                    if( xNewSeq != xSeq )
+                    {
+                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                                            Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                        aLSeqIt->second->setLabel( xNewSeq );
+                    }
+                }
+                else if( ! lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
+                {
+                    OUString aRep( RTL_CONSTASCII_USTRINGPARAM("label "));
+                    aRep += OUString::valueOf( aLSeqIt->first.first );
 
-                Reference< chart2::data::XDataSequence > xNewSequence(
-                    xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                lcl_copyProperties(
-                    xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
-                aIt->second->setLabel( xNewSequence );
+                    Reference< chart2::data::XDataSequence > xNewSeq(
+                        xDataProv->createDataSequenceByRangeRepresentation( aRep ));
+                    lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                                        Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
+                    aLSeqIt->second->setLabel( xNewSeq );
+                }
             }
         }
     }
