@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:18:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ ScTableConditionalFormat::ScTableConditionalFormat()
 }
 
 ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
-                                                    BOOL bEnglish, BOOL bCompileXML)
+                                                    const ScGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -159,8 +159,9 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
                     aItem.mnMode = sal::static_int_cast<USHORT>(pFormatEntry->GetOperation());
                     aItem.maPos = pFormatEntry->GetValidSrcPos();
-                    aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, bEnglish, bCompileXML);
-                    aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, bEnglish, bCompileXML);
+                    aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, eGrammar);
+                    aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, eGrammar);
+                    aItem.meGrammar = eGrammar;
                     aItem.maStyle = pFormatEntry->GetStyle();
 
                     AddEntry_Impl(aItem);
@@ -171,7 +172,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
 }
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, BOOL bEnglish, BOOL bCompileXML ) const
+                                            ScDocument* pDoc, ScGrammar::Grammar eGrammar ) const
 {
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
@@ -185,8 +186,15 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
         ScCondFormatEntryItem aData;
         pEntry->GetData(aData);
+        if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+            eGrammar = aData.meGrammar;
+        if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+        {
+            DBG_ERRORFILE("FillFormat: unspecified grammar, using GRAM_PODF_A1");
+            eGrammar = ScGrammar::GRAM_PODF_A1;
+        }
         ScCondFormatEntry aCoreEntry( static_cast<ScConditionMode>(aData.mnMode),
-            aData.maExpr1, aData.maExpr2, pDoc, aData.maPos, aData.maStyle, bEnglish, bCompileXML );
+            aData.maExpr1, aData.maExpr2, pDoc, aData.maPos, aData.maStyle, eGrammar );
 
         if ( aData.maPosStr.Len() )
             aCoreEntry.SetSrcString( aData.maPosStr );
@@ -298,6 +306,12 @@ void SAL_CALL ScTableConditionalFormat::addNew(
             if ( rProp.Value >>= aStrVal )
                 aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PARA );
+        }
+        else if ( aPropName.EqualsAscii( SC_UNONAME_GRAMMAR ) )
+        {
+            sal_Int32 nVal;
+            if ( rProp.Value >>= nVal )
+                aEntry.meGrammar = static_cast<ScGrammar::Grammar>(nVal);
         }
         else
         {
@@ -591,12 +605,13 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 //------------------------------------------------------------------------
 
 ScTableValidationObj::ScTableValidationObj() :
-    aPropSet( lcl_GetValidatePropertyMap() )
+    aPropSet( lcl_GetValidatePropertyMap() ),
+    meGrammar( ScGrammar::GRAM_UNSPECIFIED )
 {
 }
 
 ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
-                                            BOOL bEnglish, BOOL bCompileXML) :
+                                            const ScGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  Eintrag aus dem Dokument lesen...
@@ -609,8 +624,9 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         {
             nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
             aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
-            aExpr1 = pData->GetExpression( aSrcPos, 0, 0, bEnglish, bCompileXML );
-            aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish, bCompileXML );
+            aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
+            aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
+            meGrammar = eGrammar;
             nValMode = sal::static_int_cast<USHORT>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
             nShowList = pData->GetListType();
@@ -627,14 +643,22 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
 }
 
 ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
-                                            BOOL bEnglish, BOOL bCompileXML ) const
+                                            ScGrammar::Grammar eGrammar ) const
 {
     //  ScValidationData = Core-Struktur
+
+    if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+        eGrammar = meGrammar;
+    if (eGrammar == ScGrammar::GRAM_UNSPECIFIED)
+    {
+        DBG_ERRORFILE("CreateValidationData: unspecified grammar, using GRAM_PODF_A1");
+        eGrammar = ScGrammar::GRAM_PODF_A1;
+    }
 
     ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
                                                    (ScConditionMode)nMode,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
-                                                   bEnglish, bCompileXML );
+                                                   eGrammar );
     pRet->SetIgnoreBlank(bIgnoreBlank);
     pRet->SetListType(nShowList);
 
@@ -678,6 +702,7 @@ void ScTableValidationObj::ClearData_Impl()
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
     aExpr2.Erase();
+    meGrammar = ScGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
     aInputTitle.Erase();
     aInputMessage.Erase();
     aErrorTitle.Erase();
@@ -879,6 +904,14 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         rtl::OUString aStrVal;
         if ( aValue >>= aStrVal )
             aPosString = String( aStrVal );
+    }
+    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR ) )
+    {
+        // internal - only for XML filter, not in PropertySetInfo, only set
+
+        sal_Int32 nVal = 0;
+        if ( aValue >>= nVal )
+            meGrammar = static_cast<ScGrammar::Grammar>(nVal);
     }
 
     DataChanged();
