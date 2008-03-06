@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:42:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef SFX2_SFXMODELFACTORY_HXX
+#include <sfx2/sfxmodelfactory.hxx>
+#endif
 #ifndef INCLUDED_STRING_H
 #include <string.h>
 #define INCLUDED_STRING_H
@@ -66,7 +69,7 @@ extern uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance( co
 // writer documents
 extern uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwTextDocument_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr, const sal_uInt64 _nCreationFlags ) throw( uno::Exception );
 extern uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SwWebDocument_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
@@ -440,7 +443,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         else if( SwTextDocument_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
+            xFactory = ::sfx2::createSfxModelFactory( xMSF,
                 SwTextDocument_getImplementationName(),
                 SwTextDocument_createInstance,
                 SwTextDocument_getSupportedServiceNames() );
