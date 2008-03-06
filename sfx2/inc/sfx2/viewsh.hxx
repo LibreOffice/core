@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:38:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,16 @@ public:
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell();
+    /** retrieves the document which shall be considered the "current document" when the frame is active
+
+        The default implementation simply returns the XModel of the associated SfxObjectShell. You will rarely
+        need to overwrite this behavior.
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                                GetCurrentDocument() const;
+    /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
+    */
+    void                        SetCurrentDocument() const;
 
     virtual void                MarginChanged();
     const Size&                 GetMargin() const;
