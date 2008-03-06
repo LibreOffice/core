@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:49:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ ResMgr *FirstStartWizard::GetResManager()
 
 FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAcceptance, const rtl::OUString &rLicensePath )
     :RoadmapWizard( pParent, WizardResId(DLG_FIRSTSTART_WIZARD),
-        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, WizardResId(STR_FIRSTSTART_TITLE))
+        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP)
     ,m_bOverride(sal_False)
     ,m_aDefaultPath(0)
     ,m_aMigrationPath(0)
@@ -174,7 +174,7 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     bPage_Migration   = Migration::checkMigration();
     bPage_UpdateCheck = showOnlineUpdatePage();
 
-    Path aPath;
+    WizardPath aPath;
     if (bPage_Welcome)
         aPath.push_back(STATE_WELCOME);
     if (bPage_License)
@@ -305,7 +305,7 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
     return pTabPage;
 }
 
-String FirstStartWizard::getStateDisplayName(WizardState _nState)
+String FirstStartWizard::getStateDisplayName( WizardState _nState ) const
 {
     String sName;
     switch(_nState)
