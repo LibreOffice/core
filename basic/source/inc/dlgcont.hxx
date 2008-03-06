@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-19 10:48:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,7 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
 
     virtual SfxLibraryContainer* createInstanceImpl( void );
 
-    virtual void implSetStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage );
+    virtual void onNewRootStorage();
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const;
