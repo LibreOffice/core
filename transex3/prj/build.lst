@@ -2,5 +2,6 @@ tr	transex3	:	tools NULL
 tr	transex3						usr1	-	all	tr_mkout NULL
 tr	transex3\inc					nmake	-	all	tr_inc NULL
 tr	transex3\source					nmake	-	all	tr_src tr_inc NULL
+tr	transex3\layout					nmake	-	all	rt_layout tr_src tr_inc NULL
 tr	transex3\java\l10nconv			nmake	-	all	tr_conv NULL
 tr	transex3\java\receditor			nmake	-	all	tr_rece NULL
