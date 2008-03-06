@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ namespace abp
         // -> call the execute method of the XExecutableDialog
         static_cast< XExecutableDialog* >( this )->execute();
 
-        // result interest not realy ...
+        // result interest not really ...
         // We show this dialog one times only!
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
