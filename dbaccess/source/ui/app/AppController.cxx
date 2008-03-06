@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:07:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,81 +41,35 @@
 #include "advancedsettingsdlg.hxx"
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
-#include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XALTERVIEW_HPP_
-#include <com/sun/star/sdbcx/XAlterView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
-#include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbcx/XAlterView.hpp>
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#include <com/sun/star/sdbcx/XRename.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#endif
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -130,8 +84,14 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -253,18 +213,18 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
 #endif
+
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
 #include <algorithm>
 #include <functional>
-
-#define APP_SIZE_WIDTH  350
-#define APP_SIZE_HEIGHT 250
-
 
 extern "C" void SAL_CALL createRegistryInfo_ODBApplication()
 {
@@ -288,6 +248,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::datatransfer;
+using namespace ::com::sun::star::ui::dialogs;
+using ::com::sun::star::document::XEmbeddedScripts;
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
@@ -343,9 +305,9 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
+    ,m_aControllerConnectedEvent( LINK( this, OApplicationController, OnFirstControllerConnected ) )
     ,m_ePreviewMode(E_PREVIEWNONE)
-    ,m_eOldType(E_NONE)
-    ,m_bPreviewEnabled(sal_True)
+    ,m_eCurrentType(E_NONE)
     ,m_bNeedToReconnect(sal_False)
     ,m_bSuspended( sal_False )
 {
@@ -398,6 +360,8 @@ void OApplicationController::disconnect()
 //--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing()
 {
+    m_aControllerConnectedEvent.CancelCall();
+
     ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
     m_aCurrentContainers.clear();
 
@@ -575,7 +539,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 
     if ( m_bSuspended != bSuspend )
     {
-        if ( bSuspend && !suspendDocuments( bSuspend ))
+        if ( bSuspend && !closeSubComponents() )
             return sal_False;
 
         Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
@@ -584,10 +548,8 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
         if  (   bSuspend
             &&  xStor.is()
             &&  !xStor->isReadonly()
-            &&  (   m_bCurrentlyModified
-                ||  (   xModi.is()
-                    &&  xModi->isModified()
-                    )
+            &&  (   xModi.is()
+                &&  xModi->isModified()
                 )
             )
         {
@@ -662,7 +624,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = sal_True;
                 break;
             case ID_BROWSER_SAVEDOC:
-                aReturn.bEnabled = !isDataSourceReadOnly() && m_bCurrentlyModified;
+                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDocumentModify.is() && m_xDocumentModify->isModified();
                 break;
             case ID_BROWSER_SAVEASDOC:
                 aReturn.bEnabled = sal_True;
@@ -739,6 +701,21 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case ID_DIRECT_SQL:
                 aReturn.bEnabled = sal_True;
                 break;
+            case ID_MIGRATE_SCRIPTS:
+            {
+                // Our document supports embedding scripts into it, if and only if there are no
+                // forms/reports with macros/scripts into them. So, we need to enable migration
+                // if and only if the database document does *not* support embedding scripts.
+//                bool bAvailable = !Reference< XEmbeddedScripts >( m_xModel, UNO_QUERY ).is();
+                // TODO: revert to the disabled code. The current version is just to be able
+                // to integrate an intermediate version of the CWS, which should behave as
+                // if no macros in DB docs are allowed
+                bool bAvailable = false;
+                aReturn.bEnabled = bAvailable;
+                if ( !bAvailable )
+                    aReturn.bInvisible = true;
+            }
+            break;
             case SID_APP_NEW_FOLDER:
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() <= 1;
                 if ( aReturn.bEnabled )
@@ -1126,10 +1103,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     Reference<XStorable> xStore(m_xModel,UNO_QUERY);
                     if ( xStore.is() )
-                    {
                         xStore->store();
-                        m_bCurrentlyModified = sal_False;
-                    }
                 }
                 break;
             case ID_BROWSER_SAVEASDOC:
@@ -1162,12 +1136,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                                 xStore->storeAsURL(aURL.GetMainURL( INetURLObject::NO_DECODE ),Sequence<PropertyValue>());
                                 m_sDatabaseName = ::rtl::OUString();
                                 updateTitle();
-                                m_bCurrentlyModified = sal_False;
                                 InvalidateFeature(ID_BROWSER_SAVEDOC);
                                 if ( getContainer()->getElementType() == E_NONE )
                                 {
-                                    getContainer()->changeContainer(E_NONE);
-                                    getContainer()->changeContainer(E_TABLE);
+                                    getContainer()->selectContainer(E_NONE);
+                                    getContainer()->selectContainer(E_TABLE);
                                 }
                             }
                         }
@@ -1255,7 +1228,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        QueryDesigner aDesigner( getORB(), this, m_xCurrentFrame, true, SID_DB_NEW_VIEW_SQL == _nId );
+                        QueryDesigner aDesigner( getORB(), this, getFrame(), true, SID_DB_NEW_VIEW_SQL == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
@@ -1304,7 +1277,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        RelationDesigner aDesigner( getORB(), this, m_xCurrentFrame );
+                        RelationDesigner aDesigner( getORB(), this, getFrame() );
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         addDocumentListener( xComponent, NULL );
@@ -1344,17 +1317,20 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         openDirectSQLDialog();
                 }
                 break;
+            case ID_MIGRATE_SCRIPTS:
+                impl_migrateScripts_nothrow();
+                break;
             case SID_DB_APP_VIEW_TABLES:
-                getContainer()->changeContainer(E_TABLE);
+                getContainer()->selectContainer(E_TABLE);
                 break;
             case SID_DB_APP_VIEW_QUERIES:
-                getContainer()->changeContainer(E_QUERY);
+                getContainer()->selectContainer(E_QUERY);
                 break;
             case SID_DB_APP_VIEW_FORMS:
-                getContainer()->changeContainer(E_FORM);
+                getContainer()->selectContainer(E_FORM);
                 break;
             case SID_DB_APP_VIEW_REPORTS:
-                getContainer()->changeContainer(E_REPORT);
+                getContainer()->selectContainer(E_REPORT);
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
                 m_ePreviewMode = E_PREVIEWNONE;
@@ -1372,7 +1348,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     SfxMailModel aSendMail;
                     if ( aSendMail.AttachDocument(rtl::OUString(),getModel(), rtl::OUString()) == SfxMailModel::SEND_MAIL_OK )
-                        aSendMail.Send(m_xCurrentFrame);
+                        aSendMail.Send( getFrame() );
                 }
                 break;
             case SID_DB_APP_SENDREPORTASMAIL:
@@ -1468,6 +1444,7 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBConvertToView",    SID_DB_APP_CONVERTTOVIEW,  CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRefreshTables",    SID_DB_APP_REFRESH_TABLES, CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBDirectSQL",        ID_DIRECT_SQL,             CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBMigrateScripts",   ID_MIGRATE_SCRIPTS,        CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBViewTables",       SID_DB_APP_VIEW_TABLES,    CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewQueries",      SID_DB_APP_VIEW_QUERIES,   CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewForms",        SID_DB_APP_VIEW_FORMS,     CommandGroup::VIEW );
@@ -1656,12 +1633,10 @@ namespace
 sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(getFrame());
 
-    if ( xLayoutManager.is() && m_eOldType != _eType)
+    if ( m_eCurrentType != _eType && _eType != E_NONE )
     {
-        sal_Bool bAdd = _eType != E_TABLE;
-        if ( !bAdd )
+        if ( _eType == E_TABLE )
         {
             try
             {
@@ -1678,24 +1653,29 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
                     return sal_False;
                 }
             }
-            catch(Exception)
+            catch( const Exception& )
             {
                 return sal_False;
             }
         }
-        ::rtl::OUString sToolbar = lcl_getToolBarResource(_eType);
-        ::rtl::OUString sDestroyToolbar = lcl_getToolBarResource(m_eOldType);
-
-        xLayoutManager->lock();
-        xLayoutManager->destroyElement( sDestroyToolbar );
-        if ( sToolbar.getLength() )
+        Reference< XLayoutManager > xLayoutManager = getLayoutManager( getFrame() );
+        if ( xLayoutManager.is() )
         {
-            xLayoutManager->createElement( sToolbar );
-            xLayoutManager->requestElement( sToolbar );
+            ::rtl::OUString sToolbar = lcl_getToolBarResource(_eType);
+            ::rtl::OUString sDestroyToolbar = lcl_getToolBarResource(m_eCurrentType);
+
+            xLayoutManager->lock();
+            xLayoutManager->destroyElement( sDestroyToolbar );
+            if ( sToolbar.getLength() )
+            {
+                xLayoutManager->createElement( sToolbar );
+                xLayoutManager->requestElement( sToolbar );
+            }
+            xLayoutManager->unlock();
+            xLayoutManager->doLayout();
         }
-        xLayoutManager->unlock();
-        xLayoutManager->doLayout();
-        if ( bAdd && getContainer()->getDetailView() )
+
+        if ( _eType != E_TABLE && getContainer()->getDetailView() )
         {
             Reference< XNameAccess > xContainer = getElements(_eType);
             addContainerListener(xContainer);
@@ -1707,7 +1687,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         m_aSelectionListeners.forEach<XSelectionChangeListener>(
             ::boost::bind(&XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
     }
-    m_eOldType = _eType;
+    m_eCurrentType = _eType;
 
     return sal_True;
 }
@@ -1804,23 +1784,23 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
             if ( _eType == E_TABLE )
             {
                 if ( impl_isAlterableView_nothrow( _sName ) )
-                    pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, true, bQuerySQLMode ) );
+                    pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), true, bQuerySQLMode ) );
                 else
-                    pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
+                    pDesigner.reset( new TableDesigner( getORB(), this, getFrame() ) );
             }
             else if ( _eType == E_QUERY )
             {
-                pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, bQuerySQLMode ) );
+                pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false, bQuerySQLMode ) );
             }
             else if ( _eType == E_REPORT )
             {
-                pDesigner.reset( new ReportDesigner( getORB(),this, m_xCurrentFrame ) );
+                pDesigner.reset( new ReportDesigner( getORB(),this, getFrame() ) );
             }
             aDataSource <<= m_xDataSource;
         }
         else
         {
-            pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
+            pDesigner.reset( new ResultSetBrowser( getORB(), this, getFrame(), _eType == E_TABLE ) );
 
             aArgs.realloc(1);
             aArgs[0].Name = PROPERTY_SHOWMENU;
@@ -1920,14 +1900,14 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                 {
                     if ( _eType == E_TABLE )
                     {
-                        pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
+                        pDesigner.reset( new TableDesigner( getORB(), this, getFrame() ) );
                     }
                     else if ( _eType == E_QUERY )
                     {
-                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, _bSQLView ) );
+                        pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false, _bSQLView ) );
                     }
                     else
-                        pDesigner.reset( new ReportDesigner( getORB(), this, m_xCurrentFrame ) );
+                        pDesigner.reset( new ReportDesigner( getORB(), this, getFrame() ) );
 
                     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                     Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
@@ -2192,25 +2172,7 @@ void OApplicationController::selectEntry(const ElementType _eType,const ::rtl::O
 
     pView->showPreview(xContent);
 }
-//------------------------------------------------------------------------------
-void OApplicationController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ((XFrame*)aEvent.Frame.get() == (XFrame*)m_xCurrentFrame.get())
-        switch (aEvent.Action)
-        {
-            case FrameAction_FRAME_ACTIVATED:
-            case FrameAction_FRAME_UI_ACTIVATED:
-                m_bFrameUiActive = sal_True;
-                break;
-            case FrameAction_FRAME_DEACTIVATING:
-            case FrameAction_FRAME_UI_DEACTIVATING:
-                m_bFrameUiActive = sal_False;
-                break;
-            default:
-                break;
-        }
-}
+
 //------------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnClipboardChanged, void*, EMPTYARG )
 {
@@ -2457,6 +2419,78 @@ Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( Runt
 {
     return m_xModel;
 }
+
+// -----------------------------------------------------------------------------
+void OApplicationController::onConnectedModel()
+{
+    sal_Int32 nConnectedControllers( 0 );
+    try
+    {
+        Reference< XModel2 > xModel( m_xModel, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumControllers( xModel->getControllers(), UNO_SET_THROW );
+        while ( xEnumControllers->hasMoreElements() )
+        {
+            Reference< XController > xController( xEnumControllers->nextElement(), UNO_QUERY_THROW );
+            ++nConnectedControllers;
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    if ( nConnectedControllers > 1 )
+    {   // we are not the first connected controller, there were already others
+        return;
+    }
+
+    m_aControllerConnectedEvent.Call();
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
+{
+    // if we have forms or reports which contain macros/scripts, then show a warning
+    // which suggests the user to migrate them to the database document
+
+    // TODO: remove the following line. The current version is just to be able
+    // to integrate an intermediate version of the CWS, which should behave as
+    // if no macros in DB docs are allowed
+    return 0L;
+
+    Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
+    if ( xDocumentScripts.is() )
+    {
+        // no need to show this warning, obviously the document supports embedding scripts
+        // into itself, so there are no "old-style" forms/reports which have macros/scripts
+        // themselves
+        return 0L;
+    }
+
+    SQLWarning aWarning;
+    aWarning.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS ) );
+    SQLException aDetail;
+    aDetail.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
+    aWarning.NextException <<= aDetail;
+
+    try
+    {
+        ::comphelper::ComponentContext aContext( getORB() );
+        Sequence< Any > aArgs(1);
+        aArgs[0] <<= NamedValue( PROPERTY_SQLEXCEPTION, makeAny( aWarning ) );
+        Reference< XExecutableDialog > xDialog(
+            aContext.createComponentWithArguments( "com.sun.star.sdb.ErrorMessageDialog", aArgs ),
+            UNO_QUERY_THROW );
+        xDialog->execute();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return 1L;
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
@@ -2474,9 +2508,16 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
 
     m_xModel = _rxModel;
     if ( _rxModel.is() )
+    {
+        m_xDocumentModify.set( m_xModel, UNO_QUERY_THROW );
         m_aModelConnector = ModelControllerConnector( _rxModel, this );
+        onConnectedModel();
+    }
     else
+    {
+        m_xDocumentModify.clear();
         m_aModelConnector.clear();
+    }
 
     m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
     if ( !m_xDataSource.is() )
@@ -2591,7 +2632,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
                 pIter->Value >>= aSelection;
         }
 
-        getContainer()->changeContainer(eType);
+        getContainer()->selectContainer(eType);
         getContainer()->selectElements(aSelection);
         return sal_True;
     }
@@ -2621,6 +2662,33 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
     }
 
     return makeAny(aCurrentSelection);
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::impl_migrateScripts_nothrow()
+{
+    try
+    {
+        ::rtl::OUString sDialogService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.application.MacroMigrationWizard" ) );
+        ::comphelper::ComponentContext aContext( getORB() );
+        Sequence< Any > aDialogArgs(1);
+        aDialogArgs[0] <<= Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW );
+        Reference< XExecutableDialog > xDialog(
+            aContext.createComponentWithArguments( sDialogService, aDialogArgs ),
+            UNO_QUERY );
+
+        if ( !xDialog.is() )
+        {
+            ShowServiceNotAvailableError( getView(), sDialogService, true );
+            return;
+        }
+
+        xDialog->execute();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //........................................................................
