@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:32:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,27 +87,7 @@ namespace svt
     class SAL_NO_VTABLE IWizardPage : public WizardTypes
     {
     public:
-        // access control
-        struct GrantAccess
-        {
-            friend class OWizardMachine;
-        protected:
-            GrantAccess() { }
-        };
-
-        /// compatibility only. Superseded by CommitPageReason
-        enum COMMIT_REASON
-        {
-            CR_TRAVEL_NEXT = eTravelForward,
-            CR_TRAVEL_PREVIOUS = eTravelBackward,
-            CR_FINISH = eFinish,
-            CR_VALIDATE = eValidate,
-            CR_VALIDATE_NOUI = eValidateNoUI
-        };
-    public:
         //-----------------------------------------------------------------
-        // methods which, though public, are acessible for the OWizardMachine only
-        virtual void enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess ) = 0;
         // This methods  behave somewhat different than ActivatePage/DeactivatePage
         // The latter are handled by the base class itself whenever changing the pages is in the offing,
         // i.e., when it's already decided which page is the next.
@@ -115,8 +95,9 @@ namespace svt
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
         virtual void        initializePage() = 0;
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason) = 0;
+        virtual sal_Bool    commitPage( CommitPageReason _eReason ) = 0;
     };
+
     //=====================================================================
     //= OWizardPage
     //=====================================================================
@@ -144,42 +125,27 @@ namespace svt
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(IWizardPage::COMMIT_REASON _eReason);
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
-        //-----------------------------------------------------------------
-        // methods which, though public, are acessible for the OWizardMachine only
-        virtual void        enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, IWizardPage::GrantAccess );
+        /** determines whether or not it is allowed to advance to a next page
+
+            You should make this dependent on the current state of the page only, not on
+            states on other pages of the whole dialog.
+
+            The default implementation always returns <TRUE/>.
+        */
+        virtual bool    canAdvance() const;
 
     protected:
         // TabPage overridables
         virtual void    ActivatePage();
 
-        /** checks whether or not the header is enabled
+        /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
-            The header can only be enabled by the OWizardMachine the page belongs to. This way, it is ensured
-            that <em>all</em> or <em>none</em> of the pages have a header.
+            If the parent of the tab page is a OWizardMachine, then updateTravelUI at this instance
+            is called. Otherwise, nothing happens.
         */
-        sal_Bool        isHeaderEnabled( ) const;
-
-        /** sets the text of the header.
-
-            To be called if the header is enabled only.
-
-            @see isHeaderEnabled
-        */
-        void            setHeaderText( const String& _rHeaderText );
-
-    protected:
-        /** called from within ActivatePage, enables the wizards "Next" button depending on the return value of
-            <member>determineNextButtonState</member>
-        */
-        void implCheckNextButton();
-
-        /** determines whether or not the <em>Next</em> button should be enabled in the current situation.
-
-            The default implementation always returns <TRUE/>.
-        */
-        virtual sal_Bool determineNextButtonState();
+        void    updateDialogTravelUI();
     };
 
     //=====================================================================
@@ -239,7 +205,7 @@ namespace svt
 
             For the button flags, use any combination of the WZB_* flags.
         */
-        OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags, sal_Bool _bCheckButtonStates = sal_False, sal_Bool _bRoadmapMode = sal_False, sal_Int16 _nLeftAlignCount = 0  );
+        OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags );
         ~OWizardMachine();
 
         /// enable (or disable) buttons
@@ -253,6 +219,16 @@ namespace svt
         void            setTitleBase(const String& _rTitleBase);
         const String&   getTitleBase() const;
 
+        /// determines whether there is a next state to which we can advance
+        virtual bool    canAdvance() const;
+
+        /** updates the user interface which deals with traveling in the wizard
+
+            The default implementation simply checks whether both the current page and the wizard
+            itself allow to advance to the next state (<code>canAdvance</code>), and enables the "Next"
+            button if and only if this is the case.
+        */
+        virtual void    updateTravelUI();
 
     protected:
         // WizardDialog overridables
@@ -265,7 +241,7 @@ namespace svt
         virtual TabPage*    createPage(WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
-        virtual void            enterState(WizardState _nState);
+        virtual void        enterState(WizardState _nState);
 
         /** will be called when the current state is about to be left for the given reason
 
@@ -277,7 +253,7 @@ namespace svt
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual sal_Bool        prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual sal_Bool    prepareLeaveCurrentState( CommitPageReason _eReason );
 
         /** will be called when the given state is left
 
@@ -291,7 +267,7 @@ namespace svt
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual sal_Bool        leaveState( WizardState _nState );
+        virtual sal_Bool    leaveState( WizardState _nState );
 
         /** determine the next state to travel from the given one
 
@@ -299,43 +275,30 @@ namespace svt
 
             Return WZS_INVALID_STATE to prevent traveling.
         */
-        virtual WizardState     determineNextState(WizardState _nCurrentState);
+        virtual WizardState determineNextState( WizardState _nCurrentState ) const;
 
         /** called when the finish button is pressed
             <p>By default, only the base class' Finnish method (which is not virtual) is called</p>
         */
-        virtual sal_Bool onFinish(sal_Int32 _nResult);
-
-        /** enables a header bitmap
-
-            Usually, wizards contain a header. This header is as wide as the dialog and positioned at the very top.
-            In addition, it contains a (rather small) bitmap on the left side, and right next to this bitmap, a short
-            text describing the current page.
-
-            If you call this method, this header is automatically created on every page. In addition, all
-            other controls on the pages are moved below the header. The title of every page is used as text
-            for the header.
-
-            This method must not be called if there are already pages created.
-
-            @param _rBitmap
-                the bitmap to use for the header
-            @param _nPixelHeight
-                the height of the header in pixels.<br/>
-                If -1 is passed, the default of 30 APPFONT units will be used.
-        */
-        void            enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight = -1 );
+        virtual sal_Bool    onFinish(sal_Int32 _nResult);
 
         /// travel to the next state
-        sal_Bool        travelNext();
+        sal_Bool            travelNext();
 
         /// travel to the previous state
-        sal_Bool        travelPrevious();
+        sal_Bool            travelPrevious();
 
-        /**
-            removes a page from the history. Should be called when the page is being disabled
+        /** enables the automatic enabled/disabled state of the "Next" button
+
+            If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
+            enabled if and only if determineNextState does not return WZS_INVALID_STATE.
         */
-        void  removePageFromHistory( WizardState nToRemove );
+        void                enableAutomaticNextButtonState( bool _bEnable = true );
+        bool                isAutomaticNextButtonStateEnabled() const;
+
+        /** removes a page from the history. Should be called when the page is being disabled
+        */
+        void                removePageFromHistory( WizardState nToRemove );
 
         /** skip a state
 
@@ -354,7 +317,7 @@ namespace svt
             @see skipUntil
             @see skipBackwardUntil
         */
-        sal_Bool        skip( sal_Int32 _nSteps = 1 );
+        sal_Bool                skip( sal_Int32 _nSteps = 1 );
 
         /** skips one or more states, until a given state is reached
 
@@ -370,7 +333,7 @@ namespace svt
             @see skip
             @see skipBackwardUntil
         */
-        sal_Bool        skipUntil( WizardState _nTargetState );
+        sal_Bool                skipUntil( WizardState _nTargetState );
 
         /** moves back one or more states, until a given state is reached
 
@@ -388,22 +351,22 @@ namespace svt
             @see skipUntil
             @see skip
         */
-        sal_Bool        skipBackwardUntil( WizardState _nTargetState );
+        sal_Bool                skipBackwardUntil( WizardState _nTargetState );
 
         /** returns the current state of the machine
 
             Vulgo, this is the identifier of the current tab page :)
         */
-        WizardState     getCurrentState() const { return WizardDialog::GetCurLevel(); }
+        WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
 
         virtual IWizardPage*    getWizardPage(TabPage* _pCurrentPage) const;
 
-        /** prevent nested calls of links next/previous or page change with the roadmap control
+    public:
+        class AccessGuard { friend class WizardTravelSuspension; private: AccessGuard() { } };
 
-         */
-        bool IsInCallOfLink() const;
-
-        void SetInCallOfLink( bool bSet );
+        void suspendTraveling( AccessGuard );
+        void resumeTraveling( AccessGuard );
+        bool isTravelingSuspended() const;
 
     private:
        // long OnNextPage( PushButton* );
@@ -413,6 +376,25 @@ namespace svt
 
         SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
+    };
+
+    /// helper class to temporarily suspend any traveling in the wizard
+    class WizardTravelSuspension
+    {
+    public:
+        WizardTravelSuspension( OWizardMachine& _rWizard )
+            :m_rWizard( _rWizard )
+        {
+            m_rWizard.suspendTraveling( OWizardMachine::AccessGuard() );
+        }
+
+        ~WizardTravelSuspension()
+        {
+            m_rWizard.resumeTraveling( OWizardMachine::AccessGuard() );
+        }
+
+    private:
+        OWizardMachine& m_rWizard;
     };
 
 //.........................................................................
