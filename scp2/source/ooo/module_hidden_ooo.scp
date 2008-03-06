@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:46:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Ctl,
 	gid_File_Lib_Cui,
     gid_File_Lib_Sdbt,
+    gid_File_Lib_Dbmm,
 	gid_File_Lib_Dba,
 	gid_File_Lib_Dbacfg,
 	gid_File_Lib_Dbase2,
