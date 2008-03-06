@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tableselectionpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,12 +123,12 @@ namespace abp
     //---------------------------------------------------------------------
     IMPL_LINK( TableSelectionPage, OnTableSelected, void*, /*NOTINTERESTEDIN*/ )
     {
-        implCheckNextButton();
+        updateDialogTravelUI();
         return 0L;
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TableSelectionPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool TableSelectionPage::commitPage( CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
             return sal_False;
@@ -140,9 +140,9 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TableSelectionPage::determineNextButtonState()
+    bool TableSelectionPage::canAdvance() const
     {
-        return  AddressBookSourcePage::determineNextButtonState()
+        return  AddressBookSourcePage::canAdvance()
             &&  ( 0 < m_aTableList.GetSelectEntryCount() );
     }
 
