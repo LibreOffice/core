@@ -1,0 +1,62 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: udlg_global.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:29:02 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef SVTOOLS_UDLG_GLOBAL_HRC
+#define SVTOOLS_UDLG_GLOBAL_HRC
+
+#include <svtools/solar.hrc>
+
+//=====================================================================
+//= bases
+//=====================================================================
+#define RID_UDLG_DIALOG_START       RID_SVTOOLS_START + 0
+#define RID_UDLG_TAPPAGE_START      RID_SVTOOLS_START + 0
+
+//=====================================================================
+//= dialogs
+//=====================================================================
+
+#define DLG_ROADMAP_SKELETON    RID_UDLG_DIALOG_START + 0
+
+//=====================================================================
+//= tab pages
+//=====================================================================
+
+#define TP_WELCOME          ( RID_UDLG_TAPPAGE_START + 0 )
+#define TP_PREPARE          ( RID_UDLG_TAPPAGE_START + 1 )
+#define TP_SETUP            ( RID_UDLG_TAPPAGE_START + 2 )
+#define TP_FINISH           ( RID_UDLG_TAPPAGE_START + 3 )
+
+#endif // SVTOOLS_UDLG_GLOBAL_HRC
