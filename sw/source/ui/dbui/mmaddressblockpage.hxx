@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:13:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
 
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
-    virtual sal_Bool    determineNextButtonState();
+    virtual sal_Bool    commitPage( CommitPageReason _eReason );
+    virtual bool        canAdvance() const;
 
 public:
     SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent);
