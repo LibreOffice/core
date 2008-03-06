@@ -48,3 +48,16 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
 ..\inc\toolkit\dllapi.h %_DEST%\inc%_EXT%\toolkit\dllapi.h
 
+mkdir: %_DEST%\inc%_EXT%\layout
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\layout.lib %_DEST%\lib%_EXT%\tklayout.lib
+..\%__SRC%\bin\layout*.dll %_DEST%\bin%_EXT%\tklayout*.dll
+..\%__SRC%\misc\layout*.map %_DEST%\bin%_EXT%\tklayout*.map
+
+..\%__SRC%\lib\*.xml %_DEST%\lib%_EXT%\*.xml
+mkdir: %_DEST%\lib%_EXT%\de
+..\%__SRC%\lib\de\*.xml %_DEST%\lib%_EXT%\de\*.xml
+mkdir: %_DEST%\lib%_EXT%\nl
+..\%__SRC%\lib\nl\*.xml %_DEST%\lib%_EXT%\nl\*.xml
+
+..\inc\layout\*.hxx %_DEST%\inc%_EXT%\layout\*.hxx
