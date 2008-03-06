@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:26:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #ifndef EXTENSIONS_ABSPILOT_HXX
 #define EXTENSIONS_ABSPILOT_HXX
 
-#include "abpenvironment.hxx"
-
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -62,11 +60,7 @@ namespace abp
     //=====================================================================
     //= OAddessBookSourcePilot
     //=====================================================================
-#if defined( ABP_USE_ROADMAP )
     typedef ::svt::RoadmapWizard OAddessBookSourcePilot_Base;
-#else
-    typedef ::svt::OWizardMachine OAddessBookSourcePilot_Base;
-#endif
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {
     protected:
@@ -102,17 +96,11 @@ namespace abp
         // OWizardMachine overridables
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
         virtual void                enterState( WizardState _nState );
-#if defined( ABP_USE_ROADMAP )
         virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-#else
-        virtual WizardState         determineNextState( WizardState _nCurrentState );
-#endif  // !defined( ABP_USE_ROADMAP )
         virtual sal_Bool            onFinish( sal_Int32 _nResult );
 
-#if defined( ABP_USE_ROADMAP )
         // RoadmapWizard
-        virtual String  getStateDisplayName( WizardState _nState );
-#endif
+        virtual String              getStateDisplayName( WizardState _nState ) const;
 
         virtual BOOL    Close();
 
@@ -152,10 +140,22 @@ namespace abp
             return needManualFieldMapping( m_aSettings.eType );
         }
 
+        /// determines whether the given address book type does provide one table only
+        inline bool needTableSelection( AddressSourceType _eType ) const
+        {
+            return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType ) && ( AST_EVOLUTION != _eType )
+                &&  ( AST_EVOLUTION_GROUPWISE != _eType ) && ( AST_EVOLUTION_LDAP != _eType );
+        }
+
+        inline bool needTableSelection() const
+        {
+            return needTableSelection( m_aSettings.eType );
+        }
+
         void implCleanup();
         void implCommitAll();
 
-        void implUpdateTypeDependentStates( AddressSourceType _eType );
+        void implUpdateRoadmap( AddressSourceType _eType );
     };
 
 //.........................................................................
