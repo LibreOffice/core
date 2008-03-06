@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSourceHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:56:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,19 +46,12 @@
 #include "ControllerLockGuard.hxx"
 #include "PropertyHelper.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASOURCE_HPP_
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 //.............................................................................
 namespace chart
@@ -83,6 +76,48 @@ void lcl_addRanges( ::std::vector< ::rtl::OUString > & rOutResult,
     xSeq.set( xLabeledSeq->getValues());
     if( xSeq.is())
         rOutResult.push_back( xSeq->getSourceRangeRepresentation());
+}
+
+void lcl_addDataSourceRanges(
+    ::std::vector< ::rtl::OUString > & rOutResult,
+    const uno::Reference< data::XDataSource > & xDataSource )
+{
+    if( xDataSource.is() )
+    {
+        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+        for( sal_Int32 i=0; i<aDataSequences.getLength(); ++i)
+            lcl_addRanges( rOutResult, aDataSequences[i] );
+    }
+}
+
+void lcl_addErrorBarRanges(
+    ::std::vector< ::rtl::OUString > & rOutResult,
+    const uno::Reference< XDataSeries > & xDataSeries )
+{
+    uno::Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
+    if( !xSeriesProp.is())
+        return;
+
+    try
+    {
+        uno::Reference< beans::XPropertySet > xErrorBarProp;
+        if( ( xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp ) &&
+            xErrorBarProp.is())
+        {
+            sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= eStyle ) &&
+                eStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA )
+            {
+                uno::Reference< data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
+                if( xErrorBarDataSource.is() )
+                    lcl_addDataSourceRanges( rOutResult, xErrorBarDataSource );
+            }
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 struct lcl_migrateData : public ::std::unary_function<
@@ -256,11 +291,8 @@ uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges(
                  ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
         {
             uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
-            if( !xDataSource.is() )
-                continue;
-            uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-            for( sal_Int32 i=0; i<aDataSequences.getLength(); ++i)
-                lcl_addRanges( aResult, aDataSequences[i] );
+            lcl_addDataSourceRanges( aResult, xDataSource );
+            lcl_addErrorBarRanges( aResult, *aSeriesIt );
         }
     }
 
