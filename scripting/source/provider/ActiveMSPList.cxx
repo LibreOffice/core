@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:27:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,21 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
 #include <util/MiscUtils.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 
 #include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
+
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -70,13 +74,14 @@ ActiveMSPList::~ActiveMSPList()
 }
 
 Reference< provider::XScriptProvider >
-ActiveMSPList::createNewMSP( const ::rtl::OUString& context ) throw( RuntimeException )
+ActiveMSPList::createNewMSP( const uno::Any& context )
 {
     ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
-    Sequence< Any > args(1);
-    args[ 0 ] <<= context;
+    Sequence< Any > args( &context, 1 );
 
-    Reference< provider::XScriptProvider > msp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    Reference< provider::XScriptProvider > msp(
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            serviceName, args, m_xContext ), UNO_QUERY );
     return msp;
 }
 
@@ -85,7 +90,7 @@ ActiveMSPList::getActiveProviders()
 {
     ::osl::MutexGuard guard( m_mutex );
 
-    sal_Int32 numChildNodes = m_hMsps.size() + m_mModels.size();
+    sal_Int32 numChildNodes = m_hMsps.size() + m_mScriptComponents.size();
     // get providers for application
     Msp_hash::iterator h_itEnd =  m_hMsps.end();
     Sequence< Reference< provider::XScriptProvider > > children( numChildNodes );
@@ -98,9 +103,9 @@ ActiveMSPList::getActiveProviders()
     }
 
     // get providers for active documents
-    Model_map::iterator m_itEnd =  m_mModels.end();
+    ScriptComponent_map::iterator m_itEnd =  m_mScriptComponents.end();
 
-    for ( Model_map::iterator m_it = m_mModels.begin(); m_it != m_itEnd; ++m_it )
+    for ( ScriptComponent_map::iterator m_it = m_mScriptComponents.begin(); m_it != m_itEnd; ++m_it )
     {
         children[ count++ ] = m_it->second;
     }
@@ -109,113 +114,170 @@ ActiveMSPList::getActiveProviders()
 
 
 Reference< provider::XScriptProvider >
-ActiveMSPList::createMSP( const Any& aContext )
-            throw ( RuntimeException )
+ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
+            SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
-    if (  ! ( aContext.getValueType() == ::getCppuType((const ::rtl::OUString* ) NULL ) ) )
+    ::rtl::OUString sContext;
+    if ( aContext >>= sContext )
     {
-        Reference< frame::XModel> xModel( aContext, UNO_QUERY );
-        if ( xModel.is() )
-        {
-            ::rtl::OUString sContext = MiscUtils::xModelToTdocUrl( xModel, m_xContext );
-            msp = createMSP( sContext );
-        }
-        else
-        {
-            createNonDocMSPs();
-            return m_hMsps[ shareDirString ];
-        }
+        msp = getMSPFromStringContext( sContext );
+        return msp;
+    }
 
+    Reference< frame::XModel > xModel( aContext, UNO_QUERY );
+
+    Reference< document::XScriptInvocationContext > xScriptContext( aContext, UNO_QUERY );
+    if ( xScriptContext.is() )
+    {
+        // the component supports executing scripts embedded in a - possibly foreign document.
+        // Check whether this other document its the component itself.
+        if ( !xModel.is() || ( xModel != xScriptContext->getScriptContainer() ) )
+        {
+            msp = getMSPFromInvocationContext( xScriptContext );
+            return msp;
+        }
+    }
+
+    if ( xModel.is() )
+    {
+        sContext = MiscUtils::xModelToTdocUrl( xModel, m_xContext );
+        msp = getMSPFromStringContext( sContext );
+        return msp;
+    }
+
+    createNonDocMSPs();
+    return m_hMsps[ shareDirString ];
+}
+
+Reference< provider::XScriptProvider >
+    ActiveMSPList::getMSPFromInvocationContext( const Reference< document::XScriptInvocationContext >& xContext )
+        SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
+{
+    Reference< provider::XScriptProvider > msp;
+
+    Reference< document::XEmbeddedScripts > xScripts;
+    if ( xContext.is() )
+        xScripts.set( xContext->getScriptContainer() );
+    if ( !xScripts.is() )
+    {
+        ::rtl::OUStringBuffer buf;
+        buf.appendAscii( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
+        buf.appendAscii( "Component supporting XEmbeddScripts interface not found." );
+        throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
+    }
+
+    ::osl::MutexGuard guard( m_mutex );
+
+    Reference< XInterface > xNormalized( xContext, UNO_QUERY );
+    ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
+    if ( pos == m_mScriptComponents.end() )
+    {
+        // TODO
+        msp = createNewMSP( uno::makeAny( xContext ) );
+        addActiveMSP( xNormalized, msp );
     }
     else
     {
-        ::rtl::OUString sContext;
-        aContext >>= sContext;
-        msp = createMSP( sContext );
+        msp = pos->second;
     }
+
     return msp;
 }
 
 Reference< provider::XScriptProvider >
-ActiveMSPList::createMSP( const ::rtl::OUString& context )
-            throw ( RuntimeException )
+    ActiveMSPList::getMSPFromStringContext( const ::rtl::OUString& context )
+        SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
-    if ( context.indexOf( OUSTR( "vnd.sun.star.tdoc" ) ) == 0 )
+    try
     {
-        Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( context ), UNO_QUERY );
-        if ( !xModel.is() )
+        if ( context.indexOf( OUSTR( "vnd.sun.star.tdoc" ) ) == 0 )
         {
-            ::rtl::OUStringBuffer buf( 80 );
-            buf.append( OUSTR("Failed to create MasterScriptProvider for " ) );
-            buf.append( context);
-            ::rtl::OUString message = buf.makeStringAndClear();
-            throw RuntimeException( message, Reference< XInterface >() );
-        }
-        ::osl::MutexGuard guard( m_mutex );
-        Model_map::const_iterator itr = m_mModels.find( xModel );
-        if ( itr == m_mModels.end() )
-        {
-            msp = createNewMSP( context );
-            addActiveMSP( xModel, msp );
-        }
-        else
-        {
-            msp = itr->second;
-        }
-    }
-    else
-    {
-        ::osl::MutexGuard guard( m_mutex );
-        Msp_hash::iterator h_itEnd =  m_hMsps.end();
-        Msp_hash::const_iterator itr = m_hMsps.find( context );
-        if ( itr ==  h_itEnd )
-        {
-            try
+            Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( context ) );
+
+            Reference< document::XEmbeddedScripts > xScripts( xModel, UNO_QUERY );
+            Reference< document::XScriptInvocationContext > xScriptsContext( xModel, UNO_QUERY );
+            if ( !xScripts.is() && !xScriptsContext.is() )
+            {
+                ::rtl::OUStringBuffer buf;
+                buf.appendAscii( "Failed to create MasterScriptProvider for '" );
+                buf.append     ( context );
+                buf.appendAscii( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
+                throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
+            }
+
+            ::osl::MutexGuard guard( m_mutex );
+            Reference< XInterface > xNormalized( xModel, UNO_QUERY );
+            ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
+            if ( pos == m_mScriptComponents.end() )
             {
                 msp = createNewMSP( context );
+                addActiveMSP( xNormalized, msp );
             }
-            catch ( RuntimeException& )
+            else
             {
-                ::rtl::OUStringBuffer buf( 80 );
-                buf.append( OUSTR("Failed to create MasterScriptProvider for " ) );
-                buf.append( context);
-                ::rtl::OUString message = buf.makeStringAndClear();
-                throw RuntimeException( message, Reference< XInterface >() );
+                msp = pos->second;
             }
-            m_hMsps[ context ] = msp;
         }
         else
         {
-            msp = m_hMsps[ context ];
+            ::osl::MutexGuard guard( m_mutex );
+            Msp_hash::iterator h_itEnd =  m_hMsps.end();
+            Msp_hash::const_iterator itr = m_hMsps.find( context );
+            if ( itr ==  h_itEnd )
+            {
+                msp = createNewMSP( context );
+                m_hMsps[ context ] = msp;
+            }
+            else
+            {
+                msp = m_hMsps[ context ];
+            }
         }
+    }
+    catch( const lang::IllegalArgumentException& )
+    {
+        // allowed to leave
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave
+    }
+    catch( const Exception& )
+    {
+        ::rtl::OUStringBuffer aMessage;
+        aMessage.appendAscii( "Failed to create MasterScriptProvider for context '" );
+        aMessage.append     ( context );
+        aMessage.appendAscii( "'." );
+        throw lang::WrappedTargetRuntimeException(
+            aMessage.makeStringAndClear(), *this, ::cppu::getCaughtException() );
     }
     return msp;
 }
 
 void
-ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
+ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
                const Reference< provider::XScriptProvider >& msp )
 {
     ::osl::MutexGuard guard( m_mutex );
-    Model_map::const_iterator itr = m_mModels.find( xModel );
-    if ( itr == m_mModels.end() )
+    Reference< XInterface > xNormalized( xComponent, UNO_QUERY );
+    ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
+    if ( pos == m_mScriptComponents.end() )
     {
-        m_mModels[ xModel ] = msp;
+        m_mScriptComponents[ xNormalized ] = msp;
 
-        // add self as listener for document dispose
+        // add self as listener for component disposal
         // should probably throw from this method!!, reexamine
         try
         {
-            Reference< lang::XComponent > xComponent =
-                Reference< lang::XComponent >( xModel, UNO_QUERY_THROW );
-            validateXRef( xComponent, "ActiveMSPList::addActiveMSP: model not XComponent\n" );
-            xComponent->addEventListener( this );
-
+            Reference< lang::XComponent > xBroadcaster =
+                Reference< lang::XComponent >( xComponent, UNO_QUERY_THROW );
+            xBroadcaster->addEventListener( this );
         }
-        catch ( RuntimeException& )
+        catch ( const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -226,30 +288,22 @@ ActiveMSPList::disposing( const ::com::sun::star::lang::EventObject& Source )
 throw ( ::com::sun::star::uno::RuntimeException )
 
 {
-    Reference< frame::XModel > xModel;
     try
     {
-        Reference< XInterface > xInterface = Source.Source;
-        xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY );
-        if ( xModel.is() )
+        Reference< XInterface > xNormalized( Source.Source, UNO_QUERY );
+        if ( xNormalized.is() )
         {
             ::osl::MutexGuard guard( m_mutex );
-            Model_map::const_iterator itr = m_mModels.find( xModel );
-            if ( itr != m_mModels.end() )
-            {
-                m_mModels.erase( xModel );
-            }
+            ScriptComponent_map::iterator pos = m_mScriptComponents.find( xNormalized );
+            if ( pos != m_mScriptComponents.end() )
+                m_mScriptComponents.erase( pos );
         }
     }
-    catch ( RuntimeException& e )
+    catch ( const Exception& )
     {
         // if we get an exception here, there is not much we can do about
         // it can't throw as it will screw up the model that is calling dispose
-        ::rtl::OUString message =
-            OUSTR( "ActiveMSPList::disposing: document invalid model." );
-        message = message.concat( e.Message );
-        OSL_TRACE( ::rtl::OUStringToOString( message,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
