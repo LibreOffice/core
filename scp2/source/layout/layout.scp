@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: layout.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:47:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Lib_Layout
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(libtklayout,OFFICEUPD,DLLPOSTFIX,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(tklayout,OFFICEUPD,DLLPOSTFIX,.dll));
+  #endif
+End
+
+Directory gid_Dir_Share_Layout
+    ParentID = gid_Dir_Share;
+    DosName = "layout";
+End
+
+File gid_File_Xml_Wordcount
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout;
+   Name = "wordcount.xml";
+   Styles = (PACKED);
+End
+
+File gid_File_Xml_Zoom
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout;
+   Name = "zoom.xml";
+   Styles = (PACKED);
+End
+
+Directory gid_Dir_Share_Layout_De
+    ParentID = gid_Dir_Share_Layout;
+    DosName = "de";
+End
+
+File gid_File_Xml_Wordcount_De
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout_De;
+   Name = "de/wordcount.xml";
+   Styles = (PACKED);
+End
+
+File gid_File_Xml_Zoom_De
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout_De;
+   Name = "de/zoom.xml";
+   Styles = (PACKED);
+End
+
+Directory gid_Dir_Share_Layout_Nl
+    ParentID = gid_Dir_Share_Layout;
+    DosName = "nl";
+End
+
+File gid_File_Xml_Wordcount_Nl
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout_Nl;
+   Name = "nl/wordcount.xml";
+   Styles = (PACKED);
+End
+
+File gid_File_Xml_Zoom_Nl
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Share_Layout_Nl;
+   Name = "nl/zoom.xml";
+   Styles = (PACKED);
+End
+
+//  Do we need this?
+//  Must MODULE_OPTIONAL_LAYOUT be registered somewhere?
+//
+// Module gid_Module_Layout
+//    MOD_NAME_DESC (MODULE_OPTIONAL_LAYOUT);
+//    ParentID = gid_Module_Optional;
+//    Files = (gid_File_Lib_Layout,gid_File_Xml_Wordcount,gid_File_Xml_Zoom);
+//    Minimal = NO;
+//    Default = YES;
+//    Styles = ();
+// End
