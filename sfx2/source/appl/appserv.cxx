@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:03:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -115,6 +118,9 @@
 #endif
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -160,13 +166,14 @@
 #include <svtools/moduleoptions.hxx>
 #include <svtools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vos/process.hxx>
 #include <rtl/bootstrap.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "about.hxx"
@@ -220,8 +227,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
-
-#define SFX_KEY_MULTIQUICKSEARCH    "ExplorerMultiQuickSearch"
+using namespace ::com::sun::star::document;
 
 //-------------------------------------------------------------------------
 long QuitAgain_Impl( void* pObj, void* pArg )
@@ -827,6 +833,30 @@ ResMgr* SfxApplication::GetOffResManager_Impl()
     return pAppData_Impl->pOfaResMgr;
 }
 
+namespace
+{
+    Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, Window* _pFallback )
+    {
+        if ( !_rxFrame.is() )
+            return _pFallback;
+
+        try
+        {
+            Reference< awt::XWindow > xContainerWindow( _rxFrame->getContainerWindow(), UNO_SET_THROW );
+            Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            OSL_ENSURE( pWindow, "lcl_getDialogParent: cool, somebody implemented a VCL-less toolkit!" );
+
+            if ( pWindow )
+                return pWindow->GetSystemWindow();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return _pFallback;
+    }
+}
+
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -963,99 +993,52 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
-            AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog( GetTopWindow() );
-            if( pDlg )
+
+            Reference< XFrame > xFrame;
+            const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
+            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
+            if ( pFrameItem )
+                pFrameItem->GetValue() >>= xFrame;
+
+            if ( !xFrame.is() )
             {
+                const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+                if ( pFrame )
+                    xFrame = pFrame->GetFrameInterface();
+            }
+
+            do  // artificial loop for flow control
+            {
+                AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog(
+                    lcl_getDialogParent( xFrame, GetTopWindow() ), FALSE, xFrame );
+                OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
+                if ( !pDlg )
+                    break;
                 pDlg->SetRunLabel();
-                short ret = pDlg->Execute();
-                if ( ret )
-                {
-                    const String scriptURL = pDlg->GetScriptURL();
-                    SfxViewFrame* pView = SfxViewFrame::Current();
-                    SfxObjectShell* pObjShell = NULL;
-                    Sequence< Any > args(0);
-                    Any aRet;
-                    Sequence< sal_Int16 > outIndex;
-                    Sequence< Any > outArgs( 0 );
-                    if ( pView )
-                    {
-                        pObjShell = pView->GetObjectShell();
-                    }
-                    if ( pObjShell )
-                    {
-                        pObjShell->CallXScript(scriptURL, args, aRet, outIndex, outArgs);
-                    }
-                    else
-                    {
-                        bool bCaughtException = FALSE;
-                        Any aException;
 
-                        try
-                        {
-                            Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-                            Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+                short nDialogResult = pDlg->Execute();
+                if ( !nDialogResult )
+                    break;
 
-                            Reference< provider::XScriptProviderFactory > xFac(
-                                xCtx->getValueByName(
-                                    ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                Sequence< Any > args;
+                Sequence< sal_Int16 > outIndex;
+                Sequence< Any > outArgs;
+                Any ret;
 
-                            Any aContext;
+                Reference< XInterface > xScriptContext;
 
-                            Reference< provider::XScriptProvider > xScriptProvider( xFac->createScriptProvider( aContext ),
-                                UNO_QUERY_THROW );
-                            Reference< provider::XScript > xScript(
-                                xScriptProvider->getScript( scriptURL ), UNO_QUERY_THROW );
+                Reference< XController > xController;
+                if ( xFrame.is() )
+                    xController = xFrame->getController();
+                if ( xController.is() )
+                    xScriptContext = xController->getModel();
+                if ( !xScriptContext.is() )
+                    xScriptContext = xController;
 
-                            xScript->invoke( args, outIndex, outArgs );
-                        }
-                        catch ( provider::ScriptFrameworkErrorException& se )
-                        {
-                            aException = makeAny( se );
-                            bCaughtException = TRUE;
-                        }
-                        catch ( ::com::sun::star::reflection::InvocationTargetException& ite )
-                        {
-                            aException = makeAny( ite );
-                            bCaughtException = TRUE;
-                        }
-                        catch ( ::com::sun::star::lang::IllegalArgumentException& iae )
-                        {
-                            aException = makeAny( iae );
-                            bCaughtException = TRUE;
-                        }
-                        catch ( ::com::sun::star::uno::RuntimeException& rte )
-                        {
-                            aException = makeAny( rte );
-                            bCaughtException = TRUE;
-                        }
-                        catch ( ::com::sun::star::uno::Exception& e )
-                        {
-                            aException = makeAny( e );
-                            bCaughtException = TRUE;
-                        }
-
-                         if ( bCaughtException )
-                        {
-                            if ( pFact != NULL )
-                            {
-                                VclAbstractDialog* pScriptErrDlg =
-                                    pFact->CreateScriptErrorDialog(
-                                        NULL, aException );
-
-                                if ( pScriptErrDlg != NULL )
-                                {
-                                    pScriptErrDlg->Execute();
-                                    delete pScriptErrDlg;
-                                }
-                            }
-                           }
-                    }
-                }
+                SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
             }
-            else
-            {
-                OSL_TRACE("no dialog!!!");
-            }
+            while ( false );
             rReq.Done();
         }
         break;
