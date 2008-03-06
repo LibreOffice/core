@@ -1,0 +1,29 @@
+#ifndef __com_sun_star_awt_XLayoutFlow_idl__
+#define __com_sun_star_awt_XLayoutFlow_idl__
+
+//=============================================================================
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** Enables height-for-width layout negociations, which allows for label wrapping
+ *  and flow containers. Can be implemented by either a container or an ordinary widget;
+ *  whether its parent will honor it is another story, so keep implementing
+ *  getMinimumSize().
+ */
+published interface XLayoutFlow
+{
+    long getHeightForWidth( [in] long Width );
+
+    /* Allow the container/widget to toggle the functionality. */
+    boolean hasHeightForWidth();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

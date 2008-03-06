@@ -1,0 +1,25 @@
+#ifndef __com_sun_star_awt_XLayoutUnit_idl__
+#define __com_sun_star_awt_XLayoutUnit_idl__
+
+#include <com/sun/star/awt/XLayoutContainer.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** Responsible to evaluate size damages and force a re-calculation. Containers
+    should let it know of state changes that may affects their size.
+ *  All children of a top-level window should share the same object.
+ */
+published interface XLayoutContainer
+{
+    void queueResize( [in] com::sun::star::awt::XLayoutContainer Container );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

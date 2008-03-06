@@ -1,0 +1,26 @@
+#ifndef __com_sun_star_awt_XDialog2_idl__
+#define __com_sun_star_awt_XDialog2_idl__
+
+#ifndef __com_sun_star_awt_XDialog_idl__
+#include <com/sun/star/awt/XDialog.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** Makes it possible to end a dialog.
+ */
+published interface XDialog2: com::sun::star::awt::XDialog
+{
+    void endDialog ( [in] long Result );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

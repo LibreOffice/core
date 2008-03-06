@@ -1,0 +1,27 @@
+#ifndef __com_sun_star_awt_MaxChildrenException_idl__
+#define __com_sun_star_awt_MaxChildrenException_idl__
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** This exception is thrown when adding a child to a container that is full.
+
+    @see     XLayoutContainer
+    @see     com::sun::star::awt::XLayoutContainer::addChild
+ */
+published exception MaxChildrenException: com::sun::star::uno::Exception
+{
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

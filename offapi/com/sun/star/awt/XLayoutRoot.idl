@@ -1,0 +1,31 @@
+#ifndef __com_sun_star_awt_XLayoutRoot_idl__
+#define __com_sun_star_awt_XLayoutRoot_idl__
+
+#ifndef __com_sun_star_awt_XLayoutContainer_idl__
+#include <com/sun/star/awt/XLayoutContainer.idl>
+#endif
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies an interface for a top-level layoutable widget
+ */
+published interface XLayoutRoot: com::sun::star::container::XNameAccess
+{
+    com::sun::star::awt::XLayoutContainer getLayoutContainer();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
