@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:41:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
     gid_File_Lib_Wpft,
+    gid_File_Lib_T602Filter,
     gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerweb_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerglobal_Menubar_Xml,
