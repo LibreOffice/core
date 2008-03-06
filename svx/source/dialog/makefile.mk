@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:14:22 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:45:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # --- Files --------------------------------------------------------
 
