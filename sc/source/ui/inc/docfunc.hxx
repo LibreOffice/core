@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:16:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef SC_POSTIT_HXX
 #include "postit.hxx"
+#endif
+
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
 #endif
 
 class ScEditEngineDefaulter;
@@ -101,10 +105,12 @@ public:
     BOOL            PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
-                                    BOOL bInterpret, BOOL bEnglish, BOOL bApi );
+                                    BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+                                    const ScGrammar::Grammar eGrammar );
 
                     // creates a new cell for use with PutCell
-    ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText );
+    ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
+                                            const ScGrammar::Grammar eGrammar );
 
     BOOL            SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi );
 
@@ -149,7 +155,8 @@ public:
 
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,
-                                    const String& rString, BOOL bApi, BOOL bEnglish );
+                                    const String& rString, BOOL bApi, BOOL bEnglish,
+                                    const ScGrammar::Grammar );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                             const ScTabOpParam& rParam, BOOL bRecord, BOOL bApi );
