@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbarange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:03:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@
 
 using namespace ::org::openoffice;
 using namespace ::com::sun::star;
-
+using ::std::vector;
 
 //    * 1 point = 1/72 inch = 20 twips
 //    * 1 inch = 72 points = 1440 twips
