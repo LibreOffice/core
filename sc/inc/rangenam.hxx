@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:01:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
+#endif
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
 #endif
 
 //------------------------------------------------------------------------
@@ -98,7 +101,7 @@ public:
                                  const String& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
-                                 BOOL bEnglish = FALSE );
+                                 const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
                     ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScTokenArray& rArr,
@@ -109,16 +112,11 @@ public:
                                  const ScAddress& rTarget );
                                 // rTarget ist ABSPOS Sprungmarke
                     ScRangeData(const ScRangeData& rScRangeData);
-                    ScRangeData( SvStream& rStream,
-                                 ScMultipleReadHeader& rHdr,
-                                 USHORT nVer );
 
     virtual         ~ScRangeData();
 
 
     virtual DataObject* Clone() const;
-
-    BOOL            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
     BOOL            operator== (const ScRangeData& rData) const;
 
@@ -138,12 +136,11 @@ public:
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     BOOL            HasType( RangeType nType ) const;
-    void            GetSymbol(String& rSymbol) const;
-    void            GetEnglishSymbol(String& rSymbol, BOOL bCompileXML = FALSE) const;
+    void            GetSymbol( String& rSymbol, const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( String& rSymbol, const ScAddress&,
-                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE );
+                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
-                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE );
+                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -219,8 +216,6 @@ public:
     ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     ScRangeData*            GetRangeAtBlock( const ScRange& ) const;
 
-    BOOL                    Load( SvStream& rStream, USHORT nVer );
-    BOOL                    Store( SvStream& rStream ) const;
     BOOL                    SearchName( const String& rName, USHORT& rPos ) const;
                             // SearchNameUpper must be called with an upper-case search string
     BOOL                    SearchNameUpper( const String& rUpperName, USHORT& rPos ) const;
