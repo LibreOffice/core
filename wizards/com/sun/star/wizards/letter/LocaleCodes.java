@@ -12,7 +12,7 @@ public class LocaleCodes extends Resource {
 
     public LocaleCodes (XMultiServiceFactory xmsf) {
         super(xmsf, UNIT_NAME, MODULE_NAME);
-        allLanguageStrings = getStringList(16298);  // STR_SVT_JAVAERROR_END part of SvtLanguageTable from svtools
+        allLanguageStrings = getStringList(16299);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
     }
 
     public String getLanguageString(String MSID) {
