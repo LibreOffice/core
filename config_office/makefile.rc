@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-06 11:17:31 $
+#   last change: $Author: kz $ $Date: 2008-03-06 12:20:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@ MAKEFILERC=true
 # 
 
 build_all : build_instsetoo_native
+
+all .PHONY : build_all
 
 check_modules .PHONY :
 	@+echo Checking module list
@@ -85,6 +87,21 @@ clean .PHONY:
 configure .PHONY SETDIR=config_office :
 	@configure
 
+
+# 
+# install target
+# 
+
+install .PHONY :
+	@test "$(DESTDIR)$(prefix)" != "" || (echo Usage: make install [DESTDIR=DIR] prefix=DIR; exit 2)
+	cp -p instsetoo_native/$(INPATH)/bin/* $(SOLARVER)/$(INPATH)/bin
+	cd instsetoo_native/util \
+	    && OUT=$(INPATH)\
+	    LOCAL_OUT=$(INPATH)\
+	    LOCAL_COMMON_OUT=$(INPATH)\
+            DEFAULT_TO_ENGLISH_FOR_PACKING=1\
+	    PYTHONPATH=$(SOLARVER)/$(INPATH)/bin:$(SOLARVER)/$(INPATH)/lib:$(PYTHONPATH) \
+	    $(PERL) $(SOLARENV)/bin/make_installer.pl -f openoffice.lst -l $(WITH_LANG:f:t",") -p OpenOffice -buildid 0 -simple $(DESTDIR)$(prefix)
 
 #*************************************************************************
 
