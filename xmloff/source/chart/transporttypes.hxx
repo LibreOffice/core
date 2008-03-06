@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ struct SchXMLCell
     rtl::OUString aString;
     double fValue;
     SchXMLCellType eType;
+    rtl::OUString aRangeId;
 
     SchXMLCell() : fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN ) {}
 };
@@ -74,6 +75,8 @@ struct SchXMLTable
     bool bHasHeaderRow;
     bool bHasHeaderColumn;
 
+    ::rtl::OUString aTableNameOfFile;                   /// the table name read at the table:table element
+
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),
@@ -88,7 +91,8 @@ typedef sal_Int32 tSchXMLIndex;
 enum SchXMLLabeledSequencePart
 {
     SCH_XML_PART_LABEL,
-    SCH_XML_PART_VALUES
+    SCH_XML_PART_VALUES,
+    SCH_XML_PART_ERROR_BARS
 };
 typedef ::std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
 typedef ::std::multimap< tSchXMLIndexWithPart,
@@ -185,5 +189,8 @@ struct DataRowPointStyle
             mbSymbolSizeForSeriesIsMissingInFile( false )
         {}
 };
+
+typedef ::std::multimap< ::rtl::OUString, ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 #endif  // SCH_XML_TRANSPORTTYPES_HXX_
