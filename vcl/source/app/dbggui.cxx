@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:36:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1672,8 +1672,12 @@ void DbgDialogTest( Window* pWindow )
 
             if ( pChild->GetType() == WINDOW_MULTILINEEDIT )
             {
-                if ( !(pChild->GetStyle() & WB_IGNORETAB) )
-                    DbgError( "MultiLineEdits in Dialogs should have the Style WB_IGNORETAB" );
+                if  (   ( 0 == ( pChild->GetStyle() & WB_IGNORETAB ) )
+                    &&  ( 0 == ( pChild->GetStyle() & WB_READONLY ) )
+                    )
+                {
+                    DbgError( "editable MultiLineEdits in Dialogs should have the Style WB_IGNORETAB" );
+                }
             }
 
             if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
