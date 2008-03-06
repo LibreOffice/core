@@ -51,3 +51,4 @@ st	svtools\source\passwordcontainer	nmake	-	all	st_passcont st_inc NULL
 st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util st_inc NULL
 st	svtools\uno							nmake	-	all	st_svtuno st_util st_inc NULL
 st	svtools\source\java				nmake	-	all	st_svtjava  st_inc NULL
+st  svtools\workben\unodialog           nmake   -   all st_workben_udlg st_util NULL
