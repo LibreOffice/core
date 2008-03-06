@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:55:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@ public:
     bool HasNumberProperties() const;
     bool ProvidesStartingAngle() const;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+        getDocument() const;
+
 private:
     rtl::OUString   m_aObjectCID;
     ObjectType      m_eObjectType;
@@ -96,6 +99,8 @@ private:
     bool m_bCanAxisLabelsBeStaggered;
     bool m_bHasNumberProperties;
     bool m_bProvidesStartingAngle;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 };
 
 /*************************************************************************
