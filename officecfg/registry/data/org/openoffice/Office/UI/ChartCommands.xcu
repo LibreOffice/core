@@ -392,38 +392,52 @@
             </node>
             <node oor:name=".uno:DiagramAxisMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">A~xis</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChartTitleMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Title</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Grid</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertTrendline" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Insert Tre~nd Line...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertMeanValue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Insert Mean ~Value Line</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertTrendlineEquation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Insert Trend Line ~Equation</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertYErrorbar" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Insert ~Y Error Bars...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteMeanValue" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete Mean ~Value Line</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteTrendline" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete Tre~ndline</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DeleteYErrorbar" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Delete ~Y Error Bars</value>
                 </prop>
             </node>
         </node>
