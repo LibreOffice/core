@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:07:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <svtools/pathoptions.hxx>
 #include <sot/storage.hxx>
 
@@ -137,6 +138,8 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -146,6 +149,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
 namespace css = ::com::sun::star;
 
 #define _SVSTDARR_STRINGSDTOR
@@ -811,6 +815,60 @@ void SfxConfigGroupListBox_Impl::InitStyles()
 }
 
 //-----------------------------------------------
+namespace
+{
+    //...........................................
+    /** examines a component whether it supports XEmbeddedScripts, or provides access to such a
+        component by implementing XScriptInvocationContext.
+        @return
+            the model which supports the embedded scripts, or <NULL/> if it cannot find such a
+            model
+    */
+    static Reference< XModel > lcl_getDocumentWithScripts_throw( const Reference< XInterface >& _rxComponent )
+    {
+        Reference< XEmbeddedScripts > xScripts( _rxComponent, UNO_QUERY );
+        if ( !xScripts.is() )
+        {
+            Reference< XScriptInvocationContext > xContext( _rxComponent, UNO_QUERY );
+            if ( xContext.is() )
+                xScripts.set( xContext->getScriptContainer(), UNO_QUERY );
+        }
+
+        return Reference< XModel >( xScripts, UNO_QUERY );
+    }
+
+    //...........................................
+    static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
+    {
+        Reference< XModel > xDocument;
+
+        // examine our associated frame
+        try
+        {
+            OSL_ENSURE( _rxFrame.is(), "lcl_getScriptableDocument_nothrow: you need to pass a frame to this dialog/tab page!" );
+            if ( _rxFrame.is() )
+            {
+                // first try the model in the frame
+                Reference< XController > xController( _rxFrame->getController(), UNO_SET_THROW );
+                xDocument = lcl_getDocumentWithScripts_throw( xController->getModel() );
+
+                if ( !xDocument.is() )
+                {
+                    // if there is no suitable document in the frame, try the controller
+                    xDocument = lcl_getDocumentWithScripts_throw( _rxFrame->getController() );
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return xDocument;
+    }
+}
+
+//-----------------------------------------------
 void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
                                       const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
                                       const ::rtl::OUString&                                        sModuleLongName)
@@ -916,7 +974,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             }
         }
 
-        Reference< XModel > xDoc( SfxObjectShell::GetWorkingDocument() );
+        Reference< XModel > xDoc( lcl_getScriptableDocument_nothrow( m_xFrame ) );
         if ( xDoc.is() )
         {
             BasicManager* pBasicMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xDoc );
@@ -999,24 +1057,24 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             bIsRootNode = TRUE;
                         }
 
+                        //To mimic current starbasic behaviour we
+                        //need to make sure that only the current document
+                        //is displayed in the config tree. Tests below
+                        //set the bDisplay flag to FALSE if the current
+                        //node is a first level child of the Root and is NOT
+                        //either the current document, user or share
+                        ::rtl::OUString currentDocTitle;
+                        Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
+                        if ( xDocument.is() )
+                        {
+                            currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
+                        }
+
                         for ( sal_Int32 n = 0; n < children.getLength(); n++ )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             BOOL bDisplay = TRUE;
-                            //To mimic current starbasic behaviour we
-                            //need to make sure that only the current document
-                            //is displayed in the config tree. Tests below
-                            //set the bDisplay flag to FALSE if the current
-                            //node is a first level child of the Root and is NOT
-                            //either the current document, user or share
-                            ::rtl::OUString currentDocTitle;
-                            Reference< XModel > xDocument( SfxObjectShell::GetWorkingDocument() );
-                            if ( xDocument.is() )
-                            {
-                                currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
-                            }
                             ::rtl::OUString uiName = theChild->getName();
-
                             if ( bIsRootNode )
                             {
                                 if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
@@ -1589,24 +1647,25 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             bIsRootNode = TRUE;
                         }
 
+                        /* To mimic current starbasic behaviour we
+                        need to make sure that only the current document
+                        is displayed in the config tree. Tests below
+                        set the bDisplay flag to FALSE if the current
+                        node is a first level child of the Root and is NOT
+                        either the current document, user or share */
+                        ::rtl::OUString currentDocTitle;
+                        Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
+                        if ( xDocument.is() )
+                        {
+                            currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
+                        }
+
                         sal_Int32 nLen = children.getLength();
                         for ( sal_Int32 n = 0; n < nLen; n++ )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             ::rtl::OUString aName( theChild->getName() );
                             BOOL bDisplay = TRUE;
-                            /* To mimic current starbasic behaviour we
-                            need to make sure that only the current document
-                            is displayed in the config tree. Tests below
-                            set the bDisplay flag to FALSE if the current
-                            node is a first level child of the Root and is NOT
-                            either the current document, user or share */
-                            ::rtl::OUString currentDocTitle;
-                            Reference< XModel > xDocument( SfxObjectShell::GetWorkingDocument() );
-                            if ( xDocument.is() )
-                            {
-                                currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
-                            }
                             if ( bIsRootNode )
                             {
                                 if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
