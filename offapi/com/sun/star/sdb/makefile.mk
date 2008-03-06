@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-30 08:15:39 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:56:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ IDLFILES=\
     DatasourceAdministrationDialog.idl \
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
+    DefinitionContent.idl \
     Document.idl \
     DocumentContainer.idl \
     DocumentDataSource.idl \
