@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpfinalpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:02:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,12 @@
 #ifndef EXTENSIONS_ABP_ABPFINALPAGE_HXX
 #define EXTENSIONS_ABP_ABPFINALPAGE_HXX
 
-#ifndef EXTENSIONS_ABP_ABSPAGE_HXX
 #include "abspage.hxx"
-#endif
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-#ifndef EXTENSIONS_ABP_ABPTYPES_HXX
 #include "abptypes.hxx"
-#endif
-#ifndef SVTOOLS_URLCONTROL_HXX
+
 #include <svtools/urlcontrol.hxx>
-#endif
+#include <svx/databaselocationinput.hxx>
+#include <vcl/edit.hxx>
 
 //.........................................................................
 namespace abp
@@ -69,8 +63,10 @@ namespace abp
         Edit            m_aName;
         FixedText       m_aDuplicateNameError;
 
+        ::svx::DatabaseLocationInputController
+                        m_aLocationController;
+
         StringBag       m_aInvalidDataSourceNames;
-        sal_Bool        m_bCheckFileName;
 
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
@@ -78,18 +74,17 @@ namespace abp
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
         // TabDialog overridables
         virtual void        ActivatePage();
         virtual void        DeactivatePage();
 
         // OImportPage overridables
-        virtual sal_Bool    determineNextButtonState();
+        virtual bool        canAdvance() const;
 
     private:
         DECL_LINK( OnNameModified, Edit* );
-        DECL_LINK( OnBrowse, PushButton* );
         DECL_LINK( OnRegister, CheckBox* );
 
         sal_Bool    isValidName() const;
