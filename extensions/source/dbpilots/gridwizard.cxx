@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState )
+    WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -364,9 +364,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridFieldsSelection::determineNextButtonState()
+    bool OGridFieldsSelection::canAdvance() const
     {
-        return sal_False;
+        return false;
             // we're the last page in our wizard
     }
 
@@ -392,7 +392,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridFieldsSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OGridFieldsSelection::commitPage( CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
             return sal_False;
