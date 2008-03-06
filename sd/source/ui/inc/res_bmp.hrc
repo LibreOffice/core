@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@
 #define BMP_FOILH_03            RID_APP_START+33
 #define BMP_FOILH_04            RID_APP_START+34
 #define BMP_FOILH_06            RID_APP_START+35
+#define BMP_FOILH_09            RID_APP_START+36
 #define BMP_FOILN_01            RID_APP_START+40
 
 // Bitmaps fuer Tree-ListBox im Effekte-TabDialog
@@ -231,6 +232,8 @@
 #define BMP_TRIANGLE_DOWN_H                 RID_SD_START+330
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
 #define BMP_FADE_EFFECT_INDICATOR_H         RID_SD_START+332
+
+#define BMP_FOILH_09_H                      RID_SD_START+333
 
 // -----------------------------------------------------------------------------
 
