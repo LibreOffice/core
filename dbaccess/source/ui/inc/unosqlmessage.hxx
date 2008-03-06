@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosqlmessage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:32:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@ class OSQLMessageDialog
 protected:
     // <properties>
     ::com::sun::star::uno::Any  m_aException;
+    ::rtl::OUString             m_sHelpURL;
     // </properties>
+
 protected:
     OSQLMessageDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
