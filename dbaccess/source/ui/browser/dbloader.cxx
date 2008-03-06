@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:52:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 /** === end UNO includes === **/
 
-#include <comphelper/componentcontext.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -72,6 +72,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -217,9 +218,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         ServiceNameToImplName( URL_COMPONENT_TABLEDESIGN,           "org.openoffice.comp.dbu.OTableDesign"         ),
         ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN,        "org.openoffice.comp.dbu.ORelationDesign"      )
     };
+
     INetURLObject aParser( rURL );
     Reference< XController > xController;
-    sal_Bool bAttachModel = sal_False;
 
     const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
@@ -235,20 +236,23 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     // table data view, effectively. In this case, we need to adjust the module identifier.
     // 2008-02-05 / i85879 / frank.schoenheit@sun.com
     ::comphelper::NamedValueCollection aLoadArgs( rArgs );
-    if  (   ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
-        &&  (   ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEW, sal_True ) )
-            ||  ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEWBUTTON, sal_True ) )
-            )
-        )
+
+    if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
-        try
+        sal_Bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
+                                ||  ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
+
+        if ( bDisableBrowser )
         {
-            Reference< XModule > xModule( xController, UNO_QUERY_THROW );
-            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableDataView" ) ) );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
+            try
+            {
+                Reference< XModule > xModule( xController, UNO_QUERY_THROW );
+                xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableDataView" ) ) );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 
@@ -256,129 +260,97 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         sal_Bool bPreview = aLoadArgs.getOrDefault( "Preview", sal_False );
         if ( bPreview )
-        {
-            if (rListener.is())
-                rListener->loadCancelled(this);
+        {   // report designs cannot be previewed
+            if ( rListener.is() )
+                rListener->loadCancelled( this );
             return;
         }
         Reference< XModel > xReportModel( aLoadArgs.getOrDefault( "Model", Reference< XModel >() ) );
         if ( xReportModel.is() )
         {
-            xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ReportDesign"))),UNO_QUERY);
+            xController.set( m_xServiceFactory->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.ReportDesign" ) ) ), UNO_QUERY );
             if ( xController.is() )
             {
-                xController->attachModel(xReportModel);
+                xController->attachModel( xReportModel );
                 xReportModel->connectController( xController );
-                xReportModel->setCurrentController(xController);
+                xReportModel->setCurrentController( xController );
             }
         }
     }
 
     sal_Bool bSuccess = xController.is();
-    Reference<XModel> xModel;
-    if(bSuccess)
+    Reference< XModel > xDatabaseDocument;
+    if ( bSuccess )
     {
-        if ( bAttachModel )
+        Reference< XDataSource > xDataSource    ( aLoadArgs.getOrDefault( "DataSource",       Reference< XDataSource >() ) );
+        ::rtl::OUString          sDataSourceName( aLoadArgs.getOrDefault( "DataSourceName",   ::rtl::OUString()          ) );
+        Reference< XConnection > xConnection    ( aLoadArgs.getOrDefault( "ActiveConnection", Reference< XConnection >() ) );
+        if ( xDataSource.is() )
         {
-            PropertyValue aValue;
-            const PropertyValue* pIter  = m_aArgs.getConstArray();
-            const PropertyValue* pEnd       = pIter + m_aArgs.getLength();
-
-            for ( ; ( pIter != pEnd ) && !xModel.is(); ++pIter )
-            {
-                if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCE))
-                {
-                    Reference<XDataSource> xProp(pIter->Value,UNO_QUERY);
-                    xModel.set(getDataSourceOrModel(xProp),UNO_QUERY);
-                    break;
-                }
-                else if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCENAME))
-                {
-                    ::rtl::OUString sDataSource;
-                    pIter->Value >>= sDataSource;
-
-                    Reference< XNameAccess > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-                    xModel.set(getDataSourceOrModel(getDataSourceByName_displayError(xDatabaseContext,sDataSource,NULL,m_xServiceFactory,sal_False)),UNO_QUERY);
-                    break;
-                }
-                else if ( 0 == pIter->Name.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
-                {
-                    Reference< XChild > xAsChild( pIter->Value, UNO_QUERY );
-                    if ( xAsChild.is() )
-                    {
-                        OSL_ENSURE( Reference< XDataSource >( xAsChild->getParent(), UNO_QUERY ).is(),
-                            "DBContentLoader::load: a connection whose parent is no data source?" );
-                        xModel.set(getDataSourceOrModel( xAsChild->getParent() ),UNO_QUERY);
-                    }
-                }
-            }
-            if ( (bSuccess = ( xModel.is() && xModel->getURL().getLength() != 0)) )
-            {
-                try
-                {
-                    xController->attachModel(xModel);
-                    //xModel->setCurrentController(xController);
-                }
-                catch( const Exception& )
-                {
-                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception!" );
-                    bSuccess = sal_False;
-                }
-            }
-
-            OSL_ENSURE( bSuccess, "DBContentLoader::load: missing the required arguments - could not initialize the query design!" );
+            xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
         }
+        else if ( sDataSourceName.getLength() )
+        {
+            xDatabaseDocument.set( getDataSourceOrModel( getDataSourceByName_displayError( sDataSourceName, NULL, m_xServiceFactory, sal_False ) ), UNO_QUERY );
+        }
+        else if ( xConnection.is() )
+        {
+            Reference< XChild > xAsChild( xConnection, UNO_QUERY );
+            if ( xAsChild.is() )
+            {
+                OSL_ENSURE( Reference< XDataSource >( xAsChild->getParent(), UNO_QUERY ).is(),
+                    "DBContentLoader::load: a connection whose parent is no data source?" );
+                xDatabaseDocument.set( getDataSourceOrModel( xAsChild->getParent() ), UNO_QUERY );
+            }
+        }
+
         // init controller
-        if ( bSuccess )
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        try
         {
-            ::vos::OGuard aGuard(Application::GetSolarMutex());
-            // and initialize
-            try
-            {
-                Reference<XInitialization > xIni(xController,UNO_QUERY);
-                PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
-                Sequence< Any > aArgs(m_aArgs.getLength()+1);
+            Reference<XInitialization > xIni(xController,UNO_QUERY);
+            PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+            Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
-                Any* pBegin = aArgs.getArray();
-                Any* pEnd   = pBegin + aArgs.getLength();
-                *pBegin <<= aFrame;
-                const PropertyValue* pIter      = m_aArgs.getConstArray();
-                for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
-                {
-                    *pBegin <<= *pIter;
-                }
-
-                xIni->initialize(aArgs);
-            }
-            catch(Exception&)
+            Any* pBegin = aInitArgs.getArray();
+            Any* pEnd   = pBegin + aInitArgs.getLength();
+            *pBegin <<= aFrame;
+            const PropertyValue* pIter      = m_aArgs.getConstArray();
+            for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
             {
-                bSuccess = sal_False;
-                try
-                {
-                    if ( xController.is() )
-                        xController->attachModel( NULL );
-                }
-                catch( const Exception& )
-                {
-                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception!" );
-                }
+                *pBegin <<= *pIter;
             }
+
+            xIni->initialize(aInitArgs);
         }
-
+        catch(const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     // assign controller and frame
-    if (bSuccess && rListener.is())
+    if ( bSuccess )
     {
         if ( xController.is() && rFrame.is() )
             xController->attachFrame(rFrame);
-        Reference< document::XEventListener > xGlobalDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
-        document::EventObject aEvent( xModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated")) );
-        xGlobalDocEventBroadcaster->notifyEvent(aEvent);
-        rListener->loadFinished(this);
+
+        if ( xDatabaseDocument.is() )
+        {
+            Reference< document::XEventListener > xGlobalDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
+            document::EventObject aEvent( xDatabaseDocument, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated")) );
+            xGlobalDocEventBroadcaster->notifyEvent(aEvent);
+            // TODO: is this correct? The newly created view is not a view for the database document, at least not in
+            // the sense that its XController::getModel would return the database document
+        }
+
+        if ( rListener.is() )
+            rListener->loadFinished( this );
     }
-    else if (!bSuccess && rListener.is())
-        rListener->loadCancelled(this);
+    else
+        if ( rListener.is() )
+        rListener->loadCancelled( this );
 }
 
 // -----------------------------------------------------------------------
