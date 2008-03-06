@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 13:57:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:20:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEWITHLOCATION_HPP_
 #include "com/sun/star/resource/XStringResourceWithLocation.hpp"
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#endif
 
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -93,6 +96,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
+#endif
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -100,13 +106,16 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
+#include <util/MiscUtils.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::beans;
-
+using namespace ::com::sun::star::document;
+using namespace ::sf_misc;
 
 //.........................................................................
 namespace dlgprov
@@ -311,47 +320,43 @@ namespace dlgprov
             }
             else if ( sLocation == ::rtl::OUString::createFromAscii( "document" ) )
             {
-                if ( m_xModel.is() )
+                Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
+                if ( xDocumentScripts.is() )
                 {
-                    for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
-                    {
-                        if ( m_xModel == pObjShell->GetModel() )
-                        {
-                            xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
-                            break;
-                        }
-                    }
+                    xLibContainer.set( xDocumentScripts->getDialogLibraries(), UNO_QUERY );
+                    OSL_ENSURE( xLibContainer.is(),
+                        "DialogProviderImpl::createDialogModel: invalid dialog container!" );
                 }
             }
             else
             {
-                for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
+                Sequence< ::rtl::OUString > aOpenDocsTdocURLs( MiscUtils::allOpenTDocUrls( m_xContext ) );
+                const ::rtl::OUString* pTdocURL = aOpenDocsTdocURLs.getConstArray();
+                const ::rtl::OUString* pTdocURLEnd = aOpenDocsTdocURLs.getConstArray() + aOpenDocsTdocURLs.getLength();
+                for ( ; pTdocURL != pTdocURLEnd; ++pTdocURL )
                 {
-                    Reference< frame::XModel > xModel( pObjShell->GetModel(), UNO_QUERY );
-                    if ( xModel.is() )
+                    Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( *pTdocURL ) );
+                    OSL_ENSURE( xModel.is(), "DialogProviderImpl::createDialogModel: invalid document model!" );
+                    if ( !xModel.is() )
+                        continue;
+
+                    ::rtl::OUString sDocURL = xModel->getURL();
+                    if ( sDocURL.getLength() == 0 )
                     {
-                        ::rtl::OUString sDocURL = xModel->getURL();
-                        if ( sDocURL.getLength() == 0 )
-                        {
-                            Sequence < beans::PropertyValue > aProps = xModel->getArgs();
-                            sal_Int32 nProps = aProps.getLength();
-                            const beans::PropertyValue* pProps = aProps.getConstArray();
-                            for ( sal_Int32 i = 0; i < nProps; ++i )
-                            {
-                                // TODO: according to MBA the property 'Title' may change in future
-                                if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
-                                {
-                                    pProps[i].Value >>= sDocURL;
-                                    break;
-                                }
-                            }
-                        }
-                        if ( sLocation == sDocURL )
-                        {
-                            xLibContainer = Reference< XLibraryContainer >( pObjShell->GetDialogContainer(), UNO_QUERY );
-                            break;
-                        }
+                        ::comphelper::NamedValueCollection aModelArgs( xModel->getArgs() );
+                        sDocURL = aModelArgs.getOrDefault( "Title", sDocURL );
                     }
+
+                    if ( sLocation != sDocURL )
+                        continue;
+
+                    Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
+                    if ( !xDocumentScripts.is() )
+                        continue;
+
+                    xLibContainer.set( xDocumentScripts->getDialogLibraries(), UNO_QUERY );
+                    OSL_ENSURE( xLibContainer.is(),
+                        "DialogProviderImpl::createDialogModel: invalid dialog container!" );
                 }
             }
 
