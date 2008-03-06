@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.126 $
+#   $Revision: 1.127 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:42:00 $
+#   last change: $Author: kz $ $Date: 2008-03-06 14:20:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.126 $$"
+LIBSMKREV!:="$$Revision: 1.127 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -155,6 +155,7 @@ FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 .ENDIF
 PSPLIB=-lpsp$(DLLPOSTFIX)
 TKLIB=-ltk$(DLLPOSTFIX)
+LAYOUTLIB=-ltklayout$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB=-lxmlsec1-1
@@ -451,6 +452,7 @@ CPPCANVASLIB=icppcanvas.lib
 AGGLIB=iagg.lib
 PSPLIB=apsp.lib
 TKLIB=itk.lib
+LAYOUTLIB=itklayout.lib
 SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
