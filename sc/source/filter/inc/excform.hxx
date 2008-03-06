@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:11:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,6 @@ protected:
 
     void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
 
-    void                PushRangeOperator();
-
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
@@ -85,8 +83,10 @@ public:
     const ScTokenArray* GetBoolErr( XclBoolError );
     BOOL                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
-    static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
+#if 0
                             // return = TRUE -> String-Record folgt!
+    static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
+#endif
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
     static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
