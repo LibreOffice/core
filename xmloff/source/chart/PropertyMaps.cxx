@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,10 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                                                ::getCppuType((const chart::ChartAxisArrangeOrderType*)0) );
                 break;
 
-            case XML_SCH_TYPE_ERROR_CATEGORY:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartErrorCategoryEnumMap,
-                                               ::getCppuType((const chart::ChartErrorCategory*)0) );
+            case XML_SCH_TYPE_ERROR_BAR_STYLE:
+                // here we have a constant rather than an enum
+                pHdl = new XMLEnumPropertyHdl( aXMLChartErrorBarStyleEnumMap,
+                                               ::getCppuType((const sal_Int32*)0) );
                 break;
 
             case XML_SCH_TYPE_REGRESSION_TYPE:
