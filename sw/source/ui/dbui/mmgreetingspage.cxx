@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:33:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
 /*-- 11.05.2004 14:47:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwMailMergeGreetingsPage::commitPage(COMMIT_REASON)
+sal_Bool    SwMailMergeGreetingsPage::commitPage( CommitPageReason )
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
 
