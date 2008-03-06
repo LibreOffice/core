@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include "transporttypes.hxx"
 
 #include <list>
+#include <map>
 
 class SchXMLImport;
 class SchXMLImportHelper;
@@ -111,6 +112,20 @@ struct SeriesDefaultsAndStyles
 
 class SchXMLChartContext : public SvXMLImportContext
 {
+public:
+    SchXMLChartContext( SchXMLImportHelper& rImpHelper,
+                        SvXMLImport& rImport, const rtl::OUString& rLocalName );
+    virtual ~SchXMLChartContext();
+
+    virtual void StartElement( const com::sun::star::uno::Reference<
+                                     com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT nPrefix,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference<
+            com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
 private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
@@ -138,24 +153,6 @@ private:
 
     ::com::sun::star::awt::Size maChartSize;
 
-    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
-    void MergeSeriesForStockChart();
-
-public:
-    SchXMLChartContext( SchXMLImportHelper& rImpHelper,
-                        SvXMLImport& rImport, const rtl::OUString& rLocalName );
-    virtual ~SchXMLChartContext();
-
-    virtual void StartElement( const com::sun::star::uno::Reference<
-                                     com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
-    virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& xAttrList );
-
-private:
     /** @descr  This method bundles some settings to the chart model and executes them with
             a locked controller.  This includes setting the draw page size and setting
             the chart type.
@@ -173,6 +170,8 @@ private:
 
     void ChangeDiagramAccordingToTemplate(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xNewDoc );
+    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
+    void MergeSeriesForStockChart();
 };
 
 // ----------------------------------------
