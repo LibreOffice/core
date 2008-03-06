@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 15:47:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -247,15 +247,15 @@ void LicensePage::ActivatePage()
     OWizardPage::ActivatePage();
     m_bLicenseRead = m_mlLicense.IsEndReached();
     m_pbDown.GrabFocus();
-    implCheckNextButton();
+    updateDialogTravelUI();
 }
 
-sal_Bool LicensePage::determineNextButtonState()
+bool LicensePage::canAdvance() const
 {
     if (m_mlLicense.IsEndReached())
-        m_pbDown.Disable();
+        const_cast< LicensePage* >( this )->m_pbDown.Disable();
     else
-        m_pbDown.Enable();
+        const_cast< LicensePage* >( this )->m_pbDown.Enable();
 
     return m_bLicenseRead;
 }
@@ -269,13 +269,13 @@ IMPL_LINK( LicensePage, PageDownHdl, PushButton *, EMPTYARG )
 IMPL_LINK( LicensePage, EndReachedHdl, LicenseView *, EMPTYARG )
 {
     m_bLicenseRead = TRUE;
-    implCheckNextButton();
+    updateDialogTravelUI();
     return 0;
 }
 
 IMPL_LINK( LicensePage, ScrolledHdl, LicenseView *, EMPTYARG )
 {
-    implCheckNextButton();
+    updateDialogTravelUI();
     return 0;
 }
 
@@ -366,9 +366,9 @@ MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
     m_ftBody.SetText( aText );
 }
 
-sal_Bool MigrationPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool MigrationPage::commitPage( CommitPageReason _eReason )
 {
-    if (_eReason == CR_TRAVEL_NEXT && m_cbMigration.IsChecked() && !m_bMigrationDone)
+    if (_eReason == eTravelForward && m_cbMigration.IsChecked() && !m_bMigrationDone)
     {
         EnterWait();
         Migration::doMigration();
@@ -417,7 +417,7 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     }
 }
 
-sal_Bool UserPage::commitPage(COMMIT_REASON)
+sal_Bool UserPage::commitPage( CommitPageReason )
 {
     SvtUserOptions aUserOpt;
     aUserOpt.SetFirstName(m_edFirst.GetText());
@@ -446,9 +446,9 @@ UpdateCheckPage::UpdateCheckPage( svt::OWizardMachine* parent, const ResId& resi
     _setBold(m_ftHead);
 }
 
-sal_Bool UpdateCheckPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool UpdateCheckPage::commitPage( CommitPageReason _eReason )
 {
-    if ( _eReason == CR_TRAVEL_NEXT )
+    if ( _eReason == eTravelForward )
     {
         try {
             Reference < XNameReplace > xUpdateAccess;
@@ -501,9 +501,9 @@ RegistrationPage::RegistrationPage( Window* pParent, const ResId& rResid )
     updateButtonStates();
 }
 
-sal_Bool RegistrationPage::determineNextButtonState()
+bool RegistrationPage::canAdvance() const
 {
-    return sal_False;
+    return false;
 }
 
 void RegistrationPage::ActivatePage()
@@ -545,9 +545,9 @@ void RegistrationPage::updateButtonStates()
     }
 }
 
-sal_Bool RegistrationPage::commitPage( COMMIT_REASON eReason )
+sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
 {
-    if ( eReason == CR_FINISH )
+    if ( _eReason == eFinish )
     {
         ::svt::RegOptions aOptions;
         if ( m_rbNow.IsChecked())
@@ -629,7 +629,7 @@ void RegistrationPage::executeSingleMode()
     // the registration modes "Now" and "Later" are handled by the page
     RegistrationPage::RegistrationMode eMode = pPage->getRegistrationMode();
     if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
-        pPage->commitPage( IWizardPage::CR_FINISH );
+        pPage->commitPage( IWizardPage::eFinish );
     if ( eMode != RegistrationPage::rmLater )
         ::svt::RegOptions().removeReminder();
 }
