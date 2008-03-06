@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:41:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,10 +469,26 @@ String STR_DATA_ROLE_X_ERROR
 {
     Text [ en-US ] = "X-Error-Bars" ;
 };
+String STR_DATA_ROLE_X_ERROR_POSITIVE
+{
+    Text [ en-US ] = "Positive X-Error-Bars" ;
+};
+String STR_DATA_ROLE_X_ERROR_NEGATIVE
+{
+    Text [ en-US ] = "Negative X-Error-Bars" ;
+};
 
 String STR_DATA_ROLE_Y_ERROR
 {
     Text [ en-US ] = "Y-Error-Bars" ;
+};
+String STR_DATA_ROLE_Y_ERROR_POSITIVE
+{
+    Text [ en-US ] = "Positive Y-Error-Bars" ;
+};
+String STR_DATA_ROLE_Y_ERROR_NEGATIVE
+{
+    Text [ en-US ] = "Negative Y-Error-Bars" ;
 };
 
 String STR_DATA_ROLE_FIRST
@@ -512,7 +528,7 @@ String STR_DATA_UNNAMED_SERIES_WITH_INDEX
 
 String STR_DATA_SELECT_RANGE_FOR_SERIES
 {
-    Text [ en-US ] = "Choose range for %VALUETYPE of %SERIESNAME" ;
+    Text [ en-US ] = "Select Range for %VALUETYPE of %SERIESNAME" ;
 };
 
 String STR_DATA_SELECT_RANGE_FOR_CATEGORIES
@@ -523,6 +539,14 @@ String STR_DATA_SELECT_RANGE_FOR_CATEGORIES
 String STR_DATA_SELECT_RANGE_FOR_DATALABELS
 {
     Text [ en-US ] = "Select Range for data labels" ;
+};
+String STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS
+{
+    Text [ en-US ] = "Select Range for Positive Error Bars" ;
+};
+String STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS
+{
+    Text [ en-US ] = "Select Range for Negative Error Bars" ;
 };
 
 String STR_DATA_EDITOR_INCORRECT_INPUT
