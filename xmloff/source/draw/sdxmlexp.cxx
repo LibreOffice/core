@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:35:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,7 @@ DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*)
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define IMP_AUTOLAYOUT_INFO_MAX         (31L)
+#define IMP_AUTOLAYOUT_INFO_MAX         (32L)
 
 class ImpXMLAutoLayoutInfo
 {
@@ -478,7 +478,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         aLayoutSize.Width() = long( aLayoutSize.Width() * 0.854 );
         aLayoutSize.Height() = long( aLayoutSize.Height() * 0.444 );
     }
-    else if(mnType >= 22 && mnType <= 26) // AUTOLAYOUT_HANDOUT
+    else if((mnType >= 22 && mnType <= 26) || (mnType == 31)) // AUTOLAYOUT_HANDOUT
     {
         // keep info for inner area in maPresRect, put info for gap size
         // to maTitleRect position
@@ -1289,6 +1289,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                     case 24 : // AUTOLAYOUT_HANDOUT3
                     case 25 : // AUTOLAYOUT_HANDOUT4
                     case 26 : // AUTOLAYOUT_HANDOUT6
+                    case 31 : // AUTOLAYOUT_HANDOUT9
                     {
                         sal_Int32 nColCnt, nRowCnt;
                         sal_Int32 nGapX = pInfo->GetGapX();
@@ -1300,7 +1301,8 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                             case 23 : nColCnt = 1; nRowCnt = 2; break;
                             case 24 : nColCnt = 1; nRowCnt = 3; break;
                             case 25 : nColCnt = 2; nRowCnt = 2; break;
-                            case 26 : nColCnt = 3; nRowCnt = 3; break;
+                            case 26 : nColCnt = 3; nRowCnt = 2; break;
+                            case 31 : nColCnt = 3; nRowCnt = 3; break;
                             default:  nColCnt = 0; nRowCnt = 0; break;  // FIXME - What is correct values?
                         }
 
