@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-06 17:17:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1208,7 +1208,7 @@ void SimpleXMLParser::Default(
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const String &rFileName )
+XMLFile *SimpleXMLParser::Execute( const String &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
 //  printf("DBG: SimpleXMLParser::Execute( %s )", ByteString( rFileName , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -1229,7 +1229,8 @@ XMLFile *SimpleXMLParser::Execute( const String &rFileName )
 
     aStream.Close();
 
-    pXMLFile = new XMLFile( rFileName );
+    pXMLFile = pXMLFileIn;
+    pXMLFile->SetName( rFileName );
 
     return Execute( &aMemStream );
 }
@@ -1300,6 +1301,9 @@ XMLFile *SimpleXMLParser::Execute( SvMemoryStream *pStream )
               case XML_ERROR_EXTERNAL_ENTITY_HANDLING: aErrorInformation.sMessage += String::CreateFromAscii( "External entity handling" ); break;
               case XML_ERROR_NOT_STANDALONE: aErrorInformation.sMessage += String::CreateFromAscii( "Not standalone" ); break;
             case XML_ERROR_NONE: break;
+            default:
+                break;
+
         }
         delete pXMLFile;
         pXMLFile = NULL;
