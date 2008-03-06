@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-18 15:37:36 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:06:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ IDLFILES=\
     XTwoAxisYSupplier.idl\
     XSecondAxisTitleSupplier.idl\
     XYDiagram.idl\
+    ErrorBarStyle.idl
 
 # ------------------------------------------------------------------
 
