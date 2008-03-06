@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptProviderForBeanShell.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:02:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,44 +34,26 @@
 ************************************************************************/
 package com.sun.star.script.framework.provider.beanshell;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.frame.XModel;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
 
-import com.sun.star.beans.XPropertySet;
-
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.reflection.InvocationTargetException;
 
-import com.sun.star.script.CannotConvertException;
-
-import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.Map;
 import java.io.*;
 
 import java.net.URL;
-import java.net.MalformedURLException;
-import java.net.URLDecoder;
 
-import bsh.BshClassManager;
 import bsh.Interpreter;
 
-import com.sun.star.script.provider.XScriptContext;
-import com.sun.star.script.provider.XScriptProvider;
+import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.script.provider.XScript;
 import com.sun.star.script.provider.ScriptErrorRaisedException;
 import com.sun.star.script.provider.ScriptExceptionRaisedException;
@@ -87,8 +69,6 @@ public class ScriptProviderForBeanShell
 {
     public static class _ScriptProviderForBeanShell extends ScriptProvider
     {
-        private static ScriptEditorForBeanShell myScriptEditorForBeanShell;
-
         public _ScriptProviderForBeanShell(XComponentContext ctx)
         {
             super (ctx, "BeanShell");
@@ -102,7 +82,7 @@ public class ScriptProviderForBeanShell
             try
             {
                 scriptData = getScriptData( scriptURI );
-                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xModel );
+                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xModel, m_xInvocContext );
                 return script;
             }
             catch ( com.sun.star.uno.RuntimeException re )
@@ -195,12 +175,15 @@ class ScriptImpl implements XScript
     private XComponentContext m_xContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XModel m_xModel;
+    private XScriptInvocationContext m_xInvocContext;
 
-    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, XModel xModel ) throws com.sun.star.uno.RuntimeException
+    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, XModel xModel,
+            XScriptInvocationContext xContext ) throws com.sun.star.uno.RuntimeException
     {
         this.metaData = metaData;
         this.m_xContext = ctx;
         this.m_xModel = xModel;
+        this.m_xInvocContext = xContext;
 
         try
         {
@@ -289,7 +272,7 @@ class ScriptImpl implements XScript
             interpreter.setClassLoader(cl);
             try {
                 interpreter.set("XSCRIPTCONTEXT",
-                    ScriptContext.createContext(m_xModel,
+                    ScriptContext.createContext(m_xModel, m_xInvocContext,
                         m_xContext, m_xMultiComponentFactory));
 
                 interpreter.set("ARGUMENTS", aParams);
@@ -370,7 +353,7 @@ class ScriptImpl implements XScript
                 {
                     editor = ScriptEditorForBeanShell.getEditor();
                     editor.edit(
-                        ScriptContext.createContext(m_xModel,
+                        ScriptContext.createContext(m_xModel, m_xInvocContext,
                             m_xContext, m_xMultiComponentFactory), metaData );
                     editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
                 }

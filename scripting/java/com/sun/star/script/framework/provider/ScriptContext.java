@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptContext.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,24 +34,15 @@
 ************************************************************************/
 package com.sun.star.script.framework.provider;
 
+import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.Type;
-
-import java.util.HashMap;
 
 import com.sun.star.script.provider.XScriptContext;
 
@@ -82,17 +73,19 @@ public class ScriptContext extends PropertySet implements XScriptContext
 
 
     public XModel m_xModel = null;
+    public XScriptInvocationContext m_xInvocationContext = null;
     public String m_sDocURI = null;
     public XDesktop m_xDeskTop = null;
     public Integer m_iStorageID = null;
     public XComponentContext m_xComponentContext = null;
 
     public ScriptContext( XComponentContext xmComponentContext,
-        XDesktop xDesktop, XModel xModel)
+        XDesktop xDesktop, XModel xModel, XScriptInvocationContext xInvocContext)
     {
         this.m_xDeskTop = xDesktop;
         this.m_xComponentContext = xmComponentContext;
         this.m_xModel = xModel;
+        this.m_xInvocationContext = xInvocContext;
 
         if ( m_xModel != null )
         {
@@ -108,7 +101,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xComponentContext");
     }
 
-    public static XScriptContext createContext( XModel xModel,
+    public static XScriptContext createContext( XModel xModel, XScriptInvocationContext xInvocContext,
         XComponentContext xCtxt, XMultiComponentFactory xMCF)
     {
         XScriptContext sc = null;
@@ -124,7 +117,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
                 UnoRuntime.queryInterface(XDesktop.class, xInterface);
             if ( xModel != null )
             {
-                sc = new ScriptContext(xCtxt, xDesktop, xModel);
+                sc = new ScriptContext(xCtxt, xDesktop, xModel, xInvocContext);
             }
             else
             {
@@ -148,6 +141,11 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public XModel getDocument()
     {
         return m_xModel;
+    }
+
+    public XScriptInvocationContext getInvocationContext()
+    {
+        return m_xInvocationContext;
     }
 
     /**
