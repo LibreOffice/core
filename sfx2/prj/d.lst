@@ -79,6 +79,8 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\sfx2\objitem.hxx %_DEST%\inc%_EXT%\sfx2\objitem.hxx
 ..\inc\sfx2\signaturestate.hxx %_DEST%\inc%_EXT%\sfx2\signaturestate.hxx
 ..\inc\sfx2\docmacromode.hxx %_DEST%\inc%_EXT%\sfx2\docmacromode.hxx
+..\inc\sfx2\docstoragemodifylistener.hxx %_DEST%\inc%_EXT%\sfx2\docstoragemodifylistener.hxx
+..\inc\sfx2\sfxmodelfactory.hxx %_DEST%\inc%_EXT%\sfx2\sfxmodelfactory.hxx
 ..\inc\sfx2\objsh.hxx %_DEST%\inc%_EXT%\sfx2\objsh.hxx
 ..\inc\sfx2\printer.hxx %_DEST%\inc%_EXT%\sfx2\printer.hxx
 ..\inc\sfx2\printopt.hxx %_DEST%\inc%_EXT%\sfx2\printopt.hxx
