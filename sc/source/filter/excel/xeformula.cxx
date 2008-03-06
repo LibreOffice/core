@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:25:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ struct XclExpTokenData
 
     inline explicit     XclExpTokenData() : mpScToken( 0 ), mnSpaces( 0 ) {}
     inline bool         Is() const { return mpScToken != 0; }
-    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svErr ); }
+    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
@@ -317,6 +317,7 @@ private:
 
     void                ProcessDouble( const XclExpTokenData& rTokData );
     void                ProcessString( const XclExpTokenData& rTokData );
+    void                ProcessError( const XclExpTokenData& rTokData );
     void                ProcessMissing( const XclExpTokenData& rTokData );
     void                ProcessBad( const XclExpTokenData& rTokData );
     void                ProcessParentheses( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
@@ -471,7 +472,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
     if( mbOk )
     {
         XclExpTokenData aTokData( GetNextToken() );
-        USHORT nScError = rScTokArr.GetError();
+        USHORT nScError = rScTokArr.GetCodeError();
         if( (nScError != 0) && (!aTokData.Is() || (aTokData.GetOpCode() == ocStop)) )
         {
             // #i50253# convert simple ocStop token to error code formula (e.g. =#VALUE!)
@@ -1140,9 +1141,12 @@ XclExpTokenData XclExpFmlaCompImpl::Factor( XclExpTokenData aTokData, sal_uInt8 
 
     switch( eTokType )
     {
-        case svErr:         mbOk = false;                           break;
+        case svUnknown:     mbOk = false;                           break;
         case svDouble:      ProcessDouble( aTokData );              break;
         case svString:      ProcessString( aTokData );              break;
+#if 0   // erAck
+        case svError:       ProcessError( aTokData );               break;
+#endif
         case svSingleRef:   ProcessCellRef( aTokData, nExpClass );  break;
         case svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
         case svMatrix:      ProcessMatrix( aTokData, nExpClass );   break;
@@ -1186,6 +1190,15 @@ void XclExpFmlaCompImpl::ProcessString( const XclExpTokenData& rTokData )
 {
     AppendOpTokenId( EXC_TOKID_STR, EXC_TOKCLASS_NONE, rTokData.mnSpaces );
     Append( rTokData.mpScToken->GetString() );
+}
+
+void XclExpFmlaCompImpl::ProcessError( const XclExpTokenData& rTokData )
+{
+#if 0   // erAck
+    AppendErrorToken( XclTools::GetXclErrorCode( rTokData.mpScToken->GetError() ), rTokData.mnSpaces );
+#else
+    (void)rTokData; // compiler warning
+#endif
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpTokenData& rTokData )
@@ -1270,7 +1283,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
     // no exportable function found - try to create an external macro call
     if( !pFuncInfo && (eOpCode > ocEndUnOp) )
     {
-        const String& rFuncName = ScCompiler::GetStringFromOpCode( eOpCode, false );
+        const String& rFuncName = ScCompiler::GetStringFromOpCode( eOpCode );
         if( rFuncName.Len() )
         {
             aExtFuncData.Set( rFuncName, true, false );
