@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPoint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:00:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,7 @@ private:
         ::com::sun::star::beans::XPropertySet >   m_xParentProperties;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    bool m_bNoParentPropAllowed;
 };
 
 } //  namespace chart
