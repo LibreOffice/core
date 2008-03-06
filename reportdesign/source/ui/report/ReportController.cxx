@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:13:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,9 @@
 #endif
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 #ifndef RPTUI_PROPERTYSETFORWARD_HXX
 #include "PropertyForward.hxx"
@@ -1729,44 +1732,13 @@ short OReportController::saveModified()
 // -----------------------------------------------------------------------------
 void OReportController::impl_initialize( )
 {
-    try
-    {
-        Reference< XConnection > xConn;
-        const ::comphelper::NamedValueCollection& rIni = getInitParams();
-        if ( rIni.get_ensureType(static_cast< ::rtl::OUString>(PROPERTY_ACTIVECONNECTION),xConn) && xConn.is() )
-            initializeConnection( xConn );
+    OReportController_BASE::impl_initialize();
 
-        rIni.get_ensureType(static_cast< ::rtl::OUString>(PROPERTY_REPORTNAME),m_sName);
-        if ( !m_sName.getLength() )
-        {
-            static const ::rtl::OUString s_sDocumentTitle(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
-            rIni.get_ensureType(s_sDocumentTitle,m_sName);
-        }
+    const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
-
-        sal_Bool bFirstTry = sal_False;
-        if (!isConnected())
-        {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-            dbtools::isEmbeddedInDatabase(m_xReportDefinition,xConn);
-            if ( xConn.is() )
-                initializeConnection( xConn );
-            if (!isConnected())
-            {
-                reconnect(sal_False);
-                bFirstTry = sal_True;
-            }
-        }
-        if (!isConnected()) // so what should otherwise
-        {
-            if ( !bFirstTry )
-                connectionLostMessage();
-            throw Exception();
-        }
-    }
-    catch(const SQLException&)
-    {
-        OSL_ENSURE(sal_False, "OReportController::initialize: caught an exception!");
-    }
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_REPORTNAME, m_sName );
+    if ( !m_sName.getLength() )
+        rArguments.get_ensureType( "DocumentTitle", m_sName );
 
     try
     {
