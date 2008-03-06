@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:50:49 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:30:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@ SRC1FILES =\
     dlgolbul.src \
     LayerDialog.src			\
     PaneDockingWindow.src \
-    layeroptionsdlg.src
+    layeroptionsdlg.src \
+    printdialog.src
 
 
 SLOFILES =  \
@@ -128,7 +129,8 @@ SLOFILES =  \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj			\
         $(SLO)$/PaneDockingWindow.obj			\
-        $(SLO)$/PaneShells.obj
+        $(SLO)$/PaneShells.obj \
+        $(SLO)$/printdialog.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -154,7 +156,8 @@ LIB1OBJFILES= \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj		\
-        $(SLO)$/PaneShells.obj
+        $(SLO)$/PaneShells.obj \
+        $(SLO)$/printdialog.obj
 
 
 LIB2TARGET= $(SLB)$/sdui.lib
