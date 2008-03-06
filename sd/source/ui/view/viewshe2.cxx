@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:44:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,7 +744,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     }
 
     // Handoutseite an neues Format der Standardseiten anpassen
-    if ( ePageKind == PK_STANDARD )
+    if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
         GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(TRUE);
 
     // Undo Gruppe dem Undo Manager uebergeben
