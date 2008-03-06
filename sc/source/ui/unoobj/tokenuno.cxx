@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:19:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,13 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     if (mxOpCodeMap.get())
         rCompiler.SetFormulaLanguage( mxOpCodeMap );
     else
-        rCompiler.SetCompileEnglish( mbEnglish );
+    {
+        sal_Int32 nFormulaLanguage = mbEnglish ?
+            sheet::FormulaLanguage::ENGLISH :
+            sheet::FormulaLanguage::NATIVE;
+        ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( nFormulaLanguage);
+        rCompiler.SetFormulaLanguage( xMap);
+    }
 
     ScAddress::Convention eConv = ScAddress::CONV_UNSPECIFIED;
     if ( mbR1C1 )
