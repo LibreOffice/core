@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #include "CandleStickChart.hxx"
 //
 
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -638,7 +638,7 @@ namespace
 double lcl_getErrorBarLogicLength(
     const uno::Sequence< double > & rData,
     uno::Reference< beans::XPropertySet > xProp,
-    ErrorBarStyle eErrorBarStyle,
+    sal_Int32 nErrorBarStyle,
     sal_Int32 nIndex,
     bool bPositive )
 {
@@ -646,17 +646,17 @@ double lcl_getErrorBarLogicLength(
     ::rtl::math::setNan( & fResult );
     try
     {
-        switch( eErrorBarStyle )
+        switch( nErrorBarStyle )
         {
-            case ErrorBarStyle_NONE:
+            case ::com::sun::star::chart::ErrorBarStyle::NONE:
                 break;
-            case ErrorBarStyle_VARIANCE:
+            case ::com::sun::star::chart::ErrorBarStyle::VARIANCE:
                 fResult = StatisticsHelper::getVariance( rData );
                 break;
-            case ErrorBarStyle_STANDARD_DEVIATION:
+            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION:
                 fResult = StatisticsHelper::getStandardDeviation( rData );
                 break;
-            case ErrorBarStyle_RELATIVE:
+            case ::com::sun::star::chart::ErrorBarStyle::RELATIVE:
             {
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
@@ -672,12 +672,12 @@ double lcl_getErrorBarLogicLength(
                 }
             }
             break;
-            case ErrorBarStyle_ABSOLUTE:
+            case ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
                 xProp->getPropertyValue( bPositive
                                          ? C2U("PositiveError")
                                          : C2U("NegativeError")) >>= fResult;
                 break;
-            case ErrorBarStyle_ERROR_MARGIN:
+            case ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
             {
                 // todo: check if this is really what's called error-margin
                 double fPercent = 0;
@@ -701,16 +701,17 @@ double lcl_getErrorBarLogicLength(
                 }
             }
             break;
-            case ErrorBarStyle_STANDARD_ERROR:
+            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR:
                 fResult = StatisticsHelper::getStandardError( rData );
                 break;
-            case ErrorBarStyle_FROM_DATA:
-                // todo: implement
-                break;
-
-                // to avoid warning
-            case ErrorBarStyle_MAKE_FIXED_SIZE:
-                break;
+            case ::com::sun::star::chart::ErrorBarStyle::FROM_DATA:
+            {
+                uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
+                if( xErrorBarData.is())
+                    fResult = StatisticsHelper::getErrorFromDataSource(
+                        xErrorBarData, nIndex, bPositive /*, true */ /* y-error */ );
+            }
+            break;
         }
     }
     catch( uno::Exception & e )
@@ -805,16 +806,16 @@ void VSeriesPlotter::createErrorBar(
     {
         sal_Bool bShowPositive = sal_False;
         sal_Bool bShowNegative = sal_False;
-        ErrorBarStyle eErrorBarStyle = ErrorBarStyle_VARIANCE;
+        sal_Int32 nErrorBarStyle = ::com::sun::star::chart::ErrorBarStyle::VARIANCE;
 
         xErrorBarProperties->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPositive;
         xErrorBarProperties->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNegative;
-        xErrorBarProperties->getPropertyValue( C2U( "ErrorBarStyle" )) >>= eErrorBarStyle;
+        xErrorBarProperties->getPropertyValue( C2U( "ErrorBarStyle" )) >>= nErrorBarStyle;
 
         if(!bShowPositive && !bShowNegative)
             return;
 
-        if(eErrorBarStyle==chart2::ErrorBarStyle_NONE)
+        if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::NONE)
             return;
 
         bool bCreateNegativeBorder = false;//make a vertical line at the negative end of the error bar
@@ -830,7 +831,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowPositive )
         {
-            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, eErrorBarStyle, nIndex, true );
+            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, nErrorBarStyle, nIndex, true );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -848,7 +849,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowNegative )
         {
-            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, eErrorBarStyle, nIndex, false );
+            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, nErrorBarStyle, nIndex, false );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
