@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:57:06 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:26:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,4 @@ CDEFS += -DSOT_DLLIMPLEMENTATION
  CFLAGS += -xldscope=hidden
 .ENDIF # 5.5
 .ENDIF # sunpro5
-
-PDBTARGET=sot
 
