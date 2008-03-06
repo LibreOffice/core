@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSeriesOrDiagramProperty.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,12 @@ namespace chart
 namespace wrapper
 {
 
+enum tSeriesOrDiagramPropertyType
+{
+    DATA_SERIES,
+    DIAGRAM
+};
+
 //PROPERTYTYPE is the type of the outer property
 
 template< typename PROPERTYTYPE >
@@ -63,11 +69,13 @@ public:
     virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, PROPERTYTYPE aNewValue ) const =0;
 
     explicit WrappedSeriesOrDiagramProperty( const ::rtl::OUString& rName, const ::com::sun::star::uno::Any& rDefaulValue
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )//if !spChart2ModelContact.get() this property does belong to a single series and not to the whole diagram
+        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
+        , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedProperty(rName,::rtl::OUString())
             , m_spChart2ModelContact(spChart2ModelContact)
             , m_aOuterValue(rDefaulValue)
             , m_aDefaultValue(rDefaulValue)
+            , m_ePropertyType( ePropertyType )
     {
     }
     virtual ~WrappedSeriesOrDiagramProperty() {};
@@ -76,7 +84,8 @@ public:
     {
         bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
-        if( m_spChart2ModelContact.get() )
+        if( m_ePropertyType == DIAGRAM &&
+            m_spChart2ModelContact.get() )
         {
             ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
@@ -104,7 +113,8 @@ public:
     }
     void setInnerValue( PROPERTYTYPE aNewValue ) const
     {
-        if( m_spChart2ModelContact.get() )
+        if( m_ePropertyType == DIAGRAM &&
+            m_spChart2ModelContact.get() )
         {
             ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
@@ -127,7 +137,7 @@ public:
         if( ! (rOuterValue >>= aNewValue) )
             throw ::com::sun::star::lang::IllegalArgumentException( C2U("statistic property requires different type"), 0, 0 );
 
-        if( m_spChart2ModelContact.get() )
+        if( m_ePropertyType == DIAGRAM )
         {
             m_aOuterValue = rOuterValue;
 
@@ -148,7 +158,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
-        if( m_spChart2ModelContact.get() )
+        if( m_ePropertyType == DIAGRAM )
         {
             bool bHasAmbiguousValue = false;
             PROPERTYTYPE aValue;
@@ -176,9 +186,10 @@ public:
     }
 
 protected:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    mutable ::com::sun::star::uno::Any     m_aOuterValue;
-    ::com::sun::star::uno::Any             m_aDefaultValue;
+    ::boost::shared_ptr< Chart2ModelContact >  m_spChart2ModelContact;
+    mutable ::com::sun::star::uno::Any         m_aOuterValue;
+    ::com::sun::star::uno::Any                 m_aDefaultValue;
+    tSeriesOrDiagramPropertyType               m_ePropertyType;
 };
 
 } //namespace wrapper
