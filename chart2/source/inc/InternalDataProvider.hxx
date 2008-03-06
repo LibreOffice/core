@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:14:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #include "ServiceMacros.hxx"
 #endif
 
-#include "UncachedDataSequence.hxx"
+#include "CachedDataSequence.hxx"
 
 #include <map>
 #include <memory>
@@ -132,6 +132,8 @@ public:
     virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL appendSequence()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
         throw (::com::sun::star::uno::RuntimeException);
@@ -223,6 +225,9 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
         createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence >
+        createErrorBarDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
     void deleteMapReferences( const ::rtl::OUString & rRangeRepresentation );
     void adaptMapReferences(
         const ::rtl::OUString & rOldRangeRepresentation,
@@ -245,6 +250,11 @@ private:
     mutable tSequenceMap m_aSequenceMap;
     mutable ::std::auto_ptr< impl::InternalData > m_apData;
     bool m_bDataInColumns;
+
+//     typedef ::std::map< ::rtl::OUString,
+//             ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > >
+//         tHardRefSequenceMap;
+//     tHardRefSequenceMap m_aErrorBarSequences;
 };
 
 } //  namespace chart
