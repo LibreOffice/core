@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:25:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,38 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 }
 
 //------------------------------------------------------
+static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< lang::XMultiServiceFactory >& _rxFactory,
+    const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport )
+{
+    uno::Sequence< uno::Any > aArguments(2);
+    aArguments[0] <<= beans::NamedValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedObject" ) ),
+                        uno::makeAny( (sal_Bool)sal_True )
+                      );
+    aArguments[1] <<= beans::NamedValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedScriptSupport" ) ),
+                        uno::makeAny( (sal_Bool)_bEmbeddedScriptSupport )
+                      );
+
+    uno::Reference< uno::XInterface > xDocument;
+    try
+    {
+        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments );
+    }
+    catch( const uno::Exception& )
+    {
+        // some of our embedded object implementations (in particular chart) do neither support
+        // the EmbeddedObject, nor the EmbeddedScriptSupport argument. Also, they do not support
+        // XInitialization, which means the default factory from cppuhelper will throw an
+        // IllegalArgumentException when we try to create the instance with arguments.
+        // Okay, so we fall back to creating the instance without any arguments.
+        xDocument = _rxFactory->createInstance( _rDocumentServiceName );
+    }
+
+    return uno::Reference< util::XCloseable >( xDocument, uno::UNO_QUERY );
+}
+
+//------------------------------------------------------
 static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, const ::rtl::OUString& aModuleName )
 {
     if ( xDocument.is() )
@@ -333,8 +365,8 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 //------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 {
-    uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
-                                                uno::UNO_QUERY );
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+                                                m_bEmbeddedScriptSupport ) );
 
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
@@ -384,8 +416,8 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 //------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
-    uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
-                                                uno::UNO_QUERY );
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+                                                m_bEmbeddedScriptSupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -487,7 +519,8 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 {
     OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
 
-    uno::Reference< util::XCloseable >  xDocument( m_xFactory->createInstance( GetDocumentServiceName() ), uno::UNO_QUERY );
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+                                                m_bEmbeddedScriptSupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc
@@ -819,8 +852,8 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDescr_Impl(
                                         const uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
-    uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
-                                                uno::UNO_QUERY );
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
+                                                m_bEmbeddedScriptSupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -1050,13 +1083,36 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceFrameProperties" ) )
         {
             uno::Sequence< uno::Any > aOutFrameProps;
+            uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
             if ( lObjArgs[nObjInd].Value >>= aOutFrameProps )
+            {
                 m_pDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
+            }
+            else if ( lObjArgs[nObjInd].Value >>= aOutFramePropsTyped )
+            {
+                aOutFrameProps.realloc( aOutFramePropsTyped.getLength() );
+                uno::Any* pProp = aOutFrameProps.getArray();
+                for (   const beans::NamedValue* pTypedProp = aOutFramePropsTyped.getConstArray();
+                        pTypedProp != aOutFramePropsTyped.getConstArray() + aOutFramePropsTyped.getLength();
+                        ++pTypedProp, ++pProp
+                    )
+                {
+                    *pProp <<= *pTypedProp;
+                }
+                m_pDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
+            }
+            else
+                OSL_ENSURE( false, "OCommonEmbeddedObject::setPersistentEntry: illegal type for argument 'OutplaceFrameProperties'!" );
         }
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "ModuleName" ) )
         {
             lObjArgs[nObjInd].Value >>= m_aModuleName;
         }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "EmbeddedScriptSupport" ) )
+        {
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bEmbeddedScriptSupport );
+        }
+
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
