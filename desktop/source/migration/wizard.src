@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:52:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,6 @@ ModalDialog DLG_FIRSTSTART_WIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
     HelpID          = HID_FIRSTSTART_DIALOG;
-};
-
-String STR_FIRSTSTART_TITLE
-{
-    Text [ en-US ] = "Steps";
 };
 
 String STR_STATE_WELCOME
