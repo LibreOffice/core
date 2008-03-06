@@ -169,7 +169,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\imageresourceaccess.hxx %_DEST%\inc%_EXT%\svtools\imageresourceaccess.hxx
 ..\inc\svtools\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
 ..\inc\addresstemplate.hxx %_DEST%\inc%_EXT%\svtools\addresstemplate.hxx
-..\inc\genericunodialog.hxx %_DEST%\inc%_EXT%\svtools\genericunodialog.hxx
+..\inc\svtools\genericunodialog.hxx %_DEST%\inc%_EXT%\svtools\genericunodialog.hxx
 ..\inc\svtools\editbrowsebox.hxx %_DEST%\inc%_EXT%\svtools\editbrowsebox.hxx
 ..\inc\svtools\editimplementation.hxx %_DEST%\inc%_EXT%\svtools\editimplementation.hxx
 ..\inc\templatefoldercache.hxx %_DEST%\inc%_EXT%\svtools\templatefoldercache.hxx
@@ -300,7 +300,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 
 ..\inc\svtools\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
-..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 ..\inc\svtools\insdlg.hxx %_DEST%\inc%_EXT%\svtools\insdlg.hxx
 ..\inc\soerr.hxx %_DEST%\inc%_EXT%\svtools\soerr.hxx
 ..\inc\sores.hxx %_DEST%\inc%_EXT%\svtools\sores.hxx
