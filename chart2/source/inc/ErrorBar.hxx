@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:46:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,40 +40,29 @@
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
+#include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
-#include <com/sun/star/chart2/XRegressionCurve.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 
 namespace chart
 {
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+        ::com::sun::star::util::XModifyListener,
+        ::com::sun::star::chart2::data::XDataSource,
+        ::com::sun::star::chart2::data::XDataSink >
     ErrorBar_Base;
 }
 
@@ -134,6 +123,22 @@ protected:
         const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XDataSink ____
+    virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >& aData )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XDataSource ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XChild ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
+        throw (::com::sun::star::lang::NoSupportException,
+               ::com::sun::star::uno::RuntimeException);
+
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent();
 
@@ -144,7 +149,12 @@ private:
         ::com::sun::star::uno::XComponentContext >
                         m_xContext;
 
+    typedef ::std::vector< ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
+    tDataSequenceContainer m_aDataSequences;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 };
 
 } //  namespace chart
