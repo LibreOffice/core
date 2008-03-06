@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLParagraphContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,16 @@ class SchXMLParagraphContext : public SvXMLImportContext
 {
 private:
     ::rtl::OUString& mrText;
+    ::rtl::OUString* mpId;
     ::rtl::OUStringBuffer maBuffer;
 
 public:
     SchXMLParagraphContext( SvXMLImport& rImport,
                             const ::rtl::OUString& rLocalName,
-                            ::rtl::OUString& rText );
+                            ::rtl::OUString& rText,
+                            ::rtl::OUString * pOutId = 0 );
     virtual ~SchXMLParagraphContext();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
