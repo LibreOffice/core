@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:31:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,12 @@
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
+#include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/interaction.hxx>
@@ -74,6 +76,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/digest.h>
 #include <sfx2/signaturestate.hxx>
@@ -103,6 +106,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
@@ -322,10 +326,11 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
-            ,m_xServiceFactory(_rxFactory)
             ,m_bHasAnyObjectWithMacros( false )
+            ,m_bModificationLock( false )
+            ,m_aContext( _rxFactory )
             ,m_nLoginTimeout(0)
-            ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
+            ,m_bReadOnly(sal_False)
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
             ,m_bModified(sal_False)
@@ -335,7 +340,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_pSharedConnectionManager(NULL)
             ,m_refCount(0)
             ,m_nControllerLockCount(0)
-            ,m_bOwnStorage(sal_False)
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
@@ -358,8 +362,9 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
-            ,m_xServiceFactory(_rxFactory)
             ,m_bHasAnyObjectWithMacros( false )
+            ,m_bModificationLock( false )
+            ,m_aContext( _rxFactory )
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False)
@@ -372,7 +377,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_pSharedConnectionManager(NULL)
             ,m_refCount(0)
             ,m_nControllerLockCount(0)
-            ,m_bOwnStorage(sal_False)
 {
     DBG_CTOR(ODatabaseModelImpl,NULL);
     // adjust our readonly flag
@@ -412,10 +416,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
             makeAny( aAllowedTypes )
         );
 
-        m_xSettings = m_xSettings.query( m_xServiceFactory->createInstanceWithArguments(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.PropertyBag" ) ),
-            aInitArgs
-        ) );
+        m_xSettings.set( m_aContext.createComponentWithArguments( "com.sun.star.beans.PropertyBag", aInitArgs ), UNO_QUERY_THROW );
 
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );
@@ -455,7 +456,7 @@ namespace
     }
 
     // .........................................................................
-    bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const ::utl::SharedUNOComponent< XStorage >& _rxContainerStorage )
+    bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const SharedStorage& _rxContainerStorage )
     {
         bool bSomeDocHasMacros = false;
 
@@ -478,12 +479,7 @@ namespace
                 continue;
             }
 
-            ::utl::SharedUNOComponent< XStorage > xObjectStor( _rxContainerStorage->openStorageElement(
-                rPersistentName, ElementModes::READ ) );
-
-            // TODO: opening the storage is too expensive, find some hasByHierarchicalName or so
-
-            bSomeDocHasMacros = ::sfx2::DocumentMacroMode::storageHasMacros( xObjectStor );
+            bSomeDocHasMacros = ODatabaseModelImpl::objectHasMacros( _rxContainerStorage, rPersistentName );
         }
         return bSomeDocHasMacros;
     }
@@ -498,7 +494,7 @@ namespace
 
         try
         {
-            ::utl::SharedUNOComponent< XStorage > xContainerStorage( _rModel.getStorage(
+            SharedStorage xContainerStorage( _rModel.getStorage(
                 _rModel.getObjectContainerStorageName( _eType ), ElementModes::READ ) );
 
             if ( xContainerStorage.is() )
@@ -517,6 +513,29 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContainerStorage, const ::rtl::OUString& _rPersistentName )
+{
+    OSL_PRECOND( _rxContainerStorage.is(), "ODatabaseModelImpl::objectHasMacros: this will crash!" );
+
+    bool bHasMacros = true;
+    try
+    {
+        if ( !_rxContainerStorage->hasByName( _rPersistentName ) )
+            return false;
+
+        SharedStorage xObjectStor( _rxContainerStorage->openStorageElement(
+            _rPersistentName, ElementModes::READ ) );
+
+        bHasMacros = ::sfx2::DocumentMacroMode::storageHasMacros( xObjectStor );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return bHasMacros;
+}
+
+// -----------------------------------------------------------------------------
 void ODatabaseModelImpl::reset()
 {
     m_bReadOnly = sal_False;
@@ -529,11 +548,6 @@ void ODatabaseModelImpl::reset()
         m_pStorageAccess->release();
         m_pStorageAccess = NULL;
     }
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ODatabaseModelImpl::getURL(  )
-{
-    return m_sRealFileURL;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
@@ -633,13 +647,12 @@ void ODatabaseModelImpl::dispose()
         if ( bStore )
             commitRootStorage();
 
-        if ( m_bOwnStorage )
-            ::comphelper::disposeComponent(m_xStorage);
+        impl_switchToStorage_throw( NULL );
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
-    m_xStorage = NULL;
 
     if ( m_pStorageAccess )
     {
@@ -658,10 +671,8 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
         Sequence< Any > aArguments(1);
         aArguments.getArray()[0] <<= aUserInfo.getUserLanguage();
 
-        m_xNumberFormatsSupplier = Reference< XNumberFormatsSupplier >(m_xServiceFactory->createInstanceWithArguments(
-                ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier"),
-                aArguments),
-            UNO_QUERY);
+        m_xNumberFormatsSupplier.set(
+            m_aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aArguments ), UNO_QUERY_THROW );
         DBG_ASSERT(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
     }
     return m_xNumberFormatsSupplier;
@@ -693,84 +704,68 @@ void ODatabaseModelImpl::disposeStorages() SAL_THROW(())
 // -----------------------------------------------------------------------------
 Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() const
 {
-    return Reference< XSingleServiceFactory >(
-        m_xServiceFactory->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ) )
-        ),
-        UNO_QUERY
-    );
+    return Reference< XSingleServiceFactory >( m_aContext.createComponent( "com.sun.star.embed.StorageFactory" ), UNO_QUERY_THROW );
 }
 // -----------------------------------------------------------------------------
 void ODatabaseModelImpl::commitRootStorage()
 {
+    Reference< XStorage > xStorage( getOrCreateRootStorage() );
 #if OSL_DEBUG_LEVEL > 0
     bool bSuccess =
 #endif
-    commitStorageIfWriteable_ignoreErrors( getStorage() );
-    OSL_ENSURE( bSuccess || !getStorage().is(),
+    commitStorageIfWriteable_ignoreErrors( xStorage );
+    OSL_ENSURE( bSuccess || !xStorage.is(),
         "ODatabaseModelImpl::commitRootStorage: could commit the storage!" );
 }
 // -----------------------------------------------------------------------------
-Reference<XStorage> ODatabaseModelImpl::getStorage()
+Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
 {
-    if ( !m_xStorage.is() )
+    if ( !m_xDocumentStorage.is() )
     {
         Reference< XSingleServiceFactory> xStorageFactory = createStorageFactory();
-        if ( xStorageFactory.is() && m_sRealFileURL.getLength() )
+        if ( xStorageFactory.is() && m_sDocumentURL.getLength() )
         {
-            Sequence<Any> aArgs(2);
-            const PropertyValue* pEnd = m_aArgs.getConstArray() + m_aArgs.getLength();
-            const PropertyValue* pValue =::std::find_if(
-                m_aArgs.getConstArray(),
-                pEnd,
-                ::std::bind2nd(
-                    ::comphelper::TPropertyValueEqualFunctor(),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Stream" ) )
-                ));
+            Any aSource;
+            ::comphelper::NamedValueCollection aArgs( m_aArgs );
 
-            if ( pValue && pValue != pEnd )
-                aArgs[0] = pValue->Value;
-            else
+            aSource = aArgs.get( "Stream" );
+            if ( !aSource.hasValue() )
+                aSource = aArgs.get( "InputStream" );
+            if ( !aSource.hasValue() && m_sDocumentURL.getLength() )
+                aSource <<= m_sDocumentURL;
+
+            OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
+
+            if ( aSource.hasValue() )
             {
-                pValue =::std::find_if(
-                    m_aArgs.getConstArray(),
-                    pEnd,
-                    ::std::bind2nd(
-                        ::comphelper::TPropertyValueEqualFunctor(),
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) )
-                    ));
+                Sequence< Any > aStorageCreationArgs(2);
+                aStorageCreationArgs[0] = aSource;
+                aStorageCreationArgs[1] <<= ElementModes::READWRITE;
 
-                if ( pValue && pValue != pEnd )
-                    aArgs[0] = pValue->Value;
-                else if ( m_sRealFileURL.getLength() )
-                    aArgs[0] <<= m_sRealFileURL;
-            }
-
-            if ( aArgs[0].hasValue() )
-            {
-                aArgs[1] <<= ElementModes::READWRITE;
-
+                Reference< XStorage > xDocumentStorage;
                 try
                 {
-                    m_xStorage.set( xStorageFactory->createInstanceWithArguments( aArgs ),UNO_QUERY );
+                    xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
                 }
-                catch(Exception)
+                catch( const Exception& )
                 {
                     m_bDocumentReadOnly = sal_True;
-                    aArgs[1] <<= ElementModes::READ;
+                    aStorageCreationArgs[1] <<= ElementModes::READ;
                     try
                     {
-                        m_xStorage.set( xStorageFactory->createInstanceWithArguments( aArgs ),UNO_QUERY );
+                        xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
                     }
-                    catch(Exception)
+                    catch( const Exception& )
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
-                m_bOwnStorage = m_xStorage.is();
+
+                impl_switchToStorage_throw( xDocumentStorage );
             }
         }
     }
-    return m_xStorage;
+    return m_xDocumentStorage.getTyped();
 }
 // -----------------------------------------------------------------------------
 DocumentStorageAccess* ODatabaseModelImpl::getDocumentStorageAccess()
@@ -782,6 +777,19 @@ DocumentStorageAccess* ODatabaseModelImpl::getDocumentStorageAccess()
     }
     return m_pStorageAccess;
 }
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::modelIsDisposing( ResetModelAccess )
+{
+    m_xModel = Reference< XModel >();
+
+    // Basic libraries and Dialog libraries are a model facet, though held at this impl class.
+    // They automatically dispose themself when the model they belong to is being disposed.
+    // So, to not be tempted to do anything with them, again, we reset them.
+    m_xBasicLibraries.clear();
+    m_xDialogLibraries.clear();
+}
+
 // -----------------------------------------------------------------------------
 Reference< XDocumentSubStorageSupplier > ODatabaseModelImpl::getDocumentSubStorageSupplier()
 {
@@ -797,7 +805,7 @@ Reference<XStorage> ODatabaseModelImpl::getStorage( const ::rtl::OUString& _sSto
     {
         try
         {
-            Reference< XStorage > xMyStorage( getStorage() );
+            Reference< XStorage > xMyStorage( getOrCreateRootStorage() );
             if ( xMyStorage.is() )
             {
                 sal_Int32 nMode = m_bDocumentReadOnly ? ElementModes::READ : _nMode;
@@ -850,13 +858,15 @@ sal_Bool ODatabaseModelImpl::commitEmbeddedStorage( sal_Bool _bPreventRootCommit
     return bStore;
 
 }
+
 // -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+namespace
 {
-    bool bSuccess = false;
-    Reference<XTransactedObject> xTrans( _rxStorage, UNO_QUERY );
-    if ( xTrans.is() )
+    bool lcl_storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
     {
+        if ( !_rxStorage.is() )
+            return false;
+
         sal_Int32 nMode = ElementModes::READ;
         try
         {
@@ -866,10 +876,20 @@ bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& 
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ODatabaseModelImpl::commitStorageIfWriteable: could not determine the OpenMode of the storage!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
+        return ( nMode & ElementModes::WRITE ) != 0;
+    }
+}
 
-        if ( ( nMode & ElementModes::WRITE ) != 0 )
+// -----------------------------------------------------------------------------
+bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+{
+    bool bSuccess = false;
+    Reference<XTransactedObject> xTrans( _rxStorage, UNO_QUERY );
+    if ( xTrans.is() )
+    {
+        if ( lcl_storageIsWritable_nothrow( _rxStorage ) )
             xTrans->commit();
         bSuccess = true;
     }
@@ -892,6 +912,9 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
 // -----------------------------------------------------------------------------
 void ODatabaseModelImpl::setModified( sal_Bool _bModified )
 {
+    if ( isModifyLocked() )
+        return;
+
     try
     {
         Reference<XModifiable> xModi(m_xModel.get(),UNO_QUERY);
@@ -918,7 +941,7 @@ Reference<XDataSource> ODatabaseModelImpl::getDataSource( bool _bCreateIfNecessa
     return xDs;
 }
 // -----------------------------------------------------------------------------
-Reference< XModel> ODatabaseModelImpl::getModel_noCreate()
+Reference< XModel> ODatabaseModelImpl::getModel_noCreate() const
 {
     return m_xModel;
 }
@@ -947,7 +970,7 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
         acquire();  // prevent multiple releases
         dispose();
         m_pDBContext->storeTransientProperties(*this);
-        m_pDBContext->deregisterPrivate(m_sRealFileURL);
+        revokeDataSource();
         delete this;
         return 0;
     }
@@ -963,7 +986,7 @@ void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeExcept
         for (; aIter != aEnd ; ++aIter)
             commitStorageIfWriteable( aIter->second );
     }
-    catch(WrappedTargetException)
+    catch(const WrappedTargetException&)
     {
         // WrappedTargetException not allowed to leave
         throw IOException();
@@ -1052,6 +1075,13 @@ bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 }
 
 // -----------------------------------------------------------------------------
+void ODatabaseModelImpl::revokeDataSource() const
+{
+    if ( m_pDBContext && m_sDocumentURL.getLength() )
+        m_pDBContext->deregisterPrivate( m_sDocumentURL );
+}
+
+// -----------------------------------------------------------------------------
 void ODatabaseModelImpl::checkMacrosOnLoading()
 {
     ::comphelper::NamedValueCollection aArgs( m_aArgs );
@@ -1064,6 +1094,138 @@ void ODatabaseModelImpl::checkMacrosOnLoading()
 void ODatabaseModelImpl::resetMacroExecutionMode()
 {
     m_aMacroMode = ::sfx2::DocumentMacroMode( *this );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContainer( bool _bScript )
+{
+    Reference< XStorageBasedLibraryContainer >& rxContainer( _bScript ? m_xBasicLibraries : m_xDialogLibraries );
+    if ( rxContainer.is() )
+        return rxContainer;
+
+    Reference< XStorageBasedDocument > xDocument( getModel_noCreate(), UNO_QUERY_THROW );
+        // this is only to be called if there already exists a document model - in fact, it is
+        // to be called by the document model only
+
+    try
+    {
+        Reference< XStorageBasedLibraryContainer > (*Factory)( const Reference< XComponentContext >&, const Reference< XStorageBasedDocument >&)
+            = _bScript ? &DocumentScriptLibraryContainer::create : &DocumentDialogLibraryContainer::create;
+
+        rxContainer.set(
+            (*Factory)( m_aContext.getUNOContext(), xDocument ),
+            UNO_QUERY_THROW
+        );
+    }
+    catch( const RuntimeException& )
+    {
+        throw;
+    }
+    catch( const Exception& )
+    {
+        throw WrappedTargetRuntimeException(
+            ::rtl::OUString(),
+            xDocument,
+            ::cppu::getCaughtException()
+        );
+    }
+    return rxContainer;
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::storeLibraryContainersTo( const Reference< XStorage >& _rxToRootStorage )
+{
+    if ( m_xBasicLibraries.is() )
+        m_xBasicLibraries->storeLibrariesToStorage( _rxToRootStorage );
+
+    if ( m_xDialogLibraries.is() )
+        m_xDialogLibraries->storeLibrariesToStorage( _rxToRootStorage );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XStorage > ODatabaseModelImpl::switchToStorage( const Reference< XStorage >& _rxNewRootStorage )
+{
+    if ( !_rxNewRootStorage.is() )
+        throw IllegalArgumentException();
+
+    return impl_switchToStorage_throw( _rxNewRootStorage );
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    void lcl_modifyListening( ::osl::Mutex& _rMutex, ::sfx2::IModifiableDocument& _rDocument,
+        const Reference< XStorage >& _rxStorage, ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >& _inout_rListener,
+        bool _bListen )
+    {
+        Reference< XModifiable > xModify( _rxStorage, UNO_QUERY );
+        OSL_ENSURE( xModify.is() || !_rxStorage.is(), "lcl_modifyListening: storage can't notify us!" );
+
+        if ( xModify.is() && !_bListen && _inout_rListener.is() )
+        {
+            xModify->removeModifyListener( _inout_rListener.get() );
+        }
+
+        if ( _inout_rListener.is() )
+        {
+            _inout_rListener->dispose();
+            _inout_rListener = NULL;
+        }
+
+        if ( xModify.is() && _bListen )
+        {
+            _inout_rListener = new ::sfx2::DocumentStorageModifyListener( _rMutex, _rDocument );
+            xModify->addModifyListener( _inout_rListener.get() );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
+{
+    // stop listening for modifications at the old storage
+    lcl_modifyListening( m_xMutex->getMutex(), *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, false );
+
+    // set new storage
+    m_xDocumentStorage.reset( _rxNewRootStorage, SharedStorage::TakeOwnership );
+
+    // start listening for modifications
+    lcl_modifyListening( m_xMutex->getMutex(), *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, true );
+
+    // forward new storage to Basic and Dialog library containers
+    if ( m_xBasicLibraries.is() )
+        m_xBasicLibraries->setRootStorage( m_xDocumentStorage.getTyped() );
+    if ( m_xDialogLibraries.is() )
+        m_xDialogLibraries->setRootStorage( m_xDocumentStorage.getTyped() );
+
+    m_bReadOnly = !lcl_storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
+    // TODO: our data source, if it exists, must broadcast the change of its ReadOnly property
+
+    return m_xDocumentStorage.getTyped();
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation, const ::rtl::OUString& _rDocumentURL )
+{
+    // register at the database context, or change registration
+    if ( _rDocumentURL != m_sDocumentURL )
+    {
+        if ( m_pDBContext )
+        {
+            if ( m_sDocumentURL.getLength() )
+                m_pDBContext->nameChangePrivate( m_sDocumentURL, _rDocumentURL );
+            else
+                m_pDBContext->registerPrivate( _rDocumentURL, this );
+        }
+
+        INetURLObject aURL( _rDocumentURL );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            m_sName = _rDocumentURL;
+    }
+
+    // remember both
+    m_sDocFileLocation = _rDocumentLocation;
+    m_sDocumentURL = _rDocumentURL;
 }
 
 // -----------------------------------------------------------------------------
@@ -1122,10 +1284,10 @@ sal_Bool ODatabaseModelImpl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODatabaseModelImpl::getDocumentLocation() const
 {
-    // don't return getURL() (or m_sRealFileURL, which is the same). In case we were recovered
-    // after a previous crash of OOo, m_sFileURL points to the file which were loaded from,
+    // don't return getURL() (or m_sDocumentURL, which is the same). In case we were recovered
+    // after a previous crash of OOo, m_sDocFileLocation points to the file which were loaded from,
     // and this is the one we need for security checks.
-    return m_sFileURL;
+    return getLocation();
 }
 
 // -----------------------------------------------------------------------------
@@ -1140,7 +1302,7 @@ Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
 sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     // does our root storage contain macros?
-    if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xStorage ) )
+    if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocumentStorage ) )
         return true;
 
     // do we have forms or reports with macros?
@@ -1158,9 +1320,7 @@ sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 // -----------------------------------------------------------------------------
 Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() const
 {
-    // we do not (yet) support embedding scripts directly into the database document
-    // (but in sub documents only), so we're allowed to return <NULL/> here.
-    return Reference< XEmbeddedScripts >();
+    return Reference< XEmbeddedScripts >( getModel_noCreate(), UNO_QUERY );
 }
 
 // -----------------------------------------------------------------------------
@@ -1174,6 +1334,12 @@ sal_Int16 ODatabaseModelImpl::getScriptingSignatureState() const
 void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteractionHandler >& /*_rxInteraction*/ ) const
 {
     OSL_ENSURE( false, "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::storageIsModified()
+{
+    setModified( sal_True );
 }
 
 // -----------------------------------------------------------------------------
