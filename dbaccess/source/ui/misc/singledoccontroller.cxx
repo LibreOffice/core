@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:38:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,108 +36,149 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
-#include "singledoccontroller.hxx"
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBU_MISC_HRC_
-#include "dbu_misc.hrc"
-#endif
-#ifndef DBAUI_DATAVIEW_HXX
-#include "dataview.hxx"
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
+#include "dataview.hxx"
+#include "dbu_misc.hrc"
+#include "dbustrings.hrc"
+#include "moduledbu.hxx"
+#include "singledoccontroller.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <toolkit/unohlp.hxx>
+#include <tools/debug.hxx>
+#include <vcl/msgbox.hxx>
+
 //........................................................................
 namespace dbaui
 {
 //........................................................................
-    using namespace ::com::sun::star;
-    using namespace uno;
-    using namespace beans;
-    using namespace lang;
-    using namespace container;
-    using namespace sdbc;
-    using namespace sdb;
-    using namespace frame;
-    using namespace util;
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::sdbc::XConnection;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::container::XChild;
+    using ::com::sun::star::sdbc::XDataSource;
+    using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::frame::XFrame;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::sdbc::SQLException;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::sdb::XOfficeDatabaseDocument;
+    using ::com::sun::star::awt::XWindow;
+    using ::com::sun::star::sdbc::XDatabaseMetaData;
+    using ::com::sun::star::sdb::XDocumentDataSource;
+    using ::com::sun::star::document::XEmbeddedScripts;
+    using ::com::sun::star::lang::IllegalArgumentException;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    /** === end UNO using === **/
+
+    class DataSourceHolder
+    {
+    public:
+        DataSourceHolder()
+        {
+        }
+
+        DataSourceHolder( const Reference< XDataSource >& _rxDataSource )
+        {
+            m_xDataSource = _rxDataSource;
+            Reference< XDocumentDataSource > xDocDS( m_xDataSource, UNO_QUERY );
+            if ( xDocDS.is() )
+                m_xDocument = xDocDS->getDatabaseDocument();
+
+            m_xDataSourceProps.set( m_xDataSource, UNO_QUERY );
+        }
+
+        const Reference< XDataSource >&             getDataSource() const { return m_xDataSource; }
+        const Reference< XPropertySet >&            getDataSourceProps() const { return m_xDataSourceProps; }
+        const Reference< XOfficeDatabaseDocument >  getDatabaseDocument() const { return m_xDocument; }
+
+        bool is() const { return m_xDataSource.is(); }
+
+        void clear()
+        {
+            m_xDataSource.clear();
+            m_xDocument.clear();
+        }
+
+    private:
+        Reference< XDataSource >                m_xDataSource;
+        Reference< XPropertySet >               m_xDataSourceProps;
+        Reference< XOfficeDatabaseDocument >    m_xDocument;
+    };
 
     struct OSingleDocumentControllerImpl
     {
-        OModuleClient m_aModuleClient;
-        uno::Any m_aCurrentError; // contains the current error which can be set through IEnvironment
+    private:
+        ::boost::optional< bool >       m_aDocScriptSupport;
+
+    public:
+        OModuleClient                   m_aModuleClient;
+        Any                             m_aCurrentError; // contains the current error which can be set through IEnvironment
 
         // <properties>
-        SharedConnection            m_xConnection;
-        ::dbtools::DatabaseMetaData m_aSdbMetaData;
+        SharedConnection                m_xConnection;
+        ::dbtools::DatabaseMetaData     m_aSdbMetaData;
         // </properties>
-        ::rtl::OUString m_sDataSourceName;      // the data source we're working for
-        uno::Reference< beans::XPropertySet >
-                        m_xDataSource;
-        uno::Reference< util::XNumberFormatter >
-                        m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        ModelControllerConnector
-                        m_aModelConnector;
-        sal_Bool        m_bSuspended     : 1;   // is true when the controller was already suspended
-        sal_Bool        m_bEditable      : 1;   // is the control readonly or not
-        sal_Bool        m_bModified      : 1;   // is the data modified
+        ::rtl::OUString                 m_sDataSourceName;      // the data source we're working for
+        DataSourceHolder                m_aDataSource;
+        Reference< XModel >             m_xDocument;
+        Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
+        sal_Bool                        m_bEditable;    // is the control readonly or not
+        sal_Bool                        m_bModified;    // is the data modified
 
-        OSingleDocumentControllerImpl() :
-            m_bSuspended( sal_False )
+        OSingleDocumentControllerImpl()
+            :m_aDocScriptSupport()
+            ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
             ,m_bModified(sal_False)
         {
+        }
+
+        bool    documentHasScriptSupport() const
+        {
+            // TODO: revert to the disabled code. The current version is just to be able
+            // to integrate an intermediate version of the CWS, which should behave as
+            // if no macros in DB docs are allowed
+            return false;
+//            OSL_PRECOND( !!m_aDocScriptSupport,
+//                "OSingleDocumentControllerImpl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
+//            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
+        }
+
+        void    setDocumentScriptSupport( const bool _bSupport )
+        {
+            OSL_PRECOND( !m_aDocScriptSupport,
+                "OSingleDocumentControllerImpl::setDocumentScriptSupport: already initialized!" );
+            m_aDocScriptSupport = ::boost::optional< bool >( _bSupport );
         }
     };
 
@@ -146,35 +187,77 @@ namespace dbaui
     //====================================================================
     //--------------------------------------------------------------------
     OSingleDocumentController::OSingleDocumentController(const Reference< XMultiServiceFactory >& _rxORB)
-        :OSingleDocumentController_CBASE( _rxORB )
+        :OSingleDocumentController_Base( _rxORB )
         ,m_pImpl(new OSingleDocumentControllerImpl())
     {
     }
+
     //--------------------------------------------------------------------
     OSingleDocumentController::~OSingleDocumentController()
     {
     }
+
     //--------------------------------------------------------------------
-    Sequence<sal_Int8> SAL_CALL OSingleDocumentController::getImplementationId(  ) throw(RuntimeException)
+    void OSingleDocumentController::impl_initialize()
     {
-        static ::cppu::OImplementationId * pId = 0;
-        if (! pId)
+        OGenericUnoController::impl_initialize();
+
+        const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
+
+        Reference< XConnection > xConnection;
+        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
+
+        if ( !xConnection.is() )
+            ::dbtools::isEmbeddedInDatabase( getModel(), xConnection );
+
+        if ( xConnection.is() )
+            initializeConnection( xConnection );
+
+        bool bShowError = true;
+        if ( !isConnected() )
         {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if (! pId)
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
+            reconnect( sal_False );
+            bShowError = false;
         }
-        return pId->getImplementationId();
+        if ( !isConnected() )
+        {
+            if ( bShowError )
+                connectionLostMessage();
+            throw IllegalArgumentException();
+        }
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL OSingleDocumentController::queryInterface(const Type& _rType) throw (RuntimeException)
+    {
+        if ( _rType.equals( XScriptInvocationContext::static_type() ) )
+        {
+            if ( m_pImpl->documentHasScriptSupport() )
+                return makeAny( Reference< XScriptInvocationContext >( this ) );
+            return Any();
+        }
+
+        return OSingleDocumentController_Base::queryInterface( _rType );
     }
 
     //--------------------------------------------------------------------
     Sequence< Type > SAL_CALL OSingleDocumentController::getTypes(  ) throw (RuntimeException)
     {
-        return OSingleDocumentController_CBASE::getTypes();
+        Sequence< Type > aTypes( OSingleDocumentController_Base::getTypes() );
+        if ( !m_pImpl->documentHasScriptSupport() )
+        {
+            Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
+            ::std::remove_copy_if(
+                aTypes.getConstArray(),
+                aTypes.getConstArray() + aTypes.getLength(),
+                aStrippedTypes.getArray(),
+                ::std::bind2nd( ::std::equal_to< Type >(), XScriptInvocationContext::static_type() )
+            );
+            aTypes = aStrippedTypes;
+        }
+        return aTypes;
     }
+
     //--------------------------------------------------------------------
     void OSingleDocumentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
@@ -190,7 +273,8 @@ namespace dbaui
         // get the data source the connection belongs to
         try
         {
-            if ( !m_pImpl->m_xDataSource.is() )
+            // determine our data source
+            OSL_PRECOND( !m_pImpl->m_aDataSource.is(), "OSingleDocumentController::initializeConnection: already a data source in this phase?" );
             {
                 Reference< XChild > xConnAsChild( m_pImpl->m_xConnection, UNO_QUERY );
                 Reference< XDataSource > xDS;
@@ -198,23 +282,26 @@ namespace dbaui
                     xDS = Reference< XDataSource >( xConnAsChild->getParent(), UNO_QUERY );
 
                 // (take the indirection through XDataSource to ensure we have a correct object ....)
-                m_pImpl->m_xDataSource.set(xDS,UNO_QUERY);
-                DBG_ASSERT( m_pImpl->m_xDataSource.is(), "OSingleDocumentController::initializeConnection: could not retrieve the data source!" );
+                m_pImpl->m_aDataSource = xDS;
             }
+            OSL_POSTCOND( m_pImpl->m_aDataSource.is(), "OSingleDocumentController::initializeConnection: unable to obtain the data source object!" );
 
-            if ( m_pImpl->m_xDataSource.is() )
+            // determine the availability of script support in our document. Our own XScriptInvocationContext
+            // interface depends on this
+            m_pImpl->setDocumentScriptSupport( Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY ).is() );
+
+            // get a number formatter
+            Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps(), UNO_SET_THROW );
+            xDataSourceProps->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->m_sDataSourceName;
+            DBG_ASSERT( m_pImpl->m_sDataSourceName.getLength(), "OSingleDocumentController::initializeConnection: invalid data source name!" );
+            Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
+            if(xSupplier.is())
             {
-                m_pImpl->m_xDataSource->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->m_sDataSourceName;
-                DBG_ASSERT( m_pImpl->m_sDataSourceName.getLength(), "OSingleDocumentController::initializeConnection: invalid data source name!" );
-                Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
-                if(xSupplier.is())
-                {
-                    m_pImpl->m_xFormatter = Reference< util::XNumberFormatter >(getORB()
-                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-                    m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-                }
-                OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");
+                m_pImpl->m_xFormatter = Reference< XNumberFormatter >(getORB()
+                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
+            OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");
         }
         catch( const Exception& )
         {
@@ -242,7 +329,7 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_pImpl->m_xConnection.reset( connect( Reference<XDataSource>(m_pImpl->m_xDataSource,UNO_QUERY), sal_True ), SharedConnection::TakeOwnership );
+            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), sal_True ), SharedConnection::TakeOwnership );
             m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         }
 
@@ -270,14 +357,14 @@ namespace dbaui
     //--------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing()
     {
-        OSingleDocumentController_CBASE::disposing();
+        OSingleDocumentController_Base::disposing();
         m_aUndoManager.Clear();
 
         disconnect();
 
         attachFrame( Reference < XFrame >() );
 
-        m_pImpl->m_xDataSource.clear();
+        m_pImpl->m_aDataSource.clear();
     }
 
     //--------------------------------------------------------------------
@@ -287,7 +374,7 @@ namespace dbaui
         if ( getView() )
             getView()->enableSeparator( );
 
-        return OSingleDocumentController_CBASE::Construct( _pParent );
+        return OSingleDocumentController_Base::Construct( _pParent );
     }
 
     //--------------------------------------------------------------------
@@ -311,7 +398,7 @@ namespace dbaui
             }
         }
         else
-            OSingleDocumentController_CBASE::disposing( _rSource );
+            OSingleDocumentController_Base::disposing( _rSource );
     }
     //--------------------------------------------------------------------
     namespace
@@ -343,7 +430,7 @@ namespace dbaui
         @param  _aException
             contains a description of the error or the error directly
     */
-    void OSingleDocumentController::appendError(const sdbc::SQLException& _aException)
+    void OSingleDocumentController::appendError(const SQLException& _aException)
     {
         concatSQLExceptions(m_pImpl->m_aCurrentError,makeAny(_aException));
     }
@@ -359,7 +446,7 @@ namespace dbaui
         @param  _rException
             will contain the current error
     */
-    void OSingleDocumentController::getError(sdbc::SQLException& _rException ) const
+    void OSingleDocumentController::getError(SQLException& _rException ) const
     {
         m_pImpl->m_aCurrentError >>= _rException;
     }
@@ -408,7 +495,7 @@ namespace dbaui
                 }
                 break;
             default:
-                aReturn = OSingleDocumentController_CBASE::GetState(_nId);
+                aReturn = OSingleDocumentController_Base::GetState(_nId);
         }
         return aReturn;
     }
@@ -456,34 +543,21 @@ namespace dbaui
         if ( isFeatureSupported( ID_BROWSER_SAVEASDOC ) )
             InvalidateFeature(ID_BROWSER_SAVEASDOC);
     }
-    // -----------------------------------------------------------------------------
-    Reference< XModel >  SAL_CALL OSingleDocumentController::getModel(void) throw( RuntimeException )
-    {
-        return NULL;//Reference< XModel >(m_pImpl->m_xDataSource,UNO_QUERY); // OJ: i31891
-    }
-    // -----------------------------------------------------------------------------
-    sal_Bool SAL_CALL OSingleDocumentController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
 
-        Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
-        m_pImpl->m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(), UNO_QUERY );
-
-        return sal_True;
-    }
     // -----------------------------------------------------------------------------
     ::rtl::OUString OSingleDocumentController::getDataSourceName() const
     {
         ::rtl::OUString sName;
-        if ( m_pImpl->m_xDataSource.is() )
-            m_pImpl->m_xDataSource->getPropertyValue(PROPERTY_NAME) >>= sName;
+        Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps() );
+        if ( xDataSourceProps.is() )
+            xDataSourceProps->getPropertyValue(PROPERTY_NAME) >>= sName;
         return sName;
     }
     // -----------------------------------------------------------------------------
     void OSingleDocumentController::connectionLostMessage() const
     {
         String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-        Reference< awt::XWindow> xWindow = getTopMostContainerWindow();
+        Reference< XWindow > xWindow = getTopMostContainerWindow();
         Window* pWin = NULL;
         if ( xWindow.is() )
             pWin = VCLUnoHelper::GetWindow(xWindow);
@@ -493,27 +567,87 @@ namespace dbaui
         InfoBox(pWin, aMessage).Execute();
     }
     // -----------------------------------------------------------------------------
-    const Reference< XConnection >&
-                    OSingleDocumentController::getConnection() const
+    const Reference< XConnection >& OSingleDocumentController::getConnection() const
     {
         return m_pImpl->m_xConnection;
     }
+
     // -----------------------------------------------------------------------------
-    sal_Bool        OSingleDocumentController::isReadOnly()         const { return !m_pImpl->m_bEditable; }
-    sal_Bool        OSingleDocumentController::isEditable()         const { return m_pImpl->m_bEditable; }
-    sal_Bool        OSingleDocumentController::isModified()         const { return m_pImpl->m_bModified; }
-    void            OSingleDocumentController::setEditable(sal_Bool _bEditable)   { m_pImpl->m_bEditable = _bEditable; }
-    const ::dbtools::DatabaseMetaData& OSingleDocumentController::getSdbMetaData() const { return m_pImpl->m_aSdbMetaData; }
-    sal_Bool        OSingleDocumentController::isConnected() const { return m_pImpl->m_xConnection.is(); }
-    uno::Reference< sdbc::XDatabaseMetaData >
-                    OSingleDocumentController::getMetaData( ) const
+    sal_Bool OSingleDocumentController::isReadOnly() const
     {
-        return isConnected() ? m_pImpl->m_xConnection->getMetaData() : uno::Reference< sdbc::XDatabaseMetaData >();
+        return !m_pImpl->m_bEditable;
     }
-    const uno::Reference< beans::XPropertySet >&
-                    OSingleDocumentController::getDataSource() const { return m_pImpl->m_xDataSource; }
-    sal_Bool    OSingleDocumentController::haveDataSource() const { return m_pImpl->m_xDataSource.is(); }
-    uno::Reference< util::XNumberFormatter >    OSingleDocumentController::getNumberFormatter() const   { return m_pImpl->m_xFormatter; }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::isEditable() const
+    {
+        return m_pImpl->m_bEditable;
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::isModified() const
+    {
+        return m_pImpl->m_bModified;
+    }
+
+    // -----------------------------------------------------------------------------
+    void OSingleDocumentController::setEditable(sal_Bool _bEditable)
+    {
+        m_pImpl->m_bEditable = _bEditable;
+    }
+
+    // -----------------------------------------------------------------------------
+    const ::dbtools::DatabaseMetaData& OSingleDocumentController::getSdbMetaData() const
+    {
+        return m_pImpl->m_aSdbMetaData;
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::isConnected() const
+    {
+        return m_pImpl->m_xConnection.is();
+    }
+
+    // -----------------------------------------------------------------------------
+    Reference< XDatabaseMetaData > OSingleDocumentController::getMetaData( ) const
+    {
+        return isConnected() ? m_pImpl->m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
+    }
+
+    // -----------------------------------------------------------------------------
+    const Reference< XPropertySet >& OSingleDocumentController::getDataSource() const
+    {
+        return m_pImpl->m_aDataSource.getDataSourceProps();
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::haveDataSource() const
+    {
+        return m_pImpl->m_aDataSource.is();
+    }
+
+    // -----------------------------------------------------------------------------
+    Reference< XModel > OSingleDocumentController::getDatabaseDocument() const
+    {
+        return Reference< XModel >( m_pImpl->m_aDataSource.getDatabaseDocument(), UNO_QUERY );
+    }
+
+    // -----------------------------------------------------------------------------
+    Reference< XNumberFormatter > OSingleDocumentController::getNumberFormatter() const
+    {
+        return m_pImpl->m_xFormatter;
+    }
+
+    // -----------------------------------------------------------------------------
+    Reference< XEmbeddedScripts > SAL_CALL OSingleDocumentController::getScriptContainer() throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !m_pImpl->documentHasScriptSupport() )
+            return NULL;
+
+        return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
+    }
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
