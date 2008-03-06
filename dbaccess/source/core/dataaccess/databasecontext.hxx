@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:33:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,10 @@
 #ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
 #include "ModelImpl.hxx"
 #endif
+#ifndef BASICMANAGERREPOSITORY_HXX
+#include <basic/basicmanagerrepository.hxx>
+#endif
+
 #include <boost/shared_ptr.hpp>
 
 // needed for registration
@@ -115,7 +119,8 @@ typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XService
                                             ,   ::com::sun::star::lang::XUnoTunnel
                                             >   DatabaseAccessContext_Base;
 
-class ODatabaseContext : public DatabaseAccessContext_Base
+class ODatabaseContext  :public DatabaseAccessContext_Base
+                        ,public ::basic::BasicManagerCreationListener
 {
 private:
     /** loads the given object from the given URL
@@ -136,7 +141,7 @@ private:
         @param  _sURL       The file URL of the data source
         @param  _xObject    The data source itself.
     */
-    void setTransientProperties(const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
+    void setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel );
 
 protected:
     ::osl::Mutex                    m_aMutex;
@@ -208,6 +213,13 @@ public:
     void deregisterPrivate(const ::rtl::OUString& _sName);
     void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
     void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
+
+private:
+    // BasicManagerCreationListener
+    virtual void onBasicManagerCreated(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxForDocument,
+        BasicManager& _rBasicManager
+    );
 };
 
 //........................................................................
