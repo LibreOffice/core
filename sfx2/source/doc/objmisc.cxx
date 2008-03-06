@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:09:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _INETMSG_HXX //autogen
 #include <svtools/inetmsg.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -49,6 +52,7 @@
 #include <svtools/intitem.hxx>
 #endif
 #include <vos/mutex.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -58,6 +62,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_FINISHENGINEEVENT_HPP_
 #include <com/sun/star/script/FinishEngineEvent.hpp>
@@ -92,12 +99,19 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+
 
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
@@ -114,14 +128,19 @@
 #include <svtools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::provider;
+using namespace ::com::sun::star::container;
 
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -1387,8 +1406,6 @@ sal_Bool SfxObjectShell::IsBasic(
     const String & rCode, SbxObject * pVCtrl )
 {
     if( !rCode.Len() ) return sal_False;
-    if( !pImp->bIsBasicDefault )
-        return sal_False;
     return SfxMacroConfig::IsBasic( pVCtrl, rCode, GetBasicManager() );
 }
 
@@ -1420,6 +1437,87 @@ ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn, Sbx
     return nErr;
 }
 
+namespace
+{
+    static bool lcl_isScriptAccessAllowed_nothrow( const Reference< XInterface >& _rxScriptContext )
+    {
+        try
+        {
+            Reference< XEmbeddedScripts > xScripts( _rxScriptContext, UNO_QUERY );
+            if ( !xScripts.is() )
+            {
+                Reference< XScriptInvocationContext > xContext( _rxScriptContext, UNO_QUERY_THROW );
+                xScripts.set( xContext->getScriptContainer(), UNO_SET_THROW );
+            }
+
+            return xScripts->getAllowMacroExecution();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return false;
+    }
+}
+
+ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const ::rtl::OUString& _rScriptURL,
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+{
+    OSL_TRACE( "in CallXScript" );
+    ErrCode nErr = ERRCODE_NONE;
+
+    bool bIsDocumentScript = ( _rScriptURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "location=document" ) ) >= 0 );
+        // TODO: we should parse the URL, and check whether there is a parameter with this name.
+        // Otherwise, we might find too much.
+    if ( bIsDocumentScript && !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
+        return ERRCODE_IO_ACCESSDENIED;
+
+    bool bCaughtException = false;
+    Any aException;
+    try
+    {
+        // obtain/create a script provider
+        Reference< provider::XScriptProvider > xScriptProvider;
+        Reference< provider::XScriptProviderSupplier > xSPS( _rxScriptContext, UNO_QUERY );
+        if ( xSPS.is() )
+            xScriptProvider.set( xSPS->getScriptProvider() );
+
+        if ( !xScriptProvider.is() )
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< provider::XScriptProviderFactory > xScriptProviderFactory(
+                aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+            xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( _rxScriptContext ) ), UNO_SET_THROW );
+        }
+
+        // obtain the script, and execute it
+        Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_QUERY_THROW );
+
+        aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
+    }
+    catch ( const uno::Exception& )
+    {
+        aException = ::cppu::getCaughtException();
+        bCaughtException = TRUE;
+        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
+    }
+
+    if ( bCaughtException )
+    {
+        ::std::auto_ptr< VclAbstractDialog > pScriptErrDlg;
+        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+        if ( pFact )
+            pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( NULL, aException ) );
+        OSL_ENSURE( pScriptErrDlg.get(), "SfxObjectShell::CallXScript: no script error dialog!" );
+
+        if ( pScriptErrDlg.get() )
+            pScriptErrDlg->Execute();
+    }
+
+    OSL_TRACE( "leaving CallXScript" );
+    return nErr;
+}
+
 // perhaps rename to CallScript once we get rid of the existing CallScript
 // and Call, CallBasic, CallStarBasic methods
 ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
@@ -1430,98 +1528,8 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
             aOutParam)
 {
-    OSL_TRACE( "in CallXScript" );
-    ErrCode nErr = ERRCODE_NONE;
-
-    bool bCaughtException = FALSE;
-    ::com::sun::star::uno::Any aException;
-
-    // security check if it's not an application script?
-    // or if it's a document script??
-    if( rScriptURL.Search( UniString::CreateFromAscii( "location=document" ) )
-            > 0 )
-    {
-        if ( !AdjustMacroMode( String() ) )
-            return ERRCODE_IO_ACCESSDENIED;
-    }
-
-    try
-    {
-        Reference< provider::XScriptProviderSupplier > xSPS =
-            Reference< provider::XScriptProviderSupplier >
-                ( GetModel(), UNO_QUERY_THROW );
-
-        Reference< provider::XScriptProvider > xScriptProvider =
-            xSPS->getScriptProvider();
-
-        if( !xScriptProvider.is() )
-        {
-            OSL_TRACE( "CallXScript: no ScriptProvider" );
-            throw RuntimeException(::rtl::OUString(), Reference< XInterface >());
-        }
-
-        ::rtl::OUString oScriptURL( rScriptURL.GetBuffer() );
-        Reference< provider::XScript > xScript =
-            xScriptProvider->getScript( oScriptURL );
-
-        if( !xScript.is() )
-        {
-            OSL_TRACE( "CallXScript: no Script" );
-            throw RuntimeException(::rtl::OUString(), Reference< XInterface >());
-        }
-        OSL_TRACE( "CallXScript, got Script, about to invoke");
-        OSL_TRACE( "CallXScript, number of params is: %d", aParams.getLength() );
-        aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
-        OSL_TRACE( "CallXScript, invoke is finished");
-    }
-    // Use the errors from basic for the time being
-    catch ( ::com::sun::star::uno::RuntimeException& rte )
-    {
-        OSL_TRACE( "CallXScript: exception rte" );
-
-        aException = makeAny( rte );
-        bCaughtException = TRUE;
-        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
-    }
-    catch ( provider::ScriptFrameworkErrorException& ite )
-    {
-        OSL_TRACE( "CallXScript: exception ite" );
-
-        aException = makeAny( ite );
-        bCaughtException = TRUE;
-        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
-    }
-    catch ( ::com::sun::star::reflection::InvocationTargetException& ite )
-    {
-        OSL_TRACE( "CallXScript: exception ite" );
-
-        aException = makeAny( ite );
-        bCaughtException = TRUE;
-        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
-    }
-
-    if ( bCaughtException )
-    {
-        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-
-        if ( pFact != NULL )
-        {
-            VclAbstractDialog* pDlg =
-                pFact->CreateScriptErrorDialog( GetDialogParent(), aException );
-
-            if ( pDlg != NULL )
-            {
-                pDlg->Execute();
-                delete pDlg;
-            }
-        }
-    }
-
-    OSL_TRACE( "leaving CallXScript" );
-    return nErr;
+    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam );
 }
-
-extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 //-------------------------------------------------------------------------
 namespace {
