@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:12:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,9 +174,8 @@ namespace dbaui
         sal_Bool getSelectedDataSource(DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
         // svt::IWizardPage
-        virtual void enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess );
         virtual void initializePage();
-        virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool commitPage( CommitPageReason _eReason );
 
         void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
         bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
