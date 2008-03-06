@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 14:52:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:07:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define com_sun_star_chart_ErrorBar_idl
 
 #include <com/sun/star/drawing/LineProperties.idl>
-#include <com/sun/star/chart2/ErrorBarStyle.idl>
+#include <com/sun/star/chart/ErrorBarStyle.idl>
 
 module com
 {
@@ -57,7 +57,7 @@ service ErrorBar
 
     /**
      */
-    [property] ErrorBarStyle ErrorBarStyle;
+    [property] ::com::sun::star::chart::ErrorBarStyle ErrorBarStyle;
 
     /**
      */
