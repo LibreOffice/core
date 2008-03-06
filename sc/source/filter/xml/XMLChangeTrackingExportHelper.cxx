@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:33:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,10 +435,15 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
     if (pFormulaCell)
     {
         rtl::OUString sAddress;
-        ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, rExport.GetDocument());
+        const ScDocument* pDoc = rExport.GetDocument();
+        ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
+        const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+        /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, this
+         * should be XML_NAMESPACE_OF instead of XML_NAMESPACE_NONE! */
+        sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
         String sFormula;
-        pFormulaCell->GetEnglishFormula(sFormula, sal_True);
+        pFormulaCell->GetFormula(sFormula, eGrammar);
         rtl::OUString sOUFormula(sFormula);
         sal_uInt8 nMatrixFlag(pFormulaCell->GetMatrixFlag());
         if (nMatrixFlag)
@@ -460,12 +465,12 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
             }
             rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sMatrixFormula, sal_False );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         else
         {
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sFormula, sal_False );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         if (pFormulaCell->IsValue())
