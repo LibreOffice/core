@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:25:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
 /*-- 05.07.2004 13:55:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeAddressBlockPage::determineNextButtonState()
+bool SwMailMergeAddressBlockPage::canAdvance() const
 {
     return m_pWizard->GetConfigItem().GetResultSet().is();
 }
@@ -205,9 +205,9 @@ void SwMailMergeAddressBlockPage::ActivatePage()
 /*-- 27.05.2004 13:59:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool    SwMailMergeAddressBlockPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool    SwMailMergeAddressBlockPage::commitPage( CommitPageReason _eReason )
 {
-    if(CR_TRAVEL_NEXT == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is())
+    if ( eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
         return sal_False;
     return sal_True;
 }
