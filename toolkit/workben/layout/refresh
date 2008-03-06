@@ -1,0 +1,3 @@
+echo "source me ..."
+test -n "${INPATH}" && rm -Rf ../../${INPATH}
+build debug=true && cp ../../${INPATH}/lib/*.so ../../../solver/680/${INPATH}/lib && dmake debug=true && ../../${INPATH}/bin/test "$@"
