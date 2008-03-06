@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:24:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:22:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,18 +49,17 @@ namespace svt
 {
 //........................................................................
 
-    namespace
-    {
-        typedef ::std::vector< WizardTypes::WizardState > Path;
-    }
-
     struct RoadmapWizardImpl;
+    class RoadmapWizard;
 
     struct RoadmapWizardTypes
     {
     public:
-        typedef sal_Int16  PathId;
+        typedef sal_Int16                                   PathId;
+        typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
+        typedef TabPage* (* RoadmapPageFactory)( RoadmapWizard& );
     };
+
     //====================================================================
     //= RoadmapWizard
     //====================================================================
@@ -89,8 +88,11 @@ namespace svt
         RoadmapWizardImpl*  m_pImpl;
 
     public:
-        RoadmapWizard( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags,
-            const ResId& _rRoadmapTitleResource, sal_Bool _bCheckButtonStates = sal_False );
+        RoadmapWizard(
+            Window* _pParent,
+            const ResId& _rRes,
+            sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
+        );
         ~RoadmapWizard( );
 
         void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
@@ -103,11 +105,15 @@ namespace svt
         sal_Bool        IsRoadmapInteractive();
         virtual void    Resize();
         virtual void    StateChanged( StateChangedType nStateChange );
-        /** returns current state
-         */
-        bool    isStateEnabled( WizardState _nState );
 
-    protected:
+        // returns whether a given state is enabled
+        bool            isStateEnabled( WizardState _nState ) const;
+
+        // WizardDialog overridables
+        virtual bool    canAdvance() const;
+        virtual void    updateTravelUI();
+
+protected:
         /** declares a valid path in the wizard
 
             The very first path which is declared is automatically activated.
@@ -131,7 +137,14 @@ namespace svt
                 with a WZS_INVALID_STATE.
         */
         void    declarePath( PathId _nPathId, WizardState _nFirstState, ... );
-        void    declarePath( PathId _nPathId, const Path& _lWizardStates);
+        void    declarePath( PathId _nPathId, const WizardPath& _lWizardStates);
+
+        /** provides basic information about a state
+
+            The given display name is used in the default implementation of getStateDisplayName,
+            and the given factory is used in the default implementation of createPage.
+        */
+        void    describeState( WizardState _nState, const String& _rStateDisplayName, RoadmapPageFactory _pPageFactory );
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -173,7 +186,7 @@ namespace svt
 
             @see activatePath
         */
-        virtual WizardState     determineNextState( WizardState _nCurrentState );
+        virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
 
         /** en- or disables a state
 
@@ -201,9 +214,20 @@ namespace svt
         virtual void            enterState( WizardState _nState );
 
         /** returns a human readable name for a given state
-            @pure
+
+            There is a default implementation for this method, which returns the display name
+            as given in a call to describeState. If there is no description for the given state,
+            this is worth an assertion in a non-product build, and then an empty string is
+            returned.
         */
-        virtual String  getStateDisplayName( WizardState _nState ) = 0;
+        virtual String  getStateDisplayName( WizardState _nState ) const;
+
+        /** creates a page for a given state
+
+            This member is inherited from OWizardMachine, and default-implemented in this class
+            for all states which have been described using describeState.
+        */
+        virtual TabPage*    createPage( WizardState _nState );
 
         /** asks for a new label of the wizard page
 
@@ -221,13 +245,6 @@ namespace svt
 
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, void* );
-
-        /** inserts an entry for the given state into the roadmap, at the given index
-
-            This method automatically cares for the enabled/disabled state of the item,
-            and for its text.
-        */
-        SVT_DLLPRIVATE void implInsertState( WizardState _nState, sal_Int32 _nIndex );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)
