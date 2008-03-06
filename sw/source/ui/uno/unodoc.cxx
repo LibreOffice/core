@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:42:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #include <tools/string.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include "swdll.hxx"
 #include "docsh.hxx"
 #include "globdoc.hxx"
@@ -73,12 +74,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwTextDocument_getSupportedServiceName
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
-                            const uno::Reference< lang::XMultiServiceFactory > & )
+        const uno::Reference< lang::XMultiServiceFactory >&, const sal_uInt64 _nCreationFlags )
     throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SwDLL::Init();
-    SfxObjectShell* pShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
+    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
+    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
+    SfxObjectShell* pShell = new SwDocShell( eCreateMode, bScriptSupport );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
