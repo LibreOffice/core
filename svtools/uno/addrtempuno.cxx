@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addrtempuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:31:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVT_GENERICUNODIALOG_HXX_
-#include "genericunodialog.hxx"
+#include "svtools/genericunodialog.hxx"
 #endif
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include "addresstemplate.hxx"
