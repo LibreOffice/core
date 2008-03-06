@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorMessageDialog.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:18:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,13 @@ published service ErrorMessageDialog
         </p>
     */
     [property] any SQLException;
+
+    /** specifies the URL to the help topic to associate with the dialog.
+
+        <p>If This URL is not empty, then the dialog will get a "Help" button, which
+        directs the user to the given help topic.</p>
+    */
+    [optional, property] string HelpURL;
 
     /** allows access to the properties of the object
     */
