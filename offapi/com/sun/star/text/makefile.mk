@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 09:54:20 $
+#   last change: $Author: kz $ $Date: 2008-03-06 10:37:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@ IDLFILES=\
      HypertextDocument.idl\
      IllustrationIndex.idl\
      InvalidTextContentException.idl\
+        LabelFollow.idl\
      LineNumberingProperties.idl\
      LineNumberingSettings.idl\
         MailMerge.idl\
@@ -129,6 +130,7 @@ IDLFILES=\
      ParagraphEnumeration.idl\
      ParagraphVertAlign.idl\
      PlaceholderType.idl\
+        PositionAndSpaceMode.idl\
         PositionLayoutDir.idl\
         PrintPreviewSettings.idl\
      PrintSettings.idl\
@@ -270,7 +272,6 @@ IDLFILES=\
         XFlatParagraph.idl \
         XFlatParagraphIterator.idl \
         XFlatParagraphIteratorProvider.idl
-
 
 # ------------------------------------------------------------------
 
