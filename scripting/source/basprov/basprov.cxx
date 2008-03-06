@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:26:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
@@ -81,6 +84,9 @@
 #endif
 #ifndef _BASMGR_HXX
 #include <basic/basmgr.hxx>
+#endif
+#ifndef BASICMANAGERREPOSITORY_HXX
+#include <basic/basicmanagerrepository.hxx>
 #endif
 #ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
@@ -112,6 +118,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
 
 //.........................................................................
@@ -305,38 +312,66 @@ namespace basprov
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        if ( aArguments.getLength() == 1 && aArguments[0].getValueType() ==  ::getCppuType(  (const ::rtl::OUString* ) NULL ))
+        if ( aArguments.getLength() != 1 )
+        {
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument count." ) ),
+                *this,
+                1
+            );
+        }
+
+        Reference< frame::XModel > xModel;
+
+        m_xInvocationContext.set( aArguments[0], UNO_QUERY );;
+        if ( m_xInvocationContext.is() )
+        {
+            xModel.set( m_xInvocationContext->getScriptContainer(), UNO_QUERY );
+            if ( !xModel.is() )
+            {
+                throw IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context." ) ),
+                    *this,
+                    1
+                );
+            }
+        }
+        else
+        {
+            if ( !( aArguments[0] >>= m_sScriptingContext ) )
+            {
+                throw IllegalArgumentException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument type " )  ).concat(  aArguments[0].getValueTypeName() ),
+                    *this,
+                    1
+                );
+            }
+
+            ::rtl::OUString sDoc = OUSTR("vnd.sun.star.tdoc");
+            if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
+            {
+                xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
+                // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
+            }
+        }
+
+        if ( xModel.is() )
+        {
+            Reference< XEmbeddedScripts > xDocumentScripts( xModel, UNO_QUERY );
+            if ( xDocumentScripts.is() )
+            {
+                m_pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( xModel );
+                m_xLibContainerDoc.set( xDocumentScripts->getBasicLibraries(), UNO_QUERY );
+                OSL_ENSURE( m_pDocBasicManager && m_xLibContainerDoc.is(),
+                    "BasicProviderImpl::initialize: invalid BasicManager, or invalid script container!" );
+            }
+            m_bIsAppScriptCtx = false;
+        }
+        else
         {
             // Provider has been created with application context for user
             // or share
-            aArguments[0] >>= m_sScriptingContext;
-
-            ::rtl::OUString sUser = OUSTR("user");
-            ::rtl::OUString sShare = OUSTR("share");
-            ::rtl::OUString sDoc = OUSTR("vnd.sun.star.tdoc");
-
-            if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
-            {
-                Reference< frame::XModel > xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
-                // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
-
-                if ( xModel.is() )
-                {
-                    for ( SfxObjectShell* pObjShell = SfxObjectShell::GetFirst(); pObjShell; pObjShell = SfxObjectShell::GetNext( *pObjShell ) )
-                    {
-                        if ( xModel == pObjShell->GetModel() )
-                        {
-                            m_pDocBasicManager = pObjShell->GetBasicManager();
-                            m_xLibContainerDoc = Reference< script::XLibraryContainer >( pObjShell->GetBasicContainer(), UNO_QUERY );
-
-                            break;
-                        }
-                    }
-                }
-                m_bIsAppScriptCtx = false;
-             }
-
-            else if ( !m_sScriptingContext.equals( sUser ) )
+            if ( !m_sScriptingContext.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
             {
                 m_bIsUserCtx = false;
             }
@@ -348,14 +383,6 @@ namespace basprov
                     Reference< XInterface >() );
                 */
             }
-        }
-        else
-        {
-
-            throw RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::initialize: incorrect argument type " )  ).concat(  aArguments[0].getValueType().getTypeName() ),
-                Reference< XInterface >() );
-
         }
 
         // TODO
@@ -387,7 +414,7 @@ namespace basprov
         if ( !xFac.is() )
         {
             throw provider::ScriptFrameworkErrorException(
-                OUSTR( "Failed to instantiate  UriReferenceFactory" ), Reference< XInterface >(),
+                OUSTR( "Failed to instantiate UriReferenceFactory" ), Reference< XInterface >(),
                 scriptURI, OUSTR("Basic"),
                 provider::ScriptFrameworkErrorType::UNKNOWN );
         }
@@ -452,7 +479,12 @@ namespace basprov
                         {
                             SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
                             if ( pMethod )
-                                xScript = static_cast< provider::XScript* >( new BasicScriptImpl( aDescription, pMethod ) );
+                            {
+                                if ( m_pDocBasicManager == pBasicMgr )
+                                    xScript = new BasicScriptImpl( aDescription, pMethod, *m_pDocBasicManager, m_xInvocationContext );
+                                else
+                                    xScript = new BasicScriptImpl( aDescription, pMethod );
+                            }
                         }
                     }
                 }
@@ -461,8 +493,15 @@ namespace basprov
 
         if ( !xScript.is() )
         {
+            ::rtl::OUStringBuffer aMessage;
+            aMessage.appendAscii( "The following Basic script could not be found:\n" );
+            aMessage.appendAscii( "library: '" ).append( aLibrary ).appendAscii( "'\n" );
+            aMessage.appendAscii( "module: '" ).append( aModule ).appendAscii( "'\n" );
+            aMessage.appendAscii( "method: '" ).append( aMethod ).appendAscii( "'\n" );
+            aMessage.appendAscii( "location: '" ).append( aLocation ).appendAscii( "'\n" );
             throw provider::ScriptFrameworkErrorException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicProviderImpl::getScript: no script!" ) ), Reference< XInterface >(),
+                aMessage.makeStringAndClear(),
+                Reference< XInterface >(),
                 scriptURI, OUSTR("Basic"),
                 provider::ScriptFrameworkErrorType::UNKNOWN );
         }
