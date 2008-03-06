@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:33:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1499,7 +1499,8 @@ void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
             uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
-            mrAddress = lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
+            mrAddress = xAttrList->getValueByIndex( i );
+            // lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
         }
     }
 }
