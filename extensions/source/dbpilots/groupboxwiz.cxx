@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    WizardTypes::WizardState OGroupBoxWizard::determineNextState( WizardState _nCurrentState )
+    WizardTypes::WizardState OGroupBoxWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
         {
@@ -288,7 +288,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORadioSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool ORadioSelectionPage::commitPage( CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -349,7 +349,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORadioSelectionPage::determineNextButtonState()
+    bool ORadioSelectionPage::canAdvance() const
     {
         return 0 != m_aExistingRadios.GetEntryCount();
     }
@@ -416,7 +416,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ODefaultFieldSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool ODefaultFieldSelectionPage::commitPage( CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return sal_False;
@@ -503,7 +503,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OOptionValuesPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OOptionValuesPage::commitPage( CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
@@ -556,9 +556,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFinalizeGBWPage::determineNextButtonState()
+    bool OFinalizeGBWPage::canAdvance() const
     {
-        return sal_False;
+        return false;
     }
 
     //---------------------------------------------------------------------
@@ -571,7 +571,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFinalizeGBWPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OFinalizeGBWPage::commitPage( CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
             return sal_False;
