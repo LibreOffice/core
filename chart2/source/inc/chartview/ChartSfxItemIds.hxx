@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartSfxItemIds.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 16:00:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,10 @@
 #define SCHATTR_STAT_BIGERROR               (SCHATTR_STAT_START + 3)
 #define SCHATTR_STAT_CONSTPLUS              (SCHATTR_STAT_START + 4)
 #define SCHATTR_STAT_CONSTMINUS             (SCHATTR_STAT_START + 5)
-#define SCHATTR_STAT_REGRESSTYPE            (SCHATTR_STAT_START + 6)
-#define SCHATTR_STAT_INDICATE               (SCHATTR_STAT_START + 7)
-#define SCHATTR_STAT_END                    SCHATTR_STAT_INDICATE
+#define SCHATTR_STAT_INDICATE               (SCHATTR_STAT_START + 6)
+#define SCHATTR_STAT_RANGE_POS              (SCHATTR_STAT_START + 7)
+#define SCHATTR_STAT_RANGE_NEG              (SCHATTR_STAT_START + 8)
+#define SCHATTR_STAT_END                    SCHATTR_STAT_RANGE_NEG
 
 #define SCHATTR_TEXT2_START                 ( SCHATTR_STAT_END + 1)
 #define SCHATTR_TEXT_DEGREES                ( SCHATTR_TEXT2_START   )
@@ -219,10 +220,11 @@
 #define SCHATTR_MISC_END                 SCHATTR_AXIS_FOR_ALL_SERIES
 
 // regression curve equation
-#define SCHATTR_REGRESSION_START        (SCHATTR_MISC_END + 1)
-#define SCHATTR_REGRESSION_SHOW_EQUATION SCHATTR_REGRESSION_START
-#define SCHATTR_REGRESSION_SHOW_COEFF   (SCHATTR_REGRESSION_START + 1)
-#define SCHATTR_REGRESSION_END           SCHATTR_REGRESSION_SHOW_COEFF
+#define SCHATTR_REGRESSION_START         (SCHATTR_MISC_END + 1)
+#define SCHATTR_REGRESSION_TYPE           SCHATTR_REGRESSION_START
+#define SCHATTR_REGRESSION_SHOW_EQUATION (SCHATTR_REGRESSION_START + 1)
+#define SCHATTR_REGRESSION_SHOW_COEFF    (SCHATTR_REGRESSION_START + 2)
+#define SCHATTR_REGRESSION_END            SCHATTR_REGRESSION_SHOW_COEFF
 
 #define SCHATTR_END                     SCHATTR_REGRESSION_END
 
