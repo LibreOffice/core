@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nn $ $Date: 2008-02-15 15:19:59 $
+#   last change: $Author: rt $ $Date: 2008-03-06 12:48:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=scext
+PRJNAME=sccomp
 TARGET=solver
 
 ENABLE_EXCEPTIONS=TRUE
@@ -54,7 +54,7 @@ SRC1FILES=solver.src
 
 # --- Library -----------------------------------
 
-SHL1TARGET=     $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=     $(TARGET)$(DLLPOSTFIX)
 
 SHL1OBJS=       $(SLOFILES)
 
