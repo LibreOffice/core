@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:53:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,16 +76,12 @@
 #include <svx/svdmark.hxx>
 #endif
 
-
 //============================================================================
 // PropBrwMgr
 //============================================================================
 
 class PropBrwMgr : public SfxChildWindow
 {
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                    m_xUnoRepresentation;
 public:
     PropBrwMgr(Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
     SFX_DECL_CHILDWINDOW(PropBrwMgr);
@@ -111,6 +107,8 @@ private:
                     m_xBrowserController;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                     m_xBrowserComponentWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                    m_xContextDocument;
 
 protected:
     SdrView*        pView;
@@ -131,15 +129,24 @@ protected:
     ::rtl::OUString GetHeadlineName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
-    void implDetachController();
-
 public:
-    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-            SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent);
+    PropBrw( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+             SfxBindings *pBindings,
+             PropBrwMgr* pMgr,
+             Window* pParent,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
+    );
     virtual ~PropBrw();
     using Window::Update;
-    void    Update( SdrView* pView );
+    // note: changing the Context document to an instance other than the one given in the ctor is not supported
+    // currently
+    void    Update( const SfxViewShell* _pShell );
     SdrView*        GetCurView() const { return pView; }
+
+private:
+    void    ImplUpdate( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument, SdrView* pView );
+    void    ImplDestroyController();
+    void    ImplReCreateController();
 };
 
 #endif // _BASCTL_PROPBRW_HXX
