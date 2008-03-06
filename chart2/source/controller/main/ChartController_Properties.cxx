@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:57:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #include "LegendItemConverter.hxx"
 #include "RegressionCurveItemConverter.hxx"
 #include "RegressionEquationItemConverter.hxx"
+#include "ErrorBarItemConverter.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
@@ -275,13 +276,18 @@ namespace
             }
             case OBJECTTYPE_GRID:
             case OBJECTTYPE_SUBGRID:
-            case OBJECTTYPE_DATA_ERRORS:
             case OBJECTTYPE_DATA_AVERAGE_LINE:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
                     break;
+
+            case OBJECTTYPE_DATA_ERRORS:
+                pItemConverter =  new wrapper::ErrorBarItemConverter(
+                    xChartModel, xObjectProperties, rDrawModel.GetItemPool(),
+                    rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
+                break;
 
             case OBJECTTYPE_DATA_CURVE:
                 pItemConverter =  new wrapper::RegressionCurveItemConverter(
@@ -642,7 +648,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
             aDlg.setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
         }
-        if( aDialogParameter.HasRegressionProperties() )
+        if( aDialogParameter.HasStatisticProperties() )
         {
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, aObjectCID ) );
