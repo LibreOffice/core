@@ -291,7 +291,7 @@ fi
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop
-/usr/share/applications/%unixfilename-extension.desktop
+/usr/share/applications/%unixfilename-extensionmgr.desktop
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
