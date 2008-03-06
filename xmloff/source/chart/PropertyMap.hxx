@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:32:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
-#include <com/sun/star/chart/ChartErrorCategory.hpp>
+#ifndef _COM_SUN_STAR_CHART_ERRORBARSTYLE_HPP_
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
@@ -78,7 +78,7 @@
 
 // custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
-#define XML_SCH_TYPE_ERROR_CATEGORY         ( XML_SCH_TYPES_START + 1 )
+#define XML_SCH_TYPE_ERROR_BAR_STYLE        ( XML_SCH_TYPES_START + 1 )
 #define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
@@ -199,9 +199,11 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "ConstantErrorHigh", CHART, XML_ERROR_UPPER_LIMIT, XML_TYPE_DOUBLE ),
     MAP_ENTRY( "ErrorIndicator", CHART, XML_ERROR_UPPER_INDICATOR, XML_SCH_TYPE_ERROR_INDICATOR_UPPER | MID_FLAG_MERGE_PROPERTY ),  // convert one constant
     MAP_ENTRY( "ErrorIndicator", CHART, XML_ERROR_LOWER_INDICATOR, XML_SCH_TYPE_ERROR_INDICATOR_LOWER | MID_FLAG_MERGE_PROPERTY ),  // to two bools
-      MAP_ENTRY( "ErrorCategory", CHART, XML_ERROR_CATEGORY, XML_SCH_TYPE_ERROR_CATEGORY ),
+      MAP_ENTRY( "ErrorBarStyle", CHART, XML_ERROR_CATEGORY, XML_SCH_TYPE_ERROR_BAR_STYLE ),
       MAP_ENTRY( "PercentageError", CHART, XML_ERROR_PERCENTAGE, XML_TYPE_DOUBLE ),
       MAP_ENTRY( "RegressionCurves", CHART, XML_REGRESSION_TYPE, XML_SCH_TYPE_REGRESSION_TYPE ),
+      MAP_ENTRY( "ErrorBarRangePositive", CHART, XML_ERROR_UPPER_RANGE, XML_TYPE_STRING ),
+      MAP_ENTRY( "ErrorBarRangeNegative", CHART, XML_ERROR_LOWER_RANGE, XML_TYPE_STRING ),
 
     // series/data-point properties
     MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_NUMBER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),   // convert one constant
@@ -241,14 +243,16 @@ SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartErrorCategoryEnumMap[] =
+SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
 {
-    { ::xmloff::token::XML_NONE,                    ::com::sun::star::chart::ChartErrorCategory_NONE },
-    { ::xmloff::token::XML_VARIANCE,                ::com::sun::star::chart::ChartErrorCategory_VARIANCE },
-    { ::xmloff::token::XML_STANDARD_DEVIATION,  ::com::sun::star::chart::ChartErrorCategory_STANDARD_DEVIATION },
-    { ::xmloff::token::XML_PERCENTAGE,          ::com::sun::star::chart::ChartErrorCategory_PERCENT },
-    { ::xmloff::token::XML_ERROR_MARGIN,            ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN },
-    { ::xmloff::token::XML_CONSTANT,            ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE },
+    { ::xmloff::token::XML_NONE,                ::com::sun::star::chart::ErrorBarStyle::NONE },
+    { ::xmloff::token::XML_VARIANCE,            ::com::sun::star::chart::ErrorBarStyle::VARIANCE },
+    { ::xmloff::token::XML_STANDARD_DEVIATION,  ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION },
+    { ::xmloff::token::XML_CONSTANT,            ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE },
+    { ::xmloff::token::XML_PERCENTAGE,          ::com::sun::star::chart::ErrorBarStyle::RELATIVE },
+    { ::xmloff::token::XML_ERROR_MARGIN,        ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN },
+    { ::xmloff::token::XML_STANDARD_ERROR,      ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR },
+    { ::xmloff::token::XML_CELL_RANGE,          ::com::sun::star::chart::ErrorBarStyle::FROM_DATA },
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
