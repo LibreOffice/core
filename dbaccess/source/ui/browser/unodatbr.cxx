@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:53:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,300 +36,105 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _SVX_GRIDCTRL_HXX
-#include <svx/gridctrl.hxx>
-#endif
-#ifndef SVX_DATABASE_REGISTRATION_UI_HXX
-#include <svx/databaseregistrationui.hxx>
-#endif
-#ifndef _SBA_UNODATBR_HXX_
-#include "unodatbr.hxx"
-#endif
-#ifndef _SBA_GRID_HXX
-#include "sbagrid.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
-#include "imageprovider.hxx"
-#endif
-#ifndef _SVTREEBOX_HXX
-#include <svtools/svtreebx.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
-#include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XParametersSupplier.hpp>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _SV_MULTISEL_HXX //autogen
-#include <tools/multisel.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
-#include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
-#include <com/sun/star/document/MacroExecMode.hpp>
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _SFXINTITEM_HXX //autogen
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX //autogen
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
-#include <com/sun/star/form/XGridColumnFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
-#include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
-#include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
-#include <com/sun/star/awt/LineEndFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
-#include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-
-#ifndef _SVX_ALGITEM_HXX //autogen
-#include <svx/algitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
-#include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
-#include "dbtreemodel.hxx"
-#endif
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
-#include "dbtreeview.hxx"
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX
-#include <svtools/filenotation.hxx>
-#endif
-#ifndef _SVLBOXITM_HXX
-#include <svtools/svlbitm.hxx>
-#endif
-#ifndef _SV_SPLIT_HXX
-#include <vcl/split.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBU_BRW_HRC_
-#include "dbu_brw.hrc"
-#endif
-#ifndef DBACCESS_SBA_GRID_HRC
-#include "sbagrid.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBU_REGHELPER_HXX_
-#include "dbu_reghelper.hxx"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
-#include "dbtreelistbox.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
-#include "listviewitems.hxx"
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef DBAUI_TOKENWRITER_HXX
-#include "TokenWriter.hxx"
-#endif
-#ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
-#include "WCopyTable.hxx"
-#endif
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
-#include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
-#include "WNameMatch.hxx"
-#endif
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
-#include "WColumnSelect.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
-#include "QEnumTypes.hxx"
-#endif
-#ifndef DBAUI_WIZARD_CPAGE_HXX
-#include "WCPage.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef DBAUI_RTFREADER_HXX
-#include "RtfReader.hxx"
-#endif
-#ifndef DBAUI_HTMLREADER_HXX
-#include "HtmlReader.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef DBAUI_DLGSAVE_HXX
+#include "dbtreelistbox.hxx"
+#include "dbtreemodel.hxx"
+#include "dbtreeview.hxx"
+#include "dbu_brw.hrc"
+#include "dbu_reghelper.hxx"
+#include "dbustrings.hrc"
 #include "dlgsave.hxx"
-#endif
-#ifndef _SOT_STORAGE_HXX
-#include <sot/storage.hxx>
-#endif
-#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
+#include "HtmlReader.hxx"
+#include "imageprovider.hxx"
 #include "linkeddocuments.hxx"
-#endif
-#ifndef _DBACCESS_UI_DIRECTSQL_HXX_
-#include "directsql.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include "listviewitems.hxx"
+#include "QEnumTypes.hxx"
+#include "RtfReader.hxx"
+#include "sbagrid.hrc"
+#include "sbagrid.hxx"
+#include "sqlmessage.hxx"
+#include "TokenWriter.hxx"
+#include "UITools.hxx"
+#include "unodatbr.hxx"
+#include "WColumnSelect.hxx"
+#include "WCopyTable.hxx"
+#include "WCPage.hxx"
+#include "WExtendPages.hxx"
+#include "WNameMatch.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/awt/VisualEffect.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#include <com/sun/star/sdbcx/XDrop.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/extract.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sot/storage.hxx>
+#include <svtools/filenotation.hxx>
+#include <svtools/intitem.hxx>
 #include <svtools/moduleoptions.hxx>
-#endif
+#include <svtools/svlbitm.hxx>
+#include <svtools/svtreebx.hxx>
+#include <svx/algitem.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+#include <svx/databaseregistrationui.hxx>
+#include <svx/gridctrl.hxx>
+#include <toolkit/unohlp.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/multisel.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/confignode.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/split.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/waitobj.hxx>
+#include <vcl/wrkwin.hxx>
 
 #include <memory>
 
@@ -451,6 +256,14 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
 //------------------------------------------------------------------------------
 Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType) throw (RuntimeException)
 {
+    if ( _rType.equals( XScriptInvocationContext::static_type() ) )
+    {
+        OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::queryInterface: did not initialize this, yet!" );
+        if ( !!m_aDocScriptSupport && *m_aDocScriptSupport )
+            return makeAny( Reference< XScriptInvocationContext >( this ) );
+        return Any();
+    }
+
     Any aReturn = SbaXDataBrowserController::queryInterface(_rType);
     if (!aReturn.hasValue())
         aReturn = SbaTableQueryBrowser_Base::queryInterface(_rType);
@@ -460,10 +273,24 @@ Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType) throw (Run
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  ) throw (RuntimeException)
 {
-    return ::comphelper::concatSequences(
+    Sequence< Type > aTypes( ::comphelper::concatSequences(
         SbaXDataBrowserController::getTypes(),
         SbaTableQueryBrowser_Base::getTypes()
-    );
+    ) );
+
+    OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::getTypes: did not initialize this, yet!" );
+    if ( !m_aDocScriptSupport || !*m_aDocScriptSupport )
+    {
+        Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
+        ::std::remove_copy_if(
+            aTypes.getConstArray(),
+            aTypes.getConstArray() + aTypes.getLength(),
+            aStrippedTypes.getArray(),
+            ::std::bind2nd( ::std::equal_to< Type >(), XScriptInvocationContext::static_type() )
+        );
+        aTypes = aStrippedTypes;
+    }
+    return aTypes;
 }
 
 //------------------------------------------------------------------------------
@@ -1050,7 +877,11 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                     OSL_ENSURE(bProperFormat, "SbaTableQueryBrowser::statusChanged: need a data access descriptor here!");
                     m_aDocumentDataSource.initializeFrom(aDescriptor);
 
-                    OSL_ENSURE(( m_aDocumentDataSource.has(daDataSource) || m_aDocumentDataSource.has(daDatabaseLocation)) && m_aDocumentDataSource.has(daCommand) && m_aDocumentDataSource.has(daCommandType),
+                    OSL_ENSURE( (   m_aDocumentDataSource.has(daDataSource)
+                                ||  m_aDocumentDataSource.has(daDatabaseLocation)
+                                )
+                                &&  m_aDocumentDataSource.has(daCommand)
+                                &&  m_aDocumentDataSource.has(daCommandType),
                         "SbaTableQueryBrowser::statusChanged: incomplete descriptor!");
 
                     // check if we know the object which is set as document data source
@@ -1261,7 +1092,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescri
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::connectExternalDispatches()
 {
-    Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
+    Reference< XDispatchProvider >  xProvider( getFrame(), UNO_QUERY );
     DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchProvider !");
     if (xProvider.is())
     {
@@ -1510,16 +1341,17 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
 
     SbaXDataBrowserController::attachFrame(_xFrame);
 
-    if ( m_xCurrentFrame.is() )
+    Reference< XFrame > xCurrentFrame( getFrame() );
+    if ( xCurrentFrame.is() )
     {
-        m_xCurrentFrameParent = m_xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
+        m_xCurrentFrameParent = xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
 
         // obtain our toolbox
         try
         {
-            Reference< XPropertySet > xFrameProps( m_xCurrentFrame, UNO_QUERY_THROW );
+            Reference< XPropertySet > xFrameProps( m_aCurrentFrame.getFrame(), UNO_QUERY_THROW );
             Reference< XLayoutManager > xLayouter(
                 xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ),
                 UNO_QUERY );
@@ -1635,7 +1467,6 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
 
     if (isValid() && !loadingCancelled())
     {
-        // -------------------------------
         // did we load a query?
         sal_Bool bTemporary;    // needed because we m_bQueryEscapeProcessing is only one bit wide (and we want to pass it by reference)
         if ( implGetQuerySignature( m_sQueryCommand, bTemporary ) )
@@ -1643,10 +1474,27 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
     }
 
     // if the form has been loaded, this means that our "selection" has changed
-    ::com::sun::star::lang::EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIter(m_aSelectionListeners);
-    while (aIter.hasMoreElements())
-        static_cast< XSelectionChangeListener* >(aIter.next())->selectionChanged(aEvt);
+    EventObject aEvent( *this );
+    m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
+
+    // update our database document
+    Reference< XModel > xDocument;
+    try
+    {
+        Reference< XPropertySet > xCursorProps( getRowSet(), UNO_QUERY_THROW );
+        Reference< XConnection > xConnection( xCursorProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY );
+        if ( xConnection.is() )
+        {
+            Reference< XChild > xChild( xConnection, UNO_QUERY_THROW );
+            Reference< XDocumentDataSource > xDataSource( xChild->getParent(), UNO_QUERY_THROW );
+            xDocument.set( xDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    m_xCurrentDatabaseDocument = xDocument;
 }
 
 //------------------------------------------------------------------------------
@@ -2995,6 +2843,33 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
 }
 
 // -------------------------------------------------------------------------
+namespace
+{
+    Reference< XInterface > lcl_getDataSource( const Reference< XNameAccess >& _rxDatabaseContext,
+        const ::rtl::OUString& _rDataSourceName, const Reference< XConnection >& _rxConnection )
+    {
+        Reference< XDataSource > xDataSource;
+        try
+        {
+            if ( _rDataSourceName.getLength() && _rxDatabaseContext->hasByName( _rDataSourceName ) )
+                xDataSource.set( _rxDatabaseContext->getByName( _rDataSourceName ), UNO_QUERY_THROW );
+
+            if ( !xDataSource.is() )
+            {
+                Reference< XChild > xConnAsChild( _rxConnection, UNO_QUERY );
+                if ( xConnAsChild.is() )
+                    xDataSource.set( xConnAsChild->getParent(), UNO_QUERY_THROW );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return xDataSource;
+    }
+}
+
+// -------------------------------------------------------------------------
 void SbaTableQueryBrowser::impl_initialize()
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -3026,13 +2901,25 @@ void SbaTableQueryBrowser::impl_initialize()
     rArguments.get_ensureType( "Frame", xFrame );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_SHOWMENU, m_bShowMenu );
 
-    sal_Bool bShowTreeView = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEW, sal_True );
-    m_bEnableBrowser = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOWTREEVIEWBUTTON, sal_True );
+    // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
+    // is present and set to FALSE
+    sal_Bool bDisableBrowser =  ( sal_False == rArguments.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
+                            ||  ( sal_False == rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
+    OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
+        "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
+    m_bEnableBrowser = !bDisableBrowser;
 
-    if ( bShowTreeView )
-        showExplorer();
-    else
+    // hide the tree view it is disabled in general, or if the settings tell to hide it initially
+    sal_Bool bHideTreeView =    ( !m_bEnableBrowser )
+                            ||  ( sal_False == rArguments.getOrDefault( "ShowTreeView", sal_True ) )  // compatibility name
+                            ||  ( sal_False == rArguments.getOrDefault( (::rtl::OUString)PROPERTY_SHOW_BROWSER, sal_True ) );
+    OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
+        "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
+
+    if ( bHideTreeView )
         hideExplorer();
+    else
+        showExplorer();
 
     if ( m_bPreview )
     {
@@ -3129,6 +3016,24 @@ void SbaTableQueryBrowser::impl_initialize()
     else
         initializeTreeModel();
 
+    if ( m_bEnableBrowser )
+    {
+        m_aDocScriptSupport = ::boost::optional< bool >( false );
+    }
+    else
+    {
+        // we are not used as "browser", but as mere view for a single table/query/command. In particular,
+        // there is a specific database document which we belong to.
+        Reference< XOfficeDatabaseDocument > xDocument( getDataSourceOrModel(
+            lcl_getDataSource( m_xDatabaseContext, sInitialDataSourceName, xConnection ) ), UNO_QUERY );
+        m_aDocScriptSupport = ::boost::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
+    }
+
+    // TODO: remove the following line. The current version is just to be able
+    // to integrate an intermediate version of the CWS, which should behave as
+    // if no macros in DB docs are allowed
+    m_aDocScriptSupport = ::boost::optional< bool> ( false );
+
     if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing, xConnection, sal_True ) )
     {
         try
@@ -3141,7 +3046,7 @@ void SbaTableQueryBrowser::impl_initialize()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::initialize: could not set the update related names!");
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
         }
     }
     else
@@ -3330,36 +3235,6 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
 }
 
 // -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implDirectSQL( SvLBoxEntry* _pApplyTo )
-{
-    try
-    {
-        SharedConnection xConnection;
-        if(!ensureConnection(_pApplyTo, xConnection))
-            return;
-
-        DirectSQLDialog aDlg(getView(), xConnection);
-        aDlg.Execute();
-    }
-    catch(const SQLException& e)
-    {
-        showError(SQLExceptionInfo(e));
-    }
-    catch(const WrappedTargetException& e)
-    {
-        SQLException aSql;
-        if(e.TargetException >>= aSql)
-            showError(SQLExceptionInfo(aSql));
-        else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implDirectSQL: something strange happended!");
-    }
-    catch(const Exception&)
-    {
-        DBG_ERROR("SbaTableQueryBrowser::implDirectSQL: caught an (unknown) exception!");
-    }
-}
-
-// -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
 {
     try
@@ -3379,7 +3254,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
                 sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
             Reference< XModel > xDocumentModel(
-                getDataSourceOrModel(getDataSourceByName_displayError( m_xDatabaseContext, sInitialSelection, getView(), getORB(), true )),UNO_QUERY);
+                getDataSourceOrModel(getDataSourceByName_displayError( sInitialSelection, getView(), getORB(), true )),UNO_QUERY);
 
             if ( xDocumentModel.is() )
             {
@@ -3477,9 +3352,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
     // enable menu entries
     if (!pDSData || !pDSData->xConnection.is())
-    {   // no -> disable the connection-related menu entries
+    {
         aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
-        aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
     }
     aContextMenu.EnableItem(SID_COPY,   sal_False);
 
@@ -3507,7 +3381,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             case etQuery:
             {
                 // 3.2 actions on existing queries
-                aContextMenu.EnableItem(SID_COPY,                   etQuery == eType);
+                aContextMenu.EnableItem( SID_COPY, etQuery == eType );
             }
             break;
             case etDatasource:
@@ -3516,17 +3390,12 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         }
     }
 
-    // rebuild conn not implemented yet
-    aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
-
     if (!getORB().is())
         // no ORB -> no administration dialog
         aContextMenu.EnableItem(ID_TREE_EDIT_DATABASE, sal_False);
 
     // no disabled entries
     aContextMenu.RemoveDisabledEntries();
-
-    sal_Bool bReopenConn = sal_False;
 
     USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
 
@@ -3546,13 +3415,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_TREE_EDIT_DATABASE:
             implAdministrate(pEntry);
             break;
-
-        case ID_DIRECT_SQL:
-            implDirectSQL(pEntry);
-            break;
-
-        case ID_TREE_REBUILD_CONN:
-            bReopenConn = sal_True;
 
         case ID_TREE_CLOSE_CONN:
             openHelpAgent(HID_DSBROWSER_DISCONNECTING);
@@ -3736,6 +3598,7 @@ sal_Bool SbaTableQueryBrowser::preReloadForm()
     }
     return bIni;
 }
+
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::postReloadForm()
 {
@@ -3743,6 +3606,16 @@ void SbaTableQueryBrowser::postReloadForm()
     LoadFinished(sal_True);
     updateTitle();
 }
+
+//------------------------------------------------------------------------------
+Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer() throw (RuntimeException)
+{
+    Reference< XEmbeddedScripts > xScripts( m_xCurrentDatabaseDocument, UNO_QUERY );
+    OSL_ENSURE( xScripts.is() || !m_xCurrentDatabaseDocument.is(),
+        "SbaTableQueryBrowser::getScriptContainer: invalid database document!" );
+    return xScripts;
+}
+
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
