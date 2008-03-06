@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:36:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nRepeatedRows(nTempRepeatedRows),
     nCellsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
+    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
     nCellType(util::NumberFormat::TEXT),
     bIsMerged(sal_False),
     bIsMatrix(sal_False),
@@ -143,6 +144,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
+    ScGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -168,19 +170,25 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         if (sValue.getLength())
                         {
                             DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                            pOUFormula = new rtl::OUString();
+                            DELETEZ( pOUFormula);
+                            rtl::OUString sFormula;
                             sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                                    _GetKeyByAttrName( sValue, pOUFormula, sal_False );
-                            // #i56720# For any valid namespace, the formula text is the part without
-                            // the namespace tag.
-                            // Only for an invalid namespace (not defined in the file, XML_NAMESPACE_UNKNOWN)
-                            // or no namespace tag (XML_NAMESPACE_NONE) the full text is used.
-                            // An invalid namespace can occur from a colon in the formula text if no
-                            // namespace tag was added.
-                            if ( nFormulaPrefix == XML_NAMESPACE_UNKNOWN || nFormulaPrefix == XML_NAMESPACE_NONE )
+                                    _GetKeyByAttrName( sValue, &sFormula, sal_False );
+
+                            if (ScXMLImport::IsAcceptedFormulaNamespace(
+                                        nFormulaPrefix, sValue, eGrammar,
+                                        eStorageGrammar))
                             {
-                                delete pOUFormula;
-                                pOUFormula = new rtl::OUString(sValue);
+                                // Namespaces we accept.
+                                pOUFormula = new rtl::OUString( sFormula);
+                            }
+                            else
+                            {
+                                // No namespace => entire string.
+                                // Also unknown namespace included in formula,
+                                // so hopefully will result in string or
+                                // compile error.
+                                pOUFormula = new rtl::OUString( sValue);
                             }
                         }
                     }
@@ -628,9 +636,10 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
     if (pContentValidationName)
     {
         ScMyImportValidation aValidation;
+        aValidation.eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
         if (rXMLImport.GetValidation(*pContentValidationName, aValidation))
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT))), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML))), uno::UNO_QUERY);
             if (xPropertySet.is())
             {
                 if (aValidation.sErrorMessage.getLength())
@@ -656,9 +665,11 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     // #b4974740# source position must be set as string, because it may
                     // refer to a sheet that hasn't been loaded yet.
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
+                    // Transport grammar.
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar)));
                 }
             }
-            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), uno::makeAny(xPropertySet));
+            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)), uno::makeAny(xPropertySet));
         }
     }
 }
@@ -967,11 +978,11 @@ void ScXMLTableRowCellContext::EndElement()
                                                 {
                                                     ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
                                                     if (pOUTextValue && pOUTextValue->getLength())
-                                                        pFCell->SetString( *pOUTextValue );
+                                                        pFCell->SetHybridString( *pOUTextValue );
                                                     else if (pOUTextContent && pOUTextContent->getLength())
-                                                        pFCell->SetString( *pOUTextContent );
+                                                        pFCell->SetHybridString( *pOUTextContent );
                                                     else if ( i > 0 && pOUText && pOUText->getLength() )
-                                                        pFCell->SetString( *pOUText );
+                                                        pFCell->SetHybridString( *pOUText );
                                                     else
                                                         bDoIncrement = sal_False;
                                                 }
@@ -1039,7 +1050,7 @@ void ScXMLTableRowCellContext::EndElement()
                                                 ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                 ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
                                                 if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                                                    static_cast<ScFormulaCell*>(pCell)->SetDouble( fValue );
+                                                    static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
                                             }
                                             else
                                             {
@@ -1146,31 +1157,30 @@ void ScXMLTableRowCellContext::EndElement()
                         SetCellProperties(xCell); // set now only the validation
                         DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
                         rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
-                        ScXMLConverter::ParseFormula(*pOUFormula);
                         if (!bIsMatrix)
                         {
-                            xCell->setFormula(*pOUFormula);
-                            if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                            LockSolarMutex();
+                            ScCellObj* pCellObj =
+                                static_cast<ScCellObj*>(ScCellRangesBase::getImplementation(
+                                            xCell));
+                            if (pCellObj)
                             {
-                                LockSolarMutex();
-                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                                if (pCellObj)
-                                    pCellObj->SetFormulaResultString(*pOUTextValue);
-                            }
-                            else if (fValue != 0.0)
-                            {
-                                LockSolarMutex();
-                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                                if (pCellObj)
-                                    pCellObj->SetFormulaResultDouble(fValue);
+                                pCellObj->SetFormulaWithGrammar( *pOUFormula, eGrammar);
+                                if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                                    pCellObj->SetFormulaResultString( *pOUTextValue);
+                                else if (fValue != 0.0)
+                                    pCellObj->SetFormulaResultDouble( fValue);
                             }
                         }
                         else
                         {
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
-                                rXMLImport.GetTables().AddMatrixRange(aCellPos.Column, aCellPos.Row,
-                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1, *pOUFormula);
+                                rXMLImport.GetTables().AddMatrixRange(
+                                        aCellPos.Column, aCellPos.Row,
+                                        aCellPos.Column + nMatrixCols - 1,
+                                        aCellPos.Row + nMatrixRows - 1,
+                                        *pOUFormula, eGrammar);
                             }
                         }
                         SetAnnotation( aCellPos );
