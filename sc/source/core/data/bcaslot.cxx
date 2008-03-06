@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bcaslot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:51:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,20 +217,25 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
     BOOL bIsBroadcasted = FALSE;
     const ScAddress& rAddress = rHint.GetAddress();
     // Unfortunately we can't search for the first matching entry.
-    for ( ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); ++aIter)
+    ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+    while (aIter != aBroadcastAreaTbl.end())
     {
-        const ScRange& rAreaRange = (*aIter)->GetRange();
+        ScBroadcastArea* pArea = *aIter;
+        // A Notify() during broadcast may call EndListeningArea() and thus
+        // dispose this area if it was the last listener, which would
+        // invalidate the iterator, hence increment before call.
+        ++aIter;
+        const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.In( rAddress))
         {
-            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( *aIter))
+            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
-                (*aIter)->GetBroadcaster().Broadcast( rHint);
+                pArea->GetBroadcaster().Broadcast( rHint);
                 bIsBroadcasted = TRUE;
             }
         }
         else if (rAddress < rAreaRange.aStart)
-            break;  // for loop, only ranges greater than rAddress follow
+            break;  // while loop, only ranges greater than rAddress follow
     }
     return bIsBroadcasted;
 }
@@ -243,20 +248,25 @@ BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         return FALSE;
     BOOL bIsBroadcasted = FALSE;
     // Unfortunately we can't search for the first matching entry.
-    for ( ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); ++aIter)
+    ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+    while (aIter != aBroadcastAreaTbl.end())
     {
-        const ScRange& rAreaRange = (*aIter)->GetRange();
+        ScBroadcastArea* pArea = *aIter;
+        // A Notify() during broadcast may call EndListeningArea() and thus
+        // dispose this area if it was the last listener, which would
+        // invalidate the iterator, hence increment before call.
+        ++aIter;
+        const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.Intersects( rRange ))
         {
-            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( *aIter))
+            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
-                (*aIter)->GetBroadcaster().Broadcast( rHint);
+                pArea->GetBroadcaster().Broadcast( rHint);
                 bIsBroadcasted = TRUE;
             }
         }
         else if (rRange.aEnd < rAreaRange.aStart)
-            break;  // for loop, only ranges greater than end address follow
+            break;  // while loop, only ranges greater than end address follow
     }
     return bIsBroadcasted;
 }
