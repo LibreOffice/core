@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:56:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -65,9 +68,6 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
@@ -158,16 +158,9 @@ namespace dbaui
             return;
         }
 
-        AuthenticationRequest aAuthentRequest;
-        if (aRequest >>= aAuthentRequest)
-        {   // it's an authentification request
-            implHandle(aAuthentRequest, aContinuations);
-            return;
-        }
-
         ParametersRequest aParamRequest;
         if (aRequest >>= aParamRequest)
-        {   // it's an authentification request
+        {   // it's an authentication request
             implHandle(aParamRequest, aContinuations);
             return;
         }
@@ -223,126 +216,6 @@ namespace dbaui
         catch(RuntimeException&)
         {
             DBG_ERROR("OInteractionHandler::implHandle(ParametersRequest): caught a RuntimeException while calling the continuation callback!");
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    void OInteractionHandler::implHandle(const AuthenticationRequest& _rAuthRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
-    {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
-            // want to open a dialog ....
-
-        // search the continuations we can handle
-        sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
-        sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
-        sal_Int32 nAuthentPos = getContinuation(SUPPLY_AUTHENTICATION, _rContinuations);
-
-        // we strongly need an XInteractionSupplyAuthentication (else we can't return the input given by the user)
-        Reference< XInteractionSupplyAuthentication > xSuppAuthent;
-        if (-1 != nAuthentPos)
-            xSuppAuthent = Reference< XInteractionSupplyAuthentication >(_rContinuations[nAuthentPos], UNO_QUERY);
-        DBG_ASSERT(xSuppAuthent.is(), "OInteractionHandler::implHandle: need an XInteractionSupplyAuthentication to return the results!");
-
-        // check which "remember password" modes are allowed
-        sal_Bool bRemember(sal_False);
-        sal_Bool bRememberPersistent(sal_False);
-        if (xSuppAuthent.is())
-        {
-            RememberAuthentication eDefault;
-            Sequence< RememberAuthentication > aModes(xSuppAuthent->getRememberPasswordModes(eDefault));
-            const RememberAuthentication* pModes = aModes.getConstArray();
-            bRemember = eDefault != RememberAuthentication_NO;
-            for (sal_Int32 i=0; i<aModes.getLength(); ++i, ++pModes)
-                if (*pModes == RememberAuthentication_PERSISTENT)
-                {
-                    bRememberPersistent = sal_True;
-                    break;
-                }
-        }
-
-        // extract some infor from the authentication request
-        // use the account as realm
-        String sRealm;
-        if (_rAuthRequest.HasRealm)
-            sRealm = _rAuthRequest.Realm.getStr();
-
-        // determine the flags for
-        sal_uInt16 nFlags = 0;
-        nFlags |= LF_NO_PATH;   // the AuthenticationRequest does not support a path
-
-        if (0 == _rAuthRequest.Diagnostic.getLength())
-            nFlags |= LF_NO_ERRORTEXT;
-        if (!_rAuthRequest.HasAccount)
-            nFlags |= LF_NO_ACCOUNT;
-        if (!_rAuthRequest.HasUserName || !xSuppAuthent.is() || !xSuppAuthent->canSetUserName())
-            nFlags |= LF_USERNAME_READONLY;
-
-        // create the dialog
-        ::rtl::OUString sName = _rAuthRequest.ServerName;
-        sName = ::dbaui::getStrippedDatabaseName(NULL,sName);
-        ::svt::LoginDialog aLogin(NULL, nFlags, sName, sRealm.Len() ? &sRealm : NULL);
-
-        // initialize it
-        aLogin.SetErrorText(_rAuthRequest.Diagnostic.getStr());
-        aLogin.SetName(_rAuthRequest.UserName);
-        if (_rAuthRequest.HasAccount)
-            aLogin.ClearAccount();
-        else
-            aLogin.ClearPassword();
-
-        aLogin.SetPassword(_rAuthRequest.Password.getStr());
-
-        aLogin.SetSavePassword(bRemember);
-        aLogin.SetSavePasswordText(ModuleRes(bRememberPersistent ? STR_REMEMBERPASSWORD_PERSISTENT : STR_REMEMBERPASSWORD_SESSION));
-
-        String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
-        if (sName.getLength())
-               sLoginRequest.SearchAndReplaceAscii("$name$", sName.getStr());
-        else
-        {
-            sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
-            sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
-        }
-        aLogin.SetLoginRequestText(sLoginRequest);
-
-        // execute
-        sal_Int32 nResult = aLogin.Execute();
-
-        // dispatch the result
-        try
-        {
-            switch (nResult)
-            {
-                case RET_OK:
-                    if (xSuppAuthent.is())
-                    {
-                        xSuppAuthent->setUserName(aLogin.GetName());
-                        xSuppAuthent->setPassword(aLogin.GetPassword());
-                        xSuppAuthent->setRememberPassword(
-                                    aLogin.IsSavePassword()
-                                    ?
-                                            bRememberPersistent
-                                        ?   RememberAuthentication_PERSISTENT
-                                        :   RememberAuthentication_SESSION
-                                    :   RememberAuthentication_NO);
-                        if (_rAuthRequest.HasAccount)
-                            xSuppAuthent->setAccount(aLogin.GetAccount());
-                        xSuppAuthent->select();
-                    }
-                    break;
-                case RET_RETRY:
-                    if (-1 != nRetryPos)
-                        _rContinuations[nRetryPos]->select();
-                    break;
-                default:
-                    if (-1 != nAbortPos)
-                        _rContinuations[nAbortPos]->select();
-                    break;
-            }
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("OInteractionHandler::implHandle(AuthenticationRequest): error while calling back into the InteractionContinuation!");
         }
     }
 
@@ -415,9 +288,9 @@ namespace dbaui
                     break;
             }
         }
-        catch(RuntimeException&)
+        catch( const Exception& )
         {
-            DBG_ERROR("OInteractionHandler::implHandle(SQLExceptionInfo): caught a RuntimeException while calling the continuation callback!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     //-------------------------------------------------------------------------
@@ -524,10 +397,6 @@ namespace dbaui
                     break;
                 case ABORT:
                     if (Reference< XInteractionAbort >(*pContinuations, UNO_QUERY).is())
-                        return i;
-                    break;
-                case SUPPLY_AUTHENTICATION:
-                    if (Reference< XInteractionSupplyAuthentication >(*pContinuations, UNO_QUERY).is())
                         return i;
                     break;
                 case SUPPLY_PARAMETERS:
