@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSimpleTabController.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:12:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
         @param  ID
                 the ID of the tab, which should be removed.
 
-        @throw  [IndexOutOfBoundsException]
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
                 if the specified ID isnt used inside this tab controller.
      */
     void removeTab( [in] long ID )
@@ -113,7 +113,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
         @param  ID
                 the ID of the tab, which should be changed.
 
-        @throw  [IndexOutOfBoundsException]
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
                 if the specified ID isnt used inside this tab controller.
      */
     void setTabProps( [in] long                                          ID         ,
@@ -126,7 +126,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
         @param  ID
                 the ID of the tab.
 
-        @throw  [IndexOutOfBoundsException]
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
                 if the specified ID isnt used inside this tab controller.
      */
     sequence< com::sun::star::beans::NamedValue > getTabProps( [in] long ID )
@@ -142,7 +142,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
         @param  ID
                 the ID of the new active tab.
 
-        @throw  [IndexOutOfBoundsException]
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
                 if the specified ID isnt used inside this tab controller.
      */
     void activateTab( [in] long ID )
