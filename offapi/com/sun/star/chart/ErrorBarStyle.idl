@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ErrorBarStyle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:06:07 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_ErrorBarStyle_idl
+#define com_sun_star_chart_ErrorBarStyle_idl
+
+module com {  module sun {  module star {  module chart {
+
+/** specifies the style of error indicators.
+ */
+published constants ErrorBarStyle
+{
+    /** error indicators are not displayed.
+     */
+    const long NONE = 0;
+
+    /** displays error indicators for the variance of the data.
+     */
+    const long VARIANCE = 1;
+
+    /** displays error indicators for the standard deviation (square
+        root of variance) of the data.
+     */
+    const long STANDARD_DEVIATION = 2;
+
+    /** the error indicators for all data points have the same
+        absolute value as length for either direction.
+
+        <p>The values for these are given as absolute numbers in
+        <member>ChartStatistics::ConstantErrorLow</member> and
+        <member>ChartStatistics::ConstantErrorHigh</member></p>
+
+        @see ChartStatistics
+     */
+    const long ABSOLUTE = 3;
+
+    /** The length of the error indicators is calculated for each data
+        point by taking the percentage given as
+        <member>ChartStatistics::PercentageError</member> of its
+        value.
+
+        @see ChartStatistics
+     */
+    const long RELATIVE = 4;
+
+    /** The length of the error indicators for all data points is
+        calculated by taking the percentage given as
+        <member>ChartStatistics::ErrorMargin</member> of the largest
+        data point value.
+
+        @see ChartStatistics
+     */
+    const long ERROR_MARGIN = 5;
+
+    /** displays error indicators for the standard error, also known
+        as the standard deviation of the mean (SDOM).
+     */
+    const long STANDARD_ERROR = 6;
+
+    /** Uses values given by cell ranges of the container document.
+
+        <p>The values for the cell ranges are given in the properties
+        <member>ChartStatistics::ErrorBarRangePositive</member> for
+        positive indicators and
+        <member>ChartStatistics::ErrorBarRangeNegative</member> for
+        negative indicators.</p>
+     */
+    const long FROM_DATA = 7;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
