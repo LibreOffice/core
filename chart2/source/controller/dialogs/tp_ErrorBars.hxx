@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ErrorBars.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@ public:
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( ErrorBarResources::tErrorBarType eNewType );
+    void SetChartDocumentForRangeChoosing(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument > & xChartDocument );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );

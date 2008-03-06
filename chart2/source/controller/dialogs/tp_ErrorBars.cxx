@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ErrorBars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:49:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include "tp_ErrorBars.hxx"
 #include "ResId.hxx"
 #include "TabPages.hrc"
+#include "TabPageNotifiable.hxx"
+
+using namespace ::com::sun::star;
 
 //.............................................................................
 namespace chart
@@ -47,7 +50,11 @@ namespace chart
 
 ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, SchResId( TP_YERRORBAR ), rInAttrs ),
-        m_aErrorBarResources( this, rInAttrs )
+        m_aErrorBarResources(
+            this,
+            // the parent is the tab control, of which the parent is the dialog
+            dynamic_cast< Dialog * >( pParent->GetParent() ),
+            rInAttrs, /* bNoneAvailable = */ false )
 {
     FreeResource();
 }
@@ -88,6 +95,12 @@ void ErrorBarsTabPage::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorSt
 void ErrorBarsTabPage::SetErrorBarType( ErrorBarResources::tErrorBarType eNewType )
 {
     m_aErrorBarResources.SetErrorBarType( eNewType );
+}
+
+void ErrorBarsTabPage::SetChartDocumentForRangeChoosing(
+    const uno::Reference< chart2::XChartDocument > & xChartDocument )
+{
+    m_aErrorBarResources.SetChartDocumentForRangeChoosing( xChartDocument );
 }
 
 //.............................................................................

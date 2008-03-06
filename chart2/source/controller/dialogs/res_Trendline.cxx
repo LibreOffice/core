@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_Trendline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:48:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,18 +50,10 @@
 
 // macro for selecting a normal or high contrast bitmap the stack variable
 // bIsHighContrast must exist and reflect the correct state
-#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
+#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 namespace
 {
-void lcl_InterpolateFixedBitmap( FixedBitmap & rBitmap )
-{
-    Bitmap aBmp( rBitmap.GetBitmap() );
-    Size aSize = rBitmap.GetSizePixel();
-    aBmp.Scale( aSize, BMP_SCALE_INTERPOLATE );
-    rBitmap.SetBitmap( aBmp );
-}
-
 template< class T >
     long lcl_getRightEdge( T & rControl )
 {
@@ -107,11 +99,11 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
         m_aRBExponential( pParent, SchResId( RB_EXPONENTIAL )),
         m_aRBPower( pParent, SchResId( RB_POWER )),
 
-        m_aFBNone( pParent, SchResId( FB_NONE )),
-        m_aFBLinear( pParent, SchResId( FB_LINEAR )),
-        m_aFBLogarithmic( pParent, SchResId( FB_LOGARITHMIC )),
-        m_aFBExponential( pParent, SchResId( FB_EXPONENTIAL )),
-        m_aFBPower( pParent, SchResId( FB_POWER )),
+        m_aFINone( pParent, SchResId( FI_NONE )),
+        m_aFILinear( pParent, SchResId( FI_LINEAR )),
+        m_aFILogarithmic( pParent, SchResId( FI_LOGARITHMIC )),
+        m_aFIExponential( pParent, SchResId( FI_EXPONENTIAL )),
+        m_aFIPower( pParent, SchResId( FI_POWER )),
 
         m_aFLEquation( pParent, SchResId( FL_EQUATION )),
         m_aCBShowEquation( pParent, SchResId( CB_SHOW_EQUATION )),
@@ -122,16 +114,8 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
 {
     FillValueSets();
 
-    lcl_InterpolateFixedBitmap( m_aFBLinear );
-    lcl_InterpolateFixedBitmap( m_aFBLogarithmic );
-    lcl_InterpolateFixedBitmap( m_aFBExponential );
-    lcl_InterpolateFixedBitmap( m_aFBPower );
-
     if( m_bNoneAvailable )
-    {
         m_aRBNone.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-        lcl_InterpolateFixedBitmap( m_aFBNone );
-    }
     else
         m_aRBNone.Hide();
 
@@ -211,7 +195,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     const SfxPoolItem *pPoolItem = NULL;
     SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_REGRESSTYPE, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, TRUE, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -273,7 +257,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bTrendLineUnique )
-        rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_STAT_REGRESSTYPE ));
+        rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
     if( m_aCBShowEquation.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_aCBShowEquation.IsChecked() ));
     if( m_aCBShowCorrelationCoeff.GetState() != STATE_DONTKNOW )
@@ -286,11 +270,11 @@ void TrendlineResources::FillValueSets()
     bool bIsHighContrast = ( true && m_aFLType.GetDisplayBackground().GetColor().IsDark() );
 
     if( m_bNoneAvailable )
-        m_aFBNone.SetBitmap( SELECT_BITMAP( BMP_REGRESSION_NONE ));
-    m_aFBLinear.SetBitmap( SELECT_BITMAP( BMP_REGRESSION_LINEAR ));
-    m_aFBLogarithmic.SetBitmap( SELECT_BITMAP( BMP_REGRESSION_LOG ));
-    m_aFBExponential.SetBitmap( SELECT_BITMAP( BMP_REGRESSION_EXP ));
-    m_aFBPower.SetBitmap( SELECT_BITMAP( BMP_REGRESSION_POWER ));
+        m_aFINone.SetImage( SELECT_IMAGE( BMP_REGRESSION_NONE ));
+    m_aFILinear.SetImage( SELECT_IMAGE( BMP_REGRESSION_LINEAR ));
+    m_aFILogarithmic.SetImage( SELECT_IMAGE( BMP_REGRESSION_LOG ));
+    m_aFIExponential.SetImage( SELECT_IMAGE( BMP_REGRESSION_EXP ));
+    m_aFIPower.SetImage( SELECT_IMAGE( BMP_REGRESSION_POWER ));
 }
 
 void TrendlineResources::UpdateControlStates()
