@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:47:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,6 @@ namespace dbaui
         URL will also be denoted. Yet more additionally, and other exceptions will be forwarded to
         a <type scope="com::sun::star::sdb">InteractionHandler</type>.
 
-        @param _rxDBContext
-            The database context. Must not be <NULL/>
         @param _rDataSourceName
             the URL of the database document, or the name of a registered data source
         @param _pErrorMessageParent
@@ -212,7 +210,6 @@ namespace dbaui
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
         getDataSourceByName_displayError(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDBContext,
                 const ::rtl::OUString& _rDataSourceName,
                 Window* _pErrorMessageParent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB,
