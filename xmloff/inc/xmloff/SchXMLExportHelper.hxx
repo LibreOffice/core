@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:33:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:39:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,7 @@ private:
     SAL_DLLPRIVATE void swapDataArray( com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< double > >& rSequence );
     /// exports a string as a paragraph element
     SAL_DLLPRIVATE void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
+    SAL_DLLPRIVATE void exportErrorBarRanges();
 
     SAL_DLLPRIVATE SchXMLExportHelper(SchXMLExportHelper &); // not defined
     SAL_DLLPRIVATE void operator =(SchXMLExportHelper &); // not defined
