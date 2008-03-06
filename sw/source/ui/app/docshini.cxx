@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:23:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
  --------------------------------------------------------------------*/
 
 
-SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
+SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport ) :
     SfxObjectShell ( eMode ),
     pDoc(0),
     pBasePool(0),
@@ -510,6 +510,8 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     bInUpdateFontList(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
+    if ( !_bScriptingSupport )
+        SetHasNoBasic();
     Init_Impl();
 }
 
