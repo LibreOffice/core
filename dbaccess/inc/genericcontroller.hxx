@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:04:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,107 +36,45 @@
 #ifndef DBAUI_GENERICCONTROLLER_HXX
 #define DBAUI_GENERICCONTROLLER_HXX
 
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
-#include <com/sun/star/frame/CommandGroup.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
-#include <com/sun/star/util/XModifyListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef DBAUI_ASYNCRONOUSLINK_HXX
 #include "AsyncronousLink.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef DBAUI_ICONTROLLER_HXX
-#include "IController.hxx"
-#endif
-#ifndef INCLUDED_DBACCESSDLLAPI_H
+#include "controllerframe.hxx"
 #include "dbaccessdllapi.h"
-#endif
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include "IController.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/CommandGroup.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#endif
+#include <comphelper/stl_types.hxx>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 #include <boost/optional.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
 class Window;
 class VCLXWindow;
 namespace dbaui
 {
     class ODataView;
-
-    typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
-
-    typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::frame::XDispatch
-                                                ,   ::com::sun::star::frame::XDispatchProviderInterceptor
-                                                ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::view::XSelectionSupplier
-                                                ,   ::com::sun::star::frame::XFrameActionListener
-                                                ,   ::com::sun::star::lang::XInitialization
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::frame::XDispatchInformationProvider
-                                                >   OGenericUnoController_COMPBASE;
-
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XController
-                                >   OGenericUnoController_CTRBASE;
 
     // ====================================================================
     // = optional
@@ -245,10 +183,23 @@ namespace dbaui
         }
     };
 
+    typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
+
+    typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::frame::XDispatch
+                                                ,   ::com::sun::star::frame::XDispatchProviderInterceptor
+                                                ,   ::com::sun::star::util::XModifyListener
+                                                ,   ::com::sun::star::view::XSelectionSupplier
+                                                ,   ::com::sun::star::frame::XFrameActionListener
+                                                ,   ::com::sun::star::lang::XInitialization
+                                                ,   ::com::sun::star::lang::XServiceInfo
+                                                ,   ::com::sun::star::frame::XDispatchInformationProvider
+                                                ,   ::com::sun::star::frame::XController
+                                                >   OGenericUnoController_Base;
+
     // ====================================================================
-    class DBACCESS_DLLPUBLIC OGenericUnoController  :public OGenericUnoController_MBASE
-                                ,public OGenericUnoController_COMPBASE
-                                ,public OGenericUnoController_CTRBASE
+    class DBACCESS_DLLPUBLIC OGenericUnoController
+                                :public OGenericUnoController_MBASE
+                                ,public OGenericUnoController_Base
                                 ,public IController
     {
     private:
@@ -279,7 +230,6 @@ namespace dbaui
 
         ::cppu::OInterfaceContainerHelper
                                 m_aSelectionListeners;
-        ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
         ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state
         Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
@@ -288,7 +238,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xCurrentFrame;// the frame we're residing in
+        ControllerFrame                                                                     m_aCurrentFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xDatabaseContext;
@@ -297,7 +247,6 @@ namespace dbaui
         sal_Bool                m_bPreview;
         sal_Bool                m_bReadOnly;
 
-        sal_Bool                m_bFrameUiActive        : 1;        // updated in ::frameAction
         sal_Bool                m_bCurrentlyModified    : 1;
 
 
@@ -305,11 +254,11 @@ namespace dbaui
         // ----------------------------------------------------------------
         // attribute access
         ::osl::Mutex&               getMutex( )             { return OGenericUnoController_MBASE::m_aMutex; }
-        ::cppu::OBroadcastHelper&   getBroadcastHelper()    { return OGenericUnoController_COMPBASE::rBHelper; }
+        ::cppu::OBroadcastHelper&   getBroadcastHelper()    { return OGenericUnoController_Base::rBHelper; }
 
         // ----------------------------------------------------------------
         // methods
-        OGenericUnoController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        OGenericUnoController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM );
         const ::comphelper::NamedValueCollection&
                                     getInitParams() const   { return m_aInitParameters; }
 
@@ -319,14 +268,19 @@ namespace dbaui
                 The help id to dispatch.
         */
         void openHelpAgent(sal_Int32 _nHelpId);
+
         /** open the help agent for the given help url.
             @param  _pHelpStringURL
                 The help url to dispatch.
         */
-        void openHelpAgent(rtl::OUString const& _suHelpStringURL );
-        // void openHelpAgent(URL aURL);
+        void openHelpAgent( const rtl::OUString& _suHelpStringURL );
 
-        void openHelpAgent(com::sun::star::util::URL aURL);
+        /** opens the given Help URL in the help agent
+
+            The URL does not need to be parsed already, it is passed through
+            XURLTransformer::parseStrict before it is used.
+        */
+        void openHelpAgent( const ::com::sun::star::util::URL& _rURL );
 
         // closes the task when possible
         void closeTask();
@@ -420,6 +374,9 @@ namespace dbaui
         */
         virtual void updateTitle( );
 
+        virtual void    startFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+        virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+
         virtual ~OGenericUnoController();
 
     private:
@@ -431,9 +388,6 @@ namespace dbaui
 
         sal_Bool ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState);
         void ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache);
-
-        sal_Bool    startFrameListening( );
-        void        stopFrameListening( );
 
         // link methods
         DECL_LINK(OnAsyncInvalidateAll, void*);
@@ -476,7 +430,8 @@ namespace dbaui
         virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const;
         virtual sal_Bool isCommandEnabled(const ::rtl::OUString& _rCompleteCommandURL) const;
-        virtual sal_Bool isDataSourceReadOnly() const { return sal_False; }
+        virtual sal_Bool isDataSourceReadOnly() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL getXController() throw( ::com::sun::star::uno::RuntimeException );
 
         // misc
         virtual sal_Bool isCommandChecked(sal_uInt16 _nCommandId) const;
@@ -488,13 +443,8 @@ namespace dbaui
         virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
         // XInterface
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire(  ) throw ();
         virtual void SAL_CALL release(  ) throw ();
-
-        // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XController
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
@@ -502,8 +452,8 @@ namespace dbaui
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException ) = 0;
         virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException ){ return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > (); };
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SAL_CALL getFrame(void) throw( ::com::sun::star::uno::RuntimeException ){ return m_xCurrentFrame; };
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SAL_CALL getFrame(void) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::frame::XDispatch
         virtual void        SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException);
@@ -521,7 +471,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException) {OGenericUnoController_COMPBASE::dispose(); }
+        virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL disposing();
         virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException);
@@ -546,6 +496,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) throw (::com::sun::star::uno::RuntimeException);
 
+    protected:
+        OGenericUnoController();    // never implemented
     };
 }
 
