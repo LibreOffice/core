@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:08:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
+#endif
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
 #endif
 
 #ifndef _LIST_HXX //autogen
@@ -97,12 +100,16 @@ struct ScCondFormatEntryItem
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens2;
-    String      maExpr1;
-    String      maExpr2;
-    String      maPosStr;   // formula position as text
-    String      maStyle;    // display name as stored in ScStyleSheet
-    ScAddress   maPos;
-    USHORT      mnMode;     // stores enum ScConditionMode
+    String             maExpr1;
+    String             maExpr2;
+    String             maPosStr;  // formula position as text
+    String             maStyle;   // display name as stored in ScStyleSheet
+    ScAddress          maPos;
+    ScGrammar::Grammar meGrammar; // grammar used with maExpr1 and maExpr2
+    USHORT             mnMode;    // stores enum ScConditionMode
+
+    // Make sure the grammar is initialized for API calls.
+    ScCondFormatEntryItem() : meGrammar( ScGrammar::GRAM_UNSPECIFIED ) {}
 };
 
 class ScTableConditionalFormat : public cppu::WeakImplHelper5<
@@ -121,11 +128,11 @@ private:
 public:
                             ScTableConditionalFormat();
                             ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
-                                                        BOOL bEnglish, BOOL bCompileXML);
+                                                        const ScGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
 
     void                    FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, BOOL bEnglish, BOOL bCompileXML ) const;
+                                            ScDocument* pDoc, ScGrammar::Grammar eGrammar ) const;
     void                    DataChanged();
 
                             // XSheetConditionalEntries
@@ -243,6 +250,7 @@ private:
     USHORT              nMode;          // enum ScConditionMode
     String              aExpr1;
     String              aExpr2;
+    ScGrammar::Grammar  meGrammar;      // grammar used with aExpr1 and aExpr2
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
@@ -263,11 +271,11 @@ private:
 public:
                             ScTableValidationObj();
                             ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
-                                                BOOL bEnglish, BOOL bCompileXML);
+                                                const ScGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj();
 
     ScValidationData*       CreateValidationData( ScDocument* pDoc,
-                                                BOOL bEnglish, BOOL bCompileXML ) const;
+                                                ScGrammar::Grammar eGrammar ) const;
     void                    DataChanged();
 
                             // XSheetCondition
