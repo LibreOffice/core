@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:22:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,12 @@
 #endif
 #ifndef SC_TOKENARRAY_HXX
 #include "tokenarray.hxx"
+#endif
+#ifndef SC_GRAMMAR_HXX
+#include "grammar.hxx"
+#endif
+#ifndef SC_FORMULARESULT_HXX
+#include "formularesult.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -128,6 +134,11 @@ public:
                                     ScTokenArray* pArr = NULL,
                                     ScAddress aPos = ScAddress() );
 
+    /** Error code if ScFormulaCell, else 0. */
+    USHORT          GetErrorCode() const;
+    /** ScFormulaCell with svEmptyCell result, or ScNoteCell (may have been
+        created due to reference to empty cell). */
+    BOOL            HasEmptyData() const;
     BOOL            HasValueData() const;
     BOOL            HasStringData() const;
     String          GetStringData() const;          // nur echte Strings
@@ -233,10 +244,10 @@ public:
 };
 
 enum ScMatrixMode {
-    MM_NONE      = 0,                   // keine Matrixformel
-    MM_FORMULA   = 1,                   // Matrixformel
-    MM_REFERENCE = 2,                   // Referenz auf Matrixformel (MATVALUE)
-    MM_FAKE      = 3                    // Formel als Matrixformel
+    MM_NONE      = 0,                   // No matrix formula
+    MM_FORMULA   = 1,                   // Upper left matrix formula cell
+    MM_REFERENCE = 2,                   // Remaining cells, via ocMatRef reference token
+    MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
 };
 
 
@@ -245,32 +256,27 @@ class ScIndexMap;
 class ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
-    String          aErgString;
-    double          nErgValue;
-    ScAddress::Convention nErgConv;
-    ScTokenArray*   pCode;                  // das neue Token-Array
+    ScFormulaResult aResult;
+    ScGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
+    ScTokenArray*   pCode;              // The (new) token array
     ScDocument*     pDocument;
-    ScMatrixRef     xMatrix;                // Pointer to refcounted result matrix
     ScFormulaCell*  pPrevious;
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
-    ULONG           nFormatIndex;       // durch Berechnung gesetztes Format
-    SCCOL           nMatCols;           // wenn MM_FORMULA Matrixzelle
-    SCROW           nMatRows;           // belegte Area
+    ULONG           nFormatIndex;       // Number format set by calculation
+    short           nFormatType;        // Number format type set by calculation
     USHORT          nSeenInIteration;   // Iteration cycle in which the cell was last encountered
-    short           nFormatType;
-    BOOL            bIsValue    : 1;    // Result is numerical, not textual
-    BOOL            bDirty      : 1;    // Must be (re)calculated
-    BOOL            bChanged    : 1;    // Whether something changed regarding display/representation
-    BOOL            bRunning    : 1;    // Already interpreting right now
-    BOOL            bCompile    : 1;    // Must be (re)compiled
-    BOOL            bSubTotal   : 1;    // Cell is part of or contains a SubTotal
-    BOOL            bIsIterCell : 1;    // Cell is part of a circular reference
-    BOOL            bInChangeTrack: 1;  // Cell is in ChangeTrack
-    BOOL            bTableOpDirty : 1;  // Dirty flag for TableOp
+    BYTE            cMatrixFlag;        // One of ScMatrixMode
+    BOOL            bDirty         : 1; // Must be (re)calculated
+    BOOL            bChanged       : 1; // Whether something changed regarding display/representation
+    BOOL            bRunning       : 1; // Already interpreting right now
+    BOOL            bCompile       : 1; // Must be (re)compiled
+    BOOL            bSubTotal      : 1; // Cell is part of or contains a SubTotal
+    BOOL            bIsIterCell    : 1; // Cell is part of a circular reference
+    BOOL            bInChangeTrack : 1; // Cell is in ChangeTrack
+    BOOL            bTableOpDirty  : 1; // Dirty flag for TableOp
     BOOL            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
-    BYTE            cMatrixFlag;        // 1 = links oben, 2 = Restmatrix, 0 = keine
 
                     enum ScInterpretTailParameter
                     {
@@ -280,11 +286,11 @@ private:
                     };
     void            InterpretTail( ScInterpretTailParameter );
 
-    /** Get English formula, if bCompileXML==TRUE in Plain Old Formula format,
-        which means missing parameters are substituded. */
-    void            GetEnglishFormulaForPof( rtl::OUStringBuffer &rBuffer,
-                                             const ScAddress &rPos,
-                                             BOOL bCompileXML ) const;
+    /** Get formula, if eGrammar is one of GRAM_PODF in Plain Old Formula
+        format, which means missing parameters are substituded. */
+    void            GetFormulaForPof( rtl::OUStringBuffer &rBuffer,
+                                      const ScAddress &rPos,
+                                      const ScGrammar::Grammar eGrammar ) const;
 
 public:
 
@@ -297,35 +303,34 @@ public:
                     ~ScFormulaCell();
                     ScFormulaCell();
 
-    // leere Zelle, ggf. mit fertigem TokenArray
-    ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL, BYTE=0 );
-    // mit Formel
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& aPos,
-                   const String& rFormula,
-                   // Use the conv associated with aPos::nTab by default
-                   ScAddress::Convention eConvP = ScAddress::CONV_UNSPECIFIED,
-                   BYTE bMatInd = 0 );
+    /** Empty formula cell, or with a preconstructed token array. */
+    ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
+                    const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT,
+                    BYTE = MM_NONE );
+
+    /** With formula string and grammar to compile with.
+        ScGrammar::GRAM_DEFAULT effectively is ScGrammar::GRAM_NATIVE_UI that
+        also includes ScAddress::CONV_UNSPECIFIED, therefor uses the address
+        convention associated with rPos::nTab by default. */
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
+                    const String& rFormula,
+                    const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT,
+                    BYTE cMatInd = MM_NONE );
+
     // copy-ctor
     // nCopyFlags:  0 := nothing special
     //              0x0001 := readjust 3D references to point to old position even if relative
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                    const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags = 0 );
-    // lesender ctor
-    ScFormulaCell( ScDocument* pDoc, const ScAddress&,
-                   SvStream& rStream, ScMultipleReadHeader& rHdr );
 
     using ScBaseCell::Clone;
     ScBaseCell*     Clone(ScDocument* pDoc, const ScAddress&,
                             BOOL bNoListening = FALSE ) const;
 
     void            GetFormula( String& rFormula,
-                                ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
-    void            GetEnglishFormula( String& rFormula, BOOL bCompileXML = FALSE,
-                                       ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
-    void            GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML = FALSE,
-                                       ScAddress::Convention eConv = ScAddress::CONV_OOO) const;
-
-    void            Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
+                                const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT ) const;
+    void            GetFormula( rtl::OUStringBuffer& rBuffer,
+                                const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty();
     inline void     SetDirtyVar() { bDirty = TRUE; }
@@ -339,7 +344,7 @@ public:
     void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula,
                             BOOL bNoListening = FALSE,
-                            ScAddress::Convention eConv = ScAddress::CONV_OOO);
+                            const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT );
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
@@ -376,7 +381,10 @@ public:
     BOOL            IsSubTotal() const                      { return bSubTotal; }
     BOOL            IsChanged() const                       { return bChanged; }
     void            ResetChanged()                          { bChanged = FALSE; }
-    BOOL            IsValue();
+    BOOL            IsEmpty();      // svEmptyCell result
+                    // display as empty string if svEmptyCell result
+    BOOL            IsEmptyDisplayedAsString();
+    BOOL            IsValue();      // also TRUE if svEmptyCell
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     void            GetString( String& rString );
@@ -384,7 +392,8 @@ public:
     BOOL            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     USHORT          GetMatrixEdge( ScAddress& rOrgPos );
-    USHORT          GetErrCode();
+    USHORT          GetErrCode();   // interpret first if necessary
+    USHORT          GetRawError();  // don't interpret, just return code or result error
     short           GetFormatType() const                   { return nFormatType; }
     ULONG           GetFormatIndex() const                  { return nFormatIndex; }
     void            GetFormatInfo( short& nType, ULONG& nIndex ) const
@@ -410,10 +419,8 @@ public:
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
     void            SetCompile( BOOL bVal ) { bCompile = bVal; }
     ScDocument*     GetDocument() const     { return pDocument; }
-    void            SetMatColsRows( SCCOL nCols, SCROW nRows )
-                                    { nMatCols = nCols; nMatRows = nRows; }
-    void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const
-                                    { nCols = nMatCols; nRows = nMatRows; }
+    void            SetMatColsRows( SCCOL nCols, SCROW nRows );
+    void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // ob Zelle im ChangeTrack und nicht im echten Dokument ist
     void            SetInChangeTrack( BOOL bVal ) { bInChangeTrack = bVal; }
@@ -424,12 +431,23 @@ public:
                     // uebernommene Format.
     ULONG           GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFormat ) const;
 
-    // fuer die Importfilter!
+    // For import filters!
     void            AddRecalcMode( ScRecalcMode );
-    void            SetDouble( double n )                   { nErgValue = n; bIsValue = TRUE; }
-    void            SetString( const String& r,
-                               ScAddress::Convention eConv = ScAddress::CONV_OOO)
-                        { aErgString = r; nErgConv = eConv; bIsValue = FALSE; }
+    /** For import only: set a double result. */
+    void            SetHybridDouble( double n )     { aResult.SetHybridDouble( n); }
+    /** For import only: set a string result.
+        If for whatever reason you have to use both, SetHybridDouble() and
+        SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
+        for performance reasons.*/
+    void            SetHybridString( const String& r )
+                        { aResult.SetHybridString( r); }
+    /** For import only: set a temporary formula string to be compiled later.
+        If for whatever reason you have to use both, SetHybridDouble() and
+        SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
+        for performance reasons.*/
+    void            SetHybridFormula( const String& r,
+                                    const ScGrammar::Grammar eGrammar )
+                        { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
     void            SetErrCode( USHORT n );
     inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject*     CreateURLObject() ;
