@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaapplication.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:43:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -574,16 +574,29 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             uno::Reference< uno::XInterface >() );
 }
 
+namespace
+{
+    static uno::Reference< frame::XController > lcl_getCurrentController()
+    {
+        const uno::Reference< frame::XModel > xWorkingDoc( SfxObjectShell::GetCurrentComponent(), uno::UNO_QUERY );
+        uno::Reference< frame::XController > xController;
+        if ( xWorkingDoc.is() )
+            xController.set( xWorkingDoc->getCurrentController(), uno::UNO_SET_THROW );
+        else
+            xController.set( SfxObjectShell::GetCurrentComponent(), uno::UNO_QUERY_THROW );
+        return xController;
+    }
+}
+
 sal_Int32 SAL_CALL
 ScVbaApplication::getCursor() throw (uno::RuntimeException)
 {
     sal_Int32 nPointerStyle( POINTER_ARROW );
     try
     {
-        const uno::Reference< frame::XModel >      xWorkingDoc( SfxObjectShell::GetWorkingDocument(), uno::UNO_SET_THROW );
-        const uno::Reference< frame::XController > xController( xWorkingDoc->getCurrentController(),  uno::UNO_SET_THROW );
-        const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),              uno::UNO_SET_THROW );
-        const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),         uno::UNO_SET_THROW );
+        const uno::Reference< frame::XController > xController( lcl_getCurrentController(),     uno::UNO_SET_THROW );
+        const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),        uno::UNO_SET_THROW );
+        const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),   uno::UNO_SET_THROW );
         // why the heck isn't there an XWindowPeer::getPointer, but a setPointer only?
         const Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
@@ -614,12 +627,39 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 {
     try
     {
-        const uno::Reference< frame::XModel2 >          xWorkingDoc     ( SfxObjectShell::GetWorkingDocument(), uno::UNO_QUERY_THROW );
-        const uno::Reference< container::XEnumeration > xEnumControllers( xWorkingDoc->getControllers(),        uno::UNO_SET_THROW   );
-        while ( xEnumControllers->hasMoreElements() )
+        ::std::vector< uno::Reference< frame::XController > > aControllers;
+
+        const uno::Reference< frame::XModel2 > xModel2( SfxObjectShell::GetCurrentComponent(), uno::UNO_QUERY );
+        if ( xModel2.is() )
         {
-            const uno::Reference< frame::XController > xController( xEnumControllers->nextElement(), uno::UNO_QUERY_THROW );
-            const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),         uno::UNO_SET_THROW   );
+            const uno::Reference< container::XEnumeration > xEnumControllers( xModel2->getControllers(), uno::UNO_SET_THROW );
+            while ( xEnumControllers->hasMoreElements() )
+            {
+                const uno::Reference< frame::XController > xController( xEnumControllers->nextElement(), uno::UNO_QUERY_THROW );
+                aControllers.push_back( xController );
+            }
+        }
+        else
+        {
+            const uno::Reference< frame::XModel > xModel( SfxObjectShell::GetCurrentComponent(), uno::UNO_QUERY );
+            if ( xModel.is() )
+            {
+                const uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+                aControllers.push_back( xController );
+            }
+            else
+            {
+                const uno::Reference< frame::XController > xController( SfxObjectShell::GetCurrentComponent(), uno::UNO_QUERY_THROW );
+                aControllers.push_back( xController );
+            }
+        }
+
+        for (   ::std::vector< uno::Reference< frame::XController > >::const_iterator controller = aControllers.begin();
+                controller != aControllers.end();
+                ++controller
+            )
+        {
+            const uno::Reference< frame::XFrame >      xFrame     ( (*controller)->getFrame(),       uno::UNO_SET_THROW   );
             const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),    uno::UNO_SET_THROW   );
 
             Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
