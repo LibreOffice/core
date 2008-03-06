@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recursionhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:52:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef INCLUDED_RECURSIONHELPER_HXX
 #define INCLUDED_RECURSIONHELPER_HXX
 
+#ifndef SC_FORMULARESULT_HXX
+#include "formularesult.hxx"
+#endif
+
 #include <list>
 #include <stack>
 #include <tools/solar.h>
@@ -46,15 +50,11 @@ struct ScFormulaRecursionEntry
 {
     ScFormulaCell*  pCell;
     BOOL            bOldRunning;
-    BOOL            bPreviousNumeric;
-    double          fPreviousResult;
-    String          aPreviousString;
-    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL bR, BOOL bN, double f,
-            const String& rS ) : pCell(p), bOldRunning(bR),
-                                 bPreviousNumeric(bN), fPreviousResult(f)
+    ScFormulaResult aPreviousResult;
+    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL bR,
+            const ScFormulaResult & rRes ) :
+        pCell(p), bOldRunning(bR), aPreviousResult( rRes)
     {
-        if (!bPreviousNumeric)
-            aPreviousString = rS;
     }
 };
 
@@ -106,11 +106,11 @@ class ScRecursionHelper
     }
     bool    IsDoingRecursion() const        { return bDoingRecursion; }
     void    SetDoingRecursion( bool b )     { bDoingRecursion = b; }
-    void    Insert( ScFormulaCell* p, BOOL bOldRunning, BOOL bNumeric,
-                    double fResult, const String& rStrResult )
+    void    Insert( ScFormulaCell* p, BOOL bOldRunning,
+                    const ScFormulaResult & rRes )
     {
         aRecursionFormulas.insert( aInsertPos, ScFormulaRecursionEntry( p,
-                    bOldRunning, bNumeric, fResult, rStrResult));
+                    bOldRunning, rRes));
     }
     ScFormulaRecursionList::iterator    GetStart()
     {
