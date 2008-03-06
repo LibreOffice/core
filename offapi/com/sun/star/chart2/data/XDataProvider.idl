@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDataProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 19:15:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
 
         @see createDataSource
 
-        @throw com::sun::star::lang::IllegalArgumentException
+        @throws com::sun::star::lang::IllegalArgumentException
             if the given range does not contain a valid range
             representation for a one-dimensional range of data.
      */
