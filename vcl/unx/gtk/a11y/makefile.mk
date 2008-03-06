@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:20:41 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:07:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # workaround for makedepend hang
 MKDEPENDSOLVER=
-LIBTARGET=NO
 NO_DEFAULT_STL=YES
 
 # --- Settings -----------------------------------------------------
@@ -62,7 +61,7 @@ dummy:
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
 
-CFLAGS+=-DVERSION=\"$(UPD)$(LAST_MINOR)\"
+CFLAGS+=-DVERSION=$(EMQ)"$(UPD)$(LAST_MINOR)$(EMQ)"
 
 ATKVERSION:=$(shell @$(PKGCONFIG) --modversion atk | $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk)
 
@@ -70,8 +69,7 @@ ATKVERSION:=$(shell @$(PKGCONFIG) --modversion atk | $(AWK) -v num=true -f $(SOL
 CFLAGS+=-DHAS_ATKRECTANGLE
 .ENDIF
 
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=\
+SLOFILES=\
     $(SLO)$/atkaction.obj \
     $(SLO)$/atkbridge.obj \
     $(SLO)$/atkcomponent.obj \
