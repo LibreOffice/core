@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             title="Interactable Containers" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true">
+    <hsplitter>
+            <scroller>
+                <vbox>
+                    <pushbutton label="Some Label" />
+                    <edit has_border="true" text="Some Text" />
+                    <listbox has_border="true" string-item-list="Item One:Item Two:Item Three:Item Four:Item Five:Item Six:Item Seven" />
+                    <combobox has_border="true" string-item-list="Item One:Item Two:Item Three" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                    <pushbutton label="Some Label" />
+                </vbox>
+            </scroller>
+        <vsplitter>
+            <pushbutton label="Corner" />
+            <tabcontrol>
+                <table columns="3" cnt:title="Page 1">
+                    <pushbutton cnt:x-expand="false" cnt:row-span="2" label="1,1" />
+                    <pushbutton cnt:y-expand="false" label="1,2" />
+                    <pushbutton cnt:y-expand="false" label="1,3" />
+                    <pushbutton cnt:col-span="2" label="2,1" />
+                </table>
+                <vbox cnt:title="Page 2">
+                    <pushbutton label="1" />
+                    <pushbutton label="2" />
+                    <pushbutton label="3" />
+                    <pushbutton label="4" />
+                </vbox>
+                <pushbutton label="Content 3" cnt:title="Page 3" />
+                <pushbutton label="Content 4" cnt:title="Page 4" />
+                <pushbutton label="Content 5" cnt:title="Page 5" />
+            </tabcontrol>
+        </vscroll>
+    </hsplitter>
+</dialog>

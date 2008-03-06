@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="window1" title="Test-Dialog" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true">
+    <hbox border="20" spacing="10" homogeneous="true">
+        <pushbutton label="XML Left"
+                    cnt:expand="true" cnt:fill="true" />
+        <pushbutton label="XML Center"
+                    cnt:expand="true" cnt:fill="false" />
+        <pushbutton label="XML Right"
+                    cnt:expand="false" cnt:fill="false" />
+    </hbox>
+</dialog>

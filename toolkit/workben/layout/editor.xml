@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Normal skin -->
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        id="dialog" title="Layout Editor" sizeable="true">
+    <vbox>
+        <hbox>
+            <min-size min-width="120" cnt:expand="false">
+                <vbox>
+                    <fixedtext label="Layout:" cnt:expand="false" />
+                    <hbox>
+                        <listbox id="layout-tree" has_border="true" />
+                        <vbox cnt:expand="false">
+                            <pushbutton id="layout-up-button" cnt:expand="false" />
+                            <pushbutton id="layout-down-button" cnt:expand="false" />
+                            <fixedtext cnt:expand="true" />
+                            <pushbutton id="layout-remove-button" cnt:expand="false" />
+                        </vbox>
+                    </hbox>
+                </vbox>
+            </min-size>
+            <min-size min-width="120">
+                <vbox>
+                    <fixedtext label="Preview:" cnt:expand="false" />
+                    <vbox border="50">
+                        <bin id="preview-box" />
+                    </vbox>
+                </vbox>
+            </min-size>
+            <min-size min-width="120" cnt:expand="false">
+                <vbox>
+                    <fixedtext label="Properties:" cnt:expand="false" />
+                    <table id="properties-box" columns="3" />
+                </vbox>
+            </min-size>
+        </hbox>
+        <hfixedline cnt:expand="false" />
+        <vbox cnt:expand="false">
+            <fixedtext label="Create widgets:" cnt:expand="false" />
+            <flow id="create-widget" homogeneous="true" spacing="2" />
+            <fixedtext label="Create containers:" cnt:expand="false" />
+            <flow id="create-container" homogeneous="true" spacing="2" />
+        </vbox>
+        <hbox cnt:expand="false">
+            <vbox><fixedline /><fixedline /><fixedline /><fixedline /></vbox>
+<!--            <pushbutton id="import-button" label="Import..." cnt:expand="false"/>-->
+            <pushbutton id="export-button" label="Export (stdout)" cnt:expand="false"/>
+        </hbox>
+    </vbox>
+</dialog>

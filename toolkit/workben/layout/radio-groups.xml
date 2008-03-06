@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Radio Groups Test"
+        optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <hbox>
+            <radiobutton group="1" label="Group 1"
+                         cnt:expand="false" cnt:fill="false" />
+            <radiobutton group="2" label="Group 2"
+                         cnt:expand="true" cnt:fill="true" />
+            <radiobutton group="2" label="Group 2"
+                         cnt:expand="true" cnt:fill="false" />
+            <radiobutton group="1" label="Group 1 (default)" state="1"
+                         cnt:expand="false" cnt:fill="false" />
+        </hbox>
+        <radiobutton group="1" label="Group 1" state="0"
+                     cnt:expand="false" cnt:fill="false" />
+    </vbox>
+</dialog>

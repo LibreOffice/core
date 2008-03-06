@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Scroll Test" optimumsize="true"
+        has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <scroller>
+            <vbox>
+                <pushbutton label="Button 1" />
+                <edit has_border="true" text="Edit 1" />
+                <pushbutton label="Button 2" />
+                <pushbutton label="Button 3" />
+                <pushbutton label="Button 4" />
+                <pushbutton label="Button 5" />
+                <pushbutton label="Button 6" />
+                <pushbutton label="Button 7" />
+                <pushbutton label="Button 8" />
+                <pushbutton label="Button 9" />
+                <pushbutton label="Button 10" />
+                <pushbutton label="Button 11" />
+                <pushbutton label="Button 12" />
+                <pushbutton label="Button 13" />
+                <pushbutton label="Button 14" />
+                <pushbutton label="Button 15" />
+                <pushbutton label="Button 16" />
+                <pushbutton label="Button 17" />
+            </vbox>
+        </scroller>
+        <okbutton cnt:expand="false" />
+    </vbox>
+</dialog>
