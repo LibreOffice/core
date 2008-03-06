@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:30:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2204,14 +2204,15 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
 
 
 void ScDocument::GetNumberFormatInfo( short& nType, ULONG& nIndex,
-            const ScAddress& rPos, const ScFormulaCell& rFCell ) const
+            const ScAddress& rPos, const ScBaseCell* pCell ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( pTab[nTab] )
     {
         nIndex = pTab[nTab]->GetNumberFormat( rPos );
-        if ( (nIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-            rFCell.GetFormatInfo( nType, nIndex );
+        if ( (nIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell &&
+                pCell->GetCellType() == CELLTYPE_FORMULA )
+            static_cast<const ScFormulaCell*>(pCell)->GetFormatInfo( nType, nIndex );
         else
             nType = GetFormatTable()->GetType( nIndex );
     }
