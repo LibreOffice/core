@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:33:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1456,8 +1456,9 @@ SdOptionsPrint::SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig ) :
     bBack( TRUE ),
     bCutPage( FALSE ),
     bPaperbin( FALSE ),
+    mbHandoutHorizontal( TRUE ),
+    mnHandoutPages( 6 ),
     nQuality( 0 )
-
 {
     EnableModify( TRUE );
 }
@@ -1485,6 +1486,8 @@ void SdOptionsPrint::SetDefaults()
     SetCutPage( FALSE );
     SetPaperbin( FALSE );
     SetOutputQuality( 0 );
+    SetHandoutHorizontal( TRUE );
+    SetHandoutPages( 6 );
 }
 
 // -----------------------------------------------------------------------------
@@ -1509,7 +1512,9 @@ BOOL SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
             IsBackPage() == rOpt.IsBackPage() &&
             IsCutPage() == rOpt.IsCutPage() &&
             IsPaperbin() == rOpt.IsPaperbin() &&
-            GetOutputQuality() == rOpt.GetOutputQuality() );
+            GetOutputQuality() == rOpt.GetOutputQuality() &&
+            IsHandoutHorizontal() == rOpt.IsHandoutHorizontal() &&
+            GetHandoutPages() == rOpt.GetHandoutPages() );
 }
 
 // -----------------------------------------------------------------------------
@@ -1555,12 +1560,14 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
         "Content/Presentation",
         "Content/Note",
         "Content/Handout",
-        "Content/Outline"
+        "Content/Outline",
+        "Other/HandoutHorizontal",
+        "Other/PagesPerHandout"
     };
 
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        rCount = 15;
+        rCount = 17;
         ppNames = aImpressPropNames;
     }
     else
@@ -1593,6 +1600,8 @@ BOOL SdOptionsPrint::ReadData( const Any* pValues )
         if( pValues[12].hasValue() ) SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
         if( pValues[13].hasValue() ) SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
         if( pValues[14].hasValue() ) SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
+        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[12].getValue() );
+        if( pValues[16].hasValue() ) SetHandoutPages( (UINT16)*(sal_Int32*) pValues[13].getValue() );
     }
 
     return TRUE;
@@ -1621,6 +1630,8 @@ BOOL SdOptionsPrint::WriteData( Any* pValues ) const
         pValues[ 12 ] <<= IsNotes();
         pValues[ 13 ] <<= IsHandout();
         pValues[ 14 ] <<= IsOutline();
+        pValues[ 15 ] <<= IsHandoutHorizontal();
+        pValues[ 16 ] <<= GetHandoutPages();
     }
 
     return TRUE;
@@ -1647,6 +1658,8 @@ void SdOptionsPrint::SetPrinterOptions( const SdOptionsPrint* pOptions )
     bCutPage = pOptions->bCutPage;
     bPaperbin = pOptions->bPaperbin;
     nQuality = pOptions->nQuality;
+    mnHandoutPages = pOptions->mnHandoutPages;
+    mbHandoutHorizontal = pOptions->mbHandoutHorizontal;
 }
 
 /*************************************************************************
