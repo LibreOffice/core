@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,23 +39,15 @@
 #include "macros.hxx"
 #include "LineProperties.hxx"
 #include "ContainerHelper.hxx"
-
-#ifndef CHART_PROPERTYHELPER_HXX
+#include "EventListenerHelper.hxx"
 #include "PropertyHelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
-#endif
+#include "CloneHelper.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
+
 #include <rtl/math.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -85,7 +77,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "ErrorBarStyle" ),
                   PROP_ERROR_BAR_STYLE,
-                  ::getCppuType( reinterpret_cast< const chart2::ErrorBarStyle * >(0)),
+                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -126,7 +118,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, chart2::ErrorBarStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, ::com::sun::star::chart::ErrorBarStyle::NONE );
     ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_POS_ERROR, 0.0 );
     ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_NEG_ERROR, 0.0 );
     ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_WEIGHT, 1.0 );
@@ -167,6 +159,13 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     return aArrayHelper;
 }
 
+bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
+{
+    uno::Reference< lang::XServiceInfo > xServiceInfo( xLSeq, uno::UNO_QUERY );
+    return ( xServiceInfo.is() && xServiceInfo->getImplementationName().equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.chart2.LabeledDataSequence")));
+}
+
 } // anonymous namespace
 
 namespace chart
@@ -185,7 +184,17 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{}
+{
+    if( ! rOther.m_aDataSequences.empty())
+    {
+        if( lcl_isInternalData( rOther.m_aDataSequences.front()))
+            CloneHelper::CloneRefVector< tDataSequenceContainer::value_type >(
+                rOther.m_aDataSequences, m_aDataSequences );
+        else
+            m_aDataSequences = rOther.m_aDataSequences;
+        ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
+    }
+}
 
 ErrorBar::~ErrorBar()
 {}
@@ -289,6 +298,39 @@ void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
+}
+
+// ____ XDataSink ____
+void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
+    throw (uno::RuntimeException)
+{
+    ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
+    EventListenerHelper::removeListenerFromAllElements( m_aDataSequences, this );
+    m_aDataSequences = ContainerHelper::SequenceToVector( aData );
+    EventListenerHelper::addListenerToAllElements( m_aDataSequences, this );
+    ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
+}
+
+// ____ XDataSource ____
+uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
+    throw (uno::RuntimeException)
+{
+    return ContainerHelper::ContainerToSequence( m_aDataSequences );
+}
+
+// ____ XChild ____
+uno::Reference< uno::XInterface > SAL_CALL ErrorBar::getParent()
+    throw (uno::RuntimeException)
+{
+    return m_xParent;
+}
+
+void SAL_CALL ErrorBar::setParent(
+    const uno::Reference< uno::XInterface >& Parent )
+    throw (lang::NoSupportException,
+           uno::RuntimeException)
+{
+    m_xParent.set( Parent );
 }
 
 // ____ OPropertySet ____
