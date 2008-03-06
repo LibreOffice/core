@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:49:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,8 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #endif
 
+#include "grammar.hxx"
+
 class ScXMLImport;
 class OutlinerParaObject;
 
@@ -107,6 +109,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nRepeatedRows;
     sal_Int32   nCellsRepeated;
     ScXMLImport& rXMLImport;
+    ScGrammar::Grammar  eGrammar;
     sal_Int16   nCellType;
     sal_Bool    bIsMerged;
     sal_Bool    bIsMatrix;
