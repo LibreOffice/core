@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:13:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ namespace comphelper {
             const ::rtl::OUString sTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
 
             sDocURL = _rxDocument->getURL();
+            if ( sDocURL.matchAsciiL( "private:", 8 ) )
+                sDocURL = ::rtl::OUString();
 
             // 1. if the document is not saved, yet, check the frame title
             if ( sDocURL.getLength() == 0 )
@@ -159,15 +161,15 @@ namespace comphelper {
         {
             ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() );
             ::rtl::OString sMessage( "caught an exception!" );
-            sMessage += "ntype   : ";
+            sMessage += "\ntype   : ";
             sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
-            sMessage += "nmessage: ";
+            sMessage += "\nmessage: ";
             ::com::sun::star::uno::Exception exception;
             caught >>= exception;
             sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
-            sMessage += "nin function:n";
+            sMessage += "\nin function:\n";
             sMessage += BOOST_CURRENT_FUNCTION;
-            sMessage += "n";
+            sMessage += "\n";
             OSL_ENSURE( false, sMessage );
         }
 
