@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:27:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScP
         const ScTokenArray* pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
             XclTools::ErrorToEnum( fValue, EXC_BOOLERR_ERROR, nErrCode ) );
         ScFormulaCell* pCell = new ScFormulaCell( &rDoc, rScPos, pScTokArr );
-        pCell->SetDouble( fValue );
+        pCell->SetHybridDouble( fValue );
         rDoc.PutCell( rScPos, pCell );
     }
 }
