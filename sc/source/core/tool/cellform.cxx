@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:18:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,8 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
 
                         if (nErrCode != 0)
                             rString = ScGlobal::GetErrorString(nErrCode);
+                        else if ( pFCell->IsEmptyDisplayedAsString() )
+                            rString.Erase();
                         else if ( pFCell->IsValue() )
                         {
                             double fValue = pFCell->GetValue();
@@ -191,7 +193,11 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rSt
             break;
         case CELLTYPE_FORMULA:
             {
-                if (((ScFormulaCell*)pCell)->IsValue())
+                if (((ScFormulaCell*)pCell)->IsEmptyDisplayedAsString())
+                {
+                    rString.Erase();
+                }
+                else if (((ScFormulaCell*)pCell)->IsValue())
                 {
                     double nValue = ((ScFormulaCell*)pCell)->GetValue();
                     rFormatter.GetInputLineString( nValue, nFormat, rString );
