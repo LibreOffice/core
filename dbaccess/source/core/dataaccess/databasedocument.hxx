@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:49:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,56 +35,41 @@
 #ifndef _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
 #define _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include "ModelImpl.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL2_HPP_
 #include <com/sun/star/frame/XModel2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE10_HXX_
-#include <cppuhelper/compbase10.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
 #include <com/sun/star/embed/XTransactionListener.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+/** === end UNO includes === **/
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
+#include <comphelper/implbase_var.hxx>
 #endif
 
 #include <boost/shared_ptr.hpp>
-#ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
-#include "ModelImpl.hxx"
-#endif
+
+namespace comphelper {
+    class NamedValueCollection;
+}
 
 //........................................................................
 namespace dbaccess
@@ -98,98 +83,85 @@ typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::cppu::WeakComponentImplHelper10<  ::com::sun::star::frame::XModel2
-                            ,   ::com::sun::star::util::XModifiable
-                            ,   ::com::sun::star::frame::XStorable
-                            ,   ::com::sun::star::document::XEventBroadcaster
-                            ,   ::com::sun::star::document::XEventListener
-                            ,   ::com::sun::star::view::XPrintable
-                            ,   ::com::sun::star::util::XCloseable
-                            ,   ::com::sun::star::lang::XServiceInfo
-                            ,   ::com::sun::star::sdb::XOfficeDatabaseDocument
-                            ,   ::com::sun::star::ui::XUIConfigurationManagerSupplier
-                            //, ::com::sun::star::document::XStorageBasedDocument
-                            >   ODatabaseDocument_OfficeDocument;
+typedef ::comphelper::WeakComponentImplHelper14 <   ::com::sun::star::frame::XModel2
+                                                ,   ::com::sun::star::util::XModifiable
+                                                ,   ::com::sun::star::frame::XStorable
+                                                ,   ::com::sun::star::document::XEventBroadcaster
+                                                ,   ::com::sun::star::document::XEventListener
+                                                ,   ::com::sun::star::view::XPrintable
+                                                ,   ::com::sun::star::util::XCloseable
+                                                ,   ::com::sun::star::lang::XServiceInfo
+                                                ,   ::com::sun::star::sdb::XOfficeDatabaseDocument
+                                                ,   ::com::sun::star::ui::XUIConfigurationManagerSupplier
+                                                ,   ::com::sun::star::document::XStorageBasedDocument
+                                                ,   ::com::sun::star::document::XEmbeddedScripts
+                                                ,   ::com::sun::star::document::XScriptInvocationContext
+                                                ,   ::com::sun::star::script::provider::XScriptProviderSupplier
+                                                >   ODatabaseDocument_OfficeDocument;
 
 class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
                         ,public ODatabaseDocument_OfficeDocument
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
 
-    ::cppu::OInterfaceContainerHelper                                                   m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                                                   m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                                                   m_aDocEventListeners;
+    ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
+    ::cppu::OInterfaceContainerHelper                                                           m_aDocEventListeners;
+    ::cppu::OInterfaceContainerHelper                                                           m_aStorageListeners;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xCurrentController;
-    Controllers                                                                         m_aControllers;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >                    m_xCurrentController;
+    Controllers                                                                                 m_aControllers;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xForms;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xReports;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::script::provider::XScriptProvider > m_xScriptProvider;
 
-    /** stores the model
-        @param  sURL
-            The URL
-        @param  lArguments
-            The media descriptor
-        @param  _xStorageToSaveTo
-            The storage which should be used for saving
-        @param  _rGuard
-            The gurad will be clear before notifying
+    /** stores the document to the given URL, rebases it to the respective new storage, if necessary, resets
+        the modified flag, and notifies any listeners as required
     */
-    void store(const ::rtl::OUString& sURL
-             , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments
-             ,ModelMethodGuard& _rGuard);
+    void impl_storeAs_throw(
+            const ::rtl::OUString& _rURL,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArguments,
+            const sal_Char* _pAsciiDocumentEventName,
+            ModelMethodGuard& _rGuard
+         );
 
     /** notifies the global event broadcaster
-        @param  _sEventName
-            On of
-            OnNew      => new document
-            OnLoad      => load document
-            OnUnload   => close document
-            OnSaveDone   => "Save" ended
-            OnSaveAsDone   => "SaveAs" ended
-            OnModifyChanged   => modified/unmodified
-        @param _rClearForNotify
-            a guard to our mutex, which will be cleared (i.e. the mutex released) immediately before
-            the notification happens
-    */
-    void impl_notifyEvent( const ::rtl::OUString& _sEventName, ::osl::ClearableMutexGuard& _rClearForNotify );
 
-    /** notifies the global event broadcaster
+        The method must be called without our mutex locked
     */
-    inline void impl_notifyEvent( const sal_Char* _pAsciiEventName, ::osl::ClearableMutexGuard& _rClearForNotify  )
-    {
-        impl_notifyEvent( ::rtl::OUString::createFromAscii( _pAsciiEventName ), _rClearForNotify );
-    }
+    void impl_notifyEvent_nolck_nothrow( const ::com::sun::star::document::EventObject& _rEvent );
+
+    /** notifies our storage change listeners that our underlying storage changed
+
+        @param _rxNewRootStorage
+            the new root storage to be notified. If <NULL/>, it is assumed that no storage change actually
+            happened, and the listeners are not notified.
+    */
+    void    impl_notifyStorageChange_nolck_nothrow(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
+            );
 
     /// write a single XML stream into the package
-    sal_Bool WriteThroughComponent(
-        /// the component we export
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent> & xComponent,
-        const sal_Char* pStreamName,        /// the stream name
-        const sal_Char* pServiceName,       /// service name of the component
-        /// the argument (XInitialization)
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments,
-        /// output descriptor
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-        sal_Bool bPlainStream
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);          /// neither compress nor encrypt
+    void WriteThroughComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > & xComponent,  /// the component we export
+        const sal_Char* pStreamName,                                                                /// the stream name
+        const sal_Char* pServiceName,                                                               /// service name of the component
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> & rArguments,            /// the argument (XInitialization)
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> & rMediaDesc,/// output descriptor
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo
+    ) const;
+
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
-    sal_Bool WriteThroughComponent(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XOutputStream> & xOutputStream,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent> & xComponent,
+    void WriteThroughComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComponent,
         const sal_Char* pServiceName,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc);
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArguments,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> & rMediaDesc
+    ) const;
 
     /** writes the content and settings
         @param  sURL
@@ -199,18 +171,18 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         @param  _xStorageToSaveTo
             The storage which should be used for saving
     */
-    void writeStorage(const ::rtl::OUString& _sURL
-                    , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);
-
+    void writeStorage(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxTargetStorage,
+        const ::comphelper::NamedValueCollection& _rMediaDescriptor
+    ) const;
 
     // ModelDependentComponent overridables
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() const;
 
 private:
     ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
     // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
-    // ODatabaseDocument require clear ownership, and in turn lifetime synchronisation with the ModelImpl.
+    // ODatabaseDocument requires clear ownership, and in turn lifetime synchronisation with the ModelImpl.
     // If you create a ODatabaseDocument directly, you might easily create a leak.
     // #i50905# / 2005-06-20 / frank.schonheit@sun.com
 
@@ -226,12 +198,18 @@ public:
         return new ODatabaseDocument( _pImpl );
     }
 
-// ::com::sun::star::lang::XServiceInfo
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XServiceInfo - static methods
+    // ::com::sun::star::lang::XServiceInfo - static methods
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -240,12 +218,12 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XComponent
+    // XComponent
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::frame::XModel
+    // XModel
     virtual sal_Bool SAL_CALL attachResource( const ::rtl::OUString& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::rtl::OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getArgs(  ) throw (::com::sun::star::uno::RuntimeException) ;
@@ -313,6 +291,25 @@ public:
     // XOfficeDatabaseDocument
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
 
+    // XStorageBasedDocument
+    virtual void SAL_CALL loadFromStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescriptor ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL storeToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescriptor ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL switchToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentStorage(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addStorageChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeStorageChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XEmbeddedScripts
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (::com::sun::star::uno::RuntimeException);
+
+    // XScriptInvocationContext
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
+
+    // XScriptProviderSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::provider::XScriptProvider > SAL_CALL getScriptProvider(  ) throw (::com::sun::star::uno::RuntimeException);
+
     /** clears the given object container
 
         Clearing is done via disposal - the method calls XComponent::dispose at the given object,
@@ -358,12 +355,61 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType );
 
-    /** clears the guard before notifying.
-    *
-    * \param _bModified
-    * \param _rGuard
+    /** resets everything
+
+        @precond
+            m_pImpl is not <NULLL/>
     */
-    void setModified( sal_Bool _bModified,ModelMethodGuard& _rGuard );
+    void
+            impl_reset_nothrow();
+
+    /** imports the document from the given resource.
+    */
+    bool    impl_import_throw( const ::comphelper::NamedValueCollection& _rResource );
+
+    /** creates a storage for the given URL, truncating it if a file with this name already exists
+
+        @throws IOException
+            if the storage could not be created, and the error causing this could not be handled
+            by the document's interaction handler. The message of the IOException will note the failure,
+            and also the message of the originally thrown exception.
+
+        @return
+            <TRUE/> if and only if the storage could be created. If <FALSE/> is returned, then the storage
+            could not be created, but the error had successfully been handled by the document's
+            interaction handler.
+    */
+    bool    impl_createStorageFor_throw(
+                const ::rtl::OUString& _rURL,
+                ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _out_rxStorage
+            ) const;
+
+    /** clears the guard before notifying.
+    */
+    void    impl_setModified_throw( sal_Bool _bModified, ModelMethodGuard& _rGuard );
+
+    /** stores the document to the given storage
+
+        Note that the document is actually not rebased to this storage, it just stores a copy of itself
+        to the given target storage.
+
+        @throws ::com::sun::star::uno::IllegalArgumentException
+            if the given storage is <NULL/>.
+
+        @throws ::com::sun::star::uno::RuntimeException
+            when any of the used operations throws it
+
+        @throws ::com::sun::star::io::IOException
+            when any of the used operations throws it, or any other exception occurs which is no
+            RuntimeException and no IOException
+    */
+    void    impl_storeToStorage_throw(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxTargetStorage,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor
+            ) const;
+
+    /// determines whether we should disable the scripting related interfaces
+    bool    impl_shouldDisallowScripting_nolck_nothrow() const;
 };
 
 //........................................................................
