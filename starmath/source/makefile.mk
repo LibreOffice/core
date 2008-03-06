@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:35:38 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:10:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,16 +34,12 @@
 #*************************************************************************
 
 #MKDEPENDSOLVER=YES
-PROJECTPCH4DLL=TRUE
 
 PRJ=..
 
 PRJNAME=starmath
 TARGET=starmath
 
-PROJECTPCH=math_pch
-PDBTARGET=math_pch
-PROJECTPCHSOURCE=math_pch
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
