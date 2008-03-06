@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:56:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,14 +523,24 @@ public:
 
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc(USHORT nId ) = 0; //  add for SvxDistributePage
     virtual DialogGetRanges         GetDialogGetRangesFunc( USHORT nId ) = 0; //add for SvxPostItDialog
+
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
-            Window* pParent, BOOL bShowSlots = FALSE ) = 0;
+            Window* pParent,
+            BOOL bShowSlots,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+        ) = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
             Window* pParent, com::sun::star::uno::Any aException) = 0;
 
-    virtual VclAbstractDialog*          CreateSvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 ) = 0;
+    virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
+                Window* _pParent,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+                const bool _bUnoDialogMode,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
+                const sal_uInt16 _nInitiallySelectedEvent
+            ) = 0;
 };
 
 #endif
