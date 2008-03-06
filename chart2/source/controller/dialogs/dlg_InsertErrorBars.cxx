@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertErrorBars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:42:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,16 +63,20 @@ namespace chart
 
 InsertErrorBarsDialog::InsertErrorBarsDialog(
     Window* pParent, const SfxItemSet& rMyAttrs,
+    const uno::Reference< chart2::XChartDocument > & xChartDocument,
     ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
         ModalDialog( pParent, SchResId( DLG_DATA_YERRORBAR )),
         rInAttrs( rMyAttrs ),
         aBtnOK( this, SchResId( BTN_OK )),
         aBtnCancel( this, SchResId( BTN_CANCEL )),
         aBtnHelp( this, SchResId( BTN_HELP )),
-        m_apErrorBarResources( new ErrorBarResources( this, rInAttrs, eType ))
+        m_apErrorBarResources( new ErrorBarResources(
+                                   this, this, rInAttrs,
+                                   /* bNoneAvailable = */ true, eType ))
 {
     FreeResource();
     this->SetText( String( SchResId( STR_PAGE_YERROR_BARS )));
+    m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }
 
 InsertErrorBarsDialog::~InsertErrorBarsDialog()

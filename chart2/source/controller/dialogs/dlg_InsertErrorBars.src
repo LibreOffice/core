@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertErrorBars.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:43:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@ ModalDialog DLG_DATA_YERRORBAR
 //  HelpID = SID_INSERT_STATISTICS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 308 , 150 ) ;
+    Size = MAP_APPFONT ( 300 , 156 ) ;
     Moveable = TRUE ;
-    BUTTONS_OK_CANCEL_HELP_STACKED(252)
-    RESOURCE_ERRORBARS( 252 - 6 )
+    BUTTONS_OK_CANCEL_HELP_STACKED( 244 )
+    RESOURCE_ERRORBARS( 244 - 6, 14 )
 };
