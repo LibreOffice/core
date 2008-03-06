@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 15:45:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2196,7 +2196,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 //------------------------------------------------------------------
 
-ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
+ScDocShell::ScDocShell( SfxObjectCreateMode eMode, const bool _bScriptSupport )
     :   SfxObjectShell( eMode ),
         __SCDOCSHELL_INIT
 {
@@ -2208,6 +2208,9 @@ ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
     //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
+
+    if ( !_bScriptSupport )
+        SetHasNoBasic();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
