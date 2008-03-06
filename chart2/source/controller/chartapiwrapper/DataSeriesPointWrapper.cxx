@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:45:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,12 +729,12 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
 
     if( m_eType == DATA_SERIES )
     {
-        WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties );
+        WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
         aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
     }
 
-    WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );//for series and  points
-    WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties );//for series and  points
+    WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
+    WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
 
     //add unnamed fill properties (different inner names here)
 //     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
