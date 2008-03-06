@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:25:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,15 @@
 #endif
 #include "dbaccessdllapi.h"
 
-namespace com { namespace sun { namespace star { namespace util {
-    struct URL;
-}
-}}}
+namespace com { namespace sun { namespace star {
+    namespace util {
+        struct URL;
+    }
+    namespace frame {
+        class XController;
+    }
+} } }
 
-class ImageList;
 namespace dbaui
 {
     // interface for controller depended calls like commands
@@ -112,6 +115,14 @@ namespace dbaui
                 <TRUE/> if read only, otherwise <FALSE/>
         */
         virtual sal_Bool isDataSourceReadOnly() const = 0;
+
+        /** provides access to the model of the controller
+
+            This must be the same model as returned by XController::getModel, and might be <NULL/> when
+            the controller does not have an own model.
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL
+                getXController(void) throw( ::com::sun::star::uno::RuntimeException ) = 0;
     };
 }
 #endif // DBAUI_ICONTROLLER_HXX
