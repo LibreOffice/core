@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDatabaseDocumentUI.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:59:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ interface XDatabaseDocumentUI
         <p>Note that reading this atttribute is equivalent to querying the component
         for the <type scope="com::sun::star::frame">XController</type> interface,
         asking the controller for its frame, and asking this frame for its
-        container window.
+        container window.</p>
 
         @see ::com::sun::star::frame::XController
         @see ::com::sun::star::frame::XFrame
@@ -88,7 +88,8 @@ interface XDatabaseDocumentUI
         <p>Note that the connection returned here is really the working connection
         of the application. Clients should not misuse it, in particular, closing
         the connection can yield unexpected results and should definately be
-        avoided.</p>
+        avoided. If you need a separate connection to the data source, use
+        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>.</p>
     */
     [attribute, readonly] com::sun::star::sdbc::XConnection ActiveConnection;
 
@@ -112,6 +113,45 @@ interface XDatabaseDocumentUI
             a subsequent call to <member>isConnected</member> would return <TRUE/>.
     */
     boolean connect();
+
+    /** contains all sub components of the database document
+
+        <p>During working with the database, the user might open different sub components:
+        forms, reports, tables, queries. Those components are tracked by the application,
+        and provided in this attribute.</p>
+
+        <p>The components here might either be documents (<type scope="com::sun::star::frame">XModel</type>),
+        controllers (<type scope="com::sun::star::frame">XController</type>), or frames
+        (<type scope="com::sun::star::frame">XFrame</type>).
+
+        @since OOo 3.0
+    */
+    [attribute, readonly] sequence< ::com::sun::star::lang::XComponent >
+            SubComponents;
+
+    /** closes all sub components of the database document.
+
+        <p>During working with the database, the user might open different sub components:
+        forms, reports, tables, queries. If you need to close all those documents, use
+        <code>closeSubComponents</code>, which will gracefully do this.</p>
+
+        <p>In a first step, the sub components will be suspended
+        (<member scope="com::sun::star::frame">XController::suspend</member>). There
+        are basically two reasons why suspending a single sub component can fail: The
+        user might veto it (she's asked if the document is currently modified), and
+        the component might be uncloseable currently, e.g. due to an open modal
+        dialog, or a long-lasting operation running currently (e.g. printing).</p>
+
+        <p>Once all sub components have been suspended, they will, in a second step,
+        be closed. Again, closing might be vetoed by other instances, e.g. by a close
+        listener registered at the component.</p>
+
+        @return
+            <TRUE/> if and only if both suspending and closing all sub components succeeds.
+
+        @since OOo 3.0
+    */
+    boolean closeSubComponents();
 };
 
 //=============================================================================
