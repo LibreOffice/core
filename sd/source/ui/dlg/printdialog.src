@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: printdialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:32:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "printdialog.hrc"
+
+ModalDialog DLG_PRINTDIALOG
+{
+    Size = MAP_APPFONT ( 260, 77 ) ;
+
+    FixedLine FL_PRINTCONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 0 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Print content" ;
+    };
+    FixedText FT_CONTENT
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text [ en-US ] = "Content" ;
+    };
+    ListBox CB_CONTENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 108 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Slides" ; > ;
+            < "Handouts" ; > ;
+            < "Notes" ; > ;
+            < "Outline" ; > ;
+        };
+    };
+    FixedText FT_SLIDESPERPAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text [ en-US ] = "Slides per page" ;
+    };
+    ListBox CB_SLIDESPERPAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 28 ) ;
+        Size = MAP_APPFONT ( 24 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "6" ; > ;
+            < "9" ; > ;
+        };
+    };
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( 12 , 47 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text [ en-US ] = "Order" ;
+    };
+    RadioButton RBT_HORIZONTAL
+    {
+        Pos = MAP_APPFONT ( 60 , 45 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Horizontal" ;
+    };
+    RadioButton RBT_VERTICAL
+    {
+        Pos = MAP_APPFONT ( 60 , 58 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Vertical" ;
+    };
+    FixedImage IMG_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 168 , 28 ) ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
