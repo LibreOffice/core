@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 14:32:29 $
+#   last change: $Author: kz $ $Date: 2008-03-06 16:42:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ IDLFILES=\
     XLinkTargetSupplier.idl\
     XMimeTypeInfo.idl\
     XRedlinesSupplier.idl \
+    XScriptInvocationContext.idl\
     XStandaloneDocumentInfo.idl\
     XStorageBasedDocument.idl\
     XStorageChangeListener.idl\
