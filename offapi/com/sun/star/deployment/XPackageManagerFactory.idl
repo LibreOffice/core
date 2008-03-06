@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackageManagerFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:58:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ interface XPackageManagerFactory
                </ul>
         @return
                <type>XPackageManager</type> object
-        @throw <type scope="com::sun::star::lang">
-               IllegalArgumentException</type> in case of an invalid context
+        @throws ::com::sun::star::lang::IllegalArgumentException
+                in case of an invalid context
     */
     XPackageManager getPackageManager( [in] string context )
         raises (com::sun::star::lang::IllegalArgumentException);
