@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:51:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:19:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ struct SingleRefData        // Single reference (one address) into the sheet
     inline  void InitFlags() { bFlags = 0; }    // all FALSE
     // InitAddress: InitFlags and set address
     inline  void InitAddress( const ScAddress& rAdr );
+    inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     // InitAddressRel: InitFlags and set address, everything relative to rPos
     inline  void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
     inline  void SetColRel( BOOL bVal ) { Flags.bColRel = (bVal ? TRUE : FALSE ); }
@@ -127,21 +128,23 @@ struct SingleRefData        // Single reference (one address) into the sheet
             BOOL operator==( const SingleRefData& ) const;
 };
 
-inline void SingleRefData::InitAddress( const ScAddress& rAdr )
+inline void SingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
 {
     InitFlags();
-    nCol = rAdr.Col();
-    nRow = rAdr.Row();
-    nTab = rAdr.Tab();
+    nCol = nColP;
+    nRow = nRowP;
+    nTab = nTabP;
+}
+
+inline void SingleRefData::InitAddress( const ScAddress& rAdr )
+{
+    InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
 }
 
 inline void SingleRefData::InitAddressRel( const ScAddress& rAdr,
                                             const ScAddress& rPos )
 {
-    InitFlags();
-    nCol = rAdr.Col();
-    nRow = rAdr.Row();
-    nTab = rAdr.Tab();
+    InitAddress( rAdr.Col(), rAdr.Row(), rAdr.Tab());
     SetColRel( TRUE );
     SetRowRel( TRUE );
     SetTabRel( TRUE );
@@ -173,6 +176,12 @@ struct ComplRefData         // Complex reference (a range) into the sheet
             Ref1.InitAddressRel( rRange.aStart, rPos );
             Ref2.InitAddressRel( rRange.aEnd, rPos );
         }
+    inline  void InitRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
+        {
+            Ref1.InitAddress( nCol1, nRow1, nTab1 );
+            Ref2.InitAddress( nCol2, nRow2, nTab2 );
+        }
     inline  void SmartRelAbs( const ScAddress& rPos )
         { Ref1.SmartRelAbs( rPos ); Ref2.SmartRelAbs( rPos ); }
     inline  void CalcRelFromAbs( const ScAddress& rPos )
@@ -183,9 +192,15 @@ struct ComplRefData         // Complex reference (a range) into the sheet
         { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
     inline  BOOL Valid() const
         { return Ref1.Valid() && Ref2.Valid(); }
-            void PutInOrder();
+    /// Absolute references have to be up-to-date when calling this!
+    void PutInOrder();
     inline  BOOL operator==( const ComplRefData& r ) const
         { return Ref1 == r.Ref1 && Ref2 == r.Ref2; }
+    /** Enlarge range if reference passed is not within existing range.
+        ScAddress position is used to calculate absolute references from
+        relative references. */
+    ComplRefData& Extend( const SingleRefData & rRef, const ScAddress & rPos );
+    ComplRefData& Extend( const ComplRefData & rRef, const ScAddress & rPos );
 };
 
 #endif
