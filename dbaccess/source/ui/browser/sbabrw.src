@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:54:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,6 @@ String RID_STR_TABLES_CONTAINER
     HelpId = HID_BROWSER_CLOSECONN ;    \
     Text [ en-US ] = "Disco~nnect" ;    \
 
-#define MID_REFRESHCONN \
-    Identifier = ID_TREE_REBUILD_CONN ; \
-    HelpId = HID_BROWSER_REFRESHCONN ;  \
-    Text [ en-US ] = "~Refresh Connection" ;    \
-
 Menu MENU_BROWSER_DEFAULTCONTEXT
 {
     ItemList =
@@ -122,10 +117,6 @@ Menu MENU_BROWSER_DEFAULTCONTEXT
         MenuItem    \
         {   \
             MID_CLOSECONN   \
-        };  \
-        MenuItem    \
-        {   \
-            MID_REFRESHCONN \
         };  \
         MenuItem    \
         {   \
