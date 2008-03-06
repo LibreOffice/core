@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:22:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ namespace dbaui
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
 
 
         inline void enableConnectionURL() { m_aET_Connection.SetReadOnly(sal_False); }
