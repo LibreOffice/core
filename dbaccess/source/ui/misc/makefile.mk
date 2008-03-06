@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 16:10:51 $
+#   last change: $Author: kz $ $Date: 2008-03-06 18:29:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,8 @@ SLOFILES=	\
         $(SLO)$/charsets.obj				\
         $(SLO)$/dsntypes.obj                \
         $(SLO)$/defaultobjectnamecheck.obj  \
-        $(SLO)$/dsmeta.obj
+        $(SLO)$/dsmeta.obj                  \
+        $(SLO)$/controllerframe.obj
 
 # --- Targets ----------------------------------
 
