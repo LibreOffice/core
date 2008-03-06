@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_ErrorBar_tmpl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:46:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,168 +37,185 @@
 
 #include "res_ErrorBar_IDs.hrc"
 
-#define RESOURCE_ERRORBARS(availablewidth) \
+#define RESOURCE_ERRORBARS(availablewidth, yoffset) \
 FixedLine FL_ERROR \
 { \
     Pos = MAP_APPFONT ( 6 , 6  ) ; \
-    Size = MAP_APPFONT ( 140 , 8 ) ; \
-    Text [ en-US ] = "Error category" ; \
+    Size = MAP_APPFONT ( 116 , 8 ) ; \
+    Text [ en-US ] = "Error Category" ; \
 }; \
-RadioButton RBT_NONE \
+RadioButton RB_NONE \
 { \
     HelpID = HID_SCH_STATISTIK_NO_ERROR; \
     Pos = MAP_APPFONT ( 12 , 20  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
-    Text [ en-US ] = "~No function" ; \
+    Size = MAP_APPFONT ( 110 , 10 ) ; \
+    Text [ en-US ] = "~None" ; \
     TabStop = TRUE ; \
 }; \
-RadioButton RBT_VARIANT \
+RadioButton RB_CONST \
 { \
-    HelpID = HID_SCH_STATISTIK_VARIANT; \
-    Pos = MAP_APPFONT ( 12 , 36  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
-    Text [ en-US ] = "~Variance" ; \
+    HelpID = HID_SCH_STATISTIK_CONSTERROR; \
+    Pos = MAP_APPFONT ( 12 , 20 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 110 , 10 ) ; \
+    Text [ en-US ] = "~Constant Value" ; \
     TabStop = TRUE ; \
 }; \
-RadioButton RBT_SIGMA \
-{ \
-    HelpID = HID_SCH_STATISTIK_SIGMA; \
-    Pos = MAP_APPFONT ( 12 , 52  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
-    Text [ en-US ] = "~Standard deviation" ; \
-    TabStop = TRUE ; \
-}; \
-RadioButton RBT_PERCENT \
+RadioButton RB_PERCENT \
 { \
     HelpID = HID_SCH_STATISTIK_PERCENT; \
-    Pos = MAP_APPFONT ( 12 , 68  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
+    Pos = MAP_APPFONT ( 12 , 34 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 110 , 10 ) ; \
     Text [ en-US ] = "~Percentage" ; \
     TabStop = TRUE ; \
 }; \
-RadioButton RBT_BIGERROR \
+RadioButton RB_FUNCTION \
 { \
-    HelpID = HID_SCH_STATISTIK_BIGERROR; \
-    Pos = MAP_APPFONT ( 12 , 84  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
-    Text [ en-US ] = "~Error margin" ; \
+    Pos = MAP_APPFONT ( 12 , 48 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 12 , 10 ) ; \
+    Text [ en-US ] = "" ; \
     TabStop = TRUE ; \
 }; \
-RadioButton RBT_CONST \
+RadioButton RB_RANGE \
 { \
-    HelpID = HID_SCH_STATISTIK_CONSTERROR; \
-    Pos = MAP_APPFONT ( 12 , 100  ) ; \
-    Size = MAP_APPFONT ( 75 , 10 ) ; \
-    Text [ en-US ] = "~Constant value" ; \
+    Pos = MAP_APPFONT( 12, 62 + yoffset ) ; \
+    Size = MAP_APPFONT( 110, 10 ) ; \
+    Text [ en-US ] = "Cell ~Range" ; \
     TabStop = TRUE ; \
 }; \
-MetricField MTR_FLD_PERCENT \
+ListBox LB_FUNCTION \
 { \
-    HelpID = HID_SCH_STATISTIK_PERCENT_VALUE; \
+    Pos = MAP_APPFONT ( 22 , 46 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 94 , 59 ) ; \
+    DropDown = TRUE; \
+    Border = TRUE; \
+    StringList [ en-US ] = \
+        { \
+            < "Standard Error" ; CHART_LB_FUNCTION_STD_ERROR ; >; \
+            < "Standard Deviation" ; CHART_LB_FUNCTION_STD_DEV ; >; \
+            < "Variance" ; CHART_LB_FUNCTION_VARIANCE ; >; \
+            < "Error Margin" ; CHART_LB_FUNCTION_ERROR_MARGIN ; >; \
+        }; \
+}; \
+FixedLine FL_PARAMETERS \
+{ \
+    Pos = MAP_APPFONT ( 6 , 82 + yoffset  ) ; \
+    Size = MAP_APPFONT ( availablewidth - 12, 8 ) ; \
+    Text [ en-US ] = "Parameters" ; \
+}; \
+FixedText FT_POSITIVE \
+{ \
+    Pos = MAP_APPFONT ( 12 , 94 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 46 , 8 ) ; \
+    Text [ en-US ] = "P~ositive (+)"; \
+}; \
+MetricField MF_POSITIVE \
+{ \
     Border = TRUE ; \
-    Pos = MAP_APPFONT ( 100 , 67  ) ; \
-    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    Pos = MAP_APPFONT ( 60 , 92 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 56 , 12 ) ; \
     TabStop = TRUE ; \
     Repeat = TRUE ; \
     Spin = TRUE ; \
     Minimum = 0 ; \
-    Maximum = 10000 ; \
     StrictFormat = TRUE ; \
     Unit = FUNIT_CUSTOM ; \
-    CustomUnitText = " %" ; \
-    First = 100 ; \
-    Last = 10000 ; \
     SpinSize = 100 ; \
     DecimalDigits = 2 ; \
 }; \
-MetricField MTR_FLD_BIGERROR \
+Edit ED_RANGE_POSITIVE \
 { \
-    HelpID = HID_SCH_STATISTIK_BIGERROR_VALUE; \
     Border = TRUE ; \
-    Pos = MAP_APPFONT ( 100 , 83  ) ; \
-    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    Hide = TRUE; \
+    Pos = MAP_APPFONT ( 60 , 92 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 90 , 12 ) ; \
+}; \
+ImageButton IB_RANGE_POSITIVE \
+{ \
+    Hide = TRUE; \
+    Pos = MAP_APPFONT ( 152 , 91 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 14 , 14 ) ; \
+    TabStop = TRUE ; \
+}; \
+FixedText FT_NEGATIVE \
+{ \
+    Pos = MAP_APPFONT ( 12 , 110 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 46 , 8 ) ; \
+    Text [ en-US ] = "~Negative (-)"; \
+}; \
+MetricField MF_NEGATIVE \
+{ \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( 60 , 108 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 56 , 12 ) ; \
     TabStop = TRUE ; \
     Repeat = TRUE ; \
     Spin = TRUE ; \
     Minimum = 0 ; \
-    Maximum = 10000 ; \
     StrictFormat = TRUE ; \
     Unit = FUNIT_CUSTOM ; \
-    CustomUnitText  = " %" ; \
-    First = 100 ; \
-    Last = 10000 ; \
     SpinSize = 100 ; \
     DecimalDigits = 2 ; \
 }; \
-FixedText FT_PERCENT_PLUS \
+Edit ED_RANGE_NEGATIVE \
 { \
-    Pos = MAP_APPFONT ( 92 , 101  ) ; \
-    Size = MAP_APPFONT ( 8 , 8 ) ; \
-    Text [ en-US ] = "+" ; \
-}; \
-MetricField MTR_FLD_PLUS \
-{ \
-    HelpID = HID_SCH_STATISTIK_PLUS_VALUE; \
     Border = TRUE ; \
-    Pos = MAP_APPFONT ( 100 , 99  ) ; \
-    Size = MAP_APPFONT ( 40 , 12 ) ; \
-    TabStop = TRUE ; \
-    Repeat = TRUE ; \
-    Spin = TRUE ; \
-    Minimum = 0 ; \
-    Maximum = 100000000 ; \
-    StrictFormat = TRUE ; \
-    Unit = FUNIT_CUSTOM ; \
-    First = 0 ; \
-    Last = 100000000 ; \
-    SpinSize = 1 ; \
-    DecimalDigits = 3 ; \
+    Hide = TRUE; \
+    Pos = MAP_APPFONT ( 60 , 108 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 90 , 12 ) ; \
 }; \
-FixedText FT_PERCENT_MINUS \
+ImageButton IB_RANGE_NEGATIVE \
 { \
-    Pos = MAP_APPFONT ( 92 , 117  ) ; \
-    Size = MAP_APPFONT ( 8 , 8 ) ; \
-    Text [ en-US ] = "-"; \
-}; \
-MetricField MTR_FLD_MINUS \
-{ \
-    HelpID = HID_SCH_STATISTIK_MINUS_VALUE; \
-    Border = TRUE ; \
-    Pos = MAP_APPFONT ( 100 , 115  ) ; \
-    Size = MAP_APPFONT ( 40 , 12 ) ; \
+    Hide = TRUE; \
+    Pos = MAP_APPFONT ( 152 , 107 + yoffset  ) ; \
+    Size = MAP_APPFONT ( 14 , 14 ) ; \
     TabStop = TRUE ; \
-    Repeat = TRUE ; \
-    Spin = TRUE ; \
-    Minimum = 0 ; \
-    Maximum = 100000000 ; \
-    StrictFormat = TRUE ; \
-    Unit = FUNIT_CUSTOM ; \
-    First = 0 ; \
-    Last = 100000000 ; \
-    SpinSize = 1 ; \
-    DecimalDigits = 3 ; \
+}; \
+CheckBox CB_SYN_POS_NEG \
+{ \
+    HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION; \
+    Pos = MAP_APPFONT ( 12 , 126 + yoffset  ); \
+    Size = MAP_APPFONT ( 80 , 10 ); \
+    TabStop = TRUE; \
+    Text[ en-US ] = "Same value for both"; \
 }; \
 FixedLine FL_INDICATE \
 { \
-    Pos = MAP_APPFONT ( 150 , 6  ) ; \
-    Size = MAP_APPFONT ( availablewidth - 150 , 8 ) ; \
-    Text [ en-US ] = "Error ~indicator" ; \
+    Pos = MAP_APPFONT ( 130 , 6  ) ; \
+    Size = MAP_APPFONT ( availablewidth - 136 , 8 ) ; \
+    Text [ en-US ] = "Error Indicator" ; \
 }; \
-Control CT_INDICATE \
+RadioButton RB_BOTH \
 { \
-    HelpId = HID_SCH_CT_INDICATE ; \
-    Border = TRUE ; \
-    Pos = MAP_APPFONT ( 150 , 20  ) ; \
-    Size = MAP_APPFONT ( 76 , 36 ) ; \
-    TabStop = TRUE ; \
+    Pos = MAP_APPFONT ( 154 , 22  ); \
+    Size = MAP_APPFONT ( 90 , 10 ); \
+    Text[ en-US ] = "Positive ~and Negative"; \
+}; \
+RadioButton RB_POSITIVE \
+{ \
+    Pos = MAP_APPFONT ( 154 , 43  ); \
+    Size = MAP_APPFONT ( 90 , 10 ); \
+    Text[ en-US ] = "Pos~itive"; \
+}; \
+RadioButton RB_NEGATIVE \
+{ \
+    Pos = MAP_APPFONT ( 154 , 64  ); \
+    Size = MAP_APPFONT ( 90 , 10 ); \
+    Text[ en-US ] = "Ne~gative"; \
+}; \
+FixedImage FI_BOTH \
+{ \
+    Pos = MAP_APPFONT ( 134 , 18  ); \
+    Size = MAP_APPFONT ( 18 , 18 ); \
+}; \
+FixedImage FI_POSITIVE \
+{ \
+    Pos = MAP_APPFONT ( 134 , 39  ); \
+    Size = MAP_APPFONT ( 18 , 18 ); \
+}; \
+FixedImage FI_NEGATIVE \
+{ \
+    Pos = MAP_APPFONT ( 134 , 60  ); \
+    Size = MAP_APPFONT ( 18 , 18 ); \
 };
-
-// RadioButton RBT_RANGE \
-// { \
-//  Pos = MAP_APPFONT ( 12 , 116  ) ; \
-//  Size = MAP_APPFONT ( 75 , 10 ) ; \
-//  Text [ en-US ] = "~Range" ; \
-//  TabStop = TRUE ; \
-// }; \
 
 #endif
