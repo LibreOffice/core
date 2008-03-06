@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:02:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const String& rSymbol,
                           const ScAddress& rAddress,
                           RangeType nType,
-                          BOOL bEnglish ) :
+                          const ScGrammar::Grammar eGrammar ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
                 pCode       ( NULL ),
@@ -84,10 +84,9 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 {
     if (rSymbol.Len() > 0)
     {
-        ScCompiler aComp( pDoc, aPos );
-        aComp.SetCompileEnglish(bEnglish);
+        ScCompiler aComp( pDoc, aPos, eGrammar );
         pCode = aComp.CompileString( rSymbol );
-        if( !pCode->GetError() )
+        if( !pCode->GetCodeError() )
         {
             pCode->Reset();
             ScToken* p = pCode->GetNextReference();
@@ -128,7 +127,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 nIndex      ( 0 ),
                 bModified   ( FALSE )
 {
-    if( !pCode->GetError() )
+    if( !pCode->GetCodeError() )
     {
         pCode->Reset();
         ScToken* p = pCode->GetNextReference();
@@ -169,7 +168,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     pCode->AddSingleReference( aRefData );
     ScCompiler aComp( pDoc, aPos, *pCode );
     aComp.CompileTokenArray();
-    if ( !pCode->GetError() )
+    if ( !pCode->GetCodeError() )
         eType |= RT_ABSPOS;
 }
 
@@ -193,67 +192,6 @@ ScRangeData::~ScRangeData()
 DataObject* ScRangeData::Clone() const
 {
     return new ScRangeData(*this);
-}
-
-ScRangeData::ScRangeData
-    ( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */, USHORT /* nVer */ )
-           : pCode      ( new ScTokenArray ),
-             bModified  (FALSE)
-
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    if( nVer >= SC_NEW_TOKEN_ARRAYS )
-    {
-        UINT32 nPos;
-        BYTE nData;
-        rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-        rStream >> nPos >> eType >> nIndex >> nData;
-        if( nData & 0x0F )
-            rStream.SeekRel( nData & 0x0F );
-#if SC_ADDRESS_BITS_USED
-        aPos = ScAddress( nPos );
-#else
-#error SC_ADDRESS_BITS_USED
-#endif
-        pCode->Load( rStream, nVer, aPos );
-    }
-    else
-    {
-        UINT16 nTokLen, r, c, t;
-        rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-        rStream >> c >> r >> t >> eType >> nIndex >> nTokLen;
-        aPos.Set( c, r, t );
-        if( nTokLen )
-            pCode->Load30( rStream, aPos );
-    }
-
-    rHdr.EndEntry();
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-BOOL ScRangeData::Store
-    ( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
-{
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    rHdr.StartEntry();
-
-    rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
-#if SC_ADDRESS_BITS_USED
-    rStream << (UINT32) aPos << eType << nIndex << (BYTE) 0x00;
-#else
-#error SC_ADDRESS_BITS_USED
-#endif
-    pCode->Store( rStream, aPos );
-
-    rHdr.EndEntry();
-    return TRUE;
-#else
-    return FALSE;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 BOOL ScRangeData::IsBeyond( SCROW nMaxRow ) const
@@ -314,39 +252,27 @@ void ScRangeData::GuessPosition()
 //          String((SCROW)(-nMinRow))+String("/")+String((SCTAB)(-nMinTab)));
 }
 
-void ScRangeData::GetSymbol (String& rSymbol) const
+void ScRangeData::GetSymbol( String& rSymbol, const ScGrammar::Grammar eGrammar ) const
 {
-    ScCompiler aScComp(pDoc, aPos, *pCode);
-    aScComp.CreateStringFromTokenArray( rSymbol );
-}
-
-void ScRangeData::GetEnglishSymbol  (String& rSymbol, BOOL bCompileXML) const
-{
-    ScCompiler aScComp(pDoc, aPos, *pCode);
-    aScComp.SetCompileEnglish( TRUE );
-    aScComp.SetCompileXML( bCompileXML );
+    ScCompiler aScComp(pDoc, aPos, *pCode, eGrammar);
     aScComp.CreateStringFromTokenArray( rSymbol );
 }
 
 void ScRangeData::UpdateSymbol( String& rSymbol, const ScAddress& rPos,
-                                BOOL bEnglish, BOOL bCompileXML )
+                                const ScGrammar::Grammar eGrammar )
 {
     ScTokenArray* pTemp = pCode->Clone();
-    ScCompiler aComp( pDoc, rPos, *pTemp );
-    aComp.SetCompileEnglish( bEnglish );
-    aComp.SetCompileXML( bCompileXML );
+    ScCompiler aComp( pDoc, rPos, *pTemp, eGrammar );
     aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rSymbol );
     delete pTemp;
 }
 
 void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                BOOL bEnglish, BOOL bCompileXML )
+                                const ScGrammar::Grammar eGrammar )
 {
     ScTokenArray* pTemp = pCode->Clone();
-    ScCompiler aComp( pDoc, rPos, *pTemp );
-    aComp.SetCompileEnglish( bEnglish );
-    aComp.SetCompileXML( bCompileXML );
+    ScCompiler aComp( pDoc, rPos, *pTemp, eGrammar );
     aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rBuffer );
     delete pTemp;
@@ -494,8 +420,6 @@ BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
         {
             ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
             ScCompiler aComp( pDoc, rPos, *pTemp );
-            aComp.SetCompileEnglish( false );
-            aComp.SetCompileXML( false );
             aComp.MoveRelWrap();
             return pTemp->IsReference( rRange );
         }
@@ -626,7 +550,7 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 
 USHORT ScRangeData::GetErrCode()
 {
-    return pCode ? pCode->GetError() : 0;
+    return pCode ? pCode->GetCodeError() : 0;
 }
 
 BOOL ScRangeData::HasReferences() const
@@ -809,63 +733,6 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
         return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex );
     else
         return FALSE;
-}
-
-BOOL ScRangeName::Load( SvStream& rStream, USHORT nVer )
-{
-    BOOL bSuccess = TRUE;
-    USHORT nNewCount;
-
-    while( nCount > 0 )
-        AtFree(0);                  // alles loeschen
-
-    ScMultipleReadHeader aHdr( rStream );
-
-    USHORT nDummy;
-    if( nVer >= SC_NEW_TOKEN_ARRAYS )
-        rStream >> nSharedMaxIndex >> nNewCount;
-    else
-        rStream >> nSharedMaxIndex >> nDummy >> nNewCount;
-    for (USHORT i=0; i<nNewCount && bSuccess; i++)
-    {
-        ScRangeData* pData = new ScRangeData( rStream, aHdr, nVer );
-        pData->SetDocument(pDoc);
-        Insert( pData );
-        if( rStream.GetError() != SVSTREAM_OK )
-            bSuccess = FALSE;
-    }
-    return bSuccess;
-}
-
-BOOL ScRangeName::Store( SvStream& rStream ) const
-{
-    ScMultipleWriteHeader aHdr( rStream );
-
-    USHORT i;
-    USHORT nSaveCount = nCount;
-    SCROW nSaveMaxRow = pDoc->GetSrcMaxRow();
-    if ( nSaveMaxRow < MAXROW )
-    {
-        nSaveCount = 0;
-        for (i=0; i<nCount; i++)
-            if ( !((const ScRangeData*)At(i))->IsBeyond(nSaveMaxRow) )
-                ++nSaveCount;
-
-        if ( nSaveCount < nCount )
-            pDoc->SetLostData();            // Warnung ausgeben
-    }
-
-    rStream << nSharedMaxIndex << nSaveCount;
-    BOOL bSuccess = TRUE;
-
-    for (i=0; i<nCount && bSuccess; i++)
-    {
-        const ScRangeData* pRangeData = (const ScRangeData*)At(i);
-        if ( nSaveMaxRow == MAXROW || !pRangeData->IsBeyond(nSaveMaxRow) )
-            bSuccess = pRangeData->Store( rStream, aHdr );
-    }
-
-    return bSuccess;
 }
 
 void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
