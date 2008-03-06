@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,10 @@ namespace abp
 #define STATE_MANUAL_FIELD_MAPPING  3
 #define STATE_FINAL_CONFIRM         4
 
-#define PATH_DYN_TABLE_SELECTION    1   // path where we dynamically decide whether we need table selection
-#define PATH_LDAP                   2
+#define PATH_COMPLETE               1
+#define PATH_NO_SETTINGS            2
+#define PATH_NO_FIELDS              3
+#define PATH_NO_SETTINGS_NO_FIELDS  4
 
     using namespace ::svt;
     using namespace ::com::sun::star::uno;
@@ -103,11 +105,7 @@ namespace abp
     //---------------------------------------------------------------------
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
-#if defined( ABP_USE_ROADMAP )
-            WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS, ResId( STR_ROADMAP_TITLE ) )
-#else
             WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS )
-#endif
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
@@ -116,9 +114,7 @@ namespace abp
 
         ShowButtonFixedLine(sal_True);
 
-#if defined( ABP_USE_ROADMAP )
-        // we have two paths: One with, and one without table selection
-        declarePath( PATH_DYN_TABLE_SELECTION,
+        declarePath( PATH_COMPLETE,
             STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
             STATE_TABLE_SELECTION,
@@ -126,24 +122,26 @@ namespace abp
             STATE_FINAL_CONFIRM,
             WZS_INVALID_STATE
         );
-        declarePath( PATH_LDAP,
+        declarePath( PATH_NO_SETTINGS,
             STATE_SELECT_ABTYPE,
-            STATE_INVOKE_ADMIN_DIALOG,
+            STATE_TABLE_SELECTION,
+            STATE_MANUAL_FIELD_MAPPING,
             STATE_FINAL_CONFIRM,
             WZS_INVALID_STATE
         );
-            // Note that in theory, we could make only one path out of it. But, to determine whether we
-            // need a table selection page, we need to establish the connection. This is done immediately
-            // before the pre-table-selection page is left.
-            // As a result, if we would have only one path, then the user could click the "Table selection"
-            // in the roadmap, and it could happen that we only at this very moment that we do *not need*
-            // this page at all - which would look pretty strange to the user.
-
-        // unless told otherwise, don't allow traveling to the last page
-        enableState( STATE_FINAL_CONFIRM, false );
-#else
-        enableHeader( Bitmap( ModuleRes( BMP_HEADERIMAGE ) ) );
-#endif
+        declarePath( PATH_NO_FIELDS,
+            STATE_SELECT_ABTYPE,
+            STATE_INVOKE_ADMIN_DIALOG,
+            STATE_TABLE_SELECTION,
+            STATE_FINAL_CONFIRM,
+            WZS_INVALID_STATE
+        );
+        declarePath( PATH_NO_SETTINGS_NO_FIELDS,
+            STATE_SELECT_ABTYPE,
+            STATE_TABLE_SELECTION,
+            STATE_FINAL_CONFIRM,
+            WZS_INVALID_STATE
+        );
 
         m_pPrevPage->SetHelpId(HID_ABSPILOT_PREVIOUS);
         m_pNextPage->SetHelpId(HID_ABSPILOT_NEXT);
@@ -164,16 +162,18 @@ namespace abp
         m_aSettings.eType = AST_OTHER;
 #endif
         m_aSettings.sDataSourceName = String(ModuleRes(RID_STR_DEFAULT_NAME));
-        m_aSettings.bRegisterDataSource = sal_False;
+        m_aSettings.bRegisterDataSource = false;
+        m_aSettings.bIgnoreNoTable = false;
 
         defaultButton(WZB_NEXT);
         enableButtons(WZB_FINISH, sal_False);
         ActivatePage();
+
+        typeSelectionChanged( m_aSettings.eType );
     }
 
-#if defined( ABP_USE_ROADMAP )
     //---------------------------------------------------------------------
-    String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState )
+    String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         USHORT nResId = 0;
         switch ( _nState )
@@ -190,12 +190,11 @@ namespace abp
         if ( nResId )
         {
             svt::OLocalResourceAccess aAccess( ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ), RSC_MODALDIALOG );
-            sDisplayName = String( ResId( nResId ) );
+            sDisplayName = String( ModuleRes( nResId ) );
         }
 
         return sDisplayName;
     }
-#endif
 
     //---------------------------------------------------------------------
     void OAddessBookSourcePilot::implCommitAll()
@@ -269,11 +268,9 @@ namespace abp
     {
         switch ( _nState )
         {
-#if defined( ABP_USE_ROADMAP )
             case STATE_SELECT_ABTYPE:
-                implUpdateTypeDependentStates( static_cast< TypeSelectionPage* >( getPage( STATE_SELECT_ABTYPE ) )->getSelectedType() );
+                implUpdateRoadmap( static_cast< TypeSelectionPage* >( GetPage( STATE_SELECT_ABTYPE ) )->getSelectedType() );
                 break;
-#endif
 
             case STATE_FINAL_CONFIRM:
                 if ( !needManualFieldMapping( ) )
@@ -288,7 +285,6 @@ namespace abp
         OAddessBookSourcePilot_Base::enterState(_nState);
     }
 
-#if defined( ABP_USE_ROADMAP )
     //---------------------------------------------------------------------
     sal_Bool OAddessBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
@@ -297,6 +293,8 @@ namespace abp
 
         if ( _eReason == eTravelBackward )
             return sal_True;
+
+        sal_Bool bAllow = sal_True;
 
         switch ( getCurrentState() )
         {
@@ -309,40 +307,28 @@ namespace abp
         case STATE_INVOKE_ADMIN_DIALOG:
             if ( !connectToDataSource( sal_False ) )
             {
-                // connecting did not succeed -> do not allow proceeding, and do not
-                // allow the final page
-                enableState( STATE_FINAL_CONFIRM, false );
-                return sal_False;
-            }
-            enableState( STATE_FINAL_CONFIRM, true );
-
-            if ( m_aSettings.eType == AST_LDAP )
+                // connecting did not succeed -> do not allow proceeding
+                bAllow = sal_False;
                 break;
+            }
 
             // ........................................................
             // now that we connected to the data source, check whether we need the "table selection" page
             const StringBag& aTables = m_aNewDataSource.getTableNames();
-            enableState( STATE_TABLE_SELECTION, aTables.size() > 1 );
 
-            bool bNeedFieldMapping = needManualFieldMapping( m_aSettings.eType );
-            if ( aTables.size() == 0 )
+            if ( aTables.empty() )
             {
-                if ( _eReason == eValidateNoUI )
-                    // cannot ask the user
-                    return sal_False;
-
-                QueryBox aQuery( this, ModuleRes( RID_QRY_NOTABLES ) );
-                if ( RET_YES == aQuery.Execute() )
-                {   // the user chose to use this data source, though there are no tables
-                    bNeedFieldMapping = false;
+                if  (   ( _eReason == eValidateNoUI )
+                    ||  ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
+                    )
+                {
+                    // cannot ask the user, or the user chose to use this data source, though there are no tables
+                    bAllow = sal_False;
+                    break;
                 }
-                else
-                    return sal_False;
-            }
-            enableState( STATE_MANUAL_FIELD_MAPPING, bNeedFieldMapping );
 
-            // from now on, we're definately on the "dynamic table selection" path
-            activatePath( PATH_DYN_TABLE_SELECTION, true );
+                m_aSettings.bIgnoreNoTable = true;
+            }
 
             if ( aTables.size() == 1 )
                 // remember the one and only table we have
@@ -351,9 +337,9 @@ namespace abp
             break;
         }
 
-        return sal_True;
+        implUpdateRoadmap( m_aSettings.eType );
+        return bAllow;
     }
-#endif
 
     //---------------------------------------------------------------------
     void OAddessBookSourcePilot::implDefaultTableName()
@@ -493,107 +479,57 @@ namespace abp
         }
     }
 
-#if defined( ABP_USE_ROADMAP )
     //---------------------------------------------------------------------
-    void OAddessBookSourcePilot::implUpdateTypeDependentStates( AddressSourceType _eType )
+    void OAddessBookSourcePilot::implUpdateRoadmap( AddressSourceType _eType )
     {
-        enableState( STATE_INVOKE_ADMIN_DIALOG, needAdminInvokationPage( _eType ) );
-        enableState( STATE_MANUAL_FIELD_MAPPING, needManualFieldMapping( _eType ) );
+        bool bSettingsPage = needAdminInvokationPage( _eType );
+        bool bTablesPage   = needTableSelection( _eType );
+        bool bFieldsPage   = needManualFieldMapping( _eType );
+
+        bool bConnected = m_aNewDataSource.isConnected();
+        bool bCanSkipTables =
+                (   m_aNewDataSource.hasTable( m_aSettings.sSelectedTable )
+                ||  m_aSettings.bIgnoreNoTable
+                );
+
+        enableState( STATE_INVOKE_ADMIN_DIALOG, bSettingsPage );
+
+        enableState( STATE_TABLE_SELECTION,
+            bTablesPage &&  ( bConnected ? !bCanSkipTables : !bSettingsPage )
+            // if we do not need a settings page, we connect upon "Next" on the first page
+        );
+
+        enableState( STATE_MANUAL_FIELD_MAPPING,
+                bFieldsPage && bConnected && m_aNewDataSource.hasTable( m_aSettings.sSelectedTable )
+        );
+
+        enableState( STATE_FINAL_CONFIRM,
+            bConnected && bCanSkipTables
+        );
     }
-#endif
 
     //---------------------------------------------------------------------
-    void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType /*_eType*/ )
+    void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType _eType )
     {
-#if defined( ABP_USE_ROADMAP )
-        implUpdateTypeDependentStates( _eType );
-        enableState( STATE_FINAL_CONFIRM, false );
-
-        // for LDAP, there is no "table selection" page
-        if ( _eType == AST_LDAP )
-            activatePath( PATH_LDAP, true );
+        PathId nCurrentPathID( PATH_COMPLETE );
+        bool bSettingsPage = needAdminInvokationPage( _eType );
+        bool bFieldsPage = needManualFieldMapping( _eType );
+        if ( !bSettingsPage )
+            if ( !bFieldsPage )
+                nCurrentPathID = PATH_NO_SETTINGS_NO_FIELDS;
+            else
+                nCurrentPathID = PATH_NO_SETTINGS;
         else
-            activatePath( PATH_DYN_TABLE_SELECTION, false );
-#endif
+            if ( !bFieldsPage )
+                nCurrentPathID = PATH_NO_FIELDS;
+            else
+                nCurrentPathID = PATH_COMPLETE;
+        activatePath( nCurrentPathID, true );
+
+        m_aNewDataSource.disconnect();
+        m_aSettings.bIgnoreNoTable = false;
+        implUpdateRoadmap( _eType );
     }
-
-#if !defined( ABP_USE_ROADMAP )
-    //---------------------------------------------------------------------
-    WizardTypes::WizardState OAddessBookSourcePilot::determineNextState(WizardState _nCurrentState)
-    {
-        switch (_nCurrentState)
-        {
-            case STATE_SELECT_ABTYPE:
-
-                if  ( needAdminInvokationPage() )
-                {
-                    // ........................................................
-                    // create the new data source
-                    implCreateDataSource( );
-                    return STATE_INVOKE_ADMIN_DIALOG;
-                }
-                // _NO_ break !!!
-
-            case STATE_INVOKE_ADMIN_DIALOG:
-            {
-                // determining the next state here is somewhat more complex: it depends on the type selected,
-                // and on the number of tables in the data source specified by the user
-
-                // ........................................................
-                // create the new data source
-                implCreateDataSource( );
-
-                // ........................................................
-                // if we're here, we have all settings necessary for connecting to the data source
-                if ( !connectToDataSource( sal_False ) )
-                    // connecting did not succeed -> do not allow traveling (indicated by returning WZS_INVALID_STATE)
-                    return WZS_INVALID_STATE;
-
-                // ........................................................
-                // get the tables of the connection
-                const StringBag& aTables = m_aNewDataSource.getTableNames();
-                if ( aTables.size() > 1 )
-                    // in the next step, we need to determine the primary address table
-                    return STATE_TABLE_SELECTION;
-
-                // ........................................................
-                // do we have any tables ?
-                if ( 0 == aTables.size() )
-                {   // ... no
-                    QueryBox aQuery( this, ModuleRes( RID_QRY_NOTABLES ) );
-                    if ( RET_YES == aQuery.Execute() )
-                    {   // but the user chose to use this data source, anyway
-                        // -> go to the final page (no field mapping possible at all ...)
-                        return STATE_FINAL_CONFIRM;
-                    }
-
-                    // not allowed to leave the page
-                    return WZS_INVALID_STATE;
-                }
-
-                // remember the one and only table we have
-                m_aSettings.sSelectedTable = *aTables.begin();
-            }
-                // _NO_ break !!!
-
-            case STATE_TABLE_SELECTION:
-
-                // ........................................................
-                // do we need a field mapping provided by the user?
-                if ( needManualFieldMapping( ) )
-                    return STATE_MANUAL_FIELD_MAPPING;
-
-                // ........................................................
-                // we're nearly done ...
-                return STATE_FINAL_CONFIRM;
-
-            case STATE_MANUAL_FIELD_MAPPING:
-                return STATE_FINAL_CONFIRM;
-        }
-
-        return WZS_INVALID_STATE;
-    }
-#endif
 
 //.........................................................................
 }   // namespace abp
