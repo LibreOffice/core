@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:57:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@
 #define STR_ORACLE_HEADERTEXT               54
 #define STR_GENERAL_HEADERTEXT              55
 #define STR_DBWIZARDTITLE                   56
-#define STR_ROADMAPHEADER                   57
 
 #define STR_DEFAULTLDAPPORTNUMBER           60
 
