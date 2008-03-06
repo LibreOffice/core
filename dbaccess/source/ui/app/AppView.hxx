@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:48:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ namespace dbaui
             @param  _eType
                 Which container to show.
         */
-        void changeContainer(ElementType _eType);
+        void selectContainer(ElementType _eType);
 
         /// returns the preview mode
         PreviewMode getPreviewMode();
