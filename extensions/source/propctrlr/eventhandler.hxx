@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
-#include "propertyhandler.hxx"
-#endif
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
 #include "pcrcomponentcontext.hxx"
 #endif
@@ -56,6 +53,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 /** === end UNO includes === **/
 
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
@@ -262,6 +262,11 @@ namespace pcr
                 the script event to set
         */
         void    impl_setDialogElementScriptEvent_nothrow( const ::com::sun::star::script::ScriptEventDescriptor& _rScriptEvent );
+
+        /** returns the frame associated with our context document
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                impl_getContextFrame_nothrow() const;
 
     private:
         EventHandler();                                 // never implemented
