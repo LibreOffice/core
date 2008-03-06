@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:32:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ public:
                     SFX_DECL_OBJECTFACTORY();
 
                     ScDocShell( const ScDocShell& rDocShell );
-                    ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
+                    ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const bool _bScriptSupport = true );
                     ~ScDocShell();
 
     using SotObject::GetInterface;
