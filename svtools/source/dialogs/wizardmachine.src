@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:29:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,3 +52,7 @@ String STR_WIZDLG_PREVIOUS
     Text [ en-US ] = "<< Bac~k";
 };
 
+String STR_WIZDLG_ROADMAP_TITLE
+{
+    Text [ en-US ] = "Steps";
+};
