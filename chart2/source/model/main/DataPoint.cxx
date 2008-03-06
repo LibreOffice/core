@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPoint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:00:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,20 +104,23 @@ namespace chart
 
 DataPoint::DataPoint() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_bNoParentPropAllowed( false )
 {}
 
 DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
         ::property::OPropertySet( m_aMutex ),
         m_xParentProperties( rParentProperties ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_bNoParentPropAllowed( false )
 {}
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
         MutexContainer(),
         impl::DataPoint_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_bNoParentPropAllowed( true )
 {
     // m_xParentProperties has to be set from outside, like in the method
     // DataSeries::createClone
@@ -135,6 +138,8 @@ DataPoint::DataPoint( const DataPoint & rOther ) :
     if( ( aValue >>= xPropertySet )
         && xPropertySet.is())
         ModifyListenerHelper::addListener( xPropertySet, m_xModifyEventForwarder );
+
+    m_bNoParentPropAllowed = false;
 }
 
 DataPoint::~DataPoint()
@@ -191,7 +196,7 @@ uno::Any DataPoint::GetDefaultValue( sal_Int32 nHandle ) const
     uno::Reference< beans::XFastPropertySet > xFast( m_xParentProperties, uno::UNO_QUERY );
     if( !xFast.is())
     {
-        OSL_ENSURE( false, "data point needs a parent property set to provide values correctly" );
+        OSL_ENSURE( m_bNoParentPropAllowed, "data point needs a parent property set to provide values correctly" );
         return uno::Any();
     }
 
