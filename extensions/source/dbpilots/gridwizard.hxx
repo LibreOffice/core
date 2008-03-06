@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:30:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace dbp
     protected:
         // OWizardMachine overridables
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
-        virtual WizardState         determineNextState( WizardState _nCurrentState );
+        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
         virtual void                enterState( WizardState _nState );
         virtual sal_Bool            leaveState( WizardState _nState );
 
@@ -126,8 +126,8 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
-        sal_Bool            determineNextButtonState();
+        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual bool        canAdvance() const;
 
     protected:
         DECL_LINK(OnMoveOneEntry, PushButton*);
