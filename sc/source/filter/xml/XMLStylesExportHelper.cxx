@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:35:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,7 +341,14 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 sCondition = rtl::OUString();
     }
     if (sCondition.getLength())
-        sCondition = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sCondition, sal_False );
+    {
+        sal_uInt16 nNamespacePrefix;
+        const ScGrammar::Grammar eGrammar = rExport.GetDocument()->GetStorageGrammar();
+        /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, this
+         * should be XML_NAMESPACE_OF instead of XML_NAMESPACE_NONE! */
+        nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
+        sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, sal_False );
+    }
 
     return sCondition;
 }
