@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 10:34:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2994,6 +2994,13 @@ namespace xmloff { namespace token {
         TOKEN( "nothing",                            XML_NOTHING ),
         TOKEN( "list-tab-stop-position",             XML_LIST_TAB_STOP_POSITION ),
         // <--
+
+        // bm: chart error bar extensions (ODF 1.2)
+        TOKEN( "standard-error",        XML_STANDARD_ERROR ),
+        TOKEN( "cell-range" ,           XML_CELL_RANGE ),
+        TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
+        TOKEN( "error-upper-range",     XML_ERROR_UPPER_RANGE ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
