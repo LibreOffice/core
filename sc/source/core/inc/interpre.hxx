@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:53:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,13 +98,6 @@ public:
     ScToken* pPointer[ MAXSTACK ];
 };
 
-class ScErrorStack
-{
-public:
-    DECL_FIXEDMEMPOOL_NEWDEL( ScErrorStack )
-    USHORT pPointer[ MAXSTACK ];
-};
-
 enum ScIterFunc {
     ifSUM,                              // Aufsummieren
     ifSUMSQ,                            // Quadratsummen
@@ -134,7 +127,6 @@ class ScInterpreter
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
-    static USHORT nGlobalError;         // globale Fehlervariable
 #if SC_SPEW_ENABLED
     static ScSpew theSpew;
 #endif
@@ -153,52 +145,46 @@ public:
 
 private:
     static ScTokenStack*    pGlobalStack;
-    static ScErrorStack*    pGlobalErrorStack;
     static BOOL             bGlobalStackInUse;
 
     ScTokenIterator aCode;
     ScAddress   aPos;
     ScTokenArray& rArr;
-    String      aResult;
-    ScDocument* pDok;                   // Pointer aufs Dokument
-    double      nResult;
-    ScMatrixRef pResult;
+    ScDocument* pDok;
+    ScTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to ScTokenRef if in array condition
-    ScFormulaCell* pMyFormulaCell;      // die Zelle mit der Formel
+    ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
-    StackVar    eResult;
 
-    USHORT      nGlobError;             // lokale Kopie
-    const ScToken* pCur;                // aktuelles Token
-    String      aTempStr;               // fuer GetString()
-    ScTokenStack* pStackObj;            // enthaelt den Stack
-    ScToken**   pStack;                 // der Stack
-    ScErrorStack* pErrorStackObj;       // enthaelt den ErrorStack
-    USHORT*     pErrorStack;            // der ErrorStack
-    USHORT      sp;                     // der Stackpointer
-    USHORT      maxsp;                  // der maximale StackPointer
-    ULONG       nFuncFmtIndex;          // NumberFormatIndex einer Funktion
-    ULONG       nCurFmtIndex;           // aktueller NumberFormatIndex
-    ULONG       nRetFmtIndex;           // ggbf. NumberFormatIndex des Ausdrucks
-    short       nFuncFmtType;           // NumberFormatTyp einer Funktion
-    short       nCurFmtType;            // aktueller NumberFormatTyp
-    short       nRetFmtType;            // NumberFormatTyp des Ausdrucks
-    BOOL        glSubTotal;             // Flag fuer Subtotalfunktionen
-    BYTE        cPar;                   // aktuelle Anzahl Parameter
-    BOOL        bCalcAsShown;           // Genauigkeit wie angezeigt
-    BOOL        bMatrixFormula;         // Formelzelle ist Matrixformel
+    const ScToken* pCur;                // current token
+    String      aTempStr;               // for GetString()
+    ScTokenStack* pStackObj;            // contains the stacks
+    ScToken**   pStack;                 // the current stack
+    USHORT      nGlobalError;           // global (local to this formula expression) error
+    USHORT      sp;                     // stack pointer
+    USHORT      maxsp;                  // the maximal used stack pointer
+    ULONG       nFuncFmtIndex;          // NumberFormatIndex of a function
+    ULONG       nCurFmtIndex;           // current NumberFormatIndex
+    ULONG       nRetFmtIndex;           // NumberFormatIndex of an expression, if any
+    short       nFuncFmtType;           // NumberFormatType of a function
+    short       nCurFmtType;            // current NumberFormatType
+    short       nRetFmtType;            // NumberFormatType of an expression
+    BOOL        glSubTotal;             // flag for subtotal functions
+    BYTE        cPar;                   // current count of parameters
+    BOOL        bCalcAsShown;           // precision as shown
+    BOOL        bMatrixFormula;         // formula cell is a matrix formula
 
 //---------------------------------Funktionen in interpre.cxx---------
-// nMust <= nAct <= nMax ? ok : SetError, PushInt
-inline BOOL MustHaveParamCount( BYTE nAct, BYTE nMust );
-inline BOOL MustHaveParamCount( BYTE nAct, BYTE nMust, BYTE nMax );
-inline BOOL MustHaveParamCountMin( BYTE nAct, BYTE nMin );
-void SetParameterExpected();
-void SetIllegalParameter();
-void SetIllegalArgument();
-void SetNoValue();
-void SetNA();
+// nMust <= nAct <= nMax ? ok : PushError
+inline BOOL MustHaveParamCount( short nAct, short nMust );
+inline BOOL MustHaveParamCount( short nAct, short nMust, short nMax );
+inline BOOL MustHaveParamCountMin( short nAct, short nMin );
+void PushParameterExpected();
+void PushIllegalParameter();
+void PushIllegalArgument();
+void PushNoValue();
+void PushNA();
 //-------------------------------------------------------------------------
 // Funktionen fuer den Zugriff auf das Document
 //-------------------------------------------------------------------------
@@ -212,11 +198,17 @@ double GetValueCellValue( const ScAddress&, const ScValueCell* );
 ScBaseCell* GetCell( const ScAddress& rPos )
     { return pDok->GetCell( rPos ); }
 void GetCellString( String& rStr, const ScBaseCell* pCell );
-USHORT GetCellErrCode( const ScBaseCell* pCell );
+inline USHORT GetCellErrCode( const ScBaseCell* pCell )
+    { return pCell ? pCell->GetErrorCode() : 0; }
 inline CellType GetCellType( const ScBaseCell* pCell )
     { return pCell ? pCell->GetCellType() : CELLTYPE_NONE; }
+/// Really empty or inherited emptiness.
+inline BOOL HasCellEmptyData( const ScBaseCell* pCell )
+    { return pCell ? pCell->HasEmptyData() : TRUE; }
+/// This includes inherited emptiness, which usually is regarded as value!
 inline BOOL HasCellValueData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasValueData() : FALSE; }
+/// Not empty and not value.
 inline BOOL HasCellStringData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasStringData() : FALSE; }
 
@@ -226,19 +218,83 @@ BOOL CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
 BOOL CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
+
 //-----------------------------------------------------------------------------
-// Stackoperationen
+// Stack operations
 //-----------------------------------------------------------------------------
+
+/** Does substitute with ScErrorToken in case nGlobalError is set and the token
+    passed is not ScErrorToken.
+    Increments RefCount of the original token if not substituted. */
 void Push( ScToken& r );
+
+/** Does not substitute with ScErrorToken in case nGlobalError is set.
+    Used to push RPN tokens or from within Push() or tokens that are already
+    explicit ScErrorToken. Increments RefCount. */
+void PushWithoutError( ScToken& r );
+
+/** Clones the token to be pushed or substitutes with ScErrorToken if
+    nGlobalError is set and the token passed is not ScErrorToken. */
 void PushTempToken( const ScToken& );
-void PushTempToken( ScToken* );             //! see warnings in interpr4.cxx
+
+/** Does substitute with ScErrorToken in case nGlobalError is set and the token
+    passed is not ScErrorToken.
+    Increments RefCount of the original token if not substituted.
+    ATTENTION! The token had to be allocated with `new' and must not be used
+    after this call if no RefCount was set because possibly it gets immediately
+    deleted in case of an errStackOverflow or if substituted with ScErrorToken! */
+void PushTempToken( ScToken* );
+
+/** Does not substitute with ScErrorToken in case nGlobalError is set.
+    Used to push tokens from within PushTempToken() or tokens that are already
+    explicit ScErrorToken. Increments RefCount.
+    ATTENTION! The token had to be allocated with `new' and must not be used
+    after this call if no RefCount was set because possibly it gets immediately
+    decremented again and thus deleted in case of an errStackOverflow! */
+void PushTempTokenWithoutError( ScToken* );
+
+/** If nGlobalError is set push ScErrorToken.
+    If nGlobalError is not set do nothing.
+    Used in PushTempToken() and alike to simplify handling.
+    @return: <TRUE/> if nGlobalError. */
+inline bool IfErrorPushError()
+{
+    if (nGlobalError)
+    {
+        PushTempTokenWithoutError( new ScErrorToken( nGlobalError));
+        return true;
+    }
+    return false;
+}
+
+/** Obtain cell result / content from address and push as temp token.
+    bDisplayEmptyAsString is passed to ScEmptyCell in case of an empty cell
+    result. Also obtain number format and type if _both_, type and index
+    pointer, are not NULL. */
+void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
+        short * pRetTypeExpr, ULONG * pRetIndexExpr );
+
+ScTokenRef PopToken();
 void Pop();
 void PopError();
-BYTE PopByte();
 double PopDouble();
 const String& PopString();
+void ValidateRef( const SingleRefData & rRef );
+void ValidateRef( const ComplRefData & rRef );
+void ValidateRef( const ScRefList & rRefList );
+void SingleRefToVars( const SingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
+void DoubleRefToRange( const ComplRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
+/** If StackVar svDoubleRef pop ScDoubleRefToken and return values of
+    ComplRefData.
+    Else if StackVar svRefList return values of the ComplRefData where
+    rRefInList is pointing to. rRefInList is incremented. If rRefInList was the
+    last element in list pop ScRefListToken and set rRefInList to 0, else
+    rParam is incremented (!) to allow usage as in
+    while(nParamCount--) PopDoubleRef(aRange,nParamCount,nRefInList);
+  */
+void PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList );
 void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
 void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
@@ -266,7 +322,10 @@ void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix(ScMatrix* pMat);
-void PushError( USHORT nError = errIllegalArgument );
+void PushError( USHORT nError );
+/// Raw stack type without default replacements.
+StackVar GetRawStackType();
+/// Stack type with replacement of defaults, e.g. svMissing and svEmptyCell will result in svDouble.
 StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 StackVar GetStackType( BYTE nParam );
@@ -296,7 +355,7 @@ inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 // Check for String overflow of rResult+rAdd and set error and erase rResult
 // if so. Return TRUE if ok, FALSE if overflow
-static inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
+inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
 // Set error according to rVal, and set rVal to 0.0 if there was an error.
 inline void TreatDoubleError( double& rVal );
 // Lookup using ScLookupCache, @returns TRUE if found and result address
@@ -327,6 +386,8 @@ void ScNot();
 void ScNeg();
 void ScPercentSign();
 void ScIntersect();
+void ScRangeFunc();
+void ScUnionFunc();
 void ScPi();
 void ScRandom();
 void ScTrue();
@@ -357,7 +418,7 @@ void ScIsEmpty();
 short IsString();
 void ScIsString();
 void ScIsNonString();
-void ScIsLogical(UINT16 aOldNumType);
+void ScIsLogical();
 void ScType();
 void ScCell();
 void ScIsRef();
@@ -519,8 +580,8 @@ void ScDecimal();
 void ScConvert();
 
 //----------------------- Finanzfunktionen ------------------------------------
-void ScNBW();
-void ScIKV();
+void ScNPV();
+void ScIRR();
 void ScMIRR();
 void ScISPMT();
 
@@ -560,9 +621,9 @@ void ScMod();
 void ScBackSolver();
 void ScIntercept();
 //-------------------------Funktionen in interpr5.cxx--------------------------
-double ScGetGGT(double fx, double fy);
-void ScGGT();
-void ScKGV();
+double ScGetGCD(double fx, double fy);
+void ScGCD();
+void ScLCM();
 //-------------------------- Matrixfunktionen ---------------------------------
 ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 void ScMatValue();
@@ -595,8 +656,9 @@ void ScRKP();
 void ScForecast();
 //--------------------------------------------------------------------------------
 // Funktionen in interpr3.cxx
-// Statistik:
 void ScNoName();
+void ScBadName();
+// Statistik:
 double phi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
@@ -649,8 +711,9 @@ void ScGeoMean();
 void ScStandard();
 void ScSkew();
 void ScMedian();
-void GetSortArray(BYTE nParamCount, double** ppSortArray, SCSIZE& nSize);
-void QuickSort(long nLo, long nHi, double* pSortArr);
+void GetSortArray(short nParamCount, double** ppSortArray, SCSIZE& nSize);
+void GetSortArray(BYTE nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
+void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void ScModalValue();
 void ScAveDev();
 void ScDevSq();
@@ -687,16 +750,15 @@ public:
 
     StackVar Interpret();
 
-    static void SetError(USHORT nError)
+    void SetError(USHORT nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
 
-    static USHORT GetError() { return nGlobalError; }
+    USHORT GetError() { return nGlobalError; }
 
-    const     String& GetStringResult() { return aResult; }
-    double    GetNumResult()            { return nResult; }
-    /// caller must call ScMatrix.SetEternalRef() if stored as ScMatrix*
-    ScMatrixRef GetMatrixResult()       { return pResult; }
-    StackVar  GetResultType()           { return eResult; }
+    StackVar  GetResultType()           { return xResult->GetType(); }
+    const     String& GetStringResult() { return xResult->GetString(); }
+    double    GetNumResult()            { return xResult->GetDouble(); }
+    ScTokenRef GetResultToken()         { return xResult; }
     short     GetRetFormatType()    { return nRetFmtType; }
     ULONG     GetRetFormatIndex()   { return nRetFmtIndex; }
 };
@@ -728,35 +790,35 @@ inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCount( BYTE nAct, BYTE nMust )
+inline BOOL ScInterpreter::MustHaveParamCount( short nAct, short nMust )
 {
     if ( nAct == nMust )
         return TRUE;
     if ( nAct < nMust )
-        SetParameterExpected();
+        PushParameterExpected();
     else
-        SetIllegalParameter();
+        PushIllegalParameter();
     return FALSE;
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCount( BYTE nAct, BYTE nMust, BYTE nMax )
+inline BOOL ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
 {
     if ( nMust <= nAct && nAct <= nMax )
         return TRUE;
     if ( nAct < nMust )
-        SetParameterExpected();
+        PushParameterExpected();
     else
-        SetIllegalParameter();
+        PushIllegalParameter();
     return FALSE;
 }
 
 
-inline BOOL ScInterpreter::MustHaveParamCountMin( BYTE nAct, BYTE nMin )
+inline BOOL ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 {
     if ( nAct >= nMin )
         return TRUE;
-    SetParameterExpected();
+    PushParameterExpected();
     return FALSE;
 }
 
