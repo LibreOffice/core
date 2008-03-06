@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:36:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #include "dociter.hxx"
 #include "scmatrix.hxx"
 #include "globstr.hrc"
+
+using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -170,7 +172,17 @@ double lcl_IterateInverse( const ScDistFunc& rFunction, double x0, double x1, BO
 
 void ScInterpreter::ScNoName()
 {
-    SetError(errNoName);
+    PushError(errNoName);
+}
+
+void ScInterpreter::ScBadName()
+{
+    short nParamCount = GetByte();
+    while (nParamCount-- > 0)
+    {
+        PopError();
+    }
+    PushError( errNoName);
 }
 
 double ScInterpreter::phi(double x)
@@ -675,7 +687,7 @@ void ScInterpreter::ScLogGamma()
     if (x > 0.0)
         PushDouble(GetLogGamma(x));
     else
-        SetIllegalArgument();
+        PushIllegalArgument();
 }
 
 void ScInterpreter::ScBetaDist()
@@ -697,7 +709,7 @@ void ScInterpreter::ScBetaDist()
     x = GetDouble();
     if (x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     x = (x-fA)/(fB-fA);                 // Skalierung auf (0,1)
@@ -718,7 +730,7 @@ void ScInterpreter::ScFisher()
 {
     double fVal = GetDouble();
     if (fabs(fVal) >= 1.0)
-        SetIllegalArgument();
+        PushIllegalArgument();
     else
         PushDouble(0.5*log((1.0+fVal)/(1.0-fVal)));
 }
@@ -733,7 +745,7 @@ void ScInterpreter::ScFact()
 {
     double nVal = GetDouble();
     if (nVal < 0.0)
-        SetIllegalArgument();
+        PushIllegalArgument();
     else
         PushDouble(Fakultaet(nVal));
 }
@@ -745,7 +757,7 @@ void ScInterpreter::ScKombin()
         double k = ::rtl::math::approxFloor(GetDouble());
         double n = ::rtl::math::approxFloor(GetDouble());
         if (k < 0.0 || n < 0.0 || k > n)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble(BinomKoeff(n, k));
     }
@@ -758,7 +770,7 @@ void ScInterpreter::ScKombin2()
         double k = ::rtl::math::approxFloor(GetDouble());
         double n = ::rtl::math::approxFloor(GetDouble());
         if (k < 0.0 || n < 0.0 || k > n)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble(BinomKoeff(n + k - 1, k));
     }
@@ -771,7 +783,7 @@ void ScInterpreter::ScVariationen()
         double k = ::rtl::math::approxFloor(GetDouble());
         double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || k < 0.0 || k > n)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (k == 0.0)
             PushInt(1);     // (n! / (n - 0)!) == 1
         else
@@ -791,7 +803,7 @@ void ScInterpreter::ScVariationen2()
         double k = ::rtl::math::approxFloor(GetDouble());
         double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || k < 0.0 || k > n)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble(pow(n,k));
     }
@@ -808,7 +820,7 @@ void ScInterpreter::ScB()
         double p = GetDouble();
         double n = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
         {
             double q = 1.0 - p;
@@ -817,7 +829,7 @@ void ScInterpreter::ScB()
             {
                 fFactor = pow(p, n);
                 if (fFactor == 0.0)
-                    SetNoValue();
+                    PushNoValue();
                 else
                 {
                     ULONG max = (ULONG) (n - x);
@@ -860,7 +872,7 @@ void ScInterpreter::ScB()
             {
                 fFactor = pow(p, n);
                 if (fFactor == 0.0)
-                    SetNoValue();
+                    PushNoValue();
                 else
                 {
                     double fSum = 0.0;
@@ -914,7 +926,7 @@ void ScInterpreter::ScB()
             }
         }
         else
-            SetIllegalArgument();
+            PushIllegalArgument();
     }
 }
 
@@ -928,7 +940,7 @@ void ScInterpreter::ScBinomDist()
         double x      = ::rtl::math::approxFloor(GetDouble());              // x
         double fFactor, q, fSum;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (kum == 0.0)                        // Dichte
         {
             q = 1.0 - p;
@@ -937,7 +949,7 @@ void ScInterpreter::ScBinomDist()
             {
                 fFactor = pow(p, n);
                 if (fFactor == 0.0)
-                    SetNoValue();
+                    PushNoValue();
                 else
                 {
                     ULONG max = (ULONG) (n - x);
@@ -966,7 +978,7 @@ void ScInterpreter::ScBinomDist()
                 {
                     fFactor = pow(p, n);
                     if (fFactor == 0.0)
-                        SetNoValue();
+                        PushNoValue();
                     else
                     {
                         fSum = 1.0 - fFactor;
@@ -1006,7 +1018,7 @@ void ScInterpreter::ScCritBinom()
         double p      = GetDouble();                    // p
         double n      = ::rtl::math::approxFloor(GetDouble());
         if (n < 0.0 || alpha <= 0.0 || alpha >= 1.0 || p < 0.0 || p > 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
         {
             double q = 1.0 - p;
@@ -1015,7 +1027,7 @@ void ScInterpreter::ScCritBinom()
             {
                 fFactor = pow(p, n);
                 if (fFactor == 0.0)
-                    SetNoValue();
+                    PushNoValue();
                 else
                 {
                     double fSum = 1.0 - fFactor; ULONG max = (ULONG) n;
@@ -1053,7 +1065,7 @@ void ScInterpreter::ScNegBinomDist()
         double r      = GetDouble();                    // r
         double x      = GetDouble();                    // x
         if (r < 0.0 || x < 0.0 || p < 0.0 || p > 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
         {
             double q = 1.0 - p;
@@ -1096,7 +1108,7 @@ void ScInterpreter::ScLogNormDist()
         else if (sigma == 0.0)
             PushError( errDivisionByZero);
         else if (x <= 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble(0.5 + gauss((log(x)-mue)/sigma));
     }
@@ -1115,7 +1127,7 @@ void ScInterpreter::ScExpDist()
         double lambda = GetDouble();                    // lambda
         double x      = GetDouble();                    // x
         if (lambda <= 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (kum == 0.0)                        // Dichte
         {
             if (x >= 0.0)
@@ -1142,7 +1154,7 @@ void ScInterpreter::ScTDist()
     double T     = GetDouble();
     if (fDF < 1.0 || T < 0.0 || (fFlag != 1.0 && fFlag != 2.0) )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     double R = GetTDist(T, fDF);
@@ -1161,7 +1173,7 @@ void ScInterpreter::ScFDist()
     double fF  = GetDouble();
     if (fF < 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     PushDouble(GetFDist(fF, fF1, fF2));
@@ -1175,7 +1187,7 @@ void ScInterpreter::ScChiDist()
     double fChi = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fChi < 0.0 )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     PushDouble(GetChiDist(fChi, fDF));
@@ -1190,7 +1202,7 @@ void ScInterpreter::ScWeibull()
         double alpha = GetDouble();                 // alpha
         double x     = GetDouble();                 // x
         if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (kum == 0.0)                        // Dichte
             PushDouble(alpha/pow(beta,alpha)*pow(x,alpha-1.0)*
                        exp(-pow(x/beta,alpha)));
@@ -1207,7 +1219,7 @@ void ScInterpreter::ScPoissonDist()
         double lambda = GetDouble();                    // Mittelwert
         double x      = ::rtl::math::approxFloor(GetDouble());              // x
         if (lambda < 0.0 || x < 0.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (kum == 0.0)                            // Dichte
         {
             if (lambda == 0.0)
@@ -1280,7 +1292,7 @@ void ScInterpreter::ScHypGeomDist()
 
     if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
 
@@ -1291,7 +1303,7 @@ void ScInterpreter::ScHypGeomDist()
     size_t nMaxSize = ::std::min( cnNumer.max_size(), nMaxArraySize );
     if ( nEstContainerSize > nMaxSize )
     {
-        SetNoValue();
+        PushNoValue();
         return;
     }
     cnNumer.reserve( nEstContainerSize + 10 );
@@ -1489,7 +1501,7 @@ void ScInterpreter::ScGammaDist()
     double alpha = GetDouble();
     double x = GetDouble();                     // x
     if (x < 0.0  || alpha <= 0.0 || beta <= 0.0)
-        SetIllegalArgument();
+        PushIllegalArgument();
     else if (kum == 0.0)                        // Dichte
     {
         double G = GetGamma(alpha);
@@ -1507,9 +1519,9 @@ void ScInterpreter::ScNormInv()
         double mue   = GetDouble();
         double x     = GetDouble();
         if (sigma <= 0.0 || x < 0.0 || x > 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else if (x == 0.0 || x == 1.0)
-            SetNoValue();
+            PushNoValue();
         else
             PushDouble(gaussinv(x)*sigma + mue);
     }
@@ -1519,9 +1531,9 @@ void ScInterpreter::ScSNormInv()
 {
     double x = GetDouble();
     if (x < 0.0 || x > 1.0)
-        SetIllegalArgument();
+        PushIllegalArgument();
     else if (x == 0.0 || x == 1.0)
-        SetNoValue();
+        PushNoValue();
     else
         PushDouble(gaussinv(x));
 }
@@ -1534,7 +1546,7 @@ void ScInterpreter::ScLogNormInv()
         double mue = GetDouble();                   // Mittelwert
         double y = GetDouble();                     // y
         if (sigma <= 0.0 || y <= 0.0 || y >= 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble(exp(mue+sigma*gaussinv(y)));
     }
@@ -1561,7 +1573,7 @@ void ScInterpreter::ScGammaInv()
     double fP = GetDouble();
     if (fAlpha <= 0.0 || fBeta <= 0.0 || fP < 0.0 || fP >= 1.0 )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     if (fP == 0.0)
@@ -1609,7 +1621,7 @@ void ScInterpreter::ScBetaInv()
     fP     = GetDouble();
     if (fP < 0.0 || fP >= 1.0 || fA == fB || fAlpha <= 0.0 || fBeta <= 0.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     if (fP == 0.0)
@@ -1621,10 +1633,7 @@ void ScInterpreter::ScBetaInv()
         // 0..1 as range for iteration so it isn't extended beyond the valid range
         double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
         if (bConvError)
-        {
-            SetError(errNoConvergence);
-            PushInt(0);
-        }
+            PushError( errNoConvergence);
         else
             PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
     }
@@ -1654,7 +1663,7 @@ void ScInterpreter::ScTInv()
     double fP = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
 
@@ -1687,7 +1696,7 @@ void ScInterpreter::ScFInv()
     double fP  = GetDouble();
     if (fP <= 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10 || fP > 1.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
 
@@ -1719,7 +1728,7 @@ void ScInterpreter::ScChiInv()
     double fP = GetDouble();
     if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
 
@@ -1741,7 +1750,7 @@ void ScInterpreter::ScConfidence()
         double sigma = GetDouble();
         double alpha = GetDouble();
         if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
-            SetIllegalArgument();
+            PushIllegalArgument();
         else
             PushDouble( gaussinv(1.0-alpha/2.0) * sigma/sqrt(n) );
     }
@@ -1758,7 +1767,7 @@ void ScInterpreter::ScZTest()
         sigma = GetDouble();
         if (sigma <= 0.0)
         {
-            SetIllegalArgument();
+            PushIllegalArgument();
             return;
         }
     }
@@ -1792,24 +1801,30 @@ void ScInterpreter::ScZTest()
             }
         }
         break;
+        case svRefList :
         case svDoubleRef :
         {
-            ScRange aRange;
-            USHORT nErr = 0;
-            PopDoubleRef( aRange );
-            ScValueIterator aValIter(pDok, aRange, glSubTotal);
-            if (aValIter.GetFirst(fVal, nErr))
+            short nParam = 1;
+            size_t nRefInList = 0;
+            while (nParam-- > 0)
             {
-                fSum += fVal;
-                fSumSqr += fVal*fVal;
-                rValCount++;
-                while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
+                ScRange aRange;
+                USHORT nErr = 0;
+                PopDoubleRef( aRange, nParam, nRefInList);
+                ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
                     fSumSqr += fVal*fVal;
                     rValCount++;
+                    while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
+                    {
+                        fSum += fVal;
+                        fSumSqr += fVal*fVal;
+                        rValCount++;
+                    }
+                    SetError(nErr);
                 }
-                SetError(nErr);
             }
         }
         break;
@@ -1865,7 +1880,7 @@ void ScInterpreter::ScTTest()
     double fAnz = ::rtl::math::approxFloor(GetDouble());
     if (fAnz != 1.0 && fAnz != 2.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
 
@@ -1873,7 +1888,7 @@ void ScInterpreter::ScTTest()
     ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     double fT, fF;
@@ -1886,7 +1901,7 @@ void ScInterpreter::ScTTest()
     {
         if (nC1 != nC2 || nR1 != nR2)
         {
-            SetIllegalParameter();
+            PushIllegalArgument();
             return;
         }
         double fCount   = 0.0;
@@ -1909,7 +1924,7 @@ void ScInterpreter::ScTTest()
             }
         if (fCount < 1.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
         fT = sqrt(fCount-1.0) * fabs(fSum1 - fSum2) /
@@ -1949,7 +1964,7 @@ void ScInterpreter::ScTTest()
             }
         if (fCount1 < 2.0 || fCount2 < 2.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
 #if 0
@@ -1958,7 +1973,7 @@ void ScInterpreter::ScTTest()
         double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0)/fCount2;
         if (fS1 + fS2 == 0.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
@@ -2006,14 +2021,14 @@ void ScInterpreter::ScTTest()
             }
         if (fCount1 < 2.0 || fCount2 < 2.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
         double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0)/fCount1;
         double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0)/fCount2;
         if (fS1 + fS2 == 0.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
@@ -2028,7 +2043,7 @@ void ScInterpreter::ScTTest()
 
     else
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     if (fAnz == 1.0)
@@ -2045,7 +2060,7 @@ void ScInterpreter::ScFTest()
     ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -2084,14 +2099,14 @@ void ScInterpreter::ScFTest()
         }
     if (fCount1 < 2.0 || fCount2 < 2.0)
     {
-        SetNoValue();
+        PushNoValue();
         return;
     }
     double fS1 = (fSumSqr1-fSum1*fSum1/fCount1)/(fCount1-1.0);
     double fS2 = (fSumSqr2-fSum2*fSum2/fCount2)/(fCount2-1.0);
     if (fS1 == 0.0 || fS2 == 0.0)
     {
-        SetNoValue();
+        PushNoValue();
         return;
     }
     double fF, fF1, fF2;
@@ -2123,7 +2138,7 @@ void ScInterpreter::ScChiTest()
     ScMatrixRef pMat1 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -2132,7 +2147,7 @@ void ScInterpreter::ScChiTest()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     double fChi = 0.0;
@@ -2148,7 +2163,7 @@ void ScInterpreter::ScChiTest()
             }
             else
             {
-                SetIllegalArgument();
+                PushIllegalArgument();
                 return;
             }
         }
@@ -2159,7 +2174,7 @@ void ScInterpreter::ScChiTest()
         fDF = (double)(nC1*nR1 - 1);
         if (fDF == 0.0)
         {
-            SetNoValue();
+            PushNoValue();
             return;
         }
     }
@@ -2189,10 +2204,9 @@ void ScInterpreter::ScChiTest()
 
 void ScInterpreter::ScKurt()
 {
-    BYTE nParamCount = GetByte();
+    short nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
-    USHORT i;
     double fSum    = 0.0;
     double vSum    = 0.0;
     std::vector<double> values;
@@ -2200,7 +2214,8 @@ void ScInterpreter::ScKurt()
     double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
-    for (i = 0; i < nParamCount; i++)
+    size_t nRefInList = 0;
+    while (nParamCount-- > 0)
     {
         switch (GetStackType())
         {
@@ -2226,8 +2241,9 @@ void ScInterpreter::ScKurt()
             }
             break;
             case svDoubleRef :
+            case svRefList :
             {
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParamCount, nRefInList);
                 USHORT nErr = 0;
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst(fVal, nErr))
@@ -2284,7 +2300,7 @@ void ScInterpreter::ScKurt()
 
     if (nGlobalError)
     {
-        PushInt(0);
+        PushError( nGlobalError);
         return;
     }
 
@@ -2296,7 +2312,7 @@ void ScInterpreter::ScKurt()
 
     double fMean = fSum / fCount;
 
-    for (i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
         vSum += (values[i] - fMean) * (values[i] - fMean);
 
     double fStdDev = sqrt(vSum / (fCount - 1.0));
@@ -2309,7 +2325,7 @@ void ScInterpreter::ScKurt()
         return;
     }
 
-    for (i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
     {
         dx = (values[i] - fMean) / fStdDev;
         xpower4 = xpower4 + (dx * dx * dx * dx);
@@ -2324,12 +2340,13 @@ void ScInterpreter::ScKurt()
 
 void ScInterpreter::ScHarMean()
 {
-    BYTE nParamCount = GetByte();
+    short nParamCount = GetByte();
     double nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
-    for (short i = 0; i < nParamCount && (nGlobalError == 0); i++)
+    size_t nRefInList = 0;
+    while ((nGlobalError == 0) && (nParamCount-- > 0))
     {
         switch (GetStackType())
         {
@@ -2363,9 +2380,10 @@ void ScInterpreter::ScHarMean()
                 break;
             }
             case svDoubleRef :
+            case svRefList :
             {
                 USHORT nErr = 0;
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter(pDok, aRange, glSubTotal);
                 if (aValIter.GetFirst(nCellVal, nErr))
@@ -2436,18 +2454,19 @@ void ScInterpreter::ScHarMean()
     if (nGlobalError == 0)
         PushDouble((double)nValCount/nVal);
     else
-        PushInt(0);
+        PushError( nGlobalError);
 }
 
 void ScInterpreter::ScGeoMean()
 {
-    BYTE nParamCount = GetByte();
+    short nParamCount = GetByte();
     double nVal = 0.0;
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
 
-    for (short i = 0; i < nParamCount && (nGlobalError == 0); i++)
+    size_t nRefInList = 0;
+    while ((nGlobalError == 0) && (nParamCount-- > 0))
     {
         switch (GetStackType())
         {
@@ -2481,9 +2500,10 @@ void ScInterpreter::ScGeoMean()
                 break;
             }
             case svDoubleRef :
+            case svRefList :
             {
                 USHORT nErr = 0;
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter(pDok, aRange, glSubTotal);
                 if (aValIter.GetFirst(nCellVal, nErr))
@@ -2554,7 +2574,7 @@ void ScInterpreter::ScGeoMean()
     if (nGlobalError == 0)
         PushDouble(exp(nVal / nValCount));
     else
-        PushInt(0);
+        PushError( nGlobalError);
 }
 
 void ScInterpreter::ScStandard()
@@ -2575,10 +2595,9 @@ void ScInterpreter::ScStandard()
 
 void ScInterpreter::ScSkew()
 {
-    BYTE nParamCount = GetByte();
+    short nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
-    USHORT i;
     double fSum    = 0.0;
     double vSum    = 0.0;
     std::vector<double> values;
@@ -2586,7 +2605,8 @@ void ScInterpreter::ScSkew()
     double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
-    for (i = 0; i < nParamCount; i++)
+    size_t nRefInList = 0;
+    while (nParamCount-- > 0)
     {
         switch (GetStackType())
         {
@@ -2612,8 +2632,9 @@ void ScInterpreter::ScSkew()
             }
             break;
             case svDoubleRef :
+            case svRefList :
             {
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParamCount, nRefInList);
                 USHORT nErr = 0;
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst(fVal, nErr))
@@ -2670,13 +2691,13 @@ void ScInterpreter::ScSkew()
 
     if (nGlobalError)
     {
-        PushInt(0);
+        PushError( nGlobalError);
         return;
     }
 
     double fMean = fSum / fCount;
 
-    for (i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
         vSum += (values[i] - fMean) * (values[i] - fMean);
 
     double fStdDev = sqrt(vSum / (fCount - 1.0));
@@ -2685,11 +2706,11 @@ void ScInterpreter::ScSkew()
 
     if (fStdDev == 0)
     {
-        SetError(errIllegalArgument);
+        PushIllegalArgument();
         return;
     }
 
-    for (i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
     {
         dx = (values[i] - fMean) / fStdDev;
         xcube = xcube + (dx * dx * dx);
@@ -2707,7 +2728,7 @@ void ScInterpreter::ScMedian()
     SCSIZE nSize = 0;
     GetSortArray(nParamCount, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         if (nSize % 2 == 0)
@@ -2726,14 +2747,14 @@ void ScInterpreter::ScPercentile()
     double alpha = GetDouble();
     if (alpha < 0.0 || alpha > 1.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     double* pSortArray = NULL;
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         if (nSize == 1)
@@ -2764,14 +2785,14 @@ void ScInterpreter::ScQuartile()
     double fFlag = ::rtl::math::approxFloor(GetDouble());
     if (fFlag < 0.0 || fFlag > 4.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     double* pSortArray = NULL;
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         if (nSize == 1)
@@ -2832,7 +2853,7 @@ void ScInterpreter::ScModalValue()
     SCSIZE nSize = 0;
     GetSortArray(nParamCount, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         SCSIZE nMaxIndex = 0, nMax = 1, nCount = 1;
@@ -2860,7 +2881,7 @@ void ScInterpreter::ScModalValue()
             nMaxIndex = i-1;
         }
         if (nMax == 1 && nCount == 1)
-            SetNoValue();
+            PushNoValue();
         else if (nMax == 1)
             PushDouble(nOldVal);
         else
@@ -2877,7 +2898,7 @@ void ScInterpreter::ScLarge()
     double f = ::rtl::math::approxFloor(GetDouble());
     if (f < 1.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     SCSIZE k = static_cast<SCSIZE>(f);
@@ -2885,7 +2906,7 @@ void ScInterpreter::ScLarge()
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError || nSize < k)
-        SetNoValue();
+        PushNoValue();
     else
     {
 #if 0
@@ -2901,7 +2922,7 @@ void ScInterpreter::ScLarge()
             }
         }
         if (nCount < k)
-            SetNoValue();
+            PushNoValue();
         else
             PushDouble(nOldVal);
 */
@@ -2919,7 +2940,7 @@ void ScInterpreter::ScSmall()
     double f = ::rtl::math::approxFloor(GetDouble());
     if (f < 1.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     SCSIZE k = static_cast<SCSIZE>(f);
@@ -2927,7 +2948,7 @@ void ScInterpreter::ScSmall()
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError || nSize < k)
-        SetNoValue();
+        PushNoValue();
     else
     {
 #if 0
@@ -2943,7 +2964,7 @@ void ScInterpreter::ScSmall()
             }
         }
         if (nCount < k)
-            SetNoValue();
+            PushNoValue();
         else
             PushDouble(nOldVal);
 */
@@ -2967,7 +2988,7 @@ void ScInterpreter::ScPercentrank()
         fPrec = ::rtl::math::approxFloor(GetDouble());
         if (fPrec < 1.0)
         {
-            SetIllegalArgument();
+            PushIllegalArgument();
             return;
         }
     }
@@ -2980,11 +3001,11 @@ void ScInterpreter::ScPercentrank()
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         if (fNum < pSortArray[0] || fNum > pSortArray[nSize-1])
-            SetNoValue();
+            PushNoValue();
         else if ( nSize == 1 )
             PushDouble(1.0);            // fNum == pSortArray[0], see test above
         else
@@ -3037,14 +3058,14 @@ void ScInterpreter::ScTrimMean()
     double alpha = GetDouble();
     if (alpha < 0.0 || alpha >= 1.0)
     {
-        SetIllegalArgument();
+        PushIllegalArgument();
         return;
     }
     double* pSortArray = NULL;
     SCSIZE nSize = 0;
     GetSortArray(1, &pSortArray, nSize);
     if (!pSortArray || nSize == 0 || nGlobalError)
-        SetNoValue();
+        PushNoValue();
     else
     {
         ULONG nIndex = (ULONG) ::rtl::math::approxFloor(alpha*(double)nSize);
@@ -3061,44 +3082,67 @@ void ScInterpreter::ScTrimMean()
         delete [] pSortArray;
 }
 
-void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, SCSIZE& nSize)
+void ScInterpreter::GetSortArray(short nParamCount, double** ppSortArray, SCSIZE& nSize)
 {
-    *ppSortArray = NULL;
-    nSize = 0;
+    // TODO: This is a glue method.  Check all the references of this method,
+    // and rewrite them to use the other GetSortArray method so that we can
+    // remove this one.
 
-    USHORT SaveSP = sp;
-    SCSIZE rValCount = 0;
+    nSize = 0;
+    vector<double> aSortArray;
+    GetSortArray(static_cast<BYTE>(nParamCount), aSortArray);
+    if (aSortArray.empty())
+        return;
+
+    nSize = aSortArray.size();
+    *ppSortArray = new double[nSize];
+    double* pSortArray = *ppSortArray;
+    for (SCSIZE i = 0; i < nSize; ++i)
+        pSortArray[i] = aSortArray[i];
+}
+
+void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder)
+{
     ScAddress aAdr;
     ScRange aRange;
-    BYTE nParam;
-    for (nParam = 0; nParam < nParamCount; nParam++)
+    short nParam = nParamCount;
+    size_t nRefInList = 0;
+    while (nParam-- > 0)
     {
         switch (GetStackType())
         {
             case svDouble :
-                PopDouble();
-                rValCount++;
+                rSortArray.push_back( PopDouble());
             break;
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
                 ScBaseCell* pCell = GetCell( aAdr );
                 if (HasCellValueData(pCell))
-                    rValCount++;
+                    rSortArray.push_back( GetCellValue( aAdr, pCell));
             }
             break;
             case svDoubleRef :
+            case svRefList :
             {
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParam, nRefInList);
+                if (nGlobalError)
+                    break;
+
+                aRange.Justify();
+                SCSIZE nCellCount = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
+                nCellCount *= aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+                rSortArray.reserve( rSortArray.size() + nCellCount);
+
                 USHORT nErr = 0;
-                double nCellVal;
+                double fCellVal;
                 ScValueIterator aValIter(pDok, aRange);
-                if (aValIter.GetFirst(nCellVal, nErr))
+                if (aValIter.GetFirst( fCellVal, nErr))
                 {
-                    rValCount++;
+                    rSortArray.push_back( fCellVal);
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
-                        rValCount++;
+                    while ((nErr == 0) && aValIter.GetNext( fCellVal, nErr))
+                        rSortArray.push_back( fCellVal);
                     SetError(nErr);
                 }
             }
@@ -3106,173 +3150,121 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, SCSIZE&
             case svMatrix :
             {
                 ScMatrixRef pMat = PopMatrix();
-                if (pMat)
+                if (!pMat)
+                    break;
+
+                SCSIZE nCount = pMat->GetElementCount();
+                rSortArray.reserve( rSortArray.size() + nCount);
+                if (pMat->IsNumeric())
                 {
-                    SCSIZE nCount = pMat->GetElementCount();
-                    if (pMat->IsNumeric())
-                        rValCount += nCount;
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
-                                rValCount++;
-                    }
+                    for (SCSIZE i = 0; i < nCount; ++i)
+                        rSortArray.push_back( pMat->GetDouble(i));
+                }
+                else
+                {
+                    for (SCSIZE i = 0; i < nCount; ++i)
+                        if (!pMat->IsString(i))
+                            rSortArray.push_back( pMat->GetDouble(i));
                 }
             }
             break;
             default :
-                SetError(errIllegalParameter);
+                PopError();
+                SetError( errIllegalParameter);
             break;
         }
+        if (nGlobalError)
+            break;  // while
     }
-    if (rValCount > MAX_ANZ_DOUBLE_FOR_SORT || nGlobalError)
-    {
-        SetError(errStackOverflow);
-        return;
-    }
-    else if (rValCount == 0)
-    {
-        SetNoValue();
-        return;
-    }
-    *ppSortArray = new double[rValCount];
-    double* pSortArray = *ppSortArray;
-    if (!*ppSortArray)
-    {
-        rValCount = 0;
-        SetError(errStackOverflow);
-        return;
-    }
-    sp = SaveSP;
-    SCSIZE nIndex = 0;
-    for (nParam = 0; nParam < nParamCount; nParam++)
-    {
-        switch (GetStackType())
-        {
-            case svDouble :
-                pSortArray[nIndex] = GetDouble();
-                nIndex++;
-                break;
-            case svSingleRef :
-            {
-                PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                {
-                    pSortArray[nIndex] = GetCellValue( aAdr, pCell );
-                    nIndex++;
-                }
-            }
-            break;
-            case svDoubleRef :
-            {
-                PopDoubleRef( aRange );
-                USHORT nErr;
-                double nCellVal;
-                ScValueIterator aValIter(pDok, aRange);
-                if (aValIter.GetFirst(nCellVal, nErr))
-                {
-                    pSortArray[nIndex] = nCellVal;
-                    nIndex++;
-                    while (aValIter.GetNext(nCellVal, nErr))
-                    {
-                        pSortArray[nIndex] = nCellVal;
-                        nIndex++;
-                    }
-                }
-            }
-            break;
-            case svMatrix :
-            {
-                ScMatrixRef pMat = PopMatrix();
-                if (pMat)
-                {
-                    SCSIZE nCount = pMat->GetElementCount();
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                        {
-                            pSortArray[nIndex] = pMat->GetDouble(i);
-                            nIndex++;
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
-                            {
-                                pSortArray[nIndex] = pMat->GetDouble(i);
-                                nIndex++;
-                            }
-                    }
-                }
-            }
-            break;
-            default : SetError(errIllegalParameter); break;
-        }
-    }
-    DBG_ASSERT(nIndex == rValCount,"nIndex != rValCount");
+    // nParam > 0 in case of error, clean stack environment and obtain earlier
+    // error if there was one.
+    while (nParam-- > 0)
+        PopError();
+
+    if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
+        SetError( errStackOverflow);
+    else if (rSortArray.empty())
+        SetError( errNoValue);
+
     if (nGlobalError == 0)
-    {
-        double fVal;
-        SCSIZE nInd;
-        for (SCSIZE i = 0; (i + 4) <= rValCount-1; i += 4)
-        {
-            nInd = rand() % (int) (rValCount-1);
-            fVal = pSortArray[i];
-            pSortArray[i] = pSortArray[nInd];
-            pSortArray[nInd] = fVal;
-        }
-        QuickSort(0, static_cast<long>(rValCount)-1, pSortArray);
-    }
-    nSize = rValCount;
+        QuickSort( rSortArray, pIndexOrder);
 }
 
-void ScInterpreter::QuickSort(long nLo, long nHi, double* pSortArray)
+static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
+    // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
+
+    using ::std::swap;
+
     if (nHi - nLo == 1)
     {
-        if (pSortArray[nLo] > pSortArray[nHi])
+        if (rSortArray[nLo] > rSortArray[nHi])
         {
-            double fVal;
-            fVal = pSortArray[nLo];
-            pSortArray[nLo] = pSortArray[nHi];
-            pSortArray[nHi] = fVal;
+            swap(rSortArray[nLo],  rSortArray[nHi]);
+            if (pIndexOrder)
+                swap(pIndexOrder->at(nLo), pIndexOrder->at(nHi));
         }
+        return;
+    }
+
+    long ni = nLo;
+    long nj = nHi;
+    do
+    {
+        while (ni <= nHi && rSortArray[ni]  < rSortArray[nLo]) ni++;
+        while (nj >= nLo && rSortArray[nLo] < rSortArray[nj])  nj--;
+        if (ni <= nj)
+        {
+            if (ni != nj)
+            {
+                swap(rSortArray[ni],  rSortArray[nj]);
+                if (pIndexOrder)
+                    swap(pIndexOrder->at(ni), pIndexOrder->at(nj));
+            }
+
+            ++ni;
+            --nj;
+        }
+    }
+    while (ni < nj);
+
+    if ((nj - nLo) < (nHi - ni))
+    {
+        if (nLo < nj) lcl_QuickSort(nLo, nj, rSortArray, pIndexOrder);
+        if (ni < nHi) lcl_QuickSort(ni, nHi, rSortArray, pIndexOrder);
     }
     else
     {
-        long ni = nLo;
-        long nj = nHi;
-        do
-        {
-            while (ni <= nHi && pSortArray[ni]  < pSortArray[nLo]) ni++;
-            while (nj >= nLo && pSortArray[nLo] < pSortArray[nj])  nj--;
-            if (ni <= nj)
-            {
-                if (ni != nj)
-                {
-                    double fVal;
-                    fVal = pSortArray[ni];
-                    pSortArray[ni] = pSortArray[nj];
-                    pSortArray[nj] = fVal;
-                }
-                ni++;
-                nj--;
-            }
-        }
-        while (ni < nj);
-        if ((nj - nLo) < (nHi - ni))
-        {
-            if (nLo < nj) QuickSort(nLo, nj, pSortArray);
-            if (ni < nHi) QuickSort(ni, nHi, pSortArray);
-        }
-        else
-        {
-            if (ni < nHi) QuickSort(ni, nHi, pSortArray);
-            if (nLo < nj) QuickSort(nLo, nj, pSortArray);
-        }
+        if (ni < nHi) lcl_QuickSort(ni, nHi, rSortArray, pIndexOrder);
+        if (nLo < nj) lcl_QuickSort(nLo, nj, rSortArray, pIndexOrder);
     }
+}
+
+void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexOrder )
+{
+    long n = static_cast<long>(rSortArray.size());
+
+    if (pIndexOrder)
+    {
+        pIndexOrder->clear();
+        pIndexOrder->reserve(n);
+        for (long i = 0; i < n; ++i)
+            pIndexOrder->push_back(i);
+    }
+
+    if (n < 2)
+        return;
+
+    size_t nValCount = rSortArray.size();
+    for (size_t i = 0; (i + 4) <= nValCount-1; i += 4)
+    {
+        size_t nInd = rand() % (int) (nValCount-1);
+        ::std::swap( rSortArray[i], rSortArray[nInd]);
+        if (pIndexOrder)
+            ::std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
+    }
+
+    lcl_QuickSort(0, n-1, rSortArray, pIndexOrder);
 }
 
 void ScInterpreter::ScRank()
@@ -3312,31 +3304,43 @@ void ScInterpreter::ScRank()
             break;
         }
         case svDoubleRef :
+        case svRefList :
         {
             ScRange aRange;
-            USHORT nErr = 0;
-            PopDoubleRef( aRange );
-            double fVal = GetDouble();
-            double nCellVal;
-            ScValueIterator aValIter(pDok, aRange, glSubTotal);
-            if (aValIter.GetFirst(nCellVal, nErr))
+            short nParam = 1;
+            size_t nRefInList = 0;
+            while (nParam-- > 0)
             {
-                if (nCellVal == fVal)
-                    bValid = TRUE;
-                else if ((!bDescending && nCellVal > fVal) ||
-                         (bDescending && nCellVal < fVal) )
-                    fCount++;
-                SetError(nErr);
-                while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
+                USHORT nErr = 0;
+                // Preserve stack until all RefList elements are done!
+                USHORT nSaveSP = sp;
+                PopDoubleRef( aRange, nParam, nRefInList);
+                if (nParam)
+                    --sp;   // simulate pop
+                double fVal = GetDouble();
+                if (nParam)
+                    sp = nSaveSP;
+                double nCellVal;
+                ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal == fVal)
                         bValid = TRUE;
                     else if ((!bDescending && nCellVal > fVal) ||
-                             (bDescending && nCellVal < fVal) )
+                            (bDescending && nCellVal < fVal) )
                         fCount++;
+                    SetError(nErr);
+                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
+                    {
+                        if (nCellVal == fVal)
+                            bValid = TRUE;
+                        else if ((!bDescending && nCellVal > fVal) ||
+                                (bDescending && nCellVal < fVal) )
+                            fCount++;
+                    }
                 }
+                SetError(nErr);
             }
-            SetError(nErr);
         }
         break;
         case svMatrix :
@@ -3379,7 +3383,7 @@ void ScInterpreter::ScRank()
     if (bValid)
         PushDouble(fCount);
     else
-        SetNoValue();
+        PushNoValue();
 }
 
 void ScInterpreter::ScAveDev()
@@ -3388,13 +3392,14 @@ void ScInterpreter::ScAveDev()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     USHORT SaveSP = sp;
-    USHORT i;
     double nMiddle = 0.0;
     double rVal = 0.0;
     double rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
-    for (i = 0; i < nParamCount; i++)
+    short nParam = nParamCount;
+    size_t nRefInList = 0;
+    while (nParam-- > 0)
     {
         switch (GetStackType())
         {
@@ -3414,10 +3419,11 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svDoubleRef :
+            case svRefList :
             {
                 USHORT nErr = 0;
                 double nCellVal;
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
@@ -3466,13 +3472,15 @@ void ScInterpreter::ScAveDev()
     }
     if (nGlobalError)
     {
-        PushInt(0);
+        PushError( nGlobalError);
         return;
     }
     nMiddle = rVal / rValCount;
     sp = SaveSP;
     rVal = 0.0;
-    for (i = 0; i < nParamCount; i++)
+    nParam = nParamCount;
+    nRefInList = 0;
+    while (nParam-- > 0)
     {
         switch (GetStackType())
         {
@@ -3488,10 +3496,11 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svDoubleRef :
+            case svRefList :
             {
                 USHORT nErr = 0;
                 double nCellVal;
-                PopDoubleRef( aRange );
+                PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
@@ -3559,7 +3568,7 @@ void ScInterpreter::ScProbability()
     ScMatrixRef pMatP = GetMatrix();
     ScMatrixRef pMatW = GetMatrix();
     if (!pMatP || !pMatW)
-        SetIllegalParameter();
+        PushIllegalParameter();
     else
     {
         SCSIZE nC1, nC2;
@@ -3568,7 +3577,7 @@ void ScInterpreter::ScProbability()
         pMatW->GetDimensions(nC2, nR2);
         if (nC1 != nC2 || nR1 != nR2 || nC1 == 0 || nR1 == 0 ||
             nC2 == 0 || nR2 == 0)
-            SetNA();
+            PushNA();
         else
         {
             double fSum = 0.0;
@@ -3595,7 +3604,7 @@ void ScInterpreter::ScProbability()
                     SetError( errIllegalArgument);
             }
             if (bStop || fabs(fSum -1.0) > 1.0E-7)
-                SetNoValue();
+                PushNoValue();
             else
                 PushDouble(fRes);
         }
@@ -3616,7 +3625,7 @@ void ScInterpreter::ScCovar()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3625,7 +3634,7 @@ void ScInterpreter::ScCovar()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     /* #i78250#
@@ -3652,7 +3661,7 @@ void ScInterpreter::ScCovar()
         }
     }
     if (fCount < 1.0)
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
@@ -3681,7 +3690,7 @@ void ScInterpreter::ScPearson()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3690,7 +3699,7 @@ void ScInterpreter::ScPearson()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     /* #i78250#
@@ -3719,7 +3728,7 @@ void ScInterpreter::ScPearson()
         }
     }
     if (fCount < 1.0) // fCount==1 is handled by checking denominator later on
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
@@ -3760,8 +3769,8 @@ void ScInterpreter::ScRSQ()
                 }
                 break;
             default:
-                Pop();
-                SetNoValue();
+                PopError();
+                PushNoValue();
         }
     }
 }
@@ -3774,7 +3783,7 @@ void ScInterpreter::ScSTEXY()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3783,7 +3792,7 @@ void ScInterpreter::ScSTEXY()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     // #i78250# numerical stability improved
@@ -3808,7 +3817,7 @@ void ScInterpreter::ScSTEXY()
         }
     }
     if (fCount < 3.0)
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
@@ -3843,7 +3852,7 @@ void ScInterpreter::ScSlope()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3852,7 +3861,7 @@ void ScInterpreter::ScSlope()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     // #i78250# numerical stability improved
@@ -3876,7 +3885,7 @@ void ScInterpreter::ScSlope()
         }
     }
     if (fCount < 1.0)
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
@@ -3909,7 +3918,7 @@ void ScInterpreter::ScIntercept()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3918,7 +3927,7 @@ void ScInterpreter::ScIntercept()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     // #i78250# numerical stability improved
@@ -3942,7 +3951,7 @@ void ScInterpreter::ScIntercept()
         }
     }
     if (fCount < 1.0)
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
@@ -3975,7 +3984,7 @@ void ScInterpreter::ScForecast()
     ScMatrixRef pMat2 = GetMatrix();
     if (!pMat1 || !pMat2)
     {
-        SetIllegalParameter();
+        PushIllegalParameter();
         return;
     }
     SCSIZE nC1, nC2;
@@ -3984,7 +3993,7 @@ void ScInterpreter::ScForecast()
     pMat2->GetDimensions(nC2, nR2);
     if (nR1 != nR2 || nC1 != nC2)
     {
-        SetIllegalParameter();
+        PushIllegalArgument();
         return;
     }
     double fVal = GetDouble();
@@ -4009,7 +4018,7 @@ void ScInterpreter::ScForecast()
         }
     }
     if (fCount < 1.0)
-        SetNoValue();
+        PushNoValue();
     else
     {
         double fMeanX = fSumX / fCount;
