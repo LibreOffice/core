@@ -1,0 +1,413 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: macromigration.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:03:25 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "dbmm_global.hrc"
+#include "macromigration.hrc"
+
+// -----------------------------------------------------------------------------
+ModalDialog DLG_MACRO_MIGRATION
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE ;
+    Hide = TRUE;
+
+    Text[ en-US ]  = "Database Document Macro Migration" ;
+
+    String STR_STATE_CLOSE_SUB_DOCS
+    {
+        Text [ en-US ] = "Prepare";
+    };
+
+    String STR_STATE_BACKUP_DBDOC
+    {
+        Text [ en-US ] = "Backup Document";
+    };
+
+    String STR_STATE_MIGRATE
+    {
+        Text [ en-US ] = "Migrate";
+    };
+
+    String STR_STATE_SUMMARY
+    {
+        Text [ en-US ] = "Summary";
+    };
+};
+
+//========================================================================
+//= PreparationPage
+//========================================================================
+
+TabPage TP_PREPARE
+{
+    Pos = MAP_APPFONT( 40, 130 );
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+
+    Hide = TRUE;
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_CONTENT_MARGIN );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Welcome to the Database Macro Migration Wizard";
+    };
+
+    FixedText FT_INTRODUCTION
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
+                            TAB_PAGE_HEIGHT - CONTENT_POS_X - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros and scripts.\n\n"
+
+            "After you finished it, all macros and scripts which were formerly embedded into your "
+            "forms and reports will have been moved to the database document. In this course, libraries "
+            "will be renamed as needed.\n\n"
+
+            "If your forms and reports contain references to those macros and scripts, they "
+            "will be adjusted, where possible.\n\n"
+
+            "Before the migration can start, all forms, reports, queries and tables must be closed. "
+            "Press 'Next' to do so.";
+    };
+
+    FixedText FT_CLOSE_DOC_ERROR
+    {
+        Pos = MAP_APPFONT ( TAB_PAGE_CONTENT_MARGIN,
+                            TAB_PAGE_HEIGHT - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
+                            2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED );
+        Text [ en-US ] = "Not all objects could be closed. Please close them manually, and re-start the wizard.";
+        hide = TRUE;
+    };
+};
+
+//========================================================================
+//= SaveDBDocPage
+//========================================================================
+
+TabPage TP_SAVE_DBDOC_AS
+{
+    Pos = MAP_APPFONT( 40, 130 );
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+
+    Hide = TRUE;
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_CONTENT_MARGIN );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Backup your Document";
+    };
+
+    FixedText FT_EXPLANATION
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, 5 * FIXED_TEXT_HEIGHT );
+
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "To allow you to go back to the state before the migration, the database "
+            "document will be backed up to a location of your choice. Every change done by the wizard will "
+            "be made to the original document, the backup will stay untouched.";
+    };
+
+    FixedText FT_SAVE_AS_LABEL
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X + 5 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( 60, INPUT_HEIGHT );
+
+        VCenter = TRUE;
+
+        Text [ en-US ] = "Save To:";
+    };
+
+    ComboBox ED_SAVE_AS_LOCATION
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60 + SPACING_RELATED,
+                            CONTENT_POS_X + 5 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 + SPACING_RELATED ) - TAB_PAGE_CONTENT_MARGIN,
+                            INPUT_HEIGHT );
+
+        Border = TRUE;
+        DropDown = TRUE ;
+
+        Text = "/home/user/databases/database.backup.odb";
+    };
+
+    PushButton PB_BROWSE_SAVE_AS_LOCATION
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_WIDTH - BUTTON_WIDTH - TAB_PAGE_CONTENT_MARGIN,
+                            CONTENT_POS_X + 5 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + INPUT_HEIGHT + SPACING_RELATED );
+        Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+
+        Text [ en-US ] = "Browse ...";
+    };
+
+    FixedText FT_START_MIGRATION
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN,
+                            TAB_PAGE_HEIGHT - TAB_PAGE_CONTENT_MARGIN - 3 * FIXED_TEXT_HEIGHT );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
+                            3 * FIXED_TEXT_HEIGHT );
+
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "Press 'Next' to save a copy of your document, and to begin the migration.";
+    };
+};
+
+//========================================================================
+//= ProgressPage
+//========================================================================
+
+TabPage TP_MIGRATE
+{
+    Pos = MAP_APPFONT( 40, 130 );
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+
+    Hide = TRUE;
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_CONTENT_MARGIN );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Migration Progress";
+    };
+
+    FixedText FT_OBJECT_COUNT
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, 2 * FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "The database document contains $forms$ form(s) and $reports$ report(s), which are currently being processed:";
+
+        WordBreak = TRUE;
+    };
+
+    FixedText FT_CURRENT_OBJECT_LABEL
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( 60, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Current object:";
+    };
+
+    FixedText FT_CURRENT_OBJECT
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Form 1";
+    };
+
+    FixedText FT_CURRENT_PROGRESS_LABEL
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( 60, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Current progress:";
+    };
+
+    FixedText FT_CURRENT_PROGRESS
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "loading ...";
+    };
+
+    Window WND_CURRENT_PROGRESS
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_RELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ) - TAB_PAGE_CONTENT_MARGIN, PROGRESS_HEIGHT );
+
+        Border = TRUE;
+        BorderStyle = WINDOW_BORDER_MONO;
+    };
+
+    FixedText FT_ALL_PROGRESS_LABEL
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_RELATED + PROGRESS_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( 60, FIXED_TEXT_HEIGHT );
+
+        VCenter = TRUE;
+
+        Text [ en-US ] = "Overall progress:";
+    };
+
+    FixedText FT_OBJECT_COUNT_PROGRESS
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_RELATED + PROGRESS_HEIGHT + SPACING_UNRELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ) - TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "document $current$ of $overall$";
+    };
+
+    Window WND_ALL_PROGRESS
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
+                            CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_RELATED + PROGRESS_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_RELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ) - TAB_PAGE_CONTENT_MARGIN, PROGRESS_HEIGHT );
+
+        Border = TRUE;
+        BorderStyle = WINDOW_BORDER_MONO;
+    };
+
+    FixedText FT_MIGRATION_DONE
+    {
+        Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_HEIGHT - TAB_PAGE_CONTENT_MARGIN - 2 * FIXED_TEXT_HEIGHT );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, 2 * FIXED_TEXT_HEIGHT );
+
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "All documents have been successfully processed. Press 'Next' to show a detailed summary.";
+    };
+};
+
+//========================================================================
+//= ResultPage
+//========================================================================
+
+TabPage TP_SUMMARY
+{
+    Pos = MAP_APPFONT( 40, 130 );
+    Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
+
+    Hide = TRUE;
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, TAB_PAGE_CONTENT_MARGIN );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "Summary";
+    };
+
+    FixedText FT_CHANGES_LABEL
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN, FIXED_TEXT_HEIGHT );
+
+        Text [ en-US ] = "The following actions have been taken:";
+    };
+
+    MultiLineEdit ED_CHANGES
+    {
+        Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X + FIXED_TEXT_HEIGHT + SPACING_RELATED );
+        Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
+                            TAB_PAGE_HEIGHT - ( CONTENT_POS_X + FIXED_TEXT_HEIGHT + SPACING_RELATED ) - TAB_PAGE_CONTENT_MARGIN );
+
+        ReadOnly = TRUE;
+        AutoVScroll = TRUE;
+        Border = TRUE;
+        BorderStyle = WINDOW_BORDER_MONO;
+    };
+};
+
+String STR_FORM
+{
+    Text [ en-US ] = "Form '$name$'";
+    Text [ x-comment ] = "This refers to a form document inside a database document.";
+};
+
+String STR_REPORT
+{
+    Text [ en-US ] = "Report '$name$'";
+    Text [ x-comment ] = "This refers to a report document inside a database document.";
+};
+
+String STR_OVERALL_PROGRESS
+{
+    Text [ en-US ] = "document $current$ of $overall$";
+};
+
+String STR_DATABASE_DOCUMENT
+{
+    Text[ en-US ] = "Database Document";
+};
+
+String STR_SAVED_COPY_TO
+{
+    Text[ en-US ] = "saved copy to $location$";
+};
+
+String STR_MOVED_LIBRARY
+{
+    Text[ en-US ] = "moved $type$ library $old$ to $new$";
+};
+
+String STR_OOO_BASIC
+{
+    Text[ en-US ] = "%PRODUCTNAME% Basic";
+};
+
+String STR_JAVA_SCRIPT
+{
+    Text[ en-US ] = "JavaScript";
+};
+
+String STR_BEAN_SHELL
+{
+    Text[ en-US ] = "BeanShell";
+};
+
+String STR_JAVA
+{
+    Text[ en-US ] = "Java";
+};
+
+String STR_PYTHON
+{
+    Text[ en-US ] = "Python";
+};
+
+String STR_DIALOG
+{
+    Text[ en-US ] = "dialog";
+};
+
