@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:43:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,7 +803,7 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
+SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport) :
     SfxObjectShell(eMode),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
@@ -822,6 +822,9 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
 
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
+
+    if ( !_bScriptSupport )
+        SetHasNoBasic();
 
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
                                     //! im Destruktor nicht explizit geloescht werden.
