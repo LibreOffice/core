@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,6 +838,7 @@ void SchXMLChartContext::EndElement()
     if( mbHasOwnTable )
         msChartAddress = ::rtl::OUString::createFromAscii("all");
 
+    bool bPostProcessTable = false;
     if( !mbHasOwnTable && mbAllRangeAddressesAvailable )
     {
         // special handling for stock chart (merge series together)
@@ -851,7 +852,8 @@ void SchXMLChartContext::EndElement()
             // note: mbRowHasLabels means the first row contains labels, that
             // means we have "column-descriptions", (analogously mbColHasLabels
             // means we have "row-descriptions")
-            SchXMLTableHelper::applyTable( maTable, maLSequencesPerIndex, xNewDoc ); //, meDataRowSource );
+            SchXMLTableHelper::applyTable( maTable, xNewDoc );
+            bPostProcessTable = true;
         }
         else
         {
@@ -939,7 +941,7 @@ void SchXMLChartContext::EndElement()
             if( !bSpecialHandlingForDonutChart )
             {
                 SchXMLSeries2Context::setStylesToSeries( maSeriesDefaultsAndStyles
-                            , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart );
+                                                         , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart, maLSequencesPerIndex );
                 // ... then set attributes for statistics (after their existence was set in the series)
                 SchXMLSeries2Context::setStylesToStatisticsObjects( maSeriesDefaultsAndStyles
                             , pStylesCtxt, pStyle, sCurrStyleName );
@@ -950,6 +952,9 @@ void SchXMLChartContext::EndElement()
                             , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart, bSpecialHandlingForDonutChart, bSwitchOffLinesForScatter );
         }
     }
+
+    if( bPostProcessTable )
+        SchXMLTableHelper::postProcessTable( maTable, maLSequencesPerIndex, xNewDoc, meDataRowSource );
 
     if( xProp.is())
         xProp->setPropertyValue( rtl::OUString::createFromAscii( "RefreshAddInAllowed" ) , uno::makeAny( sal_True) );
