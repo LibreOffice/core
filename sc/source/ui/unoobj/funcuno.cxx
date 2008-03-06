@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:18:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,7 +650,10 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     if ( !bArgErr && !bOverflow && nDocRow <= MAXROWCOUNT )
     {
         ScAddress aFormulaPos( 0, 0, nTempSheet );
-        ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos, &aTokenArr, MM_FORMULA );
+        // GRAM_PODF_A1 doesn't really matter for the token array but fits with
+        // other API compatibility grammars.
+        ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
+                &aTokenArr, ScGrammar::GRAM_PODF_A1, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
