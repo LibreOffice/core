@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:10:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,6 @@
 #define STR_3DSCHEME_SIMPLE                  (RID_APP_START + 231)
 #define STR_3DSCHEME_REALISTIC               (RID_APP_START + 232)
 #define STR_3DSCHEME_CUSTOM                  (RID_APP_START + 259)
-
-//additional strings for wizard:
-
-#define STR_WIZARD_ROADMAP_TITLE             (RID_APP_START + 261)
 
 //additional strings
 #define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
