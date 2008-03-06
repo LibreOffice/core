@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 13:18:49 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:25:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,8 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=unoobj
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..\pch\ui_pch
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
