@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:21:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -127,7 +128,7 @@ public:
     css::uno::Reference< css::script::provider::XScriptProvider > getPkgProvider() { return m_xMSPPkg; }
     // returns context string for this provider, eg
     ::rtl::OUString getContextString() { return m_sCtxString; }
-    css::uno::Reference< css::frame::XModel > getModel() { return m_xModel; }
+
 private:
     ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
     void  createPkgProvider();
@@ -137,11 +138,13 @@ private:
 
     ProviderCache* providerCache();
     /* to obtain other services if needed */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
-    css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Sequence< css::uno::Any > m_sAargs;
-    ::rtl::OUString m_sNodeName;
+    css::uno::Reference< css::uno::XComponentContext >              m_xContext;
+    css::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
+    css::uno::Reference< css::frame::XModel >                       m_xModel;
+    css::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;
+    css::uno::Sequence< css::uno::Any >                             m_sAargs;
+    ::rtl::OUString                                                 m_sNodeName;
+
     // This component supports XInitialization, it can be created
     // using createInstanceXXX() or createInstanceWithArgumentsXXX using
     // the service Mangager.
