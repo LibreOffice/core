@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-06 17:18:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 12:38:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,10 @@ HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInput
 /*****************************************************************************/
 bool HelpParser::CreateSDF(
 /*****************************************************************************/
-    const ByteString &rSDFFile_in, const ByteString &rPrj_in,const ByteString &rRoot_in ){
+    const ByteString &rSDFFile_in, const ByteString &rPrj_in,const ByteString &rRoot_in,
+    const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1){
     // GSI File constants
-    static const String GSI_SEQUENCE1( String::CreateFromAscii("\t0\thelp\t")   );
+    static const String GSI_SEQUENCE1( String::CreateFromAscii("\t0\t") );
     static const String GSI_SEQUENCE2( String::CreateFromAscii("\t\t\t0\t")     );
     static const String GSI_TAB      ( String::CreateFromAscii("\t")            );
     static const String GSI_SEQUENCE4( String::CreateFromAscii("\t\t\t\t")      );
@@ -153,7 +154,7 @@ bool HelpParser::CreateSDF(
     }
 
 
-    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile ) );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
 
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
@@ -195,6 +196,7 @@ bool HelpParser::CreateSDF(
     OUStringBuffer sBuffer;
     const OUString sOUPrj( rPrj_in.GetBuffer() , rPrj_in.Len() , RTL_TEXTENCODING_ASCII_US );
     const OUString sOUActFileName(sActFileName.GetBuffer() , sActFileName.Len() , RTL_TEXTENCODING_ASCII_US );
+    const OUString sOUGsi1( rGsi1.GetBuffer() , rGsi1.Len() , RTL_TEXTENCODING_ASCII_US );
 
     Export::InitLanguages( false );
     std::vector<ByteString> aLanguages = Export::GetLanguages();
@@ -230,7 +232,9 @@ bool HelpParser::CreateSDF(
                 sBuffer.append( GSI_TAB );              //"\t";
                 if ( rRoot_in.Len())
                     sBuffer.append( sOUActFileName );
-                   sBuffer.append( GSI_SEQUENCE1 );     //"\t0\thelp\t";
+                   sBuffer.append( GSI_SEQUENCE1 );     //"\t0\t";
+                   sBuffer.append( sOUGsi1 );               //"help";
+                   sBuffer.append( GSI_TAB );              //"\t";
                 ByteString sID = posm->first;           // ID
                 sBuffer.append( OUString( sID.GetBuffer() , sID.Len() , RTL_TEXTENCODING_UTF8 ) );
                 sBuffer.append( GSI_TAB ); //"\t";
@@ -289,7 +293,7 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
 
     OUString sOUHelpFile( sXmlFile );
 
-    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile ) );
+    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile, new XMLFile( '0' ) ) );
     printf("Dest file %s\n",rDestinationFile.GetBuffer());
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , sLanguage , rDestinationFile );
     delete xmlfile;
@@ -371,7 +375,7 @@ bool HelpParser::Merge(
 
 
     OUString sOUHelpFile( sXmlFile );
-    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile ) );
+    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile, new XMLFile( '0' ) ) );
     xmlfile->Extract();
 
     if( xmlfile == NULL)
