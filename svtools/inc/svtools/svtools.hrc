@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtools.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:42:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,8 @@
 #define STR_WIZDLG_FINISH                   (STR_WIZARDDIALOG_START + 0)
 #define STR_WIZDLG_NEXT                     (STR_WIZARDDIALOG_START + 1)
 #define STR_WIZDLG_PREVIOUS                 (STR_WIZARDDIALOG_START + 2)
-#define STR_WIZARDDIALOG_END                (STR_WIZDLG_PREVIOUS)
+#define STR_WIZDLG_ROADMAP_TITLE            (STR_WIZARDDIALOG_START + 3)
+#define STR_WIZARDDIALOG_END                (STR_WIZDLG_ROADMAP_TITLE)
 
 #define STR_SVT_COLLATE_START               (STR_WIZARDDIALOG_END+1)
 #define STR_SVT_COLLATE_NORMAL              (STR_SVT_COLLATE_START+0)
