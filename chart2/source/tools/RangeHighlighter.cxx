@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RangeHighlighter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:59:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,8 @@
 #include "macros.hxx"
 #include "ObjectIdentifier.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #define PREFERED_DEFAULT_COLOR 0x0000ff
 
@@ -136,7 +135,6 @@ void RangeHighlighter::determineRanges()
 
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                 sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
-                Reference< uno::XInterface > xSelectedObject;
                 Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
                 if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
                 {
@@ -151,6 +149,13 @@ void RangeHighlighter::determineRanges()
                 {
                     // Data Point
                     fillRangesForDataPoint( xDataSeries, nIndex );
+                    return;
+                }
+                else if( OBJECTTYPE_DATA_ERRORS == eObjectType )
+                {
+                    // select error bar ranges, or data series, if the style is
+                    // not set to FROM_DATA
+                    fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
                     return;
                 }
                 else if( xDataSeries.is() )
@@ -222,6 +227,40 @@ void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XD
         lcl_fillRanges( m_aSelectedRanges,
                         ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
                         nPreferredColor );
+}
+
+void RangeHighlighter::fillRangesForErrorBars(
+    const uno::Reference< beans::XPropertySet > & xErrorBar,
+    const uno::Reference< chart2::XDataSeries > & xSeries )
+{
+    // only show error bar ranges, if the style is set to FROM_DATA
+    bool bUsesRangesAsErrorBars = false;
+    try
+    {
+        sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+        bUsesRangesAsErrorBars =
+            ( xErrorBar.is() &&
+              (xErrorBar->getPropertyValue( C2U("ErrorBarStyle")) >>= nStyle) &&
+              nStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    if( bUsesRangesAsErrorBars )
+    {
+        sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
+        Reference< chart2::data::XDataSource > xSource( xErrorBar, uno::UNO_QUERY );
+        if( xSource.is())
+            lcl_fillRanges( m_aSelectedRanges,
+                            ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
+                            nPreferredColor );
+    }
+    else
+    {
+        fillRangesForDataSeries( xSeries );
+    }
 }
 
 void RangeHighlighter::fillRangesForCategories( const Reference< chart2::XAxis > & xAxis )
