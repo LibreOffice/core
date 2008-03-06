@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:51:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:13:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1493,8 +1493,11 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 aText.Append( q, sal::static_int_cast<xub_StrLen>( p-q ) );
                             }
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
-                            ScCompiler aComp( pDoc, aPos );
-                            aComp.SetCompileEnglish( TRUE );
+                            /* FIXME: do we want GRAM_ODFF_A1 instead? At the
+                             * end it probably should be GRAM_ODFF_R1C1, since
+                             * R1C1 is what Excel writes in SYLK. */
+                            const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_PODF_A1;
+                            ScCompiler aComp( pDoc, aPos, eGrammar );
                             ScTokenArray* pCode = aComp.CompileString( aText );
                             if ( ch == 'M' )
                             {
@@ -1505,7 +1508,8 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             }
                             else
                             {
-                                ScFormulaCell* pFCell = new ScFormulaCell( pDoc, aPos, pCode, 0 );
+                                ScFormulaCell* pFCell = new ScFormulaCell(
+                                        pDoc, aPos, pCode, eGrammar, MM_NONE);
                                 pDoc->PutCell( aPos, pFCell );
                             }
                             delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
@@ -1693,7 +1697,11 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                pFCell->GetEnglishFormula( aCellStr );
+                                pFCell->GetFormula( aCellStr, ScGrammar::GRAM_PODF_A1);
+                                /* FIXME: do we want GRAM_ODFF_A1 instead? At
+                                 * the end it probably should be
+                                 * GRAM_ODFF_R1C1, since R1C1 is what Excel
+                                 * writes in SYLK. */
                         }
                         if ( pFCell->GetMatrixFlag() != MM_NONE &&
                                 aCellStr.Len() > 2 &&
