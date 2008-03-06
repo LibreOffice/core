@@ -12,6 +12,7 @@ ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres ba_inc NULL
 ba  dbaccess\source\sdbtools\connection     nmake   -   all ba_conntools ba_inc NULL
 ba  dbaccess\source\sdbtools\misc           nmake   -   all ba_misctools ba_inc NULL
 ba  dbaccess\source\sdbtools\resource       nmake   -   all ba_miscres ba_inc NULL
+ba  dbaccess\source\ext\macromigration      nmake   -   all ba_extmm ba_inc NULL
 ba  dbaccess\source\ext\adabas  			nmake   -   all ba_ext_adabasui ba_inc NULL
 ba	dbaccess\source\ui\app					nmake	-	all	ba_uiapp ba_uiinc ba_inc NULL
 ba	dbaccess\source\ui\browser				nmake	-	all	ba_uibrowser ba_uiinc ba_inc NULL
