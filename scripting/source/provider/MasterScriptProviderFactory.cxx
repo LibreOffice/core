@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:28:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <util/util.hxx>
 
 #include "MasterScriptProviderFactory.hxx"
@@ -77,7 +71,7 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 Reference< provider::XScriptProvider > SAL_CALL
 MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( lang::IllegalArgumentException, RuntimeException)
 {
-    Reference< provider::XScriptProvider > xMsp( getActiveMSPList()->createMSP( context ), UNO_QUERY_THROW );
+    Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_QUERY_THROW );
     return xMsp;
 }
 
