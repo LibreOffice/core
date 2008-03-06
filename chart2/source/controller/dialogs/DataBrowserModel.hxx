@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowserModel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:13:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,13 @@ public:
 private:
     void updateFromModel();
     void applyToModel();
+
+    void addErrorBarRanges(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        sal_Int32 nNumberFormatKey,
+        sal_Int32 & rInOutSequenceIndex,
+        sal_Int32 & rInOutHeaderEnd );
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >
