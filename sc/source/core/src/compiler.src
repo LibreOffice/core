@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:12:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ en-US ] = "OR" ;
     };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
-    String SC_OPCODE_UNION { Text = ";" ; };
+    String SC_OPCODE_UNION { Text = "~" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
     String SC_OPCODE_NOT
     {
@@ -803,7 +803,7 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text [ en-US ] = "HLOOKUP" ;
     };
-    String SC_OPCODE_MULTI_AREA     // TODO: legacy for range list (union), remove if done.
+    String SC_OPCODE_MULTI_AREA     // legacy for range list (union)
     {
         Text [ en-US ] = "MULTIRANGE" ;
     };
@@ -1201,7 +1201,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_AND { Text = "AND" ; };
     String SC_OPCODE_OR { Text = "OR" ; };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
-    String SC_OPCODE_UNION { Text = ";" ; };
+    String SC_OPCODE_UNION { Text = "~" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
     String SC_OPCODE_NOT { Text = "NOT" ; };
     String SC_OPCODE_NEG { Text = "NEG" ; };
@@ -1385,7 +1385,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
-    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // TODO: legacy for range list (union), remove if done.
+    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // legacy for range list (union)
     String SC_OPCODE_OFFSET { Text = "OFFSET" ; };
     String SC_OPCODE_INDEX { Text = "INDEX" ; };
     String SC_OPCODE_AREAS { Text = "AREAS" ; };
@@ -1693,7 +1693,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
-    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // TODO: legacy for range list (union), remove if done.
+    String SC_OPCODE_MULTI_AREA { Text = "ORG.OPENOFFICE.MULTIRANGE" ; };   // legacy for range list (union)
     String SC_OPCODE_OFFSET { Text = "OFFSET" ; };
     String SC_OPCODE_INDEX { Text = "INDEX" ; };
     String SC_OPCODE_AREAS { Text = "AREAS" ; };
