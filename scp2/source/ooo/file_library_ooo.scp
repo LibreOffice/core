@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.277 $
+ *  $Revision: 1.278 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:45:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1439,6 +1439,8 @@ End
 #endif
 
 STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Wpft,wpft)
+
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_T602Filter,t602filter)
 
 STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Writerfilter,writerfilter)
 
