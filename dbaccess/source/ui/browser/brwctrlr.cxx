@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:52:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,6 @@ class SbaXDataBrowserController::FormControllerImpl
     friend class SbaXDataBrowserController;
     ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
     SbaXDataBrowserController*          m_pOwner;
-    sal_Bool                            m_bActive;
 
 public:
     FormControllerImpl(SbaXDataBrowserController* pOwner);
@@ -316,7 +315,6 @@ DBG_NAME(FormControllerImpl)
 SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* _pOwner)
     :m_aActivateListeners(_pOwner->getMutex())
     ,m_pOwner(_pOwner)
-    ,m_bActive(sal_False)
 {
     DBG_CTOR(FormControllerImpl,NULL);
 
@@ -412,34 +410,8 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast(void) 
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& /*aEvent*/) throw( RuntimeException )
 {
-    OSL_ENSURE(aEvent.Source == m_pOwner->m_xCurrentFrame, "SbaXDataBrowserController::FormControllerImpl::frameAction : where did this come frome ?");
-
-    ::com::sun::star::lang::EventObject aEvt(*m_pOwner);
-    ::cppu::OInterfaceIteratorHelper aIter(m_aActivateListeners);
-    switch (aEvent.Action)
-    {
-        case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED:
-            // as the frame sends more ACTIVATED than DEACTIVATING events we check this with our own flag, so the listeners
-            // will be notified only when the first activation occurs
-//          if (!m_bActive)
-                // TODO : when de DEACTIVATED-event is implemented (MBA) reinsert this line
-//          {
-//              while (aIter.hasMoreElements())
-//                  ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formActivated(aEvt);
-//          }
-//          m_bActive = sal_True;
-            break;
-
-        case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
-//          while (aIter.hasMoreElements())
-//              ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
-//          m_bActive = sal_False;
-            break;
-        default:
-            break;
-    }
 }
 
 //------------------------------------------------------------------
@@ -455,12 +427,8 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::c
 //------------------------------------------------------------------
 Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (RuntimeException)
 {
-    Sequence< Type > aTypes1 = ::comphelper::concatSequences(
-        OGenericUnoController::getTypes(),
-        SbaXDataBrowserController_Base::getTypes()
-    );
     return ::comphelper::concatSequences(
-        aTypes1,
+        SbaXDataBrowserController_Base::getTypes(),
         m_pFormControllerImpl->getTypes()
     );
 }
@@ -485,13 +453,11 @@ Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     // check for our additional interfaces
-    Any aRet = OGenericUnoController::queryInterface(_rType);
+    Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
 
     // check for the base controllers interfaces
     if (!aRet.hasValue())
     {
-        aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
-
         // check for our aggregate (implementing the XFormController)
         if (!aRet.hasValue())
         {
@@ -503,22 +469,10 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
     return aRet;
 }
 
-//------------------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::acquire(  ) throw ()
-{
-    OGenericUnoController::acquire();
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::release(  ) throw ()
-{
-    OGenericUnoController::release();
-}
-
 DBG_NAME(SbaXDataBrowserController)
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-    :OGenericUnoController(_rM)
+    :SbaXDataBrowserController_Base(_rM)
     ,m_pClipbordNotifier( NULL )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
@@ -560,22 +514,31 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
 
     DBG_DTOR(SbaXDataBrowserController,NULL);
 }
+
 // -----------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
+void SbaXDataBrowserController::startFrameListening( const Reference< XFrame >& _rxFrame )
 {
-    Reference< ::com::sun::star::frame::XFrameActionListener >  xAggListener;
-    if (m_xFormControllerImpl.is())
-        m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::frame::XFrameActionListener>*)0)) >>= xAggListener;
+    SbaXDataBrowserController_Base::startFrameListening( _rxFrame );
 
-    // log off my aggregated object
-    if (m_xCurrentFrame.is() && xAggListener.is())
-        m_xCurrentFrame->removeFrameActionListener(xAggListener);
+    Reference< XFrameActionListener >   xAggListener;
+    if ( m_xFormControllerImpl.is() )
+        m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
 
-    OGenericUnoController::attachFrame(xFrame);
+    if ( _rxFrame.is() && xAggListener.is() )
+        _rxFrame->addFrameActionListener( xAggListener );
+}
 
-    // and log on to the new frame
-    if (m_xCurrentFrame.is() && xAggListener.is())
-        m_xCurrentFrame->addFrameActionListener(xAggListener);
+// -----------------------------------------------------------------------
+void SbaXDataBrowserController::stopFrameListening( const Reference< XFrame >& _rxFrame )
+{
+    SbaXDataBrowserController_Base::stopFrameListening( _rxFrame );
+
+    Reference< XFrameActionListener >   xAggListener;
+    if ( m_xFormControllerImpl.is() )
+        m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
+
+    if ( _rxFrame.is() && xAggListener.is() )
+        _rxFrame->removeFrameActionListener( xAggListener );
 }
 
 // -----------------------------------------------------------------------------
@@ -615,10 +578,7 @@ void SbaXDataBrowserController::initFormatter()
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::describeSupportedFeatures()
 {
-
-    implDescribeSupportedFeature( ".uno:FormSlots/deleteRecord",    SID_FM_DELETEROWS,      CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
-    OGenericUnoController::describeSupportedFeatures();
+    SbaXDataBrowserController_Base::describeSupportedFeatures();
     implDescribeSupportedFeature( ".uno:FormSlots/undoRecord",      ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:FormController/undoRecord", ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:RecUndo",                   ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
@@ -635,6 +595,8 @@ void SbaXDataBrowserController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:FilterCrit",                SID_FM_FILTERCRIT,      CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:Sortup",                    ID_BROWSER_SORTUP,      CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:SortDown",                  ID_BROWSER_SORTDOWN,    CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FormSlots/deleteRecord",    SID_FM_DELETEROWS,      CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
 }
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
@@ -708,7 +670,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
     // this call create the toolbox
-    OGenericUnoController::Construct(pParent);
+    SbaXDataBrowserController_Base::Construct(pParent);
 
     getBrowserView()->Show();
 
@@ -949,24 +911,12 @@ void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lan
 void SbaXDataBrowserController::disposing(const EventObject& Source) throw( RuntimeException )
 {
     // if it's a component other than our aggregate, forward it to the aggregate
-    if (m_xFormControllerImpl != Source.Source)
+    if ( m_xFormControllerImpl != Source.Source )
     {
-        Reference< XEventListener >  xAggListener;
-        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
-        if (xAggListener.is())
-            xAggListener->disposing(Source);
-    }
-
-    // if it's our frame, remove the aggregate as listener
-    if (Source.Source == m_xCurrentFrame)
-    {
-        // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
-        Reference< XFrameActionListener >  xAggListener;
-        if (m_xFormControllerImpl.is())
-        {
-            m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
-            m_xCurrentFrame->removeFrameActionListener(xAggListener);
-        }
+        Reference< XEventListener > xAggListener;
+        m_xFormControllerImpl->queryAggregation( ::getCppuType( &xAggListener ) ) >>= xAggListener;
+        if ( xAggListener.is( ))
+            xAggListener->disposing( Source );
     }
 
     // is it the grid control ?
@@ -994,7 +944,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
         if (xInfo->hasPropertyByName(PROPERTY_WIDTH))
             disposingColumnModel(Source);
     }
-    OGenericUnoController::disposing(Source);
+    SbaXDataBrowserController_Base::OGenericUnoController::disposing( Source );
 }
 
 // -----------------------------------------------------------------------
@@ -1146,7 +1096,7 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
             // form tries to acquire (blocking) the solar mutex, too, and we loop waiting for the other thread
             // we have a classic deadlock. And bet your ass that ANYBODY in the foreign thread tries to lock
             // the solar mutex. Almost all the UNO-capsules around normal C++ classes use the solar mutex for
-            // "thread safety" (which doesn't deserve that name anymore ;), e.g. the ::com::sun::star::util::XNumberFormatter-implementation
+            // "thread safety" (which doesn't deserve that name anymore ;), e.g. the XNumberFormatter-implementation
             // does.
             // So we have to do a fake : we tell the loading thread that we aren't interested in the results anymore
             // and the thread deletes itself (and the data source) as soon as it is done. As it holds the last
@@ -1175,15 +1125,6 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::disposing()
 {
-    // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
-    Reference< XFrameActionListener >  xAggListener;
-    if (m_xFormControllerImpl.is())
-    {
-        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
-        if(m_xCurrentFrame.is()) // may be null if the component dba couldn't be loaded
-            m_xCurrentFrame->removeFrameActionListener(xAggListener);
-    }
-
     // and dispose the aggregate
     if (m_xFormControllerImpl.is())
     {
@@ -1194,7 +1135,7 @@ void SbaXDataBrowserController::disposing()
     }
 
     // the base class
-    OGenericUnoController::disposing();
+    SbaXDataBrowserController_Base::OGenericUnoController::disposing();
 
     if (!PendingLoad())
     {
@@ -1283,12 +1224,15 @@ void SbaXDataBrowserController::disposing()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    if ((::com::sun::star::frame::XFrame*)aEvent.Frame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get())
-        switch (aEvent.Action)
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    SbaXDataBrowserController_Base::frameAction( aEvent );
+
+    if ( aEvent.Source == getFrame() )
+        switch ( aEvent.Action )
         {
-            case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED:
-            case ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED:
-                m_bFrameUiActive = sal_True;
+            case FrameAction_FRAME_ACTIVATED:
+            case FrameAction_FRAME_UI_ACTIVATED:
                 // ensure that the active cell (if any) has the focus
                 m_aAsyncGetCellFocus.Call();
                 // start the clipboard timer
@@ -1298,9 +1242,8 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                     OnInvalidateClipboard( NULL );
                 }
                 break;
-            case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
-            case ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING:
-                m_bFrameUiActive = sal_False;
+            case FrameAction_FRAME_DEACTIVATING:
+            case FrameAction_FRAME_UI_DEACTIVATING:
                 // stop the clipboard invalidator
                 if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
                 {
@@ -1506,10 +1449,10 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     sal_Bool bIsReadOnly = rEdit.IsReadOnly();
                     switch (nId)
                     {
-                        case ID_BROWSER_CUT:    aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
-                        case SID_COPY   :       aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
+                        case ID_BROWSER_CUT:    aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen && !bIsReadOnly; break;
+                        case SID_COPY   :       aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen; break;
                         case ID_BROWSER_PASTE:
-                            aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly;
+                            aReturn.bEnabled = m_aCurrentFrame.isActive() && !bIsReadOnly;
                             if(aReturn.bEnabled)
                             {
                                 aReturn.bEnabled = aReturn.bEnabled && IsFormatSupported( m_aSystemClipboard.GetDataFlavorExVector(), FORMAT_STRING );
@@ -1626,7 +1569,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             }
             break;
             default:
-                return OGenericUnoController::GetState(nId);
+                return SbaXDataBrowserController_Base::GetState(nId);
         }
     }
     catch(const Exception& )
@@ -2314,7 +2257,7 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
 //  }
 //
 //
-//  return OGenericUnoController::SaveData(bUI,bForBrowsing);
+//  return SbaXDataBrowserController_Base::SaveData(bUI,bForBrowsing);
 //}
 //
 // -------------------------------------------------------------------------
