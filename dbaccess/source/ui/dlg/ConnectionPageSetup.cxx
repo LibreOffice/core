@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:10:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:15:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ namespace dbaui
         callModifiedHdl();
     }
     // -----------------------------------------------------------------------
-       sal_Bool OConnectionTabPageSetup::commitPage(COMMIT_REASON /*_eReason*/)
+       sal_Bool OConnectionTabPageSetup::commitPage( CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }
