@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:58:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,10 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
@@ -230,6 +234,12 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_25)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_25
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 25
+#include <comphelper/implbase_var.hxx>
+#endif
+
 //  include of my own project
 //________________________________________________________________________________________________________
 
@@ -276,6 +286,7 @@
 #define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
 #define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
 #define XEMBEDDEDSCRIPTS        ::com::sun::star::document::XEmbeddedScripts
+#define XSCRIPTINVOCATIONCONTEXT    ::com::sun::star::document::XScriptInvocationContext
 
 #define NOSUPPORTEXCEPTION      ::com::sun::star::lang::NoSupportException
 #define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
@@ -292,7 +303,6 @@
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define MUTEX                   ::osl::Mutex
 #define OUSTRING                ::rtl::OUString
-#define OWEAKOBJECT             ::cppu::OWeakObject
 #define UNOTYPE                 ::com::sun::star::uno::Type
 #define XVIEWDATASUPPLIER       ::com::sun::star::document::XViewDataSupplier
 #define XINDEXACCESS            ::com::sun::star::container::XIndexAccess
@@ -354,9 +364,10 @@ struct IMPL_SfxBaseModel_MutexContainer
                 XModifiable2
                 XPrintable
                 XStorable2
-                ::document::XEventBroadcaster
-                ::document::XEventsSupplier
-                ::document::XEmbeddedScripts
+                document::XEventBroadcaster
+                document::XEventsSupplier
+                document::XEmbeddedScripts
+                document::XScriptInvocationContext
                 XCloseable
                 XCloseBroadcaster
 
@@ -364,34 +375,36 @@ struct IMPL_SfxBaseModel_MutexContainer
                  SfxListener
 */
 
-class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
-                    ,   public XCHILD
-                    ,   public XDOCUMENTINFOSUPPLIER
-                    ,   public ::com::sun::star::document::XDocumentPropertiesSupplier
-                    ,   public XEVENTBROADCASTER
-                    ,   public XEVENTLISTENER
-                    ,   public XEVENTSSUPPLIER
-                    ,   public XEMBEDDEDSCRIPTS
-                    ,   public XMODEL2
-                    ,   public XMODIFIABLE2
-                    ,   public XPRINTABLE
-                    ,   public XPRINTJOBBROADCASTER
-                    ,   public XSTORABLE2
-                    ,   public XLOADABLE
-                    ,   public XSTARBASICACCESS
-                    ,   public XVIEWDATASUPPLIER
-                    ,   public XCLOSEABLE           // => XCLOSEBROADCASTER
-                    ,   public XTRANSFERABLE
-                    ,   public XDOCUMENTSUBSTORAGESUPPLIER
-                    ,   public XSTORAGEBASEDDOCUMENT
-                    ,   public XSCRIPTPROVIDERSUPPLIER
-                    ,   public XUICONFIGURATIONMANAGERSUPPLIER
-                    ,   public XVISUALOBJECT
-                    ,   public XUNOTUNNEL
-                    ,   public XMODULE
-                    ,   public IMPL_SfxBaseModel_MutexContainer
-                    ,   public SfxListener
-                    ,   public OWEAKOBJECT
+typedef ::comphelper::WeakImplHelper25  <   XCHILD
+                                        ,   XDOCUMENTINFOSUPPLIER
+                                        ,   ::com::sun::star::document::XDocumentPropertiesSupplier
+                                        ,   XEVENTBROADCASTER
+                                        ,   XEVENTLISTENER
+                                        ,   XEVENTSSUPPLIER
+                                        ,   XEMBEDDEDSCRIPTS
+                                        ,   XSCRIPTINVOCATIONCONTEXT
+                                        ,   XMODEL2
+                                        ,   XMODIFIABLE2
+                                        ,   XPRINTABLE
+                                        ,   XPRINTJOBBROADCASTER
+                                        ,   XSTORABLE2
+                                        ,   XLOADABLE
+                                        ,   XSTARBASICACCESS
+                                        ,   XVIEWDATASUPPLIER
+                                        ,   XCLOSEABLE           // => XCLOSEBROADCASTER
+                                        ,   XTRANSFERABLE
+                                        ,   XDOCUMENTSUBSTORAGESUPPLIER
+                                        ,   XSTORAGEBASEDDOCUMENT
+                                        ,   XSCRIPTPROVIDERSUPPLIER
+                                        ,   XUICONFIGURATIONMANAGERSUPPLIER
+                                        ,   XVISUALOBJECT
+                                        ,   XUNOTUNNEL
+                                        ,   XMODULE
+                                        >   SfxBaseModel_Base;
+
+class SFX2_DLLPUBLIC SfxBaseModel   :   public SfxBaseModel_Base
+                                    ,   public IMPL_SfxBaseModel_MutexContainer
+                                    ,   public SfxListener
 {
 
 //________________________________________________________________________________________________________
@@ -433,8 +446,6 @@ public:
     */
 
     virtual ~SfxBaseModel() ;
-
-    void StorageIsModified_Impl(); // can only be called by own listener
 
     //____________________________________________________________________________________________________
     //  XInterface
@@ -1332,6 +1343,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
+    //  XScriptInvocationContext
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XEventBroadcaster
