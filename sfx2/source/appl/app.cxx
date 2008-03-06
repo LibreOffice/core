@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 17:27:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,6 +594,14 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             }
         }
     }
+
+    // even if the frame actually didn't change, ensure its document is forwarded
+    // to SfxObjectShell::SetCurrentComponent.
+    // Otherwise, the CurrentComponent might not be correct, in case it has meanwhile
+    // been reset to some other document, by some non-SFX component.
+    // #i49133# / 2007-12-19 / frank.schoenheit@sun.com
+    if ( pFrame && pFrame->GetViewShell() )
+        pFrame->GetViewShell()->SetCurrentDocument();
 }
 
 //--------------------------------------------------------------------
@@ -850,8 +858,12 @@ SfxApplication::ChooseScript()
     {
         OSL_TRACE("create selector dialog");
 
+        const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
+        uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
+
           AbstractScriptSelectorDialog* pDlg =
-            pFact->CreateScriptSelectorDialog( NULL );
+            pFact->CreateScriptSelectorDialog( NULL, FALSE, xFrame );
 
         OSL_TRACE("done, now exec it");
 
