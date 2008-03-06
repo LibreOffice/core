@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UncachedDataSequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:23:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,7 @@ protected:
     ::rtl::OUString                                 m_sRole;
     sal_Bool                                        m_bIsHidden;
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
+    ::rtl::OUString                                 m_aXMLRange;
     // </properties>
 
     /** This method registers all properties.  It should be called by all
