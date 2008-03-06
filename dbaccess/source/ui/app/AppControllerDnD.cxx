@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:52:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -225,6 +222,9 @@
 #endif
 #ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
 #include "defaultobjectnamecheck.hxx"
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 //........................................................................
@@ -570,12 +570,6 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
     return xElements;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::impl_initialize()
-{
-    Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
-    m_bCurrentlyModified = (xModi.is() && xModi->isModified());
-}
-// -----------------------------------------------------------------------------
 void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames) const
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -633,7 +627,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 
     OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
     return ::std::auto_ptr<OLinkedDocumentsAccess>(
-        new OLinkedDocumentsAccess( getView(), m_xCurrentFrame,getORB(), xNameAccess, xConnection, getDatabaseName() ) );
+        new OLinkedDocumentsAccess( getView(), m_aCurrentFrame.getFrame(), getORB(), xNameAccess, xConnection, getDatabaseName() ) );
 }
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
@@ -760,7 +754,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     try
                     {
                         // the concrete query
-                        Reference<XQueryDefinitionsSupplier> xSourceQuerySup(getDataSourceByName_displayError( m_xDatabaseContext, sDataSourceName, getView(), getORB(), true ),UNO_QUERY);
+                        Reference<XQueryDefinitionsSupplier> xSourceQuerySup(getDataSourceByName_displayError( sDataSourceName, getView(), getORB(), true ),UNO_QUERY);
                         if ( xSourceQuerySup.is() )
                             xQueries.set(xSourceQuerySup->getQueryDefinitions(),UNO_QUERY);
 
