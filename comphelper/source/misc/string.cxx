@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:14:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 20:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <string.h>
 #include <vector>
 
 #include "comphelper/string.hxx"
@@ -46,7 +47,7 @@
 
 namespace comphelper { namespace string {
 
-rtl::OUString searchAndReplace(
+rtl::OUString searchAndReplaceAsciiL(
     rtl::OUString const & source, char const * from, sal_Int32 fromLength,
     rtl::OUString const & to, sal_Int32 beginAt, sal_Int32 * replacedAt)
 {
@@ -55,6 +56,21 @@ rtl::OUString searchAndReplace(
         *replacedAt = n;
     }
     return n == -1 ? source : source.replaceAt(n, fromLength, to);
+}
+
+COMPHELPER_DLLPUBLIC ::rtl::OUString& searchAndReplaceAsciiI(
+    ::rtl::OUString & _source, sal_Char const * _asciiPattern, ::rtl::OUString const & _replace,
+    sal_Int32 _beginAt, sal_Int32 * _replacedAt )
+{
+    sal_Int32 fromLength = strlen( _asciiPattern );
+    sal_Int32 n = _source.indexOfAsciiL( _asciiPattern, fromLength, _beginAt );
+    if ( _replacedAt != NULL )
+        *_replacedAt = n;
+
+    if ( n != -1 )
+        _source = _source.replaceAt( n, fromLength, _replace );
+
+    return _source;
 }
 
 // convert between sequence of string and comma separated string
