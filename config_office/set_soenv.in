@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.176 $
-# Date:        $Date: 2008-03-06 12:21:05 $
+# Version:     $Revision: 1.177 $
+# Date:        $Date: 2008-03-06 15:16:57 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1613,6 +1613,7 @@ ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
 ToFile( "INTRO_BITMAPS",     "@INTRO_BITMAPS@",  "e" );
 ToFile( "ABOUT_BITMAPS",     "@ABOUT_BITMAPS@",  "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
+ToFile( "OOODMAKEMODE",      "YES",              "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
