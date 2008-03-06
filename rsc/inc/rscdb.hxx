@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:58:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,11 @@ class RscTypCont
     Atom                nLeftId;
     Atom                nCenterId;
     Atom                nRightId;
-    Atom                nHscrollId;
-    Atom                nVscrollId;
+    Atom                nTopId;
+    Atom                nVCenterId;
+    Atom                nBottomId;
+    Atom                nHScrollId;
+    Atom                nVScrollId;
     Atom                nSortId;
     Atom                nDefaultId;
     Atom                nSVLookId;
@@ -142,12 +145,11 @@ class RscTypCont
     Atom                nTabControlId;
     Atom                nSimpleModeId;
     Atom                nDragId;
-    Atom                nSaveAsId;
-    Atom                nOpenId;
     Atom                nScrollId;
     Atom                nZoomableId;
     Atom                nHideWhenDeactivateId;
     Atom                nAutoHScrollId;
+    Atom                nAutoVScrollId;
     Atom                nDDExtraWidthId;
     Atom                nWordBreakId;
     Atom                nLeftLabelId;
@@ -206,6 +208,7 @@ class RscTypCont
     RscTop *    InitClassModalDialog( RscTop * pSuper );
     RscTop *    InitClassModelessDialog( RscTop * pSuper );
     RscTop *    InitClassControl( RscTop * pSuper );
+    RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
     RscTop *    InitClassTriStateBox( RscTop * pSuper, RscEnum * pTriState );
     RscTop *    InitClassMenuButton( RscTop * pSuper, RscTop * pClasMenu );
@@ -220,6 +223,7 @@ class RscTypCont
     RscTop *    InitClassFixedText( RscTop * pSuper );
     RscTop *    InitClassFixedBitmap( RscTop * pSuper, RscTop * pClassBitmap );
     RscTop *    InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage );
+    RscTop *    InitClassRadioButton( RscTop * pSuper );
     RscTop *    InitClassImageRadioButton( RscTop * pSuper, RscTop * pClassImage );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassAccelItem( RscTop * pSuper, RscTop * pKeyCode );
