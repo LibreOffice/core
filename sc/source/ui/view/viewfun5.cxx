@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:53:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,16 +724,23 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     String aTopic( aByteTopic, eSysEnc );
     String aItem( aByteItem, eSysEnc );
 
-    //! use tokens
+    // TODO: we could define ocQuote for "
+    String aQuote( '"' );
     String aFormula( '=' );
-    aFormula += ScCompiler::GetNativeSymbol(ocDde);
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
+    aFormula += ScCompiler::GetNativeSymbol( ocDde);
+    aFormula += ScCompiler::GetNativeSymbol( ocOpen);
+    aFormula += aQuote;
     aFormula += aApp;
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+    aFormula += aQuote;
+    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+    aFormula += aQuote;
     aFormula += aTopic;
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+    aFormula += aQuote;
+    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+    aFormula += aQuote;
     aFormula += aItem;
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
+    aFormula += aQuote;
+    aFormula += ScCompiler::GetNativeSymbol( ocClose);
 
     //  mark range
 
