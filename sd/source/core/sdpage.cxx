@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:21:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,110 +800,32 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
                 pMasterPage->RemoveObject(pObj->GetOrdNum());
             }
 
-            Size    aArea = GetSize();
-            long    nX = GetLftBorder();
-            long    nY = GetUppBorder();
-            long    nGapW = (nX + GetRgtBorder()) / 2;
-            long    nGapH = (nY + GetLwrBorder()) / 2;
-            USHORT  nColCnt, nRowCnt;
+            std::vector< Rectangle > aAreas;
+            CalculateHandoutAreas( *static_cast< SdDrawDocument* >(GetModel() ), pMasterPage->GetAutoLayout(), false, aAreas );
 
-            const int NOTES_HEADER_FOOTER_HEIGHT = long((aArea.Height() - GetUppBorder() - GetLwrBorder()) * 0.05);
+            const bool bSkip = pMasterPage->GetAutoLayout() == AUTOLAYOUT_HANDOUT3;
 
-            aArea.Height() -= 2 * NOTES_HEADER_FOOTER_HEIGHT;
-
-            if ( !nGapW )
+            sal_uInt16 nPage = 0;
+            std::vector< Rectangle >::iterator iter( aAreas.begin() );
+            while( iter != aAreas.end() )
             {
-                nGapW = aArea.Width() / 10;
-                nX = nGapW;
-            }
-            if ( !nGapH )
-            {
-                nGapH = aArea.Height() / 10;
-                nY = nGapH;
-            }
+                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, FALSE, (*iter++), TRUE) );
 
-            switch ( pMasterPage->GetAutoLayout() )
-            {
-                case AUTOLAYOUT_HANDOUT1: nColCnt = 1; nRowCnt = 1; break;
-                case AUTOLAYOUT_HANDOUT2: nColCnt = 1; nRowCnt = 2; break;
-                case AUTOLAYOUT_HANDOUT3: nColCnt = 1; nRowCnt = 3; break;
-                case AUTOLAYOUT_HANDOUT4: nColCnt = 2; nRowCnt = 2; break;
-                case AUTOLAYOUT_HANDOUT6: nColCnt = 2; nRowCnt = 3; break;
-                default: nColCnt = 1; nRowCnt = 1; break;
-            }
-            aArea.Width() -= nGapW * 2;
-            aArea.Height() -= nGapH * 2;
+                const sal_uInt16 nDestinationPageNum(2 * nPage + 1);
 
-            if ( nGapW < aArea.Width() / 10 )
-                nGapW = aArea.Width() / 10;
-            if ( nGapH < aArea.Height() / 10 )
-                nGapH = aArea.Height() / 10;
-
-            // bei Querformat Reihen und Spalten vertauschen
-            if ( aArea.Width() > aArea.Height() )
-            {
-                USHORT nTmp = nRowCnt;
-                nRowCnt = nColCnt;
-                nColCnt = nTmp;
-            }
-
-            Size aPartArea, aSize;
-            aPartArea.Width()  = ((aArea.Width()  + nGapW) / nColCnt) - nGapW;
-            aPartArea.Height() = ((aArea.Height() + nGapH) / nRowCnt) - nGapH;
-
-            SdrPage* pFirstPage = ((SdDrawDocument*) pModel)->GetSdPage(0, PK_STANDARD);
-            if ( pFirstPage )
-            {   // tatsaechliche Seitengroesse in das Handout-Rechteck skalieren
-                double fH = (double) aPartArea.Width()  / pFirstPage->GetWdt();
-                double fV = (double) aPartArea.Height() / pFirstPage->GetHgt();
-
-                if ( fH > fV )
-                    fH = fV;
-                aSize.Width()  = (long) (fH * pFirstPage->GetWdt());
-                aSize.Height() = (long) (fH * pFirstPage->GetHgt());
-
-                nX += (aPartArea.Width() - aSize.Width()) / 2;
-                nY += (aPartArea.Height()- aSize.Height())/ 2;
-            }
-            else
-                aSize = aPartArea;
-
-            Point aPos(nX, nY + NOTES_HEADER_FOOTER_HEIGHT);
-            USHORT nPgNum = 0;
-
-            sal_Bool    bRTL = ( GetModel() && static_cast< SdDrawDocument* >( GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
-            for (USHORT nRow = 0; nRow < nRowCnt; nRow++)
-            {
-                aPos.X() = nX;
-                if (bRTL)
-                    aPos.X() = nX + (aPartArea.Width() + nGapW)*(nColCnt - 1);
-                else
-                    aPos.X() = nX;
-
-                for (USHORT nCol = 0; nCol < nColCnt; nCol++)
+                if(nDestinationPageNum < pModel->GetPageCount())
                 {
-                    Rectangle aRect(aPos, aSize);
-                    SdrPageObj* pPageObj = (SdrPageObj*) pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, FALSE, aRect, TRUE);
-
-                    const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
-
-                    if(nDestinationPageNum < pModel->GetPageCount())
-                    {
-                        pPageObj->SetReferencedPage(pModel->GetPage(nDestinationPageNum));
-                    }
-                    else
-                    {
-                        pPageObj->SetReferencedPage(0L);
-                    }
-
-                    nPgNum++;
-
-                    if (bRTL)
-                        aPos.X() -= aPartArea.Width() + nGapW;
-                    else
-                        aPos.X() += aPartArea.Width() + nGapW;
+                    pPageObj->SetReferencedPage(pModel->GetPage(nDestinationPageNum));
                 }
-                aPos.Y() += aPartArea.Height() + nGapH;
+                else
+                {
+                    pPageObj->SetReferencedPage(0L);
+                }
+
+                if( bSkip && iter != aAreas.end() )
+                    iter++;
+
+                nPage++;
             }
         }
 
@@ -1249,6 +1171,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT3
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT4
         LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT6
+        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT9
         LayoutDescriptor( 7, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_CHART ),// AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
         LayoutDescriptor( 8, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
@@ -1926,9 +1849,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
             // #88084# remember aTopLeft as original TopLeft
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
-            if (bIsPresObjOnMaster &&
-                (mePageKind == PK_HANDOUT ||
-                 pObj == GetPresObj(PRESOBJ_BACKGROUND, nIndexBackground)))
+            if (bIsPresObjOnMaster && (pObj == GetPresObj(PRESOBJ_BACKGROUND, nIndexBackground)) )
             {
                 /**************************************************************
                 * 1. Praesentationsobjekte auf Handzettelseite sollen nur positioniert werden
@@ -2959,6 +2880,14 @@ bool SdPage::checkVisibility(
             }
         }
     }
+
+    // i63977, do not print sdr page obj from master pages
+    if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
+    {
+        if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
+            return false;
+    }
+
     return true;
 }
 
@@ -3014,6 +2943,153 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
         }
     }
     return bRet;
+}
+
+void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas )
+{
+    SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PK_HANDOUT );
+
+    Size    aArea = rHandoutMaster.GetSize();
+
+    const long nGapW = 1000; // gap is 1cm
+    const long nGapH = 1000;
+
+    long nLeftBorder = rHandoutMaster.GetLftBorder();
+    long nRightBorder = rHandoutMaster.GetRgtBorder();
+    long nTopBorder = rHandoutMaster.GetUppBorder();
+    long nBottomBorder = rHandoutMaster.GetLwrBorder();
+
+    const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
+
+    nTopBorder += nHeaderFooterHeight;
+    nBottomBorder += nHeaderFooterHeight;
+
+    long nX = nGapW + nLeftBorder;
+    long nY = nGapH + nTopBorder;
+
+    aArea.Width() -= nGapW * 2 + nLeftBorder + nRightBorder;
+    aArea.Height() -= nGapH * 2 + nTopBorder + nBottomBorder;
+
+    const bool bLandscape = aArea.Width() > aArea.Height();
+
+    static sal_uInt16 aOffsets[5][9] =
+    {
+        { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
+        { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
+        { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
+        { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
+        { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
+    };
+
+    sal_uInt16* pOffsets = aOffsets[0];
+    USHORT  nColCnt = 0, nRowCnt = 0;
+    switch ( eLayout )
+    {
+        case AUTOLAYOUT_HANDOUT1:
+            nColCnt = 1; nRowCnt = 1;
+            break;
+
+        case AUTOLAYOUT_HANDOUT2:
+            if( bLandscape )
+            {
+                nColCnt = 2; nRowCnt = 1;
+            }
+            else
+            {
+                nColCnt = 1; nRowCnt = 2;
+            }
+            break;
+
+        case AUTOLAYOUT_HANDOUT3:
+            if( bLandscape )
+            {
+                nColCnt = 3; nRowCnt = 2;
+            }
+            else
+            {
+                nColCnt = 2; nRowCnt = 3;
+            }
+            pOffsets = aOffsets[ bLandscape ? 1 : 0 ];
+            break;
+
+        case AUTOLAYOUT_HANDOUT4:
+            nColCnt = 2; nRowCnt = 2;
+            pOffsets = aOffsets[ bHorizontal ? 0 : 2 ];
+            break;
+
+        case AUTOLAYOUT_HANDOUT6:
+            if( bLandscape )
+            {
+                nColCnt = 3; nRowCnt = 2;
+            }
+            else
+            {
+                nColCnt = 2; nRowCnt = 3;
+            }
+            if( !bHorizontal )
+                pOffsets = aOffsets[ bLandscape ? 1 : 3 ];
+            break;
+
+        default:
+        case AUTOLAYOUT_HANDOUT9:
+            nColCnt = 3; nRowCnt = 3;
+
+            if( !bHorizontal )
+                pOffsets = aOffsets[4];
+            break;
+    }
+
+    rAreas.resize( nColCnt * nRowCnt );
+
+    Size aPartArea, aSize;
+    aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
+    aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
+
+    SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PK_STANDARD);
+    if ( pFirstPage )
+    {
+        // scale actual size into handout rect
+        double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWdt();
+
+        aSize.Height() = (long)(fScale * pFirstPage->GetHgt() );
+        if( aSize.Height() > aPartArea.Height() )
+        {
+            fScale = (double)aPartArea.Height() / (double)pFirstPage->GetHgt();
+            aSize.Height() = aPartArea.Height();
+            aSize.Width() = (long)(fScale * pFirstPage->GetWdt());
+        }
+        else
+        {
+            aSize.Width() = aPartArea.Width();
+        }
+
+        nX += (aPartArea.Width() - aSize.Width()) / 2;
+        nY += (aPartArea.Height()- aSize.Height())/ 2;
+    }
+    else
+    {
+        aSize = aPartArea;
+    }
+
+    Point aPos( nX, nY );
+
+    const bool bRTL = rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+
+    const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
+    const long nOffsetY = aPartArea.Height() + nGapH;
+    const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) - nX : nX;
+
+    for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
+    {
+        aPos.X() = nStartX;
+        for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
+        {
+            rAreas[*pOffsets++] = Rectangle(aPos, aSize);
+            aPos.X() += nOffsetX;
+        }
+
+        aPos.Y() += nOffsetY;
+    }
 }
 
 HeaderFooterSettings::HeaderFooterSettings()
