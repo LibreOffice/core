@@ -46,6 +46,7 @@ T4_WRITER = \
     writer_StarOffice_XML_Writer \
     $(T4_WRITER_BINFILTER) \
     writer_WordPerfect_Document \
+    writer_T602_Document \
     writer_Text \
     writer_Text_encoded \
     writer_JustSystem_Ichitaro_10 \
@@ -81,6 +82,7 @@ F4_WRITER = \
     StarOffice_XML__Writer_ \
     $(F4_WRITER_BINFILTER) \
     WordPerfect \
+    T602Document \
     Text \
     Text__encoded_ \
     writer_JustSystem_Ichitaro_10 \
