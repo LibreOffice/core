@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:55:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,8 @@ public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_IMPRESS);
+        DocumentType=DOCUMENT_TYPE_IMPRESS,
+        BOOL bScriptSupport=TRUE);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
