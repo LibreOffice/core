@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:56:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
     switch( nWhichId )
     {
-        case SCHATTR_STAT_REGRESSTYPE:
+        case SCHATTR_REGRESSION_TYPE:
         {
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
@@ -232,14 +232,14 @@ void RegressionCurveItemConverter::FillSpecialItem(
 
     switch( nWhichId )
     {
-        case SCHATTR_STAT_REGRESSTYPE:
+        case SCHATTR_REGRESSION_TYPE:
         {
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
             {
                 SvxChartRegress eRegress = static_cast< SvxChartRegress >(
                     static_cast< sal_Int32 >( RegressionCurveHelper::getRegressionType( xCurve )));
-                rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_STAT_REGRESSTYPE ));
+                rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
             }
         }
         break;
