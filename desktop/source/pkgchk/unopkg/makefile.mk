@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 14:34:31 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:29:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TARGETTYPE = GUI
 ENABLE_EXCEPTIONS = TRUE
 LIBTARGET=NO
 
-PRJINC += ..$/..$/deployment
+PRJINC += ..$/..$/deployment ..$/..
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
