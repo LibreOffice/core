@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:25:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 11:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -574,6 +574,18 @@ void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::Runti
         GetWindow()->GrabFocus();
 }
 
+void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     // FIXME: elide duplication ?
+                     BASEPROPERTY_LINE_END_FORMAT,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_MAXTEXTLEN,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+
+}
 //  ----------------------------------------------------
 //  class VCLXFileDialog
 //  ----------------------------------------------------
@@ -912,6 +924,16 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
     if ( pControl )
         nCols = (sal_Int16) pControl->GetEdit().GetMaxVisChars();
 }
+
+void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     // FIXME: elide duplication ?
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+}
+
 
 //  ----------------------------------------------------
 //  class SVTXFormattedField
@@ -1484,6 +1506,30 @@ void SVTXFormattedField::NotifyTextListeners()
     }
 }
 
+void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     // FIXME: elide duplication ?
+                     BASEPROPERTY_EFFECTIVE_MIN,
+                     BASEPROPERTY_VALUEMIN_DOUBLE,
+                     BASEPROPERTY_EFFECTIVE_MAX,
+                     BASEPROPERTY_VALUEMAX_DOUBLE,
+                     BASEPROPERTY_EFFECTIVE_DEFAULT,
+                     BASEPROPERTY_TREATASNUMBER,
+                     BASEPROPERTY_EFFECTIVE_VALUE,
+                     BASEPROPERTY_VALUE_DOUBLE,
+                     BASEPROPERTY_VALUESTEP_DOUBLE,
+                     BASEPROPERTY_DECIMALACCURACY,
+                     BASEPROPERTY_FORMATSSUPPLIER,
+                     BASEPROPERTY_NUMSHOWTHOUSANDSEP,
+                     BASEPROPERTY_FORMATKEY,
+                     BASEPROPERTY_TREATASNUMBER,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+    VCLXSpinField::ImplGetPropertyIds( rIds );
+}
+
 
 //  ----------------------------------------------------
 //  class SVTXRoadmap
@@ -1730,6 +1776,18 @@ void SVTXRoadmap::ImplSetNewImage()
     pButton->SetRoadmapBitmap( GetBitmap() );
 }
 
+void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_COMPLETE,
+                     BASEPROPERTY_ACTIVATED,
+                     BASEPROPERTY_CURRENTITEMID,
+                     BASEPROPERTY_TEXT,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+}
+
 //  ----------------------------------------------------
 //  class SVTXNumericField
 //  ----------------------------------------------------
@@ -1890,6 +1948,11 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
 
     FormattedField* pField = GetFormattedField();
     return pField ? pField->IsStrictFormat() : sal_False;
+}
+
+void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
 //  ----------------------------------------------------
@@ -2120,6 +2183,15 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
         }
     }
     return SVTXFormattedField::getProperty(PropertyName);
+}
+
+void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_CURRENCYSYMBOL,
+                     BASEPROPERTY_CURSYM_POSITION,
+                     0);
+    SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
 
@@ -2359,6 +2431,17 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
     return aProp;
 }
 
+void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_PROGRESSVALUE,
+                     BASEPROPERTY_PROGRESSVALUE_MIN,
+                     BASEPROPERTY_PROGRESSVALUE_MAX,
+                     BASEPROPERTY_FILLCOLOR,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+}
+
 
 //  ----------------------------------------------------
 //  class SVTXDateField
@@ -2394,4 +2477,12 @@ void SAL_CALL SVTXDateField::setProperty( const ::rtl::OUString& PropertyName, c
         }
         break;
     }
+}
+
+void SVTXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_TEXTLINECOLOR,
+                     0);
+    VCLXDateField::ImplGetPropertyIds( rIds );
 }
