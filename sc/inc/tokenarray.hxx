@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-02 15:21:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,18 +43,7 @@
 #include <tools/solar.h>
 #endif
 
-enum ScRecalcMode40
-{                           // old RecalcMode up to and including SO 4.0
-    RC_NORMAL,
-    RC_ALWAYS,
-    RC_ONLOAD,              // always after load
-    RC_ONLOAD_ONCE,         // once after load
-    RC_FORCED,              // also if cell isn't visible
-    RC_ONREFMOVE            // if reference was moved (since SP3, 05.11.97)
-};
-
-// New (since 5.0, 14.01.98) RecalcMode access only via TokenArray
-// SetRecalcMode / IsRecalcMode...
+// RecalcMode access only via TokenArray SetRecalcMode / IsRecalcMode...
 
 typedef BYTE ScRecalcMode;
 // Only one of the exclusive bits can be set,
@@ -66,8 +55,7 @@ typedef BYTE ScRecalcMode;
 #define RECALCMODE_FORCED       0x10    // combined, also if cell isn't visible
 #define RECALCMODE_ONREFMOVE    0x20    // combined, if reference was moved
 #define RECALCMODE_EMASK        0x0F    // mask of exclusive bits
-// If new bits are to be defined, ExportRecalcMode40 and AddRecalcMode have to
-// be adjusted!
+// If new bits are to be defined, AddRecalcMode has to be adjusted!
 
 struct ScRawToken;
 
@@ -88,9 +76,8 @@ class ScTokenArray
 
     void                    Assign( const ScTokenArray& );
 
+    /// Also used by the compiler. The token MUST had been allocated with new!
     ScToken*                Add( ScToken* );
-    void                    ImportRecalcMode40( ScRecalcMode40 );
-    ScRecalcMode40          ExportRecalcMode40() const;
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                             { nMode |= (nBits & ~RECALCMODE_EMASK); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
@@ -122,6 +109,8 @@ public:
     ScToken* GetNextReferenceOrName();
     ScToken* GetNextColRowName();
     ScToken* GetNextOpCodeRPN( OpCode );
+    /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
+    ScToken* PeekPrev( USHORT & nIdx );
     ScToken* PeekNext();
     ScToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     ScToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
@@ -130,6 +119,7 @@ public:
     ScToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     ScToken* PrevRPN();
 
+    BOOL    HasOpCode( OpCode ) const;
     BOOL    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex
     BOOL    HasName() const;
@@ -145,8 +135,8 @@ public:
     USHORT    GetLen() const     { return nLen; }
     USHORT    GetCodeLen() const { return nRPN; }
     void      Reset()            { nIndex = 0; }
-    USHORT    GetError() const { return nError; }
-    void      SetError( USHORT n ) { nError = n; }
+    USHORT    GetCodeError() const      { return nError; }
+    void      SetCodeError( USHORT n )  { nError = n; }
     short     GetRefs()  const { return nRefs;  }
     void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
     BOOL      IsHyperLink() const       { return bHyperLink; }
@@ -199,26 +189,33 @@ public:
                                 with DoubleRef in Formula? */
     BOOL                    HasMatrixDoubleRefOps();
 
-    void Load30( SvStream&, const ScAddress& );
-    void Load( SvStream&, USHORT, const ScAddress& );
-    void Store( SvStream&, const ScAddress& ) const;
-
     ScToken* AddToken( const ScRawToken& );
     ScToken* AddToken( const ScToken& );
     ScToken* AddOpCode( OpCode eCode );
     ScToken* AddString( const sal_Unicode* pStr );
     ScToken* AddString( const String& rStr );
     ScToken* AddDouble( double fVal );
+    /** ScSingleRefToken with ocPush. */
     ScToken* AddSingleReference( const SingleRefData& rRef );
+    /** ScSingleRefOpToken with ocMatRef. */
+    ScToken* AddMatrixSingleReference( const SingleRefData& rRef );
     ScToken* AddDoubleReference( const ComplRefData& rRef );
     ScToken* AddName( USHORT n );
     ScToken* AddMatrix( ScMatrix* p );
     ScToken* AddExternal( const sal_Unicode* pStr );
-    ScToken* AddExternal( const String& rStr );
+    /** Xcl import may play dirty tricks with OpCode!=ocExternal.
+        Others don't use! */
+    ScToken* AddExternal( const String& rStr, OpCode eOp = ocExternal );
+    /** ScSingleRefOpToken with ocColRowName. */
     ScToken* AddColRowName( const SingleRefData& rRef );
     ScToken* AddBad( const sal_Unicode* pStr );     /// ocBad with String
     ScToken* AddBad( const String& rStr );          /// ocBad with String
     ScToken* MergeArray( );
+    /** Merge very last SingleRef+ocRange+SingleRef combination into DoubleRef
+        and adjust pCode array, or do nothing if conditions not met.
+        Unconditionally returns last token from the resulting pCode array, or
+        NULL if there is no pCode (which actually would be caller's fault). */
+    ScToken* MergeRangeReference( const ScAddress & rPos );
 
     /// Assignment with references to ScToken entries (not copied!)
     ScTokenArray& operator=( const ScTokenArray& );
