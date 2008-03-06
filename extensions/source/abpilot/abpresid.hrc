@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 #ifndef EXTENSIONS_ABPRESID_HRC
 #define EXTENSIONS_ABPRESID_HRC
-
-#include "abpenvironment.hxx"
 
 #ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
@@ -82,10 +80,9 @@
 #define RID_STR_PLEASECHECKSETTINGS     ( RID_STRING_START +  3 )
 #define RID_STR_FIELDDIALOGTITLE        ( RID_STRING_START +  4 )
 #define RID_STR_NOFIELDSASSIGNED        ( RID_STRING_START +  5 )
-#define RID_STR_ALREADYEXISTOVERWRITE   ( RID_STRING_START +  7 )
 // please adjust RID_STRING_END (below) when adding new strings
 
-#define RID_STRING_END                  RID_STR_ALREADYEXISTOVERWRITE
+#define RID_STRING_END                  RID_STR_NOFIELDSASSIGNED
 
 //========================================================================
 // error boxes
@@ -196,21 +193,18 @@
 //........................................................................
 #define CBB_LOCATION            1
 
-#if defined( ABP_USE_ROADMAP )
-    //........................................................................
-    #define STR_SELECT_ABTYPE           1
-    #define STR_INVOKE_ADMIN_DIALOG     2
-    #define STR_TABLE_SELECTION         3
-    #define STR_MANUAL_FIELD_MAPPING    4
-    #define STR_FINAL_CONFIRM           5
-    #define STR_ROADMAP_TITLE           6
-#endif
+//........................................................................
+#define STR_SELECT_ABTYPE           1
+#define STR_INVOKE_ADMIN_DIALOG     2
+#define STR_TABLE_SELECTION         3
+#define STR_MANUAL_FIELD_MAPPING    4
+#define STR_FINAL_CONFIRM           5
 
 //========================================================================
 // some defines
 
 //........................................................................
-#define WINDOW_SIZE_X   281
+#define WINDOW_SIZE_X   240
 #define WINDOW_SIZE_Y   185
 
 #define WINDOW_BORDER_X  12
