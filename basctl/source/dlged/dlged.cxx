@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 09:51:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -755,12 +755,15 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
-    if ( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( pDlgEdView );
+    if ( !pChildWin )
+        return 0L;
 
-    return 0;
+    ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
+
+    return 1;
 }
 
 //----------------------------------------------------------------------------
