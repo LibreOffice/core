@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:17:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 15:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,8 @@ BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
 
             if (pCell)
             {
+                // FIXME FIXME FIXME this might need to be reworked now that we have ScErrorToken and ScFormulaResult, double check !!!
+                DBG_ERRORFILE("ScDocument::Solver: -> ScFormulaCell::GetValueAlways might need reimplementation");
                 pCell->Interpret();
                 USHORT nErrCode = pCell->GetErrCode();
                 nX = pCell->GetValueAlways();
@@ -123,7 +125,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      SCCOL nCol2, SCROW nRow2,
                                      const ScMarkData& rMark,
                                      const String& rFormula,
-                                     const ScTokenArray* pArr )
+                                     const ScTokenArray* pArr,
+                                     const ScGrammar::Grammar eGrammar )
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
@@ -150,9 +153,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
     if (pArr)
-        pCell = new ScFormulaCell( this, aPos, pArr, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, pArr, eGrammar, MM_FORMULA );
     else
-        pCell = new ScFormulaCell( this, aPos, rFormula, ScAddress::CONV_UNSPECIFIED, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, rFormula, eGrammar, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
     for (i = 0; i <= MAXTAB; i++)
     {
@@ -176,8 +179,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     aRefData.CalcRelFromAbs( ScAddress( nCol1, nRow1, nTab1 ) );
 
     ScTokenArray aArr;
-    ScToken* t = aArr.AddSingleReference(aRefData);
-    t->NewOpCode( ocMatRef );
+    ScToken* t = aArr.AddMatrixSingleReference( aRefData);
 
     for (i = 0; i <= MAXTAB; i++)
     {
@@ -200,7 +202,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                         // Zelle ein eigenes Array erhaelt!
                         aPos = ScAddress( j, k, i );
                         t->CalcRelFromAbs( aPos );
-                        pCell = new ScFormulaCell( this, aPos, aArr.Clone(), MM_REFERENCE );
+                        pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGrammar, MM_REFERENCE );
                         pTab[i]->PutCell(j, k, (ScBaseCell*) pCell);
                     }
                 }
@@ -238,14 +240,14 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     ScRefAddress aRef;
     String aForString = '=';
     aForString += ScCompiler::GetNativeSymbol(ocTableOp);
-    aForString += '(';
+    aForString += ScCompiler::GetNativeSymbol( ocOpen);
     if (rParam.nMode == 0)                          // nur Spalte
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), TRUE, FALSE, FALSE );
         aForString += aRef.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aForString += rParam.aRefColCell.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aRef.Set( nCol1, nRow1, nTab1, FALSE, TRUE, TRUE );
         aForString += aRef.GetRefString(this, nTab1);
         nCol1++;
@@ -256,9 +258,9 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), FALSE, TRUE, FALSE );
         aForString += aRef.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aRef.Set( nCol1, nRow1, nTab1, TRUE, FALSE, TRUE );
         aForString += aRef.GetRefString(this, nTab1);
         nRow1++;
@@ -268,21 +270,22 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     else                    // beides
     {
         aForString += rParam.aRefFormulaCell.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aForString += rParam.aRefColCell.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aRef.Set( nCol1, nRow1 + 1, nTab1, FALSE, TRUE, TRUE );
         aForString += aRef.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aForString += rParam.aRefRowCell.GetRefString(this, nTab1);
-        aForString += ';';
+        aForString += ScCompiler::GetNativeSymbol( ocSep);
         aRef.Set( nCol1 + 1, nRow1, nTab1, TRUE, FALSE, TRUE );
         aForString += aRef.GetRefString(this, nTab1);
         nCol1++; nRow1++;
     }
-    aForString += ')';
+    aForString += ScCompiler::GetNativeSymbol( ocClose);
 
-    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString, ScAddress::CONV_OOO, 0l );
+    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString,
+            ScGrammar::GRAM_NATIVE, MM_NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i <= MAXTAB; i++)
