@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:58:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "ChartController.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "DataSeriesHelper.hxx"
+#include "StatisticsHelper.hxx"
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -139,6 +140,11 @@ struct ControllerState
     bool bMayAddTrendline;
     bool bMayAddTrendlineEquation;
     bool bMayAddMeanValue;
+    bool bMayAddYErrorBars;
+
+    bool bMayDeleteTrendline;
+    bool bMayDeleteMeanValue;
+    bool bMayDeleteYErrorBars;
 };
 
 
@@ -152,7 +158,11 @@ ControllerState::ControllerState() :
         bMayMoveSeriesBackward( false ),
         bMayAddTrendline( false ),
         bMayAddTrendlineEquation( false ),
-        bMayAddMeanValue( false )
+        bMayAddMeanValue( false ),
+        bMayAddYErrorBars( false ),
+        bMayDeleteTrendline( false ),
+        bMayDeleteMeanValue( false ),
+        bMayDeleteYErrorBars( false )
 {}
 
 void ControllerState::update(
@@ -200,22 +210,39 @@ void ControllerState::update(
         bMayAddTrendline = false;
         bMayAddTrendlineEquation = false;
         bMayAddMeanValue = false;
+        bMayAddYErrorBars = false;
+        bMayDeleteTrendline = false;
+        bMayDeleteMeanValue = false;
+        bMayDeleteYErrorBars = false;
         if( bHasSelectedObject )
         {
             if( xGivenDataSeries.is())
             {
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+                uno::Reference< chart2::XChartType > xFirstChartType(
+                    DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ));
+
+                // trend lines/mean value line
                 if( ChartTypeHelper::isSupportingRegressionProperties(
-                    DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ),
-                    nDimensionCount ))
+                        xFirstChartType, nDimensionCount ))
                 {
                     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                         xGivenDataSeries, uno::UNO_QUERY );
                     if( xRegCurveCnt.is())
                     {
-                        bMayAddTrendline = ! RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
-                        bMayAddMeanValue = ! RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
+                        bMayDeleteTrendline = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
+                        bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
+                        bMayAddTrendline = ! bMayDeleteTrendline;
+                        bMayAddMeanValue = ! bMayDeleteMeanValue;
                     }
+                }
+
+                // error bars
+                if( ChartTypeHelper::isSupportingStatisticProperties(
+                        xFirstChartType, nDimensionCount ))
+                {
+                    bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries );
+                    bMayAddYErrorBars = ! bMayDeleteYErrorBars;
                 }
             }
 
@@ -545,6 +572,11 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:InsertMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
     m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
+    m_aCommandAvailability[ C2U(".uno:InsertYErrorbar")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
+
+    m_aCommandAvailability[ C2U(".uno:DeleteTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
+    m_aCommandAvailability[ C2U(".uno:DeleteMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
+    m_aCommandAvailability[ C2U(".uno:DeleteYErrorbar")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
 }
 
 bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
