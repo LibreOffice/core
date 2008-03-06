@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:54:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -709,26 +710,6 @@ void OQueryController::impl_initialize()
 
     const NamedValueCollection& rArguments( getInitParams() );
 
-    // connection or data source name
-    Reference< XConnection > xConnection;
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
-    if ( xConnection.is() )
-        initializeConnection( xConnection );
-    else
-    {
-        ::rtl::OUString sDataSourceName;
-        rArguments.get_ensureType( (::rtl::OUString)PROPERTY_DATASOURCENAME, sDataSourceName );
-        if ( !sDataSourceName.getLength() )
-            throw IllegalArgumentException(
-                ::rtl::OUString( String( ModuleRes( STR_NO_DATASOURCE_OR_CONNECTION ) ) ),
-                *this,
-                1
-            );
-
-        // TODO: respect this data source name by creating a connection, remembering it,
-        // and remembering that we are the owner of it
-    }
-
     ::rtl::OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
@@ -987,15 +968,14 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Reference< XFrame > xSource(Source.Source, UNO_QUERY);
-    if (xSource.is() && getContainer())
+    if ( getContainer() && Source.Source.is() )
     {
-        if (xSource.get() == m_xCurrentFrame.get())
+        if ( Source.Source == m_aCurrentFrame.getFrame() )
         {   // our frame is beeing disposed -> close the preview window (if we have one)
-            Reference<XFrame> xXFrame( getContainer()->getPreviewFrame());
-            ::comphelper::disposeComponent( xXFrame );
+            Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
+            ::comphelper::disposeComponent( xPreviewFrame );
         }
-        else if (xSource.get() == getContainer()->getPreviewFrame().get())
+        else if ( Source.Source == getContainer()->getPreviewFrame() )
         {
             getContainer()->disposingPreview();
         }
@@ -1142,7 +1122,7 @@ void OQueryController::executeQuery()
     {
         try
         {
-            getContainer()->showPreview(m_xCurrentFrame);
+            getContainer()->showPreview( getFrame() );
             InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
             URL aWantToDispatch;
@@ -1152,10 +1132,10 @@ void OQueryController::executeQuery()
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
 
             Reference< XDispatch> xDisp;
-            Reference< XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
+            Reference< XDispatchProvider> xProv( getFrame()->findFrame( sFrameName, nSearchFlags ), UNO_QUERY );
             if(!xProv.is())
             {
-                xProv.set(m_xCurrentFrame,UNO_QUERY);
+                xProv.set( getFrame(), UNO_QUERY );
                 if (xProv.is())
                     xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
             }
@@ -1165,7 +1145,7 @@ void OQueryController::executeQuery()
             }
             if (xDisp.is())
             {
-                Sequence< PropertyValue> aProps(10);
+                Sequence< PropertyValue> aProps(9);
                 aProps[0].Name = PROPERTY_DATASOURCENAME;
                 aProps[0].Value <<= sDataSourceName;
 
@@ -1175,31 +1155,28 @@ void OQueryController::executeQuery()
                 aProps[2].Name = PROPERTY_COMMAND;
                 aProps[2].Value <<= sTranslatedStmt;
 
-                aProps[3].Name = PROPERTY_SHOWTREEVIEW;
+                aProps[3].Name = PROPERTY_ENABLE_BROWSER;
                 aProps[3].Value = ::cppu::bool2any(sal_False);
 
-                aProps[4].Name = PROPERTY_SHOWTREEVIEWBUTTON;
-                aProps[4].Value = ::cppu::bool2any(sal_False);
+                aProps[4].Name = PROPERTY_ACTIVE_CONNECTION;
+                aProps[4].Value <<= getConnection();
 
-                aProps[5].Name = PROPERTY_ACTIVE_CONNECTION;
-                aProps[5].Value <<= getConnection();
+                aProps[5].Name = PROPERTY_UPDATE_CATALOGNAME;
+                aProps[5].Value <<= m_sUpdateCatalogName;
 
-                aProps[6].Name = PROPERTY_UPDATE_CATALOGNAME;
-                aProps[6].Value <<= m_sUpdateCatalogName;
+                aProps[6].Name = PROPERTY_UPDATE_SCHEMANAME;
+                aProps[6].Value <<= m_sUpdateSchemaName;
 
-                aProps[7].Name = PROPERTY_UPDATE_SCHEMANAME;
-                aProps[7].Value <<= m_sUpdateSchemaName;
+                aProps[7].Name = PROPERTY_UPDATE_TABLENAME;
+                aProps[7].Value <<= m_sUpdateTableName;
 
-                aProps[8].Name = PROPERTY_UPDATE_TABLENAME;
-                aProps[8].Value <<= m_sUpdateTableName;
-
-                aProps[9].Name = PROPERTY_ESCAPE_PROCESSING;
-                aProps[9].Value = ::cppu::bool2any(m_bEscapeProcessing);
+                aProps[8].Name = PROPERTY_ESCAPE_PROCESSING;
+                aProps[8].Value = ::cppu::bool2any(m_bEscapeProcessing);
 
                 xDisp->dispatch(aWantToDispatch, aProps);
                 // check the state of the beamer
                 // be notified when the beamer frame is closed
-                Reference< XComponent >  xComponent(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags), UNO_QUERY);
+                Reference< XComponent >  xComponent( getFrame()->findFrame( sFrameName, nSearchFlags ), UNO_QUERY );
                 if (xComponent.is())
                 {
                     OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
