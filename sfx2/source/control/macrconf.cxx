@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:31:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -760,27 +760,9 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
 
             if ( pSh && pMgr && pMgr == pAppMgr )
             {
-                SbxBaseRef xOldVar;
-                SbxVariable *pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-                ::com::sun::star::uno::Any aAny;
-                aAny <<= xInterface;
-                if ( pCompVar )
-                {
-                    xOldVar = pCompVar->GetObject();
-                    pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
-                }
-                else
-                {
-                    SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
-                    xUnoObj->SetFlag( SBX_DONTSTORE );
-                    pAppMgr->GetLib(0)->Insert( xUnoObj );
-                    pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-                }
-
+                ::com::sun::star::uno::Any aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pSh->GetModel() ) );
                 nErr = Call( 0, aCode, pMgr );
-                if ( pCompVar )
-                    pCompVar->PutObject( xOldVar );
+                pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
             }
             else if ( pMgr )
                 nErr = Call( 0, aCode, pMgr );
