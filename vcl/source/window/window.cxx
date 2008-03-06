@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.275 $
+ *  $Revision: 1.276 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:11:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1345,6 +1345,12 @@ void Window::ImplLoadRes( const ResId& rResId )
         SetData( (void*)ReadLongRes() );
     if ( nObjMask & WINDOW_UNIQUEID )
         SetUniqueId( (ULONG)ReadLongRes() );
+
+    if ( nObjMask & WINDOW_BORDER_STYLE )
+    {
+        USHORT nBorderStyle = (USHORT)ReadLongRes();
+        SetBorderStyle( nBorderStyle );
+    }
 }
 
 // -----------------------------------------------------------------------
