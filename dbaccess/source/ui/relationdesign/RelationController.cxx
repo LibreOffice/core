@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:54:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,21 +293,9 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
 // -----------------------------------------------------------------------------
 void ORelationController::impl_initialize()
 {
-    const NamedValueCollection& rArguments( getInitParams() );
+    OJoinController::impl_initialize();
 
-    Reference< XConnection > xConnection;
-    xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
-    if ( xConnection.is() )
-        initializeConnection( xConnection );
-
-    if ( !ensureConnected( sal_False ) )
-    {
-        setEditable(sal_False);
-        m_bRelationsPossible    = sal_False;
-        connectionLostMessage();
-        throw SQLException();
-    }
-    else if( !getSdbMetaData().supportsRelations() )
+    if( !getSdbMetaData().supportsRelations() )
     {// check if this database supports relations
 
         setEditable(sal_False);
@@ -321,8 +309,6 @@ void ORelationController::impl_initialize()
         disconnect();
         throw SQLException();
     }
-
-    OJoinController::impl_initialize();
 
     if(!m_bRelationsPossible)
         InvalidateAll();
