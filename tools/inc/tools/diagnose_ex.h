@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose_ex.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:10:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,11 @@
 
 #if OSL_DEBUG_LEVEL > 0
 
-    #ifndef _CPPUHELPER_EXC_HLP_HXX_
     #include <cppuhelper/exc_hlp.hxx>
-    #endif
-    #ifndef _OSL_DIAGNOSE_H_
     #include <osl/diagnose.h>
-    #endif
-    #ifndef _OSL_THREAD_H_
     #include <osl/thread.h>
-    #endif
     #include <boost/current_function.hpp>
+    #include <typeinfo>
 
     /** reports a caught UNO exception via OSL diagnostics
 
@@ -60,14 +55,23 @@
     #define DBG_UNHANDLED_EXCEPTION()   \
         ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() ); \
         ::rtl::OString sMessage( "caught an exception!" ); \
-        sMessage += "\ntype   : "; \
+        sMessage += "\nin function:"; \
+        sMessage += BOOST_CURRENT_FUNCTION; \
+        sMessage += "\ntype: "; \
         sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() ); \
-        sMessage += "\nmessage: "; \
         ::com::sun::star::uno::Exception exception; \
         caught >>= exception; \
-        sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() ); \
-        sMessage += "\nin function:\n"; \
-        sMessage += BOOST_CURRENT_FUNCTION; \
+        if ( exception.Message.getLength() ) \
+        { \
+            sMessage += "\nmessage: "; \
+            sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() ); \
+        } \
+        if ( exception.Context.is() ) \
+        { \
+            const char* pContext = typeid( *exception.Context.get() ).name(); \
+            sMessage += "\ncontext: "; \
+            sMessage += pContext; \
+        } \
         sMessage += "\n"; \
         OSL_ENSURE( false, sMessage )
 
