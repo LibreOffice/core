@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripthandler.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 16:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,8 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -72,6 +73,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::provider;
+using namespace ::com::sun::star::document;
 using namespace ::scripting_util;
 
 namespace scripting_protocolhandler
@@ -165,37 +168,23 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            // obtain the SfxObject shell for our security check
-            SfxObjectShell* pDocShell = NULL;
-            if ( m_xFrame != NULL )
-            {
-                Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
-                if ( xFrame.is() )
-                {
-                    SfxFrame* pFrame = SfxFrame::GetFirst();
-                    for ( ; pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
-                    {
-                        if ( pFrame->GetFrameInterface() == xFrame )
-                            break;
-                    }
+            bool bIsDocumentScript = ( aURL.Complete.indexOf( ::rtl::OUString::createFromAscii( "document" ) ) !=-1 );
+                // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
 
-                    if ( pFrame )
-                        pDocShell = pFrame->GetCurrentDocument();
-                }
-            }
-
-            // Security check
-            if ( pDocShell && aURL.Complete.indexOf( ::rtl::OUString::createFromAscii("document") )!=-1 )
+            if ( bIsDocumentScript )
             {
-                if ( !pDocShell->AdjustMacroMode( String() ) )
-                {
+                // obtain the component for our security check
+                Reference< XEmbeddedScripts > xDocumentScripts;
+                if ( getScriptInvocation() )
+                    xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
+
+                OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
+                if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
                     return;
-                }
             }
-
 
             // Creates a ScriptProvider ( if one is not created allready )
-            createScriptProvider( aURL.Complete );
+            createScriptProvider();
 
             Reference< provider::XScript > xFunc =
                 m_xScriptProvider->getScript( aURL.Complete );
@@ -370,36 +359,60 @@ throw ( RuntimeException )
     (void)aURL;
 }
 
-void
-ScriptProtocolHandler::createScriptProvider( const ::rtl::OUString& url )
-throw ( RuntimeException )
+bool
+ScriptProtocolHandler::getScriptInvocation()
 {
-    (void)url;
+    if ( !m_xScriptInvocation.is() && m_xFrame.is() )
+    {
+        Reference< XController > xController = m_xFrame->getController();
+        if ( xController .is() )
+        {
+            // try to obtain an XScriptInvocationContext interface, preferred from the
+            // mode, then from the controller
+            if ( !m_xScriptInvocation.set( xController->getModel(), UNO_QUERY ) )
+                m_xScriptInvocation.set( xController, UNO_QUERY );
+        }
+    }
+    return m_xScriptInvocation.is();
+}
 
+void
+ScriptProtocolHandler::createScriptProvider()
+{
     if ( m_xScriptProvider.is() )
     {
         return;
     }
     try
     {
-        css::uno::Sequence < css::uno::Any > args( 1 );
-        Reference< XModel > xModel;
-        if ( m_xFrame.is() )
+        // first, ask the component supporting the XScriptInvocationContext interface
+        // (if there is one) for a script provider
+        if ( getScriptInvocation() )
+        {
+            Reference< XScriptProviderSupplier > xSPS( m_xScriptInvocation, UNO_QUERY );
+            if ( xSPS.is() )
+                m_xScriptProvider = xSPS->getScriptProvider();
+        }
+
+        // second, ask the model in our frame
+        if ( !m_xScriptProvider.is() && m_xFrame.is() )
         {
             Reference< XController > xController = m_xFrame->getController();
             if ( xController .is() )
             {
-                xModel = xController->getModel();
-                args[ 0 ] <<= xModel;
-
-                Reference< provider::XScriptProviderSupplier > xSPS =
-                    Reference< provider::XScriptProviderSupplier >
-                        ( xModel, UNO_QUERY );
+                Reference< XScriptProviderSupplier > xSPS( xController->getModel(), UNO_QUERY );
                 if ( xSPS.is() )
-                {
                     m_xScriptProvider = xSPS->getScriptProvider();
-                }
             }
+        }
+
+
+        // as a fallback, ask the controller
+        if ( !m_xScriptProvider.is() && m_xFrame.is() )
+        {
+            Reference< XScriptProviderSupplier > xSPS( m_xFrame->getController(), UNO_QUERY );
+            if ( xSPS.is() )
+                m_xScriptProvider = xSPS->getScriptProvider();
         }
 
         if ( !m_xScriptProvider.is() )
@@ -419,6 +432,8 @@ throw ( RuntimeException )
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
 
             Any aContext;
+            if ( getScriptInvocation() )
+                aContext = makeAny( m_xScriptInvocation );
             m_xScriptProvider = Reference< provider::XScriptProvider > (
                 xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
