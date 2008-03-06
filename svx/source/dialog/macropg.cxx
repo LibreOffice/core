@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:20:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,8 +818,8 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHa
     return ::std::make_pair( type, url );
 }
 
-SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
-    : _SvxMacroTabPage( pParent, rResId, rSet )
+SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
+    : _SvxMacroTabPage( pParent, SVX_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
 {
     mpImpl->pStrEvent           = new String(                       SVX_RES( STR_EVENT ) );
     mpImpl->pAssignedMacro      = new String(                       SVX_RES( STR_ASSMACRO ) );
@@ -834,6 +834,8 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const ResId& rResId, const Sf
     mpImpl->pComponentImg_h     = new Image(                        SVX_RES(IMG_COMPONENT_H) );
 
     FreeResource();
+
+    SetFrame( _rxDocumentFrame );
 
     if( !mpImpl->bIDEDialogMode )
     {
@@ -869,16 +871,11 @@ SvxMacroTabPage::~SvxMacroTabPage()
 {
 }
 
-SfxTabPage* SvxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
-{
-    return new SvxMacroTabPage( pParent, SVX_RES( RID_SVXPAGE_MACROASSIGN ), rAttrSet, xNameReplace, nSelectedIndex );
-}
-
-SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet,
-    Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex  )
+SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
+    const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
         : SvxMacroAssignSingleTabDialog( pParent, rSet, 0 )
 {
-    SetTabPage( SvxMacroTabPage::Create( this, rSet, xNameReplace, nSelectedIndex ) );
+    SetTabPage( new SvxMacroTabPage( this, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex ) );
 }
 
 SvxMacroAssignDlg::~SvxMacroAssignDlg()
