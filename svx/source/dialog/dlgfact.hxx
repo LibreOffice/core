@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:20:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 17:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,7 @@ class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
     DECL_ABSTDLG_BASE(
         AbstractScriptSelectorDialog_Impl, SvxScriptSelectorDialog)
 
-    virtual String GetScriptURL();
+    virtual String GetScriptURL() const;
 
     virtual void SetRunLabel();
 };
@@ -812,12 +812,22 @@ public:
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
-            Window* pParent, BOOL bShowSlots = FALSE );
+            Window* pParent,
+            BOOL bShowSlots,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+        );
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
             Window* pParent, ::com::sun::star::uno::Any aException);
 
-    virtual VclAbstractDialog*          CreateSvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex = 0 );
+    virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
+                Window* _pParent,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxDocumentFrame,
+                const bool _bUnoDialogMode,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
+                const sal_uInt16 _nInitiallySelectedEvent
+            );
+
     virtual VclAbstractDialog*          CreateOptionsDialog(
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
 };
