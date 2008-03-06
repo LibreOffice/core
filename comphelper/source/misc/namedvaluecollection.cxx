@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:53:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 20:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,27 @@ namespace comphelper
     NamedValueCollection::NamedValueCollection()
         :m_pImpl( new NamedValueCollection_Impl )
     {
+    }
+
+    //--------------------------------------------------------------------
+    NamedValueCollection::NamedValueCollection( const Any& _rElements )
+        :m_pImpl( new NamedValueCollection_Impl )
+    {
+        Sequence< NamedValue > aNamedValues;
+        Sequence< PropertyValue > aPropertyValues;
+        NamedValue aNamedValue;
+        PropertyValue aPropertyValue;
+
+        if ( _rElements >>= aNamedValues )
+            impl_assign( aNamedValues );
+        else if ( _rElements >>= aPropertyValues )
+            impl_assign( aPropertyValues );
+        else if ( _rElements >>= aNamedValue )
+            impl_assign( Sequence< NamedValue >( &aNamedValue, 1 ) );
+        else if ( _rElements >>= aPropertyValue )
+            impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
+        else
+            OSL_ENSURE( false, "NamedValueCollection::NamedValueCollection(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------
@@ -270,7 +291,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues )
+    sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
         ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2PropertyValue() );
@@ -278,7 +299,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues )
+    sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
         ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2NamedValue() );
