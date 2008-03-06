@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:52:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 19:58:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,14 @@ namespace comphelper
 
     public:
         NamedValueCollection();
+
+        /** constructs a collection
+            @param  _rElements
+                the wrapped elements of the collection. The <code>Any</code> might contain a sequence of
+                property values, a sequence of named values, or directly a property value or named value.
+                All other cases are worth an assertion in non-product builds.
+        */
+        NamedValueCollection( const ::com::sun::star::uno::Any& _rElements );
 
         /** constructs a collection
             @param _rArguments
@@ -252,14 +260,34 @@ namespace comphelper
             @return
                 the  number of elements in the sequence
         */
-        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rValues );
+        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rValues ) const;
 
         /** transforms the collection to a sequence of NamedValues
 
             @return
                 the  number of elements in the sequence
         */
-        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rValues );
+        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rValues ) const;
+
+        /** transforms the collection into a sequence of PropertyValues
+        */
+        inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                getPropertyValues() const
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aValues;
+            *this >>= aValues;
+            return aValues;
+        }
+
+        /** transforms the collection into a sequence of NamedValues
+        */
+        inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+                getNamedValues() const
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aValues;
+            *this >>= aValues;
+            return aValues;
+        }
 
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
