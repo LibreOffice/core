@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-06 18:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ namespace abp
 
                 // the data source to use
                 *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSource" ), -1, makeAny( _rxDataSource ), PropertyState_DIRECT_VALUE);
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSourceName" ), -1, makeAny( _rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSourceName" ), -1, makeAny( (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
 
                 // the table to use
                 *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "Command" ), -1, makeAny( _rSettings.sSelectedTable ), PropertyState_DIRECT_VALUE);
