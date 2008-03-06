@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.227 $
+#   $Revision: 1.228 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:31:49 $
+#   last change: $Author: kz $ $Date: 2008-03-06 15:14:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,15 +58,11 @@ ENABLE_PCH=TRUE
 .INCLUDE : unitools.mk
 
 #have SCRIPTEXT already defined in product.mk but available for all
-.IF "$(GUI)"=="WNT"
-SCRIPTEXT=.btm
+.IF "$(USE_SHELL)"=="4NT"
+SCRIPTEXT=.bat
 .ELSE           # "$(GUI)"=="WNT"
 SCRIPTEXT=
 .ENDIF          # "$(GUI)"=="WNT"
-
-.IF "$(PRODUCTNAME)"!=""
-.INCLUDE : product.mk
-.ENDIF			# "$(PRODUCTNAME)"!=""
 
 .INCLUDE : minor.mk
 
