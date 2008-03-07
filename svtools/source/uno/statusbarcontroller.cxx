@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:39:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,27 @@ void StatusbarController::updateStatus( const rtl::OUString aCommandURL )
         {
         }
     }
+}
+
+::Rectangle StatusbarController::getControlRect() const
+{
+    ::Rectangle aRect;
+
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        if ( m_bDisposed )
+            throw DisposedException();
+
+        if ( m_xParentWindow.is() )
+        {
+            StatusBar* pStatusBar = dynamic_cast< StatusBar* >( VCLUnoHelper::GetWindow( m_xParentWindow ));
+            if ( pStatusBar && pStatusBar->GetType() == WINDOW_STATUSBAR )
+                aRect = pStatusBar->GetItemRect( m_nID );
+        }
+    }
+
+    return aRect;
 }
 
 void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
