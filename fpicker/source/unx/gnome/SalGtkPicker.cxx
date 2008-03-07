@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:02:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,8 @@ gboolean rundialog(RunDialog *pDialog)
 void RunDialog::run()
 {
     mnStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
-    gtk_widget_hide( m_pDialog );
+    if (mnStatus != 1)  //PLAY
+        gtk_widget_hide( m_pDialog );
 
     maLock.acquire();
     mbFinished = true;
