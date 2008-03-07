@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:42:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:16:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ interface TableDocument : OfficeDocument
     SID_DELETE_SCENARIO     [ ExecMethod = Execute; ]
     SID_EDIT_SCENARIO       [ ExecMethod = Execute; ]
     SID_ATTR_CHAR_FONTLIST  [ StateMethod = GetState; ]
+    SID_SHARE_DOC           [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 
