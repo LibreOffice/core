@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:21:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #include "addincfg.hxx"
 #include "scmod.hxx"
 #include "rangeseq.hxx"
+#include "funcdesc.hxx"
 
 using namespace com::sun::star;
 
@@ -1355,21 +1356,22 @@ BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
         BOOL bMultiple = FALSE;
         const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
-        rDesc.aDefArgNames = new String*[nArgCount];
-        rDesc.aDefArgDescs = new String*[nArgCount];
-        rDesc.aDefArgOpt   = new BOOL[nArgCount];
+        rDesc.ppDefArgNames = new String*[nArgCount];
+        rDesc.ppDefArgDescs = new String*[nArgCount];
+        rDesc.pDefArgFlags   = new ScFuncDesc::ParameterFlags[nArgCount];
         for ( long nArg=0; nArg<nArgCount; nArg++ )
         {
-            rDesc.aDefArgNames[nArg] = new String( pArgs[nArg].aName );
-            rDesc.aDefArgDescs[nArg] = new String( pArgs[nArg].aDescription );
-            rDesc.aDefArgOpt[nArg] = pArgs[nArg].bOptional;
+            rDesc.ppDefArgNames[nArg] = new String( pArgs[nArg].aName );
+            rDesc.ppDefArgDescs[nArg] = new String( pArgs[nArg].aDescription );
+            rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
+            rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
-            if ( rDesc.aDefArgNames[nArg]->Len() == 0 )
+            if ( rDesc.ppDefArgNames[nArg]->Len() == 0 )
             {
                 String aDefName( RTL_CONSTASCII_USTRINGPARAM("arg") );
                 aDefName += String::CreateFromInt32( nArg+1 );
-                *rDesc.aDefArgNames[nArg] = aDefName;
+                *rDesc.ppDefArgNames[nArg] = aDefName;
             }
 
             //  last argument repeated?
