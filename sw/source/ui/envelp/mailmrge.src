@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:41:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT (  150, 152 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Sa~ve as individual document";
+        Text [ en-US ] = "Sa~ve as individual documents";
     };
     CheckBox RB_GENERATE_FROM_DATABASE
     {
