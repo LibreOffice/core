@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:01:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,4 +694,13 @@ struct SvxEmphasisMark
 item SvxEmphasisMark SvxEmphasisMarkItem;
 
 item String SvxSmartTagItem;                 // dummy for sequence
+
+
+item String Points;                 // dummy for sequence
+struct ZoomSlider
+{
+    INT16  CurrentZoom          MID_ZOOMSLIDER_CURRENTZOOM;
+    Points SnappingPoints       MID_ZOOMSLIDER_SNAPPINGPOINTS;
+};
+item ZoomSlider SvxZoomSliderItem;
 
