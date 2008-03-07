@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:03:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3778,7 +3778,16 @@ static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
                 nGridType = 2;
                 break;
             case GRID_LINES_CHARS:
-                nGridType = 1;
+                {
+                    if(rItem.IsSnapToChars())
+                    {
+                        nGridType = 3;
+                    }
+                    else
+                    {
+                        nGridType = 1;
+                    }
+                }
                 break;
         }
         rWrtWW8.InsUInt16(0x5032);
@@ -3787,6 +3796,27 @@ static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
         UINT16 nHeight = rItem.GetBaseHeight() + rItem.GetRubyHeight();
         rWrtWW8.InsUInt16(0x9031);
         rWrtWW8.InsUInt16(nHeight);
+           sal_uInt32 nPageCharSize = ItemGet<SvxFontHeightItem>(*(rWrtWW8.pStyles->GetSwFmt()),
+                RES_CHRATR_CJK_FONTSIZE).GetHeight();
+
+        INT32 nCharWidth = rItem.GetBaseWidth() - nPageCharSize;
+           INT32 nFraction = 0;
+           nFraction = nCharWidth%20;
+           if( nCharWidth < 0 )
+            nFraction = 20 + nFraction;
+          nFraction = ((nFraction)*0xFFF)/20;
+           nFraction = (nFraction & 0x00000FFF);
+
+           INT32 nMain = 0;
+           nMain = nCharWidth/20;
+           if( nCharWidth < 0 )
+            nMain -= 1;
+           nMain = nMain * 0x1000;
+           nMain = (nMain & 0xFFFFF000);
+
+           UINT32 nCharSpace = nFraction + nMain;
+           rWrtWW8.InsUInt16(0x7030);
+           rWrtWW8.InsUInt32(nCharSpace);
     }
     return rWrt;
 }
