@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:02:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3241,7 +3241,7 @@ void Notify_Background( const SdrObject* pObj,
     }
     SwFrm *pLastTab = 0;
 
-    while ( pCnt && pArea->IsAnLower( pCnt ) )
+    while ( pCnt && pArea && pArea->IsAnLower( pCnt ) )
     {
         ::lcl_NotifyCntnt( pObj, pCnt, rRect, eHint );
         if ( pCnt->IsInTab() )
@@ -3545,37 +3545,14 @@ const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
 {
     if ( !rRect.IsOver( pPage->Frm() ) )
     {
-        BOOL bPrvAllowed = TRUE;
-        BOOL bNxtAllowed = TRUE;
-        do
-        {   if ( pPage->Frm().Top() > rRect.Top() && bPrvAllowed )
-            {
-                if ( pPage->GetPrev() )
-                {
-                    bNxtAllowed = FALSE;
-                    pPage = pPage->GetPrev();
-                }
-                else
-                    break;
-            }
-            else if ( pPage->Frm().Bottom() < rRect.Top() && bNxtAllowed )
-            {
-                if ( pPage->GetNext() )
-                {
-                    bPrvAllowed = FALSE;
-                    pPage = pPage->GetNext();
-                }
-                else
-                    break;
-            }
-            else
-                break;
-
-        } while ( !rRect.IsOver( pPage->Frm() ) );
+        const SwRootFrm* pRootFrm = static_cast<const SwRootFrm*>(pPage->GetUpper());
+        const SwFrm* pTmpPage = pRootFrm ? pRootFrm->GetPageAtPos( rRect.TopLeft(), &rRect.SSize(), true ) : 0;
+        if ( pTmpPage )
+            pPage = pTmpPage;
     }
+
     return pPage;
 }
-
 
 SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                         const SwPosition *pPos, const BOOL bCalcFrm )
@@ -3587,11 +3564,12 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
     SwClientIter aIter( rMod );
     do {
         pMinFrm = 0;
-        Size aMinSize;
+        sal_uInt64 nMinDist = 0;
         bClientIterChanged = false;
 
         for( pTmpFrm = (SwFrm*)aIter.First( TYPE( SwFrm )); pTmpFrm;
                 pTmpFrm = (SwFrm*)aIter.Next() )
+        {
             if( pTmpFrm->GetType() & nFrmType &&
                 (!pTmpFrm->IsFlowFrm() ||
                  !SwFlowFrm::CastFlowFrm( pTmpFrm )->IsFollow() ))
@@ -3644,45 +3622,20 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                     else
                         aCalcRect = pTmpFrm->Frm();
 
-                    // fasse den Point und das Recteck zusammen, falls
-                    // er Point nicht innerhalb liegt. Liegt er ausserhalb,
-                    // wird nach dem kleinsten Rectangle gesucht, also das,
-                    // wo der Point am dichtesten dran liegt. Ist der Point im
-                    // Rechteck, wird die Schleife beendet.
+                    if ( aCalcRect.IsInside( *pPoint ) )
                     {
-                        BOOL bInside = TRUE;
-                        // die Left/Right-Position erweitern
-                        if( pPoint->X() < aCalcRect.Left() )
-                            {   bInside = FALSE; aCalcRect.Left( pPoint->X() ); }
-                        if( pPoint->X() > aCalcRect.Right() )
-                            {   bInside = FALSE; aCalcRect.Right( pPoint->X() ); }
-
-                        if( pPoint->Y() > aCalcRect.Bottom() )
-                            {   bInside = FALSE; aCalcRect.Bottom( pPoint->Y() ); }
-                        if( pPoint->Y() < aCalcRect.Top() )
-                            {   bInside = FALSE; aCalcRect.Top( pPoint->Y() ); }
-                        if( bInside )
-                        {
-                            pMinFrm = pTmpFrm;
-                            break;
-                        }
+                        pMinFrm = pTmpFrm;
+                        break;
                     }
 
-                    if( pMinFrm )
+                    // Point not in rectangle. Compare distances:
+                    const Point aCalcRectCenter = aCalcRect.Center();
+                    const Point aDiff = aCalcRectCenter - *pPoint;
+                    const sal_uInt64 nCurrentDist = aDiff.X() * aDiff.X() + aDiff.Y() * aDiff.Y(); // opt: no sqrt
+                    if ( !pMinFrm || nCurrentDist < nMinDist )
                     {
-                        long nDiffW = aMinSize.Width() - aCalcRect.Width();
-                        long nDiffH = aMinSize.Height() - aCalcRect.Height();
-
-                            // gleiche Hoehe, dann entscheided die Breite
-                        if( !nDiffH )       { if( 0 >= nDiffW ) continue; }
-                            // gleiche Breite, dann entscheided die Hoehe
-                        else if( !nDiffW )  { if( 0 >= nDiffH ) continue; }
-
-                            // hoehere Gewichtung auf die Hoehe !!
-                        else if( !(0 < nDiffW && 0 < nDiffH ) &&
-                                ((0 > nDiffW && 0 > nDiffH ) ||
-                                0 >= nDiffH ))
-                            continue;
+                        pMinFrm = pTmpFrm;
+                        nMinDist = nCurrentDist;
                     }
                 }
                 else
@@ -3692,9 +3645,8 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                     pMinFrm = pTmpFrm;
                     break;
                 }
-                pMinFrm = pTmpFrm;
-                aMinSize = aCalcRect.SSize();
             }
+        }
     } while( bClientIterChanged );
 
     if( pPos && pMinFrm && pMinFrm->IsTxtFrm() )
