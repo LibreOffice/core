@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:28:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,6 +365,14 @@ Resource RID_SC_FUNCTION_NAMES
     String SC_OPCODE_ASC
     {
         Text [ en-US ] = "ASC" ;
+    };
+    String SC_OPCODE_UNICODE
+    {
+        Text [ en-US ] = "UNICODE" ;
+    };
+    String SC_OPCODE_UNICHAR
+    {
+        Text [ en-US ] = "UNICHAR" ;
     };
     String SC_OPCODE_LOG10
     {
@@ -1168,6 +1176,51 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text [ en-US ] = "GETPIVOTDATA";
     };
+    String SC_OPCODE_EUROCONVERT
+    {
+        Text [ en-US ] = "EUROCONVERT";
+    };
+    String SC_OPCODE_NUMBERVALUE
+    {
+        Text [ en-US ] = "NUMBERVALUE" ;
+    };
+    /* BEGIN defined ERROR.TYPE() values. */
+    /* ERROR.TYPE( #NULL! ) == 1 */
+    String SC_OPCODE_ERROR_NULL
+    {
+        Text [ en-US ] = "#NULL!" ;
+    };
+    /* ERROR.TYPE( #DIV/0! ) == 2 */
+    String SC_OPCODE_ERROR_DIVZERO
+    {
+        Text [ en-US ] = "#DIV/0!" ;
+    };
+    /* ERROR.TYPE( #VALUE! ) == 3 */
+    String SC_OPCODE_ERROR_VALUE
+    {
+        Text [ en-US ] = "#VALUE!" ;
+    };
+    /* ERROR.TYPE( #REF! ) == 4 */
+    String SC_OPCODE_ERROR_REF
+    {
+        Text [ en-US ] = "#REF!" ;
+    };
+    /* ERROR.TYPE( #NAME! ) == 5 */
+    String SC_OPCODE_ERROR_NAME
+    {
+        Text [ en-US ] = "#NAME?" ;
+    };
+    /* ERROR.TYPE( #NUM! ) == 6 */
+    String SC_OPCODE_ERROR_NUM
+    {
+        Text [ en-US ] = "#NUM!" ;
+    };
+    /* ERROR.TYPE( #N/A ) == 7 */
+    String SC_OPCODE_ERROR_NA
+    {
+        Text [ en-US ] = "#N/A" ;
+    };
+    /* END defined ERROR.TYPE() values. */
 };
 
 
@@ -1276,6 +1329,8 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHAR { Text = "CHAR" ; };
     String SC_OPCODE_JIS { Text = "JIS" ; };
     String SC_OPCODE_ASC { Text = "ASC" ; };
+    String SC_OPCODE_UNICODE { Text = "UNICODE" ; };
+    String SC_OPCODE_UNICHAR { Text = "UNICHAR" ; };
     String SC_OPCODE_LOG10 { Text = "LOG10" ; };
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
@@ -1477,6 +1532,17 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_INFO { Text = "INFO" ; };
     String SC_OPCODE_BAHTTEXT { Text = "BAHTTEXT" ; };
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
+    String SC_OPCODE_EUROCONVERT { Text = "EUROCONVERT" ; };
+    String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
+    /* BEGIN defined ERROR.TYPE() values. */
+    String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
+    String SC_OPCODE_ERROR_DIVZERO { Text = "#DIV/0!" ; };
+    String SC_OPCODE_ERROR_VALUE   { Text = "#VALUE!" ; };
+    String SC_OPCODE_ERROR_REF     { Text = "#REF!"   ; };
+    String SC_OPCODE_ERROR_NAME    { Text = "#NAME?"  ; };
+    String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
+    String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
+    /* END defined ERROR.TYPE() values. */
 };
 
 
@@ -1584,6 +1650,8 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CHAR { Text = "CHAR" ; };
     String SC_OPCODE_JIS { Text = "JIS" ; };
     String SC_OPCODE_ASC { Text = "ASC" ; };
+    String SC_OPCODE_UNICODE { Text = "UNICODE" ; };
+    String SC_OPCODE_UNICHAR { Text = "UNICHAR" ; };
     String SC_OPCODE_LOG10 { Text = "LOG10" ; };
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
@@ -1785,4 +1853,15 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_INFO { Text = "INFO" ; };
     String SC_OPCODE_BAHTTEXT { Text = "COM.MICROSOFT.BAHTTEXT" ; };
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
+    String SC_OPCODE_EUROCONVERT { Text = "EUROCONVERT" ; };
+    String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
+    /* BEGIN defined ERROR.TYPE() values. */
+    String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
+    String SC_OPCODE_ERROR_DIVZERO { Text = "#DIV/0!" ; };
+    String SC_OPCODE_ERROR_VALUE   { Text = "#VALUE!" ; };
+    String SC_OPCODE_ERROR_REF     { Text = "#REF!"   ; };
+    String SC_OPCODE_ERROR_NAME    { Text = "#NAME?"  ; };
+    String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
+    String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
+    /* END defined ERROR.TYPE() values. */
 };
