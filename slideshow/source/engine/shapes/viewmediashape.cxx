@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmediashape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:46:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 17:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <avmedia/mediawindow.hxx>
 
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -74,14 +75,6 @@
 #include "viewmediashape.hxx"
 #include "mediashape.hxx"
 #include "tools.hxx"
-
-#ifdef WNT
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
-#elif defined QUARTZ
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
-#else
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
-#endif
 
 using namespace ::com::sun::star;
 
@@ -377,24 +370,8 @@ namespace slideshow
                 {
                     if( rMediaURL.getLength() )
                     {
-                        uno::Reference<lang::XMultiComponentFactory> xFactory(
-                            mxComponentContext->getServiceManager() );
-
-                        if( xFactory.is() )
-                        {
-                            uno::Reference< media::XManager > xManager;
-
-                            xManager.set(
-                                xFactory->createInstanceWithContext(
-                                    ::rtl::OUString::createFromAscii(
-                                        AVMEDIA_MANAGER_SERVICE_NAME ),
-                                    mxComponentContext ),
-                                uno::UNO_QUERY );
-
-                            if( xManager.is() )
-                                mxPlayer.set( xManager->createPlayer( rMediaURL ),
-                                              uno::UNO_QUERY );
-                        }
+                        mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL ),
+                            uno::UNO_QUERY );
                     }
                 }
                 catch( uno::RuntimeException& )
