@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:30:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1725,7 +1725,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                     SonderZeichen 0-31 und 255 entfernen
  --------------------------------------------------------------------*/
 
-String lcl_GetNumString( const SwTOXSortTabBase& rBase )
+String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYTE nLevel )
 {
     String sRet;
 
@@ -1737,7 +1737,7 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase )
             const SwNumRule* pRule = pNd->GetNumRule();
 
             if( pRule && pNd->GetLevel() < MAXLEVEL )
-                sRet = pNd->GetNumString();
+                sRet = pNd->GetNumString(bUsePrefix, nLevel);
         }
     }
     return sRet;
@@ -1785,7 +1785,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
             {
             case TOKEN_ENTRY_NO:
                 // fuer Inhaltsverzeichnis Numerierung
-                rTxt.Insert( lcl_GetNumString( rBase ));
+                rTxt.Insert( lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<BYTE>(aToken.nOutlineLevel - 1)) );
                 break;
 
             case TOKEN_ENTRY_TEXT:
@@ -1798,7 +1798,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
             case TOKEN_ENTRY:
                 {
                     // fuer Inhaltsverzeichnis Numerierung
-                    rTxt.Insert( lcl_GetNumString( rBase ));
+                    rTxt.Insert( lcl_GetNumString( rBase, sal_True, MAXLEVEL ));
 
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
                     rBase.FillText( *pTOXNd, aIdx );
@@ -1917,18 +1917,46 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     const SwTOXSource* pTOXSource = 0;
                     if(rBase.aTOXSources.Count())
                         pTOXSource = &rBase.aTOXSources[0];
-                    if( pTOXSource && pTOXSource->pNd && pTOXSource->pNd->IsTxtNode() )
+
+                    // --> OD 2008-02-14 #i53420#
+//                    if( pTOXSource && pTOXSource->pNd
+//                        pTOXSource->pNd->IsTxtNode() )
+                    if ( pTOXSource && pTOXSource->pNd &&
+                         pTOXSource->pNd->IsCntntNode() )
+                    // <--
                     {
                         const SwCntntFrm* pFrm = pTOXSource->pNd->GetFrm();
                         if( pFrm )
                         {
                             SwChapterFieldType aFldTyp;
                             SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
-                            aFld.SetLevel( MAXLEVEL - 1 );
-                            aFld.ChangeExpansion( pFrm, (SwTxtNode*)pTOXSource->pNd, TRUE );
-
+                            aFld.SetLevel( static_cast<BYTE>(aToken.nOutlineLevel - 1) );
+                            // --> OD 2008-02-14 #i53420#
+//                            aFld.ChangeExpansion( pFrm, (SwTxtNode*)pTOXSource->pNd, TRUE );
+                            aFld.ChangeExpansion( pFrm,
+                                dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
+                                TRUE );
+                            // <--
+/* TODO beppec56: the meaning of CF_NUMBER here is different than the one
+ * set in sw/inc/chpfld.hxx:47, IMHO it should be as follows:
+ *                          internal                            field format                ODF definition
+ *                   xmloff/source/text/txtfldi.cxx:2643  sw/source/core/
+ *                                                          unocore/unoidx.cxx:2521         see 6.2.7.1 on ODF 1.2 (1.0 it's the same)
+ * ODF 1.0 & 1.2
+ *
+ * name                     ChapterFormat::NAME                 CF_TITLE                    the chapter name
+ * number                   ChapterFormat::NUMBER               CF_NUMBER                   the chapter number with pre/postfix
+ * number-and-name          ChapterFormat::NAME_NUMBER          CF_NUM_TITLE                the chapter number with pre/postfix and the chapter name
+ * plain-number-and-name    ChapterFormat::NO_PREFIX_SUFFIX     CF_NUMBER_NOPREPST          the plain chapter number and the chapter name
+ * plain-number             ChapterFormat::DIGIT                CF_NUM_NOPREPST_TITLE       the plain chapter number
+ * in the index generation we have:
+ * CF_NUMBER used instead of CF_NUM_NOPREPST_TITLE
+ * CF_NUM_TITLE used instead of CF_NUMBER_NOPREPST
+ * should we do something with ODF 1.2?
+ *
+ */
                             if(CF_NUMBER == aToken.nChapterFormat)
-                                rTxt.Insert(aFld.GetNumber());
+                                rTxt.Insert(aFld.GetNumber()); //get the string number without pre/postfix
                             else if(CF_NUM_TITLE == aToken.nChapterFormat)
                             {
                                 rTxt += aFld.GetNumber();
