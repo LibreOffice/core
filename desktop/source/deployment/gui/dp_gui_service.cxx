@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,8 @@ class ServiceImpl
     Reference<XComponentContext> const m_xComponentContext;
     boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
     boost::optional<OUString> /* const */ m_view;
+    /* if true then this service is running in an unopkg process and not in an office process */
+    boost::optional<sal_Bool> /* const */ m_unopkg;
     boost::optional<OUString> m_extensionURL;
     OUString m_initialTitle;
     bool m_bShowUpdateOnly;
@@ -180,7 +182,7 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
       m_bShowUpdateOnly( false )
 {
     try {
-        comphelper::unwrapArgs( args, m_parent, m_view );
+        comphelper::unwrapArgs( args, m_parent, m_view, m_unopkg );
         return;
     } catch (css::lang::IllegalArgumentException & ) {
     }
@@ -253,6 +255,12 @@ void ServiceImpl::startExecuteModal(
                                         static_cast<OWeakObject *>(this) );
             as.SetUILanguage( MsLangId::convertIsoStringToLanguage( slang ) );
             app->SetSettings( as );
+            String sTitle = ::utl::ConfigManager::GetDirectConfigProperty(
+                                ::utl::ConfigManager::PRODUCTNAME).get<OUString>()
+                                + String(static_cast<sal_Unicode>(' '))
+                                + ::utl::ConfigManager::GetDirectConfigProperty(
+                                    ::utl::ConfigManager::PRODUCTVERSION).get<OUString>();
+            app->SetDisplayName(sTitle);
         }
     }
     else
