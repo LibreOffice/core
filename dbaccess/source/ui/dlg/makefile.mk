@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 15:13:50 $
+#   last change: $Author: kz $ $Date: 2008-03-07 11:23:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ SRC1FILES =	\
         AdabasStatDlg.src	\
         UserAdminDlg.src	\
         sqlmessage.src      \
-        ExtensionNotPresent.src
+        ExtensionNotPresent.src \
+        textconnectionsettings.src
 
 
 # ... object files ............................
@@ -131,7 +132,8 @@ EXCEPTIONSFILES=						\
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
         $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj
+        $(SLO)$/dlgattr.obj             \
+        $(SLO)$/textconnectionsettings.obj
 
 .IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
 DISABLE_ADO=TRUE
