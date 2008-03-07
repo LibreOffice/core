@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:53:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,6 +236,8 @@ void SwXMLExport::_ExportStyles( sal_Bool bUsed )
     GetTextParagraphExport()->exportTextStyles( bUsed
                                              ,IsShowProgress()
                                               );
+    //page defaults
+    GetPageExport()->exportDefaultStyle();
 }
 
 void SwXMLExport::_ExportAutoStyles()
