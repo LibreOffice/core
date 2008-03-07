@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:45:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _FMTFORDR_HXX //autogen
 #include <fmtfordr.hxx>
 #endif
+#ifndef _FMTFLD_HXX //autogen
+#include <fmtfld.hxx>
+#endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
 #endif
@@ -69,6 +72,12 @@
 #include <ftninfo.hxx>
 #endif
 #include <tgrditem.hxx>
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
 
 #include "viewimp.hxx"
 #include "pagefrm.hxx"
@@ -329,8 +338,9 @@ SwPageFrm::~SwPageFrm()
                     pImp->GetLayAction().SetAgain();
                 // OD 12.02.2003 #i9719#, #105645# - retouche area of page
                 // including border and shadow area.
+                const bool bRightSidebar = !MarginSide();
                 SwRect aRetoucheRect;
-                GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect );
+                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
             }
         }
@@ -672,7 +682,10 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
                 Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
                 Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );
-                AdjustRootSize( CHG_CHGPAGE, &aOldPageFrmRect );
+
+                // PAGES01
+                if ( GetUpper() )
+                    static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
             }
             //Window aufraeumen.
             ViewShell *pSh;
@@ -680,8 +693,9 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             {
                 // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
                 // page frame for determine 'old' rectangle - it's used for invalidating.
+                const bool bRightSidebar = !MarginSide();
                 SwRect aOldRectWithBorderAndShadow;
-                GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow );
+                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow, bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
             rInvFlags |= 0x03;
@@ -859,14 +873,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     ASSERT( pRet, "Kein Descriptor gefunden." );
     return pRet;
 }
-/*************************************************************************
-|*
-|*  SwPageFrm::AdjustRootSize()
-|*
-|*  Ersterstellung      MA 13. Aug. 93
-|*  Letzte Aenderung    MA 25. Jun. 95
-|*
-|*************************************************************************/
+
 //Wenn der RootFrm seine Groesse aendert muss benachrichtigt werden.
 void AdjustSizeChgNotify( SwRootFrm *pRoot )
 {
@@ -877,131 +884,18 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     {
         pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );//Einmal fuer das Drawing.
         do
-        {   pSh->SizeChgNotify();     //Einmal fuer jede Sicht.
+        {
+            pSh->SizeChgNotify();     //Einmal fuer jede Sicht.
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
     }
     pRoot->bCheckSuperfluous = bOld;
 }
 
-void MA_FASTCALL lcl_AdjustRoot( SwFrm *pPage, long nOld )
-{
-    //Groesse der groessten Seite ermitteln.
-    //nOld enthaelt den alten Wert wenn die Seite geschrumpft ist und
-    //den aktuellen Wert wenn sie etwa ausgeschnitten wurde. Dadurch
-    //kann abgebrochen werden, wenn eine Seite gefunden wird, deren Wert
-    //dem alten entspricht.
-    long nMax = pPage->Frm().Width();
-    if ( nMax == nOld )
-        nMax = 0;
-    const SwFrm *pFrm = pPage->GetUpper()->Lower();
-    while ( pFrm )
-    {
-        if ( pFrm != pPage )
-        {
-            const SwTwips nTmp = pFrm->Frm().Width();
-            if ( nTmp == nOld )
-            {
-                nMax = 0;
-                break;
-            }
-            else if ( nTmp > nMax )
-                nMax = nTmp;
-        }
-        pFrm = pFrm->GetNext();
-    }
-    if ( nMax )
-        pPage->GetUpper()->ChgSize( Size( nMax,
-                                          pPage->GetUpper()->Frm().Height() ) );
-}
 
 inline void SetLastPage( SwPageFrm *pPage )
 {
     ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
-}
-
-void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
-{
-    if ( !GetUpper() )
-        return;
-
-    const SwRect aOld( GetUpper()->Frm() );
-
-    const SwTwips nVar = Frm().Height();
-    SwTwips nFix = Frm().Width();
-    SwTwips nDiff = 0;
-
-    switch ( eChgType )
-    {
-        case CHG_NEWPAGE:
-            {
-                if( nFix > GetUpper()->Prt().Width() )
-                    GetUpper()->ChgSize( Size(nFix,GetUpper()->Frm().Height()));
-                nDiff = nVar;
-                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                    nDiff += DOCUMENTBORDER/2;
-                else if ( !IsEmptyPage() && GetNext() )
-                    nDiff += DOCUMENTBORDER/2;
-            }
-            break;
-        case CHG_CUTPAGE:
-            {
-                if ( nFix == GetUpper()->Prt().Width() )
-                    ::lcl_AdjustRoot( this, nFix );
-                nDiff = -nVar;
-                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                    nDiff -= DOCUMENTBORDER/2;
-                else if ( !IsEmptyPage() && GetNext() )
-                    nDiff -= DOCUMENTBORDER/2;
-                if ( IsEmptyPage() && GetNext() && GetPrev() )
-                    nDiff = -nVar;
-            }
-            break;
-        case CHG_CHGPAGE:
-            {
-                ASSERT( pOld, "ChgPage ohne OldValue nicht moeglich." );
-                if ( pOld->Width() < nFix )
-                {
-                    if ( nFix > GetUpper()->Prt().Width() )
-                        GetUpper()->ChgSize( Size( nFix,
-                                                GetUpper()->Frm().Height() ) );
-                }
-                else if ( pOld->Width() > nFix )
-                    ::lcl_AdjustRoot( this, pOld->Width() );
-                nDiff = nVar - pOld->Height();
-            }
-            break;
-
-        default:
-            ASSERT( FALSE, "Neuer Typ fuer PageChg." );
-    }
-
-    if ( nDiff > 0 )
-        GetUpper()->Grow( nDiff );
-    else if ( nDiff < 0 )
-        GetUpper()->Shrink( -nDiff );
-
-    //Fix(8522): Calc auf die Root damit sich dir PrtArea sofort einstellt.
-    //Anderfalls gibt es Probleme wenn mehrere Aenderungen innerhalb einer
-    //Action laufen.
-    GetUpper()->Calc();
-
-    if ( aOld != GetUpper()->Frm() )
-    {
-        SwLayoutFrm *pUp = GetUpper();
-        if ( eChgType == CHG_CUTPAGE )
-        {
-            //Seiten vorher kurz aushaengen, weil sonst falsch formatiert wuerde.
-            SwFrm *pSibling = GetNext();
-            if ( ((SwRootFrm*)pUp)->GetLastPage() == this )
-                ::SetLastPage( (SwPageFrm*)GetPrev() );
-            Remove();
-            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
-            InsertBefore( pUp, pSibling );
-        }
-        else
-            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
-    }
 }
 
 /*************************************************************************
@@ -1014,7 +908,8 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
 |*************************************************************************/
 void SwPageFrm::Cut()
 {
-    AdjustRootSize( CHG_CUTPAGE, 0 );
+    // PAGES01
+    //AdjustRootSize( CHG_CUTPAGE, 0 );
 
     ViewShell *pSh = GetShell();
     if ( !IsEmptyPage() )
@@ -1067,10 +962,14 @@ void SwPageFrm::Cut()
     else
         ::SetLastPage( (SwPageFrm*)GetPrev() );
 
+    SwFrm* pRootFrm = GetUpper();
+
     // Alle Verbindungen kappen.
     Remove();
-    if ( pSh )
-        pSh->SetFirstVisPageInvalid();
+
+    // PAGES01
+    if ( pRootFrm )
+        static_cast<SwRootFrm*>(pRootFrm)->CheckViewLayout( 0, 0 );
 }
 
 /*************************************************************************
@@ -1115,13 +1014,12 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     if( Frm().Width() != pParent->Prt().Width() )
         _InvalidateSize();
+
     InvalidatePos();
 
-    AdjustRootSize( CHG_NEWPAGE, 0 );
-
-    ViewShell *pSh = GetShell();
-    if ( pSh )
-        pSh->SetFirstVisPageInvalid();
+    // PAGES01
+    if ( GetUpper() )
+        static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 }
 
 /*************************************************************************
@@ -1522,14 +1420,18 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     return pPage;
 }
 
+// false = right, true = left
 bool SwPageFrm::MarginSide() const
 {
-    if (GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+    if (!GetShell() || GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
         return false;
     else
     {
-        //return Application::GetSettings().GetLayoutRTL();
-        return false;
+        const bool bLTR = GetUpper() ? static_cast<const SwRootFrm*>(GetUpper())->IsLeftToRightViewLayout() : true;
+        const bool bBookMode = GetShell()->GetViewOptions()->IsViewLayoutBookMode();
+        const bool bRightSidebar = bLTR ? (!bBookMode || OnRightPage()) : (bBookMode && !OnRightPage());
+
+        return !bRightSidebar;
     }
 }
 
@@ -2104,5 +2006,426 @@ void SwRootFrm::UnoRestoreAllActions()
             pSh = (ViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
+}
+
+// PAGES01: Helper functions for SwRootFrm::CheckViewLayout
+void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset );
+
+void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
+{
+    SwSortedObjs* pSortedObj = 0;
+    const bool bPage = pFrm->IsPageFrm();
+
+    if ( bPage )
+        pSortedObj = static_cast<SwPageFrm*>(pFrm)->GetSortedObjs();
+    else
+        pSortedObj = pFrm->GetDrawObjs();
+
+    for ( USHORT i = 0; pSortedObj && i < pSortedObj->Count(); ++i)
+    {
+        SwAnchoredObject* pAnchoredObj = (*pSortedObj)[i];
+
+        const SwFrmFmt& rObjFmt = pAnchoredObj->GetFrmFmt();
+        const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
+
+        // all except from the as character anchored objects are moved
+        // when processing the page frame:
+        const bool bAsChar = rAnchor.GetAnchorId() == FLY_IN_CNTNT;
+        if ( !bPage && !bAsChar )
+            continue;
+
+        SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );
+
+        if ( pAnchoredObj->ISA(SwFlyFrm) )
+        {
+            SwFlyFrm* pFlyFrm( static_cast<SwFlyFrm*>(pAnchoredObj) );
+            lcl_MoveAllLowers( pFlyFrm, rOffset );
+            pFlyFrm->NotifyDrawObj();
+        }
+        else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+        {
+            SwAnchoredDrawObject* pAnchoredDrawObj( static_cast<SwAnchoredDrawObject*>(pAnchoredObj) );
+
+            // don't touch objects that are not yet positioned:
+            const bool bNotYetPositioned = pAnchoredDrawObj->NotYetPositioned();
+            if ( bNotYetPositioned )
+                continue;
+
+            const Point aCurrAnchorPos = pAnchoredDrawObj->GetDrawObj()->GetAnchorPos();
+            const Point aNewAnchorPos( ( aCurrAnchorPos + rOffset ) );
+            pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
+            pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
+        }
+    }
+}
+
+void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
+{
+    const SwRect aFrm( pFrm->Frm() );
+
+    // first move the current frame
+    pFrm->Frm().Pos() += rOffset;
+
+    // Don't forget accessibility:
+    if( pFrm->IsAccessibleFrm() )
+    {
+        SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+            pRootFrm->GetCurrShell() )
+        {
+            pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pFrm, aFrm );
+        }
+    }
+
+    // the move any objects
+    lcl_MoveAllLowerObjs( pFrm, rOffset );
+
+    // finally, for layout frames we have to call this function recursively:
+    if ( pFrm->ISA(SwLayoutFrm) )
+    {
+        SwFrm* pLowerFrm = pFrm->GetLower();
+        while ( pLowerFrm )
+        {
+            lcl_MoveAllLowers( pLowerFrm, rOffset );
+            pLowerFrm = pLowerFrm->GetNext();
+        }
+    }
+}
+
+// PAGES01: Calculate how the pages have to be positioned
+void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
+{
+    if ( !pVisArea )
+    {
+        // no early return for bNewPage
+        if ( mnViewWidth < 0 )
+            mnViewWidth = 0;
+    }
+    else
+    {
+        ASSERT( pViewOpt, "CheckViewLayout required ViewOptions" )
+
+        const USHORT nColumns =  pViewOpt->GetViewLayoutColumns();
+        const bool   bBookMode = pViewOpt->IsViewLayoutBookMode();
+
+        if ( nColumns == mnColumns && bBookMode == mbBookMode && pVisArea->Width() == mnViewWidth && !mbSidebarChanged )
+            return;
+
+        mnColumns = nColumns;
+        mbBookMode = bBookMode;
+        mnViewWidth = pVisArea->Width();
+        mbSidebarChanged = false;
+    }
+
+    if( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE ) )
+    {
+        mnColumns = 1;
+        mbBookMode = false;
+    }
+
+    Calc();
+
+    const BOOL bOldCallbackActionEnabled = IsCallbackActionEnabled();
+    SetCallbackActionEnabled( FALSE );
+
+    maPageRects.clear();
+
+    const long nBorder = Frm().Pos().X();
+    const long nVisWidth = mnViewWidth - 2 * nBorder;
+    const long nGapBetweenPages = GAPBETWEENPAGES;
+
+    // check how many pages fit into the first page layout row:
+    SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(Lower());
+
+    // will contain the number of pages per row. 0 means that
+    // the page does not fit.
+    long nWidthRemain = nVisWidth;
+
+    // after one row has been processed, these variables contain
+    // the width of the row and the maxium of the page heights
+    long nCurrentRowHeight = 0;
+    long nCurrentRowWidth = 0;
+
+    // these variables are used to finally set the size of the
+    // root frame
+    long nSumRowHeight = 0;
+    SwTwips nMinPageLeft = TWIPS_MAX;
+    SwTwips nMaxPageRight = 0;
+    SwPageFrm* pStartOfRow = pPageFrm;
+    USHORT nNumberOfPagesInRow = mbBookMode ? 1 : 0; // in book view, start with right page
+    bool bFirstRow = true;
+
+    bool bPageChanged = false;
+    const bool bRTL = !IsLeftToRightViewLayout();
+    const SwTwips nSidebarWidth = SwPageFrm::GetSidebarBorderWidth( GetShell() );
+
+    while ( pPageFrm )
+    {
+        // we consider the current page to be "start of row" if
+        // 1. it is the first page in the current row or
+        // 2. it is the second page in the row and the first page is an empty page in non-book view:
+        const bool bStartOfRow = pPageFrm == pStartOfRow ||
+                                             ( pStartOfRow->IsEmptyPage() && pPageFrm == pStartOfRow->GetNext() && !mbBookMode );
+
+        const bool bEmptyPage = pPageFrm->IsEmptyPage() && !mbBookMode;
+
+        // no half doc border space for first page in each row and
+        long nPageWidth = 0;
+        long nPageHeight = 0;
+
+        if ( mbBookMode )
+        {
+            const SwFrm& rFormatPage = pPageFrm->GetFormatPage();
+
+            nPageWidth  = rFormatPage.Frm().Width()  + nSidebarWidth + ((bStartOfRow || 1 == (pPageFrm->GetPhyPageNum()%2)) ? 0 : nGapBetweenPages);
+            nPageHeight = rFormatPage.Frm().Height() + nGapBetweenPages;
+        }
+        else
+        {
+            SwRect aPageFrm;
+            if ( !pPageFrm->IsEmptyPage() )
+            {
+                nPageWidth  = pPageFrm->Frm().Width() + nSidebarWidth + (bStartOfRow ? 0 : nGapBetweenPages);
+                nPageHeight = pPageFrm->Frm().Height() + nGapBetweenPages;
+            }
+        }
+
+        if ( !bEmptyPage )
+            ++nNumberOfPagesInRow;
+
+        // finish current row if
+        // 1. in dynamic mode the current page does not fit anymore or
+        // 2. the current page exceeds the maximum number of columns
+        bool bRowFinished = (0 == mnColumns && nWidthRemain < nPageWidth ) ||
+                            (0 != mnColumns && mnColumns < nNumberOfPagesInRow);
+
+        // make sure that at least one page goes to the current row:
+        if ( !bRowFinished || bStartOfRow )
+        {
+            // current page is allowed to be in current row
+            nWidthRemain = nWidthRemain - nPageWidth;
+
+            nCurrentRowWidth = nCurrentRowWidth + nPageWidth;
+            nCurrentRowHeight = Max( nCurrentRowHeight, nPageHeight );
+
+            pPageFrm = static_cast<SwPageFrm*>(pPageFrm->GetNext());
+
+            if ( !pPageFrm )
+                bRowFinished = true;
+        }
+
+        if ( bRowFinished )
+        {
+            // pPageFrm now points to the first page in the new row or null
+            // pStartOfRow points to the first page in the current row
+
+            // special centering for last row. pretend to fill the last row with virtual copies of the last page before centering:
+            if ( !pPageFrm && nWidthRemain > 0 )
+            {
+                // find last page in current row:
+                const SwPageFrm* pLastPageInCurrentRow = pStartOfRow;
+                while( pLastPageInCurrentRow->GetNext() )
+                    pLastPageInCurrentRow = static_cast<const SwPageFrm*>(pLastPageInCurrentRow->GetNext());
+
+                if ( pLastPageInCurrentRow->IsEmptyPage() )
+                    pLastPageInCurrentRow = static_cast<const SwPageFrm*>(pLastPageInCurrentRow->GetPrev());
+
+                // check how many times the last page would still fit into the remaining space:
+                USHORT nNumberOfVirtualPages = 0;
+                const USHORT nMaxNumberOfVirtualPages = mnColumns > 0 ? mnColumns - nNumberOfPagesInRow : USHRT_MAX;
+                SwTwips nRemain = nWidthRemain;
+                SwTwips nVirtualPagesWidth = 0;
+                SwTwips nLastPageWidth = pLastPageInCurrentRow->Frm().Width() + nSidebarWidth;
+
+                while ( ( mnColumns > 0 || nRemain > 0 ) && nNumberOfVirtualPages < nMaxNumberOfVirtualPages )
+                {
+                    SwTwips nLastPageWidthWithGap = nLastPageWidth;
+                    if ( !mbBookMode || ( 0 == (nNumberOfVirtualPages + nNumberOfPagesInRow) %2) )
+                        nLastPageWidthWithGap += nGapBetweenPages;
+
+                    if ( mnColumns > 0 || nLastPageWidthWithGap < nRemain )
+                    {
+                        ++nNumberOfVirtualPages;
+                        nVirtualPagesWidth += nLastPageWidthWithGap;
+                    }
+                    nRemain = nRemain - nLastPageWidthWithGap;
+                }
+
+                nCurrentRowWidth = nCurrentRowWidth + nVirtualPagesWidth;
+            }
+
+            // first page in book mode is always special:
+            if ( bFirstRow && mbBookMode )
+                nCurrentRowWidth += pStartOfRow->Frm().Width() + nSidebarWidth;
+
+            // center page if possible
+            const long nSizeDiff = nVisWidth > nCurrentRowWidth ?
+                                   ( nVisWidth - nCurrentRowWidth ) / 2 :
+                                   0;
+
+            // adjust positions of pages in current row
+            long nX = nSizeDiff;
+
+            const long nRowStart = nBorder + nSizeDiff;
+            const long nRowEnd   = nRowStart + nCurrentRowWidth;
+
+            if ( bFirstRow && mbBookMode )
+                nX += pStartOfRow->Frm().Width() + nSidebarWidth;
+
+            SwPageFrm* pEndOfRow = pPageFrm;
+            SwPageFrm* pPageToAdjust = pStartOfRow;
+
+            do
+            {
+                const SwPageFrm* pFormatPage = pPageToAdjust;
+                if ( mbBookMode )
+                    pFormatPage = &pPageToAdjust->GetFormatPage();
+
+                const SwTwips nCurrentPageWidth = pFormatPage->Frm().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
+                const Point aOldPagePos = pPageToAdjust->Frm().Pos();
+                const bool bLeftSidebar = pPageToAdjust->MarginSide();
+                const SwTwips nLeftPageAddOffset = bLeftSidebar ?
+                                                   nSidebarWidth :
+                                                   0;
+
+                Point aNewPagePos( nBorder + nX, nBorder + nSumRowHeight );
+                Point aNewPagePosWithLeftOffset( nBorder + nX + nLeftPageAddOffset, nBorder + nSumRowHeight );
+
+                // RTL view layout: Calculate mirrored page position
+                if ( bRTL )
+                {
+                    const long nXOffsetInRow = aNewPagePos.X() - nRowStart;
+                    aNewPagePos.X() = nRowEnd - nXOffsetInRow - nCurrentPageWidth;
+                    aNewPagePosWithLeftOffset = aNewPagePos;
+                    aNewPagePosWithLeftOffset.X() += nLeftPageAddOffset;
+                }
+
+                if ( aNewPagePosWithLeftOffset != aOldPagePos )
+                {
+                    lcl_MoveAllLowers( pPageToAdjust, aNewPagePosWithLeftOffset - aOldPagePos );
+                    pPageToAdjust->SetCompletePaint();
+                    bPageChanged = true;
+                }
+
+                // calculate area covered by the current page and store to
+                // maPageRects. This is used e.g., for cursor setting
+                const bool bFirstColumn = pPageToAdjust == pStartOfRow;
+                const bool bLastColumn = pPageToAdjust->GetNext() == pEndOfRow;
+                const bool bLastRow = !pEndOfRow;
+
+                nMinPageLeft  = Min( nMinPageLeft, aNewPagePos.X() );
+                nMaxPageRight = Max( nMaxPageRight, aNewPagePos.X() + nCurrentPageWidth);
+
+                // border of nGapBetweenPages around the current page:
+                SwRect aPageRectWithBorders( aNewPagePos.X() - nGapBetweenPages,
+                                             aNewPagePos.Y(),
+                                             pPageToAdjust->Frm().SSize().Width() + nGapBetweenPages + nSidebarWidth,
+                                             nCurrentRowHeight );
+
+                static const long nOuterClickDiff = 1000000;
+
+                // adjust borders for these special cases:
+                if ( bFirstColumn && !bRTL || bLastColumn && bRTL )
+                    aPageRectWithBorders.SubLeft( nOuterClickDiff );
+                if ( bLastColumn && !bRTL || bFirstColumn && bRTL )
+                    aPageRectWithBorders.AddRight( nOuterClickDiff );
+                if ( bFirstRow )
+                    aPageRectWithBorders.SubTop( nOuterClickDiff );
+                if ( bLastRow )
+                    aPageRectWithBorders.AddBottom( nOuterClickDiff );
+
+                maPageRects.push_back( aPageRectWithBorders );
+
+                nX = nX + nCurrentPageWidth;
+                pPageToAdjust = static_cast<SwPageFrm*>(pPageToAdjust->GetNext());
+
+                // distance to next page
+                if ( pPageToAdjust && pPageToAdjust != pEndOfRow )
+                {
+                    // in book view, we add the x gap before left (even) pages:
+                    if ( mbBookMode )
+                    {
+                        if ( 0 == (pPageToAdjust->GetPhyPageNum()%2) )
+                            nX = nX + nGapBetweenPages;
+                    }
+                    else
+                    {
+                        // in non-book view, dont add x gap before
+                        // 1. the last empty page in a row
+                        // 2. after an empty page
+                        const bool bDontAddGap = ( pPageToAdjust->IsEmptyPage() && pPageToAdjust->GetNext() == pEndOfRow ) ||
+                                                 ( static_cast<SwPageFrm*>(pPageToAdjust->GetPrev())->IsEmptyPage() );
+
+                        if  ( !bDontAddGap )
+                            nX = nX + nGapBetweenPages;
+                    }
+                }
+            }
+            while ( pPageToAdjust != pEndOfRow );
+
+            // adjust values for root frame size
+            nSumRowHeight = nSumRowHeight + nCurrentRowHeight;
+
+            // start new row:
+            nCurrentRowHeight = 0;
+            nCurrentRowWidth = 0;
+            pStartOfRow = pEndOfRow;
+            nWidthRemain = nVisWidth;
+            nNumberOfPagesInRow = 0;
+            bFirstRow = false;
+        } // end row finished
+    } // end while
+
+    // set size of root frame:
+    const Size aOldSize( Frm().SSize() );
+    const Size aNewSize( nMaxPageRight - nBorder, nSumRowHeight - nGapBetweenPages );
+
+    if ( bPageChanged || aNewSize != aOldSize )
+    {
+        ChgSize( aNewSize );
+        ::AdjustSizeChgNotify( this );
+        Calc();
+
+        ViewShell* pSh = GetShell();
+
+        if ( pSh )
+        {
+            pSh->SetFirstVisPageInvalid();
+            pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+            pSh->GetDoc()->GetDocShell()->Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+        }
+    }
+
+    maPagesArea.Pos( Frm().Pos() );
+    maPagesArea.SSize( aNewSize );
+    if ( TWIPS_MAX != nMinPageLeft )
+        maPagesArea._Left( nMinPageLeft );
+
+    SetCallbackActionEnabled( bOldCallbackActionEnabled );
+}
+
+bool SwRootFrm::IsLeftToRightViewLayout() const
+{
+    // Layout direction determined by layout direction of the first page.
+    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
+    return !pPage->IsRightToLeft() && !pPage->IsVertical();
+}
+
+/*const SwRect SwRootFrm::GetExtendedPageArea( USHORT nPageNumber ) const
+{
+    SwRect aRet;
+    ASSERT( nPageNumber < maPageRects.size(), "No extended page area available" )
+    if ( nPageNumber < maPageRects.size() )
+        aRet = maPageRects[ nPageNumber ];
+    return aRet;
+}*/
+
+
+const SwPageFrm& SwPageFrm::GetFormatPage() const
+{
+    const SwPageFrm* pRet = this;
+    if ( IsEmptyPage() )
+        pRet = static_cast<const SwPageFrm*>( OnRightPage() ? GetNext() : GetPrev() );
+    return *pRet;
 }
 
