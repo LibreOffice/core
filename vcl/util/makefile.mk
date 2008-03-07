@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:55:25 $
+#   last change: $Author: kz $ $Date: 2008-03-07 16:47:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -299,25 +299,6 @@ SHL2STDLIBS += $(XINERAMALIBS)
 
 .IF "$(XRENDER_LINK)" == "YES"
 SHL2STDLIBS+=`pkg-config --libs xrender`
-.ENDIF
-
-
-.IF "$(ENABLE_PASF)" != ""
-SHL2STDLIBS += $(SNDFILELIB) -lportaudio
-.IF "$(OS)"=="MACOSX"
-SHL2STDLIBS += -framework CoreAudio -framework AudioToolbox
-.ENDIF # "$(OS)"=="MACOSX"
-.ENDIF # "$(ENABLE_PASF)"!=""
-
-.IF "$(ENABLE_NAS)" != ""
-SHL2STDLIBS += -laudio
-.IF "$(XAU_LIBS)" != ""
-SHL2STDLIBS += $(XAU_LIBS)
-.ENDIF
-.IF "$(OS)"=="SOLARIS"
-# needed by libaudio.a
-SHL2STDLIBS += -ldl -lnsl -lsocket
-.ENDIF # SOLARIS
 .ENDIF
 
 .IF "$(GUIBASE)"=="unx"
