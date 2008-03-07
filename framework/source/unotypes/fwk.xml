@@ -60,19 +60,6 @@
 
     <component-description>
         <author> Andreas Schluens </author>
-        <name> com.sun.star.comp.framework.SoundHandler </name>
-        <description>
-            Implements a handler service to detect and/or play audio files.
-            supported formats: wav/au
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.frame.ContentHandler </supported-service>
-    </component-description>
-
-    <component-description>
-        <author> Andreas Schluens </author>
         <name> com.sun.star.comp.framework.DispatchRecorderSupplier </name>
         <description>
             This supplier is available on the servcice Frame as property "DispatchRecorderSupplier".
