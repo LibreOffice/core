@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-02 15:22:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     ScDocShell* pDocSh = GetViewData()->GetDocShell();
                     ScAddress aPos( nPosX, nPosY, nTab );
-                    if ( pDocSh->IsReadOnly() || !pDocSh->GetChangeAction(aPos) )
+                    if ( pDocSh->IsReadOnly() || !pDocSh->GetChangeAction(aPos) || pDocSh->IsDocShared() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -366,7 +366,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_CHG_SHOW:
                 {
-                    if(pDoc->GetChangeTrack()==NULL)
+                    if(pDoc->GetChangeTrack()==NULL || GetViewData()->GetDocShell()->IsDocShared())
                                 rSet.DisableItem( nWhich);
                 }
                 break;
@@ -380,6 +380,10 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                         {
                             rSet.DisableItem( nWhich);
                         }
+                    }
+                    if ( GetViewData()->GetDocShell()->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
                     }
                 }
                 break;
@@ -607,6 +611,11 @@ void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     // Eingabe auf jeden Fall abschliessen, auch wenn eine Formel bearbeitet wird
     SC_MOD()->InputEnterHandler();
 
+    if ( GetViewData()->GetDocShell()->IsDocShared() )
+    {
+        GetViewData()->GetDocShell()->SetDocumentModified();
+    }
+
     // ansonsten normal weiter
     GetViewData()->GetDocShell()->ExecuteSlot( rReq );
 }
@@ -619,8 +628,11 @@ void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
     USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
     {
-        // Status von der DocShell holen
-        pDocSh->GetSlotState( nWhich, NULL, &rSet );
+        if ( nWhich != SID_SAVEDOC || !GetViewData()->GetDocShell()->IsDocShared() )
+        {
+            // get state from DocShell
+            pDocSh->GetSlotState( nWhich, NULL, &rSet );
+        }
         nWhich = aIter.NextWhich();
     }
 }
