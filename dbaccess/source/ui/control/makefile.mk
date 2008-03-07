@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 08:07:18 $
+#   last change: $Author: kz $ $Date: 2008-03-07 11:20:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@ SLOFILES=	\
         $(SLO)$/listviewitems.obj		\
         $(SLO)$/undosqledit.obj			\
         $(SLO)$/marktree.obj			\
-        $(SLO)$/curledit.obj
+        $(SLO)$/curledit.obj            \
+        $(SLO)$/charsetlistbox.obj
 
 # --- Targets ----------------------------------
 
