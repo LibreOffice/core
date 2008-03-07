@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:43:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ struct SwPosition;
 struct SwCrsrMoveState;
 class SdrObject;
 class SwAttrSetChg;
+class Font;
 
 // OD 2004-05-07 #i28701# - replaced by class <SwSortedObjs>
 //SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
@@ -102,10 +103,6 @@ class SwPageFrm: public SwFtnBossFrm
     static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
-    //Anpassung der RootSize und Benachrichtigungen beim Einsetzen,
-    //Entfernen und Groessenaenderungen der Seite.
-    void AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld );
-
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
@@ -131,9 +128,10 @@ class SwPageFrm: public SwFtnBossFrm
         output parameter - instance reference of the border rectangle for
         the given page rectangle
     */
-    void GetBorderRect( const SwRect& _rPageRect,
-                        ViewShell*    _pViewShell,
-                        SwRect& _orBorderRect ) const;
+    static void GetBorderRect( const SwRect& _rPageRect,
+                               ViewShell*    _pViewShell,
+                               SwRect& _orBorderRect,
+                               bool bRightSidebar );
 
     /** determine rectangle for right page shadow
 
@@ -154,9 +152,10 @@ class SwPageFrm: public SwFtnBossFrm
         output parameter - instance reference of the right shadow rectangle for
         the given page rectangle
     */
-    void GetRightShadowRect( const SwRect& _rPageRect,
-                             ViewShell*    _pViewShell,
-                             SwRect&       _orRightShadowRect ) const;
+    static void GetRightShadowRect( const SwRect& _rPageRect,
+                                    ViewShell*    _pViewShell,
+                                    SwRect&       _orRightShadowRect,
+                                    bool bRightSidebar );
 
     /** determine rectangle for bottom page shadow
 
@@ -177,9 +176,11 @@ class SwPageFrm: public SwFtnBossFrm
         output parameter - instance reference of the bottom shadow rectangle for
         the given page rectangle
     */
-    void GetBottomShadowRect( const SwRect& _rPageRect,
-                              ViewShell*    _pViewShell,
-                              SwRect&       _orBottomShadowRect ) const;
+
+    static void GetBottomShadowRect( const SwRect& _rPageRect,
+                                     ViewShell*    _pViewShell,
+                                     SwRect&       _orBottomShadowRect,
+                                     bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
         mod 20.10.2007 for #i6193#
@@ -196,8 +197,8 @@ class SwPageFrm: public SwFtnBossFrm
         @param bPx
         input parameter - if set to true, we add in pixel
     */
-    void AddSidebarBorders( Rectangle& aRect, ViewShell* _pViewShell, bool bPx = false) const;
-    void AddSidebarBorders(    SwRect& aRect, ViewShell* _pViewShell, bool bPx = false) const;
+    static void AddSidebarBorders( Rectangle& aRect, ViewShell* _pViewShell, bool bRight, bool bPx = false);
+    static void AddSidebarBorders(       SwRect& aRect, ViewShell* _pViewShell, bool bRight, bool bPx = false);
 
 protected:
     virtual void MakeAll();
@@ -368,8 +369,10 @@ public:
         input parameter - instance of the view shell, on which the output
         has to be generated.
     */
-    void PaintBorderAndShadow( const SwRect& _rPageRect,
-                               ViewShell*    _pViewShell ) const;
+    static void PaintBorderAndShadow( const SwRect& _rPageRect,
+                                      ViewShell*    _pViewShell,
+                                      bool bPaintRightShadow,
+                                      bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
 
@@ -390,12 +393,13 @@ public:
         output parameter - instance reference of the bounded border and shadow
         rectangle for the given page rectangle
     */
-    void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                      ViewShell*    _pViewShell,
-                                      SwRect& _orBorderAndShadowBoundRect ) const;
+    static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
+                                             ViewShell*    _pViewShell,
+                                             SwRect& _orBorderAndShadowBoundRect,
+                                             bool bRightSidebar );
 
-    void PaintNotesSidebar(ViewShell* _pViewShell) const;
-    void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown) const;
+    static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, USHORT nPageNum, bool bRight);
+    static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
     /**
         mod #6i193#
 
@@ -428,6 +432,14 @@ public:
     {
         mbLayoutInProgress = _bLayoutInProgress;
     }
+
+    // in case this is am empty page, this function returns the 'reference' page
+    const SwPageFrm& GetFormatPage() const;
+
+    // return font used to paint the "empty page" string
+    static const Font& GetEmptyPageFont();
+
+    static SwTwips GetSidebarBorderWidth( const ViewShell* );
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
