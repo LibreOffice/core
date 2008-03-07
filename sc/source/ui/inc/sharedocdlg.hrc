@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: sharedocdlg.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:21:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include <sc.hrc>
+
+#define CB_SHARE                1
+#define FT_WARNING              2
+#define FL_USERS                3
+#define FT_USERS                4
+#define LB_USERS                5
+#define FL_END                  6
+#define BTN_HELP                7
+#define BTN_OK                  8
+#define BTN_CANCEL              9
+
+#define STR_TITLE_NAME          1
+#define STR_TITLE_ACCESSED      2
+#define STR_NO_USER_DATA        3
+#define STR_UNKNOWN_USER        4
+#define STR_EXCLUSIVE_ACCESS    5
