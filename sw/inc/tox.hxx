@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:13:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,7 @@ struct SW_DLLPUBLIC SwFormToken
     USHORT          nPoolId;
     SvxTabAdjust    eTabAlign;
     USHORT          nChapterFormat;     //SwChapterFormat;
+    USHORT          nOutlineLevel;//the maximum permitted outline level in numbering
     USHORT          nAuthorityField;    //enum ToxAuthorityField
     sal_Unicode     cTabFillChar;
     sal_Bool        bWithTab;      // TRUE: do generate tab
@@ -243,6 +244,7 @@ struct SW_DLLPUBLIC SwFormToken
         nPoolId(USHRT_MAX),
         eTabAlign( SVX_TAB_ADJUST_LEFT ),
         nChapterFormat(0 /*CF_NUMBER*/),
+        nOutlineLevel(MAXLEVEL),   //default to maximum outline level
         nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),
         cTabFillChar(' '),
         bWithTab(sal_True)  // #i21237#
