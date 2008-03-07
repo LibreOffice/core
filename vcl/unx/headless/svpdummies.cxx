@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpdummies.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:26:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,44 +45,6 @@ void SvpSalOpenGL::OGLEntry( SalGraphics* ) {}
 void SvpSalOpenGL::OGLExit( SalGraphics* ) {}
 void SvpSalOpenGL::StartScene( SalGraphics* ) {}
 void SvpSalOpenGL::StopScene() {}
-
-// SalSound
-SvpSalSound::~SvpSalSound() {}
-bool SvpSalSound::IsValid() { return true; }
-bool SvpSalSound::Init( const String&, ULONG& rSoundLen )
-{
-    rSoundLen = 0;
-    return true;
-}
-void SvpSalSound::Play( ULONG, ULONG, bool bLoop )
-{
-    m_bPlaying = true;
-    m_bLooping = bLoop;
-}
-void SvpSalSound::Stop()
-{
-    m_bPlaying = m_bLooping = false;
-}
-void SvpSalSound::Pause()
-{
-    m_bPaused = true;
-}
-void SvpSalSound::Continue()
-{
-    m_bPaused = false;
-}
-bool SvpSalSound::IsLoopMode() const
-{
-    return m_bLooping;
-}
-bool SvpSalSound::IsPlaying() const
-{
-    return m_bPlaying;
-}
-bool SvpSalSound::IsPaused() const
-{
-    return m_bPaused;
-}
 
 // SalObject
 SvpSalObject::SvpSalObject()

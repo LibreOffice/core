@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpinst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,8 +166,6 @@ public:
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String          GetDefaultPrinter();
 
-    // SalSound
-    virtual SalSound*       CreateSalSound();
     // SalTimer
     virtual SalTimer*       CreateSalTimer();
     // SalOpenGL

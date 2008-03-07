@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpdummies.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:26:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #ifndef _SVP_SVPDUMMIES_HXX
 
 #include <vcl/salogl.hxx>
-#include <vcl/salsound.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/salimestatus.hxx>
@@ -57,28 +56,6 @@ public:
     virtual void        OGLExit( SalGraphics* pGraphics );
     virtual void        StartScene( SalGraphics* pGraphics );
     virtual void        StopScene();
-};
-
-class SvpSalSound : public SalSound
-{
-    bool m_bPlaying;
-    bool m_bLooping;
-    bool m_bPaused;
-public:
-    SvpSalSound() : m_bPlaying( false ), m_bLooping( false ), m_bPaused( false ) {}
-    virtual ~SvpSalSound();
-
-    // overload all pure virtual methods
-    virtual bool        IsValid();
-    virtual bool        Init( const String& rSoundName,
-                              ULONG&        rSoundLen );
-       virtual void     Play( ULONG nStartTime, ULONG nPlayTime, bool bLoop );
-    virtual void        Stop();
-    virtual void        Pause();
-    virtual void        Continue();
-    virtual bool        IsLoopMode() const;
-    virtual bool        IsPlaying() const;
-    virtual bool        IsPaused() const;
 };
 
 class SvpSalObject : public SalObject

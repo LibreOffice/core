@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpinst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,11 +267,6 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics*,
 void SvpSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
     delete pDevice;
-}
-
-SalSound* SvpSalInstance::CreateSalSound()
-{
-    return new SvpSalSound();
 }
 
 SalTimer* SvpSalInstance::CreateSalTimer()
