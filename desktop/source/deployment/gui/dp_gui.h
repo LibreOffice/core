@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:21:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ struct DialogImpl :
 
 
     void checkUpdates( bool selected, bool showUpdateOnly = false, bool parentVisible = true );
-    void errbox( ::rtl::OUString const & msg ) const;
+    void errbox( ::rtl::OUString const & msg, Window const * pParent = NULL ) const;
     bool supportsOptions( ::rtl::OUString const & sExtensionId);
     void openWebBrowser(::rtl::OUString const & sURL) const;
 
@@ -277,15 +277,27 @@ struct DialogImpl :
     static ::std::vector<dp_gui::UpdateData> excludeWebsiteDownloads(
         ::std::vector<dp_gui::UpdateData> const & data);
 
+
+    enum ACTION { ADD_ACTION, REMOVE_ACTION, ENABLE_ACTION, DISABLE_ACTION, UPDATE_ACTION };
     /** checks if an some action is done with a shared extension.
 
         If so, the user will be warned by  message box, reading that all other office instances
         need to be closed. If the user selects the cancel button then this function returns false.
         Otherwise it returns true.
+        When the action is UPDATE_ACTION then, and only then, pUpdateDialog must be provided.
      */
-    bool continueActionOnSharedExtension(
+    bool continueActionForSharedExtension(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::deployment::XPackageManager> const & xPMgr) const;
+            ::com::sun::star::deployment::XPackageManager> const & xPMgr, ACTION a,
+            Window * pUpdateDialog = NULL);
+
+    /** called from update dialog.
+    */
+    bool continueUpdateForSharedExtension(
+        Window * pUpdateDialog,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::deployment::XPackageManager> const & xPMgr);
+
 
     UpdateDialog* m_pUpdateDialog;
     /** The extensions which are passed when the Extension Manager dialog is created.
