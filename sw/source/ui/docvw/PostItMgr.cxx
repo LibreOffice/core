@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PostItMgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:53:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,12 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             mbWaitingForCalcRects = true;
                             mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
                         }
-                        mpView->DocSzChgd( mpWrtShell->GetDocSize() );
+
+                        //mpView->DocSzChgd( mpWrtShell->GetDocSize() );
+                        SwRootFrm* pLayout = mpWrtShell->GetLayout();
+                        if ( pLayout )
+                            pLayout->SetSidebarChanged();
+
                         mpEditWin->Invalidate();
                     }
                 }
@@ -447,17 +452,18 @@ bool SwPostItMgr::CalcRects()
             if ( !pItem->pFmtFld->IsFldInDoc() )
                 continue;
 
-            const SwPageFrm* pPage = mpWrtShell->GetLayout()->GetPageAtPos((*i)->mPos.Pos());
+            const SwPageFrm* pPage = mpWrtShell->GetLayout()->GetPageAtPos((pItem)->mPos.Pos());
             const unsigned long aPageNum = pPage ? pPage->GetPhyPageNum() : 1;
             //DBG_ASSERT(aPageNum <= mPages.size(),"SwPostItMgr: PageNum larger than page vector");
             if (aPageNum > mPages.size())
             {
-                for (unsigned int j=0; j<aPageNum - mPages.size();j++)
+                const unsigned long nNumberOfPages = mPages.size();
+                for (unsigned int j=0; j<aPageNum - nNumberOfPages; ++j)
                     mPages.push_back( new SwPostItPageItem());
             }
-            mPages[aPageNum-1]->mList->push_back(*i);
-            mPages[aPageNum-1]->mPageRect = (*i)->mPagePos;
-            mPages[aPageNum-1]->bMarginSide = pPage->MarginSide();
+            mPages[aPageNum-1]->mList->push_back(pItem);
+            mPages[aPageNum-1]->mPageRect = (pItem)->mPagePos;
+            mPages[aPageNum-1]->bMarginSide = pPage ? pPage->MarginSide() : false;
         }
 
         if (!bChange && mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
@@ -487,9 +493,9 @@ bool SwPostItMgr::CalcRects()
     return bChange;
 }
 
-bool SwPostItMgr::HasScrollbars()
+bool SwPostItMgr::HasScrollbars() const
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwPostItItem*>::const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         if ((*i)->bShow && (*i)->pPostIt->Scrollbar())
             return true;
@@ -558,7 +564,7 @@ void SwPostItMgr::LayoutPostIts()
                         if (mPages[n]->bMarginSide)
                         {
                             // x value for notes positioning
-                            mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true) - GetSidebarBorderWidth(true) ;
+                            mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
                             //bending point
                             mlPageEnd = mpWrtShell->getIDocumentSettingAccess()->get( IDocumentSettingAccess::BROWSE_MODE) ? pItem->mFramePos.Left() : mPages[n]->mPageRect.Left() + 350;
                         }
@@ -722,7 +728,7 @@ void SwPostItMgr::LayoutPostIts()
     }
 }
 
-bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage)
+bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
     if ( mPages[aPage-1]->mList->empty() )
     {
@@ -826,7 +832,7 @@ void SwPostItMgr::AutoScroll(const SwPostIt* pPostIt,const unsigned long aPage )
     }
 }
 
-bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage)
+bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage) const
 {
     switch (aDirection)
     {
@@ -848,7 +854,7 @@ bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage)
     }
 }
 
-Color SwPostItMgr::GetArrowColor(USHORT aDirection,unsigned long aPage)
+Color SwPostItMgr::GetArrowColor(USHORT aDirection,unsigned long aPage) const
 {
     if (ArrowEnabled(aDirection,aPage))
     {
@@ -1055,8 +1061,12 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
     // if we just added the first one we have to update the view for centering
     if (bEmpty && !mvPostItFlds.empty())
     {
+        SwRootFrm* pLayout = mpWrtShell->GetLayout();
+        if ( pLayout )
+            pLayout->SetSidebarChanged();
+        //mpView->DocSzChgd( mpWrtShell->GetDocSize() );
+
         mpEditWin->Invalidate();
-        mpView->DocSzChgd( mpWrtShell->GetDocSize() );
     }
 }
 
@@ -1319,16 +1329,18 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
         // remove possible left over stuff from sidebar
         if (mvPostItFlds.empty())
             mpEditWin->Invalidate();
-        mpView->DocSzChgd( mpWrtShell->GetDocSize() );
+
+        //mpView->DocSzChgd( mpWrtShell->GetDocSize() );
+        SwRootFrm* pLayout = mpWrtShell->GetLayout();
+        if ( pLayout )
+            pLayout->SetSidebarChanged();
+
         if ( mpWrtShell->getIDocumentSettingAccess()->get( IDocumentSettingAccess::BROWSE_MODE ) )
-        {
-            SwRootFrm* pLayout = mpWrtShell->GetLayout();
             pLayout->InvalidateBrowseWidth();
-        }
     }
 }
 
-bool SwPostItMgr::ShowScrollbar(const unsigned long aPage)
+bool SwPostItMgr::ShowScrollbar(const unsigned long aPage) const
 {
     if (mPages.size() > aPage-1)
         return mPages[aPage-1]->bScrollbar;
@@ -1341,9 +1353,8 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
     if (HasNotes() && ShowNotes())
     {
         const Point aPoint = mpEditWin->PixelToLogic(aPointPixel);
-        const SwFrm* pPage = mpWrtShell->GetLayout()->Lower();
-        while( pPage && aPoint.Y() > pPage->Frm().Bottom() )
-            pPage = pPage->GetNext();
+        const SwRootFrm* pLayout = mpWrtShell->GetLayout();
+        const SwFrm* pPage = pLayout->GetPageAtPos( aPoint, 0, true );
         if (pPage)
         {
             Rectangle aRect;
@@ -1364,7 +1375,7 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
     }
     return false;
 }
-Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage)
+Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointBottom = mPages[aPage-1]->bMarginSide ? Point(aPageRect.Left() - GetSidebarWidth() - GetSidebarBorderWidth() + mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- mpEditWin->PixelToLogic(Size(0,2+GetSidebarScrollerHeight())).Height()) :
@@ -1374,7 +1385,7 @@ Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage)
 
 }
 
-Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage)
+Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointTop = mPages[aPage-1]->bMarginSide ?    Point(aPageRect.Left() - GetSidebarWidth() -GetSidebarBorderWidth()+ mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + mpEditWin->PixelToLogic(Size(0,2)).Height()) :
@@ -1440,19 +1451,19 @@ void SwPostItMgr::CorrectPositions()
     }
 }
 
-bool SwPostItMgr::ShowNotes()
+bool SwPostItMgr::ShowNotes() const
 {
     // we only want to see notes if Options - Writer - View - Notes is ticked
     return mpWrtShell->GetViewOptions()->IsPostIts();
 }
 
-bool SwPostItMgr::HasNotes()
+bool SwPostItMgr::HasNotes() const
 {
     //we just want to know if there are notes, no matter if visible or not
     return !mvPostItFlds.empty();
 }
 
-unsigned long SwPostItMgr::GetSidebarWidth(bool bPx)
+unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
     unsigned long aWidth = (unsigned long)(mpWrtShell->GetViewOptions()->GetZoom() * 1.8);
     if (bPx)
@@ -1461,7 +1472,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx)
         return mpEditWin->PixelToLogic(Size( aWidth ,0)).Width();
 }
 
-unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx)
+unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
 {
     if (bPx)
         return 2;
@@ -1542,31 +1553,31 @@ void SwPostItMgr::Rescale()
             (*i)->pPostIt->Rescale();
 }
 
-sal_Int32 SwPostItMgr::GetInitialAnchorDistance()
+sal_Int32 SwPostItMgr::GetInitialAnchorDistance() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
     return POSTIT_INITIAL_ANKOR_DISTANCE * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostItMgr::GetSpaceBetween()
+sal_Int32 SwPostItMgr::GetSpaceBetween() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
     return ( POSTIT_SPACE_BETWEEN ) * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostItMgr::GetScrollSize()
+sal_Int32 SwPostItMgr::GetScrollSize() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
     return ( POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META ) * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta()
+sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
     return POSTIT_MINIMUMSIZE_WITH_META * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostItMgr::GetSidebarScrollerHeight()
+sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
     return POSTIT_SCROLL_SIDEBAR_HEIGHT * f.GetNumerator() / f.GetDenominator();
