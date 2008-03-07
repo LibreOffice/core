@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontroller.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@
 #define INCLUDED_HASH_MAP
 #endif
 
+#include <tools/gen.hxx>
+
 namespace svt
 {
 
@@ -119,6 +121,8 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
 
         void updateStatus( const rtl::OUString aCommandURL );
         void updateStatus();
+
+        ::Rectangle getControlRect() const;
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
