@@ -10,5 +10,4 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:helpid="helpid:26063"  />
  <toolbar:toolbaritem xlink:href=".uno:DrawChart" toolbar:helpid="helpid:26071" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:helpid="helpid:5561" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertApplet" toolbar:helpid="helpid:5673" toolbar:visible="false" />
 </toolbar:toolbar>
