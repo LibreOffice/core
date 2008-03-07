@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:47:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -895,7 +895,7 @@ void DialogImpl::clickAdd( USHORT )
         m_treelb->getPackageManager(m_treelb->getCurrentSingleSelectedEntry() ) );
     OSL_ASSERT(xPackageManager.is() );
 
-    if (! continueActionOnSharedExtension(xPackageManager))
+    if (! continueActionForSharedExtension(xPackageManager, ADD_ACTION))
         return;
 
     const Sequence<OUString> files(
@@ -959,7 +959,7 @@ void DialogImpl::clickRemove( USHORT )
     for (TreeListBoxImpl::CI_PAIR_PACKAGE i = selection.begin();
          i != selection.end(); i++)
     {
-        if (! continueActionOnSharedExtension(i->second))
+        if (! continueActionForSharedExtension(i->second, REMOVE_ACTION))
         {
             return;
         }
@@ -1011,7 +1011,8 @@ void DialogImpl::clickEnableDisable( USHORT id )
     for (TreeListBoxImpl::CI_PAIR_PACKAGE i = selection.begin();
          i != selection.end(); i++)
     {
-        if (! continueActionOnSharedExtension(i->second))
+        if (! continueActionForSharedExtension(i->second,
+            id == RID_BTN_ENABLE ? ENABLE_ACTION : DISABLE_ACTION))
         {
             return;
         }
@@ -1260,10 +1261,11 @@ void DialogImpl::clickOptions( USHORT )
 }
 
 //______________________________________________________________________________
-void DialogImpl::errbox( OUString const & msg ) const
+void DialogImpl::errbox( OUString const & msg, Window const *  parent) const
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
-    const ::std::auto_ptr<ErrorBox> box( new ErrorBox( const_cast<DialogImpl*>(this), WB_OK, msg ) );
+    Window const * thisParent = parent ? parent : this;
+    const ::std::auto_ptr<ErrorBox> box( new ErrorBox( const_cast<Window*>(thisParent), WB_OK, msg ) );
     box->SetText( GetText() );
     box->Execute();
 }
@@ -1289,7 +1291,7 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
         if ( showUpdateOnly && !parentVisible )
             pParent = GetParent();
 
-        m_pUpdateDialog = new UpdateDialog( m_xComponentContext, pParent,
+        m_pUpdateDialog = new UpdateDialog( m_xComponentContext, pParent, this,
                                             ( selected ? new SelectedPackageIterator(*m_treelb.get())
                                                        : rtl::Reference<SelectedPackageIterator>()),
                                             ( selected ? Sequence<Reference<deployment::XPackageManager> >()
@@ -1334,19 +1336,84 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
     }
 }
 
-
-bool DialogImpl::continueActionOnSharedExtension(
-    Reference<css::deployment::XPackageManager> const & xPMgr) const
+bool DialogImpl::continueUpdateForSharedExtension(
+    Window * pUpdateDialog,
+    Reference<css::deployment::XPackageManager> const & xPMgr)
 {
+    return continueActionForSharedExtension(xPMgr, UPDATE_ACTION, pUpdateDialog);
+}
+
+
+bool DialogImpl::continueActionForSharedExtension(
+    Reference<css::deployment::XPackageManager> const & xPMgr, ACTION action,
+    Window * pUpdateDialog)
+{
+    /** The following flags are used to indicate that a warning has already been displayed
+        for a particular action.
+        We show a warning if a user is going to modify a shared extension. This warning
+        shall only appear once during a session.
+        Because this function is called from the various button handlers only there is
+        no risk of concurrent access.
+        ToDo!!! We should move these flags to DialogImpl and make it a real one instance
+        service. Currently it is destroyed when the window is being closed.
+    */
+
+      static bool bWarningAddSharedDisplayed = false;
+      static bool bWarningRemoveSharedDisplayed = false;
+      static bool bWarningEnableSharedDisplayed = false;
+      static bool bWarningDisableSharedDisplayed = false;
+      static bool bWarningUpdateSharedDisplayed = false;
+
     //If the package manager is readonly then the user cannot modify anything anyway.
     //Then the messagebox need not be displayed. Also the add, remove, disable buttons
     //should not be enabled.
-    if (xPMgr->getContext().equals(OUSTR("shared"))
+    sal_uInt32 id = 0;
+    //The flag is used to determine if the warning for this action was already displayed.
+    //We only display the warning once for each action.
+    bool bWasAlreadyDisplayed = false;
+    switch (action)
+    {
+    case ADD_ACTION:
+        OSL_ASSERT(!pUpdateDialog);
+        id = RID_WARNINGBOX_ADD_SHARED_EXTENSION;
+        bWasAlreadyDisplayed = bWarningAddSharedDisplayed;
+        bWarningAddSharedDisplayed = true;
+        break;
+    case REMOVE_ACTION:
+        OSL_ASSERT(!pUpdateDialog);
+        id = RID_WARNINGBOX_REMOVE_SHARED_EXTENSION;
+        bWasAlreadyDisplayed = bWarningRemoveSharedDisplayed;
+        bWarningRemoveSharedDisplayed = true;
+        break;
+    case ENABLE_ACTION:
+        OSL_ASSERT(!pUpdateDialog);
+        id = RID_WARNINGBOX_ENABLE_SHARED_EXTENSION;
+        bWasAlreadyDisplayed = bWarningEnableSharedDisplayed;
+        bWarningEnableSharedDisplayed = true;
+        break;
+    case DISABLE_ACTION:
+        OSL_ASSERT(!pUpdateDialog);
+        id = RID_WARNINGBOX_DISABLE_SHARED_EXTENSION;
+        bWasAlreadyDisplayed = bWarningDisableSharedDisplayed;
+        bWarningDisableSharedDisplayed = true;
+        break;
+    case UPDATE_ACTION:
+        OSL_ASSERT(pUpdateDialog);
+        id = RID_WARNINGBOX_UPDATE_SHARED_EXTENSION;
+        bWasAlreadyDisplayed = bWarningUpdateSharedDisplayed;
+        bWarningUpdateSharedDisplayed = true;
+        break;
+
+    default:
+        OSL_ASSERT(0);
+    }
+    if (! bWasAlreadyDisplayed
+        &&xPMgr->getContext().equals(OUSTR("shared"))
         && ! xPMgr->isReadOnly())
     {
         vos::OGuard guard(Application::GetSolarMutex());
-        InfoBox box(const_cast<DialogImpl*>(this),
-                    ResId(RID_INFOBOX_MODIFY_SHARED_EXTENSION, *DeploymentGuiResMgr::get()));
+        WarningBox box(pUpdateDialog ? pUpdateDialog : this,
+            ResId(id, *DeploymentGuiResMgr::get()));
         String msgText = box.GetMessText();
         msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
         if (RET_OK == box.Execute())
