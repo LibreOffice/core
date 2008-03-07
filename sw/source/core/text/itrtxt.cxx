@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:06:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,6 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     if ( bHasGrid )
     {
-        const USHORT nGridWidth = pGrid->GetBaseHeight();
         const USHORT nRubyHeight = pGrid->GetRubyHeight();
         const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
@@ -361,9 +360,12 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             {
                 // Portions which are bigger than on grid distance are
                 // centered inside the whole line.
-                const USHORT nLineNetto = ( nPorHeight > nGridWidth ) ?
-                                            rLine.Height() - nRubyHeight :
-                                            nGridWidth;
+
+                //for text refactor
+                const USHORT nLineNetto =  rLine.Height() - nRubyHeight;
+                //const USHORT nLineNetto = ( nPorHeight > nGridWidth ) ?
+                 //                           rLine.Height() - nRubyHeight :
+                 //                           nGridWidth;
                 nOfst += ( nLineNetto - nPorHeight ) / 2;
                 if ( bRubyTop )
                     nOfst = nOfst + nRubyHeight;
