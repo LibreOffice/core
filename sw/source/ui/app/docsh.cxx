@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:22:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1092,10 +1092,16 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
     if ( nAspect == ASPECT_THUMBNAIL )
     {
         //PreView: VisArea auf die erste Seite einstellen.
-
-        //PageDesc besorgen, vom ersten Absatz oder den default.
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwCntntNode* pNd = pDoc->GetNodes().GoNext( &aIdx );
+
+        const SwRect aPageRect = pNd->FindPageFrmRect( FALSE, 0, FALSE );
+        return aPageRect.SVRect();
+
+        // Why does this have to be that complicated? I replaced this by the
+        // call of FindPageFrmRect():
+        /*
+        //PageDesc besorgen, vom ersten Absatz oder den default.
         const SwFmtPageDesc &rDesc = pNd->GetSwAttrSet().GetPageDesc();
         const SwPageDesc* pDesc = rDesc.GetPageDesc();
         if( !pDesc )
@@ -1116,7 +1122,7 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
         const Size aSz( rFrmSz.GetWidth(), rFrmSz.GetHeight() );
         const Point aPt( DOCUMENTBORDER, DOCUMENTBORDER );
         const Rectangle aRect( aPt, aSz );
-        return aRect;
+        return aRect;*/
     }
     return SfxObjectShell::GetVisArea( nAspect );
 }
