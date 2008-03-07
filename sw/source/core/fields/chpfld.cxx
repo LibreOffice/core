@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,21 +129,42 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
+// --> OD 2008-02-14 #i53420#
+//void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
+//                                      const SwTxtNode* pTxtNd,
+//                                      sal_Bool bSrchNum )
+//{
+//    ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
+//    SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
+//    SwPosition aPos( pDoc->GetNodes().GetEndOfContent() );
+
+//    if( pFrm->IsInDocBody() )
+//        aPos.nNode = *pTxtNd;
+//    else if( 0 == (pTxtNd = GetBodyTxtNode( *pDoc, aPos, *pFrm )) )
+//        // kein TxtNode (Formatierung Kopf/Fusszeile)
+//        return;
+//    ChangeExpansion(*pTxtNd, bSrchNum);
+//}
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
-    const SwTxtNode* pTxtNd, sal_Bool bSrchNum)
+                                      const SwCntntNode* pCntntNode,
+                                      sal_Bool bSrchNum )
 {
     ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
-    SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
-    SwPosition aPos( pDoc->GetNodes().GetEndOfContent() );
+    SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
 
-    if( pFrm->IsInDocBody() )
-        aPos.nNode = *pTxtNd;
-    else if( 0 == (pTxtNd = GetBodyTxtNode( *pDoc, aPos, *pFrm )) )
-        // kein TxtNode (Formatierung Kopf/Fusszeile)
-        return;
-    ChangeExpansion(*pTxtNd, bSrchNum);
+    const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
+    if ( !pTxtNode || !pFrm->IsInDocBody() )
+    {
+        SwPosition aDummyPos( pDoc->GetNodes().GetEndOfContent() );
+        pTxtNode = GetBodyTxtNode( *pDoc, aDummyPos, *pFrm );
+    }
+
+    if ( pTxtNode )
+    {
+        ChangeExpansion( *pTxtNode, bSrchNum );
+    }
 }
-
+// <--
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
