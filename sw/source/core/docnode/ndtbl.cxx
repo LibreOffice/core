@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:38:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2674,11 +2674,9 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     SWRECTFN( pTab )
     const SwPageFrm* pPage = pTab->FindPageFrm();
     const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
-                           (pPage->Frm().*fnRect->fnGetLeft)() +
-                           DOCUMENTBORDER;
+                           (pPage->Frm().*fnRect->fnGetLeft)();
     const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
-                            (pPage->Frm().*fnRect->fnGetLeft)() +
-                            DOCUMENTBORDER;
+                            (pPage->Frm().*fnRect->fnGetLeft)();
 
     rFill.SetLeftMin ( nLeftMin );
     rFill.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
@@ -2764,8 +2762,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
     SWRECTFN( pTab )
     const SwPageFrm* pPage = pTab->FindPageFrm();
-    const long nLeftMin  = DOCUMENTBORDER +
-                           ( bVert ?
+    const long nLeftMin  = ( bVert ?
                              pTab->GetPrtLeft() - pPage->Frm().Left() :
                              pTab->GetPrtTop() - pPage->Frm().Top() );
     const long nLeft     = bVert ? LONG_MAX : 0;
@@ -2923,11 +2920,9 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
 
     const SwPageFrm* pPage = pTab->FindPageFrm();
     const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
-                           (pPage->Frm().*fnRect->fnGetLeft)() +
-                           DOCUMENTBORDER;
+                           (pPage->Frm().*fnRect->fnGetLeft)();
     const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
-                            (pPage->Frm().*fnRect->fnGetLeft)() +
-                            DOCUMENTBORDER;
+                            (pPage->Frm().*fnRect->fnGetLeft)();
 
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
     aOld.SetLeftMin ( nLeftMin );
@@ -2962,14 +2957,14 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
     long nLeftMin;
     if ( bVert )
     {
-        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left() + DOCUMENTBORDER;
+        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left();
         aOld.SetLeft    ( LONG_MAX );
         aOld.SetRightMax( aOld.GetRight() );
 
     }
     else
     {
-        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top() + DOCUMENTBORDER;
+        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top();
         aOld.SetLeft    ( 0 );
         aOld.SetRightMax( LONG_MAX );
     }
