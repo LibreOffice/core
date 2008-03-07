@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:33:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,10 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     }
 
     for( i = 0; i < BUTTON_LAST; i++ )
+    {
         m_pButtons[i] = NULL;
+        mbButtonVisibility[i] = false;
+    }
 
     for( i = 0; i < LIST_LAST; i++ )
     {
@@ -258,27 +261,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         }
 
         gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], FALSE, FALSE, 0 );
-    }
-
-    for( i = 0; i < BUTTON_LAST; i++ )
-    {
-        m_pButtons[i] = gtk_button_new();
-
-#define LABEL_BUTTON( elem ) \
-        case elem : \
-            aLabel = aResProvider.getResString( PUSHBUTTON_##elem ); \
-            setLabel( PUSHBUTTON_##elem, aLabel ); \
-            break
-
-          switch( i ) {
-
-        LABEL_BUTTON( PLAY );
-            default:
-                OSL_TRACE("Handle unknown control %d\n", i);
-                break;
-        }
-
-        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pButtons[i], FALSE, TRUE, 0 );
     }
 
     for( i = 0; i < LIST_LAST; i++ )
@@ -1108,6 +1090,16 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                 retVal = ExecutableDialogResults::CANCEL;
                 break;
 
+            case 1: //PLAY
+                {
+                    FilePickerEvent evt;
+                    evt.ElementId = PUSHBUTTON_PLAY;
+                    OSL_TRACE( "filter_changed, isn't it great %x\n", this);
+                    controlStateChanged( evt );
+                    btn = GTK_RESPONSE_NO;
+                }
+                break;
+
             default:
                 retVal = 0;
                 break;
@@ -1401,13 +1393,11 @@ throw( uno::RuntimeException )
         OSL_TRACE("enable unknown control %d\n", nControlId );
 }
 
-void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUString& aLabel )
+void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUString& rLabel )
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    OString aTxt = OUStringToOString( aLabel, RTL_TEXTENCODING_UTF8 );
 
     GType tType;
     GtkWidget *pWidget;
@@ -1417,7 +1407,22 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
           OSL_TRACE("Set label on unknown control %d\n", nControlId);
         return;
     }
-    if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
+
+    OString aTxt = OUStringToOString( rLabel.replace('~', '_'), RTL_TEXTENCODING_UTF8 );
+    if (nControlId == ExtendedFilePickerElementIds::PUSHBUTTON_PLAY)
+    {
+#ifdef GTK_STOCK_MEDIA_PLAY
+        if (!msPlayLabel.getLength())
+            msPlayLabel = rLabel;
+        if (msPlayLabel == rLabel)
+            gtk_button_set_label(GTK_BUTTON(pWidget), GTK_STOCK_MEDIA_PLAY);
+        else
+            gtk_button_set_label(GTK_BUTTON(pWidget), GTK_STOCK_MEDIA_STOP);
+#else
+        gtk_button_set_label(GTK_BUTTON(pWidget), aTxt.getStr());
+#endif
+    }
+    else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
                       "use_underline", TRUE, (char *)NULL );
     else
@@ -1711,6 +1716,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILEOPEN_PLAY:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
             first_button_text = GTK_STOCK_OPEN;
+            mbButtonVisibility[PLAY] = true;
             // TODO
                 break;
         case FILEOPEN_READONLY_VERSION:
@@ -1750,7 +1756,21 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     gtk_file_chooser_set_action( GTK_FILE_CHOOSER( m_pDialog ), eAction);
     dialog_remove_buttons( GTK_DIALOG( m_pDialog ) );
     gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL );
+    for( int nTVIndex = 0; nTVIndex < BUTTON_LAST; nTVIndex++ )
+    {
+        if( mbButtonVisibility[nTVIndex] )
+        {
+#ifdef GTK_STOCK_MEDIA_PLAY
+            m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_MEDIA_PLAY, 1 );
+#else
+            CResourceProvider aResProvider;
+            OString aPlay = OUStringToOString( aResProvider.getResString( PUSHBUTTON_PLAY ), RTL_TEXTENCODING_UTF8 );
+            m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), aPlay.getStr(), 1 );
+#endif
+        }
+    }
     gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), first_button_text, GTK_RESPONSE_ACCEPT );
+
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
     // Setup special flags
@@ -2014,9 +2034,6 @@ SalGtkFilePicker::~SalGtkFilePicker()
 
     for( i = 0; i < TOGGLE_LAST; i++ )
         gtk_widget_destroy( m_pToggles[i] );
-
-    for( i = 0; i < BUTTON_LAST; i++ )
-        gtk_widget_destroy( m_pButtons[i] );
 
     for( i = 0; i < LIST_LAST; i++ )
     {
