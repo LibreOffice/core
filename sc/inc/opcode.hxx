@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:17:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,14 @@ enum OpCodeEnum
         ocColRowNameAuto    = SC_OPCODE_COL_ROW_NAME_AUTO,
     // Percent operator _follows_ value
         ocPercentSign       = SC_OPCODE_PERCENT_SIGN,
-    // EndOfDiverse
-        ocEndDiv            = SC_OPCODE_END_DIV,
+    // Error constants
+        ocErrNull           = SC_OPCODE_ERROR_NULL,
+        ocErrDivZero        = SC_OPCODE_ERROR_DIVZERO,
+        ocErrValue          = SC_OPCODE_ERROR_VALUE,
+        ocErrRef            = SC_OPCODE_ERROR_REF,
+        ocErrName           = SC_OPCODE_ERROR_NAME,
+        ocErrNum            = SC_OPCODE_ERROR_NUM,
+        ocErrNA             = SC_OPCODE_ERROR_NA,
     // Binary operators
         ocAdd               = SC_OPCODE_ADD,
         ocSub               = SC_OPCODE_SUB,
@@ -94,12 +100,10 @@ enum OpCodeEnum
         ocIntersect         = SC_OPCODE_INTERSECT,
         ocUnion             = SC_OPCODE_UNION,
         ocRange             = SC_OPCODE_RANGE,
-        ocEndBinOp          = SC_OPCODE_END_BIN_OP,
     // Unary operators
         ocNot               = SC_OPCODE_NOT,
         ocNeg               = SC_OPCODE_NEG,
         ocNegSub            = SC_OPCODE_NEG_SUB,
-        ocEndUnOp           = SC_OPCODE_END_UN_OP,
     // Functions with no parameters
         ocPi                = SC_OPCODE_PI,
         ocRandom            = SC_OPCODE_RANDOM,
@@ -109,7 +113,6 @@ enum OpCodeEnum
         ocGetActTime        = SC_OPCODE_GET_ACT_TIME,
         ocNotAvail          = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
-        ocEndNoPar          = SC_OPCODE_END_NO_PAR,
     // Functions with one parameter
         ocDeg               = SC_OPCODE_DEG,
         ocRad               = SC_OPCODE_RAD,
@@ -188,7 +191,8 @@ enum OpCodeEnum
         ocBahtText          = SC_OPCODE_BAHTTEXT,
         ocJis               = SC_OPCODE_JIS,
         ocAsc               = SC_OPCODE_ASC,
-        ocEnd1Par           = SC_OPCODE_END_1_PAR,
+        ocUnicode           = SC_OPCODE_UNICODE,
+        ocUnichar           = SC_OPCODE_UNICHAR,
     // Functions with more than one parameters
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,
         ocCeil              = SC_OPCODE_CEIL,
@@ -386,7 +390,8 @@ enum OpCodeEnum
         ocRoman             = SC_OPCODE_ROMAN,
         ocHyperLink         = SC_OPCODE_HYPERLINK,
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
-        ocEnd2Par           = SC_OPCODE_END_2_PAR,
+        ocEuroConvert       = SC_OPCODE_EUROCONVERT,
+        ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocGame              = SC_OPCODE_GAME,
