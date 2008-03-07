@@ -415,6 +415,9 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\xexch.hxx %_DEST%\inc%_EXT%\svx\xexch.hxx
 ..\inc\zoomctrl.hxx %_DEST%\inc%_EXT%\svx\zoomctrl.hxx
 ..\inc\svx\zoomitem.hxx %_DEST%\inc%_EXT%\svx\zoomitem.hxx
+..\inc\svx\viewlayoutitem.hxx %_DEST%\inc%_EXT%\svx\viewlayoutitem.hxx
+..\inc\svx\zoomslideritem.hxx %_DEST%\inc%_EXT%\svx\zoomslideritem.hxx
+..\inc\svx\zoomsliderctrl.hxx %_DEST%\inc%_EXT%\svx\zoomsliderctrl.hxx
 ..\source\items\boxobj.hxx %_DEST%\inc%_EXT%\svx\boxobj.hxx
 ..\inc\svx\itemtype.hxx %_DEST%\inc%_EXT%\svx\itemtype.hxx
 ..\inc\svx\outliner.hxx %_DEST%\inc%_EXT%\svx\outliner.hxx
