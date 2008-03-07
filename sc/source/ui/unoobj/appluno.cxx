@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:35:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
+#include "funcdesc.hxx"
 
 #ifndef _COM_SUN_STAR_SHEET_FUNCTIONARGUMENT_HPP_
 #include <com/sun/star/sheet/FunctionArgument.hpp>
@@ -930,26 +931,36 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
         pArray[3].Value <<= rtl::OUString( *rDesc.pFuncDesc );
 
     pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_ARGUMENTS );
-    if (rDesc.aDefArgNames && rDesc.aDefArgDescs && rDesc.aDefArgOpt )
+    if (rDesc.ppDefArgNames && rDesc.ppDefArgDescs && rDesc.pDefArgFlags )
     {
         USHORT nCount = rDesc.nArgCount;
-        if (nCount >= VAR_ARGS) nCount = nCount-VAR_ARGS+1;
+        if (nCount >= VAR_ARGS)
+            nCount -= VAR_ARGS - 1;
+        USHORT nSeqCount = rDesc.GetSuppressedArgCount();
+        if (nSeqCount >= VAR_ARGS)
+            nSeqCount -= VAR_ARGS - 1;
 
-        uno::Sequence<sheet::FunctionArgument> aArgSeq(nCount);
-        sheet::FunctionArgument* pArgAry = aArgSeq.getArray();
-        for (USHORT i=0; i<nCount; i++)
+        if (nSeqCount)
         {
-            String aArgName;
-            if (rDesc.aDefArgNames[i]) aArgName = *rDesc.aDefArgNames[i];
-            String aArgDesc;
-            if (rDesc.aDefArgDescs[i]) aArgDesc = *rDesc.aDefArgDescs[i];
-            sheet::FunctionArgument aArgument;
-            aArgument.Name        = aArgName;
-            aArgument.Description = aArgDesc;
-            aArgument.IsOptional  = rDesc.aDefArgOpt[i];
-            pArgAry[i] = aArgument;
+            uno::Sequence<sheet::FunctionArgument> aArgSeq(nSeqCount);
+            sheet::FunctionArgument* pArgAry = aArgSeq.getArray();
+            for (USHORT i=0, j=0; i<nCount; i++)
+            {
+                if (!rDesc.pDefArgFlags[i].bSuppress)
+                {
+                    String aArgName;
+                    if (rDesc.ppDefArgNames[i]) aArgName = *rDesc.ppDefArgNames[i];
+                    String aArgDesc;
+                    if (rDesc.ppDefArgDescs[i]) aArgDesc = *rDesc.ppDefArgDescs[i];
+                    sheet::FunctionArgument aArgument;
+                    aArgument.Name        = aArgName;
+                    aArgument.Description = aArgDesc;
+                    aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
+                    pArgAry[j++] = aArgument;
+                }
+            }
+            pArray[4].Value <<= aArgSeq;
         }
-        pArray[4].Value <<= aArgSeq;
     }
 }
 
