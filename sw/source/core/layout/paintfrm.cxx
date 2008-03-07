@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:57:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4997,6 +4997,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                 BOOL bGrid = pGrid->GetRubyTextBelow();
                 BOOL bCell = GRID_LINES_CHARS == pGrid->GetGridType();
                 long nGrid = pGrid->GetBaseHeight();
+                const SwDoc* pDoc = GetFmt()->GetDoc();
+                long nGridWidth = GETGRIDWIDTH(pGrid,pDoc); //for textgrid refactor
                 long nRuby = pGrid->GetRubyHeight();
                 long nSum = nGrid + nRuby;
                 const Color *pCol = &pGrid->GetColor();
@@ -5140,10 +5142,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     SwTwips nY = nOrig + nSum *( (aInter.Top()-nOrig)/nSum );
                     SwRect aTmp( Point( aInter.Left(), nY ),
                                 Size( aInter.Width(), 1 ) );
-                    SwTwips nX = aGrid.Left() + nGrid *
-                                ( ( aInter.Left() - aGrid.Left() )/ nGrid );
+                    //for textgrid refactor
+                    SwTwips nX = aGrid.Left() + nGridWidth *
+                        ( ( aInter.Left() - aGrid.Left() )/ nGridWidth );
                     if( nX < aInter.Left() )
-                        nX += nGrid;
+                        nX += nGridWidth;
                     SwTwips nGridRight = aGrid.Left() + aGrid.Width();
                     BOOL bLeft = aGrid.Left() >= aInter.Left();
                     BOOL bRight = nGridRight <= nRight;
@@ -5165,7 +5168,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                     while( aVert.Left() <= nRight )
                                     {
                                         PaintBorderLine(rRect,aVert,this,pCol);
-                                        aVert.Pos().X() += nGrid;
+                                        aVert.Pos().X() += nGridWidth;  //for textgrid refactor
                                     }
                                 }
                                 else if ( bBorder )
@@ -5222,7 +5225,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                     while( aVert.Left() <= nRight )
                                     {
                                         PaintBorderLine( rRect, aVert, this, pCol);
-                                        aVert.Pos().X() += nGrid;
+                                        aVert.Pos().X() += nGridWidth;  //for textgrid refactor
                                     }
                                 }
                                 else if( bBorder )
