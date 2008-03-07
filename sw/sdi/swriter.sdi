@@ -9954,7 +9954,6 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
     Readonly = FALSE,
 
    /* config: */
@@ -10091,6 +10090,30 @@ SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR
 ]
 
 //--------------------------------------------------------------------------
+SvxViewLayoutItem ViewLayout SID_ATTR_VIEWLAYOUT
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = TRUE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = TRUE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem HideAllNotes FN_HIDE_ALL_NOTES
 ()
 [
@@ -10140,3 +10163,4 @@ SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
+
