@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 16:42:02 $
+#   last change: $Author: kz $ $Date: 2008-03-07 12:31:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ IDLFILES=\
     ImportFilter.idl\
     LinkTarget.idl\
     LinkTargets.idl\
+    LockedDocumentRequest.idl\
     MacroExecMode.idl\
     MediaDescriptor.idl\
     NoSuchFilterRequest.idl\
