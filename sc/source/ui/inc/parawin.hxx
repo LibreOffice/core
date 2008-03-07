@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parawin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 #include <vcl/tabctrl.hxx>
 #endif
 
+#include <vector>
+
 class ScFuncDesc;
 
 //============================================================================
@@ -88,9 +90,10 @@ private:
         Link            aFxLink;
         Link            aArgModifiedLink;
 
+        ::std::vector<USHORT>   aVisibleArgMapping;
         const ScFuncDesc*   pFuncDesc;
         ScAnyRefDlg*    pMyParent;
-        USHORT          nArgs;
+        USHORT          nArgs;      // unsuppressed arguments
         Font            aFntBold;
         Font            aFntLight;
 
@@ -157,7 +160,7 @@ public:
                         ~ScParaWin();
 
         void            SetFunctionDesc(const ScFuncDesc* pFDesc);
-        void            SetArgCount(USHORT nArgs, USHORT nOffset);
+        void            SetArgumentOffset(USHORT nOffset);
         void            SetEditDesc(const String& aText);
         void            UpdateParas();
         void            ClearAll();
