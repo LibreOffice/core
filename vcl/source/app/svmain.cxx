@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:05:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #endif
 #ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALSOUND_HXX
-#include <vcl/salsound.hxx>
 #endif
 #ifndef _SV_SALOGL_HXX
 #include <vcl/salogl.hxx>
