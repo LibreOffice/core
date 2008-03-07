@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:39:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ String STR_ObjNameSingulPOLY
 };
 String STR_ObjNameSingulPOLY_PntAnz
 {
-    Text [ en-US ] = "Polygon %N corners" ;
+    Text [ en-US ] = "Polygon %2 corners" ;
 };
 String STR_ObjNamePluralPOLY
 {
@@ -243,7 +243,7 @@ String STR_ObjNameSingulPLIN
 };
 String STR_ObjNameSingulPLIN_PntAnz
 {
-    Text [ en-US ] = "Polyline with %N corners" ;
+    Text [ en-US ] = "Polyline with %2 corners" ;
 };
 String STR_ObjNamePluralPLIN
 {
@@ -692,231 +692,199 @@ String STR_EditWithCopy
 };
 String STR_EditPosSize
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Position und Größe für %O setzen : Position und Gr÷˜e f³r %O setzen */
-    /* ### ACHTUNG: Neuer Text in Resource? Position und Größe für %O setzen : Position und Gr÷˜e f³r %O setzen */
-    Text [ en-US ] = "Set position and size for %O" ;
+    Text [ en-US ] = "Set position and size for %1" ;
 };
 String STR_EditDelete
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O löschen : %O l÷schen */
-    /* ### ACHTUNG: Neuer Text in Resource? %O löschen : %O l÷schen */
-    Text [ en-US ] = "Delete %O" ;
+    Text [ en-US ] = "Delete %1" ;
 };
 String STR_EditMovToTop
 {
-    Text [ en-US ] = "Move %O forward" ;
+    Text [ en-US ] = "Move %1 forward" ;
 };
 String STR_EditMovToBtm
 {
-    Text [ en-US ] = "Move %O further back" ;
+    Text [ en-US ] = "Move %1 further back" ;
 };
 String STR_EditPutToTop
 {
-    Text [ en-US ] = "Move %O to front" ;
+    Text [ en-US ] = "Move %1 to front" ;
 };
 String STR_EditPutToBtm
 {
-    Text [ en-US ] = "Move %O to back" ;
+    Text [ en-US ] = "Move %1 to back" ;
 };
 String STR_EditRevOrder
 {
-    Text [ en-US ] = "Reverse order of %O" ;
+    Text [ en-US ] = "Reverse order of %1" ;
 };
 String STR_EditMove
 {
-    Text [ en-US ] = "Move %O" ;
+    Text [ en-US ] = "Move %1" ;
 };
 String STR_EditResize
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    Text [ en-US ] = "Resize %O" ;
+    Text [ en-US ] = "Resize %1" ;
 };
 String STR_EditRotate
 {
-    Text [ en-US ] = "Rotate %O" ;
+    Text [ en-US ] = "Rotate %1" ;
 };
 String STR_EditMirrorHori
 {
-    Text [ en-US ] = "Flip %O horizontal" ;
+    Text [ en-US ] = "Flip %1 horizontal" ;
 };
 String STR_EditMirrorVert
 {
-    Text [ en-US ] = "Flip %O vertical" ;
+    Text [ en-US ] = "Flip %1 vertical" ;
 };
 String STR_EditMirrorDiag
 {
-    Text [ en-US ] = "Flip %O diagonal" ;
+    Text [ en-US ] = "Flip %1 diagonal" ;
 };
 String STR_EditMirrorFree
 {
-    Text [ en-US ] = "Flip %O freehand" ;
+    Text [ en-US ] = "Flip %1 freehand" ;
 };
 String STR_EditShear
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    Text [ en-US ] = "Distort %O (slant)" ;
+    Text [ en-US ] = "Distort %1 (slant)" ;
 };
 String STR_EditCrook
 {
-    Text [ en-US ] = "Arrange %O in circle" ;
+    Text [ en-US ] = "Arrange %1 in circle" ;
 };
 String STR_EditCrookContortion
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    Text [ en-US ] = "Curve %O in circle" ;
+    Text [ en-US ] = "Curve %1 in circle" ;
 };
 String STR_EditDistort
 {
-    Text [ en-US ] = "Distort %O" ;
+    Text [ en-US ] = "Distort %1" ;
 };
 String STR_EditRipUp
 {
-    Text [ en-US ] = "Undo %O" ;
+    Text [ en-US ] = "Undo %1" ;
 };
 String STR_EditSetPointsSmooth
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
+    Text [ en-US ] = "Modify bÃ©zier properties of %1" ;
 };
 String STR_EditSetSegmentsKind
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
+    Text [ en-US ] = "Modify bÃ©zier properties of %1" ;
 };
 String STR_EditShut
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O schließen : %O schlie˜en */
-    /* ### ACHTUNG: Neuer Text in Resource? %O schließen : %O schlie˜en */
-    Text [ en-US ] = "Close %O" ;
+    Text [ en-US ] = "Close %1" ;
 };
 String STR_EditSetGlueEscDir
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Austrittsrichtung für %O setzen : Austrittsrichtung f³r %O setzen */
-    /* ### ACHTUNG: Neuer Text in Resource? Austrittsrichtung für %O setzen : Austrittsrichtung f³r %O setzen */
-    Text [ en-US ] = "Set exit direction for %O" ;
+    Text [ en-US ] = "Set exit direction for %1" ;
 };
 String STR_EditSetGluePercent
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Relativattribut für %O setzen : Relativattribut f³r %O setzen */
-    /* ### ACHTUNG: Neuer Text in Resource? Relativattribut für %O setzen : Relativattribut f³r %O setzen */
-    Text [ en-US ] = "Set relative attribute at %O" ;
+    Text [ en-US ] = "Set relative attribute at %1" ;
 };
 String STR_EditSetGlueAlign
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Bezugspunkt für %O setzen : Bezugspunkt f³r %O setzen */
-    /* ### ACHTUNG: Neuer Text in Resource? Bezugspunkt für %O setzen : Bezugspunkt f³r %O setzen */
-    Text [ en-US ] = "Set reference point for %O" ;
+    Text [ en-US ] = "Set reference point for %1" ;
 };
 String STR_EditGroup
 {
-    Text [ en-US ] = "Group %O" ;
+    Text [ en-US ] = "Group %1" ;
 };
 String STR_EditUngroup
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O auflösen : %O aufl÷sen */
-    /* ### ACHTUNG: Neuer Text in Resource? %O auflösen : %O aufl÷sen */
-    Text [ en-US ] = "Ungroup %O" ;
+    Text [ en-US ] = "Ungroup %1" ;
 };
 String STR_EditSetAttributes
 {
-    Text [ en-US ] = "Apply attributes to %O" ;
+    Text [ en-US ] = "Apply attributes to %1" ;
 };
 String STR_EditSetStylesheet
 {
-    Text [ en-US ] = "Apply Styles to %O" ;
+    Text [ en-US ] = "Apply Styles to %1" ;
 };
 String STR_EditDelStylesheet
 {
-    Text [ en-US ] = "Remove Style from %O" ;
+    Text [ en-US ] = "Remove Style from %1" ;
 };
 String STR_EditConvToPoly
 {
-    Text [ en-US ] = "Convert %O to polygon" ;
+    Text [ en-US ] = "Convert %1 to polygon" ;
 };
 String STR_EditConvToPolys
 {
-    Text [ en-US ] = "Convert %O to polygons" ;
+    Text [ en-US ] = "Convert %1 to polygons" ;
 };
 String STR_EditConvToCurve
 {
-    Text [ en-US ] = "Convert %O to curve" ;
+    Text [ en-US ] = "Convert %1 to curve" ;
 };
 String STR_EditConvToCurves
 {
-    Text [ en-US ] = "Convert %O to curves" ;
+    Text [ en-US ] = "Convert %1 to curves" ;
 };
 String STR_EditConvToContour
 {
-    Text [ en-US ] = "Convert %O to contour";
+    Text [ en-US ] = "Convert %1 to contour";
 };
 String STR_EditConvToContours
 {
-    Text [ en-US ] = "Convert %O to contours";
+    Text [ en-US ] = "Convert %1 to contours";
 };
 String STR_EditAlign
 {
-    Text [ en-US ] = "Align %O" ;
+    Text [ en-US ] = "Align %1" ;
 };
 String STR_EditAlignVTop
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O kopfbündig ausrichten : %O kopfb³ndig ausrichten */
-    /* ### ACHTUNG: Neuer Text in Resource? %O kopfbündig ausrichten : %O kopfb³ndig ausrichten */
-    Text [ en-US ] = "Align %O to top" ;
+    Text [ en-US ] = "Align %1 to top" ;
 };
 String STR_EditAlignVBottom
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O fußbündig ausrichten : %O fu˜b³ndig ausrichten */
-    /* ### ACHTUNG: Neuer Text in Resource? %O fußbündig ausrichten : %O fu˜b³ndig ausrichten */
-    Text [ en-US ] = "Align %O to bottom" ;
+    Text [ en-US ] = "Align %1 to bottom" ;
 };
 String STR_EditAlignVCenter
 {
-    Text [ en-US ] = "Horizontally center %O" ;
+    Text [ en-US ] = "Horizontally center %1" ;
 };
 String STR_EditAlignHLeft
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O linksbündig ausrichten : %O linksb³ndig ausrichten */
-    /* ### ACHTUNG: Neuer Text in Resource? %O linksbündig ausrichten : %O linksb³ndig ausrichten */
-    Text [ en-US ] = "Align %O to left" ;
+    Text [ en-US ] = "Align %1 to left" ;
 };
 String STR_EditAlignHRight
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O rechtsbündig ausrichten : %O rechtsb³ndig ausrichten */
-    /* ### ACHTUNG: Neuer Text in Resource? %O rechtsbündig ausrichten : %O rechtsb³ndig ausrichten */
-    Text [ en-US ] = "Align %O to right" ;
+    Text [ en-US ] = "Align %1 to right" ;
 };
 String STR_EditAlignHCenter
 {
-    Text [ en-US ] = "Vertically center %O" ;
+    Text [ en-US ] = "Vertically center %1" ;
 };
 String STR_EditAlignCenter
 {
-    Text [ en-US ] = "Center %O" ;
+    Text [ en-US ] = "Center %1" ;
 };
 String STR_EditTransform
 {
-    Text [ en-US ] = "Transform %O" ;
+    Text [ en-US ] = "Transform %1" ;
 };
 String STR_EditCombine_PolyPoly
 {
-    Text [ en-US ] = "Combine %O" ;
+    Text [ en-US ] = "Combine %1" ;
 };
 String STR_EditMergeMergePoly
 {
-    Text [ en-US ] = "Merge %O";
+    Text [ en-US ] = "Merge %1";
 };
 String STR_EditMergeSubstractPoly
 {
-    Text [ en-US ] = "Subtract %O";
+    Text [ en-US ] = "Subtract %1";
 };
 String STR_EditMergeIntersectPoly
 {
-    Text [ en-US ] = "Intersect %O";
+    Text [ en-US ] = "Intersect %1";
 };
 String STR_DistributeMarkedObjects
 {
@@ -924,19 +892,19 @@ String STR_DistributeMarkedObjects
 };
 String STR_EditCombine_OnePoly
 {
-    Text [ en-US ] = "Combine %O" ;
+    Text [ en-US ] = "Combine %1" ;
 };
 String STR_EditDismantle_Polys
 {
-    Text [ en-US ] = "Split %O" ;
+    Text [ en-US ] = "Split %1" ;
 };
 String STR_EditDismantle_Lines
 {
-    Text [ en-US ] = "Split %O" ;
+    Text [ en-US ] = "Split %1" ;
 };
 String STR_EditImportMtf
 {
-    Text [ en-US ] = "Split %O" ;
+    Text [ en-US ] = "Split %1" ;
 };
 String STR_EditImportSGV
 {
@@ -958,7 +926,7 @@ String STR_ExchangePaste
 };
 String STR_ExchangeClpCut
 {
-    Text [ en-US ] = "Cut %O" ;
+    Text [ en-US ] = "Cut %1" ;
 };
 String STR_ExchangeClpPaste
 {
@@ -968,7 +936,7 @@ String STR_ExchangeClpPaste
 };
 String STR_ExchangeDD
 {
-    Text [ en-US ] = "Drag and Drop %O" ;
+    Text [ en-US ] = "Drag and Drop %1" ;
 };
 String STR_ExchangeDDPaste
 {
@@ -978,15 +946,11 @@ String STR_ExchangeDDPaste
 };
 String STR_DragInsertPoint
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Punkt in %O einfügen : Punkt in %O einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Punkt in %O einfügen : Punkt in %O einf³gen */
-    Text [ en-US ] = "Insert point to %O" ;
+    Text [ en-US ] = "Insert point to %1" ;
 };
 String STR_DragInsertGluePoint
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Klebepunkt in %O einfügen : Klebepunkt in %O einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Klebepunkt in %O einfügen : Klebepunkt in %O einf³gen */
-    Text [ en-US ] = "Insert glue point to %O" ;
+    Text [ en-US ] = "Insert glue point to %1" ;
 };
 String STR_DragMethMovHdl
 {
@@ -994,67 +958,59 @@ String STR_DragMethMovHdl
 };
 String STR_DragMethObjOwn
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O geometrisch verändern : %O geometrisch verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? %O geometrisch verändern : %O geometrisch verõndern */
-    Text [ en-US ] = "Geometrically change %O" ;
+    Text [ en-US ] = "Geometrically change %1" ;
 };
 String STR_DragMethMove
 {
-    Text [ en-US ] = "Move %O" ;
+    Text [ en-US ] = "Move %1" ;
 };
 String STR_DragMethResize
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O verändern : Gr÷˜e von %O verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O verändern : Gr÷˜e von %O verõndern */
-    Text [ en-US ] = "Resize %O" ;
+    Text [ en-US ] = "Resize %1" ;
 };
 String STR_DragMethRotate
 {
-    Text [ en-US ] = "Rotate %O" ;
+    Text [ en-US ] = "Rotate %1" ;
 };
 String STR_DragMethMirrorHori
 {
-    Text [ en-US ] = "Flip %O horizontal" ;
+    Text [ en-US ] = "Flip %1 horizontal" ;
 };
 String STR_DragMethMirrorVert
 {
-    Text [ en-US ] = "Flip %O vertical" ;
+    Text [ en-US ] = "Flip %1 vertical" ;
 };
 String STR_DragMethMirrorDiag
 {
-    Text [ en-US ] = "Flip %O diagonal" ;
+    Text [ en-US ] = "Flip %1 diagonal" ;
 };
 String STR_DragMethMirrorFree
 {
-    Text [ en-US ] = "Flip %O freehand" ;
+    Text [ en-US ] = "Flip %1 freehand" ;
 };
 String STR_DragMethGradient
 {
-    Text [ en-US ] = "Interactive gradient for %O";
+    Text [ en-US ] = "Interactive gradient for %1";
 };
 String STR_DragMethTransparence
 {
-    Text [ en-US ] = "Interactive transparency for %O";
+    Text [ en-US ] = "Interactive transparency for %1";
 };
 String STR_DragMethShear
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    Text [ en-US ] = "Distort %O (slant)" ;
+    Text [ en-US ] = "Distort %1 (slant)" ;
 };
 String STR_DragMethCrook
 {
-    Text [ en-US ] = "Arrange %O in circle" ;
+    Text [ en-US ] = "Arrange %1 in circle" ;
 };
 String STR_DragMethCrookContortion
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    Text [ en-US ] = "Curve %O in circle" ;
+    Text [ en-US ] = "Curve %1 in circle" ;
 };
 String STR_DragMethDistort
 {
-    Text [ en-US ] = "Distort %O" ;
+    Text [ en-US ] = "Distort %1" ;
 };
 String STR_DragMethCrop
 {
@@ -1063,65 +1019,55 @@ String STR_DragMethCrop
 
 String STR_DragRectEckRad
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Eckenradius von %O verändern : Eckenradius von %O verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Eckenradius von %O verändern : Eckenradius von %O verõndern */
-    Text [ en-US ] = "Alter radius by %O" ;
+    Text [ en-US ] = "Alter radius by %1" ;
 };
 String STR_DragPathObj
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    Text [ en-US ] = "Change %O" ;
+    Text [ en-US ] = "Change %1" ;
 };
 String STR_DragRectResize
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    Text [ en-US ] = "Resize %O" ;
+    Text [ en-US ] = "Resize %1" ;
 };
 String STR_DragCaptFram
 {
-    Text [ en-US ] = "Move %O" ;
+    Text [ en-US ] = "Move %1" ;
 };
 String STR_DragCaptTail
 {
-    Text [ en-US ] = "Move end point of %O" ;
+    Text [ en-US ] = "Move end point of %1" ;
 };
 String STR_DragCircAngle
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Winkel von %O ändern : Winkel von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Winkel von %O ändern : Winkel von %O õndern */
-    Text [ en-US ] = "Adjust angle by %O" ;
+    Text [ en-US ] = "Adjust angle by %1" ;
 };
 String STR_DragEdgeTail
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    Text [ en-US ] = "Change %O" ;
+    Text [ en-US ] = "Change %1" ;
 };
 String STR_ViewTextEdit
 {
-    Text [ en-US ] = "TextEdit: Paragraph %a, Row %z, Column %s" ;
+    Text [ en-US ] = "TextEdit: Paragraph %1, Row %2, Column %3" ;
 };
 String STR_ViewMarked
 {
-    Text [ en-US ] = "%O selected" ;
+    Text [ en-US ] = "%1 selected" ;
 };
 String STR_ViewMarkedPoint
 {
-    Text [ en-US ] = "Point from %O" ;
+    Text [ en-US ] = "Point from %1" ;
 };
 String STR_ViewMarkedPoints
 {
-    Text [ en-US ] = "%N points from %O" ;
+    Text [ en-US ] = "%2 points from %1" ;
 };
 String STR_ViewMarkedGluePoint
 {
-    Text [ en-US ] = "Glue point from %O" ;
+    Text [ en-US ] = "Glue point from %1" ;
 };
 String STR_ViewMarkedGluePoints
 {
-    Text [ en-US ] = "%N glue points from %O" ;
+    Text [ en-US ] = "%2 glue points from %1" ;
 };
 String STR_ViewMarkObjs
 {
@@ -1149,27 +1095,23 @@ String STR_ViewMarkMoreGluePoints
 };
 String STR_ViewCreateObj
 {
-    Text [ en-US ] = "Create %O" ;
+    Text [ en-US ] = "Create %1" ;
 };
 String STR_UndoInsertObj
 {
-    /* ### ACHTUNG: Neuer Text in Resource? %O einfügen : %O einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? %O einfügen : %O einf³gen */
-    Text [ en-US ] = "Insert %O" ;
+    Text [ en-US ] = "Insert %1" ;
 };
 String STR_UndoCopyObj
 {
-    Text [ en-US ] = "Copy %O" ;
+    Text [ en-US ] = "Copy %1" ;
 };
 String STR_UndoObjOrdNum
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objektreihenfolge von %O ändern : Objektreihenfolge von %O õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Objektreihenfolge von %O ändern : Objektreihenfolge von %O õndern */
-    Text [ en-US ] = "Change object order of %O" ;
+    Text [ en-US ] = "Change object order of %1" ;
 };
 String STR_UndoObjSetText
 {
-    Text [ en-US ] = "Edit text of %O" ;
+    Text [ en-US ] = "Edit text of %1" ;
 };
 String STR_UndoNewPage
 {
