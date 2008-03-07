@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:26:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,14 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const rtl::OUString& rLocalName,
@@ -90,8 +96,9 @@ TYPEINIT1( PageStyleContext, XMLPropStyleContext );
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const rtl::OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER ),
+        SvXMLStylesContext& rStyles,
+        sal_Bool bDefaultStyle) :
+    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
     sPageUsage()
 {
 }
@@ -199,6 +206,21 @@ void PageStyleContext::FillPropertySet(
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
             rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyleLayout")), aPageUsage);
+    }
+}
+
+// text grid enhancement for better CJK support
+//set default page layout style
+void PageStyleContext::SetDefaults( )
+{
+    Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
+    if (xFactory.is())
+    {
+        Reference < XInterface > xInt = xFactory->createInstance (
+        rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) ) );
+        Reference < beans::XPropertySet > xProperties ( xInt, UNO_QUERY );
+        if ( xProperties.is() )
+            FillPropertySet ( xProperties );
     }
 }
 
