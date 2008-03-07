@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:05:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,8 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
     sal_Int16 nChapterInfo;
     sal_Bool bChapterInfoOK;
     sal_Bool bTOC;
+    sal_Int16 nOutlineLevel;
+    sal_Bool bOutlineLevelOK;
 
 public:
 
