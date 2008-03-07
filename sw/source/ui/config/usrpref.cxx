@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:30:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:02:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,9 +281,11 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Zoom/Type",                        //12
         "Other/MeasureUnit",                //13
         "Other/TabStop",                    //14
-        "Window/IsVerticalRulerRight"       //15
+        "Window/IsVerticalRulerRight",      //15
+        "ViewLayout/Columns",               //16
+        "ViewLayout/BookMode"               //17
     };
-    const int nCount = bWeb ? 14 : 16;
+    const int nCount = bWeb ? 14 : 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -347,8 +349,10 @@ void SwLayoutViewConfig::Commit()
             case 13: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
             case 14: pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(rParent.GetDefTab())); break;// "Other/TabStop",
             case 15: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
+            case 16: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
+            case 17: bSet = rParent.IsViewLayoutBookMode(); break;// "ViewLayout/BookMode",
         }
-        if(nProp < 8 || nProp == 10)
+        if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 )
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
@@ -368,7 +372,7 @@ void SwLayoutViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet = nProp < 8 || nProp == 10 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bSet = nProp < 8 || nProp == 10 || nProp == 17 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
@@ -425,6 +429,14 @@ void SwLayoutViewConfig::Load()
                     }
                     break;// "Other/TabStop",
                     case 15: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
+                    case 16:
+                    {
+                        sal_Int32 nColumns = 0;
+                        pValues[nProp] >>= nColumns;
+                        rParent.SetViewLayoutColumns( static_cast<USHORT>(nColumns) );
+                    }
+                    break;// "ViewLayout/Columns",
+                    case 17: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                 }
             }
         }
