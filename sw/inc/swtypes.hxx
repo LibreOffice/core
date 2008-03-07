@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:12:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,8 @@ const SwTwips lMinBorder = 1134;
 
 //Die Wiesenbreite links neben und ueber dem Dokument.
 //Die halbe Wiesenbreite ist der Abstand zwischen den Seiten.
-#define DOCUMENTBORDER 568L
+#define DOCUMENTBORDER  568L
+#define GAPBETWEENPAGES 284L
 
 //initiale UndoActionCount
 #define UNDO_ACTION_COUNT 20
