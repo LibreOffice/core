@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:03:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,112 +222,81 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
 {
     BOOL bRet     = FALSE;
-    const SwPageFrm *pPage = this;
-    Point aStPoint( rPoint );
-    Point aPoint;
-    while ( !bRet && pPage )
+    Point aPoint( rPoint );
+
+    // check, if we have to adjust the point
+    if ( !Frm().IsInside( aPoint ) )
     {
-        aPoint = aStPoint;
-        SwTwips nTmp = pPage->Frm().Top();
-        if ( pPage->GetPrev() )
-        {
-            const SwTwips nPreTmp = pPage->GetPrev()->Frm().Bottom();
-            if ( (aPoint.Y() > nPreTmp) &&
-                 (aPoint.Y() < nTmp)    &&
-                 ((aPoint.Y() - nPreTmp) >= (nTmp - aPoint.Y())) )
-                aPoint.Y() = nTmp;
-        }
-        else if ( aPoint.Y() < nTmp )
-            aPoint.Y() = nTmp;
-
-        nTmp = pPage->Frm().Bottom();
-        if ( pPage->GetNext() )
-        {
-            const SwTwips nNxtTmp = pPage->GetNext()->Frm().Top();
-            if ( (aPoint.Y() > nTmp) &&
-                 (aPoint.Y() < nNxtTmp) &&
-                 ((nNxtTmp - aPoint.Y()) >= (aPoint.Y() - nTmp)) )
-                aPoint.Y() = nTmp;
-        }
-        else if ( aPoint.Y() > nTmp )
-            aPoint.Y() = nTmp;
-
-        //Wenn der Punkt in der Fix-Richtung neben der Seite liegt wird er
-        //hineingezogen.
-        const SwTwips nVarA = pPage->Frm().Pos().X();
-        const SwTwips nVarB = pPage->Frm().Right();
-        if ( nVarA > aPoint.X() )
-            aPoint.X() = nVarA;
-        else if ( nVarB < aPoint.X() )
-            aPoint.X() = nVarB;
-
-        //Weitere versuche mit der aktuellen Seite nur dann, wenn sich der
-        //Point innerhalb der Seite befindet.
-        const BOOL bInside = pPage->Frm().IsInside( aPoint );
-
-        //Koennte ein Freifliegender gemeint sein?
-        //Wenn sein Inhalt geschuetzt werden soll, so ist nix mit Crsr
-        //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
-        if ( bInside && pPage->GetSortedObjs() )
-        {
-            SwOrderIter aIter( pPage );
-            aIter.Top();
-            while ( aIter() )
-            {
-                const SwVirtFlyDrawObj* pObj =
-                                static_cast<const SwVirtFlyDrawObj*>(aIter());
-                const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
-                if ( pFly &&
-                     ( ( pCMS ? pCMS->bSetInReadOnly : FALSE ) ||
-                       !pFly->IsProtected() ) &&
-                     pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
-                {
-                    bRet = TRUE;
-                    break;
-                }
-
-                if ( pCMS && pCMS->bStop )
-                    return FALSE;
-                aIter.Prev();
-            }
-        }
-        if ( !bRet && bInside )
-        {
-            //Wenn kein Cntnt unterhalb der Seite 'antwortet', so korrigieren
-            //wir den StartPoint und fangen nochmal eine Seite vor der
-            //aktuellen an. Mit Flys ist es dann allerdings vorbei.
-            if ( pPage->SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
-                bRet = TRUE;
-            else
-            {
-                if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
-                {
-                    ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
-                    return FALSE;
-                }
-                const SwCntntFrm *pCnt = pPage->GetCntntPos(
-                                    aPoint, FALSE, FALSE, FALSE, pCMS, FALSE );
-                if ( pCMS && pCMS->bStop )
-                    return FALSE;
-                ASSERT( pCnt, "Crsr is gone to a Black hole" );
-                if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
-                    bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
-                else
-                    bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
-
-                if ( !bRet )
-                {
-                    // Set point to pCnt, delete mark
-                    // this may happen, if pCnt is hidden
-                    *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
-                    bRet = TRUE;
-                }
-            }
-        }
-        pPage = (const SwPageFrm*)pPage->GetNext();
+        aPoint.X() = Max( aPoint.X(), Frm().Left() );
+        aPoint.X() = Min( aPoint.X(), Frm().Right() );
+        aPoint.Y() = Max( aPoint.Y(), Frm().Top() );
+        aPoint.Y() = Min( aPoint.Y(), Frm().Bottom() );
     }
+
+    //Koennte ein Freifliegender gemeint sein?
+    //Wenn sein Inhalt geschuetzt werden soll, so ist nix mit Crsr
+    //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
+    if ( GetSortedObjs() )
+    {
+        SwOrderIter aIter( this );
+        aIter.Top();
+        while ( aIter() )
+        {
+            const SwVirtFlyDrawObj* pObj =
+                                static_cast<const SwVirtFlyDrawObj*>(aIter());
+            const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
+            if ( pFly &&
+                 ( ( pCMS ? pCMS->bSetInReadOnly : FALSE ) ||
+                   !pFly->IsProtected() ) &&
+                 pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
+            {
+                bRet = TRUE;
+                break;
+            }
+
+            if ( pCMS && pCMS->bStop )
+                return FALSE;
+            aIter.Prev();
+        }
+    }
+
+    if ( !bRet )
+    {
+        //Wenn kein Cntnt unterhalb der Seite 'antwortet', so korrigieren
+        //wir den StartPoint und fangen nochmal eine Seite vor der
+        //aktuellen an. Mit Flys ist es dann allerdings vorbei.
+        if ( SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
+            bRet = TRUE;
+        else
+        {
+            if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
+            {
+                ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
+                return FALSE;
+            }
+            const SwCntntFrm *pCnt = GetCntntPos( aPoint, FALSE, FALSE, FALSE, pCMS, FALSE );
+            if ( pCMS && pCMS->bStop )
+                return FALSE;
+
+            ASSERT( pCnt, "Crsr is gone to a Black hole" );
+            if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
+                bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
+            else
+                bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
+
+            if ( !bRet )
+            {
+                // Set point to pCnt, delete mark
+                // this may happen, if pCnt is hidden
+                *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
+                bRet = TRUE;
+            }
+        }
+    }
+
     if ( bRet )
         rPoint = aPoint;
+
     return bRet;
 }
 
@@ -407,8 +376,14 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     if( pCMS && pCMS->pFill )
         ((SwCrsrMoveState*)pCMS)->bFillRet = FALSE;
     Point aOldPoint = rPoint;
-    const SwPageFrm *pPage = (SwPageFrm*)Lower();
-    pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+
+    // PAGES01
+    // search for page containing rPoint. The borders around the pages are considerd
+    const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
+
+    if ( pPage )
+        pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
     if( pCMS )
     {
