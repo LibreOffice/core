@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:24:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,6 +990,7 @@ public:
 
     void OutStyleTab();
     USHORT Sty_GetWWSlot( const SwFmt& rFmt ) const;
+    SwFmt* GetSwFmt(){return (*pFmtA);}
 };
 
 class WW8SaveData
