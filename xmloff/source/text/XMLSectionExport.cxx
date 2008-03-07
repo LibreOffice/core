@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:04:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1247,6 +1247,7 @@ enum TemplateParamEnum
     TOK_TPARAM_TAB_FILL_CHAR,
     TOK_TPARAM_TEXT,
     TOK_TPARAM_CHAPTER_FORMAT,
+    TOK_TPARAM_CHAPTER_LEVEL,//i53420
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
@@ -1275,6 +1276,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
     ENUM_STRING_MAP_ENTRY( "WithTab",               TOK_TPARAM_TAB_WITH_TAB ),
     ENUM_STRING_MAP_ENTRY( "Text",                  TOK_TPARAM_TEXT ),
     ENUM_STRING_MAP_ENTRY( "ChapterFormat",         TOK_TPARAM_CHAPTER_FORMAT ),
+    ENUM_STRING_MAP_ENTRY( "ChapterLevel",          TOK_TPARAM_CHAPTER_LEVEL ),//i53420
     ENUM_STRING_MAP_ENTRY( "BibliographyDataField", TOK_TPARAM_BIBLIOGRAPHY_DATA ),
     ENUM_STRING_MAP_END()
 };
@@ -1343,6 +1345,10 @@ void XMLSectionExport::ExportIndexTemplateElement(
     // chapter format
     sal_Int16 nChapterFormat = 0;
     sal_Bool bChapterFormatOK = sal_False;
+
+    // outline max level
+    sal_Int16 nLevel = 0;
+    sal_Bool bLevelOK = sal_False;
 
     // Bibliography Data
     sal_Int16 nBibliographyData = 0;
@@ -1419,6 +1425,12 @@ void XMLSectionExport::ExportIndexTemplateElement(
                     rValues[i].Value >>= nChapterFormat;
                     bChapterFormatOK = sal_True;
                     break;
+//---> i53420
+                case TOK_TPARAM_CHAPTER_LEVEL:
+                    rValues[i].Value >>= nLevel;
+                    bLevelOK = sal_True;
+                    break;
+//<---
                 case TOK_TPARAM_BIBLIOGRAPHY_DATA:
                     rValues[i].Value >>= nBibliographyData;
                     bBibliographyDataOK = sal_True;
@@ -1549,8 +1561,26 @@ void XMLSectionExport::ExportIndexTemplateElement(
             GetExport().AddAttribute(
                 XML_NAMESPACE_TEXT, XML_DISPLAY,
                 XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
+//---> i53420
+            if (bLevelOK)
+                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
+                                     OUString::valueOf((sal_Int32)nLevel));
+//<---
         }
 
+//--->i53420
+        if (TOK_TTYPE_ENTRY_NUMBER == nTokenType)
+        {
+            if (bChapterFormatOK)
+                GetExport().AddAttribute(
+                    XML_NAMESPACE_TEXT, XML_DISPLAY,
+                    XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
+
+            if (bLevelOK)
+                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
+                                     OUString::valueOf((sal_Int32)nLevel));
+        }
+//<---
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
                                             pElement, sal_True, sal_False);
