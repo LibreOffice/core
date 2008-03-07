@@ -1449,6 +1449,11 @@
                     <value xml:lang="en-US">E-mail as ~OpenDocument Spreadsheet...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ShareDocument" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">S~hare Document...</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">
