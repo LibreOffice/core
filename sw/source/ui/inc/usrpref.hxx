@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:26:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ class SwMasterUsrPref : public SwViewOption
 
     sal_Int32   nDefTab;            //default tab stop distance
 
+    sal_Bool    bIsSquaredPageMode; //default page mode for text grid
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
@@ -268,6 +269,15 @@ public:
     void        SetDefTab( sal_Int32  nSet, sal_Bool bNoModify = sal_False )
                 {
                     nDefTab = nSet;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
+
+    //default page mode for text grid
+    sal_Bool    IsSquaredPageMode() const {return bIsSquaredPageMode;}
+    void        SetDefaultPageMode( sal_Bool bVal, sal_Bool bNoModify = sal_False )
+                {
+                    bIsSquaredPageMode = bVal;
                     if(!bNoModify)
                         aLayoutConfig.SetModified();
                 }
