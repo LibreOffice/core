@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:51:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,8 +796,10 @@ enum SwPropNameIds
 /* 0720 */  UNO_NAME_LISTTAB_STOP_POSITION,
 /* 0721 */  UNO_NAME_FIRST_LINE_INDENT,
 /* 0722 */  UNO_NAME_INDENT_AT,
-// <--
-/* 0723 */  SW_PROPNAME_END
+// --> #i52420# / 2008-02-07 / beppec56@openoffice.org
+/* 0723 */  UNO_NAME_CHAPTER_LEVEL,
+/* 0724 */  UNO_NAME_ROW_SPAN,
+/* 0725 */  SW_PROPNAME_END
 };
 
 
