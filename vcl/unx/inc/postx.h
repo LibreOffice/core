@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postx.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:46:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,6 @@
 #undef ReleaseToken
 #undef InitializeToken
 #undef NextRequest
-
-/* Network Audio System */
-#undef Sound
 
 #ifdef KeyPress
 #if KeyPress != 2
