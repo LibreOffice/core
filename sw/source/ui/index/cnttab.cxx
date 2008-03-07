@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:32:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,9 @@
 #endif
 #ifndef _TOXHLP_HXX
 #include <toxwrap.hxx>
+#endif
+#ifndef _CHPFLD_HXX
+#include <chpfld.hxx>
 #endif
 
 #ifndef _UTLUI_HRC
@@ -1983,6 +1986,9 @@ public:
     void SetChapterInfo(sal_uInt16 nSet) { aFormToken.nChapterFormat = nSet;}
     sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
+    void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
+    sal_uInt16 GetOutlineLevel() const{ return aFormToken.nOutlineLevel;}
+
     void SetLinkEnd()
         {
             DBG_ASSERT(TOKEN_LINK_START == aFormToken.eTokenType,
@@ -2109,6 +2115,11 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aChapterEntryFT(this,       SW_RES(FT_CHAPTERENTRY       )),
     aChapterEntryLB(this,       SW_RES(LB_CHAPTERENTRY       )),
 
+    aNumberFormatFT(this,       SW_RES(FT_ENTRY_NO           )),//i53420
+    aNumberFormatLB(this,       SW_RES(LB_ENTRY_NO           )),
+    aEntryOutlineLevelFT(this,  SW_RES(FT_LEVEL_OL           )),//i53420
+    aEntryOutlineLevelNF(this,  SW_RES(NF_LEVEL_OL           )),
+
     aFillCharFT(this,           SW_RES(FT_FILLCHAR           )),
     aFillCharCB(this,           SW_RES(CB_FILLCHAR          )),
     aTabPosFT(this,             SW_RES(FT_TABPOS                )),
@@ -2190,6 +2201,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aCharStyleLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, StyleSelectHdl));
     aCharStyleLB.InsertEntry(sNoCharStyle);
     aChapterEntryLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoHdl));
+    aEntryOutlineLevelNF.SetModifyHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoOutlineHdl));
+    aNumberFormatLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, NumberFormatHdl));
+
     aTabPosMF.SetModifyHdl(LINK(this, SwTOXEntryTabPage, TabPosHdl));
     aFillCharCB.SetModifyHdl(LINK(this, SwTOXEntryTabPage, FillCharHdl));
     aAutoRightCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, AutoRightHdl));
@@ -2226,6 +2240,12 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
     aEditStylePB.Enable(sal_False);
 
+//get position for Numbering and other stuff
+    aChapterEntryFTPosition = aChapterEntryFT.GetPosPixel();
+    aEntryOutlineLevelFTPosition = aEntryOutlineLevelFT.GetPosPixel();
+    nBiasToEntryPoint = aEntryOutlineLevelNF.GetPosPixel().X() -
+                               aEntryOutlineLevelFT.GetPosPixel().X();
+
     //fill the types in
     USHORT i;
     for( i = 0; i < AUTH_FIELD_END; i++)
@@ -2255,7 +2275,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aFirstKeyLB.SelectEntryPos(0);
     aSecondKeyLB.SelectEntryPos(0);
     aThirdKeyLB.SelectEntryPos(0);
-
 }
 /* -----------------30.11.99 13:37-------------------
     pVoid is used as signal to change all levels of the example
@@ -2485,7 +2504,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         aEntryNoPB.Show(        bToxIsContent );
         aHyperLinkPB.Show(      bToxIsContent );
         aRelToStyleCB.Show(    !bToxIsAuthorities );
-        aChapterInfoPB.Show(    bToxIsIndex );
+        aChapterInfoPB.Show(    !bToxIsContent);
         aEntryPB.Show(         !bToxIsAuthorities );
         aPageNoPB.Show(        !bToxIsAuthorities );
         aAuthFieldsLB.Show(     bToxIsAuthorities );
@@ -2518,7 +2537,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         aMainEntryStyleLB.Show( bToxIsIndex );
         aAlphaDelimCB.Show(     bToxIsIndex );
         aCommaSeparatedCB.Show( bToxIsIndex );
-
     }
     aLastTOXType = aCurType;
 
@@ -2819,6 +2837,34 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
             aChapterEntryLB.SelectEntryPos(pToken->nChapterFormat);
         else
             aChapterEntryLB.SetNoSelection();
+//i53420
+//move into position the fixed text
+//         aEntryOutlineLevelFT.SetPosPixel( aEntryOutlineLevelFTPosition );
+// // then the entry
+//         Point aPoint;
+//         aPoint.Y() = aEntryOutlineLevelFTPosition.Y();
+//         aPoint.X() = aEntryOutlineLevelFTPosition.X() + nBiasToEntryPoint;
+//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
+
+        aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
+    }
+
+//i53420
+    if(pToken->eTokenType == TOKEN_ENTRY_NO)
+    {
+//move into position the fixed text
+//        aEntryOutlineLevelFT.SetPosPixel( aChapterEntryFTPosition );
+// // then the entry
+//         Point aPoint;
+//         aPoint.Y() = aChapterEntryFTPosition.Y();
+//         aPoint.X() = aChapterEntryFTPosition.X() + nBiasToEntryPoint;
+//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
+
+        aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
+        sal_uInt16 nFormat = 0;
+        if( pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE )
+            nFormat = 1;
+        aNumberFormatLB.SelectEntryPos(nFormat);
     }
 
     sal_Bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
@@ -2841,8 +2887,15 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         aTabPosMF.Enable(sal_False);
     }
 
-    aChapterEntryFT.Show(pToken->eTokenType == TOKEN_CHAPTER_INFO);
-    aChapterEntryLB.Show(pToken->eTokenType == TOKEN_CHAPTER_INFO);
+    sal_Bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
+    sal_Bool bIsEntryNumber = pToken->eTokenType == TOKEN_ENTRY_NO;
+    aChapterEntryFT.Show( bIsChapterInfo );
+    aChapterEntryLB.Show( bIsChapterInfo );
+    aEntryOutlineLevelFT.Show( bIsChapterInfo || bIsEntryNumber );
+    aEntryOutlineLevelNF.Show( bIsChapterInfo || bIsEntryNumber );
+    aNumberFormatFT.Show( bIsEntryNumber );
+    aNumberFormatLB.Show( bIsEntryNumber );
+
 
     //now enable the visible buttons
     //- inserting the same type of control is not allowed
@@ -2927,6 +2980,41 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
     }
     return 0;
 }
+
+IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
+{
+    const sal_uInt16 nLevel = static_cast<BYTE>(pField->GetValue());
+
+    Control* pCtrl = aTokenWIN.GetActiveControl();
+    DBG_ASSERT(pCtrl, "no active control?")
+    if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+        ((SwTOXButton*)pCtrl)->SetOutlineLevel(nLevel);
+
+    ModifyHdl(0);
+    return 0;
+}
+
+IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
+{
+    const sal_uInt16 nPos = pBox->GetSelectEntryPos();
+
+    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        Control* pCtrl = aTokenWIN.GetActiveControl();
+        DBG_ASSERT(pCtrl, "no active control?")
+        if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+        {
+            sal_uInt16 nFormat = CF_NUMBER;
+            if(nPos == 1)
+                nFormat = CF_NUM_NOPREPST_TITLE;
+
+            ((SwTOXButton*)pCtrl)->SetChapterInfo(nFormat);
+        }
+        ModifyHdl(0);
+    }
+    return 0;
+}
+
 /* -----------------19.08.99 15:37-------------------
 
  --------------------------------------------------*/
