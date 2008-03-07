@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:59:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,25 +239,15 @@ aDocSz = rSz;
     BOOL bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
-    Size aEditSz( GetEditWin().PixelToLogic(GetEditWin().GetOutputSizePixel()) );
 
-    if( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-        lTmp < aEditSz.Width())
+    if ( aNewVisArea.Right() >= lTmp  )
     {
-        aNewVisArea.Left() = - (aEditSz.Width() - lTmp) / 2;
-        aNewVisArea.Right() = aEditSz.Width() + aNewVisArea.Left();
-        bModified = true;
+        lTmp = aNewVisArea.Right() - lTmp;
+        aNewVisArea.Right() -= lTmp;
+        aNewVisArea.Left() -= lTmp;
+        bModified = TRUE;
     }
-    else
-    {
-        if ( aNewVisArea.Right() >= lTmp  )
-        {
-            lTmp = aNewVisArea.Right() - lTmp;
-            aNewVisArea.Right() -= lTmp;
-            aNewVisArea.Left() -= lTmp;
-            bModified = true;
-        }
-    }
+
     lTmp = aDocSz.Height() + lGreenOffset;
     if ( aNewVisArea.Bottom() >= lTmp )
     {
@@ -282,7 +272,7 @@ aDocSz = rSz;
 
 void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 {
-     const Size aOldSz( aVisArea.GetSize() );
+    const Size aOldSz( aVisArea.GetSize() );
 
     const Point aTopLeft(     AlignToPixel( rRect.TopLeft() ));
     const Point aBottomRight( AlignToPixel( rRect.BottomRight() ));
@@ -293,17 +283,16 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 
     const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
 
-    if( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-        aLR.Left() < lMin )
-    {
-        aLR.Right() += lMin - aLR.Left();
-        aLR.Left() = lMin;
-    }
     // keine negative Position, keine neg. Groesse
     if( aLR.Top() < lMin )
     {
         aLR.Bottom() += lMin - aLR.Top();
         aLR.Top() = lMin;
+    }
+    if( aLR.Left() < lMin )
+    {
+        aLR.Right() += lMin - aLR.Left();
+        aLR.Left() = lMin;
     }
     if( aLR.Right() < 0 )
         aLR.Right() = 0;
@@ -468,8 +457,7 @@ void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
     }
     else if ( rRect.Left() < aVisArea.Left() )      //Verschiebung nach links
     {
-        pPt->X() = rRect.Left() -
-                    (nRangeX != USHRT_MAX ? nRangeX : nXScroll);
+        pPt->X() = rRect.Left() - (nRangeX != USHRT_MAX ? nRangeX : nXScroll);
         pPt->X() = Max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() );
         pPt->X() = Min( rRect.Left() - nScrollX, pPt->X() );
         pPt->X() = Max( 0L, pPt->X() );
@@ -555,7 +543,7 @@ void SwView::Scroll( const Rectangle &rRect, USHORT nRangeX, USHORT nRangeY )
 
         if( bTopCrsr )
         {
-            long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+            const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
             aPt.Y() = Min( Max( nBorder, rRect.Top() ),
                                 aDocSz.Height() + nBorder -
                                     aVisArea.GetHeight() );
@@ -572,7 +560,7 @@ void SwView::Scroll( const Rectangle &rRect, USHORT nRangeX, USHORT nRangeY )
 
         if( bTopCrsr )
         {
-            long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
+            const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
             aPt.Y() = Min( Max( nBorder, rRect.Top() ),
                                 aDocSz.Height() + nBorder -
                                     aVisArea.GetHeight() );
@@ -685,7 +673,7 @@ long SwView::PhyPageUp()
         // einen Pixel addieren, damit kein Rest der Vorgaengerseite
         // sichtbar ist
         if( aPt.Y() != aAlPt.Y() )
-            aAlPt.Y() += GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height();
+            aAlPt.Y() += 3 * GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height();
         SetVisArea( aAlPt );
     }
     return 1;
@@ -705,7 +693,7 @@ long SwView::PhyPageDown()
         // falls ein Unterschied besteht, wurde abgeschnitten --> dann
         // einen Pixel addieren, damit kein Rest der Vorgaengerseite sichtbar ist
         if( aPt.Y() != aAlPt.Y() )
-            aAlPt.Y() += GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height();
+            aAlPt.Y() += 3 * GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height();
         SetVisArea( aAlPt );
     }
     return 1;
@@ -879,31 +867,14 @@ void SwView::CalcVisArea( const Size &rOutPixel )
     //Die Verschiebungen nach rechts und/oder unten koennen jetzt falsch
     //sein (z.B. Zoom aendern, Viewgroesse aendern.
     const long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-
-    if( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-        aDocSz.Width() < aRect.GetWidth())
-    {
-        //#i1761# if the document is smaller than the Window then put it to the center of the window
-        long lDelta = (aDocSz.Width() + lBorder - aRect.GetWidth())/2;
-        aRect.Right() = aRect.GetWidth() + lDelta;
-        aRect.Left() = lDelta;
-    }
-    else
+    if ( aRect.Left() )
     {
         const long lWidth = GetWrtShell().GetDocSize().Width() + lBorder;
-        if ( aRect.Left() >  0 )
+        if ( aRect.Right() > lWidth )
         {
-            if ( aRect.Right() > lWidth )
-            {
-                long lDelta    = aRect.Right() - lWidth;
-                aRect.Left()  -= lDelta;
-                aRect.Right() -= lDelta;
-            }
-        }
-        else if( aRect.Left() < 0 )
-        {
-            aRect.Right() = aRect.GetWidth();
-            aRect.Left() = 0;
+            long lDelta    = aRect.Right() - lWidth;
+            aRect.Left()  -= lDelta;
+            aRect.Right() -= lDelta;
         }
     }
     if ( aRect.Top() )
@@ -918,6 +889,7 @@ void SwView::CalcVisArea( const Size &rOutPixel )
     }
     SetVisArea( aRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER ); // for snapping points
 }
 
 /*--------------------------------------------------------------------
@@ -1353,17 +1325,16 @@ Size SwView::GetOptimalSizePixel() const
     }
     else
     {
-        const SwPageDesc &rDesc = pWrtShell->GetPageDesc(
-                                                    pWrtShell->GetCurPageDesc() );
-        const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
         aPgSize = GetWrtShell().GetAnyCurRect(RECT_PAGE).SSize();
+        aPgSize.Width() += DOCUMENTBORDER * 2;
+
+        const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
         if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )
         {
+            const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
-            aPgSize.Width() +=
-                Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
+            aPgSize.Width() += Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
         }
-        aPgSize.Width() += DOCUMENTBORDER * 2;
     }
     return GetEditWin().LogicToPixel( aPgSize );
 }
