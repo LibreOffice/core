@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: vg $ $Date: 2005-03-23 12:29:45 $
+#  last change: $Author: kz $ $Date: 2008-03-07 16:58:16 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -61,7 +61,7 @@ JAVAFILES  = \
     x11$/SystemWindowAdapter.java   
 
 JARFILES        = sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
-JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//).class)
 
 JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
