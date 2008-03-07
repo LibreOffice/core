@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPageExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:41:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@ public:
     void    collectAutoStyles( sal_Bool bUsed )     { exportStyles( bUsed, sal_True ); }
     void    exportAutoStyles();
     void    exportMasterStyles( sal_Bool bUsed )    { exportStyles( bUsed, sal_False ); }
+
+    //text grid enhancement for better CJK support
+    void exportDefaultStyle();
 };
 
 #endif  //  _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
