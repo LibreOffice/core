@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:17:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@ BOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         return FALSE;
 
     const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+    const SwTabFrm* pMasterTabFrm = pTabFrm->IsFollow() ? pTabFrm->FindMaster( true ) : pTabFrm;
     const SwTable* pTable = pTabFrm->GetTable();
 
     SET_CURR_SHELL( this );
@@ -300,6 +301,11 @@ BOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
     pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
 
+    // set PtPos 'close' to the reference table, otherwise we might get problems with the
+    // repeated headlines check in UpdateCrsr():
+    if ( !bRow )
+        pTblCrsr->GetPtPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
+
     UpdateCrsr();                 // und den akt. Updaten
     return TRUE;
 }
@@ -311,8 +317,9 @@ BOOL SwCrsrShell::SelTbl()
     if( !pFrm->IsInTab() )
         return FALSE;
 
-    SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
-    SwTableNode* pTblNd = pTblFrm->GetTable()->GetTableNode();
+    const SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
+    const SwTabFrm* pMasterTabFrm = pTblFrm->IsFollow() ? pTblFrm->FindMaster( true ) : pTblFrm;
+    const SwTableNode* pTblNd = pTblFrm->GetTable()->GetTableNode();
 
     SET_CURR_SHELL( this );
 
@@ -327,6 +334,9 @@ BOOL SwCrsrShell::SelTbl()
     pTblCrsr->GetPoint()->nNode = *pTblNd;
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     pTblCrsr->SetMark();
+    // set MkPos 'close' to the master table, otherwise we might get problems with the
+    // repeated headlines check in UpdateCrsr():
+    pTblCrsr->GetMkPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
     pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
     UpdateCrsr();                 // und den akt. Updaten
