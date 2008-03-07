@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:05:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,9 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         void DataChanged( const DataChangedEvent& rDCEvt );
         void UserDraw( const UserDrawEvent& rUDEvt );
         void Command( const CommandEvent& rEvt );
+        void MouseMove( const MouseEvent& rMEvt );
+        void MouseButtonDown( const MouseEvent& rMEvt );
+        void MouseButtonUp( const MouseEvent& rMEvt );
         DECL_LINK( Click, StatusBar* );
         DECL_LINK( DoubleClick, StatusBar* );
 
