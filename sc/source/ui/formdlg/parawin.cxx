@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:15:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #include "tabvwsh.hxx"
 #include "appoptio.hxx"
 #include "compiler.hxx"
+#include "funcdesc.hxx"
 
 //============================================================================
 
@@ -135,21 +136,27 @@ void ScParaWin::UpdateArgDesc( USHORT nArg )
 
         if ( nArgs < VAR_ARGS )
         {
-            aArgDesc  = *(pFuncDesc->aDefArgDescs[nArg]);
-            aArgName  = *(pFuncDesc->aDefArgNames[nArg]);
-            aArgName += ScGlobal::GetRscString( (pFuncDesc->aDefArgOpt[nArg]) ?
-                                                    STR_OPTIONAL : STR_REQUIRED );
+            USHORT nRealArg = aVisibleArgMapping[nArg];
+            aArgDesc  = *(pFuncDesc->ppDefArgDescs[nRealArg]);
+            aArgName  = *(pFuncDesc->ppDefArgNames[nRealArg]);
+            aArgName += ' ';
+            aArgName += ScGlobal::GetRscString(
+                    (pFuncDesc->pDefArgFlags[nRealArg].bOptional) ?
+                    STR_OPTIONAL : STR_REQUIRED );
         }
         else
         {
             USHORT nFix = nArgs - VAR_ARGS;
             USHORT nPos = ( nArg < nFix ? nArg : nFix );
-            aArgDesc  = *(pFuncDesc->aDefArgDescs[nPos]);
-            aArgName  = *(pFuncDesc->aDefArgNames[nPos]);
+            USHORT nRealArg = (nPos < aVisibleArgMapping.size() ?
+                    aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+            aArgDesc  = *(pFuncDesc->ppDefArgDescs[nRealArg]);
+            aArgName  = *(pFuncDesc->ppDefArgNames[nRealArg]);
             if ( nArg >= nFix )
                 aArgName += String::CreateFromInt32(nArg-nFix+1);
+            aArgName += ' ';
             aArgName += ScGlobal::GetRscString(
-                (nArg > nFix || pFuncDesc->aDefArgOpt[nPos]) ?
+                (nArg > nFix || pFuncDesc->pDefArgFlags[nRealArg].bOptional) ?
                 STR_OPTIONAL : STR_REQUIRED );
         }
 
@@ -165,25 +172,29 @@ void ScParaWin::UpdateArgInput( USHORT nOffset, USHORT i )
     {
         if(nArg<nArgs)
         {
-            SetArgNameFont  (i,(pFuncDesc->aDefArgOpt[nArg])
+            USHORT nRealArg = aVisibleArgMapping[nArg];
+            SetArgNameFont  (i,(pFuncDesc->pDefArgFlags[nRealArg].bOptional)
                                             ? aFntLight : aFntBold );
-            SetArgName      (i,*(pFuncDesc->aDefArgNames[nArg]));
+            SetArgName      (i,*(pFuncDesc->ppDefArgNames[nRealArg]));
         }
     }
     else
     {
         USHORT nFix = nArgs - VAR_ARGS;
         USHORT nPos = ( nArg < nFix ? nArg : nFix );
-        SetArgNameFont( i, (nArg > nFix || pFuncDesc->aDefArgOpt[nPos]) ?
-            aFntLight : aFntBold );
+        USHORT nRealArg = (nPos < aVisibleArgMapping.size() ?
+                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+        SetArgNameFont( i,
+                (nArg > nFix || pFuncDesc->pDefArgFlags[nRealArg].bOptional) ?
+                aFntLight : aFntBold );
         if ( nArg >= nFix )
         {
-            String aArgName( *(pFuncDesc->aDefArgNames[nPos]) );
+            String aArgName( *(pFuncDesc->ppDefArgNames[nRealArg]) );
             aArgName += String::CreateFromInt32(nArg-nFix+1);
             SetArgName( i, aArgName );
         }
         else
-            SetArgName( i, *(pFuncDesc->aDefArgNames[nPos]) );
+            SetArgName( i, *(pFuncDesc->ppDefArgNames[nRealArg]) );
     }
     if(nArg<nArgs) SetArgVal(i,*(aParaArray[nArg]));
     //@ aArgInput[i].SetArgVal( *(pArgArr[nOffset+i]) );
@@ -295,7 +306,7 @@ void ScParaWin::SetFunctionDesc(const ScFuncDesc* pFDesc)
     SetArgumentDesc( EMPTY_STRING );
     SetArgumentText( EMPTY_STRING );
     SetEditDesc( EMPTY_STRING );
-    nArgs=0;
+    nArgs = 0;
     if ( pFuncDesc!=NULL)
     {
         if(pFuncDesc->pFuncDesc != NULL)
@@ -307,7 +318,8 @@ void ScParaWin::SetFunctionDesc(const ScFuncDesc* pFDesc)
             SetEditDesc(aDefaultString);
         }
         long nHelpId = pFuncDesc->nHelpId;
-        nArgs=pFuncDesc->nArgCount;
+        nArgs = pFuncDesc->GetSuppressedArgCount();
+        aVisibleArgMapping = pFuncDesc->GetVisibleArgMapping();
         aSlider.Hide();
         SetHelpId( nHelpId );
         aEdArg1.SetHelpId( nHelpId );
@@ -398,14 +410,13 @@ void ScParaWin::InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnF
 void ScParaWin::ClearAll()
 {
     SetFunctionDesc(NULL);
-    SetArgCount(0,0);
+    SetArgumentOffset(0);
 }
 
-void ScParaWin::SetArgCount(USHORT Count, USHORT nOffset)
+void ScParaWin::SetArgumentOffset(USHORT nOffset)
 {
     DelParaArray();
     aSlider.SetThumbPos(0);
-    nArgs=Count;
     int i;
     for(i=0;i<nArgs;i++)
         aParaArray.Insert( new String, aParaArray.Count() );
