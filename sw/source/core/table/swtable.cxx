@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:11:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1049,8 +1049,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             SwFmtHoriOrient aOri( pFmt->GetHoriOrient() );
             if(text::HoriOrientation::NONE != aOri.GetHoriOrient())
             {
-                BOOL bLeftDist = rNew.GetLeft() != nShLeft;
-                BOOL bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
+                const BOOL bLeftDist = rNew.GetLeft() != nShLeft;
+                const BOOL bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
                 if(!bLeftDist && !bRightDist)
                     aOri.SetHoriOrient( text::HoriOrientation::FULL );
                 else if(!bRightDist && rNew.GetLeft() > nShLeft )
