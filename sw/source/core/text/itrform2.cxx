@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:06:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,8 +473,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     const sal_Bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
+    const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
     const USHORT nGridWidth = bHasGrid ?
-                              pGrid->GetBaseHeight() : 0;
+                                GETGRIDWIDTH(pGrid,pDoc) : 0;   //for textgrid refactor
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
