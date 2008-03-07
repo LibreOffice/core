@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 12:28:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_USEBACKUPEXCEPTION_HPP_
 #include <com/sun/star/embed/UseBackupException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
@@ -3817,5 +3820,120 @@ BOOL SfxMedium::IsOpen() const
     }
 
     return aResult;
+}
+
+::rtl::OUString SfxMedium::SwitchDocumentToTempFile()
+{
+    // the method returns empty string in case of failure
+    ::rtl::OUString aResult;
+    ::rtl::OUString aOrigURL = aLogicName;
+
+    if ( aOrigURL.getLength() )
+    {
+        sal_Int32 nPrefixLen = aOrigURL.lastIndexOf( '.' );
+        String aExt = ( nPrefixLen == -1 ) ? String() : String( aOrigURL.copy( nPrefixLen ) );
+        ::rtl::OUString aNewURL = ::utl::TempFile( String(), &aExt ).GetURL();
+
+        if ( aNewURL.getLength() )
+        {
+            uno::Reference< embed::XStorage > xStorage = GetStorage();
+            uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );
+
+            if ( xOptStorage.is() )
+            {
+                CanDisposeStorage_Impl( sal_False );
+                Close();
+                SetPhysicalName_Impl( String() );
+                SetName( aNewURL );
+
+                // remove the readonly state
+                sal_Bool bWasReadonly = sal_False;
+                nStorOpenMode = SFX_STREAM_READWRITE;
+                SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+                if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
+                    bWasReadonly = sal_True;
+                GetItemSet()->ClearItem( SID_DOC_READONLY );
+
+                GetMedium_Impl();
+
+                if ( pImp->xStream.is() )
+                {
+                    try
+                    {
+                        xOptStorage->writeAndAttachToStream( pImp->xStream );
+                        pImp->xStorage = xStorage;
+                        aResult = aNewURL;
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
+                if ( !aResult.getLength() )
+                {
+                    Close();
+                    SetPhysicalName_Impl( String() );
+                    SetName( aOrigURL );
+                    if ( bWasReadonly )
+                    {
+                        // set the readonly state back
+                        nStorOpenMode = SFX_STREAM_READONLY;
+                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                    }
+                    GetMedium_Impl();
+                    pImp->xStorage = xStorage;
+                }
+            }
+        }
+    }
+
+    return aResult;
+}
+
+sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
+{
+    sal_Bool bResult = sal_False;
+    ::rtl::OUString aOrigURL = aLogicName;
+
+    if ( aURL.getLength() && aOrigURL.getLength() )
+    {
+        uno::Reference< embed::XStorage > xStorage = GetStorage();
+        uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );
+
+        if ( xOptStorage.is() )
+        {
+            CanDisposeStorage_Impl( sal_False );
+            Close();
+            SetPhysicalName_Impl( String() );
+            SetName( aURL );
+            GetMedium_Impl();
+
+            if ( pImp->xStream.is() )
+            {
+                try
+                {
+                    uno::Reference< io::XTruncate > xTruncate( pImp->xStream, uno::UNO_QUERY_THROW );
+                    if ( xTruncate.is() )
+                        xTruncate->truncate();
+
+                    xOptStorage->writeAndAttachToStream( pImp->xStream );
+                    pImp->xStorage = xStorage;
+                    bResult = sal_True;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !bResult )
+            {
+                Close();
+                SetPhysicalName_Impl( String() );
+                SetName( aOrigURL );
+                GetMedium_Impl();
+                pImp->xStorage = xStorage;
+            }
+        }
+    }
+
+    return bResult;
 }
 
