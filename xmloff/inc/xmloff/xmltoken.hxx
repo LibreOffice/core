@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:16:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:16:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2076,6 +2076,12 @@ namespace xmloff { namespace token {
         XML_LAYOUT_GRID_RUBY_BELOW,
         XML_LAYOUT_GRID_PRINT,
         XML_LAYOUT_GRID_DISPLAY,
+
+        //text grid enhancement for better CJK support
+        XML_DEFAULT_PAGE_LAYOUT,
+        XML_LAYOUT_GRID_STANDARD_MODE,
+        XML_LAYOUT_GRID_BASE_WIDTH,
+        XML_LAYOUT_GRID_SNAP_TO_CHARS,
 
         XML_SNAP_TO_LAYOUT_GRID,
         XML_DONT_BALANCE_TEXT_COLUMNS,
