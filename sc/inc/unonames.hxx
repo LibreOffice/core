@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:22:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,6 +609,8 @@
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
+
+#define SC_UNO_SHAREDOC             "IsDocumentShared"
 
 #endif
 
