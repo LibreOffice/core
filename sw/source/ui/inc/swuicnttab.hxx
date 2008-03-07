@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuicnttab.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:24:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,6 +412,11 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText       aChapterEntryFT;
     ListBox         aChapterEntryLB;    // type of chapter info
 
+    FixedText       aNumberFormatFT;
+    ListBox         aNumberFormatLB;    //!< format for numbering (E#)
+
+    FixedText       aEntryOutlineLevelFT;    //!< Fixed text, for i53420
+    NumericField    aEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
     FixedText       aFillCharFT;
     ComboBox        aFillCharCB;        // fill char for tab stop
     FixedText       aTabPosFT;
@@ -463,6 +468,11 @@ class SwTOXEntryTabPage : public SfxTabPage
     CurTOXType      aLastTOXType;
     BOOL            bInLevelHdl;
 
+    Point           aChapterEntryFTPosition; //!< holds position of ChapterEntryFT control,
+                                             //to be used in moving the element among different tokens
+    Point           aEntryOutlineLevelFTPosition;//!< holds position ofrEntryOutlineLevelFT control
+    sal_Int32       nBiasToEntryPoint;
+
     DECL_LINK(StyleSelectHdl, ListBox*);
     DECL_LINK(EditStyleHdl, PushButton*);
     DECL_LINK(InsertTokenHdl, PushButton*);
@@ -474,6 +484,9 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(RemoveInsertAuthHdl, PushButton*);
     DECL_LINK(SortKeyHdl, RadioButton*);
     DECL_LINK(ChapterInfoHdl, ListBox*);
+    DECL_LINK(ChapterInfoOutlineHdl, NumericField*);
+    DECL_LINK(NumberFormatHdl, ListBox*);
+
     DECL_LINK(AllLevelsHdl, PushButton*);
 
     void            EnableButtons();
