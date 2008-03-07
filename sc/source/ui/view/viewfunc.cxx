@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:22:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include "sizedev.hxx"
 #include "editable.hxx"
 #include "scui_def.hxx" //CHINA001
+#include "funcdesc.hxx"
 //==================================================================
 
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
