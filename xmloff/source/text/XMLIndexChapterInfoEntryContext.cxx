@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:57:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,9 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
                                    rTemplate, nPrfx, rLocalName),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
         bChapterInfoOK(sal_False),
-        bTOC( bT )
+        bTOC( bT ),
+        nOutlineLevel( 0 ),
+        bOutlineLevelOK(sal_False)
 {
 }
 
@@ -120,7 +122,7 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
     { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
 // not supported by the template:
 //  { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
-//  { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
+    { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
 };
 
@@ -142,7 +144,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
                 bCharStyleNameOK = sal_True;
             }
-            else if ( !bTOC && IsXMLToken( sLocalName, XML_DISPLAY ) )
+            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )//i53420, always true, in TOC as well
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
@@ -151,6 +153,17 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 {
                     nChapterInfo = nTmp;
                     bChapterInfoOK = sal_True;
+                }
+            }
+            else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
+            {
+                sal_Int32 nTmp;
+
+                if (SvXMLUnitConverter::convertNumber(nTmp, xAttrList->getValueByIndex(nAttr)))
+                {
+//control on range is carried out in the UNO level
+                    nOutlineLevel = static_cast<sal_uInt16>(nTmp);
+                    bOutlineLevelOK = sal_True;
                 }
             }
         }
@@ -167,6 +180,8 @@ void XMLIndexChapterInfoEntryContext::StartElement(
     {
         nValues++;
     }
+    if (bOutlineLevelOK)
+        nValues++;
 }
 
 void XMLIndexChapterInfoEntryContext::FillPropertyValues(
@@ -176,13 +191,22 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     // entry name and (optionally) style name in parent class
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
+    sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
+
     if( bChapterInfoOK )
     {
         // chapter info field
-        sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
         rValues[nIndex].Name = rTemplateContext.sChapterFormat;
         Any aAny;
         aAny <<= nChapterInfo;
+        rValues[nIndex].Value = aAny;
+        nIndex++;
+    }
+    if( bOutlineLevelOK )
+    {
+        rValues[nIndex].Name = rTemplateContext.sChapterLevel;
+        Any aAny;
+        aAny <<= nOutlineLevel;
         rValues[nIndex].Value = aAny;
     }
 }
