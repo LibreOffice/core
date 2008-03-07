@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:22:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -737,6 +737,9 @@ String SwFormToken::GetString() const
     else if(TOKEN_CHAPTER_INFO == eTokenType)
     {
         sRet += String::CreateFromInt32( nChapterFormat );
+//add maximum permetted level
+        sRet += ',';
+        sRet += String::CreateFromInt32( nOutlineLevel );
     }
     else if(TOKEN_TEXT == eTokenType)
     {
@@ -752,6 +755,14 @@ String SwFormToken::GetString() const
         else
             bAppend = FALSE;
     }
+    else if(TOKEN_ENTRY_NO == eTokenType)
+    {
+        sRet += String::CreateFromInt32( nChapterFormat );
+//add maximum permitted level
+        sRet += ',';
+        sRet += String::CreateFromInt32( nOutlineLevel );
+    }
+
     if(bAppend)
     {
         sRet += '>';
@@ -803,6 +814,14 @@ SwFormToken SwFormTokensHelper::BuildToken( const String & sPattern,
 
     switch( eTokenType )
     {
+//i53420
+    case TOKEN_ENTRY_NO:
+        if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
+            eRet.nChapterFormat = static_cast<USHORT>(sTmp.ToInt32());
+        if( (sTmp = sToken.GetToken( 3, ',' ) ).Len() )
+            eRet.nOutlineLevel = static_cast<USHORT>(sTmp.ToInt32()); //the maximum outline level to examine
+        break;
+
     case TOKEN_TEXT:
         {
             xub_StrLen nStartText = sToken.Search( TOX_STYLE_DELIMITER );
@@ -836,6 +855,10 @@ SwFormToken SwFormTokensHelper::BuildToken( const String & sPattern,
     case TOKEN_CHAPTER_INFO:
         if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
             eRet.nChapterFormat = static_cast<USHORT>(sTmp.ToInt32()); //SwChapterFormat;
+ //i53420
+        if( (sTmp = sToken.GetToken( 3, ',' ) ).Len() )
+            eRet.nOutlineLevel = static_cast<USHORT>(sTmp.ToInt32()); //the maximum outline level to examine
+
         break;
 
     case TOKEN_AUTHORITY:
