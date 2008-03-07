@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:41:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,6 @@
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
 #endif
-
-#include "doc.hxx"
-#include "docsh.hxx"
-#include "../../../inc/PostItMgr.hxx"
-#include "../../ui/inc/view.hxx"
-
 
 #include "reffld.hxx"
 #include "ddefld.hxx"
