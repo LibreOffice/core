@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:38:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1981,7 +1981,7 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 void SdrMarkView::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHORT nVal, USHORT nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
-    xub_StrLen nPos = rStr.SearchAscii("%O");
+    xub_StrLen nPos = rStr.SearchAscii("%1");
 
     if(nPos != STRING_NOTFOUND)
     {
@@ -2001,7 +2001,7 @@ void SdrMarkView::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USH
         }
     }
 
-    nPos = rStr.SearchAscii("%N");
+    nPos = rStr.SearchAscii("%2");
 
     if(nPos != STRING_NOTFOUND)
     {
