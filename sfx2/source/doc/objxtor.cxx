@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:55:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/sharecontrolfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
@@ -306,6 +307,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bLoadReadonly( sal_False )
     ,bUseUserData( sal_True )
     ,bSaveVersionOnClose( sal_False )
+    ,m_bIsDocShared( sal_False )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,bDoNotTouchDocInfo( sal_False )
@@ -453,6 +455,27 @@ SfxObjectShell::~SfxObjectShell()
     if ( pMedium )
     {
         pMedium->CloseAndReleaseStreams_Impl();
+
+        if ( IsDocShared() )
+        {
+            ::rtl::OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            if ( GetSharedFileUrl().getLength() && !SfxMedium::EqualURLs( aTempFileURL, GetSharedFileUrl() ) )
+            {
+                try
+                {
+                    ::svt::ShareControlFile aControlFile( GetSharedFileUrl() );
+                    aControlFile.RemoveEntry();
+                }
+                catch( uno::Exception& )
+                {
+                }
+
+
+                // now remove the temporary file the document is based currently on
+                ::utl::UCBContentHelper::Kill( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+            }
+        }
+
         DELETEX( pMedium );
     }
 
