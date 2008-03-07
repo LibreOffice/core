@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 16:22:18 $
+#   last change: $Author: kz $ $Date: 2008-03-07 17:12:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,13 +69,7 @@ SLOFILES=\
             $(SLO)$/soicon.obj			\
             $(SLO)$/sm.obj				\
             $(SLO)$/keysymnames.obj		\
-            $(SLO)$/wmadaptor.obj		\
-            $(SLO)$/salsound2.obj		\
-            $(SLO)$/osssound.obj		\
-            $(SLO)$/devaudiosound.obj		\
-            $(SLO)$/audioconvert.obj		\
-            $(SLO)$/rptpsound.obj		\
-            $(SLO)$/nassound.obj		
+            $(SLO)$/wmadaptor.obj
 
 EXCEPTIONSFILES=\
             $(SLO)$/wmadaptor.obj		\
@@ -86,22 +80,6 @@ EXCEPTIONSFILES=\
             $(SLO)$/i18n_ic.obj				\
             $(SLO)$/salsys.obj
 
-
-.IF "$(ENABLE_NAS)" != ""
-CDEFS+=-DUSE_NAS
-.ENDIF
-
-.IF "$(ENABLE_PASF)" != ""
-CDEFS+=-DUSE_PASF -DPA_VER=$(PA_VER)
-SLOFILES+=$(SLO)$/pasfsound.obj
-.IF "$(SYSTEM_SNDFILE)" == "YES"
-CDEFS+=-DSYSTEM_SNDFILE
-CFLAGS+=$(SNDFILE_CFLAGS)
-.ENDIF
-.IF "$(SYSTEM_PORTAUDIO)" == "YES"
-CDEFS+=-DSYSTEM_PORTAUDIO
-.ENDIF
-.ENDIF
 
 .IF "$(USE_XINERAMA)" != "NO"
 CDEFS+=-DUSE_XINERAMA
