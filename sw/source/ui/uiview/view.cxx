@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:26:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1460,16 +1460,21 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         const beans::PropertyValue *pValue = rSequence.getConstArray();
         const SwRect& rRect = pWrtShell->GetCharRect();
         const Rectangle &rVis = GetVisArea();
+        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
 
         long nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
         long nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
-        sal_Int16 nZoomType = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
-        sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
+        sal_Int16 nZoomType = static_cast< sal_Int16 >(pVOpt->GetZoomType());
+        sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pVOpt->GetZoom());
+        bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
+        sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
+
         sal_Bool bSelectedFrame = ( pWrtShell->GetSelFrmType() != FRMTYPE_NONE ),
                  bGotViewLeft = sal_False, bGotViewTop = sal_False, bGotVisibleLeft = sal_False,
                  bGotVisibleTop = sal_False, bGotVisibleRight = sal_False,
                  bGotVisibleBottom = sal_False, bGotZoomType = sal_False,
-                 bGotZoomFactor = sal_False, bGotIsSelectedFrame = sal_False;
+                 bGotZoomFactor = sal_False, bGotIsSelectedFrame = sal_False,
+                 bGotViewLayoutColumns = sal_False, bGotViewLayoutBookMode = sal_False;
 
         for (sal_Int16 i = 0 ; i < nLength; i++)
         {
@@ -1519,10 +1524,15 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                pValue->Value >>= nZoomFactor;
                bGotZoomFactor = sal_True;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLayoutColumns" ) ) )
             {
-               bSelectedFrame = * (sal_Bool *) pValue->Value.getValue();
-               bGotIsSelectedFrame = sal_True;
+               pValue->Value >>= nViewLayoutColumns;
+               bGotViewLayoutColumns = sal_True;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLayoutBookMode" ) ) )
+            {
+               bViewLayoutBookMode = * (sal_Bool *) pValue->Value.getValue();
+               bGotViewLayoutBookMode = sal_True;
             }
             pValue++;
         }
@@ -1572,11 +1582,35 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                 }
                 SelectShell();
 
-                pWrtShell->StartAction();
-                const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
-                if ( bGotZoomType && bGotZoomFactor &&
-                   ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
+                // Set ViewLayoutSettings
+                const bool bSetViewLayoutSettings = bGotViewLayoutColumns && bGotViewLayoutBookMode &&
+                                                    ( pVOpt->GetViewLayoutColumns() != nViewLayoutColumns || pVOpt->IsViewLayoutBookMode() != bViewLayoutBookMode );
+
+                const bool bSetViewSettings = bGotZoomType && bGotZoomFactor &&
+                                              ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom );
+
+                // In case we have a 'fixed' view layout of 2 or more columns,
+                // we have to apply the view options *before* starting the action.
+                // Otherwsie the SetZoom function cannot work correctly, because
+                // the view layout hasn't been calculated.
+                const bool bZoomNeedsViewLayout = bSetViewLayoutSettings &&
+                                                  1 < nViewLayoutColumns &&
+                                                  bSetViewSettings &&
+                                                  eZoom != SVX_ZOOM_PERCENT;
+
+
+                if ( !bZoomNeedsViewLayout )
+                    pWrtShell->StartAction();
+
+                if ( bSetViewLayoutSettings )
+                    SetViewLayout( nViewLayoutColumns, bViewLayoutBookMode, sal_True );
+
+                if ( bZoomNeedsViewLayout )
+                    pWrtShell->StartAction();
+
+                if ( bSetViewSettings )
                     SetZoom( eZoom, nZoomFactor, sal_True );
+
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
 //#i43146# go to the last editing position when opening own files
@@ -1611,7 +1645,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         }
     }
 }
-#define NUM_VIEW_SETTINGS 10
+#define NUM_VIEW_SETTINGS 12
 void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     const SwRect& rRect = pWrtShell->GetCharRect();
@@ -1653,9 +1687,19 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
     pValue++;nIndex++;
 
-    sal_Int16 nInt16 = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
     pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomType" ) );
-    pValue->Value <<= nInt16;
+    const sal_Int16 nZoomType = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
+    pValue->Value <<= nZoomType;
+    pValue++;nIndex++;
+
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLayoutColumns" ) );
+    const sal_Int16 nViewLayoutColumns = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetViewLayoutColumns());
+    pValue->Value <<= nViewLayoutColumns;
+    pValue++;nIndex++;
+
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLayoutBookMode" ) );
+    const sal_Bool bIsViewLayoutBookMode = pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
+    pValue->Value.setValue( &bIsViewLayoutBookMode, ::getBooleanCppuType() );
     pValue++;nIndex++;
 
     pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomFactor" ) );
@@ -1663,7 +1707,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsSelectedFrame" ) );
-    sal_Bool bIsSelected = FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
+    const sal_Bool bIsSelected = FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
     pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;
 
