@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:45:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1281,7 +1281,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
     XclExpExtFuncData aExtFuncData;
 
     // no exportable function found - try to create an external macro call
-    if( !pFuncInfo && (eOpCode > ocEndUnOp) )
+    if( !pFuncInfo && (eOpCode >= SC_OPCODE_START_NO_PAR) )
     {
         const String& rFuncName = ScCompiler::GetStringFromOpCode( eOpCode );
         if( rFuncName.Len() )
