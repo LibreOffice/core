@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:36:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@
 #include "dbcolect.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
+#include "funcdesc.hxx"
 
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
