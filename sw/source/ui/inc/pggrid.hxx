@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:21:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class SwTextGridPage: public SfxTabPage
     RadioButton     aNoGridRB;
     RadioButton     aLinesGridRB;
     RadioButton     aCharsGridRB;
+    CheckBox        aSnapToCharsCB;
 
     SwPageGridExample   aExampleWN;
 
@@ -74,6 +75,9 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aCharsPerLineFT;
     NumericField    aCharsPerLineNF;
 
+    FixedText       aCharWidthFT;
+    MetricField     aCharWidthMF;
+
     FixedText       aRubySizeFT;
     MetricField     aRubySizeMF;
 
@@ -86,12 +90,13 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
-    Window*         aControls[16];
+    Window*         aControls[18];
 
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;
     Size            m_aPageSize;
     sal_Bool        m_bVertical;
+    sal_Bool        m_bSquaredMode;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
@@ -100,7 +105,8 @@ class SwTextGridPage: public SfxTabPage
     void PutGridItem(SfxItemSet& rSet);
 
     DECL_LINK(GridTypeHdl, RadioButton*);
-    DECL_LINK(CharSizeChangedHdl, SpinField*);
+    DECL_LINK(CharorLineChangedHdl, SpinField*);
+    DECL_LINK(TextSizeChangedHdl, SpinField*);
     DECL_LINK(GridModifyHdl, void*);
     DECL_LINK(DisplayGridHdl, CheckBox*);
 
