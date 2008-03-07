@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.127 $
+#   $Revision: 1.128 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 14:20:14 $
+#   last change: $Author: kz $ $Date: 2008-03-07 17:21:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.127 $$"
+LIBSMKREV!:="$$Revision: 1.128 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -136,7 +136,6 @@ LDAPSDKLIB=-lldap50
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 ICOLIB=-lico$(DLLPOSTFIX)
 VCLLIB=-lvcl$(DLLPOSTFIX)
-SNDFILELIB*=-lsndfile
 BASEGFXLIB=-lbasegfx$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(DLLPOSTFIX)
