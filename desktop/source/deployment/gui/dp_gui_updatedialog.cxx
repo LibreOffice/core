@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:17:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,8 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
+namespace css = ::com::sun::star;
+
 using dp_gui::UpdateDialog;
 
 namespace {
@@ -157,6 +159,8 @@ struct UpdateDialog::DisabledUpdate {
     rtl::OUString name;
     css::uno::Sequence< rtl::OUString > unsatisfiedDependencies;
     bool permission;
+    // We also want to show release notes and publisher for disabled updates
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
 };
 
 struct UpdateDialog::SpecificError {
@@ -299,7 +303,6 @@ private:
     // guarded by Application::GetSolarMutex():
     css::uno::Reference< css::task::XAbortChannel > m_abort;
     bool m_stop;
-    bool m_infoSharedDone;
 };
 
 UpdateDialog::Thread::Thread(
@@ -314,8 +317,7 @@ UpdateDialog::Thread::Thread(
     m_packageManagers(packageManagers),
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
-    m_stop(false),
-    m_infoSharedDone(false)
+    m_stop(false)
 {}
 
 void UpdateDialog::Thread::stop() {
@@ -514,20 +516,6 @@ void UpdateDialog::Thread::handle(
     } else {
         css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
             infos(getUpdateInformation(package, urls, id));
-        //If there is an update for a shared extension and this user has writer
-        //access tho office/shared then we need to warn the user.
-        if ( ! m_infoSharedDone && infos.getLength() > 0
-             && packageManager->getContext().equals(OUSTR("shared"))
-             && ! packageManager->isReadOnly())
-        {
-            vos::OGuard guard(Application::GetSolarMutex());
-            InfoBox box(&m_dialog, ResId(RID_INFOBOX_UPDATE_SHARED_EXTENSION,
-                                        *DeploymentGuiResMgr::get()));
-            String msgText = box.GetMessText();
-            msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-            box.Execute();
-            m_infoSharedDone = true;
-        }
         rtl::OUString latestVersion(package->getVersion());
         sal_Int32 latestIndex = -1;
         for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
@@ -568,7 +556,9 @@ bool UpdateDialog::Thread::update(
     OSL_ASSERT(infoset.getVersion().getLength() != 0);
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > > ds(
         dp_misc::Dependencies::check(infoset));
+
     UpdateDialog::DisabledUpdate du;
+    du.aUpdateInfo = updateInfo;
     du.unsatisfiedDependencies.realloc(ds.getLength());
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
         du.unsatisfiedDependencies[i] = dp_misc::Dependencies::name(ds[i]);
@@ -576,6 +566,8 @@ bool UpdateDialog::Thread::update(
     du.permission = ! packageManager->isReadOnly();
     const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
     rtl::OUStringBuffer b(package->getDisplayName());
+    b.append(static_cast< sal_Unicode >(' '));
+    b.append(m_dialog.m_version);
     b.append(static_cast< sal_Unicode >(' '));
     b.append(infoset.getVersion());
     if (updateWebsiteURL)
@@ -611,6 +603,7 @@ bool UpdateDialog::Thread::update(
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
+    rtl::Reference<dp_gui::DialogImpl> const & extensionManagerDialog ,
     rtl::Reference< dp_gui::SelectedPackageIterator > const & selectedPackages,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
@@ -645,13 +638,15 @@ UpdateDialog::UpdateDialog(
     m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
     m_noPermissionVista(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION_VISTA))),
     m_browserbased(String(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED))),
+    m_version(String(DpGuiResId(RID_DLG_UPDATE_VERSION))),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
             context, *this, selectedPackages,
             packageManagers)),
     m_nFirstLineDelta(0),
-    m_nOneLineMissing(0)
+    m_nOneLineMissing(0),
+    m_extensionManagerDialog(extensionManagerDialog)
 
 {
     OSL_ASSERT(updateData != NULL);
@@ -695,7 +690,6 @@ UpdateDialog::UpdateDialog(
     if ( ! dp_misc::office_is_running())
         m_help.Disable();
     FreeResource();
-
     String sTemp(m_noPermissionVista);
     sTemp.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     m_noPermissionVista = sTemp;
@@ -785,15 +779,6 @@ void UpdateDialog::addAdditional(
 void UpdateDialog::addEnabledUpdate(
     rtl::OUString const & name, dp_gui::UpdateData const & data)
 {
-// this shows how we get the publisher and release notes information
-    dp_misc::DescriptionInfoset infoset(m_context, data.aUpdateInfo);
-    std::pair< rtl::OUString, rtl::OUString > pairPub = infoset.getLocalizedPublisherNameAndURL();
-    rtl::OUString sPub = pairPub.first;
-    rtl::OUString sURL = pairPub.second;
-
-    rtl::OUString sRel = infoset.getLocalizedReleaseNotesURL();
-//--------------------------------------------------------------------
-
     std::vector< dp_gui::UpdateData >::size_type n = m_enabledUpdates.size();
     m_enabledUpdates.push_back(data);
     insertItem(
@@ -1034,9 +1019,9 @@ void UpdateDialog::clearDescription()
     m_descriptions.SetPosSizePixel( m_aFirstLinePos, m_aFirstLineSize );
 }
 
-bool UpdateDialog::showDescription( const dp_gui::UpdateData& rData )
+bool UpdateDialog::showDescription(css::uno::Reference< css::xml::dom::XNode > const & aUpdateInfo)
 {
-    dp_misc::DescriptionInfoset infoset(m_context, rData.aUpdateInfo);
+    dp_misc::DescriptionInfoset infoset(m_context, aUpdateInfo);
     std::pair< rtl::OUString, rtl::OUString > pairPub = infoset.getLocalizedPublisherNameAndURL();
     rtl::OUString sPub = pairPub.first;
     rtl::OUString sURL = pairPub.second;
@@ -1106,10 +1091,17 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
     {
         //When the index is greater or equal than the amount of enabled updates then the "Show all"
         //button is probably checked. Then we show first all enabled and then the disabled
-        //updates. Currently release notes and publisher name for disabled updates are not supported.
+        //updates.
         USHORT pos = m_updates.GetSelectEntryPos();
-        if (pos < m_enabledUpdates.size())
-            bInserted = showDescription(m_enabledUpdates[pos]);
+        const std::vector< dp_gui::UpdateData >::size_type sizeEnabled =
+            m_enabledUpdates.size();
+        const std::vector< UpdateDialog::DisabledUpdate >::size_type sizeDisabled =
+            m_disabledUpdates.size();
+        if (pos < sizeEnabled)
+            bInserted = showDescription(m_enabledUpdates[pos].aUpdateInfo);
+        else if (pos >= sizeEnabled
+            && pos < (sizeEnabled + sizeDisabled))
+            bInserted = showDescription(m_disabledUpdates[pos - sizeEnabled].aUpdateInfo);
 
         switch (p->kind)
         {
@@ -1244,7 +1236,25 @@ IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG) {
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG) {
+IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
+{
+    //If users are going to update a shared extension then we need
+    //to warn them
+    typedef ::std::vector<UpdateData>::const_iterator CIT;
+    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); i++)
+    {
+        OSL_ASSERT(i->aPackageManager.is());
+        //If the user has no write access to the shared folder then the update
+        //for a shared extension is disable, that is it cannot be in m_enabledUpdates
+        OSL_ASSERT(i->aPackageManager->isReadOnly() == sal_False);
+        OSL_ASSERT(m_extensionManagerDialog.get());
+        if (RET_CANCEL == m_extensionManagerDialog->continueUpdateForSharedExtension(
+            this, i->aPackageManager))
+        {
+            EndDialog(RET_CANCEL);
+        }
+    }
+
     for (USHORT i = 0; i < m_updates.getItemCount(); ++i) {
         UpdateDialog::Index const * p =
             static_cast< UpdateDialog::Index const * >(
