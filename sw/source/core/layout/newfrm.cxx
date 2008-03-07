@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:03:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,6 +476,13 @@ void InitCurrShells( SwRootFrm *pRoot )
 SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
         XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ) ),
+    // --> PAGES01
+    maPagesArea(),
+    mnViewWidth( -1 ),
+    mnColumns( 0 ),
+    mbBookMode( false ),
+    mbSidebarChanged( false ),
+    // <--
     nBrowseWidth( MM50*4 ), //2cm Minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
