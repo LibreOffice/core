@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:23:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1838,16 +1838,31 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 
         } while ( pTmpFrm );
 
+        const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
+
+        // set view columns before toggling:
+        if ( bSet )
+        {
+            const USHORT nColumns  = rViewOptions.GetViewLayoutColumns();
+            const bool   bBookMode = rViewOptions.IsViewLayoutBookMode();
+            if ( 1 != nColumns || bBookMode )
+            {
+                ((SwView*)GetView())->SetViewLayout( 1, false );
+            }
+        }
+
         // Triggeres a formatting:
         pTempView->GetWrtShell().CheckBrowseView( TRUE );
         pTempView->CheckVisArea();
 
-        SvxZoomType eType;
-        if( GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-              SVX_ZOOM_PERCENT != (eType = (SvxZoomType)pTempView->
-                            GetWrtShell().GetViewOptions()->GetZoomType()) )
+        if( GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
-            ((SwView*)GetView())->SetZoom( eType );
+            const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
+
+            if ( SVX_ZOOM_PERCENT != eType)
+            {
+                ((SwView*)GetView())->SetZoom( eType );
+            }
         }
         pTempView->InvalidateBorder();
         pTempView->SetNewWindowAllowed(!bSet);
