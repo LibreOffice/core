@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:32:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,12 +420,12 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         default:
             ASSERT(!this, "Unknown grid type");
         case 3:
-            //Text snaps to char grid, this doesn't make a lot of sense to
-            //me. This is closer than LINES_CHARS
-            eType = GRID_LINES_ONLY;
+            eType = GRID_LINES_CHARS;
+            aGrid.SetSnapToChars(sal_True);
             break;
         case 1:
             eType = GRID_LINES_CHARS;
+            aGrid.SetSnapToChars(sal_False);
             break;
         case 2:
             eType = GRID_LINES_ONLY;
@@ -437,6 +437,11 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     //Seems to force this behaviour in word ?
     if (eType != GRID_NONE)
         rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, true);
+
+    //force to set document as standard page mode
+    sal_Bool bSquaredMode = sal_False;
+    rDoc.SetDefaultPageMode( bSquaredMode );
+    aGrid.SetSquaredMode( bSquaredMode );
 
     //sep.dyaLinePitch
     sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
@@ -468,11 +473,15 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         nCharWidth += nFraction;
     }
 
+    aGrid.SetBaseWidth( writer_cast<sal_uInt16>(nCharWidth));
     aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
-    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nCharWidth));
-    sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
-    if (nRubyHeight < 0)
-        nRubyHeight = 0;
+    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+
+    // ruby height is not supported in ww8
+    //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
+    //if (nRubyHeight < 0)
+    //    nRubyHeight = 0;
+    sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
     rFmt.SetAttr(aGrid);
