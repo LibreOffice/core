@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:17:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,6 @@ private:
     Point                       aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
     Rectangle                   aDragSelRect;
     Point                       aPosOfInsertMarker;
-    Sound*                      pSound;
     FSS_IsShowingEffectInfo*    pIsShowingEffectInfo;
 
     void                        DrawInsertMarker(BOOL bShow);
