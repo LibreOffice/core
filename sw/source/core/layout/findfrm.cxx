@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:25:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -639,16 +639,44 @@ const SwFtnFrm* SwFtnContFrm::FindFootNote() const
     return NULL;
 }
 
-const SwPageFrm* SwRootFrm::GetPageAtPos( const Point &rPt ) const
+const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, bool bExtend ) const
 {
-    if( !Frm().IsInside( rPt ) )
-        return 0;
+    const SwPageFrm* pRet = 0;
+
+    SwRect aRect;
+    if ( pSize )
+    {
+        aRect.Pos()  = rPt;
+        aRect.SSize() = *pSize;
+    }
+
     const SwFrm* pPage = Lower();
-    while( pPage && rPt.Y() > pPage->Frm().Bottom() )
+
+    if ( !bExtend )
+    {
+        if( !Frm().IsInside( rPt ) )
+            return 0;
+
+        // skip pages above point:
+        while( pPage && rPt.Y() > pPage->Frm().Bottom() )
+            pPage = pPage->GetNext();
+    }
+
+    ASSERT( GetPageNum() <= maPageRects.size(), "number of pages differes from page rect array size" )
+    USHORT nPageIdx = 0;
+
+    while ( pPage && !pRet )
+    {
+        const SwRect& rBoundRect = bExtend ? maPageRects[ nPageIdx++ ] : pPage->Frm();
+
+        if ( !pSize && rBoundRect.IsInside( rPt ) ||
+              pSize && rBoundRect.IsOver( aRect ) )
+            pRet = static_cast<const SwPageFrm*>(pPage);
+
         pPage = pPage->GetNext();
-    if ( pPage && pPage->Frm().IsInside( rPt ) )
-        return (SwPageFrm*)pPage;
-    return 0;
+    }
+
+    return pRet;
 }
 
 /*************************************************************************
