@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:07:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             {
             }
 
-            const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%N" ) );
+            const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
                 String aName( nDisplay == nPrimaryIndex ? msPrimaryMonitor : msMonitor );
