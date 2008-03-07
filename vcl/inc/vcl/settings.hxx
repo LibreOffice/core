@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:57:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:40:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,55 +1019,6 @@ public:
                                         { return !(*this == rSet); }
 };
 
-// -----------------
-// - ImplSoundData -
-// -----------------
-
-class ImplSoundData
-{
-    friend class SoundSettings;
-
-                                    ImplSoundData();
-                                    ImplSoundData( const ImplSoundData& rData );
-
-private:
-    ULONG                           mnRefCount;
-    ULONG                           mnOptions;
-};
-
-// -----------------
-// - SoundSettings -
-// -----------------
-
-#define SOUND_OPTION_ON             ((ULONG)0x00000001)
-#define SOUND_OPTION_NOTIFYBEEP     ((ULONG)0x00000002)
-#define SOUND_OPTION_WARNINGBEEP    ((ULONG)0x00000004)
-#define SOUND_OPTION_ERRORBEEP      ((ULONG)0x00000008)
-
-class VCL_DLLPUBLIC SoundSettings
-{
-    void                            CopyData();
-
-private:
-    ImplSoundData*                  mpData;
-
-public:
-                                    SoundSettings();
-                                    SoundSettings( const SoundSettings& rSet );
-                                    ~SoundSettings();
-
-    void                            SetOptions( ULONG nOptions )
-                                        { CopyData(); mpData->mnOptions = nOptions; }
-    ULONG                           GetOptions() const
-                                        { return mpData->mnOptions; }
-
-    const SoundSettings&            operator =( const SoundSettings& rSet );
-
-    BOOL                            operator ==( const SoundSettings& rSet ) const;
-    BOOL                            operator !=( const SoundSettings& rSet ) const
-                                        { return !(*this == rSet); }
-};
-
 // ------------------------
 // - ImplNotificationData -
 // ------------------------
@@ -1193,7 +1144,6 @@ private:
     KeyboardSettings                        maKeyboardSettings;
     StyleSettings                           maStyleSettings;
     MiscSettings                            maMiscSettings;
-    SoundSettings                           maSoundSettings;
     NotificationSettings                    maNotificationSettings;
     HelpSettings                            maHelpSettings;
     ::com::sun::star::lang::Locale          maLocale;
@@ -1271,11 +1221,6 @@ public:
                                                 { CopyData(); mpData->maMiscSettings = rSet; }
     const MiscSettings&                     GetMiscSettings() const
                                                 { return mpData->maMiscSettings; }
-
-    void                                    SetSoundSettings( const SoundSettings& rSet )
-                                                { CopyData(); mpData->maSoundSettings = rSet; }
-    const SoundSettings&                    GetSoundSettings() const
-                                                { return mpData->maSoundSettings; }
 
     void                                    SetNotificationSettings( const NotificationSettings& rSet )
                                                 { CopyData(); mpData->maNotificationSettings = rSet; }
