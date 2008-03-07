@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:06:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1345,7 +1345,21 @@
 					<value>5000</value>
 				</prop>
 			</group>
-		</group>
+            <group oor:name="SharedDocument">
+                <info>
+                    <author>TBE</author>
+                    <desc>Contains settings for shared documents.</desc>
+                    <label>Shared document</label>
+                </info>
+                <prop oor:name="ShowWarning" oor:type="xs:boolean">
+                    <info>
+                        <desc>Specifies whether the warning box for shared documents is shown.</desc>
+                        <label>Show warning box</label>
+                    </info>
+                    <value>true</value>
+                </prop>
+            </group>
+        </group>
 	</component>
 </oor:component-schema>
 
