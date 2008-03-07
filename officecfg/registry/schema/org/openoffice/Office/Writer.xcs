@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 15:32:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1628,6 +1628,29 @@
 						<label>Zoom Value</label>
 					</info>
 					<value>100</value>
+				</prop>
+			</group>
+			<group oor:name="ViewLayout">
+				<info>
+					<desc>Contains view layout settings.</desc>
+				</info>
+                                <prop oor:name="Columns" oor:type="xs:int">
+					<!-- UIHints: (Status Bar) -->
+					<info>
+						<author>FME</author>
+						<desc>Specifies number of columns of the view layout. 0 means the view layout is set to automatic.</desc>
+						<label>View Layout Columns</label>
+					</info>
+					<value>0</value>
+				</prop>
+                                <prop oor:name="BookMode" oor:type="xs:boolean">
+					<!-- UIHints: (Status Bar) -->
+					<info>
+						<author>FME</author>
+						<desc>Specifies if the book mode should be applied.</desc>
+						<label>View Layout Book Mode</label>
+					</info>
+					<value>false</value>
 				</prop>
 			</group>
 		</group>
