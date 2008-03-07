@@ -24,7 +24,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false" toolbar:helpid="helpid:5561"  />
  <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false" toolbar:helpid="helpid:5672"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertApplet" toolbar:visible="false" toolbar:helpid="helpid:5673"  />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:helpid="21420"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="20335"/>
