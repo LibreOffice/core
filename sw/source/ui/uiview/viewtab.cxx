@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:28:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                     FRMTYPE_DRAWOBJ :
                                         rSh.GetFrmType(0,TRUE);
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
-    BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
 
     const USHORT nSlot      = rReq.GetSlot();
@@ -344,13 +344,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     const SwFmtFrmSize &rFrmSize = rDesc.GetMaster().GetFrmSize();
 
-    const SwRect& rPrtRect = rSh.GetAnyCurRect(RECT_PAGE);
-    const long nPageWidth  = bBrowse ?
-                                rPrtRect.Width() :
-                                    rFrmSize.GetWidth();
-    const long nPageHeight = bBrowse ?
-                                rPrtRect.Height() :
-                                    rFrmSize.GetHeight();
+    const SwRect& rPageRect = rSh.GetAnyCurRect(RECT_PAGE);
+    const long nPageWidth  = bBrowse ? rPageRect.Width() : rFrmSize.GetWidth();
+    const long nPageHeight = bBrowse ? rPageRect.Height() : rFrmSize.GetHeight();
 
     BOOL bUnlockView = FALSE;
     rSh.StartAllAction();
@@ -371,8 +367,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             BOOL bRTL;
             BOOL bVerticalFrame = (bFrmSelection && rSh.IsFrmVertical(TRUE, bRTL))|| (!bFrmSelection && bVerticalWriting);
             long nDeltaX = bVerticalFrame ?
-                rRect.Right() - nPageWidth - DOCUMENTBORDER + aLongLR.GetRight() :
-                DOCUMENTBORDER + aLongLR.GetLeft() - rRect.Left();
+                rRect.Right() - rPageRect.Right() + aLongLR.GetRight() :
+                rPageRect.Left() + aLongLR.GetLeft() - rRect.Left();
 
             SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                         RES_VERT_ORIENT, RES_HORI_ORIENT,
@@ -448,8 +444,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         else if( nFrmType == FRMTYPE_DRAWOBJ)
         {
             SwRect aRect( rSh.GetObjRect() );
-            aRect.Left( aLongLR.GetLeft() + DOCUMENTBORDER );
-            aRect.Right( nPageWidth + DOCUMENTBORDER - aLongLR.GetRight());
+            aRect.Left( aLongLR.GetLeft() + rPageRect.Left() );
+            aRect.Right( rPageRect.Right() - aLongLR.GetRight());
             rSh.SetObjRect( aRect );
         }
         else if(bSect || rSh.IsDirectlyInSection())
@@ -459,8 +455,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
             const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
             aSectRect.Pos() += aTmpRect.Pos();
-            long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - DOCUMENTBORDER);
-            long nRightDiff = aLongLR.GetRight() - (long)(nPageWidth + DOCUMENTBORDER - aSectRect.Right());
+            long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - rPageRect.Left() );
+            long nRightDiff = aLongLR.GetRight() - (long)( rPageRect.Right() - aSectRect.Right());
             //change the LRSpaceItem of the section accordingly
             const SwSection* pCurrSect = rSh.GetCurrSection();
             const SwSectionFmt* pSectFmt = pCurrSect->GetFmt();
@@ -499,11 +495,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
-            const long nDeltaY =
-                    DOCUMENTBORDER + aLongULSpace.GetUpper() -
-                                    rRect.Top();
-            const long nHeight = nPageHeight -
-                            (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
+            const long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
+            const long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
             SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                         RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
@@ -540,7 +533,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         else if( nFrmType == FRMTYPE_DRAWOBJ )
         {
             SwRect aRect( rSh.GetObjRect() );
-            const SwRect &rPageRect = rSh.GetAnyCurRect(RECT_PAGE);
             aRect.Top( aLongULSpace.GetUpper() + rPageRect.Top() );
             aRect.Bottom( rPageRect.Bottom() - aLongULSpace.GetLower() );
             rSh.SetObjRect( aRect ) ;
@@ -552,8 +544,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
             const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
             aSectRect.Pos() += aTmpRect.Pos();
-            long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPrtRect.Top());
-            long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPrtRect.Top());
+            const long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPageRect.Top());
+            const long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
             //change the LRSpaceItem of the section accordingly
             const SwSection* pCurrSect = rSh.GetCurrSection();
             const SwSectionFmt* pSectFmt = pCurrSect->GetFmt();
@@ -764,15 +756,13 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.GetTabCols(aTabCols);
 
             // linker Tabellenrand
-            long nBorder = long(aColItem.GetLeft()) -
-                             (long(aTabCols.GetLeftMin()) - DOCUMENTBORDER);
+            long nBorder = (long)(aColItem.GetLeft() - aTabCols.GetLeftMin());
             aTabCols.SetLeft( nBorder );
 
-            nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() +
-                              DOCUMENTBORDER - aColItem.GetRight();
+            nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() - aColItem.GetRight();
 
 #ifdef DEBUG
-            long nTmp1 = DOCUMENTBORDER + nPageWidth;
+            long nTmp1 = nPageWidth;
             long nTmp2 = aTabCols.GetLeftMin() + nBorder;
             (void)nTmp1;
             (void)nTmp2;
@@ -897,12 +887,11 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if ( bVerticalWriting )
             {
                 aTabCols.SetRight(nPageWidth - aColItem.GetRight() - aColItem.GetLeft());
-                aTabCols.SetLeftMin(aColItem.GetLeft() + DOCUMENTBORDER);
+                aTabCols.SetLeftMin(aColItem.GetLeft());
             }
             else
             {
-                long nBorder = nPageHeight - aTabCols.GetLeftMin() +
-                          DOCUMENTBORDER - aColItem.GetRight();
+                long nBorder = nPageHeight - aTabCols.GetLeftMin() - aColItem.GetRight();
                 aTabCols.SetRight( nBorder );
             }
 
@@ -974,7 +963,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     const BOOL  bFrmSelection = rSh.IsFrmSelected();
 
-    BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     // PageOffset/Begrenzer
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
@@ -1063,8 +1052,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 if( aRect.Width() )
                 {
-                    aLongLR.SetLeft ((long)(aRect.Left() - DOCUMENTBORDER));
-                    aLongLR.SetRight((long)(nPageWidth + DOCUMENTBORDER - aRect.Right()));
+                    // PAGES01
+                    // make relative to page position:
+                    aLongLR.SetLeft ((long)( aRect.Left() - rPageRect.Left() ));
+                    aLongLR.SetRight((long)( rPageRect.Right() - aRect.Right()));
                 }
             }
             if( nWhich == SID_ATTR_LONG_LRSPACE )
@@ -1212,10 +1203,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     if( IsTabColFromDoc() )
                     {
-                        const SwRect& rPrtRect = rSh.GetAnyCurRect(
-                                        RECT_FLY_PRT_EMBEDDED, pPt );
-                        aDistLR.SetLeft(rPrtRect.Left());
-                        aDistLR.SetRight(rPrtRect.Left());
+                        const SwRect& rFlyPrtRect = rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, pPt );
+                        aDistLR.SetLeft(rFlyPrtRect.Left());
+                        aDistLR.SetRight(rFlyPrtRect.Left());
                     }
                     else
                     {
@@ -1365,14 +1355,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
 
                 ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
-                int nLft = aTabCols.GetLeftMin() -
-                                  USHORT(DOCUMENTBORDER) +
-                                  aTabCols.GetLeft();
-
-                int nRgt = (USHORT)(bTableVertical ? nPageHeight : nPageWidth) -
+                const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();
+                const int nRgt = (USHORT)(bTableVertical ? nPageHeight : nPageWidth) -
                                   (aTabCols.GetLeftMin() +
-                                  aTabCols.GetRight() -
-                                  USHORT(DOCUMENTBORDER) );
+                                  aTabCols.GetRight());
 
                 const USHORT nL = static_cast< USHORT >(nLft > 0 ? nLft : 0);
                 const USHORT nR = static_cast< USHORT >(nRgt > 0 ? nRgt : 0);
@@ -1468,9 +1454,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         else
                         {
                             aRect.Pos() += aTmpRect.Pos();
-                            aColItem.SetLeft ((USHORT)(aRect.Left() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageWidth   - aRect.Right() +
-                                                                        DOCUMENTBORDER ));
+
+                            // PAGES01
+                            // make relative to page position:
+                            aColItem.SetLeft ((USHORT)( aRect.Left() - rPageRect.Left() ));
+                            aColItem.SetRight((USHORT)( rPageRect.Right() - aRect.Right()));
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
@@ -1508,9 +1496,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         }
                         else
                         {
-                            aColItem.SetLeft ((USHORT)(rRect.Left() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() -
-                                                                    DOCUMENTBORDER ));
+                            aColItem.SetLeft ((USHORT)(rRect.Left() - rPageRect.Left()   ));
+                            aColItem.SetRight((USHORT)(rPageRect.Right() - rRect.Right() ));
                         }
 
                         aColItem.SetOrtho(aColItem.CalcOrtho());
@@ -1584,13 +1571,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
 
 //                ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
-                int nLft = aTabCols.GetLeftMin() -
-                                  USHORT(DOCUMENTBORDER);
-
-                int nRgt = (USHORT)(bVerticalWriting ? nPageWidth : nPageHeight) -
+                const int nLft = aTabCols.GetLeftMin();
+                const int nRgt = (USHORT)(bVerticalWriting ? nPageWidth : nPageHeight) -
                                   (aTabCols.GetLeftMin() +
-                                  aTabCols.GetRight() -
-                                  USHORT(DOCUMENTBORDER) );
+                                  aTabCols.GetRight());
 
                 const USHORT nL = static_cast< USHORT >(nLft > 0 ? nLft : 0);
                 const USHORT nR = static_cast< USHORT >(nRgt > 0 ? nRgt : 0);
@@ -1643,9 +1627,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         break;
         case SID_RULER_PAGE_POS:
         {
+            // PAGES01
             SvxPagePosSizeItem aPagePosSize(
-                    Point( DOCUMENTBORDER , rPageRect.Top()) ,
-                    nPageWidth, nPageHeight);
+                    Point( rPageRect.Left(), rPageRect.Top()) , nPageWidth, nPageHeight);
+
             rSet.Put(aPagePosSize);
             break;
         }
@@ -1661,14 +1646,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SwTabCols aTabCols;
                     rSh.GetTabCols( aTabCols );
 
-                    int nLft = aTabCols.GetLeftMin() -
-                                    USHORT(DOCUMENTBORDER) +
-                                    aTabCols.GetLeft();
-
-                    int nRgt = (USHORT)nPageWidth -
-                                    (aTabCols.GetLeftMin() +
-                                    aTabCols.GetRight() -
-                                    USHORT(DOCUMENTBORDER) );
+                    const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();
+                    const int nRgt = (USHORT)nPageWidth -(aTabCols.GetLeftMin() + aTabCols.GetRight());
 
                     const USHORT nL = static_cast< USHORT >(nLft > 0 ? nLft : 0);
                     const USHORT nR = static_cast< USHORT >(nRgt > 0 ? nRgt : 0);
@@ -1718,9 +1697,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nWidth += pCols->CalcColWidth( i, nTotalWidth );
                         nEnd = nWidth - pCol->GetRight();
                     }
-                    aRectangle.Right() = nPageWidth - nEnd;
-                    aRectangle.Left() -= DOCUMENTBORDER;
-                    aRectangle.Right() += DOCUMENTBORDER;
+                    aRectangle.Right() = rPageRect.Right() - nEnd;
+                    aRectangle.Left() -= rPageRect.Left();
+
                     if(nNum > 1)
                     {
                         aRectangle.Left() += MINLAY;
@@ -1767,9 +1746,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRect.Pos() += rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,
                                                                 pPt ).Pos();
 
-                        aRectangle.Left()  = aRect.Left() - DOCUMENTBORDER;
-                        aRectangle.Right() = nPageWidth - ( aRect.Right()
-                                                         - DOCUMENTBORDER );
+                        aRectangle.Left()  = aRect.Left() - rPageRect.Left();
+                        aRectangle.Right() = rPageRect.Right() - aRect.Right();
                     }
                     else if( bBrowse )
                     {
@@ -1847,11 +1825,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     if( bFrame | bColSct )
                     {
-                        aRectangle.Left()  = aRect.Left()
-                                                - DOCUMENTBORDER + nStart;
-                        aRectangle.Right() = nPageWidth
-                                                - aRectangle.Left()
-                                                    - nEnd + nStart;
+                        aRectangle.Left()  = aRect.Left() - rPageRect.Left() + nStart;
+                        aRectangle.Right() = nPageWidth - aRectangle.Left() - nEnd + nStart;
                     }
                     else if(!bBrowse)
                     {
