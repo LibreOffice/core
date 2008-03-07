@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:41:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,10 @@ using namespace ::com::sun::star;
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
+
+#include <comphelper/processfactory.hxx>
+#include "docuno.hxx"
+
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -134,6 +138,9 @@ using namespace ::com::sun::star;
 #endif
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
+
+#include "sharedocdlg.hxx"
+
 //------------------------------------------------------------------
 
 #define IS_SHARE_HEADER(set) \
@@ -981,6 +988,129 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
         }
         break;
+
+        case SID_SHARE_DOC:
+            {
+                ScShareDocumentDlg aDlg( GetActiveDialogParent(), GetViewData() );
+                if ( aDlg.Execute() == RET_OK )
+                {
+                    bool bSetShared = aDlg.IsShareDocumentChecked();
+                    if ( bSetShared != static_cast< bool >( IsDocShared() ) )
+                    {
+                        if ( bSetShared )
+                        {
+                            bool bContinue = true;
+                            if ( HasName() )
+                            {
+                                QueryBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                    ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) );
+                                if ( aBox.Execute() == RET_NO )
+                                {
+                                    bContinue = false;
+                                }
+                            }
+                            if ( bContinue )
+                            {
+                                SwitchDocumentToShared( true );
+                                if ( pBindings )
+                                {
+                                    SC_MOD()->SetInSharedDocSaving( true );
+                                    pBindings->ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
+                                    SC_MOD()->SetInSharedDocSaving( false );
+                                }
+                                SetSharedFileUrl( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+                                GetMedium()->SwitchDocumentToTempFile();
+                                InvalidateName();
+                                GetUndoManager()->Clear();
+                            }
+                        }
+                        else
+                        {
+                            uno::Reference< frame::XLoadable > xLoadable;
+                            try
+                            {
+                                // load shared file
+                                xLoadable.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
+                                uno::Reference< util::XCloseable > xCloseable( xLoadable, uno::UNO_QUERY_THROW );
+
+                                // check if shared flag is set in shared file
+                                bool bShared = false;
+                                ScModelObj* pDocObj = ScModelObj::getImplementation( xLoadable );
+                                if ( pDocObj )
+                                {
+                                    ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pDocObj->GetEmbeddedObject() );
+                                    if ( pDocShell )
+                                    {
+                                        bShared = pDocShell->IsDocShared();
+                                    }
+                                }
+
+                                if ( bShared )
+                                {
+                                    uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY_THROW );
+                                    if ( xStorable->isReadonly() )
+                                    {
+                                        xCloseable->close( sal_True );
+                                        // TODO: get name of user who has the write lock
+                                        String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
+                                        aMessage.SearchAndReplaceAscii( "%1", aUserName );
+                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
+                                        aBox.Execute();
+                                    }
+                                    else
+                                    {
+                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
+                                        if ( aBox.Execute() == RET_YES )
+                                        {
+                                            xCloseable->close( sal_True );
+                                            if ( pBindings )
+                                            {
+                                                pBindings->ExecuteSynchron( SID_SAVEDOC );
+                                            }
+                                            SwitchDocumentToShared( false );
+                                            GetMedium()->SwitchDocumentToFile( GetSharedFileUrl() );
+                                            if ( pBindings )
+                                            {
+                                                pBindings->ExecuteSynchron( SID_SAVEDOC );
+                                            }
+                                        }
+                                        else
+                                        {
+                                            xCloseable->close( sal_True );
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    xCloseable->close( sal_True );
+                                    WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
+                                    aBox.Execute();
+                                    SwitchDocumentToShared( false );
+                                }
+                            }
+                            catch ( uno::Exception& )
+                            {
+                                DBG_ERROR( "SID_SHARE_DOC: caught exception\n" );
+                                SC_MOD()->SetInSharedDocSaving( false );
+
+                                try
+                                {
+                                    uno::Reference< util::XCloseable > xClose( xLoadable, uno::UNO_QUERY_THROW );
+                                    xClose->close( sal_True );
+                                }
+                                catch ( uno::Exception& )
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+                rReq.Done();
+            }
+            break;
 
         default:
         {
@@ -1998,6 +2128,9 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
 
             case FID_CHG_RECORD:
+                if ( IsDocShared() )
+                    rSet.DisableItem( nWhich );
+                else
                     rSet.Put( SfxBoolItem( nWhich,
                         aDocument.GetChangeTrack() != NULL ) );
                 break;
@@ -2005,7 +2138,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
             case SID_CHG_PROTECT:
                 {
                     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
-                    if ( pChangeTrack )
+                    if ( pChangeTrack && !IsDocShared() )
                         rSet.Put( SfxBoolItem( nWhich,
                             pChangeTrack->IsProtected() ) );
                     else
@@ -2400,3 +2533,62 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     return 0;
 }
 
+//------------------------------------------------------------------
+
+void ScDocShell::SwitchDocumentToShared( bool bShared )
+{
+    SetDocShared( bShared );
+    SetDocumentModified();
+    SfxBindings* pBindings = GetViewBindings();
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_SHARE_DOC );
+    }
+    if ( bShared )
+    {
+        aDocument.StartChangeTracking();
+    }
+    else
+    {
+        aDocument.EndChangeTracking();
+    }
+    ScChangeViewSettings aChangeViewSet;
+    aChangeViewSet.SetShowChanges( FALSE );
+    aDocument.SetChangeViewSettings( aChangeViewSet );
+}
+
+uno::Reference< frame::XLoadable > ScDocShell::LoadSharedDocument()
+{
+    uno::Reference< frame::XLoadable > xLoadable;
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        xLoadable.set(
+            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ), uno::UNO_QUERY_THROW );
+        uno::Sequence< beans::PropertyValue > aArgs(2);
+        aArgs[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+        aArgs[0].Value <<= GetSharedFileUrl();
+        aArgs[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+        aArgs[1].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
+        SC_MOD()->SetInSharedDocLoading( true );
+        xLoadable->load( aArgs );
+        SC_MOD()->SetInSharedDocLoading( false );
+    }
+    catch ( uno::Exception& )
+    {
+        DBG_ERROR( "ScDocShell::LoadSharedDocument(): caught exception\n" );
+        SC_MOD()->SetInSharedDocLoading( false );
+        try
+        {
+            uno::Reference< util::XCloseable > xClose( xLoadable, uno::UNO_QUERY_THROW );
+            xClose->close( sal_True );
+            return uno::Reference< frame::XLoadable >();
+        }
+        catch ( uno::Exception& )
+        {
+            return uno::Reference< frame::XLoadable >();
+        }
+    }
+    return xLoadable;
+}
