@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-30 08:57:02 $
+#   last change: $Author: kz $ $Date: 2008-03-07 11:25:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@ SLOFILES=	\
         $(SLO)$/ColumnControl.obj	\
         $(SLO)$/ColumnPeer.obj	\
         $(SLO)$/dbinteraction.obj \
-        $(SLO)$/copytablewizard.obj
+        $(SLO)$/copytablewizard.obj \
+        $(SLO)$/textconnectionsettings_uno.obj
 
 # --- Targets ----------------------------------
 
