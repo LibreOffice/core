@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:41:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,7 +1147,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     MapMode aMapMode( pOutputDev->GetMapMode() );
     MapMode aSavedMapMode = aMapMode;
 
-    Font* pEmptyPgFont = 0;
+    const Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
 
     Color aEmptyPgShadowBorderColor = SwViewOption::GetFontColor();
 
@@ -1177,21 +1177,10 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                     aPageRect = aTmpPageRect.SVRect();
                 }
                 pOutputDev->DrawRect( aPageRect );
+
                 // paint empty page text
-                if( !pEmptyPgFont )
-                {
-                    pEmptyPgFont = new Font;
-                    pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
-                    pEmptyPgFont->SetWeight( WEIGHT_BOLD );
-                    pEmptyPgFont->SetStyleName( aEmptyStr );
-                    pEmptyPgFont->SetName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Helvetica" )) );
-                    pEmptyPgFont->SetFamily( FAMILY_SWISS );
-                    pEmptyPgFont->SetTransparent( TRUE );
-                    pEmptyPgFont->SetColor( COL_GRAY );
-                }
                 Font aOldFont( pOutputDev->GetFont() );
-                pOutputDev->SetFont( *pEmptyPgFont );
+                pOutputDev->SetFont( rEmptyPgFont );
                 pOutputDev->DrawText( aPageRect, SW_RESSTR( STR_EMPTYPAGE ),
                                     TEXT_DRAW_VCENTER |
                                     TEXT_DRAW_CENTER |
@@ -1200,7 +1189,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 // paint shadow and border for empty page
                 // OD 19.02.2003 #107369# - use new method to paint page border and
                 // shadow
-                (*aPageIter)->pPage->PaintBorderAndShadow( aPageRect, &mrParentViewShell );
+                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
             }
             else
             {
@@ -1212,11 +1201,10 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 // paint page border and shadow
                 {
                     SwRect aPageBorderRect;
-                    (*aPageIter)->pPage->GetBorderAndShadowBoundRect(
-                                SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect );
+                    SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect, true );
                     const Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
-                    (*aPageIter)->pPage->PaintBorderAndShadow( aPageRect, &mrParentViewShell );
+                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
                     mrParentViewShell.DLPostPaint2();
                 }
                 // <--
@@ -1248,7 +1236,6 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                         maWinSize );
     }
 
-    delete pEmptyPgFont;
     pOutputDev->SetMapMode( aSavedMapMode );
     mrParentViewShell.aVisArea.Clear();
 
