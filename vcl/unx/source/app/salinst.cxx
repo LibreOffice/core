@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:47:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,6 @@
 #ifndef _SV_SALOGL_H
 #include <salogl.h>
 #endif
-#ifndef _SV_SALSOUND_H
-#include <salsound.h>
-#endif
 
 // -------------------------------------------------------------------------
 //
@@ -145,9 +142,6 @@ extern "C"
 
 X11SalInstance::~X11SalInstance()
 {
-    // deinitialize global sound resources
-    X11SalSound::Release();
-
     // release (possibly open) OpenGL context
     X11SalOpenGL::Release();
 
@@ -323,9 +317,3 @@ SalOpenGL* X11SalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
 {
     return new X11SalOpenGL( pGraphics );
 }
-
-SalSound* X11SalInstance::CreateSalSound()
-{
-    return new X11SalSound();
-}
-
