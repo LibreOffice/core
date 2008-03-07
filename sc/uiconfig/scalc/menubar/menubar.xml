@@ -336,6 +336,8 @@
             <menu:menuitem menu:id=".uno:SolverDialog"/>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShareDocument"/>
+            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menu menu:id=".uno:ProtectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Protect"/>
