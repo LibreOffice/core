@@ -15,7 +15,6 @@
 #i84423 -o fwk.JobHandler
 -o fwk.MailToDispatcher
 -o fwk.ServiceHandler
--o fwk.SoundHandler
 -o fwk.URLTransformer
 -o fwk.MacrosMenuController
 -o fwk.ModuleManager
