@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:59:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     BOOL bUnLockView = !pWrtShell->IsViewLocked();
     pWrtShell->LockView( TRUE );
     pWrtShell->LockPaint();
+
     {
     ACT_KONTEXT(pWrtShell);
 
@@ -156,52 +157,60 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
-    const SwPageDesc &rDesc = pWrtShell->GetPageDesc(
-                                                pWrtShell->GetCurPageDesc() );
+    const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
     const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
     const SwViewOption *pOpt = pWrtShell->GetViewOptions();
-    long lLeftMargin;
+    long lLeftMargin = 0;
 
     if( eZoomType != SVX_ZOOM_PERCENT )
     {
-        const long nOf = DOCUMENTBORDER * 2L;
-        Size aPageSize( pWrtShell->GetAnyCurRect(RECT_PAGE_CALC).SSize() );
+        const bool bAutomaticViewLayout = 0 == pOpt->GetViewLayoutColumns();
+
+        const SwRect aPageRect( pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
+        const SwRect aRootRect( pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) );
+        Size aPageSize( aPageRect.SSize() );
+        Size aRootSize( aRootRect.SSize() );
 
         //mod #i6193# added sidebar width
         SwPostItMgr* pPostItMgr = GetPostItMgr();
         if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
             aPageSize.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
 
+        const MapMode aTmpMap( MAP_TWIP );
+        const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
+
         if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
-            aPageSize.Width() +=
-                Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
+            aPageSize.Width() += Abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
         }
+
         if( SVX_ZOOM_OPTIMAL == eZoomType )
         {
-            aPageSize.Width() -=
-                ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
+            aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
+            lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
+            nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
-        else if(SVX_ZOOM_PAGEWIDTH_NOBORDER != eZoomType)
+        else if(SVX_ZOOM_WHOLEPAGE == eZoomType || SVX_ZOOM_PAGEWIDTH == eZoomType )
         {
-            aPageSize.Width() += nOf;
+            const long nOf = DOCUMENTBORDER * 2L;
+            long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+            nTmpWidth += nOf;
             aPageSize.Height() += nOf;
-        }
-        lLeftMargin = SVX_ZOOM_PAGEWIDTH != eZoomType && SVX_ZOOM_PAGEWIDTH_NOBORDER != eZoomType ?
-            long(rLRSpace.GetLeft()) + DOCUMENTBORDER + nLeftOfst : 0L;
+            nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
-        const MapMode aTmpMap( MAP_TWIP );
-        const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
-        nFac = aWindowSize.Width() * 100 / aPageSize.Width();
-        if( SVX_ZOOM_WHOLEPAGE == eZoomType )
+            if ( SVX_ZOOM_WHOLEPAGE == eZoomType )
+            {
+                long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
+                nFac = Min( nFac, nVisPercent );
+            }
+        }
+        else /*if( SVX_ZOOM_PAGEWIDTH_NOBORDER == eZoomType )*/
         {
-            long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
-            nFac = Min( nFac, nVisPercent );
+            const long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+            nFac = aWindowSize.Width() * 100 / nTmpWidth;
         }
     }
-    else
-        lLeftMargin = long(rLRSpace.GetLeft()) + DOCUMENTBORDER;
 
     nFac = Max( long( MINZOOM ), nFac );
 
@@ -230,6 +239,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         if ( eZoomType != SVX_ZOOM_PERCENT )
         {
             Point aPos;
+
             if ( eZoomType == SVX_ZOOM_WHOLEPAGE )
                 aPos.Y() = pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
             else
@@ -239,7 +249,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 aPos.X() = lLeftMargin;
                 const SwRect &rCharRect = pWrtShell->GetCharRect();
                 if ( rCharRect.Top() > GetVisArea().Bottom() ||
-                     rCharRect.Bottom() < aPos.Y() )
+                    rCharRect.Bottom() < aPos.Y() )
                     aPos.Y() = rCharRect.Top() - rCharRect.Height();
                 else
                     aPos.Y() = GetVisArea().Top();
@@ -276,6 +286,60 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     }
 
 //  eZoom = eZoomType;
+}
+
+void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
+{
+    const BOOL bUnLockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( TRUE );
+    pWrtShell->LockPaint();
+
+    {
+
+    ACT_KONTEXT(pWrtShell);
+
+    if ( !GetViewFrame()->GetFrame()->IsInPlace() && !bViewOnly )
+    {
+        const BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
+        SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
+
+        //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
+        //View updaten.
+        if ( nColumns  != pUsrPref->GetViewLayoutColumns() ||
+             bBookMode != pUsrPref->IsViewLayoutBookMode() )
+        {
+            pUsrPref->SetViewLayoutColumns( nColumns );
+            pUsrPref->SetViewLayoutBookMode( bBookMode );
+            SW_MOD()->ApplyUsrPref( *pUsrPref,
+                    bViewOnly ? this: 0,
+                    bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
+            pUsrPref->SetModified();
+        }
+    }
+
+    const SwViewOption *pOpt = pWrtShell->GetViewOptions();
+
+    if ( nColumns  != pOpt->GetViewLayoutColumns() ||
+         bBookMode != pOpt->IsViewLayoutBookMode() )
+    {
+        SwViewOption aOpt( *pOpt );
+        aOpt.SetViewLayoutColumns( nColumns );
+        aOpt.SetViewLayoutBookMode( bBookMode );
+        pWrtShell->ApplyViewOptions( aOpt );
+    }
+
+    pVRuler->ForceUpdate();
+    pHRuler->ForceUpdate();
+
+    }
+
+    pWrtShell->UnlockPaint();
+    if( bUnLockView )
+        pWrtShell->LockView( FALSE );
+
+    SfxBindings& rBnd = GetViewFrame()->GetBindings();
+    rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
+    rBnd.Invalidate( SID_ATTR_ZOOMSLIDER);
 }
 
 /*
