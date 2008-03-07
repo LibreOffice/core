@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:45:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,9 +305,24 @@ void SwViewImp::SetFirstVisPage()
     }
     else
     {
+        const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
+        const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
+
         SwPageFrm *pPage = (SwPageFrm*)pSh->GetLayout()->Lower();
-        while ( pPage && !pPage->Frm().IsOver( pSh->VisArea() ) )
+        SwRect aPageRect = pPage->Frm();
+        while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
+        {
             pPage = (SwPageFrm*)pPage->GetNext();
+            if ( pPage )
+            {
+                aPageRect = pPage->Frm();
+                if ( bBookMode && pPage->IsEmptyPage() )
+                {
+                    const SwPageFrm& rFormatPage = pPage->GetFormatPage();
+                    aPageRect.SSize() = rFormatPage.Frm().SSize();
+                }
+            }
+        }
         pFirstVisPage = pPage ? pPage : (SwPageFrm*)pSh->GetLayout()->Lower();
     }
     bFirstPageInvalid = FALSE;
