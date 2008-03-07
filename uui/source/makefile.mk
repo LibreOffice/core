@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 17:15:01 $
+#   last change: $Author: kz $ $Date: 2008-03-07 12:26:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ SLOFILES = \
     $(SLO)$/services.obj \
     $(SLO)$/masterpassworddlg.obj \
     $(SLO)$/masterpasscrtdlg.obj \
+    $(SLO)$/openlocked.obj \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
     $(SLO)$/fltdlg.obj\
@@ -63,6 +64,7 @@ SRC1FILES = \
     logindlg.src \
     masterpassworddlg.src \
     masterpasscrtdlg.src \
+    openlocked.src \
     passworddlg.src \
     passcrtdlg.src \
     passworderrs.src \
