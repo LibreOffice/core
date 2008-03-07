@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:53:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,4 +704,11 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
 //      pSpell->SetSpellWrongAgain( sal_False );
 //      pSpell->SetSpellAllAgain( sal_False );
     }
+}
+
+void SwModule::ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode)
+{
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
