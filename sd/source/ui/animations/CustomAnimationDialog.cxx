@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:45:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,8 @@
 #ifndef _SD_STLPROPERTYSET_HXX
 #include "STLPropertySet.hxx"
 #endif
+
+#include <avmedia/mediawindow.hxx>
 
 #include "filedlg.hxx"
 #include "strings.hrc"
@@ -1280,7 +1282,6 @@ private:
     FixedText*      mpFTTextDelay;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
 };
 
 
@@ -1940,17 +1941,6 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
     mpLBSound->SelectEntryPos( (USHORT) nPos );
 }
 
-// TODO(Q3): This breaks encapsulation. Either export
-// these strings from avmedia, or provide an XManager
-// factory there
-#ifdef WNT
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
-#elif defined QUARTZ
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
-#else
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
-#endif
-
 void CustomAnimationEffectTabPage::onSoundPreview()
 {
     const USHORT nPos = mpLBSound->GetSelectEntryPos();
@@ -1958,18 +1948,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     if( nPos >= 2 ) try
     {
         const OUString aSoundURL( *(String*)maSoundList.GetObject( nPos-2 ) );
-
-        if( !mxManager.is() )
-        {
-            uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
-
-            mxManager.set(
-                xFac->createInstance(
-                    ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
-                uno::UNO_QUERY_THROW );
-        }
-
-        mxPlayer.set( mxManager->createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
+                mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
         mxPlayer->start();
     }
     catch( uno::Exception& e )
