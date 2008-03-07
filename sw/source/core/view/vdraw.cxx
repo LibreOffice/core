@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:42:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         GetPageView()->GetPage()->SetSize( rNewSz );
 
     //Begrenzung des Arbeitsbereiches.
-    Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
+    const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
     BOOL bCheckDrawObjs = FALSE;
     if ( aRect != rOldWork )
