@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@
 #define STR_UNDO_THESAURUS          116
 
 #define STR_FILL_TAB                117
-#define STR_NO_VALUE                118
+#define STR_NO_VALUE                118     /* moved to compiler.src, keep define! */
 #define STR_UPDATE_SCENARIO         119
 #define STR_ERR_NEWSCENARIO         120
 #define STR_SCENARIO                121
@@ -185,7 +185,7 @@
 
 #define STR_PIVOT_NOTFOUND          138
 #define STR_ERROR_STR               139
-#define STR_NV_STR                  140
+#define STR_NV_STR                  140     /* moved to compiler.src, keep define! */
 #define STR_EMPTYDATA               141
 #define STR_PIVOT_NODATA            142
 #define STR_PIVOT_MOVENOTALLOWED    143
@@ -361,7 +361,7 @@
 #define STR_SCATTR_PAGE_SCALE       276
 #define STR_SCATTR_PAGE_SCALETOPAGES 277
 
-#define STR_NOREF_STR               278
+#define STR_NOREF_STR               278     /* moved to compiler.src, keep define! */
 #define STR_ODER_SO                 279
 
 #define STR_UNDO_CHARTDATA          280
@@ -405,7 +405,7 @@
 
 #define STR_ERR_NOREF               307
 #define STR_FUN_TEXT_COUNT2         308
-#define STR_NO_NAME_REF             309
+#define STR_NO_NAME_REF             309     /* moved to compiler.src, keep define! */
 
 #define STR_MATRIXFRAGMENTERR       310
 
@@ -550,10 +550,10 @@
 
 #define STR_ERR_DATAPILOT_INPUT     411
 
-#define STR_DIV_ZERO                412
+#define STR_DIV_ZERO                412     /* moved to compiler.src, keep define! */
 #define STR_LONG_ERR_DIV_ZERO       413
-#define STR_NUM_ERROR               414
-#define STR_NULL_ERROR              415
+#define STR_NUM_ERROR               414     /* moved to compiler.src, keep define! */
+#define STR_NULL_ERROR              415     /* moved to compiler.src, keep define! */
 
 #define STR_RECALC_MANUAL           416
 #define STR_RECALC_AUTO             417
@@ -563,7 +563,9 @@
 #define STR_ERR_LONG_NESTED_ARRAY   419
 #define STR_UNDO_TEXTTOCOLUMNS      420
 
-#define STR_COUNT                   421
+#define STR_LONG_ERR_NULL           421
+
+#define STR_COUNT                   422
 
 #endif
 
