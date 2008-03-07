@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2008-02-25 09:48:25 $
+#   last change: $Author: kz $ $Date: 2008-03-07 12:55:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ $(MISC)$/hicontrast.flag .PHONY :
 
 # unpack the Crystal icon set
 $(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
-    cd $(MISC) && gunzip -c $(CRYSTAL_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+    cd $(MISC) && gzip -d -c $(CRYSTAL_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
 .IF "$(GUI)"=="UNX"
     chmod -R g+w $(MISC)$/crystal
 .ENDIF
