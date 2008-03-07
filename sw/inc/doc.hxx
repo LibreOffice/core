@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:47:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2072,6 +2072,10 @@ public:
     }
     void SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 );
     // <--
+
+    //Update all the page masters
+    SW_DLLPUBLIC void SetDefaultPageMode(bool bSquaredPageMode);
+    SW_DLLPUBLIC sal_Bool IsSquaredPageMode() const;
 
     // i#78591#
     void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
