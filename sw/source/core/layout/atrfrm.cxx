@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:22:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,10 @@
 #include <HandleAnchorNodeChg.hxx>
 #endif
 // <--
+
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -2286,7 +2290,8 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
 SwTextGridItem::SwTextGridItem()
     : SfxPoolItem( RES_TEXTGRID ), aColor( COL_LIGHTGRAY ), nLines( 20 ),
       nBaseHeight( 400 ), nRubyHeight( 200 ), eGridType( GRID_NONE ),
-      bRubyTextBelow( 0 ), bPrintGrid( 1 ), bDisplayGrid( 1 )
+      bRubyTextBelow( 0 ), bPrintGrid( 1 ), bDisplayGrid( 1 ),
+      nBaseWidth(400), bSnapToChars( 1 ), bSquaredMode(1)
 {
 }
 
@@ -2304,7 +2309,10 @@ int SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
            bRubyTextBelow == ((SwTextGridItem&)rAttr).GetRubyTextBelow() &&
            bDisplayGrid == ((SwTextGridItem&)rAttr).GetDisplayGrid() &&
            bPrintGrid == ((SwTextGridItem&)rAttr).GetPrintGrid() &&
-           aColor == ((SwTextGridItem&)rAttr).GetColor();
+           aColor == ((SwTextGridItem&)rAttr).GetColor() &&
+           nBaseWidth == ((SwTextGridItem&)rAttr).GetBaseWidth() &&
+           bSnapToChars == ((SwTextGridItem&)rAttr).GetSnapToChars() &&
+           bSquaredMode == ((SwTextGridItem&)rAttr).GetSquaredMode();
 }
 
 SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
@@ -2322,6 +2330,9 @@ SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
     bRubyTextBelow = rCpy.GetRubyTextBelow();
     bPrintGrid = rCpy.GetPrintGrid();
     bDisplayGrid = rCpy.GetDisplayGrid();
+    nBaseWidth = rCpy.GetBaseWidth();
+    bSnapToChars = rCpy.GetSnapToChars();
+    bSquaredMode = rCpy.GetSquaredMode();
 
     return *this;
 }
@@ -2352,6 +2363,11 @@ BOOL SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                         "This value needs TWIPS-MM100 conversion" );
             rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseHeight);
             break;
+        case MID_GRID_BASEWIDTH:
+            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+                        "This value needs TWIPS-MM100 conversion" );
+            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseWidth);
+            break;
         case MID_GRID_RUBYHEIGHT:
             DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
@@ -2373,6 +2389,15 @@ BOOL SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                     DBG_ERROR("unknown SwTextGrid value");
                     bRet = FALSE;
                     break;
+            }
+            break;
+        case MID_GRID_SNAPTOCHARS:
+            rVal.setValue( &bSnapToChars, ::getBooleanCppuType() );
+            break;
+        case MID_GRID_STANDARD_MODE:
+            {
+                sal_Bool bStandardMode = !bSquaredMode;
+                rVal.setValue( &bStandardMode, ::getBooleanCppuType() );
             }
             break;
         default:
@@ -2417,6 +2442,7 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             SetDisplayGrid( *(sal_Bool*)rVal.getValue() );
             break;
         case MID_GRID_BASEHEIGHT:
+        case MID_GRID_BASEWIDTH:
         case MID_GRID_RUBYHEIGHT:
         {
             DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
@@ -2427,6 +2453,8 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
                     SetBaseHeight( (USHORT)nTmp );
+                else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
+                    SetBaseWidth( (USHORT)nTmp );
                 else
                     SetRubyHeight( (USHORT)nTmp );
             else
@@ -2457,7 +2485,15 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             break;
         }
-
+        case MID_GRID_SNAPTOCHARS:
+            SetSnapToChars( *(sal_Bool*)rVal.getValue() );
+            break;
+        case MID_GRID_STANDARD_MODE:
+        {
+            sal_Bool bStandard = *(sal_Bool*)rVal.getValue();
+               SetSquaredMode( !bStandard );
+            break;
+        }
         default:
             DBG_ERROR("Unknown SwTextGridItem member");
             bRet = FALSE;
@@ -2466,6 +2502,75 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
+void SwTextGridItem::SwitchPaperMode(BOOL bNew)
+{
+    if( bNew == bSquaredMode )
+    {
+        //same paper mode, not switch
+        return;
+    }
+
+    // use default value when grid is disable
+    if( eGridType == GRID_NONE )
+    {
+        bSquaredMode = bNew;
+        Init();
+        return;
+    }
+
+    if( bSquaredMode )
+    {
+        //switch from "squared mode" to "standard mode"
+        nBaseWidth = nBaseHeight;
+        nBaseHeight = nBaseHeight + nRubyHeight;
+        nRubyHeight = 0;
+    }
+    else
+    {
+        //switch from "standard mode" to "squared mode"
+        nRubyHeight = nBaseHeight/3;
+        nBaseHeight = nBaseHeight - nRubyHeight;
+        nBaseWidth = nBaseHeight;
+    }
+    bSquaredMode = !bSquaredMode;
+}
+
+void SwTextGridItem::Init()
+{
+    if( bSquaredMode )
+    {
+        nLines = 20;
+        nBaseHeight = 400;
+        nRubyHeight = 200;
+        eGridType = GRID_NONE;
+        bRubyTextBelow = 0;
+        bPrintGrid = 1;
+        bDisplayGrid = 1;
+        bSnapToChars = 1;
+        nBaseWidth = 400;
+    }
+    else
+    {
+        nLines = 44;
+        nBaseHeight = 312;
+        nRubyHeight = 0;
+        eGridType = GRID_NONE;
+        bRubyTextBelow = 0;
+        bPrintGrid = 1;
+        bDisplayGrid = 1;
+        nBaseWidth = 210;
+        bSnapToChars = 1;
+
+        //default grid type is line only in CJK env
+        //disable this function due to type area change
+        //if grid type change.
+        //if(SvtCJKOptions().IsAsianTypographyEnabled())
+        //{
+        //  bDisplayGrid = 0;
+        //  eGridType = GRID_LINES_ONLY;
+        //}
+    }
+}
 // class SwHeaderAndFooterEatSpacingItem
 
 SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
