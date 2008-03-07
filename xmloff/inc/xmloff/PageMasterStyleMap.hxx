@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:20:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@
 #define CTF_PM_SCALETOPAGES             (XML_PM_CTF_START + 0x0052)
 #define CTF_PM_SCALETOX                 (XML_PM_CTF_START + 0x0053)
 #define CTF_PM_SCALETOY                 (XML_PM_CTF_START + 0x0054)
+#define CTF_PM_STANDARD_MODE            (XML_PM_CTF_START + 0x0055)
+#define CTP_PM_GRID_BASE_WIDTH          (XML_PM_CTF_START + 0x0056)
+#define CTP_PM_GRID_SNAP_TO_CHARS       (XML_PM_CTF_START + 0x0057)
 // header
 #define CTF_PM_HEADERBORDERALL          (CTF_PM_HEADERFLAG|CTF_PM_BORDERALL)
 #define CTF_PM_HEADERBORDERTOP          (CTF_PM_HEADERFLAG|CTF_PM_BORDERTOP)
