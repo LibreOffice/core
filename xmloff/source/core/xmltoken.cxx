@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:15:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2086,6 +2086,12 @@ namespace xmloff { namespace token {
         TOKEN( "layout-grid-ruby-below",          XML_LAYOUT_GRID_RUBY_BELOW ),
         TOKEN( "layout-grid-print",               XML_LAYOUT_GRID_PRINT ),
         TOKEN( "layout-grid-display",             XML_LAYOUT_GRID_DISPLAY ),
+
+        //text grid enhancement for better CJK support
+        TOKEN( "default-page-layout",             XML_DEFAULT_PAGE_LAYOUT ),
+        TOKEN( "layout-grid-standard-mode",       XML_LAYOUT_GRID_STANDARD_MODE ),
+        TOKEN( "layout-grid-base-width",          XML_LAYOUT_GRID_BASE_WIDTH ),
+        TOKEN( "layout-grid-snap-to-characters",       XML_LAYOUT_GRID_SNAP_TO_CHARS ),
 
         TOKEN( "snap-to-layout-grid",             XML_SNAP_TO_LAYOUT_GRID ),
 
