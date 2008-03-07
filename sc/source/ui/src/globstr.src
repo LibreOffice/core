@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:42:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,18 +663,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Unknown filter: " ;
     };
-    String STR_NO_NAME_REF
-    {
-        Text [ en-US ] = "#NAME?" ;
-    };
-    String STR_NO_ADDIN
-    {
-        Text [ en-US ] = "#ADDIN?" ;
-    };
-    String STR_NO_MACRO
-    {
-        Text [ en-US ] = "#MACRO?" ;
-    };
     String STR_UNDO_THESAURUS
     {
         Text [ en-US ] = "Thesaurus" ;
@@ -682,10 +670,6 @@ Resource RID_GLOBSTR
     String STR_FILL_TAB
     {
         Text [ en-US ] = "Fill Sheets" ;
-    };
-    String STR_NO_VALUE
-    {
-        Text [ en-US ] = "#VALUE!" ;
     };
     String STR_UPDATE_SCENARIO
     {
@@ -832,45 +816,65 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Footer" ;
     };
+
+    /* BEGIN error constants and error strings. */
+
     String STR_ERROR_STR
     {
         Text [ en-US ] = "Err:" ;
     };
-    String STR_NOREF_STR
+    /* BEGIN defined ERROR.TYPE() values. */
+    /* ERROR.TYPE( #NULL! ) == 1 */
+    String STR_LONG_ERR_NULL
     {
-        Text [ en-US ] = "#REF!" ;
+        Text [ en-US ] = "Error: Ranges do not intersect" ;
     };
-    String STR_LONG_ERR_NO_REF
-    {
-        Text [ en-US ] = "Error: Not a valid reference" ;
-    };
-    String STR_NV_STR
-    {
-        Text [ en-US ] = "#N/A" ;
-    };
-    String STR_LONG_ERR_NV
-    {
-        Text [ en-US ] = "Error: Value not available" ;
-    };
-    String STR_DIV_ZERO
-    {
-        Text [ en-US ] = "#DIV/0!" ;
-    };
+    /* ERROR.TYPE( #DIV/0! ) == 2 */
     String STR_LONG_ERR_DIV_ZERO
     {
         Text [ en-US ] = "Error: Division by zero" ;
     };
-    String STR_NUM_ERROR
+    /* ERROR.TYPE( #VALUE! ) == 3 */
+    String STR_LONG_ERR_NO_VALUE
     {
-        Text [ en-US ] = "#NUM!" ;
+        Text [ en-US ] = "Error: Wrong data type" ;
     };
+    /* ERROR.TYPE( #REF! ) == 4 */
+    String STR_LONG_ERR_NO_REF
+    {
+        Text [ en-US ] = "Error: Not a valid reference" ;
+    };
+    /* ERROR.TYPE( #NAME! ) == 5 */
+    String STR_LONG_ERR_NO_NAME
+    {
+        Text [ en-US ] = "Error: Invalid name" ;
+    };
+    /* ERROR.TYPE( #NUM! ) == 6 */
     String STR_LONG_ERR_ILL_FPO
     {
-        Text [ en-US ] = "Error: Invalid floating point operation" ;
+        Text [ en-US ] = "Error: Invalid numeric value" ;
     };
-    String STR_NULL_ERROR
+    /* ERROR.TYPE( #N/A ) == 7 */
+    String STR_LONG_ERR_NV
     {
-        Text [ en-US ] = "#NULL!" ;
+        Text [ en-US ] = "Error: Value not available" ;
+    };
+    /* END defined ERROR.TYPE() values. */
+    String STR_NO_ADDIN
+    {
+        Text [ en-US ] = "#ADDIN?" ;
+    };
+    String STR_LONG_ERR_NO_ADDIN
+    {
+        Text [ en-US ] = "Error: Add-in not found" ;
+    };
+    String STR_NO_MACRO
+    {
+        Text [ en-US ] = "#MACRO?" ;
+    };
+    String STR_LONG_ERR_NO_MACRO
+    {
+        Text [ en-US ] = "Error: Macro not found" ;
     };
     String STR_LONG_ERR_SYNTAX
     {
@@ -920,26 +924,13 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Error: Circular reference" ;
     };
-    String STR_LONG_ERR_NO_NAME
-    {
-        Text [ en-US ] = "Error: Invalid name" ;
-    };
-    String STR_LONG_ERR_NO_ADDIN
-    {
-        Text [ en-US ] = "Error: Add-in not found" ;
-    };
-    String STR_LONG_ERR_NO_MACRO
-    {
-        Text [ en-US ] = "Error: Macro not found" ;
-    };
     String STR_LONG_ERR_NO_CONV
     {
         Text [ en-US ] = "Error: Calculation does not converge" ;
     };
-    String STR_LONG_ERR_NO_VALUE
-    {
-        Text [ en-US ] = "Error: No result" ;
-    };
+
+    /* END error constants and error strings. */
+
     String STR_ODER_SO
     {
         Text [ en-US ] = "%s or similar" ;
