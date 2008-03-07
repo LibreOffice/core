@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: dp_gui_updatedialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:26:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,12 +264,19 @@ ModalDialog RID_DLG_UPDATE {
     String RID_DLG_UPDATE_BROWSERBASED {
         Text[en-US] = "browser based update";
     };
+
+    String RID_DLG_UPDATE_VERSION {
+        Text[en-US] = "Version";
+    };
 };
 
-InfoBox RID_INFOBOX_UPDATE_SHARED_EXTENSION
+WarningBox RID_WARNINGBOX_UPDATE_SHARED_EXTENSION
 {
-    Buttons = WB_OK;
-    DefButton = WB_DEF_OK;
-    Message[en-US] = "Before updating a shared extension, make sure that no further instances of %PRODUCTNAME are running.";
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[en-US] = "Make sure that no further users are working with the same "
+    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
+    "Click \'OK\' to update the extensions.\n"
+    "Click \'Cancel\' to stop updating the extensions.";
 };
 
