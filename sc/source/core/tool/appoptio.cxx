@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:17:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,8 @@ void ScAppOptions::SetDefaults()
 
     nDefaultObjectSizeWidth = 8000;
     nDefaultObjectSizeHeight = 5000;
+
+    mbShowSharedDocumentWarning = true;
 }
 
 //------------------------------------------------------------------------
@@ -140,6 +142,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     eLinkMode       = rCpy.eLinkMode;
     nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
+    mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
     return *this;
 }
 
@@ -399,7 +402,8 @@ void lcl_GetSortList( Any& rDest )
 
 #define SCMISCOPT_DEFOBJWIDTH       0
 #define SCMISCOPT_DEFOBJHEIGHT      1
-#define SCMISCOPT_COUNT             2
+#define SCMISCOPT_SHOWSHAREDDOCWARN 2
+#define SCMISCOPT_COUNT             3
 
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
@@ -489,8 +493,9 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "DefaultObjectSize/Width",  // SCMISCOPT_DEFOBJWIDTH
-        "DefaultObjectSize/Height"  // SCMISCOPT_DEFOBJHEIGHT
+        "DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
+        "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
+        "SharedDocument/ShowWarning"    // SCMISCOPT_SHOWSHAREDDOCWARN
     };
     Sequence<OUString> aNames(SCMISCOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -677,6 +682,9 @@ ScAppCfg::ScAppCfg() :
                     case SCMISCOPT_DEFOBJHEIGHT:
                         if (pValues[nProp] >>= nIntVal) SetDefaultObjectSizeHeight( nIntVal );
                         break;
+                    case SCMISCOPT_SHOWSHAREDDOCWARN:
+                        SetShowSharedDocumentWarning( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -826,6 +834,9 @@ IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
                 break;
             case SCMISCOPT_DEFOBJHEIGHT:
                 pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeHeight();
+                break;
+            case SCMISCOPT_SHOWSHAREDDOCWARN:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetShowSharedDocumentWarning() );
                 break;
         }
     }
