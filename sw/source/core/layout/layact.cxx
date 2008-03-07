@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:44:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,11 +128,7 @@
 #ifndef _OBJECTFORMATTER_HXX
 #include <objectformatter.hxx>
 #endif
-
-#include "../../../inc/PostItMgr.hxx"
-#include "../../../inc/docsh.hxx"
-#include "../../ui/inc/view.hxx"
-
+#include <PostItMgr.hxx>
 
 // <--
 //#pragma optimize("ity",on)
@@ -501,7 +497,7 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
     // if sidebar for notes is present, no scrolling is allowed
     if ( bScroll )
     {
-        SwPostItMgr* pPostItMgr = pImp->GetShell()->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+        const SwPostItMgr* pPostItMgr = pImp->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             bScroll = false;
@@ -1676,7 +1672,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
 
                 //mod #i6193# added sidebar width
-                SwPostItMgr* pPostItMgr = pImp->GetShell()->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+                const SwPostItMgr* pPostItMgr = pImp->GetShell()->GetPostItMgr();
                 const int nSidebarWidth = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
                 if (pPageFrm->MarginSide())
                 {
@@ -1731,24 +1727,44 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             // between pages (not only for in online mode).
             if ( pLay->IsPageFrm() )
             {
-                if ( pLay->GetPrev() )
+                const SwTwips nHalfDocBorder = GAPBETWEENPAGES;
+                const bool bLeftToRightViewLayout = pRoot->IsLeftToRightViewLayout();
+                const bool bPrev = bLeftToRightViewLayout ? pLay->GetPrev() : pLay->GetNext();
+                const bool bNext = bLeftToRightViewLayout ? pLay->GetNext() : pLay->GetPrev();
+
+                if ( bPrev )
                 {
+                    // top
                     SwRect aSpaceToPrevPage( pLay->Frm() );
-                    SwTwips nTop = aSpaceToPrevPage.Top() - DOCUMENTBORDER/2;
+                    const SwTwips nTop = aSpaceToPrevPage.Top() - nHalfDocBorder;
                     if ( nTop >= 0 )
                         aSpaceToPrevPage.Top( nTop );
                     aSpaceToPrevPage.Bottom( pLay->Frm().Top() );
                     pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
+
+                    // left
+                    aSpaceToPrevPage = pLay->Frm();
+                    const SwTwips nLeft = aSpaceToPrevPage.Left() - nHalfDocBorder;
+                    if ( nLeft >= 0 )
+                        aSpaceToPrevPage.Left( nLeft );
+                    aSpaceToPrevPage.Right( pLay->Frm().Left() );
+                    pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
                 }
-                if ( pLay->GetNext() )
+                if ( bNext )
                 {
+                    // bottom
                     SwRect aSpaceToNextPage( pLay->Frm() );
-                    aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + DOCUMENTBORDER/2 );
+                    aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + nHalfDocBorder );
                     aSpaceToNextPage.Top( pLay->Frm().Bottom() );
+                    pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
+
+                    // right
+                    aSpaceToNextPage = pLay->Frm();
+                    aSpaceToNextPage.Right( aSpaceToNextPage.Right() + nHalfDocBorder );
+                    aSpaceToNextPage.Left( pLay->Frm().Right() );
                     pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
                 }
             }
-
         }
         pLay->ResetCompletePaint();
     }
@@ -2043,7 +2059,7 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
     ViewShell* pSh = pPage->GetShell();
     if ( pSh )
     {
-        SwPostItMgr* pPostItMgr = pSh->GetDoc()->GetDocShell()->GetView()->GetPostItMgr();
+        const SwPostItMgr* pPostItMgr = pSh->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             return;
