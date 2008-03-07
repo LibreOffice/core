@@ -7,6 +7,6 @@
             <value>Wave Audio File</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
-        <prop oor:name="DetectService"/>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.framework.SoundHandler</value></prop>
         <prop oor:name="PreferredFilter"/>
     </node>
