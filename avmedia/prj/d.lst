@@ -14,3 +14,5 @@ mkdir: %_DEST%\inc%_EXT%\avmedia
 ..\inc\avmedia\mediaitem.hxx %_DEST%\inc%_EXT%\avmedia\mediaitem.hxx
 ..\inc\avmedia\mediaplayer.hxx %_DEST%\inc%_EXT%\avmedia\mediaplayer.hxx
 ..\inc\avmedia\mediatoolbox.hxx %_DEST%\inc%_EXT%\avmedia\mediatoolbox.hxx
+
+..\%__SRC%\class\avmedia.jar %_DEST%\bin%_EXT%\avmedia.jar
