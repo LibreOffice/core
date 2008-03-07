@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:04:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1311,98 +1311,6 @@ BOOL MiscSettings::GetEnableLocalizedDecimalSep() const
     return mpData->mbEnableLocalizedDecimalSep;
 }
 
-
-
-// =======================================================================
-
-ImplSoundData::ImplSoundData()
-{
-    mnRefCount                  = 1;
-    mnOptions                   = 0;
-}
-
-// -----------------------------------------------------------------------
-
-ImplSoundData::ImplSoundData( const ImplSoundData& rData )
-{
-    mnRefCount                  = 1;
-    mnOptions                   = rData.mnOptions;
-}
-
-// -----------------------------------------------------------------------
-
-SoundSettings::SoundSettings()
-{
-    mpData = new ImplSoundData();
-}
-
-// -----------------------------------------------------------------------
-
-SoundSettings::SoundSettings( const SoundSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "SoundSettings: RefCount overflow" );
-
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
-    mpData = rSet.mpData;
-    mpData->mnRefCount++;
-}
-
-// -----------------------------------------------------------------------
-
-SoundSettings::~SoundSettings()
-{
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-}
-
-// -----------------------------------------------------------------------
-
-const SoundSettings& SoundSettings::operator =( const SoundSettings& rSet )
-{
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "SoundSettings: RefCount overflow" );
-
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    rSet.mpData->mnRefCount++;
-
-    // Daten loeschen, wenn letzte Referenz
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
-    mpData = rSet.mpData;
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-void SoundSettings::CopyData()
-{
-    // Falls noch andere Referenzen bestehen, dann kopieren
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplSoundData( *mpData );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SoundSettings::operator ==( const SoundSettings& rSet ) const
-{
-    if ( mpData == rSet.mpData )
-        return TRUE;
-
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return TRUE;
-    else
-        return FALSE;
-}
-
 // =======================================================================
 
 ImplNotificationData::ImplNotificationData()
@@ -1625,7 +1533,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maKeyboardSettings( rData.maKeyboardSettings ),
     maStyleSettings( rData.maStyleSettings ),
     maMiscSettings( rData.maMiscSettings ),
-    maSoundSettings( rData.maSoundSettings ),
     maNotificationSettings( rData.maNotificationSettings ),
     maHelpSettings( rData.maHelpSettings ),
     maLocale( rData.maLocale ),
@@ -1795,16 +1702,6 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
         }
     }
 
-    if ( nFlags & SETTINGS_SOUND )
-    {
-        if ( mpData->maSoundSettings != rSet.mpData->maSoundSettings )
-        {
-            CopyData();
-            mpData->maSoundSettings = rSet.mpData->maSoundSettings;
-            nChangeFlags |= SETTINGS_SOUND;
-        }
-    }
-
     if ( nFlags & SETTINGS_NOTIFICATION )
     {
         if ( mpData->maNotificationSettings != rSet.mpData->maNotificationSettings )
@@ -1876,9 +1773,6 @@ ULONG AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
         nChangeFlags |= SETTINGS_MISC;
 
-    if ( mpData->maSoundSettings != rSet.mpData->maSoundSettings )
-        nChangeFlags |= SETTINGS_SOUND;
-
     if ( mpData->maNotificationSettings != rSet.mpData->maNotificationSettings )
         nChangeFlags |= SETTINGS_NOTIFICATION;
 
@@ -1909,7 +1803,6 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maKeyboardSettings        == rSet.mpData->maKeyboardSettings)     &&
          (mpData->maStyleSettings           == rSet.mpData->maStyleSettings)        &&
          (mpData->maMiscSettings            == rSet.mpData->maMiscSettings)         &&
-         (mpData->maSoundSettings           == rSet.mpData->maSoundSettings)        &&
          (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
