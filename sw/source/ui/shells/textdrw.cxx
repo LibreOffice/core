@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:29:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
+#include <avmedia/mediawindow.hxx>
 
 #include <unomid.h>
 
@@ -162,7 +160,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
             xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
 
-            if ( Sound::IsSoundFile( rURL ) )
+            if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
             {
                 // #105638# OJ
                 aTmp <<= sal_True;
