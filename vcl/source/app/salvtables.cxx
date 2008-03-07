@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:06:48 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include <vcl/salvd.hxx>
 #include <vcl/salprn.hxx>
 #include <vcl/saltimer.hxx>
-#include <vcl/salsound.hxx>
 #include <vcl/salogl.hxx>
 #include <vcl/salimestatus.hxx>
 #include <vcl/salsys.hxx>
@@ -69,10 +68,6 @@ void SalFrame::Flush( const Rectangle& )
 // -----------------------------------------------------------------------
 
 SalInstance::~SalInstance()
-{
-}
-
-SalSound::~SalSound()
 {
 }
 
