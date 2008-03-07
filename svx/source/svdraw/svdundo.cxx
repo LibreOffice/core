@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:43:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void SdrUndoGroup::Redo()
 XubString SdrUndoGroup::GetComment() const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%O";
+    sal_Char aSearchText[] = "%1";
     String aSearchString(aSearchText, sizeof(aSearchText-1));
 
     aRet.SearchAndReplace(aSearchString, aObjDescription);
@@ -245,7 +245,7 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 XubString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%O";
+    sal_Char aSearchText[] = "%1";
     String aSearchString(aSearchText, sizeof(aSearchText-1));
 
     aRet.SearchAndReplace(aSearchString, ImpGetResStr(STR_ObjNameSingulPlural));
@@ -276,7 +276,7 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, FASTBOOL bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
-    sal_Char aSearchText[] = "%O";
+    sal_Char aSearchText[] = "%1";
     String aSearchString(aSearchText, sizeof(aSearchText-1));
 
     xub_StrLen nPos = rStr.Search(aSearchString);
