@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:44:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2498,12 +2498,13 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 
 void SwFlyFrm::NotifyDrawObj()
 {
-    GetVirtDrawObj()->SetRect();
-    GetVirtDrawObj()->SetRectsDirty();
-    GetVirtDrawObj()->SetChanged();
-    GetVirtDrawObj()->BroadcastObjectChange();
+    SwVirtFlyDrawObj* pObj = GetVirtDrawObj();
+    pObj->SetRect();
+    pObj->SetRectsDirty();
+    pObj->SetChanged();
+    pObj->BroadcastObjectChange();
     if ( GetFmt()->GetSurround().IsContour() )
-        ClrContourCache( GetVirtDrawObj() );
+        ClrContourCache( pObj );
 }
 
 /*************************************************************************
