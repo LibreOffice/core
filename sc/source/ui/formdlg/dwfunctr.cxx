@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:53:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,22 +918,27 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
             nArgs = pDesc->nArgCount;
             if(nArgs>0)
             {
-                aFirstArgStr = *(pDesc->aDefArgNames[0]);
+                // NOTE: Theoretically the first parameter could have the
+                // suppress flag as well, but practically it doesn't.
+                aFirstArgStr = *(pDesc->ppDefArgNames[0]);
                 aFirstArgStr.EraseLeadingAndTrailingChars();
                 aFirstArgStr.SearchAndReplaceAll(' ', '_');
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS )
-                {   // keine VarArgs oder Fix plus VarArgs, aber nicht nur VarArgs
+                {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
                     String aArgSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
                     USHORT nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
                     for ( USHORT nArg = 1;
-                            nArg < nFix && !pDesc->aDefArgOpt[nArg]; nArg++ )
+                            nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {
-                        aArgStr += aArgSep;
-                        String sTmp(*(pDesc->aDefArgNames[nArg]));
-                        sTmp.EraseLeadingAndTrailingChars();
-                        sTmp.SearchAndReplaceAll(' ', '_');
-                        aArgStr += sTmp;
+                        if (!pDesc->pDefArgFlags[nArg].bSuppress)
+                        {
+                            aArgStr += aArgSep;
+                            String sTmp(*(pDesc->ppDefArgNames[nArg]));
+                            sTmp.EraseLeadingAndTrailingChars();
+                            sTmp.SearchAndReplaceAll(' ', '_');
+                            aArgStr += sTmp;
+                        }
                     }
                 }
             }
