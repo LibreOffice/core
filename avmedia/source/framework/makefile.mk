@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:32:06 $
+#   last change: $Author: kz $ $Date: 2008-03-07 16:57:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,11 @@ SLOFILES= \
         $(SLO)$/mediamisc.obj 	 \
         $(SLO)$/mediacontrol.obj \
         $(SLO)$/mediatoolbox.obj \
-        $(SLO)$/mediaplayer.obj  
+        $(SLO)$/mediaplayer.obj  \
+        $(SLO)$/soundhandler.obj  
+
+EXCEPTIONSFILES = \
+        $(SLO)$/soundhandler.obj
 
 # --- Targets ----------------------------------
 
