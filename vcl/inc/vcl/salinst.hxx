@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:37:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@ struct ImplJobSetup;
 class SalGraphics;
 class SalFrame;
 class SalObject;
-class SalSound;
 class SalOpenGL;
 class SalMenu;
 class SalMenuItem;
@@ -136,8 +135,6 @@ public:
     virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
     virtual String             GetDefaultPrinter() = 0;
 
-    // SalSound
-    virtual SalSound*           CreateSalSound() = 0;
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
     // SalOpenGL
