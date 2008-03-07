@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:57:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,9 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
             long nBorder = 0;
             if( GRID_LINES_CHARS == pGrid->GetGridType() )
             {
-                nBorder = nSize % pGrid->GetBaseHeight();
+                //for textgrid refactor
+                SwDoc *pDoc = GetFmt()->GetDoc();
+                nBorder = nSize % (GETGRIDWIDTH(pGrid, pDoc));
                 nSize -= nBorder;
                 nBorder /= 2;
             }
