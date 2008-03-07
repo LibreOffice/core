@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:12:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,8 @@
 #include "inputopt.hxx"
 #include "drwlayer.hxx"
 #include "inputhdl.hxx"
+#include "conflictsdlg.hxx"
+#include "globstr.hrc"
 
 //------------------------------------------------------------------
 
@@ -771,7 +773,40 @@ inline BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, BOOL 
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
-void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
+bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, BOOL bIgnore100Sec )
+{
+    if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction )
+    {
+        return false;
+    }
+
+    const ScChangeAction* pA = pFirstSearchAction;
+    while ( pA )
+    {
+        if ( pAction->GetType() == pA->GetType() &&
+             pAction->GetUser() == pA->GetUser() &&
+             (bIgnore100Sec ?
+                pAction->GetDateTimeUTC().IsEqualIgnore100Sec( pA->GetDateTimeUTC() ) :
+                pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
+             pAction->GetBigRange() == pA->GetBigRange() )
+        {
+            String aActionDesc;
+            pAction->GetDescription( aActionDesc, pDoc, TRUE );
+            String aADesc;
+            pA->GetDescription( aADesc, pSearchDoc, TRUE );
+            if ( aActionDesc.Equals( aADesc ) )
+            {
+                DBG_ERROR( "lcl_FindAction(): found equal action!" );
+                return true;
+            }
+        }
+        pA = pA->GetNext();
+    }
+
+    return false;
+}
+
+void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheckDuplicates, ULONG nOffset )
 {
     ScTabViewShell* pViewSh = GetBestViewShell();   //! Funktionen an die DocShell
     if (!pViewSh)
@@ -787,10 +822,13 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
         aDocument.StartChangeTracking();
         pThisTrack = aDocument.GetChangeTrack();
         DBG_ASSERT(pThisTrack,"ChangeTracking nicht angeschaltet?");
-        // #51138# visuelles RedLining einschalten
-        ScChangeViewSettings aChangeViewSet;
-        aChangeViewSet.SetShowChanges(TRUE);
-        aDocument.SetChangeViewSettings(aChangeViewSet);
+        if ( !bShared )
+        {
+            // #51138# visuelles RedLining einschalten
+            ScChangeViewSettings aChangeViewSet;
+            aChangeViewSet.SetShowChanges(TRUE);
+            aDocument.SetChangeViewSettings(aChangeViewSet);
+        }
     }
 
 
@@ -816,12 +854,13 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
 
 
     const ScChangeAction* pFirstMergeAction = pSourceAction;
+    const ScChangeAction* pFirstSearchAction = pThisAction;
     //  MergeChangeData aus den folgenden Aktionen erzeugen
     ULONG nNewActionCount = 0;
     const ScChangeAction* pCount = pSourceAction;
     while ( pCount )
     {
-        if ( !ScChangeTrack::MergeIgnore( *pCount, nFirstNewNumber ) )
+        if ( bShared || !ScChangeTrack::MergeIgnore( *pCount, nFirstNewNumber ) )
             ++nNewActionCount;
         pCount = pCount->GetNext();
     }
@@ -888,10 +927,26 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
     pSourceAction = pFirstMergeAction;
     while ( pSourceAction && pSourceAction->GetActionNumber() <= nLastMergeAction )
     {
-        if ( !ScChangeTrack::MergeIgnore( *pSourceAction, nFirstNewNumber ) )
+        bool bMergeAction = false;
+        if ( bShared )
+        {
+            if ( !bCheckDuplicates || !lcl_FindAction( &rOtherDoc, pSourceAction, &aDocument, pFirstSearchAction, bIgnore100Sec ) )
+            {
+                bMergeAction = true;
+            }
+        }
+        else
+        {
+            if ( !ScChangeTrack::MergeIgnore( *pSourceAction, nFirstNewNumber ) )
+            {
+                bMergeAction = true;
+            }
+        }
+
+        if ( bMergeAction )
         {
             ScChangeActionType eSourceType = pSourceAction->GetType();
-            if ( pSourceAction->IsDeletedIn() )
+            if ( !bShared && pSourceAction->IsDeletedIn() )
             {
                 //! muss hier noch festgestellt werden, ob wirklich in
                 //! _diesem_ Dokument geloescht?
@@ -917,22 +972,42 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                 pThisTrack->SetFixDateTimeUTC( pSourceAction->GetDateTimeUTC() );
                 ULONG nNextAction = pThisTrack->GetActionMax() + 1;
 
+                bool bExecute = true;
                 ULONG nReject = pSourceAction->GetRejectAction();
-                if (nReject)
+                if ( nReject )
                 {
-                    //  alte Aktion (aus den gemeinsamen) ablehnen
-                    ScChangeAction* pOldAction = pThisTrack->GetAction( nReject );
-                    if (pOldAction && pOldAction->GetState() == SC_CAS_VIRGIN)
+                    if ( bShared )
                     {
-                        //! was passiert bei Aktionen, die in diesem Dokument accepted worden sind???
-                        //! Fehlermeldung oder was???
-                        //! oder Reject-Aenderung normal ausfuehren
+                        if ( nReject >= nFirstNewNumber )
+                        {
+                            nReject += nOffset;
+                        }
+                        ScChangeAction* pOldAction = pThisTrack->GetAction( nReject );
+                        if ( pOldAction && pOldAction->GetState() == SC_CAS_VIRGIN )
+                        {
+                            pThisTrack->Reject( pOldAction );
+                            bHasRejected = TRUE;
+                            bExecute = false;
+                        }
+                    }
+                    else
+                    {
+                        //  alte Aktion (aus den gemeinsamen) ablehnen
+                        ScChangeAction* pOldAction = pThisTrack->GetAction( nReject );
+                        if (pOldAction && pOldAction->GetState() == SC_CAS_VIRGIN)
+                        {
+                            //! was passiert bei Aktionen, die in diesem Dokument accepted worden sind???
+                            //! Fehlermeldung oder was???
+                            //! oder Reject-Aenderung normal ausfuehren
 
-                        pThisTrack->Reject(pOldAction);
-                        bHasRejected = TRUE;                // fuer Paint
+                            pThisTrack->Reject(pOldAction);
+                            bHasRejected = TRUE;                // fuer Paint
+                        }
+                        bExecute = false;
                     }
                 }
-                else
+
+                if ( bExecute )
                 {
                     //  normal ausfuehren
                     ScRange aSourceRange = pSourceAction->GetBigRange().MakeRange();
@@ -1063,7 +1138,193 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
     UnlockPaint();
 }
 
+void lcl_MergeActionStates( ScChangeTrack* pOwnTrack, ScChangeTrack* pSharedTrack )
+{
+    BOOL bIgnore100Sec = !pOwnTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
+    ScChangeAction* pOwnAction = pOwnTrack->GetFirst();
+    ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
+    while ( lcl_Equal( pOwnAction, pSharedAction, bIgnore100Sec ) )
+    {
+        pOwnTrack->MergeActionState( pOwnAction, pSharedAction );
+        pOwnAction = pOwnAction->GetNext();
+        pSharedAction = pSharedAction->GetNext();
+    }
+}
 
+bool ScDocShell::MergeSharedDocument( ScDocument& rSharedDoc )
+{
+    ScChangeTrack* pThisTrack = aDocument.GetChangeTrack();
+    if ( !pThisTrack )
+    {
+        return false;
+    }
 
+    ScChangeTrack* pSharedTrack = rSharedDoc.GetChangeTrack();
+    if ( !pSharedTrack )
+    {
+        return false;
+    }
 
+    if ( getenv( "DEBUG_CHANGETRACK" ) != NULL )
+    {
+        ::rtl::OUString aMessage = ::rtl::OUString::createFromAscii( "\nbefore merge:\n" );
+        aMessage += pThisTrack->toString();
+        OSL_ENSURE( false, ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    }
 
+    // reset show changes
+    ScChangeViewSettings aChangeViewSet;
+    aChangeViewSet.SetShowChanges( FALSE );
+    aDocument.SetChangeViewSettings( aChangeViewSet );
+
+    // find first merge action in this document
+    BOOL bIgnore100Sec = !pThisTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
+    ScChangeAction* pThisAction = pThisTrack->GetFirst();
+    ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
+    while ( lcl_Equal( pThisAction, pSharedAction, bIgnore100Sec ) )
+    {
+        pThisAction = pThisAction->GetNext();
+        pSharedAction = pSharedAction->GetNext();
+    }
+
+    if ( pSharedAction )
+    {
+        if ( pThisAction )
+        {
+            ScConflictsList aConflictsList;
+            ScConflictsFinder aFinder( pSharedTrack, pSharedAction->GetActionNumber(), pSharedTrack->GetActionMax(), pThisTrack, pThisAction->GetActionNumber(), pThisTrack->GetActionMax(), aConflictsList );
+            if ( aFinder.Find() )
+            {
+                bool bLoop = true;
+                while ( bLoop )
+                {
+                    bLoop = false;
+                    ScConflictsDlg aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
+                    if ( aDlg.Execute() == RET_CANCEL )
+                    {
+                        QueryBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                            ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) );
+                        if ( aBox.Execute() == RET_YES )
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            bLoop = true;
+                        }
+                    }
+                }
+            }
+
+            // create temp document with cloned change track
+            ScDocument* pTmpDoc = new ScDocument;
+            SCTAB nOrigCount = aDocument.GetTableCount();
+            String sTabName;
+            for ( sal_Int32 nIndex = 0; nIndex < nOrigCount; ++nIndex )
+            {
+                pTmpDoc->CreateValidTabName( sTabName );
+                pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
+            }
+            pThisTrack->Clone( pTmpDoc );
+
+            // undo own change actions since last save
+            ULONG nStartShared = pThisAction->GetActionNumber();
+            ScChangeAction* pAction = pThisTrack->GetLast();
+            while ( pAction && pAction->GetActionNumber() >= nStartShared )
+            {
+                pThisTrack->Reject( pAction );
+                pAction = pAction->GetPrev();
+            }
+            pThisTrack->Undo( nStartShared, pThisTrack->GetActionMax() );
+
+            // merge changes from shared document
+            MergeDocument( rSharedDoc, true );
+            ULONG nEndShared = pThisTrack->GetActionMax();
+
+            // resolve conflicts for shared non-content actions
+            if ( !aConflictsList.empty() )
+            {
+                ScConflictsResolver aResolver( pThisTrack, aConflictsList );
+                ULONG nOffset = 0;
+                pAction = pThisTrack->GetAction( nStartShared );
+                while ( pAction && pAction->GetActionNumber() <= nEndShared )
+                {
+                    aResolver.HandleAction( pAction, nOffset, true /*bIsSharedAction*/,
+                        false /*bHandleContentAction*/, true /*bHandleNonContentAction*/ );
+                    pAction = pAction->GetNext();
+                }
+            }
+            nEndShared = pThisTrack->GetActionMax();
+
+            // only show changes from shared document
+            aChangeViewSet.SetShowChanges( TRUE );
+            aChangeViewSet.SetShowAccepted( TRUE );
+            aChangeViewSet.SetHasActionRange( true );
+            aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
+            aDocument.SetChangeViewSettings( aChangeViewSet );
+
+            // merge changes from temp document
+            ULONG nStartOwn = pThisTrack->GetActionMax() + 1;
+            MergeDocument( *pTmpDoc, true, true, nEndShared - nStartShared + 1 );
+            delete pTmpDoc;
+            ULONG nEndOwn = pThisTrack->GetActionMax();
+
+            // resolve conflicts for shared content actions and own actions
+            if ( !aConflictsList.empty() )
+            {
+                ScConflictsResolver aResolver( pThisTrack, aConflictsList );
+                ULONG nOffset = 0;
+                pAction = pThisTrack->GetAction( nStartShared );
+                while ( pAction && pAction->GetActionNumber() <= nEndShared )
+                {
+                    aResolver.HandleAction( pAction, nOffset, true /*bIsSharedAction*/,
+                        true /*bHandleContentAction*/, false /*bHandleNonContentAction*/ );
+                    pAction = pAction->GetNext();
+                }
+
+                nOffset = nEndShared - nStartShared + 1;
+                pAction = pThisTrack->GetAction( nStartOwn );
+                while ( pAction && pAction->GetActionNumber() <= nEndOwn )
+                {
+                    aResolver.HandleAction( pAction, nOffset, false /*bIsSharedAction*/,
+                        true /*bHandleContentAction*/, true /*bHandleNonContentAction*/ );
+                    pAction = pAction->GetNext();
+                }
+            }
+            nEndOwn = pThisTrack->GetActionMax();
+        }
+        else
+        {
+            // merge changes from shared document
+            ULONG nStartShared = pThisTrack->GetActionMax() + 1;
+            MergeDocument( rSharedDoc, true );
+            ULONG nEndShared = pThisTrack->GetActionMax();
+
+            // only show changes from shared document
+            aChangeViewSet.SetShowChanges( TRUE );
+            aChangeViewSet.SetShowAccepted( TRUE );
+            aChangeViewSet.SetHasActionRange( true );
+            aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
+            aDocument.SetChangeViewSettings( aChangeViewSet );
+        }
+
+        // merge action states
+        lcl_MergeActionStates( pThisTrack, pSharedTrack );
+
+        // update view
+        PostPaintExtras();
+        PostPaintGridAll();
+
+        InfoBox aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
+        aInfoBox.Execute();
+    }
+
+    if ( getenv( "DEBUG_CHANGETRACK" ) != NULL )
+    {
+        ::rtl::OUString aMessage = ::rtl::OUString::createFromAscii( "\nafter merge:\n" );
+        aMessage += pThisTrack->toString();
+        OSL_ENSURE( false, ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    }
+
+    return ( pThisAction != NULL );
+}
