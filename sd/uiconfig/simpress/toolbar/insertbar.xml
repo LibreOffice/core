@@ -16,6 +16,5 @@
     <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="helpid:10140"  />
     <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:helpid="helpid:5561"  toolbar:visible="false"   />
     <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:helpid="helpid:5672"  toolbar:visible="false" />
-    <toolbar:toolbaritem xlink:href=".uno:InsertApplet" toolbar:helpid="helpid:5673"  toolbar:visible="false" />
     <toolbar:toolbarseparator/>
 </toolbar:toolbar>
