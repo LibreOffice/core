@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:49:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1320,16 +1320,16 @@ awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )
     if(pView)
     {
         const SwWrtShell& rSh = pView->GetWrtShell();
-        const SvxULSpaceItem& rUL = rSh.GetPageDesc( rSh.GetCurPageDesc()
-                                                    ).GetMaster().GetULSpace();
-        SwRect aCharRect(rSh.GetCharRect());
-        long nY = aCharRect.Top() -
-                                (rUL.GetUpper() + DOCUMENTBORDER);
+        const SwRect aCharRect(rSh.GetCharRect());
+
+        const SwFrmFmt& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
+
+        const SvxULSpaceItem& rUL = rMaster.GetULSpace();
+        const long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
         aRet.Y = TWIP_TO_MM100(nY);
-        const SvxLRSpaceItem& rLR = rSh.GetPageDesc( rSh.GetCurPageDesc()
-                                                    ).GetMaster().GetLRSpace();
-        long nX = aCharRect.Left() -
-                                (rLR.GetLeft() + DOCUMENTBORDER);
+
+        const SvxLRSpaceItem& rLR = rMaster.GetLRSpace();
+        const long nX = aCharRect.Left() - (rLR.GetLeft() + DOCUMENTBORDER);
         aRet.X = TWIP_TO_MM100(nX);
     }
     else
