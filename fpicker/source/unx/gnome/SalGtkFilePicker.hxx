@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:25:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,7 @@ class SalGtkFilePicker :
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
             m_xListener;
+        ::rtl::OUString msPlayLabel;
         FilterList *m_pFilterList;
         GtkWidget  *m_pVBox;
 
@@ -340,6 +341,7 @@ class SalGtkFilePicker :
         GtkWidget *m_pLists[ LIST_LAST ];
         GtkWidget *m_pListLabels[ LIST_LAST ];
         bool mbListVisibility[ LIST_LAST ];
+        bool mbButtonVisibility[ BUTTON_LAST ];
         gulong mnHID_FolderChange;
         gulong mnHID_SelectionChange;
 
