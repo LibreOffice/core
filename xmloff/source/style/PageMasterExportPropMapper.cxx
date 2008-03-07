@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:26:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,6 +348,9 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState*       pPMScaleToPages     = NULL;
     XMLPropertyState*       pPMScaleToX         = NULL;
     XMLPropertyState*       pPMScaleToY         = NULL;
+    XMLPropertyState*       pPMStandardMode     = NULL;
+    XMLPropertyState*       pPMGridBaseWidth    = NULL;
+    XMLPropertyState*       pPMGridSnapToChars  = NULL;
 
     XMLPropertyState*       pPrint              = NULL;
 
@@ -400,6 +403,9 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_SCALETOPAGES:       pPMScaleToPages     = pProp;    break;
             case CTF_PM_SCALETOX:           pPMScaleToX         = pProp;    break;
             case CTF_PM_SCALETOY:           pPMScaleToY         = pProp;    break;
+            case CTF_PM_STANDARD_MODE:      pPMStandardMode     = pProp;    break;
+            case CTP_PM_GRID_BASE_WIDTH:        pPMGridBaseWidth    = pProp;    break;
+            case CTP_PM_GRID_SNAP_TO_CHARS:     pPMGridSnapToChars  = pProp;    break;
         }
         if (nPrintId == CTF_PM_PRINTMASK)
         {
@@ -407,6 +413,18 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             lcl_RemoveState(pPrint);
         }
     }
+
+    if( pPMStandardMode && !getBOOL(pPMStandardMode->maValue) )
+    {
+        lcl_RemoveState(pPMStandardMode);
+        if( pPMGridBaseWidth )
+            lcl_RemoveState(pPMGridBaseWidth);
+        if( pPMGridSnapToChars )
+            lcl_RemoveState(pPMGridSnapToChars);
+    }
+
+    if( pPMGridBaseWidth && pPMStandardMode )
+        lcl_RemoveState(pPMStandardMode);
 
     aPageBuffer.ContextFilter( rPropState );
     aHeaderBuffer.ContextFilter( rPropState );
