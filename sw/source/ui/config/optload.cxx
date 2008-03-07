@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:21:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,11 @@
 #endif
 #include <SwNodeNum.hxx>
 
+#include <doc.hxx>
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 /* -----------------22.10.98 15:12-------------------
@@ -134,6 +139,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aMetricLB           ( this, SW_RES( LB_METRIC ) ),
     aTabFT              ( this, SW_RES( FT_TAB ) ),
     aTabMF              ( this, SW_RES( MF_TAB ) ),
+    aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
 
     pWrtShell   ( NULL ),
     bHTMLMode   ( FALSE ),
@@ -173,6 +179,10 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
         aTabFT.Hide();
         aTabMF.Hide();
     }
+
+    SvtCJKOptions aCJKOptions;
+    if(!aCJKOptions.IsAsianTypographyEnabled())
+        aUseSquaredPageMode.Hide();
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -250,6 +260,19 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = TRUE;
     }
 
+    sal_Bool bIsSquaredPageModeFlag = aUseSquaredPageMode.IsChecked();
+    if ( bIsSquaredPageModeFlag != aUseSquaredPageMode.GetSavedValue() )
+    {
+        pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
+        if ( pWrtShell )
+        {
+            SwDoc* pDoc = pWrtShell->GetDoc();
+            pDoc->SetDefaultPageMode( bIsSquaredPageModeFlag );
+            pWrtShell->SetModified();
+        }
+        bRet = TRUE;
+    }
+
     return bRet;
 }
 /*-----------------18.01.97 12.42-------------------
@@ -314,6 +337,14 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+    }
+
+    //default page mode loading
+    if(pWrtShell)
+    {
+        sal_Bool bSquaredPageMode = pWrtShell->GetDoc()->IsSquaredPageMode();
+        aUseSquaredPageMode.Check( bSquaredPageMode );
+            aUseSquaredPageMode.SaveValue();
     }
 }
 /*-----------------13.01.97 14.44-------------------
