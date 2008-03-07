@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:01:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ public:
     const ::rtl::OUString sTabStopFillCharacter;
     const ::rtl::OUString sBibliographyDataField;
     const ::rtl::OUString sChapterFormat;
+    const ::rtl::OUString sChapterLevel;//i53420
 
     const ::rtl::OUString sLevelFormat;
     const ::rtl::OUString sParaStyleLevel;
