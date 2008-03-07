@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -655,11 +658,9 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 
             const SwPageFrm* pPage = pTab->FindPageFrm();
             const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
-                                   (pPage->Frm().*fnRect->fnGetLeft)() +
-                                   DOCUMENTBORDER;
+                                   (pPage->Frm().*fnRect->fnGetLeft)();
             const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
-                                    (pPage->Frm().*fnRect->fnGetLeft)() +
-                                   DOCUMENTBORDER;
+                                    (pPage->Frm().*fnRect->fnGetLeft)();
 
             if ( pColumnCacheLastTabFrm != pTab )
             {
@@ -671,9 +672,9 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
-                    ASSERT( bVert ||
-                            pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
-                            "GetTabCols: wrong result" )
+                    //ASSERT( bVert ||
+                    //        pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
+                    //        "GetTabCols: wrong result" )
 
                     pColumnCacheLastTabFrm = pTab;
                 }
@@ -739,8 +740,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
             bDel = FALSE;
             SWRECTFN( pTab )
             const SwPageFrm* pPage = pTab->FindPageFrm();
-            const long nLeftMin  = DOCUMENTBORDER +
-                                   ( bVert ?
+            const long nLeftMin  = ( bVert ?
                                      pTab->GetPrtLeft() - pPage->Frm().Left() :
                                      pTab->GetPrtTop() - pPage->Frm().Top() );
             const long nLeft     = bVert ? LONG_MAX : 0;
@@ -1672,8 +1672,8 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                     const SwTwips nXDiff = (*fnRect->fnXDiff)( nLeft, rPointX ) * ( bRTL ? (-1) : 1 );
                     const SwTwips nYDiff = (*fnRect->fnYDiff)( nTop, rPointY );
 
-                    bCloseToRow = nXDiff > 0 && nXDiff < nFuzzy;
-                    bCloseToCol = nYDiff > 0 && nYDiff < nFuzzy;
+                    bCloseToRow = nXDiff >= 0 && nXDiff < nFuzzy;
+                    bCloseToCol = nYDiff >= 0 && nYDiff < nFuzzy;
 
                     if ( bCloseToCol && 2 * nYDiff > nFuzzy )
                     {
@@ -1860,25 +1860,148 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     return pFrm;
 }
 
+/* Helper function*/
+/* calculated the distance between Point rC and Line Segment (rA, rB) */
+double lcl_DistancePoint2Segment( const Point& rA, const Point& rB, const Point& rC )
+{
+    double nRet = 0;
+
+    const basegfx::B2DVector aBC( rC.X() - rB.X(), rC.Y() - rB.Y() );
+    const basegfx::B2DVector aAB( rB.X() - rA.X(), rB.Y() - rA.Y() );
+    const double nDot1 = aBC.scalar( aAB );
+
+    if ( nDot1 > 0 ) // check outside case 1
+        nRet = aBC.getLength();
+    else
+    {
+        const basegfx::B2DVector aAC( rC.X() - rA.X(), rC.Y() - rA.Y() );
+        const basegfx::B2DVector aBA( rA.X() - rB.X(), rA.Y() - rB.Y() );
+        const double nDot2 = aAC.scalar( aBA );
+
+        if ( nDot2 > 0 ) // check outside case 2
+            nRet = aAC.getLength();
+        else
+        {
+            const double nDiv = aAB.getLength();
+            nRet = nDiv ? aAB.cross( aAC ) / nDiv : 0;
+        }
+    }
+
+    return Abs(nRet);
+}
+
+/* Helper function*/
+Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint, bool bRowDrag )
+{
+    Point aRet( rPoint );
+    const SwTabFrm* pCurrentTab = &rTab;
+    const bool bVert = pCurrentTab->IsVertical();
+    const bool bRTL = pCurrentTab->IsRightToLeft();
+
+    // Western Layout:
+    // bRowDrag = true => compare to left border of table
+    // bRowDrag = false => compare to top border of table
+
+    // Asian Layout:
+    // bRowDrag = true => compare to right border of table
+    // bRowDrag = false => compare to top border of table
+
+    // RTL Layout:
+    // bRowDrag = true => compare to right border of table
+    // bRowDrag = false => compare to top border of table
+    bool bLeft = false;
+    bool bRight = false;
+
+    if ( bRowDrag )
+    {
+        if ( bVert || bRTL )
+            bRight = true;
+        else
+            bLeft = true;
+    }
+
+    // used to find the minimal distance
+    double nMin = -1;
+    Point aMin1;
+    Point aMin2;
+
+    Point aS1;
+    Point aS2;
+
+    while ( pCurrentTab )
+    {
+        SwRect aTabRect( pCurrentTab->Prt() );
+        aTabRect += pCurrentTab->Frm().Pos();
+
+        if ( bLeft )
+        {
+            // distance to left table border
+            aS1 = aTabRect.TopLeft();
+            aS2 = aTabRect.BottomLeft();
+        }
+        else if ( bRight )
+        {
+            // distance to right table border
+            aS1 = aTabRect.TopRight();
+            aS2 = aTabRect.BottomRight();
+        }
+        else //if ( bTop )
+        {
+            // distance to top table border
+            aS1 = aTabRect.TopLeft();
+            aS2 = aTabRect.TopRight();
+        }
+
+        const double nDist = lcl_DistancePoint2Segment( aS1, aS2, rPoint );
+
+        if ( nDist < nMin || -1 == nMin )
+        {
+            aMin1 = aS1;
+            aMin2 = aS2;
+            nMin = nDist;
+        }
+
+        pCurrentTab = pCurrentTab->GetFollow();
+    }
+
+    // project onto closest line:
+    if ( bLeft || bRight )
+    {
+        aRet.X() = aMin1.X();
+        if ( aRet.Y() > aMin2.Y() )
+            aRet.Y() = aMin2.Y();
+        else if ( aRet.Y() < aMin1.Y() )
+            aRet.Y() = aMin1.Y();
+    }
+    else //if ( bTop )
+    {
+        aRet.Y() = aMin1.Y();
+        if ( aRet.X() > aMin2.X() )
+            aRet.X() = aMin2.X();
+        else if ( aRet.X() < aMin1.X() )
+            aRet.X() = aMin1.X();
+    }
+
+    return aRet;
+}
+
 // --> FME 2004-07-30 #i32329# Enhanced table selection
-bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
+bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     bool bRet = false;
-    Point aEndPt( rPt );
+    Point aEndPt;
     if ( pEnd )
-    {
-        if ( 0 != pEnd->X() ) aEndPt.X() = pEnd->X();
-        else if ( 0 != pEnd->Y() ) aEndPt.Y() = pEnd->Y();
-    }
+        aEndPt = *pEnd;
+
     SwPosition*  ppPos[2] = { 0, 0 };
     Point        paPt [2] = { rPt, aEndPt };
     bool         pbRow[2] = { 0, 0 };
     bool         pbCol[2] = { 0, 0 };
 
-    // pEnd is set during drag 'n' drop.
+    // pEnd is set during dragging.
     for ( USHORT i = 0; i < ( pEnd ? 2 : 1 ); ++i )
     {
-         const SwCellFrm* pFrm =
+        const SwCellFrm* pFrm =
              static_cast<const SwCellFrm*>(GetBox( paPt[i], &pbRow[i], &pbCol[i] ) );
 
         if( pFrm )
@@ -1906,102 +2029,16 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
         }
 
         // no calculation of end frame if start frame has not been found.
-        if ( 0 == i )
-        {
-            if ( !ppPos[0] || !pEnd )
-                break;
+        if ( 1 == i || !ppPos[0] || !pEnd )
+            break;
 
-            const SwTabFrm* pCurrentTab = pFrm->FindTabFrm();
-            SWRECTFN( pCurrentTab )
-            const bool bColSelect = bVert ? ( 0 == pEnd->X() ) : ( 0 == pEnd->Y() );
-            long& rnEndY = bVert ? paPt[1].X() : paPt[1].Y();
-            long& rnEndX = bVert ? paPt[1].Y() : paPt[1].X();
+        // find 'closest' table frame to pEnd:
+        const SwTabFrm* pCurrentTab = pFrm->FindTabFrm();
+        if ( pCurrentTab->IsFollow() )
+            pCurrentTab = pCurrentTab->FindMaster( true );
 
-            // Restrict paPt[1] to current table boundaries:
-            // Note: Since the pages are layouted top to bottom, we have to restrict
-            // the row selection in a vertical table to the current table.
-            if ( bColSelect || bVert )
-            {
-                SwRect aTabRect( pCurrentTab->Prt() );
-                aTabRect += pCurrentTab->Frm().Pos();
-
-                if ( bColSelect )
-                {
-                    if ( (*fnRect->fnXDiff)( rnEndX, (aTabRect.*fnRect->fnGetRight)() ) > 0 )
-                        rnEndX = (aTabRect.*fnRect->fnGetRight)();
-                    if ( (*fnRect->fnXDiff)( rnEndX, (aTabRect.*fnRect->fnGetLeft)() ) < 0 )
-                        rnEndX = (aTabRect.*fnRect->fnGetLeft)();
-                }
-                else
-                {
-                    if ( (*fnRect->fnYDiff)( rnEndY, (aTabRect.*fnRect->fnGetBottom)() ) > 0 )
-                        rnEndY = (aTabRect.*fnRect->fnGetBottom)();
-                    if ( (*fnRect->fnYDiff)( rnEndY, (aTabRect.*fnRect->fnGetTop)() ) < 0 )
-                        rnEndY = (aTabRect.*fnRect->fnGetTop)();
-                }
-            }
-            else
-            {
-                // The table may have a couple of follows. Restriction
-                // in y direction is a bit more complex.
-                // Note: For vertical layout, we took the shortcut. So
-                // actually this all could be implemented without the *fnRect
-                // stuff.
-                if ( pCurrentTab->IsFollow() )
-                    pCurrentTab = pCurrentTab->FindMaster( true );
-
-                const SwRootFrm* pRootFrm = pCurrentTab->FindRootFrm();
-                const long nStartY = bVert ? rPt.X() : rPt.Y();
-                const bool bDown = (*fnRect->fnYDiff)( rnEndY, nStartY ) > 0;
-
-                do
-                {
-                    SwRect aRestrict( pCurrentTab->Prt() );
-                    aRestrict += pCurrentTab->Frm().Pos();
-
-                    if ( bDown )
-                    {
-                        if ( !pCurrentTab->GetFollow() )
-                            (aRestrict.*fnRect->fnSetBottom)( (pRootFrm->Frm().*fnRect->fnGetBottom)() );
-                        else
-                        {
-                            SwRect aFollowRect( pCurrentTab->GetFollow()->Prt() );
-                            aFollowRect += pCurrentTab->GetFollow()->Frm().Pos();
-                            (aRestrict.*fnRect->fnSetBottom)( (aFollowRect.*fnRect->fnGetTop)() );
-                        }
-                    }
-                    else
-                    {
-                        if ( !pCurrentTab->IsFollow() )
-                            (aRestrict.*fnRect->fnSetTop)( (pRootFrm->Frm().*fnRect->fnGetTop)() );
-                        else
-                        {
-                            const SwTabFrm* pMaster = pCurrentTab->FindMaster();
-                            SwRect aMasterRect( pMaster->Prt() );
-                            aMasterRect += pMaster->Frm().Pos();
-                            (aRestrict.*fnRect->fnSetTop)( (aMasterRect.*fnRect->fnGetBottom)() );
-                        }
-                    }
-
-                    if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetTop)() ) > 0 &&
-                         (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetBottom)() ) < 0 )
-                    {
-                        // Yeah! I have my frame. We restrict rnEndY to the actual tab frame rectangle.
-                        aRestrict  = pCurrentTab->Prt();
-                        aRestrict += pCurrentTab->Frm().Pos();
-
-                        if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetBottom)() ) > 0 )
-                            rnEndY = (aRestrict.*fnRect->fnGetBottom)();
-                        if ( (*fnRect->fnYDiff)( rnEndY, (aRestrict.*fnRect->fnGetTop)() ) < 0 )
-                            rnEndY = (aRestrict.*fnRect->fnGetTop)();
-                        break;
-                    }
-
-                    pCurrentTab = pCurrentTab->GetFollow();
-                }
-                while ( pCurrentTab );
-            }
-        }
+        const Point aProjection = lcl_ProjectOntoClosestTableFrm( *pCurrentTab, *pEnd, bRowDrag );
+        paPt[1] = aProjection;
     }
 
     if ( ppPos[0] )
