@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:40:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     nCurRefDlgId( 0 ),
     bIsWaterCan( FALSE ),
     bIsInEditCommand( FALSE ),
-    bIsInExecuteDrop( FALSE )
+    bIsInExecuteDrop( FALSE ),
+    mbIsInSharedDocLoading( false ),
+    mbIsInSharedDocSaving( false )
 {
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
 
