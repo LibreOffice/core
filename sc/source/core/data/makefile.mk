@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2008-02-12 13:24:18 $
+#   last change: $Author: kz $ $Date: 2008-03-07 11:13:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,8 @@ EXCEPTIONSNOOPTFILES= \
         $(SLO)$/cell.obj
 .ELSE
 EXCEPTIONSFILES+= \
-    $(SLO)$/cell.obj
+    $(SLO)$/cell.obj \
+    $(SLO)$/global.obj
 .ENDIF
 
 # --- Tagets -------------------------------------------------------
