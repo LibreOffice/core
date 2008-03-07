@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:29:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,7 +779,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0721 UNO_NAME_FIRST_LINE_INDENT */       {MAP_CHAR_LEN("FirstLineIndent")},
 /* 0722 UNO_NAME_INDENT_AT */               {MAP_CHAR_LEN("IndentAt")}
 /* 0723 UNO_NAME_CHAPTER_LEVEL */       {MAP_CHAR_LEN("ChapterLevel")},
-/* 0724 UNO_NAME_ROW_SPAN */            {MAP_CHAR_LEN("RowSpan")}
+/* 0724 UNO_NAME_GRID_BASE_WIDTH*/ {MAP_CHAR_LEN("GridBaseWidth")},
+/* 0725 UNO_NAME_GRID_SNAP_TO_CHARS*/ {MAP_CHAR_LEN("GridSnapToChars")},
+/* 0726 UNO_NAME_GRID_STANDARD_PAGE_MODE*/ {MAP_CHAR_LEN("StandardPageMode")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
