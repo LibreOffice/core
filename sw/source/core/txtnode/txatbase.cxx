@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatbase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:48:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,13 +52,6 @@
 #include <docufld.hxx>
 #endif
 
-
-#include "doc.hxx"
-#include "docsh.hxx"
-#include "../../../inc/PostItMgr.hxx"
-#include "../../ui/inc/view.hxx"
-
-
 SwTxtAttr::SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStt )
     : pAttr( &rAttr ), nStart( nStt )
 {
@@ -80,21 +73,6 @@ xub_StrLen* SwTxtAttr::GetEnd()
     // Meldet sein Attribut beim Pool ab
 void SwTxtAttr::RemoveFromPool( SfxItemPool& rPool )
 {
-    /*
-    // delete in SwPostItMgr
-    if (Which()==RES_TXTATR_FIELD)
-    {
-        if ( ((SwFmtFld&)(GetAttr())).GetFld()->GetTyp()->Which()==RES_POSTITFLD)
-        {
-            SwDocShell* aShell = static_cast<SwPostItFieldType*>(((SwFmtFld&)GetAttr()).GetFld()->GetTyp())->GetDoc()->GetDocShell();
-            if (aShell)
-            {
-                aShell->GetView()->GetPostItMgr()->Delete(&(SwFmtFld&)GetAttr());
-            }
-
-        }
-    }
-    */
     rPool.Remove( GetAttr() );
     pAttr = 0;
 }
