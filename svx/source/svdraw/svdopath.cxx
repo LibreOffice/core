@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:52 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1934,9 +1934,7 @@ sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // #103692# prepare ItemSet for shadow fill attributes
     SfxItemSet aShadowSet(aItemSet);
 
-    // prepare line geometry
     ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
-
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
     {
