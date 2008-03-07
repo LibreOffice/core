@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:12:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2535,6 +2535,15 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 }
                 aToken.nChapterFormat = nFormat;
             }
+//--->i53420
+            else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChapterLevel")) )
+            {
+                const sal_Int16 nLevel = lcl_AnyToInt16(pProperties[j].Value);
+                if( nLevel < 1 || nLevel > MAXLEVEL )
+                    throw lang::IllegalArgumentException();
+                aToken.nOutlineLevel = nLevel;
+            }
+//<---
             else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
                 sal_Int16 nType = 0;
@@ -2563,6 +2572,20 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
         if(TOKEN_ENTRY_TEXT == aToken.eTokenType &&
                                 TOX_CONTENT != pTOXBase->GetType())
             aToken.eTokenType = TOKEN_ENTRY;
+//---> i53420
+// check for chapter format allowed values if it was TOKEN_ENTRY_NO type
+// only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
+// reading from file
+        if( TOKEN_ENTRY_NO == aToken.eTokenType )
+            switch(aToken.nChapterFormat)
+            {
+            case CF_NUMBER:
+            case CF_NUM_NOPREPST_TITLE:
+                break;
+            default:
+                throw lang::IllegalArgumentException();
+            }
+//<---
         sPattern += aToken.GetString();
     }
     SwForm aForm(pTOXBase->GetTOXForm());
@@ -2629,15 +2652,47 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         {
             case TOKEN_ENTRY_NO     :
             {
-                rCurTokenSeq.realloc( 2 );
+//--->i53420
+// writing to file (from doc to properties)
+                sal_Int32 nElements = 2;
+                sal_Int32 nCurrentElement = 0;
+
+                if( aToken.nChapterFormat != CF_NUMBER )//check for default value
+                    nElements++;//we need the element
+                if( aToken.nOutlineLevel != MAXLEVEL )
+                    nElements++;
+
+                rCurTokenSeq.realloc( nElements );
+
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
-                pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenEntryNumber");
+                pArr[nCurrentElement].Name = C2U("TokenType");
+                pArr[nCurrentElement++].Value <<= OUString::createFromAscii("TokenEntryNumber");
 //              pArr[0].Value <<= C2U("TokenEntryNumber");
 
-                pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= aProgCharStyle;
+                pArr[nCurrentElement].Name = C2U("CharacterStyleName");
+                pArr[nCurrentElement++].Value <<= aProgCharStyle;
+                if( aToken.nChapterFormat != CF_NUMBER )
+                {
+                    pArr[nCurrentElement].Name = C2U("ChapterFormat");
+                    sal_Int16 nVal;
+//! the allowed values for chapter format, when used as entry number, are CF_NUMBER and CF_NUM_NOPREPST_TITLE only, all else forced to
+//CF_NUMBER
+                    switch(aToken.nChapterFormat)
+                    {
+                    default:
+                    case CF_NUMBER:             nVal = text::ChapterFormat::NUMBER; break;
+                    case CF_NUM_NOPREPST_TITLE: nVal = text::ChapterFormat::DIGIT; break;
+                    }
+                    pArr[nCurrentElement++].Value <<= (sal_Int16)nVal;
+                }
+
+                if( aToken.nOutlineLevel != MAXLEVEL ) //only  a ChapterLevel != MAXLEVEL is registered
+                {
+                    pArr[nCurrentElement].Name = C2U("ChapterLevel");
+                    pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
+                }
+//<---
             }
             break;
             case TOKEN_ENTRY        :   // no difference between Entry and Entry Text
@@ -2714,7 +2769,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_CHAPTER_INFO :
             {
-                rCurTokenSeq.realloc( 3 );
+                rCurTokenSeq.realloc( 4 );
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
@@ -2734,6 +2789,11 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                     case CF_NUM_NOPREPST_TITLE: nVal = text::ChapterFormat::DIGIT; break;
                 }
                 pArr[2].Value <<= (sal_Int16)nVal;
+//--->i53420
+                pArr[3].Name = C2U("ChapterLevel");
+                //
+                pArr[3].Value <<= aToken.nOutlineLevel;
+//<---
             }
             break;
             case TOKEN_LINK_START   :
