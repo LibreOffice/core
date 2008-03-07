@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #define FT_METRIC               20
 #define FT_TAB                  21
 #define MF_TAB                  22
+#define CB_USE_SQUARE_PAGE_MODE 23
 
 // SwCaptionOptPage -----------------------------
 
