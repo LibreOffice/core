@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-03-06 12:20:20 $
+dnl * Date: $Date: 2008-03-07 16:56:35 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.251 $ )
+AC_REVISION( $Revision: 1.252 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -242,9 +242,6 @@ AC_ARG_ENABLE(binfilter,
 AC_ARG_ENABLE(rpath,
 [  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
-AC_ARG_ENABLE(pasf,
-[  --disable-pasf          disable support for sound using portaudio/sndfile
-],,enable_pasf=yes)
 AC_ARG_ENABLE(pam,
 [  --disable-pam           Disable pam support.
 ],,)
@@ -269,9 +266,6 @@ AC_ARG_WITH(writer2latex,
 [  --without-writer2latex Removes writer2latex from openoffice.org installation
                           set, for people building for specific distributions
                           where writer2latex is known to be already available
-],,)
-AC_ARG_WITH(nas,
-[  --without-nas           Build without nas support
 ],,)
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
@@ -426,15 +420,6 @@ AC_ARG_WITH(system-boost,
 ],,)
 AC_ARG_WITH(system-vigra,
 [  --with-system-vigra     Use vigra already on system
-],,)
-AC_ARG_WITH(system-nas,
-[  --with-system-nas       Use nas already on system
-],,)
-AC_ARG_WITH(system-sndfile,
-[  --with-system-sndfile   Use sndfile already on system
-],,)
-AC_ARG_WITH(system-portaudio,
-[  --with-system-portaudio Use portaudio already on system
 ],,)
 AC_ARG_ENABLE(neon,
 [  --disable-neon          Disable neon and the compilation of webdav binding
@@ -4199,107 +4184,6 @@ if test "$XRENDER_LINK" = "YES"; then
 fi
 AC_SUBST(SYSTEM_XRENDER_HEADERS)
 AC_SUBST(XRENDER_LINK)
-
-dnl ===================================================================
-dnl Check for system nas
-dnl ===================================================================
-AC_MSG_CHECKING([which nas to use])
-if test -n "$with_nas"; then
-    AC_MSG_RESULT([none])
-elif test -n "$without_nas"; then
-    ENABLE_NAS=""
-elif test -n "$with_system_nas" -o -n "$with_system_libs" && \
-	test "$with_system_nas" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_NAS=YES
-    AC_CHECK_HEADER(audio/audiolib.h, [ NAS_INCLUDES=/usr/include ],
-        [
-             CFLAGS=-I/usr/X11R6/include
-             AC_CHECK_HEADER(audio/audiolib.h,
-                 [ NAS_INCLUDES=/usr/X11R6/include ],
-                 [ AC_MSG_ERROR(no. install nas) ], []
-             )
-        ], []
-    )
-    AC_CHECK_LIB(audio, AuOpenServer, [],
-        [AC_MSG_ERROR(nas not found or functional)], [-L$XLIB -lXt])
-    ENABLE_NAS=YES
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_NAS=NO
-    ENABLE_NAS=YES
-    BUILD_TYPE="$BUILD_TYPE NAS"
-    dnl ===================================================================
-    dnl Check whether xmkmf program can be used, x systems only
-    dnl ===================================================================
-    if test "$_os" != "WINNT" && test "$_os" != "OSF1"; then
-       AC_PATH_PROGS(XMKMF, xmkmf)
-       if test -z "$XMKMF"; then
-          AC_PATH_PROGS(XMKMF, xmkmf,, [/usr/X11R6/bin])
-          if test -z "$XMKMF"; then
-             AC_MSG_ERROR([xmkmf is needed to build nas])
-          else
-             PATHEXTRA="$PATHEXTRA:/usr/X11R6/bin"
-             AC_MSG_WARN([adding /usr/X11R6/bin to the PATH (xmkmf is needed to build nas)])
-             echo "adding /usr/X11R6/bin to the PATH (xmkmf is needed to build nas)" >> warn
-             AC_SUBST(PATHEXTRA)
-          fi
-       fi
-    fi
-fi
-AC_SUBST(SYSTEM_NAS)
-AC_SUBST(NAS_INCLUDES)
-AC_SUBST(ENABLE_NAS)
-
-AC_MSG_CHECKING([whether to enable portaudio/sndfile support])
-if test "$_os" != "WINNT" && \
-  test "$_os" != "SunOS" && \
-  test -n "$enable_pasf" && test "$enable_pasf" != "no"; then
-	AC_MSG_RESULT([yes])
-   ENABLE_PASF=YES
-  	AC_MSG_CHECKING([which sndfile to use])
-	if test -n "$with_system_sndfile" -o -n "$with_system_libs" && \
-		test "$with_system_sndfile" != "no"; then
-	   AC_MSG_RESULT([external])
-	   PKG_CHECK_MODULES(SNDFILE, sndfile)
-	   SYSTEM_SNDFILE=YES
-	else
-           AC_MSG_RESULT([internal])
-	   SYSTEM_SNDFILE=NO
-       SNDFILE_LIBS=-lsndfile
-	    BUILD_TYPE="$BUILD_TYPE SNDFILE"
-	fi
-
-   PA_VER=18
-	AC_MSG_CHECKING([which portaudio to use])
-	if test -n "$with_system_portaudio" -o -n "$with_system_libs" && \
-		test "$with_system_portaudio" != "no"; then
-	   AC_MSG_RESULT(external)
-	   AC_CHECK_HEADER(portaudio.h, [],
-		[AC_MSG_ERROR(portaudio header not found. install portaudio)], [])
-	   AC_CHECK_LIB(portaudio, Pa_Initialize, [],
-		[AC_MSG_ERROR(portaudio library not found or functional)], [])
-	   AC_MSG_CHECKING(portaudio version)
-	   AC_TRY_LINK([#include <portaudio.h>], [
-	 /* Pa_GetVersion() only exists in v19, so this fails to build with v18 */
-        int v = Pa_GetVersion();
-	   ], [PA_VER=19; AC_MSG_RESULT([OK, v$PA_VER])], [AC_MSG_RESULT([OK, v$PA_VER])])
-      SYSTEM_PORTAUDIO=YES
-	else
-	   AC_MSG_RESULT([internal])
-	   SYSTEM_PORTAUDIO=NO
-	   BUILD_TYPE="$BUILD_TYPE PORTAUDIO"
-	fi
-else
-	AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_PASF)
-AC_SUBST(PA_VER)
-AC_SUBST(SYSTEM_PORTAUDIO)
-AC_SUBST(SNDFILE_LIBS)
-AC_SUBST(SNDFILE_CFLAGS)
-AC_SUBST(SYSTEM_SNDFILE)
-AC_SUBST(BUILD_TYPE)
 
 dnl ===================================================================
 dnl Check for building neon
