@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+     <module-name> avmedia </module-name>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.SoundHandler </name>
+        <description>
+            Implements a handler service to detect and/or play audio files.
+            supported formats: wav/au
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ContentHandler </supported-service>
+    </component-description>
+
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>  tools       </project-build-dependency>
+    <project-build-dependency>  svtools     </project-build-dependency>
+    <project-build-dependency>  toolkit     </project-build-dependency>
+    <project-build-dependency>  sv          </project-build-dependency>
+    <project-build-dependency>  comphelper  </project-build-dependency>
+    <project-build-dependency>  unotools    </project-build-dependency>
+    <project-build-dependency>  ucbhelper   </project-build-dependency>
+    <project-build-dependency>  svl         </project-build-dependency>
+    <project-build-dependency>  sot         </project-build-dependency>
+
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> tl          </runtime-module-dependency>
+    <runtime-module-dependency> svt         </runtime-module-dependency>
+    <runtime-module-dependency> svl         </runtime-module-dependency>
+    <runtime-module-dependency> tk          </runtime-module-dependency>
+    <runtime-module-dependency> sv          </runtime-module-dependency>
+    <runtime-module-dependency> comphelp2   </runtime-module-dependency>
+    <runtime-module-dependency> utl         </runtime-module-dependency>
+    <runtime-module-dependency> ucb         </runtime-module-dependency>
+    <runtime-module-dependency> sot         </runtime-module-dependency>
+
+</module-description>
