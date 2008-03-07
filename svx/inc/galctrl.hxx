@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galctrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:43:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ private:
 
     GraphicObject       aGraphicObj;
     Rectangle           aPreviewRect;
-    Sound               aSound;
     GalleryTheme*       mpTheme;
 
     SVX_DLLPRIVATE BOOL             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
@@ -96,7 +95,6 @@ private:
     SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
                         DECL_LINK( MenuSelectHdl, Menu* );
-                        DECL_LINK( SoundEndHdl, Sound* );
 
 public:
 
