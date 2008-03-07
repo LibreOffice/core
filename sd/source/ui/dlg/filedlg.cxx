@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:40:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,6 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 
-#ifndef _SOUND_HXX //autogen
-#include <vcl/sound.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -107,6 +104,7 @@
 
 #include <svx/impgrf.hxx>
 
+#include <avmedia/mediawindow.hxx>
 #include "filedlg.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
@@ -133,16 +131,18 @@ private:
 
     css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
-    Sound                       maSound;
+    css::uno::Reference< css::media::XPlayer > mxPlayer;
     ULONG                       mnPlaySoundEvent;
     BOOL                        mbUsableSelection;
     BOOL                        mbLabelPlaying;
-    BOOL                        mbDuringPreparePlaying;
 
     void                        CheckSelectionState();
 
                                 DECL_LINK( PlayMusicHdl, void * );
-                                DECL_LINK( StopMusicHdl, void * );
+
+    Timer                       maUpdateTimer;
+
+                                DECL_LINK( IsMusicStoppedHdl, void * );
 
 public:
                                 SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
@@ -182,16 +182,18 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
 // ------------------------------------------------------------------------
 IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 {
+    maUpdateTimer.Stop();
     mnPlaySoundEvent = 0;
+
+    if (mxPlayer.is())
+    {
+        if (mxPlayer->isPlaying())
+            mxPlayer->stop();
+        mxPlayer.clear();
+    }
 
     if( mbLabelPlaying )
     {
-        // switch from playing to not playing
-
-        // reset, so that sound file gets unlocked
-        maSound.Stop();
-        maSound.SetSoundName( String() );
-
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
@@ -208,28 +210,23 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
     }
     else
     {
-        // switch from not playing to playing of current file
-        if( maSound.IsPlaying() )
+        rtl::OUString aUrl( GetPath() );
+        if ( aUrl.getLength() )
         {
-            // reset, so that sound file gets unlocked
-            maSound.Stop();
-            maSound.SetSoundName( String() );
-        }
+            try
+            {
+                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl ), css::uno::UNO_QUERY_THROW );
+                mxPlayer->start();
+                maUpdateTimer.SetTimeout( 100 );
+                maUpdateTimer.Start();
+            }
+            catch( css::uno::Exception& e )
+            {
+                (void)e;
+                mxPlayer.clear();
+            }
 
-        INetURLObject   aUrl( GetPath() );
-        String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( aSoundFile.Len() > 0 && Sound::IsSoundFile(aSoundFile) )
-        {
-            maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
-            mbDuringPreparePlaying=TRUE;
-            maSound.SetSoundName( aSoundFile );
-            maSound.Play();
-
-            ULONG nError = maSound.GetLastError();
-            mbDuringPreparePlaying=FALSE;
-            // guard against early stopping
-            if( maSound.IsPlaying() && !nError)
+            if (mxPlayer.is())
             {
                 try
                 {
@@ -245,11 +242,6 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 #endif
                 }
             }
-            else if(nError)
-            {
-                //reset error state of sound
-                maSound.SetSoundName( String() );
-            }
         }
     }
 
@@ -257,15 +249,19 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SdFileDialog_Imp, StopMusicHdl, void *, EMPTYARG )
+IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
 {
-    if(mbDuringPreparePlaying)
-        return( 0L ); //don't reset the error state of maSound during prepare playing
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if (
+        mxPlayer.is() && mxPlayer->isPlaying() &&
+        mxPlayer->getMediaTime() < mxPlayer->getDuration()
+       )
+    {
+        maUpdateTimer.Start();
+        return 0L;
+    }
 
-    // reset, so that sound file gets unlocked
-    maSound.SetSoundName( String() );
 
     if( mxControlAccess.is() )
     {
@@ -315,9 +311,10 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
-    mbLabelPlaying(FALSE),
-    mbDuringPreparePlaying(FALSE)
+    mbLabelPlaying(FALSE)
 {
+    maUpdateTimer.SetTimeoutHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
+
     css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
     // get the control access
