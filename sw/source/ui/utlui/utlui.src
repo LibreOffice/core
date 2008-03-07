@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 13:56:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,6 +366,111 @@ Image IMG_ALL_RIGHT_HC
     };
     MaskColor = IMAGE_MASK_COLOR ;
 };
+
+
+Image IMG_VIEWLAYOUT_AUTOMATIC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_11x25.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_a_11x25.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_BOOKMODE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_11x23.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_a_11x23.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_SINGLECOLUMN
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_11x15.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_a_11x15.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_AUTOMATIC_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_11x25_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "twopages_a_11x25_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+Image IMG_VIEWLAYOUT_BOOKMODE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_11x23_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doublepage_a_11x23_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_SINGLECOLUMN_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_11x15_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "emptypage_a_11x15_h.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
+
+
 String STR_HYPERCTRL_SEL
 {
     Text [ en-US ] = "SEL";
@@ -374,121 +479,4 @@ String STR_HYPERCTRL_HYP
 {
     Text [ en-US ] = "HYP";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
