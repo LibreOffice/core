@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:36:02 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxPreviewAnimationNode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
 
     ::std::auto_ptr<PaneHider> mpPaneHider;
 
