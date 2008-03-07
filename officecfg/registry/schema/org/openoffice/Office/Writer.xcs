@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:35:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,6 +1589,13 @@
 					</info>
 					<value>1250</value>
 				</prop>
+				<prop oor:name="IsSquaredPageMode" oor:type="xs:boolean">
+					<info>
+						<desc>Specified which kind of paper mode is used in the whole document </desc>
+						<label>Use squared paper mode</label>
+					</info>
+					<value>true</value>
+				</prop>	
 			</group>
 			<group oor:name="Zoom">
 				<info>
