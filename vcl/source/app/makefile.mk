@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:18:13 $
+#   last change: $Author: kz $ $Date: 2008-03-07 16:40:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 CDEFS+=-DDLLPOSTFIX=$(DLLPOSTFIX)
-
-.IF "$(SYSTEM_NAS)"=="YES"
-CFLAGS+=-I$(NAS_INCLUDES)
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
