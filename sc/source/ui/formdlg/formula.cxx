@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:42:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include "tabvwsh.hxx"
 #include "appoptio.hxx"
 #include "docsh.hxx"
+#include "funcdesc.hxx"
 
 //============================================================================
 
@@ -556,13 +557,14 @@ void ScFormulaDlg::FillControls()
         if(!bEditFlag)
             pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
 
-        nArgs = pFuncDesc->nArgCount;
+        nArgs = pFuncDesc->GetSuppressedArgCount();
         USHORT nOffset = pData->GetOffset();
         nEdFocus = pData->GetEdFocus();
 
         //  Verkettung der Edit's fuer Focus-Kontrolle
 
-        if(bTestFlag) aScParaWin.SetArgCount(nArgs,nOffset);
+        if(bTestFlag)
+            aScParaWin.SetArgumentOffset(nOffset);
         USHORT nActiv=0;
         xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
         xub_StrLen nEditPos=(xub_StrLen) pMEdit->GetSelection().Min();
@@ -774,7 +776,7 @@ void ScFormulaDlg::ResizeArgArr( const ScFuncDesc* pNewFunc )
 
         if ( pNewFunc )
         {
-            nArgs = pNewFunc->nArgCount;
+            nArgs = pNewFunc->GetSuppressedArgCount();
             if ( nArgs > 0 )
             {
                 pArgArr = new String*[nArgs];
@@ -1010,10 +1012,10 @@ void ScFormulaDlg::EditFuncParas(xub_StrLen nEditPos)
 
         DeleteArgs();
 
-        nArgs = pFuncDesc->nArgCount;
+        nArgs = pFuncDesc->GetSuppressedArgCount();
 
         xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula, nFStart, 0 );
-        pArgArr = ScFormulaUtil::GetArgStrings( aFormula, nFStart, pFuncDesc->nArgCount );
+        pArgArr = ScFormulaUtil::GetArgStrings( aFormula, nFStart, nArgs );
 
         USHORT nActiv=aScParaWin.GetSliderPos();
         BOOL    bFlag=FALSE;
@@ -1389,7 +1391,7 @@ void ScFormulaDlg::UpdateSelection()
     aFuncSel.Min()=PrivStart;
     aFuncSel.Max()=PrivEnd;
 
-    nArgs = pFuncDesc->nArgCount;
+    nArgs = pFuncDesc->GetSuppressedArgCount();
 
     String aFormula=pMEdit->GetText();
     xub_StrLen nArgPos=ScFormulaUtil::GetArgStart( aFormula,PrivStart,0);
