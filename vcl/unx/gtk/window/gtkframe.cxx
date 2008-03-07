@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:21:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2134,9 +2134,17 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         ReleaseGraphics( pGraphics );
 }
 
-void GtkSalFrame::Beep( SoundType /*eType*/ )
+void GtkSalFrame::Beep( SoundType eType )
 {
-    gdk_display_beep( getGdkDisplay() );
+    switch( eType )
+    {
+        case SOUND_DEFAULT:
+        case SOUND_ERROR:
+            gdk_display_beep( getGdkDisplay() );
+            break;
+        default:
+            break;
+    }
 }
 
 const SystemEnvData* GtkSalFrame::GetSystemData() const
