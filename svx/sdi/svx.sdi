@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:22:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -14204,6 +14204,31 @@ SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
         StatusBarConfig = FALSE,
         ToolBoxConfig = FALSE,
         GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
+
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = TRUE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = TRUE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_VIEW;
 ]
 
  //--------------------------------------------------------------------------
