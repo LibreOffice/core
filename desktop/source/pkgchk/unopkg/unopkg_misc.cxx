@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:24:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,6 +460,7 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( 0 ))
         {
+            String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
             if (bGui)
             {
                 //We show a message box or print to the console that there
@@ -470,8 +471,7 @@ Reference<XComponentContext> getUNO(
                     throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                             NULL );
                 {
-                    ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
-                    WarningBox warn(NULL, warnId);
+                    WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
                     warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
                                      ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
                     warn.SetIcon(0);
@@ -481,8 +481,8 @@ Reference<XComponentContext> getUNO(
             }
             else
             {
-                //ToDo issue i79333
-                fprintf(stdout,"You need to close the already opened Extension Manager to continue.\n");
+                ::rtl::OString soMsg = ::rtl::OUStringToOString(sMsg, osl_getThreadTextEncoding());
+                fprintf(stdout,"%s\n", soMsg.getStr());
 
             }
             throw RuntimeException(
