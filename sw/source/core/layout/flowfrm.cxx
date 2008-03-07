@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-16 11:38:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1604,7 +1604,9 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 
     // OD 2004-03-12 #i11860# - consider value of new parameter <_bConsiderGrid>
     // and use new method <GetUpperSpaceAmountConsideredForPageGrid(..)>
-    if ( _bConsiderGrid )
+
+    //consider grid in square page mode
+    if ( _bConsiderGrid && rThis.GetUpper()->GetFmt()->GetDoc()->IsSquaredPageMode() )
     {
         nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
     }
