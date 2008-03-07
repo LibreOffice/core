@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:32:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ class BitmapEx;
 
 struct SwAccessibilityOptions;
 class Region;
+class SwPostItMgr;
 
 // #i74769#
 class SdrPaintWindow;
@@ -600,6 +601,9 @@ public:
     static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
     static void DeleteReplacementBitmaps();
     // <--
+
+    const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
+    SwPostItMgr* GetPostItMgr();
 };
 
 //---- class CurrShell verwaltet den globalen ShellPointer -------------------
