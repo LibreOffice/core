@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 17:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,7 @@ using namespace com::sun::star;
 #include "document.hxx"
 #include "drawview.hxx"
 #include "globstr.hrc"
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
+#include <avmedia/mediawindow.hxx>
 
 //------------------------------------------------------------------------
 
@@ -116,7 +114,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     aAny <<= eButtonType;
     xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
 
-    if ( Sound::IsSoundFile( rURL ) )
+        if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
         // #105638# OJ
         aAny <<= sal_True;
