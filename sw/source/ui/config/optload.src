@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,13 @@ TabPage TP_OPTLOAD_PAGE
         Maximum = 9999 ;
         First = 50 ;
         Last = 9999 ;
+    };
+    CheckBox CB_USE_SQUARE_PAGE_MODE
+    {
+        Pos = MAP_APPFONT ( 12 , 111) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ en-US ] = "Use square page mode for text grid";
+        Text [ zh-CN ] = "使用稿纸模式";
     };
 };
 /**************************************************************************/
