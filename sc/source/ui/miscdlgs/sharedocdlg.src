@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: sharedocdlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:23:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "sharedocdlg.hrc"
+
+ModalDialog RID_SCDLG_SHAREDOCUMENT
+{
+    OutputSize = TRUE ;
+    HelpId = SID_SHARE_DOC ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 194 , 182 ) ;
+    Text [ en-US ] = "Share Document" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    CheckBox CB_SHARE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ en-US ] = "Share this spreadsheet with other users" ;
+    };
+    FixedText FT_WARNING
+    {
+        Pos = MAP_APPFONT ( 15 , 18 ) ;
+        Size = MAP_APPFONT ( 173 , 32 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Note: Changes to formatting attributes and drawing objects will not be saved in shared mode. Turn off shared mode to get exklusive access needed for those changes." ;
+    };
+    FixedLine FL_USERS
+    {
+        Pos = MAP_APPFONT ( 6 , 50 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+    };
+    FixedText FT_USERS
+    {
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ en-US ] = "Users currently accessing this spreadsheet" ;
+    };
+    Control LB_USERS
+    {
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Size = MAP_APPFONT ( 182 , 80 ) ;
+        Border = TRUE ;
+    };
+    FixedLine FL_END
+    {
+        Pos = MAP_APPFONT ( 1 , 152 ) ;
+        Size = MAP_APPFONT ( 194 , 8 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 82 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 138 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_TITLE_NAME
+    {
+        Text [ en-US ] = "Name" ;
+    };
+    String STR_TITLE_ACCESSED
+    {
+        Text [ en-US ] = "Accessed" ;
+    };
+    String STR_NO_USER_DATA
+    {
+        Text [ en-US ] = "No user data available." ;
+    };
+    String STR_UNKNOWN_USER
+    {
+        Text [ en-US ] = "Unknown User" ;
+    };
+    String STR_EXCLUSIVE_ACCESS
+    {
+        Text [ en-US ] = "(exclusive access)" ;
+    };
+};
