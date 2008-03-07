@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:43:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,8 @@
 #endif
 // <--
 
-#include "../../../inc/PostItMgr.hxx"
 #include "../../ui/inc/view.hxx"
+#include <PostItMgr.hxx>
 
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
@@ -281,6 +281,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             pSh = (ViewShell*)pSh->GetNext();
     }
 
+    const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
+
     SET_CURR_SHELL( this );
     if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->areMarkHandlesHidden() )
         Imp()->StartAction();
@@ -309,6 +311,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         aAction.Action();
         Imp()->SetScroll();
     }
+
+    if ( bIsShellForCheckViewLayout )
+        GetLayout()->CheckViewLayout( GetViewOptions(), &aVisArea );
 
     //Wenn wir selbst keine Paints erzeugen, so warten wir auf das Paint
     //vom System. Dann ist das Clipping korrekt gesetzt; Beispiel: verschieben
@@ -1231,7 +1236,8 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     //SwSaveHdl aSaveHdl( Imp() );
 
     bool bScrolled = false;
-    SwPostItMgr* pPostItMgr = pDoc->GetDocShell()->GetView()->GetPostItMgr();
+
+    SwPostItMgr* pPostItMgr = GetPostItMgr();
 
     if ( bFull )
         GetWin()->Invalidate();
@@ -1253,14 +1259,24 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             SwRect aBoth( VisArea() );
             aBoth.Union( aPrevArea );
             const SwTwips nBottom = aBoth.Bottom();
-            const SwTwips nRight  = aBoth.Right();
             SwTwips nMinLeft = LONG_MAX;
             SwTwips nMaxRight= 0;
-            while ( pPage &&
-                    !((pPage->Frm().Top()  > nBottom) ||
-                        (pPage->Frm().Left() > nRight)))
+
+            const SwTwips nSidebarWidth = pPostItMgr && pPostItMgr->ShowNotes() && pPostItMgr->HasNotes() ?
+                                          pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() :
+                                          0;
+            const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
+
+            while ( pPage && pPage->Frm().Top() <= nBottom )
             {
-                if ( pPage->Frm().IsOver( aBoth ) )
+                SwRect aPageRect( pPage->Frm() );
+                if ( bBookMode )
+                {
+                    const SwPageFrm& rFormatPage = static_cast<const SwPageFrm*>(pPage)->GetFormatPage();
+                    aPageRect.SSize() = rFormatPage.Frm().SSize();
+                }
+
+                if ( aPageRect.IsOver( aBoth ) )
                 {
                     // OD 12.02.2003 #i9719#, #105645# - consider new border
                     // and shadow width
@@ -1268,20 +1284,19 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                             GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
                     const SwTwips nShadowWidth =
                             GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
-                    //mod #i6193# added sidebar width
-                    const SwTwips nSidebarWidth = pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
+
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
                     if (pPage->MarginSide())
                     {
-                        nPageLeft = pPage->Frm().Left() - nBorderWidth - nSidebarWidth;
-                        nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
+                        nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
+                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
                     }
                     else
                     {
                         // OD 03.03.2003 #107927# - use correct datatype
-                        nPageLeft = pPage->Frm().Left() - nBorderWidth;
-                        nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        nPageLeft =  aPageRect.Left() - nBorderWidth;
+                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
                     }
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
@@ -1696,17 +1711,16 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
             bBorderOnly = TRUE;
     }
 
+    const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
+
     SwRegionRects aRegion( rRect );
 
     //mod #i6193: remove sidebar area to avoid flickering
-    bool bPostItSidebar = false;
-    SwPostItMgr* pPostItMgr = 0;
-    SwView* pView = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetView() : 0;
-    if (pView)
-    {
-        pPostItMgr = pView->GetPostItMgr();
-        bPostItSidebar = pPostItMgr->HasNotes() && pPostItMgr->ShowNotes();
-    }
+    const SwPostItMgr* pPostItMgr = GetPostItMgr();
+    const SwTwips nSidebarWidth = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ?
+                                  pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() :
+                                  0;
+
     if ( bBorderOnly )
     {
         const SwFrm *pPage = pRoot->Lower();
@@ -1719,10 +1733,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
             nTmp = pPage->Frm().Right();
             if ( nTmp > aRight.Left() )
             {
-                if (bPostItSidebar)
-                    aRight.Left( nTmp + pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() );
-                else
-                    aRight.Left( nTmp );
+                aRight.Left( nTmp + nSidebarWidth );
             }
             pPage = pPage->GetNext();
         }
@@ -1736,12 +1747,24 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     {
         const SwFrm *pPage = Imp()->GetFirstVisPage();
         const SwTwips nBottom = rRect.Bottom();
-        const SwTwips nRight  = rRect.Right();
+        //const SwTwips nRight  = rRect.Right();
         while ( pPage && aRegion.Count() &&
-                !((pPage->Frm().Top() > nBottom) || (pPage->Frm().Left() > nRight)))
+                (pPage->Frm().Top() <= nBottom) ) // PAGES01 && (pPage->Frm().Left() <= nRight))
         {
-            if ( pPage->Frm().IsOver( rRect ) )
-                aRegion -= bPostItSidebar ? SwRect(pPage->Frm().Pos(),Size(pPage->Frm().SSize().Width()+pPostItMgr->GetSidebarWidth()+pPostItMgr->GetSidebarBorderWidth(),pPage->Frm().SSize().Height())) : pPage->Frm();
+            SwRect aPageRect( pPage->Frm() );
+            if ( bBookMode )
+            {
+                const SwPageFrm& rFormatPage = static_cast<const SwPageFrm*>(pPage)->GetFormatPage();
+                aPageRect.SSize() = rFormatPage.Frm().SSize();
+            }
+
+            const bool bSidebarRight = !static_cast<const SwPageFrm*>(pPage)->MarginSide();
+            aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
+            aPageRect.SSize().Width() += nSidebarWidth;
+
+            if ( aPageRect.IsOver( rRect ) )
+                aRegion -= aPageRect;
+
             pPage = pPage->GetNext();
         }
     }
@@ -2068,7 +2091,7 @@ const Size& ViewShell::GetBrowseBorder() const
 
 sal_Int32 ViewShell::GetBrowseWidth() const
 {
-    SwPostItMgr* pPostItMgr = pDoc->GetDocShell()->GetView() ? pDoc->GetDocShell()->GetView()->GetPostItMgr() : 0;
+    const SwPostItMgr* pPostItMgr = GetPostItMgr();
     if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
     {
         Size aBorder( aBrowseBorder );
@@ -2197,7 +2220,8 @@ Size ViewShell::GetDocSize() const
         aSz = pRoot->Frm().SSize();
 
     //mod #i6193# added sidebar width
-    SwView* pView = pDoc->GetDocShell()->GetView() ;
+    // fme: Sidebar is already part of the root frame
+    /*SwView* pView = pDoc->GetDocShell()->GetView() ;
     if (pView)
     {
         SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
@@ -2205,7 +2229,7 @@ Size ViewShell::GetDocSize() const
         {
             aSz.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
         }
-    }
+    }*/
 
     return aSz;
 }
@@ -2245,6 +2269,9 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
         aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
+        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
+        aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
+
         if ( !(aOpt == *pSh->GetViewOptions()) )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (ViewShell*)pSh->GetNext();
@@ -2636,7 +2663,7 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
 
     // --> FME 2005-01-07 #i40059# Position out of bounds:
     SwRect aRect( rRect );
-    aRect.Pos().X() = Max( aRect.Left(), DOCUMENTBORDER );
+    aRect.Pos().X() = Max( aRect.Left(), GetLayout()->Frm().Left() );
     // <--
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
@@ -2693,6 +2720,15 @@ void ViewShell::DeleteReplacementBitmaps()
     DELETEZ( pReplaceBmp );
 }
 // <--
+
+SwPostItMgr* ViewShell::GetPostItMgr()
+{
+    SwView* pView =  GetDoc()->GetDocShell() ? GetDoc()->GetDocShell()->GetView() : 0;
+    if ( pView )
+        return pView->GetPostItMgr();
+
+    return 0;
+}
 
 /*
  * Document Interface Access
