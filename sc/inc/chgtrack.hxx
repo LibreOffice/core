@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:39:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,7 @@ public:
     ScChangeActionLinkEntry*        GetNext()           { return pNext; }
     const ScChangeAction*           GetAction() const   { return pAction; }
     ScChangeAction*                 GetAction()         { return pAction; }
+    String                          toString() const;
 };
 
 // --- ScChangeActionCellListEntry -----------------------------------------
@@ -507,6 +508,7 @@ public:
                                 // only to be used in the XML import
             void                AddDependent( ULONG nActionNumber,
                                         const ScChangeTrack* pTrack );
+            String              toString( ScDocument* pDoc ) const;
 };
 
 
@@ -1456,6 +1458,11 @@ public:
                                     { bTime100thSeconds = bVal; }
             BOOL                IsTime100thSeconds() const
                                     { return bTime100thSeconds; }
+
+            void                AppendCloned( ScChangeAction* pAppend );
+            ScChangeTrack*      Clone( ScDocument* pDocument ) const;
+            void                MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
+            String              toString() const;
 };
 
 
