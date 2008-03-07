@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:36:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,13 @@
 #define RID_SVXBMP_SIGNET_BROKEN_H          (RID_SVX_START +  90)
 #define RID_SVXBMP_SIGNET_NOTVALIDATED      (RID_SVX_START +  91)
 #define RID_SVXBMP_SIGNET_NOTVALIDATED_H    (RID_SVX_START +  92)
+
+#define RID_SVXBMP_SLIDERBUTTON                 (RID_SVX_START +  67)
+#define RID_SVXBMP_SLIDERDECREASE               (RID_SVX_START +  68)
+#define RID_SVXBMP_SLIDERINCREASE               (RID_SVX_START +  69)
+#define RID_SVXBMP_SLIDERBUTTON_HC              (RID_SVX_START +  70)
+#define RID_SVXBMP_SLIDERDECREASE_HC            (RID_SVX_START +  71)
+#define RID_SVXBMP_SLIDERINCREASE_HC            (RID_SVX_START +  72)
 
 // Alignment-TabPage
 #define RID_SVXPAGE_ALIGNMENT               (RID_SVX_START +  90)
