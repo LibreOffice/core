@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:21:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,21 +406,52 @@ void ProgressCommandEnv::handle(
                     verExc.New, verExc.Deployed))
         {
         case dp_misc::LESS:
-            id = RID_QUERYBOX_VERSION_LESS;
+            id = RID_WARNINGBOX_VERSION_LESS;
             break;
         case dp_misc::EQUAL:
-            id = RID_QUERYBOX_VERSION_EQUAL;
+            id = RID_WARNINGBOX_VERSION_EQUAL;
             break;
         default: // dp_misc::GREATER
-            id = RID_QUERYBOX_VERSION_GREATER;
+            id = RID_WARNINGBOX_VERSION_GREATER;
             break;
         }
+        OSL_ASSERT(verExc.New.is() && verExc.Deployed.is());
+        bool bEqualNames = verExc.New->getDisplayName().equals(
+            verExc.Deployed->getDisplayName());
+
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            InfoBox box(activeDialog(), ResId(id, *DeploymentGuiResMgr::get()));
-            String s(box.GetMessText());
+            WarningBox box(activeDialog(), ResId(id, *DeploymentGuiResMgr::get()));
+            String s;
+            if (bEqualNames)
+            {
+                s = box.GetMessText();
+            }
+            else if (id == RID_WARNINGBOX_VERSION_EQUAL)
+            {
+                //hypothetical: requires two instances of an extension with the same
+                //version to have different display names. Probably the developer forgot
+                //to change the version.
+                s = String(ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES,
+                    *DeploymentGuiResMgr::get()));
+            }
+            else if (id == RID_WARNINGBOX_VERSION_LESS)
+            {
+                s = String(ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES,
+                    *DeploymentGuiResMgr::get()));
+            }
+            else if (id == RID_WARNINGBOX_VERSION_GREATER)
+            {
+               s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES,
+                    *DeploymentGuiResMgr::get()));
+            }
+            //s.SearchAndReplaceAllAscii(
+            //    "$NAME", dp_misc::getIdentifier(verExc.New));
             s.SearchAndReplaceAllAscii(
-                "$NAME", dp_misc::getIdentifier(verExc.New));
+                "$NAME", verExc.New->getDisplayName());
+            s.SearchAndReplaceAllAscii(
+                "$OLDNAME", verExc.Deployed->getDisplayName());
+
             s.SearchAndReplaceAllAscii("$NEW", getVersion(verExc.New));
             s.SearchAndReplaceAllAscii(
                 "$DEPLOYED", getVersion(verExc.Deployed));
@@ -439,7 +470,7 @@ void ProgressCommandEnv::handle(
         else
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            InfoBox box(activeDialog(), ResId(RID_QUERYBOX_INSTALL_EXTENSION, *DeploymentGuiResMgr::get()));
+            WarningBox box(activeDialog(), ResId(RID_WARNINGBOX_INSTALL_EXTENSION, *DeploymentGuiResMgr::get()));
             String s(box.GetMessText());
             s.SearchAndReplaceAllAscii("%NAME", instExc.New->getDisplayName());
             box.SetMessText(s);
@@ -519,7 +550,7 @@ void ProgressCommandEnv::update_( Any const & Status )
             text = static_cast<Exception const *>(Status.getValue())->Message;
         if (text.getLength() == 0)
             text = ::comphelper::anyToString(Status); // fallback
-        mainDialog->errbox( text );
+        mainDialog->errbox( text, activeDialog() );
     }
     updateProgress( text );
     ++m_currentInnerProgress;
