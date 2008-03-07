@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:46:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 17:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,23 +48,13 @@
 
 #include <tools/urlobj.hxx>
 
+#include <avmedia/mediawindow.hxx>
+
 #include "soundplayer.hxx"
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
-
-
-// TODO(Q3): This breaks encapsulation. Either export
-// these strings from avmedia, or provide an XManager
-// factory there
-#ifdef WNT
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
-#elif defined QUARTZ
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
-#else
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
-#endif
 
 
 namespace slideshow
@@ -124,22 +114,10 @@ namespace slideshow
 
             try
             {
-                uno::Reference<lang::XMultiComponentFactory> xFac(
-                    rComponentContext->getServiceManager() );
-
-                uno::Reference< ::com::sun::star::media::XManager > xManager(
-                    xFac->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ),
-                        rComponentContext ),
-                    uno::UNO_QUERY );
-
-                if( xManager.is() )
-                {
-                    const INetURLObject aURL( rSoundURL );
-                    mxPlayer.set( xManager->createPlayer(
-                                      aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
-                                  uno::UNO_QUERY );
-                }
+                const INetURLObject aURL( rSoundURL );
+                mxPlayer.set( avmedia::MediaWindow::createPlayer(
+                                aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
+                                uno::UNO_QUERY);
             }
             catch( uno::RuntimeException& )
             {
