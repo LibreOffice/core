@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgviset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:27:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@ private:
     BOOL                bEveryoneButMe;
     BOOL                bShowAccepted;
     BOOL                bShowRejected;
+    bool                mbIsActionRange;
+    ULONG               mnFirstAction;
+    ULONG               mnLastAction;
 
 public:
 
@@ -91,6 +94,7 @@ public:
                             bEveryoneButMe=FALSE;
                             bShowAccepted=FALSE;
                             bShowRejected=FALSE;
+                            mbIsActionRange = false;
                         }
 
                         ScChangeViewSettings( const ScChangeViewSettings& r );
@@ -152,6 +156,10 @@ public:
                         /// Adjust dates according to selected DateMode
     void                AdjustDateMode( const ScDocument& rDoc );
 
+    bool                HasActionRange() const { return mbIsActionRange; }
+    void                SetHasActionRange( bool nFlag = true ) { mbIsActionRange = nFlag; }
+    void                GetTheActionRange( ULONG& nFirst, ULONG& nLast ) const { nFirst = mnFirstAction; nLast = mnLastAction; }
+    void                SetTheActionRange( ULONG nFirst, ULONG nLast ) { mnFirstAction = nFirst; mnLastAction = nLast; }
 };
 
 
