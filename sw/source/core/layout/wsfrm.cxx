@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:04:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1619,7 +1619,12 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
                 const BOOL bOldComplete = IsCompletePaint();
                 if ( IsBodyFrm() )
                     Prt().SSize().Height() = nOldFrmHeight;
-                ((SwPageFrm*)pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+
+                // PAGES01
+                if ( pUp->GetUpper() )
+                    static_cast<SwRootFrm*>(pUp->GetUpper())->CheckViewLayout( 0, 0 );
+                //((SwPageFrm*)pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+
                 Frm().SSize().Height() = nOldFrmHeight;
                 Prt().SSize().Height() = nOldPrtHeight;
                 bCompletePaint = bOldComplete;
