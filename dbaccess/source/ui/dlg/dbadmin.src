@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:11:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,32 +62,6 @@
         TabStop = TRUE ;                                        \
         HelpId = HID_DSADMIN_USECATALOG;                        \
         Text[ en-US ] = "Use catalog for file-based databases"; \
-    };
-
-//-------------------------------------------------------------------------
-
-#define AUTO_CHARSET(AUTO_Y)                                                \
-    FixedLine FL_DATACONVERT                                                    \
-    {                                                                       \
-        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                  \
-        Size = MAP_APPFONT ( PAGE_X  - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;        \
-        Text [ en-US ] = "Data conversion";                         \
-    };                                                                      \
-    FixedText FT_CHARSET                                                    \
-    {                                                                       \
-        Pos = MAP_APPFONT ( 6 , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;    \
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;              \
-        Text [ en-US ] = "~Character set" ;                         \
-    };                                                                      \
-    ListBox LB_CHARSET                                                      \
-    {                                                                       \
-        Border = TRUE ;                                                     \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;\
-        Size = MAP_APPFONT ( 130 , 60 ) ;                                   \
-        TabStop = TRUE ;                                                    \
-        HelpId = HID_DSADMIN_CHARSET;                                       \
-        DropDown = TRUE ;                                                   \
-        CurPos = 0 ;                                                        \
     };
 
 //-------------------------------------------------------------------------
@@ -342,7 +316,7 @@ TabPage PAGE_DBASE
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
-    AUTO_CHARSET(         UNRELATED_CONTROLS)
+    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
 
     FixedLine FL_SEPARATOR1
     {
@@ -388,7 +362,7 @@ TabPage PAGE_ADO
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ADO;
-    AUTO_CHARSET(UNRELATED_CONTROLS)
+    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
 };
 
 //.........................................................................
@@ -401,7 +375,7 @@ TabPage PAGE_ODBC
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ODBC;
 
-    AUTO_CHARSET( UNRELATED_CONTROLS)
+    AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 4 , 2*UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
@@ -538,7 +512,7 @@ TabPage PAGE_ADABAS
         Text[ en-US ] = "E~xtended...";
     };
 
-    AUTO_CHARSET(           7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT)
+    AUTO_CHARSET( 7*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 7*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT, PAGE_X )
 };
 
 //.........................................................................
@@ -553,7 +527,7 @@ TabPage PAGE_MYSQL_ODBC
     Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
     Hide = TRUE;
 
-    AUTO_CHARSET(             UNRELATED_CONTROLS )
+    AUTO_CHARSET( UNRELATED_CONTROLS, PAGE_X )
 };
 
 TabPage PAGE_MYSQL_JDBC
@@ -586,7 +560,7 @@ TabPage PAGE_MYSQL_JDBC
         Text [ en-US ] = "Test class" ;
     };
 
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT )
+    AUTO_CHARSET( 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT, PAGE_X )
 };
 
 TabPage PAGE_ORACLE_JDBC
@@ -621,7 +595,7 @@ TabPage PAGE_ORACLE_JDBC
         Text [ en-US ] = "Test class" ;
     };
 
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT )
+    AUTO_CHARSET( 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT, PAGE_X )
 };
 
 //.........................................................................
@@ -709,15 +683,6 @@ TabPage PAGE_TEXT
 
     AUTO_SEPARATORCONTROLGROUP(UNRELATED_CONTROLS, PAGE_X)
 
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 124) ;
-        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "File format";
-    };
-
-    AUTO_CHARSET(143)
-
 };
 //.........................................................................
 TabPage PAGE_USERDRIVER
@@ -769,6 +734,6 @@ TabPage PAGE_USERDRIVER
         Border = TRUE ;
         TabStop = TRUE ;
     };
-    AUTO_CHARSET(           4*UNRELATED_CONTROLS    + 3*FIXEDTEXT_HEIGHT +   RELATED_CONTROLS)
+    AUTO_CHARSET( 4*UNRELATED_CONTROLS+ 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X)
 };
 
