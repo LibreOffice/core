@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:01:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:53:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
 ,   sTabStopFillCharacter(RTL_CONSTASCII_USTRINGPARAM("TabStopFillCharacter"))
 ,   sBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM("BibliographyDataField"))
 ,   sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat"))
+,   sChapterLevel(RTL_CONSTASCII_USTRINGPARAM("ChapterLevel")) //#i53420
 
 ,   sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
 ,   sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
@@ -450,7 +451,7 @@ const sal_Bool aAllowedTokenTypesUser[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER,
+    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
     sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
