@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:37:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,8 @@ public:
     void                CreateTempFile();
     void                CreateTempFileNoCopy();
     void                TryToSwitchToRepairedTemp();
+    ::rtl::OUString     SwitchDocumentToTempFile();
+    sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
 
     ::rtl::OUString     GetCharset();
     void                SetCharset( ::rtl::OUString );
