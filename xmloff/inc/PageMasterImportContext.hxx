@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterImportContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:36:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ public:
     PageStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles);
+            SvXMLStylesContext& rStyles,
+            sal_Bool bDefaultStyle=sal_False);
     virtual ~PageStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -71,6 +72,9 @@ public:
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
+
+    //text grid enhancement
+    virtual void SetDefaults();
 };
 
 #endif
