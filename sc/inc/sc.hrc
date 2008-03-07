@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:10:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,6 +359,8 @@
 #define HID_SC_SOLVER_PROGRESS  ( HID_SC_OTHER_START + 22 )
 #define HID_SC_SOLVER_NOSOLUTION ( HID_SC_OTHER_START + 23 )
 #define HID_SC_SOLVER_SUCCESS   ( HID_SC_OTHER_START + 24 )
+
+#define HID_SCDLG_CONFLICTS     ( HID_SC_OTHER_START + 25 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
@@ -775,6 +777,7 @@
 #define SID_EDIT_MACRO          (EXTRA_MENU_START + 8)
 #define SID_SCOPTIONS           (EXTRA_MENU_START + 9)
 #define SID_MACRO_CHOOSER       (EXTRA_MENU_START + 10)
+#define SID_SHARE_DOC           (EXTRA_MENU_START + 11)
 #define SID_SCENARIOS           (EXTRA_MENU_START + 12)
 #define SID_ADD_IN_MANAGER      (EXTRA_MENU_START + 13)
 #define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
@@ -1620,6 +1623,9 @@
 #define RID_SCDLG_SOLVER_PROGRESS       (SC_DIALOGS_START + 142)
 #define RID_SCDLG_SOLVER_NOSOLUTION     (SC_DIALOGS_START + 143)
 #define RID_SCDLG_SOLVER_SUCCESS        (SC_DIALOGS_START + 144)
+
+#define RID_SCDLG_CONFLICTS             (SC_DIALOGS_START + 138)
+#define RID_SCDLG_SHAREDOCUMENT         (SC_DIALOGS_START + 139)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
