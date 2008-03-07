@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deployment.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:07:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:01:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@
 #define RID_STR_UNOPKG_ACCEPT_LIC_Y          (RID_DEPLOYMENT_UNOPKG_START+6)
 #define RID_STR_UNOPKG_ACCEPT_LIC_NO         (RID_DEPLOYMENT_UNOPKG_START+7)
 #define RID_STR_UNOPKG_ACCEPT_LIC_N          (RID_DEPLOYMENT_UNOPKG_START+8)
+#define RID_STR_CONCURRENTINSTANCE           (RID_DEPLOYMENT_UNOPKG_START+9)
 
 #define RID_DEPLOYMENT_DEPENDENCIES_START    (RID_DEPLOYMENT_START + 4400)
 #define RID_DEPLYOMENT_DEPENDENCIES_UNKNOWN  RID_DEPLOYMENT_DEPENDENCIES_START
