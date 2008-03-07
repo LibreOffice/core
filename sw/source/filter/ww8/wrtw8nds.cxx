@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:17:51 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2943,9 +2943,12 @@ void SwWW8Writer::OutWW8FlyFrm(const sw::Frame& rFmt, const Point& rNdTopLeft)
                     Munge flys in fly into absolutely positioned elements for
                     word 6
                     */
+                    const SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
+                    const SwRect aPageRect = pParTxtNode->FindPageFrmRect( FALSE, 0, FALSE );
+
                     aOffset = rFrmFmt.FindLayoutRect().Pos();
-                    aOffset.X()-=DOCUMENTBORDER;
-                    aOffset.Y()-=DOCUMENTBORDER;
+                    aOffset -= aPageRect.Pos();
+
                     pFlyOffset = &aOffset;
                     eNewAnchorType = FLY_PAGE;
                 }
