@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoom.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 12:46:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,16 +77,21 @@ class SvxZoomDialog : public SfxModalDialog
 {
 private:
     FixedLine           aZoomFl;
+    RadioButton         aOptimalBtn;
     RadioButton         aWholePageBtn;
     RadioButton         aPageWidthBtn;
-    RadioButton         aOptimalBtn;
-    RadioButton         a200Btn;
-    RadioButton         a150Btn;
     RadioButton         a100Btn;
-    RadioButton         a75Btn;
-    RadioButton         a50Btn;
     RadioButton         aUserBtn;
     MetricField         aUserEdit;
+
+    FixedLine           aViewLayoutFl;
+    RadioButton         aAutomaticBtn;
+    RadioButton         aSingleBtn;
+    RadioButton         aColumnsBtn;
+    MetricField         aColumnsEdit;
+    CheckBox            aBookModeChk;
+
+    FixedLine           aBottomFl;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
@@ -98,6 +103,9 @@ private:
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
     DECL_LINK( SpinHdl, MetricField* );
+    DECL_LINK( ViewLayoutUserHdl, RadioButton* );
+    DECL_LINK( ViewLayoutSpinHdl, MetricField* );
+    DECL_LINK( ViewLayoutCheckHdl, CheckBox* );
     DECL_LINK( OKHdl, Button* );
 #endif
 
