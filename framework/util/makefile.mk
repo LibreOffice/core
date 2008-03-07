@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:24:29 $
+#   last change: $Author: kz $ $Date: 2008-03-07 16:53:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,6 @@ SHL4OBJS=       \
                 $(SLO)$/oframes.obj					\
                 $(SLO)$/registerservices.obj		\
                 $(SLO)$/closedispatcher.obj         \
-                $(SLO)$/soundhandler.obj			\
                 $(SLO)$/statusindicator.obj			\
                 $(SLO)$/statusindicatorfactory.obj	\
                 $(SLO)$/targetfinder.obj		  	\
