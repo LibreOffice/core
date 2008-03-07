@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:15:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:24:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,9 @@
 #define MID_GRID_RUBY_BELOW     5
 #define MID_GRID_PRINT          6
 #define MID_GRID_DISPLAY        7
+#define MID_GRID_BASEWIDTH      8
+#define MID_GRID_SNAPTOCHARS    9
+#define MID_GRID_STANDARD_MODE    10
 
 //SwEnvItem
 #define MID_ENV_ADDR_TEXT       1
