@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:45:48 $
+#   last change: $Author: kz $ $Date: 2008-03-07 15:18:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,11 @@ SLOFILES=	\
         $(SLO)$/pszctrl.obj	\
         $(SLO)$/selctrl.obj	\
         $(SLO)$/modctrl.obj \
-        $(SLO)$/xmlsecctrl.obj
+                $(SLO)$/xmlsecctrl.obj \
+                $(SLO)$/zoomsliderctrl.obj
+
+EXCEPTIONSFILES= \
+    $(SLO)$/zoomsliderctrl.obj
 
 HXX1TARGET=stbctrls
 HXX1EXT=   hxx
@@ -70,7 +74,8 @@ HXX1DEPN=\
         $(INC)$/pszctrl.hxx	\
         $(INC)$/selctrl.hxx	\
         $(INC)$/modctrl.hxx \
-        $(INC)$/xmlsecctrl.hxx
+                $(INC)$/xmlsecctrl.hxx \
+                $(INC)$/zoomsliderctrl.hxx \
 
 # --- Targets -------------------------------------------------------
 
