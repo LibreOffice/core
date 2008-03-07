@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:49:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -986,7 +986,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_GRID_RUBY_BELOW), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_RUBY_BELOW},
                     { SW_PROP_NMID(UNO_NAME_GRID_PRINT), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_PRINT},
                     { SW_PROP_NMID(UNO_NAME_GRID_DISPLAY), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_DISPLAY},
-
+                    { SW_PROP_NMID(UNO_NAME_GRID_BASE_WIDTH), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_GRID_BASEWIDTH|CONVERT_TWIPS},
+                    { SW_PROP_NMID(UNO_NAME_GRID_SNAP_TO_CHARS), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_SNAPTOCHARS},
+                    { SW_PROP_NMID(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aPageStyleMap;
@@ -1809,6 +1811,10 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     // --> collapsing borders DVO, FME 2005-05-27 #i29550#
                     { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     // <-- collapsing
+
+            //text grid enhancement for better CJK support.  2007-04-01
+            //just export the default page mode property, other properties are not handled in this version
+                    { SW_PROP_NMID(UNO_NAME_GRID_STANDARD_PAGE_MODE), RES_TEXTGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
