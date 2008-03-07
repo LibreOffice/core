@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:23:12 $
+#   last change: $Author: kz $ $Date: 2008-03-07 12:22:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,14 @@ SLOFILES =  \
     $(SLO)$/redcom.obj			\
     $(SLO)$/linkarea.obj		\
     $(SLO)$/warnbox.obj	\
-    $(SLO)$/scuiautofmt.obj
+    $(SLO)$/scuiautofmt.obj     \
+    $(SLO)$/conflictsdlg.obj    \
+    $(SLO)$/sharedocdlg.obj
+
+EXCEPTIONSFILES = \
+    $(SLO)$/acredlin.obj        \
+    $(SLO)$/conflictsdlg.obj    \
+    $(SLO)$/sharedocdlg.obj
 
 EXCEPTIONSFILES= \
     $(SLO)$/optsolver.obj       \
@@ -92,7 +99,9 @@ SRC1FILES = \
     instbdlg.src				\
     acredlin.src				\
     highred.src					\
-    linkarea.src
+    linkarea.src                \
+    conflictsdlg.src            \
+    sharedocdlg.src
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -110,7 +119,9 @@ LIB1OBJFILES =  \
     $(SLO)$/highred.obj			\
     $(SLO)$/simpref.obj			\
     $(SLO)$/redcom.obj			\
-    $(SLO)$/warnbox.obj
+    $(SLO)$/warnbox.obj         \
+    $(SLO)$/conflictsdlg.obj    \
+    $(SLO)$/sharedocdlg.obj
 
 # --- Tagets -------------------------------------------------------
 
