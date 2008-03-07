@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentIndexLevelFormat.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:10:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 
 
     <p>
-    The element type is Sequence&amp;lt;PropertyValues &amp;gt;. Each element in this sequence represents
+    The element type is Sequence&lt; PropertyValues &gt;. Each element in this sequence represents
     a member of an index line. The following properties are part of such an element.
     </p>
     <ul>
@@ -80,7 +80,8 @@
     </p>
     </li>
     <li>
-    <p>TokenChapterInfo - chapter info, in alphabetical indexes
+    <p>TokenChapterInfo - chapter info, in illustration indexes,
+    table indexes, user indexes, table of objects and alphabetical indexes
     only</p>
     </li>
     <li>
@@ -109,7 +110,7 @@
     </li>
     <li>
     <p>TabStopFillCharacter</p>
-    <p>Fill character in tab stops.</p>
+    <p>Fill character in tab stops. Only valid for tab stops.</p>
     </li>
     <li>
     <p>WithTab</p>
@@ -121,8 +122,22 @@
     </li>
     <li>
     <p>ChapterFormat</p>
-    <p>Valid in chapter info only. see <type>ChapterFormat</type>
-    </p>
+    <p>Valid in chapter info and entry number only. See <type>ChapterFormat</type>.</p>
+    <p>Other information.</p>
+    <ul>
+    <li>
+    <p>In chapter info only com.sun.star.text.ChapterFormat.NUMBER, com.sun.star.text.ChapterFormat.NAME, and
+    com.sun.star.text.ChapterFormat.NAME_NUMBER constants are allowed.</p>
+    </li>
+    <li>
+    <p>In entry number only com.sun.star.text.ChapterFormat.NUMBER and com.sun.star.text.ChapterFormat.DIGIT constants are allowed.</p>
+    </li>
+    </ul>
+    </li>
+    <li>
+    <p>ChapterLevel</p>
+    <p>Valid in chapter info and entry number only.  Denotes the level up to which
+    the chapter information is given. Values permitted 1 to 10 inclusive.</p>
     </li>
     </ul>
  */

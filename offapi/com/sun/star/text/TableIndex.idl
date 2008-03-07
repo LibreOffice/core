@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableIndex.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:24:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,18 +53,19 @@ published service TableIndex
     service  com::sun::star::text::BaseIndex;
 
     //-------------------------------------------------------------------------
-    /* determins if the name or the label of an object is used to create the index.
+    /** determines if the name or the label of an object is used to create the index.
      */
     [optional, property] boolean CreateFromLabels; //tables, illustrations
 
     //-------------------------------------------------------------------------
-    /* determins the name of the sequence field that is evaluated to create the index.
+    /** determines the name of the sequence field that is evaluated to create the index.
      */
     [optional, property] string LabelCategory; //tables, illustrations
 
     //-------------------------------------------------------------------------
-    /* determins the way the paragraph containing a label is included in the index.
-        @see ChapterFormat
+    /** determines the way the paragraph containing a label is included in the index.
+        @see ReferenceFieldPart allowed constant values: only TEXT, CATEGORY_AND_NUMBER and
+        ONLY_CAPTION
      */
     [optional, property] short LabelDisplayType;//tables, illustrations
 };
