@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:52:33 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1135,20 +1135,31 @@ USHORT SwCrsrShell::GetNextPrevPageNum( BOOL bNext )
     const SwPageFrm *pPg = Imp()->GetFirstVisPage();
     if( pPg )
     {
+        const SwTwips nPageTop = pPg->Frm().Top();
+
         if( bNext )
         {
-            // erstmal die sichtbare suchen !!
+            // go to next view layout row:
+            do
+            {
+                pPg = (const SwPageFrm *)pPg->GetNext();
+            }
+            while( pPg && pPg->Frm().Top() == nPageTop );
+
             while( pPg && pPg->IsEmptyPage() )
                 pPg = (const SwPageFrm *)pPg->GetNext();
-            while( pPg && 0 != (pPg = (const SwPageFrm *)pPg->GetNext() ) &&
-                    pPg->IsEmptyPage() )
-                ;
         }
         else
         {
-            while( pPg && 0 != (pPg = (const SwPageFrm *)pPg->GetPrev() ) &&
-                    pPg->IsEmptyPage() )
-                ;
+            // go to previous view layout row:
+            do
+            {
+                pPg = (const SwPageFrm *)pPg->GetPrev();
+            }
+            while( pPg && pPg->Frm().Top() == nPageTop );
+
+            while( pPg && pPg->IsEmptyPage() )
+                pPg = (const SwPageFrm *)pPg->GetPrev();
         }
     }
     // Abfrage auf pPg muss fuer den Sonderfall Writerstart mit
