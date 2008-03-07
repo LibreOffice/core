@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:35:13 $
+#   last change: $Author: kz $ $Date: 2008-03-07 12:18:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/cellkeytranslator.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartlock.obj \
+        $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
