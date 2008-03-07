@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:57:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:05:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,6 +527,8 @@ public:
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, BOOL bViewOnly = FALSE);
     virtual void    SetZoomFactor( const Fraction &rX, const Fraction & );
 
+    void            SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly = FALSE );
+
     void            ShowHScrollbar(sal_Bool bShow);
     sal_Bool        IsHScrollbarVisible()const;
 
@@ -682,6 +684,7 @@ public:
                             BOOL bRule = FALSE );
 
     SwPostItMgr* GetPostItMgr() { return mpPostItMgr;}
+    const SwPostItMgr* GetPostItMgr() const { return mpPostItMgr;}
 };
 
 // ----------------- inline Methoden ----------------------
