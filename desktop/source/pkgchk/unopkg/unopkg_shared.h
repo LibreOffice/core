@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_shared.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:50:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,6 @@ struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMg
 {
     ResMgr * operator () () {
         return ResMgr::CreateResMgr( "deployment" );
-    }
-};
-// There is another gobal DeploymentGuiResMgr in the gui part of the Extension Manager.
-//We need it here because we share a WarningBox resource (WARNINGBOX_CONCURRENTINSTANCE)
-//the gui
-struct DeploymentGuiResMgr :
-    public ::rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
-        ResMgr * operator () () {
-            return ResMgr::CreateResMgr( "deploymentgui" );
     }
 };
 
