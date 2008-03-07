@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxids.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 17:04:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@
 // ID-Bereiche --------------------------------------------------------------
 
 // Slot-Id's
-#define SID_SVX_FIRSTFREE                   1068
-#define SID_SVX_END                         (SID_LIB_START + 1199)
+#define SID_SVX_FIRSTFREE                   1070
+#define SID_SVX_END                                             (SID_LIB_START + 1199)
 
 // --------------------------------------------------------------------------
 // Member-Id's
@@ -138,8 +138,15 @@
 #define MID_COUNT               0x74
 #define MID_READONLY            0x76
 
+#define MID_VIEWLAYOUT_COLUMNS  0x77
+#define MID_VIEWLAYOUT_BOOKMODE 0x78
+
+#define MID_ZOOMSLIDER_CURRENTZOOM      0x79
+#define MID_ZOOMSLIDER_SNAPPINGPOINTS   0x7a
+
 #define MID_ADR_FATHERSNAME     0x80
 #define MID_ADR_APARTMENT       0x81
+
 
 // --------------------------------------------------------------------------
 // Resource-Id's ? (obsolete??? at least the one beginning with SID???)
@@ -1306,10 +1313,12 @@
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
 #define SID_OPEN_SMARTTAGOPTIONS                        ( SID_SVX_START + 1062 )
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
-#define SID_FONTNAMELIST                                ( SID_SVX_START + 1064 )
-#define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1065 )
-#define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1066 )
-#define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1067 )
+#define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
+#define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )
+#define SID_FONTNAMELIST                                                                ( SID_SVX_START + 1066 )
+#define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1067 )
+#define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
+#define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs
