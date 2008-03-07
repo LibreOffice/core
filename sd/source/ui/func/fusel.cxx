@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:27:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX //autogen
 #include <svtools/imapobj.hxx>
-#endif
-#ifndef _SV_SOUND_HXX //autogen
-#include <vcl/sound.hxx>
 #endif
 #include <svtools/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -147,6 +144,7 @@
 #ifndef _SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
+#include <avmedia/mediawindow.hxx>
 
 using namespace ::com::sun::star;
 
@@ -174,7 +172,6 @@ FuSelection::FuSelection (
       bSuppressChangesOfSelection(FALSE),
       bMirrorSide0(FALSE),
       nEditMode(SID_BEZIER_MOVE),
-      pSound(NULL),
       pWaterCanCandidate(NULL)
 {
 }
@@ -205,8 +202,6 @@ FuSelection::~FuSelection()
     HPUX_DTOR_BUG;
     mpView->UnmarkAllPoints();
     mpView->ResetCreationActive();
-    delete pSound;
-    pSound = NULL;
 
     if ( mpView->GetDragMode() != SDRDRAG_MOVE )
     {
@@ -1235,20 +1230,6 @@ void FuSelection::SetEditMode(USHORT nMode)
 
 /*************************************************************************
 |*
-|*
-|*
-\************************************************************************/
-
-IMPL_LINK( FuSelection, SoundHasStoppedHdl, void*, EMPTYARG )
-{
-    pSound->SetNotifyHdl( Link() );
-    pSound->SetSoundName( String() );
-    return 0L;
-}
-
-
-/*************************************************************************
-|*
 |* Animation oder Interaktion ausfuehren
 |*
 \************************************************************************/
@@ -1398,15 +1379,15 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_SOUND:
                 {
-                    // Sound asynchron abspielen
-                    if( !pSound )
-                    {
-                        pSound = new Sound();
-                    }
-
-                    pSound->SetNotifyHdl( LINK( this, FuSelection, SoundHasStoppedHdl ) );
-                    pSound->SetSoundName( pInfo->maBookmark );
-                    pSound->Play();
+                        try
+                        {
+                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->maBookmark ), uno::UNO_QUERY_THROW );
+                            mxPlayer->start();
+                        }
+                        catch( uno::Exception& e )
+                        {
+                            (void)e;
+                        }
                     bAnimated = TRUE;
                 }
                 break;
