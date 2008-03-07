@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:09:25 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2773,7 +2773,8 @@ BOOL SwTxtNode::HasBullet() const
 // <- #i29560#
 
 // --> OD 2005-11-17 #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
-XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings ) const
+//i53420 added max outline parameter
+XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
@@ -2781,10 +2782,10 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings ) con
          GetNum()->IsCounted() &&
          pRule->Get( static_cast<USHORT>(GetNum()->GetLevel()) ).IsTxtFmt() )
     {
-        // --> OD 2005-11-17 #128041#
-        return pRule->MakeNumString( *(GetNum()),
-                                     _bInclPrefixAndSuffixStrings ? TRUE : FALSE );
-        // <--
+        return pRule->MakeNumString( GetNum()->GetNumberVector(),
+                                     _bInclPrefixAndSuffixStrings ? TRUE : FALSE,
+                                     FALSE,
+                                     _nRestrictToThisLevel );
     }
     // <--
 
