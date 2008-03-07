@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:54:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,5 +544,10 @@ inline BOOL SwPageFrm::IsInvalidFly() const
  {if( pPage && pPage->HasGrid() && GRID_NONE==(pGrid=(SwTextGridItem*)&pPage->\
      GetPageDesc()->GetMaster().GetAttr(RES_TEXTGRID))->GetGridType() ) \
     pGrid = NULL;}
+
+#define GETGRIDWIDTH( pGrid , pDoc )  pDoc->IsSquaredPageMode() ? \
+    pGrid->GetBaseHeight(): pGrid->GetBaseWidth()
+
+
 
 #endif  //_PAGEFRM_HXX
