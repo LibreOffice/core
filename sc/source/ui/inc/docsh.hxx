@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:35:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
 #endif
+
+#include <com/sun/star/frame/XLoadable.hpp>
 
 #ifndef INCLUDED_SCDLLAPI_H
 #include "scdllapi.h"
@@ -271,7 +273,7 @@ public:
     void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
-    void            MergeDocument( ScDocument& rOtherDoc );
+    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, ULONG nOffset = 0 );
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const String& rComment );
@@ -425,6 +427,13 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
+
+    bool            MergeSharedDocument( ScDocument& rSharedDoc );
+
+private:
+
+    void            SwitchDocumentToShared( bool bShared );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadable > LoadSharedDocument();
 };
 
 SO2_DECL_REF(ScDocShell)
