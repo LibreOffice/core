@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:55:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:38:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,6 @@ public:
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String             GetDefaultPrinter();
-    virtual SalSound*           CreateSalSound();
     virtual SalTimer*           CreateSalTimer();
     virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
