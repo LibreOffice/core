@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:20:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         // --> PB 2004-08-25 #i33095# Security Options
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
         // <--
+        {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -282,6 +283,14 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
+            {
+                sal_Bool bDocShared = sal_False;
+                if ( aValue >>= bDocShared )
+                {
+                    pDocShell->SetDocShared( bDocShared );
+                }
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -411,6 +420,10 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
                 aRet <<= pDocShell->IsLoadReadonly();
             // <--
+            else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
+            {
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->IsDocShared() );
+            }
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
