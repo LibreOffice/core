@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:28:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,7 +722,7 @@ void DrawView::DeleteMarked()
     if( pUndoManager )
     {
         String aUndo( SVX_RES(STR_EditDelete) );
-        String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%O"));
+        String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
         aUndo.SearchAndReplace(aSearchString, GetDescriptionOfMarkedObjects());
         pUndoManager->EnterListAction(aUndo, aUndo);
     }
