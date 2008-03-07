@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:57:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,8 @@ class ScModule: public SfxModule, public SfxListener
     BOOL                bIsWaterCan;
     BOOL                bIsInEditCommand;
     BOOL                bIsInExecuteDrop;
+    bool                mbIsInSharedDocLoading;
+    bool                mbIsInSharedDocSaving;
 
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
@@ -295,6 +297,11 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+
+    void                SetInSharedDocLoading( bool bNew )  { mbIsInSharedDocLoading = bNew; }
+    bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }
+    void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
+    bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )
