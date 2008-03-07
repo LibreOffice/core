@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:01 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,9 @@ public:
     void        SetDefaultObjectSizeHeight(INT32 nNew)  { nDefaultObjectSizeHeight = nNew; }
     INT32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
 
+    void        SetShowSharedDocumentWarning( BOOL bNew )   { mbShowSharedDocumentWarning = bNew; }
+    BOOL        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
     friend SvStream&    operator>>  ( SvStream& rStream, ScAppOptions& rOpt );
@@ -127,6 +130,7 @@ private:
     ScLkUpdMode eLinkMode;
     INT32       nDefaultObjectSizeWidth;
     INT32       nDefaultObjectSizeHeight;
+    BOOL        mbShowSharedDocumentWarning;
 };
 
 
