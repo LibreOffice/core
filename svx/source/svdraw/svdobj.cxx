@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:54 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1587,8 +1587,8 @@ void SdrObject::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHOR
 {
     rStr = ImpGetResStr(nStrCacheID);
 
-    sal_Char aSearchText1[] = "%O";
-    sal_Char aSearchText2[] = "%N";
+    sal_Char aSearchText1[] = "%1";
+    sal_Char aSearchText2[] = "%2";
     xub_StrLen nPos = rStr.SearchAscii(aSearchText1);
 
     if(nPos != STRING_NOTFOUND)
