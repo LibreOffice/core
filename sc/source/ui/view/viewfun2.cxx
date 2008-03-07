@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:39:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
+#include "funcdesc.hxx"
 
 
 // STATIC DATA ---------------------------------------------------------------
