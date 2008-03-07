@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:53:43 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,12 +135,14 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
     return  nCoreOptions == rOpt.nCoreOptions
             && nCore2Options == rOpt.nCore2Options
             && aSnapSize    == rOpt.aSnapSize
+            && mnViewLayoutColumns == rOpt.mnViewLayoutColumns
             && nDivisionX   == rOpt.GetDivisionX()
             && nDivisionY   == rOpt.GetDivisionY()
             && nPagePrevRow == rOpt.GetPagePrevRow()
             && nPagePrevCol == rOpt.GetPagePrevCol()
             && aRetoucheColor == rOpt.GetRetoucheColor()
             && bFormView == rOpt.IsFormView()
+            && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
 #ifndef PRODUCT
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
@@ -234,6 +236,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
 
 SwViewOption::SwViewOption() :
     aRetoucheColor( COL_TRANSPARENT ),
+    mnViewLayoutColumns( 0 ),
     nPagePrevRow( 1 ),
     nPagePrevCol( 2 ),
     nShdwCrsrFillMode( FILL_TAB ),
@@ -245,6 +248,7 @@ SwViewOption::SwViewOption() :
     bFormView(FALSE),
     // <--
     bBookview(FALSE),
+    mbViewLayoutBookMode(FALSE),
     bShowPlaceHolderFields( sal_True ),
 
     nZoom( 100 ),
@@ -287,6 +291,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
+    mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
     nDivisionX      = rVOpt.nDivisionX  ;
     nDivisionY      = rVOpt.nDivisionY  ;
     nPagePrevRow    = rVOpt.nPagePrevRow;
@@ -302,6 +307,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
     bBookview       = rVOpt.bBookview;
+    mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
 #ifndef PRODUCT
@@ -325,6 +331,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
+    mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
     nDivisionX      = rVOpt.nDivisionX  ;
     nDivisionY      = rVOpt.nDivisionY  ;
     nPagePrevRow    = rVOpt.nPagePrevRow;
@@ -340,6 +347,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
     bBookview       = rVOpt.bBookview;
+    mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
 #ifndef PRODUCT
