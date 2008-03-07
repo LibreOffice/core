@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:22:24 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@
 #ifndef SC_PRIVSPLT_HXX
 #include "privsplt.hxx"
 #endif
+#include "funcdesc.hxx"
 
 #ifndef LRU_MAX
 #define LRU_MAX 10
