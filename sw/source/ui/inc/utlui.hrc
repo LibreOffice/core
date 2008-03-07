@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:25:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,21 @@
 #define IMG_ONE_RIGHT_HC            (RC_UTLUI_BEGIN + 9)
 #define IMG_ALL_LEFT_HC             (RC_UTLUI_BEGIN + 10)
 #define IMG_ALL_RIGHT_HC            (RC_UTLUI_BEGIN + 11)
+
+
+#define IMG_VIEWLAYOUT_AUTOMATIC                 (RC_UTLUI_BEGIN +  12)
+#define IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE          (RC_UTLUI_BEGIN +  13)
+#define IMG_VIEWLAYOUT_BOOKMODE                  (RC_UTLUI_BEGIN +  14)
+#define IMG_VIEWLAYOUT_BOOKMODE_ACTIVE           (RC_UTLUI_BEGIN +  15)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN +  16)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN +  17)
+#define IMG_VIEWLAYOUT_AUTOMATIC_HC              (RC_UTLUI_BEGIN +  18)
+#define IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE_HC       (RC_UTLUI_BEGIN +  19)
+#define IMG_VIEWLAYOUT_BOOKMODE_HC               (RC_UTLUI_BEGIN +  20)
+#define IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC        (RC_UTLUI_BEGIN +  21)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN_HC           (RC_UTLUI_BEGIN +  22)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE_HC    (RC_UTLUI_BEGIN +  23)
+
 
 //local ids of the Database ImageLists
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
