@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 16:15:08 $
+#   last change: $Author: kz $ $Date: 2008-03-07 17:09:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ SLOFILES=   $(SLO)$/salinst.obj			\
             $(SLO)$/vclnsapp.obj        \
             $(SLO)$/saltimer.obj		\
             $(SLO)$/salnstimer.obj		\
-            $(SLO)$/salsound.obj		\
             $(SLO)$/salsys.obj
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
