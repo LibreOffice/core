@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:46:22 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -855,16 +855,17 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
         pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+
     // Die Y-Position der ersten Selektion
-    long nMinY = pFESh->IsTableMode() ? pFESh->GetTableCrsr()->GetSttPos().Y()
-                               : pFirstCrsr->GetSttPos().Y();
-    SwPageFrm* pPage = (SwPageFrm*)GetLayout()->Lower();
-    // Suche die zugehoerige Seite
-    while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
-        pPage = (SwPageFrm*)pPage->GetNext();
+    const Point aSelPoint = pFESh->IsTableMode() ?
+                            pFESh->GetTableCrsr()->GetSttPos() :
+                            pFirstCrsr->GetSttPos();
+
+    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
+
     // und ihren Seitendescribtor
-    SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
-                                pPage->GetPageDesc()->GetName() );
+    const SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
+                                        pPage->GetPageDesc()->GetName() );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
     {   // Am letzten Absatz die Absatzattribute richten:
@@ -942,15 +943,17 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
         pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+
     // Die Y-Position der ersten Selektion
-    long nMinY = pFESh->IsTableMode() ? pFESh->GetTableCrsr()->GetSttPos().Y()
-                               : pFirstCrsr->GetSttPos().Y();
-    SwPageFrm* pPage = (SwPageFrm*)GetLayout()->Lower();
-    // Suche die zugehoerige Seite
-    while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
-        pPage = (SwPageFrm*)pPage->GetNext();
+    // Die Y-Position der ersten Selektion
+    const Point aSelPoint = pFESh->IsTableMode() ?
+                            pFESh->GetTableCrsr()->GetSttPos() :
+                            pFirstCrsr->GetSttPos();
+
+    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
+
     // und ihren Seitendescribtor
-    SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
+    const SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
                                 pPage->GetPageDesc()->GetName() );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
@@ -1334,7 +1337,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                         pPrtOrPDFOut->SetMapMode( aTmp );
                     }
 
-                    BOOL bRightPg = pStPage->OnRightPage();
+                    const BOOL bRightPg = pStPage->OnRightPage();
                     if( aMulti.IsSelected( nPageNo ) &&
                         ( (bRightPg && rOptions.bPrintRightPage) ||
                             (!bRightPg && rOptions.bPrintLeftPage) ) )
@@ -1342,30 +1345,16 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                         if ( bSetPrt )
                         {
                             // check for empty page
-                            const SwPageFrm* pFormatPage = NULL;
+                            const SwPageFrm& rFormatPage = pStPage->GetFormatPage();
 
-                            // for empty pages, take the format of the partner
-                            // page
-                            if ( pStPage->IsEmptyPage() )
+                            if ( pLastPageDesc != rFormatPage.GetPageDesc() )
                             {
-                                if ( bRightPg )
-                                    pFormatPage = (SwPageFrm*)pStPage->GetNext();
-                                else
-                                    pFormatPage = (SwPageFrm*)pStPage->GetPrev();
-                            }
+                                pLastPageDesc = rFormatPage.GetPageDesc();
 
-                            if ( ! pFormatPage )
-                                pFormatPage = pStPage;
-
-                            if ( pLastPageDesc != pFormatPage->GetPageDesc() )
-                            {
-                                pLastPageDesc = pFormatPage->GetPageDesc();
-
-                                const BOOL bLandScp =
-                                        pFormatPage->GetPageDesc()->GetLandscape();
+                                const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
 
                                 if( bSetPaperBin )      // Schacht einstellen.
-                                    pPrt->SetPaperBin( pFormatPage->GetFmt()->
+                                    pPrt->SetPaperBin( rFormatPage.GetFmt()->
                                                        GetPaperBin().GetValue() );
 
                                 if (bSetOrient )
