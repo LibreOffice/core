@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:06:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,8 +532,11 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 {
     //set the cursor to the desired position - if no text content is here then
     //new paragraphs are inserted
-    sal_Bool bRet = rShell.SetShadowCrsrPos(
-            Point(DEFAULT_LEFT_DISTANCE + DOCUMENTBORDER, GREETING_TOP_DISTANCE), FILL_SPACE );
+    const SwRect& rPageRect = rShell.GetAnyCurRect(RECT_PAGE);
+    const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
+
+    const sal_Bool bRet = rShell.SetShadowCrsrPos( aGreetingPos, FILL_SPACE );
+
     if(!bRet)
     {
         //there's already text at the desired position
@@ -582,7 +585,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             }
     }
     //now insert the greeting text - if we have any?
-    sal_Bool bIndividual = rConfigItem.IsIndividualGreeting(sal_False);
+    const sal_Bool bIndividual = rConfigItem.IsIndividualGreeting(sal_False);
     String sGreeting;
     if(bIndividual)
     {
