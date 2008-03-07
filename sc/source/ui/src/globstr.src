@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:21:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1681,6 +1681,42 @@ Resource RID_GLOBSTR
     String STR_UNDO_TEXTTOCOLUMNS
     {
         Text [ en-US ] = "Text to Columns";
+    };
+    String STR_DOC_UPDATED
+    {
+        Text [ en-US ] = "Your spreadsheet has been updated with changes saved by other users.";
+    };
+    String STR_DOC_WILLBESAVED
+    {
+        Text [ en-US ] = "The spreadsheet must be saved now to activate sharing mode.\n\nDo you want to continue?";
+    };
+    String STR_DOC_WILLNOTBESAVED
+    {
+        Text [ en-US ] = "Already resolved merge conflicts will be lost and your changes to the shared spreadsheet will not be saved.\n\nDo you want to continue?";
+    };
+    String STR_DOC_DISABLESHARED
+    {
+        Text [ en-US ] = "Disabling shared mode of a spreadsheet hinders all other users of the shared spreadsheet to merge back their work.\n\nDo you want to continue?";
+    };
+    String STR_DOC_NOLONGERSHARED
+    {
+        Text [ en-US ] = "This spreadsheet is no longer in shared mode.\n\nSave your spreadsheet to a separate file and merge your changes to the shared spreadsheet manually.";
+    };
+    String STR_SHARED_DOC_WARNING
+    {
+        Text [ en-US ] = "The spreadsheet is in shared mode. This allows multiple users to access and edit the spreadsheet at the same time.\n\nChanges to formatting attributes and drawing objects will not be saved in shared mode. Turn off shared mode to get exclusive access needed for those changes.";
+    };
+    String STR_FILE_LOCKED_TRY_LATER
+    {
+        Text [ en-US ] = "The shared spreadsheet file is locked due to a merge in progress by user: '%1'\n\nSharing mode of a locked file cannot be disabled. Try again later.";
+    };
+    String STR_FILE_LOCKED_SAVE_LATER
+    {
+        Text [ en-US ] = "The shared spreadsheet file is locked due to a merge in progress by user: '%1'\n\nTry again later to save your changes.";
+    };
+    String STR_UNKNOWN_USER
+    {
+        Text [ en-US ] = "Unknown User";
     };
 };
 
