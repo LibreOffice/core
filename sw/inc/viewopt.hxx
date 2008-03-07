@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:35:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,7 @@ protected:
     UINT32          nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground fuer BrowseView
     Size            aSnapSize;          // Beschreibt hori. wie vert. Snap
+    USHORT          mnViewLayoutColumns;// # columns for edit view
     short           nDivisionX;         // Rasterunterteilung
     short           nDivisionY;
     BYTE            nPagePrevRow;       // Page Preview Row/Columns
@@ -182,11 +183,13 @@ protected:
     BOOL            bFormView : 1;
     // <--
     BOOL            bBookview : 1;      // view mode for page preview
+    BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
     SvxZoomType     eZoom;              // 'enum' fuer Zoom
+
     BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
 
 #ifndef PRODUCT
@@ -430,6 +433,11 @@ public:
 
     BOOL IsAutoCompleteWords() const;
 
+    // PAGES01
+    bool   IsViewLayoutBookMode() const { return mbViewLayoutBookMode; }
+    void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
+    USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }
+    void   SetViewLayoutColumns( USHORT nNew ) { mnViewLayoutColumns = nNew; }
 
 #ifndef PRODUCT
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
