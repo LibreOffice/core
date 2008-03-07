@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:55:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:59:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -801,7 +801,7 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
 
     if (rNum.IsCounted())
         aStr = MakeNumString(rNum.GetNumberVector(),
-                             bInclStrings, bOnlyArabic);
+                             bInclStrings, bOnlyArabic, MAXLEVEL);
 
     return aStr;
 }
