@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:53:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,10 +297,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_CREATEOBJECT        (WM_USER+116)
 // wParam == 0; lParam == pObject;
 #define SAL_MSG_DESTROYOBJECT       (WM_USER+117)
-// wParam == 0; lParam == this; lResult == bRet
-#define SAL_MSG_CREATESOUND         (WM_USER+118)
-// wParam == 0; lParam == this
-#define SAL_MSG_DESTROYSOUND        (WM_USER+119)
 // wParam == hWnd; lParam == 0; lResult == hDC
 #define SAL_MSG_GETDC               (WM_USER+120)
 // wParam == hWnd; lParam == 0
