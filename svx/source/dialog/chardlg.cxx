@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:32:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -988,7 +988,7 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
         // Bei der Suche zus"atzliche Eintr"age:
         // "Nicht Fett" und "Nicht Kursiv"
         String aEntry = m_pImpl->m_aNoStyleText;
-        const sal_Char sS[] = "%s";
+        const sal_Char sS[] = "%1";
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
         m_pImpl->m_nExtraEntryPos = pStyleBox->InsertEntry( aEntry );
         aEntry = m_pImpl->m_aNoStyleText;
