@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:04:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,18 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
             {
                 // added to avoid warnings
             }
+        }
+    }
+
+    if ( rSettings.HasActionRange() )
+    {
+        ULONG nAction = rAction.GetActionNumber();
+        ULONG nFirstAction;
+        ULONG nLastAction;
+        rSettings.GetTheActionRange( nFirstAction, nLastAction );
+        if ( nAction < nFirstAction || nAction > nLastAction )
+        {
+            return FALSE;
         }
     }
 
