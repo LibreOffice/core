@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 17:14:27 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,11 @@
 #define DLG_UUI_SSLWARN (RID_UUI_START + 28)
 #define DLG_UUI_SSLWARN_CRT (RID_UUI_START + 29)
 #define RID_XMLSECDLG_MACROWARN (RID_UUI_START + 30)
+#define STR_OPENLOCKED_TITLE (RID_UUI_START + 31)
+#define STR_OPENLOCKED_MSG (RID_UUI_START + 32)
+#define STR_OPENLOCKED_OPENREADONLY_BTN (RID_UUI_START + 33)
+#define STR_OPENLOCKED_OPENCOPY_BTN (RID_UUI_START + 34)
+#define STR_OPENLOCKED_UNKNOWNUSER (RID_UUI_START + 35)
 
 #define ERRCODE_UUI_IO_ABORT (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED (ERRCODE_AREA_UUI + 1)
