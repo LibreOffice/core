@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:22:42 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,11 +748,7 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
         if ( pRowColumnSelectionStart )
         {
             Point aPos( aModPt );
-            if( bIsRowDrag )
-                aPos.X() = 0;
-            else
-                aPos.Y() = 0;
-            rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos );
+            rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos, bIsRowDrag );
         }
         else
             (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
@@ -3493,11 +3489,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     {
         EnterArea();
         Point aPos( aDocPt );
-        if( bIsRowDrag )
-            aPos.X() = 0;
-        else
-            aPos.Y() = 0;
-        if( rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos ))
+        if( rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos, bIsRowDrag ))
             return;
     }
 
