@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:31:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,14 +134,6 @@ SwDPage::~SwDPage()
 {
     delete pGridLst;
 }
-
-
-// #i3694#
-// This GetOffset() method is not needed anymore, it even leads to errors.
-//Point  SwDPage::GetOffset() const
-//{
-//  return Point( DOCUMENTBORDER, DOCUMENTBORDER );
-//}
 
 /*************************************************************************
 |*
