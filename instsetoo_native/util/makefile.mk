@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:38:30 $
+#   last change: $Author: hjs $ $Date: 2008-03-07 15:46:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,12 @@ GEN_HID2=TRUE
 
 # PERL:=@echo
 
+# watch for the path delimiter
+.IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.ELSE			# "$(GUI)"=="WNT"
+PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
+.ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
 .IF "$(CWS_WORK_STAMP)=="" || "$(UPDATER)!=""
