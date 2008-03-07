@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:26:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:41:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,8 +798,11 @@ enum SwPropNameIds
 /* 0722 */  UNO_NAME_INDENT_AT,
 // --> #i52420# / 2008-02-07 / beppec56@openoffice.org
 /* 0723 */  UNO_NAME_CHAPTER_LEVEL,
-/* 0724 */  UNO_NAME_ROW_SPAN,
-/* 0725 */  SW_PROPNAME_END
+// --> 2007-03-27 text grid enhancement for better CJK support
+/* 0724 */  UNO_NAME_GRID_BASE_WIDTH,
+/* 0725 */  UNO_NAME_GRID_SNAP_TO_CHARS,
+/* 0726 */  UNO_NAME_GRID_STANDARD_PAGE_MODE,
+/* 0727 */  SW_PROPNAME_END
 };
 
 
