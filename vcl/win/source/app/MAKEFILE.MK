@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 09:53:00 $
+#   last change: $Author: kz $ $Date: 2008-03-07 16:48:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ SLOFILES=   $(SLO)$/salshl.obj      \
             $(SLO)$/saldata.obj     \
             $(SLO)$/salinst.obj     \
             $(SLO)$/saltimer.obj    \
-            $(SLO)$/salsound.obj    \
             $(SLO)$/salinfo.obj
 
 # --- Targets ------------------------------------------------------
