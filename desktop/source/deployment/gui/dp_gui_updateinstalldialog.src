@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:39:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ ModalDialog RID_DLG_UPDATEINSTALL {
             RSC_SP_FLGR_SPACE_Y);
 
         Size = MAP_APPFONT(LOCAL_BUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
-        Text[en-US] = "~Abort Update";
+        Text[en-US] = "Cancel Update";
         DefButton = TRUE;
     };
 
