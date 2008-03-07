@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:11:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,9 @@ public:
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
     SW_DLLPUBLIC void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
+
+    //default page mode for text grid
+    SW_DLLPUBLIC void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
     // ConfigItems erzeugen
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
