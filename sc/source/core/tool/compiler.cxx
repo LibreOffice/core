@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:30:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -730,6 +730,10 @@ ScCompiler::OpCodeMap::createSequenceOfAvailableMappings( const sal_Int32 nGroup
     }
     else
     {
+        /* FIXME: Once we support error constants in formulas we'll need a map
+         * group for that, e.g. FormulaMapGroup::ERROR_CONSTANTS, and fill
+         * SC_OPCODE_START_ERRORS to SC_OPCODE_STOP_ERRORS. */
+
         // Anything else but SPECIAL.
         if ((nGroups & FormulaMapGroup::SEPARATORS) != 0)
         {
@@ -759,7 +763,7 @@ ScCompiler::OpCodeMap::createSequenceOfAvailableMappings( const sal_Int32 nGroup
             if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) == 0)
                 lclPushOpCodeMapEntry( aVec, mpTable, ocAdd );
             // regular unary operators
-            for (USHORT nOp = SC_OPCODE_START_UN_OP; nOp < SC_OPCODE_END_UN_OP && nOp < mnSymbols; ++nOp)
+            for (USHORT nOp = SC_OPCODE_START_UN_OP; nOp < SC_OPCODE_STOP_UN_OP && nOp < mnSymbols; ++nOp)
             {
                 switch (nOp)
                 {
@@ -775,7 +779,7 @@ ScCompiler::OpCodeMap::createSequenceOfAvailableMappings( const sal_Int32 nGroup
         }
         if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) != 0)
         {
-            for (USHORT nOp = SC_OPCODE_START_BIN_OP; nOp < SC_OPCODE_END_BIN_OP && nOp < mnSymbols; ++nOp)
+            for (USHORT nOp = SC_OPCODE_START_BIN_OP; nOp < SC_OPCODE_STOP_BIN_OP && nOp < mnSymbols; ++nOp)
             {
                 switch (nOp)
                 {
@@ -793,8 +797,8 @@ ScCompiler::OpCodeMap::createSequenceOfAvailableMappings( const sal_Int32 nGroup
         {
             // Function names are not consecutive, skip the gaps between
             // functions with no parameter, functions with 1 parameter
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR, ::std::min< USHORT >( SC_OPCODE_END_NO_PAR, mnSymbols ) );
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR, ::std::min< USHORT >( SC_OPCODE_END_1_PAR, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR, ::std::min< USHORT >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR, ::std::min< USHORT >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
             // Additional functions not within range of functions.
             static const USHORT aOpCodes[] = {
                 SC_OPCODE_IF,
@@ -806,7 +810,7 @@ ScCompiler::OpCodeMap::createSequenceOfAvailableMappings( const sal_Int32 nGroup
             };
             lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, sizeof(aOpCodes)/sizeof(aOpCodes[0]) );
             // functions with 2 or more parameters.
-            for (USHORT nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_END_2_PAR && nOp < mnSymbols; ++nOp)
+            for (USHORT nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_STOP_2_PAR && nOp < mnSymbols; ++nOp)
             {
                 switch (nOp)
                 {
@@ -2086,7 +2090,7 @@ BOOL ScCompiler::IsOpCode( const String& rName )
     {
         bool bShouldBeNegSub =
             (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
-             (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_END_BIN_OP) ||
+             (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_BIN_OP) ||
              eLastOp == ocArrayOpen ||
              eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
@@ -3438,8 +3442,8 @@ BOOL ScCompiler::GetToken()
                 if ( eOp1 != ocColRowName && eOp1 != ocIntersect
                     && eOp2 != ocColRowName && eOp2 != ocIntersect )
                 {
-                    if ( (ocEndDiv < eOp1 && eOp1 < ocEndBinOp)
-                        || (ocEndDiv < eOp2 && eOp2 < ocEndBinOp) )
+                    if (    (SC_OPCODE_START_BIN_OP <= eOp1 && eOp1 < SC_OPCODE_STOP_BIN_OP) ||
+                            (SC_OPCODE_START_BIN_OP <= eOp2 && eOp2 < SC_OPCODE_STOP_BIN_OP))
                         bSingle = TRUE;
                 }
                 if ( bSingle )
@@ -3556,20 +3560,20 @@ OpCode ScCompiler::NextToken()
     // There must be an operator before a push
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
-                ((eLastOp > ocEndDiv) && (eLastOp < ocEndUnOp))) )
+                (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)) )
         SetError(errOperatorExpected);
     // Operator and Plus => operator
     if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
-                (eLastOp > ocEndDiv && eLastOp < ocEndUnOp)))
+                (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
         eOp = NextToken();
     else
     {
         // Before an operator there must not be another operator, with the
         // exception of AND and OR.
-        if ( eOp != ocAnd && eOp != ocOr
-          && ( eOp > ocEndDiv && eOp < ocEndBinOp )
-          && ( eLastOp == ocOpen || eLastOp == ocSep
-            || (eLastOp > ocEndDiv && eLastOp < ocEndUnOp)) )
+        if ( eOp != ocAnd && eOp != ocOr &&
+                (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP )
+                && (eLastOp == ocOpen || eLastOp == ocSep ||
+                    (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
         {
             SetError(errVariableExpected);
             if ( bAutoCorrect && !pStack )
@@ -3865,7 +3869,7 @@ void ScCompiler::Factor()
             default:
                 ;   // nothing
         }
-        if( eOp > ocEndUnOp && eOp < ocEndNoPar)
+        if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         {
             pFacToken = pToken;
             eOp = NextToken();
@@ -3885,7 +3889,7 @@ void ScCompiler::Factor()
         }
         // special cases NOT() and NEG()
         else if( eOp == ocNot || eOp == ocNeg
-              || ( eOp > ocEndNoPar && eOp < ocEnd1Par) )
+              || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR) )
         {
             pFacToken = pToken;
             eOp = NextToken();
@@ -3905,7 +3909,7 @@ void ScCompiler::Factor()
             PutCode( pFacToken );
             eOp = NextToken();
         }
-        else if ((eOp > ocEnd1Par && eOp < ocEnd2Par)
+        else if ((SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)
                 || eOp == ocExternal
                 || eOp == ocMacro
                 || eOp == ocAnd
@@ -4097,7 +4101,8 @@ void ScCompiler::UnaryLine()
 {
     if( pToken->GetOpCode() == ocAdd )
         GetToken();
-    else if ( pToken->GetOpCode() > ocNot && pToken->GetOpCode() < ocEndUnOp )
+    else if (SC_OPCODE_START_UN_OP <= pToken->GetOpCode() &&
+            pToken->GetOpCode() < SC_OPCODE_STOP_UN_OP)
     {
         ScTokenRef p = pToken;
         NextToken();
