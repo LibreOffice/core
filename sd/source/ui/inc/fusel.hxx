@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:16:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
 #endif
+
+#include <com/sun/star/media/XPlayer.hpp>
 
 class SdrHdl;
 class SdrObject;
@@ -96,10 +98,7 @@ protected:
     BOOL            bSuppressChangesOfSelection;
     BOOL            bMirrorSide0;
     USHORT          nEditMode;
-    Sound*          pSound;
-
-                    DECL_LINK( SoundHasStoppedHdl, void* );
-                    DECL_STATIC_LINK( FuSelection, StaticSoundHasStoppedHdl, Sound* );
+        ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 
 private:
     /** This pointer stores a canidate for assigning a style in the water
