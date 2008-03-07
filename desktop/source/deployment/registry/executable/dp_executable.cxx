@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_executable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:23:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 {
     if (mediaType.getLength() == 0)
     {
-        OSL_ASSERT(0);
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
