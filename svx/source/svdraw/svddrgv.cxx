@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:35:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,8 +797,8 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
 
         XubString aStr(ImpGetResStr(STR_DragInsertPoint));
         XubString aName;
-        pMarkedPath->TakeObjNameSingul(aName);
-        xub_StrLen nPos(aStr.SearchAscii("%O"));
+        pMarkedObj->TakeObjNameSingul(aName);
+        xub_StrLen nPos(aStr.SearchAscii("%1"));
 
         if(STRING_NOTFOUND != nPos)
         {
@@ -911,7 +911,7 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
         XubString aStr(ImpGetResStr(STR_DragInsertGluePoint));
         XubString aName; pObj->TakeObjNameSingul(aName);
 
-        aStr.SearchAndReplaceAscii("%O", aName);
+        aStr.SearchAndReplaceAscii("%1", aName);
 
         aInsPointUndoStr=aStr;
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
