@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:29:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,8 @@
 #include "hints.hxx"
 
 #include "globstr.hrc"
+
+#include <stack>
 
 #define SC_CHGTRACK_CXX
 #include "chgtrack.hxx"
@@ -1881,7 +1883,7 @@ ScChangeActionContent* ScChangeActionContent::GetTopContent() const
     if ( pNextContent )
     {
         ScChangeActionContent* pContent = pNextContent;
-        while ( pContent->pNextContent )
+        while ( pContent->pNextContent && pContent != pContent->pNextContent )
             pContent = pContent->pNextContent;
         return pContent;
     }
@@ -5180,3 +5182,480 @@ ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& 
     return 0;
 }
 
+void ScChangeTrack::AppendCloned( ScChangeAction* pAppend )
+{
+    aTable.Insert( pAppend->GetActionNumber(), pAppend );
+    if ( !pLast )
+        pFirst = pLast = pAppend;
+    else
+    {
+        pLast->pNext = pAppend;
+        pAppend->pPrev = pLast;
+        pLast = pAppend;
+    }
+}
+
+ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
+{
+    if ( !pDocument )
+    {
+        return NULL;
+    }
+
+    ScChangeTrack* pClonedTrack = new ScChangeTrack( pDocument );
+    pClonedTrack->SetTime100thSeconds( IsTime100thSeconds() );
+
+    // clone generated actions
+    ::std::stack< const ScChangeAction* > aGeneratedStack;
+    const ScChangeAction* pGenerated = GetFirstGenerated();
+    while ( pGenerated )
+    {
+        aGeneratedStack.push( pGenerated );
+        pGenerated = pGenerated->GetNext();
+    }
+    while ( !aGeneratedStack.empty() )
+    {
+        pGenerated = aGeneratedStack.top();
+        aGeneratedStack.pop();
+        const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pGenerated );
+        DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
+        const ScBaseCell* pNewCell = pContent->GetNewCell();
+        if ( pNewCell )
+        {
+            ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+            String aNewValue;
+            pContent->GetNewString( aNewValue );
+            pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
+            pClonedTrack->AddLoadedGenerated( pClonedNewCell, pGenerated->GetBigRange(), aNewValue );
+        }
+    }
+
+    // clone actions
+    const ScChangeAction* pAction = GetFirst();
+    while ( pAction )
+    {
+        ScChangeAction* pClonedAction = NULL;
+
+        switch ( pAction->GetType() )
+        {
+            case SC_CAT_INSERT_COLS:
+            case SC_CAT_INSERT_ROWS:
+            case SC_CAT_INSERT_TABS:
+                {
+                    pClonedAction = new ScChangeActionIns(
+                        pAction->GetActionNumber(),
+                        pAction->GetState(),
+                        pAction->GetRejectAction(),
+                        pAction->GetBigRange(),
+                        pAction->GetUser(),
+                        pAction->GetDateTimeUTC(),
+                        pAction->GetComment(),
+                        pAction->GetType() );
+                }
+                break;
+            case SC_CAT_DELETE_COLS:
+            case SC_CAT_DELETE_ROWS:
+            case SC_CAT_DELETE_TABS:
+                {
+                    const ScChangeActionDel* pDelete = dynamic_cast< const ScChangeActionDel* >( pAction );
+                    DBG_ASSERT( pDelete, "ScChangeTrack::Clone: pDelete is null!" );
+
+                    SCsCOLROW nD = 0;
+                    ScChangeActionType eType = pAction->GetType();
+                    if ( eType == SC_CAT_DELETE_COLS )
+                    {
+                        nD = static_cast< SCsCOLROW >( pDelete->GetDx() );
+                    }
+                    else if ( eType == SC_CAT_DELETE_ROWS )
+                    {
+                        nD = static_cast< SCsCOLROW >( pDelete->GetDy() );
+                    }
+
+                    pClonedAction = new ScChangeActionDel(
+                        pAction->GetActionNumber(),
+                        pAction->GetState(),
+                        pAction->GetRejectAction(),
+                        pAction->GetBigRange(),
+                        pAction->GetUser(),
+                        pAction->GetDateTimeUTC(),
+                        pAction->GetComment(),
+                        eType,
+                        nD,
+                        pClonedTrack );
+                }
+                break;
+            case SC_CAT_MOVE:
+                {
+                    const ScChangeActionMove* pMove = dynamic_cast< const ScChangeActionMove* >( pAction );
+                    DBG_ASSERT( pMove, "ScChangeTrack::Clone: pMove is null!" );
+
+                    pClonedAction = new ScChangeActionMove(
+                        pAction->GetActionNumber(),
+                        pAction->GetState(),
+                        pAction->GetRejectAction(),
+                        pAction->GetBigRange(),
+                        pAction->GetUser(),
+                        pAction->GetDateTimeUTC(),
+                        pAction->GetComment(),
+                        pMove->GetFromRange(),
+                        pClonedTrack );
+                }
+                break;
+            case SC_CAT_CONTENT:
+                {
+                    const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
+                    DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
+                    const ScBaseCell* pOldCell = pContent->GetOldCell();
+                    ScBaseCell* pClonedOldCell = ( pOldCell ? pOldCell->Clone( pDocument ) : NULL );
+                    String aOldValue;
+                    pContent->GetOldString( aOldValue );
+
+                    ScChangeActionContent* pClonedContent = new ScChangeActionContent(
+                        pAction->GetActionNumber(),
+                        pAction->GetState(),
+                        pAction->GetRejectAction(),
+                        pAction->GetBigRange(),
+                        pAction->GetUser(),
+                        pAction->GetDateTimeUTC(),
+                        pAction->GetComment(),
+                        pClonedOldCell,
+                        pDocument,
+                        aOldValue );
+
+                    const ScBaseCell* pNewCell = pContent->GetNewCell();
+                    if ( pNewCell )
+                    {
+                        ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+                        pClonedContent->SetNewValue( pClonedNewCell, pDocument );
+                    }
+
+                    pClonedAction = pClonedContent;
+                }
+                break;
+            case SC_CAT_REJECT:
+                {
+                    pClonedAction = new ScChangeActionReject(
+                        pAction->GetActionNumber(),
+                        pAction->GetState(),
+                        pAction->GetRejectAction(),
+                        pAction->GetBigRange(),
+                        pAction->GetUser(),
+                        pAction->GetDateTimeUTC(),
+                        pAction->GetComment() );
+                }
+                break;
+            default:
+                {
+                }
+                break;
+        }
+
+        if ( pClonedAction )
+        {
+            pClonedTrack->AppendCloned( pClonedAction );
+        }
+
+        pAction = pAction->GetNext();
+    }
+
+    if ( pClonedTrack->GetLast() )
+    {
+        pClonedTrack->SetActionMax( pClonedTrack->GetLast()->GetActionNumber() );
+    }
+
+    // set dependencies for Deleted/DeletedIn
+    pAction = GetFirst();
+    while ( pAction )
+    {
+        if ( pAction->HasDeleted() )
+        {
+            ::std::stack< ULONG > aStack;
+            const ScChangeActionLinkEntry* pL = pAction->GetFirstDeletedEntry();
+            while ( pL )
+            {
+                const ScChangeAction* pDeleted = pL->GetAction();
+                if ( pDeleted )
+                {
+                    aStack.push( pDeleted->GetActionNumber() );
+                }
+                pL = pL->GetNext();
+            }
+            ScChangeAction* pClonedAction = pClonedTrack->GetAction( pAction->GetActionNumber() );
+            if ( pClonedAction )
+            {
+                while ( !aStack.empty() )
+                {
+                    ScChangeAction* pClonedDeleted = pClonedTrack->GetActionOrGenerated( aStack.top() );
+                    aStack.pop();
+                    if ( pClonedDeleted )
+                    {
+                        pClonedDeleted->SetDeletedIn( pClonedAction );
+                    }
+                }
+            }
+        }
+        pAction = pAction->GetNext();
+    }
+
+    // set dependencies for Dependent/Any
+    pAction = GetLast();
+    while ( pAction )
+    {
+        if ( pAction->HasDependent() )
+        {
+            ::std::stack< ULONG > aStack;
+            const ScChangeActionLinkEntry* pL = pAction->GetFirstDependentEntry();
+            while ( pL )
+            {
+                const ScChangeAction* pDependent = pL->GetAction();
+                if ( pDependent )
+                {
+                    aStack.push( pDependent->GetActionNumber() );
+                }
+                pL = pL->GetNext();
+            }
+            ScChangeAction* pClonedAction = pClonedTrack->GetAction( pAction->GetActionNumber() );
+            if ( pClonedAction )
+            {
+                while ( !aStack.empty() )
+                {
+                    ScChangeAction* pClonedDependent = pClonedTrack->GetActionOrGenerated( aStack.top() );
+                    aStack.pop();
+                    if ( pClonedDependent )
+                    {
+                        ScChangeActionLinkEntry* pLink = pClonedAction->AddDependent( pClonedDependent );
+                        pClonedDependent->AddLink( pClonedAction, pLink );
+                    }
+                }
+            }
+        }
+        pAction = pAction->GetPrev();
+    }
+
+    // masterlinks
+    ScChangeAction* pClonedAction = pClonedTrack->GetFirst();
+    while ( pClonedAction )
+    {
+        pClonedTrack->MasterLinks( pClonedAction );
+        pClonedAction = pClonedAction->GetNext();
+    }
+
+    if ( IsProtected() )
+    {
+        pClonedTrack->SetProtection( GetProtection() );
+    }
+
+    if ( pClonedTrack->GetLast() )
+    {
+        pClonedTrack->SetLastSavedActionNumber( pClonedTrack->GetLast()->GetActionNumber() );
+    }
+
+    pDocument->SetChangeTrack( pClonedTrack );
+
+    return pClonedTrack;
+}
+
+void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct )
+{
+    if ( pAct->IsVirgin() )
+    {
+        if ( pOtherAct->IsAccepted() )
+        {
+            pAct->Accept();
+            if ( pOtherAct->IsRejecting() )
+            {
+                pAct->SetRejectAction( pOtherAct->GetRejectAction() );
+            }
+        }
+        else if ( pOtherAct->IsRejected() )
+        {
+            pAct->SetRejected();
+        }
+    }
+}
+
+String ScChangeAction::toString( ScDocument* pDoc ) const
+{
+    String aReturn;
+
+    String aNumber = String::CreateFromInt64( static_cast< sal_Int64 >( GetActionNumber() ) );
+
+    String aActionState;
+    ScChangeActionState eActionState = GetState();
+    switch ( eActionState )
+    {
+        case SC_CAS_VIRGIN:
+            {
+                aActionState = String::CreateFromAscii( " " );
+            }
+            break;
+        case SC_CAS_ACCEPTED:
+            {
+                aActionState = String::CreateFromAscii( "+" );
+            }
+            break;
+        case SC_CAS_REJECTED:
+            {
+                aActionState = String::CreateFromAscii( "-" );
+            }
+            break;
+    }
+
+    String aRejectAction;
+    if ( IsRejecting() )
+    {
+        aRejectAction += 'r';
+        aRejectAction += String::CreateFromInt64( static_cast< sal_Int64 >( GetRejectAction() ) );
+    }
+
+    String aReference;
+    GetRefString( aReference, pDoc, TRUE );
+
+    String aAuthor = GetUser();
+
+    DateTime aDT = GetDateTime();
+    String aDate = ScGlobal::pLocaleData->getDate( aDT );
+    aDate += ' ';
+    aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
+
+    String aDescription;
+    GetDescription( aDescription, pDoc );
+
+    String aLinkAny;
+    const ScChangeActionLinkEntry* pLinkA = pLinkAny;
+    while ( pLinkA )
+    {
+        if ( !aLinkAny.Len() )
+        {
+            aLinkAny = String::CreateFromAscii( "(Any:" );
+        }
+        aLinkAny += String::CreateFromAscii( " ->" );
+        aLinkAny += pLinkA->toString();
+        pLinkA = pLinkA->GetNext();
+    }
+    if ( aLinkAny.Len() )
+    {
+        aLinkAny += ')';
+    }
+
+    String aLinkDeletedIn;
+    const ScChangeActionLinkEntry* pLinkDI = pLinkDeletedIn;
+    while ( pLinkDI )
+    {
+        if ( !aLinkDeletedIn.Len() )
+        {
+            aLinkDeletedIn = String::CreateFromAscii( "(DeletedIn:" );
+        }
+        aLinkDeletedIn += String::CreateFromAscii( " ->" );
+        aLinkDeletedIn += pLinkDI->toString();
+        pLinkDI = pLinkDI->GetNext();
+    }
+    if ( aLinkDeletedIn.Len() )
+    {
+        aLinkDeletedIn += ')';
+    }
+
+    String aLinkDeleted;
+    const ScChangeActionLinkEntry* pLinkD = pLinkDeleted;
+    while ( pLinkD )
+    {
+        if ( !aLinkDeleted.Len() )
+        {
+            aLinkDeleted = String::CreateFromAscii( "(Deleted:" );
+        }
+        aLinkDeleted += String::CreateFromAscii( " ->" );
+        aLinkDeleted += pLinkD->toString();
+        pLinkD = pLinkD->GetNext();
+    }
+    if ( aLinkDeleted.Len() )
+    {
+        aLinkDeleted += ')';
+    }
+
+    String aLinkDependent;
+    const ScChangeActionLinkEntry* pLinkDp = pLinkDependent;
+    while ( pLinkDp )
+    {
+        if ( !aLinkDependent.Len() )
+        {
+            aLinkDependent = String::CreateFromAscii( "(Dependent:" );
+        }
+        aLinkDependent += String::CreateFromAscii( " ->" );
+        aLinkDependent += pLinkDp->toString();
+        pLinkDp = pLinkDp->GetNext();
+    }
+    if ( aLinkDependent.Len() )
+    {
+        aLinkDependent += ')';
+    }
+
+    aReturn += aNumber;
+    aReturn += aActionState;
+    aReturn += aRejectAction;
+    aReturn += String::CreateFromAscii( ": " );
+    aReturn += aReference;
+    aReturn += ' ';
+    aReturn += aAuthor;
+    aReturn += ' ';
+    aReturn += aDate;
+    aReturn += ' ';
+    aReturn += aDescription;
+    aReturn += ' ';
+    aReturn += aLinkAny;
+    aReturn += ' ';
+    aReturn += aLinkDeletedIn;
+    aReturn += ' ';
+    aReturn += aLinkDeleted;
+    aReturn += ' ';
+    aReturn += aLinkDependent;
+
+    return aReturn;
+}
+
+String ScChangeActionLinkEntry::toString() const
+{
+    String aReturn;
+    if ( pAction )
+    {
+        aReturn = String::CreateFromInt64( static_cast< sal_Int64 >( pAction->GetActionNumber() ) );
+    }
+    else if ( pLink && pLink->pAction )
+    {
+        aReturn = String::CreateFromAscii( "*" );
+        aReturn += String::CreateFromInt64( static_cast< sal_Int64 >( pLink->pAction->GetActionNumber() ) );
+    }
+    else
+    {
+        aReturn = String::CreateFromAscii( "-" );
+    }
+
+    return aReturn;
+}
+
+String ScChangeTrack::toString() const
+{
+    String aReturn;
+
+    aReturn += String::CreateFromAscii( "============================================================\n" );
+
+    const ScChangeAction* pGenerated = GetFirstGenerated();
+    while ( pGenerated )
+    {
+        aReturn += pGenerated->toString( pDoc );
+        aReturn += '\n';
+        pGenerated = pGenerated->GetNext();
+    }
+
+    aReturn += String::CreateFromAscii( "------------------------------------------------------------\n" );
+
+    const ScChangeAction* pAction = GetFirst();
+    while ( pAction )
+    {
+        aReturn += pAction->toString( pDoc );
+        aReturn += '\n';
+        pAction = pAction->GetNext();
+    }
+    aReturn += String::CreateFromAscii( "============================================================\n" );
+
+    return aReturn;
+}
