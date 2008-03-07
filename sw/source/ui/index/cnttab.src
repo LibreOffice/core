@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:15:31 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ TabPage TP_TOX_SELECT
     FixedText       FT_LEVEL
     {
         Pos = MAP_APPFONT ( 130 , 70 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ en-US ] = "Evaluate up to level";
     };
     NumericField    NF_LEVEL
@@ -766,6 +766,47 @@ TabPage TP_TOX_ENTRY
         < "Number range and description" ; > ;
     };
     };
+
+    FixedText FT_ENTRY_NO
+        {
+            Pos = MAP_APPFONT ( 37 , 71 ) ;
+            Size = MAP_APPFONT ( 60, 8 ) ;
+            Text [ en-US ] = "Format";
+        };
+    ListBox LB_ENTRY_NO
+    {
+        Pos = MAP_APPFONT ( 100 , 69 ) ;
+        Size = MAP_APPFONT ( 93, 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+            {
+                < "Number" ; > ;
+                < "Number without separator" ; > ;
+            };
+    };
+
+    FixedText       FT_LEVEL_OL
+        {
+            Pos = MAP_APPFONT ( 37 , 87 ) ;
+            Size = MAP_APPFONT ( 60 , 8 ) ;
+            Text [ en-US ] = "Evaluate up to level";
+        };
+    NumericField    NF_LEVEL_OL
+        {
+            Pos = MAP_APPFONT ( 100 , 85 ) ;
+            Size = MAP_APPFONT ( 20 , 12 ) ;
+            Border = TRUE ;
+            TabStop = TRUE ;
+            Left = TRUE ;
+            Repeat = TRUE ;
+            Spin = TRUE ;
+            Minimum = 1 ;
+            Maximum = 10 ;
+            Value = 10 ;
+            SpinSize = 1 ;
+        };
+
     FixedText FT_TABPOS
     {
         Pos = MAP_APPFONT ( 37 , 87 ) ;
