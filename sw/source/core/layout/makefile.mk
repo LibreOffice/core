@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-22 15:37:11 $
+#   last change: $Author: kz $ $Date: 2008-03-07 14:56:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,8 @@ EXCEPTIONSFILES = \
     $(SLO)$/objstmpconsiderwrapinfl.obj \
     $(SLO)$/paintfrm.obj \
     $(SLO)$/softpagebreak.obj \
-    $(SLO)$/sortedobjsimpl.obj
+    $(SLO)$/sortedobjsimpl.obj \
+    $(SLO)$/pagechg.obj
 
 
 SLOFILES =  \
