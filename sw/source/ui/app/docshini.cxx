@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:03:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,8 @@
 
 #include <unochart.hxx>
 
+// text grid
+#include <tgrditem.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -917,6 +919,14 @@ void SwDocShell::SubInitNew()
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
 
     pDoc->SetDefault( aDfltSet );
+
+    //default page mode for text grid
+    if(!bWeb)
+    {
+        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(FALSE)->IsSquaredPageMode();
+        pDoc->SetDefaultPageMode( bSquaredPageMode );
+    }
+
     pDoc->ResetModified();
 }
 
