@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:39:12 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,8 +394,8 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
                 {
-                    long nBottom = pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
-                    long nAct = GetVisArea().Bottom();
+                    const long nBottom = pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
+                    const long nAct = GetVisArea().Bottom();
                     rSet.Put(SfxBoolItem(SID_MAIL_SCROLLBODY_PAGEDOWN, nAct < nBottom ));
                 }
                 break;
