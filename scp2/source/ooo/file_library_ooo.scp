@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.279 $
+ *  $Revision: 1.280 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:46:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 17:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2575,7 +2575,7 @@ End
 #endif
 
 // AVMedia
-STD_LIB_FILE_PATCH( gid_File_Lib_AVMedia, avmedia )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_AVMedia, avmedia )
 
 #if defined UNX
 #ifdef SOLAR_JAVA
