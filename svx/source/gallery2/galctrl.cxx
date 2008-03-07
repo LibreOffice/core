@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:19:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
 {
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
-    aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
 // ------------------------------------------------------------------------
@@ -80,7 +79,6 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 {
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
-    aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
 // ------------------------------------------------------------------------
@@ -280,12 +278,6 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 }
 
 // ------------------------------------------------------------------------
-
-IMPL_LINK( GalleryPreview, SoundEndHdl, Sound*, EMPTYARG )
-{
-    aSound.SetSoundName( String() );
-    return 0L;
-}
 
 // -------------------
 // - GalleryIconView -
