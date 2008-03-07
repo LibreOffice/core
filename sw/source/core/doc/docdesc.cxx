@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:34:07 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,8 @@
 
 #include <SwUndoPageDesc.hxx>
 #include <headerfooterhelper.hxx>
+
+#include <tgrditem.hxx>
 
 using namespace com::sun::star;
 
@@ -1068,4 +1070,37 @@ void SwDoc::CheckDefaultPageFmt()
         if ( bSetSize )
             lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(), rDesc.GetLeft() );
     }
+}
+
+void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
+{
+    if( !bSquaredPageMode == !IsSquaredPageMode() )
+        return;
+
+    const SwTextGridItem& rGrid =
+                    (const SwTextGridItem&)GetDefault( RES_TEXTGRID );
+    SwTextGridItem aNewGrid = rGrid;
+    aNewGrid.SetSquaredMode(bSquaredPageMode);
+    aNewGrid.Init();
+    SetDefault(aNewGrid);
+
+    for ( USHORT i = 0; i < GetPageDescCnt(); ++i )
+    {
+        SwPageDesc& rDesc = _GetPageDesc( i );
+
+        SwFrmFmt& rMaster = rDesc.GetMaster();
+        SwFrmFmt& rLeft = rDesc.GetLeft();
+
+        SwTextGridItem aGrid((SwTextGridItem&)rMaster.GetAttr(RES_TEXTGRID));
+        aGrid.SwitchPaperMode( bSquaredPageMode );
+        rMaster.SetAttr(aGrid);
+        rLeft.SetAttr(aGrid);
+    }
+}
+
+sal_Bool SwDoc::IsSquaredPageMode() const
+{
+    const SwTextGridItem& rGrid =
+                        (const SwTextGridItem&)GetDefault( RES_TEXTGRID );
+    return rGrid.IsSquaredMode();
 }
