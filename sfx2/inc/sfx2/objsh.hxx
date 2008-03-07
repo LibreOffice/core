@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:45:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,6 +353,11 @@ public:
     sal_Bool                    IsInModalMode() const;
     sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
+
+    sal_Bool                    IsDocShared() const;
+    void                        SetDocShared( sal_Bool bShared );
+    ::rtl::OUString             GetSharedFileUrl() const;
+    void                        SetSharedFileUrl( const ::rtl::OUString& rSharedFileUrl );
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
