@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:59:46 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,9 @@
 #ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
 #endif
-
-#define CHECKBOX_HEIGHT     8
-#define FIXEDTEXT_HEIGHT    8
-#define RELATED_CONTROLS    4
-#define UNRELATED_CONTROLS  7
-#define EDIT_HEIGHT         12
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
+#endif
 
 //.........................................................................
 
