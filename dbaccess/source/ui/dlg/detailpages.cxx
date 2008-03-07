@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,8 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include "AutoControls.hrc"
+
 //.........................................................................
 namespace dbaui
 {
@@ -136,16 +138,8 @@ namespace dbaui
         {
             m_pDataConvertFixedLine = new FixedLine(this, ModuleRes(FL_DATACONVERT));
             m_pCharsetLabel = new FixedText(this, ModuleRes(FT_CHARSET));
-            m_pCharset = new ListBox(this, ModuleRes(LB_CHARSET));
+            m_pCharset = new CharSetListBox(this, ModuleRes(LB_CHARSET));
             m_pCharset->SetSelectHdl(getControlModifiedLink());
-            m_pCharset->SetDropDownLineCount( 14 );
-
-            OCharsetDisplay::const_iterator aLoop = m_aCharsets.begin();
-            while (aLoop != m_aCharsets.end())
-            {
-                m_pCharset->InsertEntry((*aLoop).getDisplayName());
-                ++aLoop;
-            }
         }
 
         Window* pWindows[] = {  m_pAutoRetrievingEnabled, m_pAutoFixedLine,
@@ -238,32 +232,7 @@ namespace dbaui
 
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
-                OCharsetDisplay::const_iterator aFind = m_aCharsets.findIanaName( pCharsetItem->GetValue() );
-                if (aFind == m_aCharsets.end())
-                {
-                    DBG_ERROR("OCommonBehaviourTabPage::implInitControls: unknown charset falling back to system language!");
-                    aFind = m_aCharsets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
-                    // fallback: system language
-                }
-
-                if (aFind == m_aCharsets.end())
-                {
-                    m_pCharset->SelectEntry( String() );
-                }
-                else
-                {
-                    String sDisplayName = (*aFind).getDisplayName();
-                    if ( LISTBOX_ENTRY_NOTFOUND == m_pCharset->GetEntryPos( sDisplayName ) )
-                    {
-                        // in our settings, there was an encoding selected which is not valid for the current
-                        // data source type
-                        // This is worth at least an assertion.
-                        DBG_ERROR( "OCommonBehaviourTabPage::implInitControls: invalid character set!" );
-                        sDisplayName = String();
-                    }
-
-                    m_pCharset->SelectEntry( sDisplayName );
-                }
+                m_pCharset->SelectEntryByIanaName( pCharsetItem->GetValue() );
             }
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
@@ -280,14 +249,8 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            if (m_pCharset->GetSelectEntryPos() != m_pCharset->GetSavedValue())
-            {
-                OCharsetDisplay::const_iterator aFind = m_aCharsets.findDisplayName( m_pCharset->GetSelectEntry() );
-                DBG_ASSERT(aFind != m_aCharsets.end(), "OCommonBehaviourTabPage::FillItemSet: could not translate the selected character set!");
-                if (aFind != m_aCharsets.end())
-                    _rSet.Put(SfxStringItem(DSID_CHARSET, (*aFind).getIanaName()));
+            if ( m_pCharset->StoreSelectedCharSet( _rSet, DSID_CHARSET ) )
                 bChangedSomething = sal_True;
-            }
         }
 
         return bChangedSomething;
@@ -1024,12 +987,11 @@ namespace dbaui
     DBG_NAME(OTextDetailsPage)
     //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET ,false)
+        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, 0, false )
     {
         DBG_CTOR(OTextDetailsPage,NULL);
 
-        m_pTextConnectionHelper = new OTextConnectionHelper(this);
-//      m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
+        m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET );
         FreeResource();
     }
 
@@ -1067,7 +1029,7 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_pTextConnectionHelper->implInitControls(_rSet, _bSaveValue, bValid);
+        m_pTextConnectionHelper->implInitControls(_rSet, bValid);
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
