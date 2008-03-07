@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,8 +509,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            Point aPt( aRect.Pos() );
-            SwFrm* pFrm = rTNd.GetFrm( &aPt, 0, FALSE );
+            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, FALSE );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
