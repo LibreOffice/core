@@ -4,5 +4,4 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:helpid="helpid:5563"  />
  <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:helpid="helpid:5561"  />
  <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:helpid="helpid:5672"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertApplet" toolbar:helpid="helpid:5673"  />
 </toolbar:toolbar>
