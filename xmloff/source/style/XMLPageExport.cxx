@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:44:13 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,4 +276,48 @@ void XMLPageExport::exportAutoStyles()
         , rExport.GetDocHandler(), rExport.GetMM100UnitConverter(),
         rExport.GetNamespaceMap()
         );
+}
+
+void XMLPageExport::exportDefaultStyle()
+{
+    Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
+    if (xFactory.is())
+    {
+        OUString sTextDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) );
+        Reference < XPropertySet > xPropSet (xFactory->createInstance ( sTextDefaults ), UNO_QUERY);
+        if (xPropSet.is())
+        {
+            // <style:default-style ...>
+            GetExport().CheckAttrList();
+
+            ::std::vector< XMLPropertyState > xPropStates =
+                xPageMasterExportPropMapper->FilterDefaults( xPropSet );
+
+            sal_Bool bExport = sal_False;
+            UniReference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
+            for( ::std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin(); aIter != xPropStates.end(); ++aIter )
+            {
+                XMLPropertyState *pProp = &(*aIter);
+                sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
+                if( nContextId == CTF_PM_STANDARD_MODE )
+                {
+                    bExport = sal_True;
+                    break;
+                }
+            }
+
+        //  if ( xPropStates.size() != 0 &&
+          //          ( xPropStates.size() != 1 || xPropStates[0].mnIndex != -1 ) )
+            if( bExport )
+            {
+                //<style:default-page-layout>
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                          XML_DEFAULT_PAGE_LAYOUT,
+                                          sal_True, sal_True );
+
+                xPageMasterExportPropMapper->exportXML( GetExport(), xPropStates,
+                                             XML_EXPORT_FLAG_IGN_WS );
+            }
+        }
+    }
 }
