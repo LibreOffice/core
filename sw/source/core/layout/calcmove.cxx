@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:44:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,7 +726,6 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     rBot = Max( rBot, nMax );
 }
 
-
 void SwPageFrm::MakeAll()
 {
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
@@ -740,9 +739,8 @@ void SwPageFrm::MakeAll()
     {
         if ( !bValidPos )
         {
-            MakePos();
-            if ( GetPrev() &&  !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                aFrm.Pos().Y() += DOCUMENTBORDER/2;
+            // PAGES01
+            bValidPos = TRUE; // positioning of the pages is taken care of by the root frame
         }
 
         if ( !bValidSize || !bValidPrtArea )
@@ -871,8 +869,10 @@ void SwPageFrm::MakeAll()
         }
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
     delete pAccess;
-    if ( Frm() != aOldRect )
-        AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+
+    // PAGES01
+    if ( Frm() != aOldRect && GetUpper() )
+        static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
 #ifndef PRODUCT
     //Der Upper (Root) muss mindestens so breit
