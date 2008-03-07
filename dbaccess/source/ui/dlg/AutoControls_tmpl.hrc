@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoControls_tmpl.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:57:30 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,11 @@
 #define FT_AUTOWIZARDHEADER         92
 #define FT_AUTOEXTENSIONHEADER      93
 #define FT_AUTOOWNEXTENSIONAPPENDIX 94
+#define FT_CHARSET                  95
 
 #define FL_AUTOSEPARATOR2           80
+#define FL_DATACONVERT              81
+#define FL_SEPARATOR1               82
 
 #define CB_AUTOHEADER               80
 
@@ -99,6 +102,7 @@
 #define RB_AUTOACCESSCCSVFILES      81
 #define RB_AUTOACCESSOTHERS         82
 
+#define LB_CHARSET                  80
 
 #define STR_AUTOFIELDSEPARATORLIST      100
 #define STR_AUTOTEXTSEPARATORLIST       101
@@ -242,6 +246,32 @@
         Text[ en-US ]   = "" ;                                                                      \
     };
 
+//-------------------------------------------------------------------------
+
+#define AUTO_CHARSET( AUTO_Y, AUTOPAGE_X )                                                          \
+    FixedLine FL_DATACONVERT                                                                        \
+    {                                                                                               \
+        Pos = MAP_APPFONT ( 4 , AUTO_Y ) ;                                                          \
+        Size = MAP_APPFONT ( AUTOPAGE_X  - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;                \
+        Text [ en-US ] = "Data conversion";                                                         \
+    };                                                                                              \
+    FixedText FT_CHARSET                                                                            \
+    {                                                                                               \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;                    \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                      \
+        Text [ en-US ] = "~Character set" ;                                                         \
+    };                                                                                              \
+    ListBox LB_CHARSET                                                                              \
+    {                                                                                               \
+        Border = TRUE ;                                                                             \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + RELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;            \
+        Size = MAP_APPFONT ( AUTOPAGE_X - EDIT_X - 6 , 60 ) ;                                                           \
+        TabStop = TRUE ;                                                                            \
+        HelpId = HID_DSADMIN_CHARSET;                                                               \
+        DropDown = TRUE ;                                                                           \
+        CurPos = 0 ;                                                                                \
+    };                                                                                              \
+
 // --------------------------------------------------------------------------------------------------
 #define AUTO_SEPARATORCONTROLGROUP(AUTO_Y,AUTOPAGE_X)                                               \
                                                                                                     \
@@ -287,7 +317,7 @@
                                                                                                     \
     FIXEDTEXT FT_AUTOOWNEXTENSIONAPPENDIX                                                               \
     {                                                                                               \
-        Pos = MAP_APPFONT (START_X + 130 , AUTO_Y + 3*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS);       \
+        Pos = MAP_APPFONT (START_X + 130 , AUTO_Y + 3 * ( FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) );  \
         Size = MAP_APPFONT ( AUTOPAGE_X - 6 -(START_X + 130), FIXEDTEXT_HEIGHT ) ;                  \
         Text[ en-US ] = "Custom: *.abc" ;                                                           \
     };                                                                                              \
@@ -299,55 +329,46 @@
         Text[ en-US ]  = "Row Format";                                                              \
     };                                                                                              \
                                                                                                     \
-    CheckBox CB_AUTOHEADER                                                                          \
-    {                                                                                               \
-        TabStop = TRUE ;                                                                            \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + 1) ;       \
-        Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;                                              \
-        HelpId = HID_DSADMIN_TEXT_HEADER;                                                           \
-        Text [ en-US ] = "~Text contains headers" ;                                                 \
-    };                                                                                              \
-                                                                                                    \
-                                                                                                    \
     FixedText FT_AUTOFIELDSEPARATOR                                                                 \
     {                                                                                               \
-        Pos = MAP_APPFONT ( START_X + INDENTED_X , AUTO_Y +50 + UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;   \
-        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                       \
-        Text[ en-US ]  = "Field separator" ;                                                               \
-    };                                                                                                          \
-    ComboBox CM_AUTOFIELDSEPARATOR                                                                                  \
-    {                                                                                                           \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +50 + UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ; \
+        Pos = MAP_APPFONT ( START_X + INDENTED_X , AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;                  \
+        Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
+        Text[ en-US ]  = "Field separator" ;                                                                                \
+    };                                                                                                                      \
+    ComboBox CM_AUTOFIELDSEPARATOR                                                                                          \
+    {                                                                                                                       \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT - 2 ) ;                            \
         Size = MAP_APPFONT ( 32 , 60 ) ;                                                                                    \
         Text = ";" ;                                                                                                        \
         TabStop = TRUE ;                                                                                                    \
         DropDown = TRUE ;                                                                                                   \
         HelpId = HID_DSADMIN_FIELD_SEPARATOR;                                                                               \
     };                                                                                                                      \
-    FixedText FT_AUTOTEXTSEPARATOR                                                                                              \
+                                                                                                                            \
+    FixedText FT_AUTOTEXTSEPARATOR                                                                                          \
     {                                                                                                                       \
-        Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y +50 + 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;          \
+        Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + EDIT_HEIGHT ) ;   \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text[ en-US ]  = "Text separator" ;                                                                            \
+        Text[ en-US ]  = "Text separator" ;                                                                                 \
     };                                                                                                                      \
-    ComboBox CM_AUTOTEXTSEPARATOR                                                                                               \
+    ComboBox CM_AUTOTEXTSEPARATOR                                                                                           \
     {                                                                                                                       \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y+50 + 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;  \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + EDIT_HEIGHT - 2 ) ;   \
         Size = MAP_APPFONT ( 32 , 60 ) ;                                                                                    \
-        Text  = "\"" ;                                                                                                       \
+        Text  = "\"" ;                                                                                                      \
         TabStop = TRUE ;                                                                                                    \
         DropDown = TRUE ;                                                                                                   \
         HelpId = HID_DSADMIN_TEXT_SEPARATOR;                                                                                \
     };                                                                                                                      \
-    FixedText FT_AUTODECIMALSEPARATOR                                                                                           \
+    FixedText FT_AUTODECIMALSEPARATOR                                                                                       \
     {                                                                                                                       \
-        Pos = MAP_APPFONT (START_X + INDENTED_X , AUTO_Y +50 + 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;          \
+        Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + 2*EDIT_HEIGHT ) ;   \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text[ en-US ]  = "Decimal separator" ;                                                                         \
+        Text[ en-US ]  = "Decimal separator" ;                                                                              \
     };                                                                                                                      \
-    ComboBox CM_AUTODECIMALSEPARATOR                                                                                            \
+    ComboBox CM_AUTODECIMALSEPARATOR                                                                                        \
     {                                                                                                                       \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +50 + 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;  \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + 2*EDIT_HEIGHT - 2 ) ;   \
         Size = MAP_APPFONT ( 32 , 60 ) ;                                                                                    \
         TabStop = TRUE ;                                                                                                    \
         MaxTextLength = 1 ;                                                                                                 \
@@ -361,17 +382,17 @@
         };                                                                                                                  \
         HelpId = HID_DSADMIN_DECIMAL_SEPARATOR;                                                                             \
     };                                                                                                                      \
-    FixedText FT_AUTOTHOUSANDSSEPARATOR                                                                                         \
+    FixedText FT_AUTOTHOUSANDSSEPARATOR                                                                                     \
     {                                                                                                                       \
-        Pos = MAP_APPFONT ( START_X + INDENTED_X , AUTO_Y +50 + 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ; \
+        Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + 3*EDIT_HEIGHT ) ;   \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text[ en-US ]  = "Thousands separator" ;                                                                       \
+        Text[ en-US ]  = "Thousands separator" ;                                                                            \
     };                                                                                                                      \
-    ComboBox CM_AUTOTHOUSANDSSEPARATOR                                                                                          \
+    ComboBox CM_AUTOTHOUSANDSSEPARATOR                                                                                      \
     {                                                                                                                       \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y+50 + 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;  \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + 3*EDIT_HEIGHT - 2 ) ;   \
         Size = MAP_APPFONT ( 32 , 44 ) ;                                                                                    \
-        Text  = "." ;                                                                                                        \
+        Text  = "." ;                                                                                                       \
         TabStop = TRUE ;                                                                                                    \
         MaxTextLength = 1 ;                                                                                                 \
         DropDown = TRUE ;                                                                                                   \
@@ -383,15 +404,25 @@
         HelpId = HID_DSADMIN_THOUSANDS_SEPARATOR;                                                                           \
     };                                                                                                                      \
                                                                                                                             \
+    CheckBox CB_AUTOHEADER                                                                                                  \
+    {                                                                                                                       \
+        TabStop = TRUE ;                                                                                                    \
+        Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*RELATED_CONTROLS + 4*EDIT_HEIGHT ) ;   \
+        Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;                                                                      \
+        HelpId = HID_DSADMIN_TEXT_HEADER;                                                                                   \
+        Text [ en-US ] = "~Text contains headers" ;                                                                         \
+    };                                                                                                                      \
+                                                                                                                            \
+    AUTO_CHARSET( AUTO_Y + 50 + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 4*RELATED_CONTROLS + 4*EDIT_HEIGHT + CHECKBOX_HEIGHT + UNRELATED_CONTROLS, AUTOPAGE_X ) \
+                                                                                                                            \
     String STR_AUTOTEXT_FIELD_SEP_NONE                                                                                      \
     {                                                                                                                       \
         Text[ en-US ]  = "{None}";                                                                                          \
     };                                                                                                                      \
                                                                                                                             \
-                                                                                                                            \
     String STR_AUTOTEXTSEPARATORLIST                                                                                        \
     {                                                                                                                       \
-        Text  = "\"\t34\t'\t39" ;                                                                                     \
+        Text  = "\"\t34\t'\t39" ;                                                                                           \
     };                                                                                                                      \
                                                                                                                             \
     String STR_AUTOFIELDSEPARATORLIST                                                                                       \
@@ -399,7 +430,6 @@
         Text [ x-comment ] = "EM Dec 2002: \'Space\' refers to what you get when you hit the space bar on your keyboard.";  \
         Text [ en-US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;                                                     \
     };                                                                                                                      \
-                                                                                                                            \
                                                                                                                             \
     String STR_AUTODELIMITER_MISSING                                                                                        \
     {                                                                                                                       \
@@ -413,7 +443,6 @@
     {                                                                                                                       \
         Text[ en-US ]  = "Wildcards such as ?,* are not allowed in #1." ;                                                   \
     };
-
 
 
 #define NAMECONTROLGROUP_HEIGHT (FIXEDTEXT_HEIGHT + 2 + EDIT_HEIGHT)
