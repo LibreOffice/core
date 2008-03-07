@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,9 @@
 #endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
+#endif
+#ifndef _SVX_ZOOMSLIDERITEM_HXX
+#include <svx/zoomslideritem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
@@ -261,7 +264,7 @@ void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 {
     static USHORT __READONLY_DATA aInval[] =
     {
-        SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, FN_PREVIEW_ZOOM, FN_STAT_ZOOM,
+        SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, SID_ATTR_ZOOMSLIDER, FN_PREVIEW_ZOOM, FN_STAT_ZOOM,
         0
     };
     rBindings.Invalidate( aInval );
@@ -1486,6 +1489,18 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             delete pDlg;
         }
         break;
+        case SID_ATTR_ZOOMSLIDER :
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem ) )
+            {
+                const USHORT nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
+            }
+        }
+        break;
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
@@ -1700,6 +1715,20 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
                             SVX_ZOOM_ENABLE_150|
                             SVX_ZOOM_ENABLE_200);
                     rSet.Put( aZoom );
+                }
+                else
+                    rSet.DisableItem(nWhich);
+            }
+        break;
+        case SID_ATTR_ZOOMSLIDER :
+            {
+                if(bZoomEnabled)
+                {
+                    const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
+                    const USHORT nCurrentZoom = pVOpt->GetZoom();
+                    SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
+                    aZoomSliderItem.AddSnappingPoint( 100 );
+                    rSet.Put( aZoomSliderItem );
                 }
                 else
                     rSet.DisableItem(nWhich);
