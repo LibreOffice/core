@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:54:38 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,17 +169,9 @@ DBG_NAME(OTextConnectionPageSetup)
     {
         DBG_CTOR(OTextConnectionPageSetup,NULL);
 
-        m_pTextConnectionHelper = new OTextConnectionHelper(this, sal_True);
+        m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_SEPARATORS );
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
 
-        m_pTextConnectionHelper->m_aDecimalSeparator.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aDecimalSeparator.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aDecimalSeparatorLabel.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aDecimalSeparatorLabel.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aFieldSeparator.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aFieldSeparator.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aFieldSeparatorLabel.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aFieldSeparatorLabel.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aTextSeparator.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aTextSeparator.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aTextSeparatorLabel.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aTextSeparatorLabel.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aThousandsSeparator.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aThousandsSeparator.GetPosPixel(), 0, -14 ) );
-        m_pTextConnectionHelper->m_aThousandsSeparatorLabel.SetPosPixel( MovePoint( m_pTextConnectionHelper->m_aThousandsSeparatorLabel.GetPosPixel(), 0, -14 ) );
         FreeResource();
     }
 
@@ -226,7 +218,7 @@ DBG_NAME(OTextConnectionPageSetup)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
         OConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
-        m_pTextConnectionHelper->implInitControls(_rSet, _bSaveValue, bValid);
+        m_pTextConnectionHelper->implInitControls(_rSet, bValid);
     }
 
 
