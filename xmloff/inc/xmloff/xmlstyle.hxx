@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:36:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:16:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ enum XMLStyleStylesElemTokens
     XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG,
     XML_TOK_TEXT_LINENUMBERING_CONFIG,
     XML_TOK_STYLE_DEFAULT_STYLE,
+    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT,  //text grid enhancement
     XML_TOK_STYLE_STYLES_ELEM_END=XML_TOK_UNKNOWN
 };
 
