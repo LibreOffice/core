@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:10:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 13:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,9 +563,18 @@
 #define STR_ERR_LONG_NESTED_ARRAY   419
 #define STR_UNDO_TEXTTOCOLUMNS      420
 
-#define STR_LONG_ERR_NULL           421
+#define STR_DOC_UPDATED             421
+#define STR_DOC_WILLBESAVED         422
+#define STR_DOC_WILLNOTBESAVED      423
+#define STR_DOC_DISABLESHARED       424
+#define STR_DOC_NOLONGERSHARED      425
+#define STR_SHARED_DOC_WARNING      426
+#define STR_FILE_LOCKED_TRY_LATER   427
+#define STR_FILE_LOCKED_SAVE_LATER  428
+#define STR_UNKNOWN_USER            429
+#define STR_LONG_ERR_NULL           430
 
-#define STR_COUNT                   422
+#define STR_COUNT                   431
 
 #endif
 
