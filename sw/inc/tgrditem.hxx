@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tgrditem.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:13:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,10 @@ class SW_DLLPUBLIC SwTextGridItem : public SfxPoolItem
     BOOL bPrintGrid;
     BOOL bDisplayGrid;
 
+    //for textgrid enhancement
+    sal_uInt16 nBaseWidth;
+    BOOL bSnapToChars;
+    BOOL bSquaredMode;
 public:
     SwTextGridItem();
     virtual ~SwTextGridItem();
@@ -108,6 +112,21 @@ public:
     BOOL IsDisplayGrid() const { return bDisplayGrid; }
     BOOL GetDisplayGrid() const { return bDisplayGrid; }
     void SetDisplayGrid( BOOL bNew ) { bDisplayGrid = bNew; }
+
+    //for textgrid enhancement
+    sal_uInt16 GetBaseWidth() const { return nBaseWidth;}
+    void SetBaseWidth( sal_uInt16 nNew ) { nBaseWidth = nNew; }
+
+    BOOL IsSnapToChars() const { return bSnapToChars; }
+    BOOL GetSnapToChars() const { return bSnapToChars; }
+    void SetSnapToChars( BOOL bNew ) { bSnapToChars = bNew; }
+
+    BOOL IsSquaredMode() const { return bSquaredMode; }
+    BOOL GetSquaredMode() const { return bSquaredMode; }
+    void SetSquaredMode( BOOL bNew ) { bSquaredMode = bNew; }
+    void SwitchPaperMode(BOOL bNew );
+
+    void Init();
 };
 
 inline const SwTextGridItem &SwAttrSet::GetTextGrid(BOOL bInP) const
