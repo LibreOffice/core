@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:25:55 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ namespace dp_gui {
 
 namespace dp_gui {
 
+    struct DialogImpl;
+
 /**
    The modal &ldquo;Check for Updates&rdquo; dialog.
 */
@@ -128,6 +130,7 @@ public:
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context,
         Window * parent,
+        rtl::Reference<DialogImpl> const & extensionManagerDialog,
         rtl::Reference< dp_gui::SelectedPackageIterator > const &
             selectedPackages,
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
@@ -209,7 +212,8 @@ private:
 
     void initDescription();
     void clearDescription();
-    bool showDescription( const dp_gui::UpdateData& rData );
+    bool showDescription( ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
 
     DECL_LINK(selectionHandler, void *);
@@ -246,6 +250,7 @@ private:
     rtl::OUString m_noPermission;
     rtl::OUString m_noPermissionVista;
     rtl::OUString m_browserbased;
+    rtl::OUString m_version;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
     std::vector< rtl::OUString > m_generalErrors;
@@ -257,6 +262,9 @@ private:
     Size m_aFirstLineSize;
     long m_nFirstLineDelta;
     long m_nOneLineMissing;
+    // The dialog only knows if we already showed the warning about
+    //updating a shared extension during this session.
+    const ::rtl::Reference<DialogImpl> m_extensionManagerDialog;
 };
 
 }
