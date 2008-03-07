@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:28:03 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,6 @@
 #include "ViewShellBase.hxx"
 #endif
 #include "DrawController.hxx"
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
