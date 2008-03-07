@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:49:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,24 +464,56 @@ WarningBox WARNINGBOX_NOSHAREDALLOWED
         "every user has to agree to the license agreement of the extension. The extension will not be installed.";
 };
 
-InfoBox RID_QUERYBOX_INSTALL_EXTENSION {
+WarningBox RID_WARNINGBOX_INSTALL_EXTENSION {
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_OK;
+    Message[en-US] = "You are about to install the extension \'%NAME\'.\n"
+    "Click \'OK\' to proceed with the installation.\n"
+    "Click \'Cancel\' to stop the installation.";
+};
+
+WARNINGBOX RID_WARNINGBOX_ADD_SHARED_EXTENSION
+{
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to install the extension \'%NAME\'.\nClick \'OK\' to proceed with the installation.\nClick \'Cancel\' to abort the installation.";
+    Message[en-US] = "Make sure that no further users are working with the same "
+    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
+    "Click \'OK\' to install the extension.\n"
+    "Click \'Cancel\' to stop the installation.";
 };
 
-WarningBox WARNINGBOX_CONCURRENTINSTANCE
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK;
-    Message[ en-US ] ="You need to close the already opened Extension Manager to continue.";
-
-};
-
-InfoBox RID_INFOBOX_MODIFY_SHARED_EXTENSION
+WARNINGBOX RID_WARNINGBOX_REMOVE_SHARED_EXTENSION
 {
     Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_OK;
-    Message[en-US] = "Before you continue working with a shared extension, make sure that no further instances of %PRODUCTNAME are running.";
+    DefButton = WB_DEF_CANCEL;
+    Message[en-US] = "Make sure that no further users are working with the same "
+    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
+    "Click \'OK\' to remove the extension.\n"
+    "Click \'Cancel\' to stop removing the extension.";
 };
 
+WARNINGBOX RID_WARNINGBOX_ENABLE_SHARED_EXTENSION
+{
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[en-US] = "Make sure that no further users are working with the same "
+    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
+    "Click \'OK\' to enable the extension.\n"
+    "Click \'Cancel\' to stop enabling the extension.";
+};
+
+WARNINGBOX RID_WARNINGBOX_DISABLE_SHARED_EXTENSION
+{
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_CANCEL;
+    Message[en-US] = "Make sure that no further users are working with the same "
+    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
+    "Click \'OK\' to disable the extension.\n"
+    "Click \'Cancel\' to stop disabling the extension.";
+};
+
+
+String RID_STR_UNSUPPORTED_PLATFORM
+{
+    Text [ en-US ] = "The extension \'%Name\' does not work on this computer.";
+};
