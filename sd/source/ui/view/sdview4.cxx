@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:56:57 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_SOUND_HXX //autogen
-#include <vcl/sound.hxx>
 #endif
 #ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
