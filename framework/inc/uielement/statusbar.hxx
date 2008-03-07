@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:46:44 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@ class FrameworkStatusBar : public StatusBar
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
         virtual void UserDraw(const UserDrawEvent& rUDEvt);
         virtual void Command( const CommandEvent &rEvt );
+        virtual void MouseMove( const MouseEvent& rMEvt );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void MouseButtonUp( const MouseEvent& rMEvt );
 
     private:
         StatusBarManager*       m_pMgr;
