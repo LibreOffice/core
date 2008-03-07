@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _DBAUI_CHARSETS_HXX_
 #include "charsets.hxx"
+#endif
+#ifndef CHARSETLISTBOX_HXX
+#include "charsetlistbox.hxx"
 #endif
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
@@ -90,7 +93,7 @@ namespace dbaui
 
         FixedLine*          m_pDataConvertFixedLine;
         FixedText*          m_pCharsetLabel;
-        ListBox*            m_pCharset;
+        CharSetListBox*     m_pCharset;
 
         FixedLine*          m_pAutoFixedLine;
         CheckBox*           m_pAutoRetrievingEnabled;
@@ -98,8 +101,6 @@ namespace dbaui
         Edit*               m_pAutoIncrement;
         FixedText*          m_pAutoRetrievingLabel;
         Edit*               m_pAutoRetrieving;
-
-        OCharsetDisplay     m_aCharsets;
 
         sal_uInt32          m_nControlFlags;
 
