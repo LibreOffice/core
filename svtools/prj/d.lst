@@ -108,6 +108,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\rngitem.hxx %_DEST%\inc%_EXT%\svtools\rngitem.hxx
 ..\inc\ruler.hxx %_DEST%\inc%_EXT%\svtools\ruler.hxx
 ..\inc\scrwin.hxx %_DEST%\inc%_EXT%\svtools\scrwin.hxx
+..\inc\svtools\sharecontrolfile.hxx %_DEST%\inc%_EXT%\svtools\sharecontrolfile.hxx
 ..\inc\svtools\slstitm.hxx %_DEST%\inc%_EXT%\svtools\slstitm.hxx
 ..\inc\svtools\ilstitem.hxx %_DEST%\inc%_EXT%\svtools\ilstitem.hxx
 ..\inc\svtools\smplhint.hxx %_DEST%\inc%_EXT%\svtools\smplhint.hxx
