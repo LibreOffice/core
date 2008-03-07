@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:40:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,6 @@
 #endif
 #ifndef _SV_SALTIMER_H
 #include <saltimer.h>
-#endif
-#ifndef _SV_SALSOUND_H
-#include <salsound.h>
 #endif
 #ifndef _SV_SALATYPE_HXX
 #include <vcl/salatype.hxx>
@@ -873,14 +870,6 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             delete (SalObject*)lParam;
             rDef = FALSE;
             break;
-        case SAL_MSG_CREATESOUND:
-            nRet = ((WinSalSound*)lParam)->ImplCreate();
-            rDef = FALSE;
-            break;
-        case SAL_MSG_DESTROYSOUND:
-            ((WinSalSound*)lParam)->ImplDestroy();
-            rDef = FALSE;
-            break;
         case SAL_MSG_GETDC:
             nRet = (LRESULT)GetDCEx( (HWND)wParam, 0, DCX_CACHE );
             rDef = FALSE;
@@ -1117,13 +1106,6 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 SalTimer* WinSalInstance::CreateSalTimer()
 {
     return new WinSalTimer();
-}
-
-// -----------------------------------------------------------------------
-
-SalSound* WinSalInstance::CreateSalSound()
-{
-    return new WinSalSound();
 }
 
 // -----------------------------------------------------------------------
