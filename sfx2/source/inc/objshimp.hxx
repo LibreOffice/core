@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:57:35 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bQueryLoadTemplate:1,
                         bLoadReadonly:1,
                         bUseUserData:1,
-                        bSaveVersionOnClose:1;
+                        bSaveVersionOnClose:1,
+                        m_bIsDocShared:1; // whether the document should be edited in shared mode
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -173,6 +174,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     sal_Bool                m_bIsInit;
 
+    ::rtl::OUString         m_aSharedFileURL;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
