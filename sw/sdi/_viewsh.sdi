@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:37:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,17 @@ interface BaseTextEditView : View
         ExecMethod = ExecuteStatusLine ;
         StateMethod = StateStatusLine ;
     ]
-    SID_ATTR_INSERT // status(final|play|rec)
+        SID_ATTR_VIEWLAYOUT // status()
+        [
+                ExecMethod = ExecuteStatusLine ;
+                StateMethod = StateStatusLine ;
+        ]
+        SID_ATTR_ZOOMSLIDER // status()
+        [
+                ExecMethod = ExecuteStatusLine ;
+                StateMethod = StateStatusLine ;
+        ]
+        SID_ATTR_INSERT // status(final|play|rec)
     [
         ExecMethod = ExecuteStatusLine ;
         StateMethod = StateStatusLine ;
