@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:02:59 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     bIsHScrollMetricSet(sal_False),
     bIsVScrollMetricSet(sal_False),
     nDefTab( MM50 * 4 ),
+    bIsSquaredPageMode(sal_False),
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
@@ -284,8 +285,9 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/IsVerticalRulerRight",      //15
         "ViewLayout/Columns",               //16
         "ViewLayout/BookMode"               //17
+        "Other/IsSquaredPageMode"           //18
     };
-    const int nCount = bWeb ? 14 : 18;
+    const int nCount = bWeb ? 14 : 19;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -351,8 +353,9 @@ void SwLayoutViewConfig::Commit()
             case 15: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
             case 16: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
             case 17: bSet = rParent.IsViewLayoutBookMode(); break;// "ViewLayout/BookMode",
+            case 18: bSet = rParent.IsSquaredPageMode(); break;// "Other/IsSquaredPageMode",
         }
-        if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 )
+        if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 || nProp == 18 )
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
@@ -372,7 +375,7 @@ void SwLayoutViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet = nProp < 8 || nProp == 10 || nProp == 17 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bSet = nProp < 8 || nProp == 10 || nProp == 17 || nProp == 18 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
@@ -437,6 +440,7 @@ void SwLayoutViewConfig::Load()
                     }
                     break;// "ViewLayout/Columns",
                     case 17: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
+                    case 18: rParent.SetDefaultPageMode(bSet); break;// "Other/IsSquaredPageMode",
                 }
             }
         }
