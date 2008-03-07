@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:36:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "global.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"
+#include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
 #include <string.h>
@@ -411,7 +412,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        USHORT nArgs = pDesc->nArgCount;
+        USHORT nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
@@ -472,7 +473,7 @@ void ScParameterClassification::GenerateDocumentation()
             BYTE nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
-            if ( eOp <= ocEndDiv )
+            if ( eOp < SC_OPCODE_STOP_DIV )
             {
                 switch ( eOp )
                 {
@@ -488,7 +489,9 @@ void ScParameterClassification::GenerateDocumentation()
                     default:;
                 }
             }
-            else if ( eOp <= ocEndBinOp )
+            else if ( eOp < SC_OPCODE_STOP_ERRORS )
+                aToken.SetByte(0);
+            else if ( eOp < SC_OPCODE_STOP_BIN_OP )
             {
                 switch ( eOp )
                 {
@@ -500,11 +503,11 @@ void ScParameterClassification::GenerateDocumentation()
                         aToken.SetByte(2);
                 }
             }
-            else if ( eOp <= ocEndUnOp )
+            else if ( eOp < SC_OPCODE_STOP_UN_OP )
                 aToken.SetByte(1);
-            else if ( eOp <= ocEndNoPar )
+            else if ( eOp < SC_OPCODE_STOP_NO_PAR )
                 aToken.SetByte(0);
-            else if ( eOp <= ocEnd1Par )
+            else if ( eOp < SC_OPCODE_STOP_1_PAR )
                 aToken.SetByte(1);
             else
                 aToken.SetByte( nParams);
