@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:44:21 $
+#   last change: $Author: kz $ $Date: 2008-03-07 17:03:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ SHL1STDLIBS= $(TOOLSLIB) \
              $(CPPCANVASLIB) \
              $(UNOTOOLSLIB) \
              $(GOODIESLIB) \
-             $(TKLIB)
+             $(TKLIB) \
+             $(AVMEDIALIB)
 
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
