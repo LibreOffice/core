@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:47:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,18 @@
 #include <svtools/accessibilityoptions.hxx>
 #endif
 
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
+#endif
 // Enable this to use the helpclass SwRVPMark
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _RVP_MARK_HXX
@@ -138,6 +150,18 @@ MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
 extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
+USHORT GetDefaultFontHeight( SwDrawTextInfo &rInf )
+{
+    SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
+    SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
+
+    String aString(SW_RES(STR_POOLCOLL_STANDARD));
+
+    SfxStyleSheetBase* pStyle = pBasePool->Find( aString, (SfxStyleFamily)SFX_STYLE_FAMILY_PARA );
+    SfxItemSet& aTmpSet = pStyle->GetItemSet();
+    SvxFontHeightItem &aDefaultFontItem = (SvxFontHeightItem&)aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE);
+    return (USHORT)aDefaultFontItem.GetHeight();
+}
 
 
 #ifdef _RVP_MARK_HXX
@@ -1167,16 +1191,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 
     //
-    // ASIAN LINE AND CHARACTER GRID MODE START
+    // ASIAN LINE AND CHARACTER GRID MODE START: snap to characters
     //
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
         {
-            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            //for textgrid refactor
+            //const USHORT nGridWidth = pGrid->GetBaseHeight();
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            const USHORT nGridWidth = GETGRIDWIDTH(pGrid, pDoc);
             sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
 
             if ( pPrinter )
@@ -1254,6 +1281,148 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
 
+    // For text grid refactor
+    // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
+    //
+    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() )
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
+        {
+            const USHORT  nDefaultFontHeight = GetDefaultFontHeight( rInf );
+
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            long nGridWidthAdd = GETGRIDWIDTH(pGrid, pDoc);
+            if( SW_LATIN == rInf.GetFont()->GetActual() )
+                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
+            else
+                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+
+            sal_Int32*  pKernArray = new sal_Int32[rInf.GetLen()];
+
+            if ( pPrinter )
+                pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                rInf.GetIdx(), rInf.GetLen() );
+            else
+                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                rInf.GetIdx(), rInf.GetLen() );
+            if ( bSwitchH2V )
+                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+            if ( rInf.GetSpace() || rInf.GetKanaComp())
+            {
+                long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+                sal_Bool bSpecialJust = sal_False;
+                if ( rInf.GetFont() && rInf.GetLen() )
+                {
+                    const SwScriptInfo* pSI = rInf.GetScriptInfo();
+                    const BYTE nActual = rInf.GetFont()->GetActual();
+                    ///Kana Compression
+                    if( SW_CJK == nActual && rInf.GetKanaComp() &&
+                        pSI && pSI->CountCompChg() &&
+                        lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
+                    {
+                        pSI->Compress( pKernArray,rInf.GetIdx(), rInf.GetLen(),
+                            rInf.GetKanaComp(), (USHORT)aFont.GetSize().Height(),&aPos );
+                        bSpecialJust = sal_True;
+                    }
+                    ///Asian Justification
+                    if ( ( SW_CJK == nActual || SW_LATIN == nActual ) && nSpaceAdd )
+                    {
+                        LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
+                        if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang)
+                        {
+                            long nSpaceSum = nSpaceAdd;
+                            for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
+                            {
+                                pKernArray[ nI ] += nSpaceSum;
+                                nSpaceSum += nSpaceAdd;
+                            }
+                            bSpecialJust = sal_True;
+                            nSpaceAdd = 0;
+                        }
+                    }
+                    long nGridAddSum = nGridWidthAdd;
+                    for(xub_StrLen i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd )
+                    {
+                        pKernArray[i] += nGridAddSum;
+                    }
+                    long nKernSum = rInf.GetKern();
+                    if ( bSpecialJust || rInf.GetKern() )
+                    {
+                        for( xub_StrLen i = 0; i < rInf.GetLen(); i++, nKernSum += rInf.GetKern() )
+                        {
+                            if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
+                                nKernSum += nSpaceAdd;
+                            pKernArray[i] += nKernSum;
+                        }
+                        ///With through/uderstr. Grouped style requires a blank at the end
+                        ///of a text edition special measures:
+                        if( bPaintBlank && rInf.GetLen() && (CH_BLANK ==
+                            rInf.GetText().GetChar( rInf.GetIdx() + rInf.GetLen() - 1) ) )
+                        {
+                            ///If it concerns a singular, underlined space acts,
+                            ///we must spend two:
+                            if( 1 == rInf.GetLen() )
+                            {
+                                pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
+                                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                    pKernArray, rInf.GetIdx(), 1 );
+                            }
+                            else
+                            {
+                                pKernArray[ rInf.GetLen() - 2] += nSpaceAdd;
+                                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                    pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                            }
+                        }
+                        else
+                        {
+                            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                        }
+                    }
+                    else
+                    {
+                        Point aTmpPos( aPos );
+                        xub_StrLen i;
+                        xub_StrLen j = 0;
+                        long nSpaceSum = 0;
+                        for( i = 0; i < rInf.GetLen(); i++ )
+                        {
+                            if( CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + i) )
+                            {
+                                nSpaceSum += nSpaceAdd;
+                                if( j < i)
+                                    rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                                    rInf.GetIdx() + j, i - j );
+                                j = i + 1;
+                                pKernArray[i] = pKernArray[i] + nSpaceSum;
+                                aTmpPos.X() = aPos.X() + pKernArray[ i ] + nKernSum;
+                            }
+                        }
+                        if( j < i )
+                            rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                            rInf.GetIdx() +j , i - j );
+                    }
+                }
+            }
+            else
+            {
+                //long nKernAdd = rInf.GetKern();
+        long nKernAdd = 0;
+                long nGridAddSum = nGridWidthAdd + nKernAdd;
+                for(xub_StrLen i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd + nKernAdd )
+                {
+                    pKernArray[i] += nGridAddSum;
+                }
+                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                    pKernArray, rInf.GetIdx(), rInf.GetLen() );
+            }
+            delete[] pKernArray;
+            return;
+        }
+    }
 
     //
     // DIRECT PAINTING WITHOUT SCREEN ADJUSTMENT
@@ -1925,9 +2094,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
          SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
-            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            const USHORT nGridWidth = GETGRIDWIDTH(pGrid, pDoc);
 
             OutputDevice* pOutDev;
 
@@ -1956,6 +2126,40 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                             1;
 
             aTxtSize.Width() = i * nGridWidth * nLn;
+            rInf.SetKanaDiff( 0 );
+            return aTxtSize;
+        }
+    }
+
+    //for textgrid refactor
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont())
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
+        {
+            const USHORT nDefaultFontHeight = GetDefaultFontHeight( rInf );
+
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            long nGridWidthAdd = GETGRIDWIDTH(pGrid, pDoc);
+            if( SW_LATIN == rInf.GetFont()->GetActual() )
+                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
+            else
+                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+            OutputDevice* pOutDev;
+            if ( pPrinter )
+            {
+                if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
+                    pPrinter->SetFont(*pPrtFont);
+                pOutDev = pPrinter;
+            }
+            else
+                pOutDev = rInf.GetpOut();
+            aTxtSize.Width() = pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
+            aTxtSize.Height() = pOutDev->GetTextHeight() +
+                                GetFontLeading( rInf.GetShell(), rInf.GetOut() );
+            aTxtSize.Width() += (nLn) * long( nGridWidthAdd );
+            //if ( rInf.GetKern() && nLn )
+            //    aTxtSize.Width() += ( nLn ) * long( rInf.GetKern() );
 
             rInf.SetKanaDiff( 0 );
             return aTxtSize;
@@ -2178,9 +2382,10 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
-            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            const USHORT nGridWidth = GETGRIDWIDTH(pGrid, pDoc);
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
@@ -2194,6 +2399,37 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
                 ++nCnt;
 
+            delete[] pKernArray;
+            return nCnt;
+        }
+    }
+
+    //for textgrid refactor
+    if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
+        rInf.GetFont() )
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
+        {
+
+            const USHORT nDefaultFontHeight = GetDefaultFontHeight( rInf );
+
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            long nGridWidthAdd = GETGRIDWIDTH(pGrid, pDoc);
+            if( SW_LATIN == rInf.GetFont()->GetActual() )
+                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
+            else
+                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+
+            for(xub_StrLen j = 0; j < rInf.GetLen(); j++)
+            {
+                long nScr = pKernArray[ j ] + ( nSpaceAdd + nGridWidthAdd  ) * ( j + 1 );
+                if( nScr >= rInf.GetOfst())
+                {
+                    nCnt = j;
+                    break;
+                }
+            }
             delete[] pKernArray;
             return nCnt;
         }
@@ -2405,9 +2641,10 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
-            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            const USHORT nGridWidth = GETGRIDWIDTH(pGrid, pDoc);
 
             sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
@@ -2428,6 +2665,35 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 ++nTxtBreak;
             }
 
+            delete[] pKernArray;
+            return nTxtBreak + rInf.GetIdx();
+        }
+    }
+
+    //for text grid enhancement
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() )
+    {
+        GETGRID( rInf.GetFrm()->FindPageFrm() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
+        {
+            const USHORT nDefaultFontHeight = GetDefaultFontHeight( rInf );
+
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            long nGridWidthAdd = GETGRIDWIDTH(pGrid, pDoc);
+            if( SW_LATIN == rInf.GetFont()->GetActual() )
+                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2 ;
+            else
+                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+
+            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                            rInf.GetIdx(), rInf.GetLen() );
+            long nCurrPos = pKernArray[nTxtBreak] + nGridWidthAdd;
+            while( nTxtBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
+            {
+                nTxtBreak++;
+                nCurrPos = pKernArray[nTxtBreak] + nGridWidthAdd * ( nTxtBreak + 1 );
+            }
             delete[] pKernArray;
             return nTxtBreak + rInf.GetIdx();
         }
