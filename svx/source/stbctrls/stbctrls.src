@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:56:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ String RID_SVXSTR_SELMODE_ERG
      // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
     Text [ en-US ] = "ADD" ;
 };
+
 String RID_SVXSTR_SELMODE_BLK
 {
      // 'Block' shortened to max. 3 chararcters
@@ -273,6 +274,56 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
     ImageBitmap = Bitmap
     {
         File = "notcertificate_16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+
+Image RID_SVXBMP_SLIDERBUTTON
+{
+    ImageBitmap = Bitmap
+    {
+        File = "navigationball_10.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERDECREASE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomout_11.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERINCREASE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomin_11.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERBUTTON_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "navigationball_10_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERDECREASE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomout_11_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERINCREASE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomin_11_h.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
