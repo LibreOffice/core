@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:00:19 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#include <com/sun/star/beans/XPropertySet.hpp>
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
@@ -216,6 +217,7 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
@@ -246,6 +248,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include <comphelper/property.hxx>
 #ifndef _MAILMERGEHELPER_HXX
 #include <mailmergehelper.hxx>
 #endif
@@ -2789,6 +2792,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
     String sFind;
+    bool bTextConnection = false;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {
         String sURL = xFP->getFiles().getConstArray()[0];
@@ -2834,25 +2838,12 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
 
+            bTextConnection = true;
             //set the filter to the file name without extension
             Sequence<rtl::OUString> aFilters(1);
             rtl::OUString sTmp(aURL.getBase());
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
-
-            Sequence<PropertyValue> aInfo(5);
-            PropertyValue* pInfo = aInfo.getArray();
-            pInfo[0].Name = C2U("FieldDelimiter");
-            pInfo[0].Value <<= rtl::OUString(String(','));
-            pInfo[1].Name = C2U("ThousandDelimiter");
-            pInfo[1].Value <<= rtl::OUString(String('.'));
-            pInfo[2].Name = C2U("StringDelimiter");
-            pInfo[2].Value <<= rtl::OUString('"');
-            pInfo[3].Name = C2U("Extension");
-            pInfo[3].Value <<= rtl::OUString(sExt);
-            pInfo[4].Name = C2U("CharSet");
-            pInfo[4].Value <<= sal_Int32(gsl_getSystemTextEncoding());
-            aInfoAny <<= aInfo;
         }
         try
         {
@@ -2895,6 +2886,22 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                     xDataProperties->setPropertyValue(C2U("TableFilter"), aTableFilterAny);
                 if(aInfoAny.hasValue())
                     xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
+
+                if( bTextConnection )
+                {
+                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg(
+                                xMgr->createInstance( C2U( "com.sun.star.sdb.TextConnectionSettings" ) ), uno::UNO_QUERY);
+                    if( xSettingsDlg->execute() )
+                    {
+                        uno::Any aSettings = xDataProperties->getPropertyValue( C2U( "Settings" ) );
+                        uno::Reference < beans::XPropertySet > xDSSettings;
+                        aSettings >>= xDSSettings;
+                        ::comphelper::copyProperties(
+                            uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY ),
+                            xDSSettings );
+                        xDSSettings->setPropertyValue( C2U("Extension"), uno::makeAny( ::rtl::OUString( sExt )));
+                    }
+                }
 
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
                 Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
