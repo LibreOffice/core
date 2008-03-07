@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:41:00 $
+#   last change: $Author: kz $ $Date: 2008-03-07 15:17:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@ SLOFILES=	\
         $(SLO)$/hlnkitem.obj \
         $(SLO)$/svxfont.obj \
         $(SLO)$/pageitem.obj	\
-        $(SLO)$/paperinf.obj	\
+                $(SLO)$/viewlayoutitem.obj    \
+                $(SLO)$/paperinf.obj    \
         $(SLO)$/drawitem.obj	\
         $(SLO)$/algitem.obj \
         $(SLO)$/itemtype.obj	\
@@ -85,7 +86,9 @@ SLOFILES=	\
         $(SLO)$/xmlcnitm.obj \
         $(SLO)$/customshapeitem.obj \
         $(SLO)$/charhiddenitem.obj \
-        $(SLO)$/SmartTagItem.obj
+        $(SLO)$/SmartTagItem.obj \
+        $(SLO)$/zoomslideritem.obj \
+
 
 
 EXCEPTIONSFILES= \
