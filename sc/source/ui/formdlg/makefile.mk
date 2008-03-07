@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:22:54 $
+#   last change: $Author: kz $ $Date: 2008-03-07 11:20:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@ SRC1FILES =	\
         parawin.src \
         formdlgs.src \
         dwfunctr.src
+
+EXCEPTIONSFILES+= \
+        $(SLO)$/parawin.obj  \
 
 # --- Tagets -------------------------------------------------------
 
