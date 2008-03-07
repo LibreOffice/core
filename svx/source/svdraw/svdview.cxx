@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:39:17 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,9 +1173,9 @@ XubString SdrView::GetStatusText()
             if (nLen==0) bBrk=TRUE; // Sicherheitshalber
         }
 
-        aStr.SearchAndReplaceAscii("%a", UniString::CreateFromInt32(nPar + 1));
-        aStr.SearchAndReplaceAscii("%z", UniString::CreateFromInt32(nLin + 1));
-        aStr.SearchAndReplaceAscii("%s", UniString::CreateFromInt32(nCol + 1));
+        aStr.SearchAndReplaceAscii("%1", UniString::CreateFromInt32(nPar + 1));
+        aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
+        aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
     }
 
     if(aStr.EqualsAscii("nix"))
@@ -1197,7 +1197,7 @@ XubString SdrView::GetStatusText()
     }
     else if(aName.Len())
     {
-        aStr.SearchAndReplaceAscii("%O", aName);
+        aStr.SearchAndReplaceAscii("%1", aName);
     }
 
     if(aStr.Len())
