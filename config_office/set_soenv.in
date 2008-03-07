@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.177 $
-# Date:        $Date: 2008-03-06 15:16:57 $
+# Version:     $Revision: 1.178 $
+# Date:        $Date: 2008-03-07 16:56:50 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
-     $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $PERL, 
+     $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
@@ -1319,10 +1319,6 @@ elsif ($platform =~ m/darwin/)
 
   # Append old PATH
   $PATH             .= $ps.$oldPATH;
-
-  # append PATHEXTRA
-  $PATHEXTRA         = "@PATHEXTRA@";                      
-  $PATH             .= $PATHEXTRA;
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for general environment paths" );
@@ -1856,7 +1852,6 @@ ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
 ToFile( "PATH",              $PATH,              "e" );
-ToFile( "PATHEXTRA",         $PATHEXTRA,         "e" );
 ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
 ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
@@ -1969,15 +1964,6 @@ ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
-ToFile( "SYSTEM_NAS",        "@SYSTEM_NAS@",       "e" );
-ToFile( "NAS_INCLUDES",      "@NAS_INCLUDES@",     "e" );
-ToFile( "ENABLE_NAS",        "@ENABLE_NAS@",       "e" );
-ToFile( "ENABLE_PASF",       "@ENABLE_PASF@",      "e" );
-ToFile( "SYSTEM_SNDFILE",    "@SYSTEM_SNDFILE@",   "e" );
-ToFile( "SNDFILE_CFLAGS",    "@SNDFILE_CFLAGS@",   "e" );
-ToFile( "SNDFILE_LIBS",	     "@SNDFILE_LIBS@",	   "e" );
-ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
-ToFile( "PA_VER",            "@PA_VER@",           "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
