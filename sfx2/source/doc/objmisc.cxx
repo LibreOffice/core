@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:55:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,7 @@ using namespace ::com::sun::star::container;
 #include <tools/inetmime.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/inettype.hxx>
+#include <svtools/sharecontrolfile.hxx>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
@@ -585,6 +586,59 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
 
 //--------------------------------------------------------------------
 
+sal_Bool SfxObjectShell::IsDocShared() const
+{
+    return pImp->m_bIsDocShared;
+}
+
+//--------------------------------------------------------------------
+
+void SfxObjectShell::SetDocShared( sal_Bool bShared )
+{
+    pImp->m_bIsDocShared = bShared;
+    if ( !bShared )
+    {
+        try
+        {
+            ::svt::ShareControlFile aControlFile( GetSharedFileUrl() );
+            aControlFile.RemoveFile();
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+
+    SetTitle( String() );
+}
+
+//--------------------------------------------------------------------
+
+::rtl::OUString SfxObjectShell::GetSharedFileUrl() const
+{
+    return pImp->m_aSharedFileURL;
+}
+
+//--------------------------------------------------------------------
+
+void SfxObjectShell::SetSharedFileUrl( const ::rtl::OUString& aURL )
+{
+    // TODO/LATER: should be supported only for file: urls
+    pImp->m_aSharedFileURL = aURL;
+    try
+    {
+        ::svt::ShareControlFile aControlFile( aURL );
+        aControlFile.InsertOwnEntry();
+    }
+    catch( uno::Exception& )
+    {
+        // TODO/LATER: in future the switching should not happen and an error should be shown
+    }
+
+    SetTitle( String() );
+}
+
+//--------------------------------------------------------------------
+
 Size SfxObjectShell::GetFirstPageSize()
 {
     return GetVisArea(ASPECT_THUMBNAIL).GetSize();
@@ -618,8 +672,9 @@ void SfxObjectShell::SetTitle
     DBG_CHKTHIS(SfxObjectShell, 0);
 
     // nix zu tun?
-    if ( ( HasName() && pImp->aTitle == rTitle ) ||
-         ( !HasName() && GetTitle() == rTitle ) )
+    if ( ( ( HasName() && pImp->aTitle == rTitle )
+        || ( !HasName() && GetTitle() == rTitle ) )
+      && !IsDocShared() )
         return;
 
     SfxApplication *pSfxApp = SFX_APP();
@@ -799,7 +854,7 @@ String SfxObjectShell::GetTitle
         return X(aNoName);
     }
 
-    const INetURLObject& aURL = INetURLObject( pMed->GetName() );
+    const INetURLObject aURL( IsDocShared() ? GetSharedFileUrl() : ::rtl::OUString( GetMedium()->GetName() ) );
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
@@ -828,7 +883,7 @@ String SfxObjectShell::GetTitle
         // ::com::sun::star::util::URL-Versionen
         if ( nMaxLength >= SFX_TITLE_MAXLEN )
         {
-            String aComplete( pMed->GetName() );
+            String aComplete( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             if( aComplete.Len() > nMaxLength )
             {
                 String aRet( DEFINE_CONST_UNICODE( "..." ) );
@@ -836,11 +891,10 @@ String SfxObjectShell::GetTitle
                 return X( aRet );
             }
             else
-                return X( pMed->GetName() );
+                return X( aComplete );
         }
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
-            //String aName( aURL.GetLastName() );
             String aName( aURL.GetBase() );
             aName = INetURLObject::decode( aName, INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET );
             if( !aName.Len() )
@@ -1881,7 +1935,7 @@ void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
 
 String SfxObjectShell::GetAPIName() const
 {
-    INetURLObject aURL( GetMedium()->GetName() );
+    INetURLObject aURL( IsDocShared() ? GetSharedFileUrl() : ::rtl::OUString( GetMedium()->GetName() ) );
     String aName( aURL.GetBase() );
     if( !aName.Len() )
         aName = aURL.GetURLNoPass();
@@ -1987,6 +2041,9 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
 
     if ( IsReadOnlyUI() || pMed && pMed->IsReadOnly() )
         aTitle += String( SfxResId(STR_READONLY) );
+    else if ( IsDocShared() )
+        aTitle += String( SfxResId(STR_SHARED) );
+
     return aTitle;
 }
 
