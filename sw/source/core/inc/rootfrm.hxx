@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:36:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ class SwTableCursor;
 class SwLayVout;
 class SwDestroyList;
 class SwCurrShells;
+class SwViewOption;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
@@ -65,6 +66,8 @@ struct SwCrsrMoveState;
 #define INV_LINENUM 32
 #define INV_DIRECTION 64
 
+#include <vector>
+
 class SwRootFrm: public SwLayoutFrm
 {
     //Muss das Superfluous temporaer abschalten.
@@ -76,6 +79,17 @@ class SwRootFrm: public SwLayoutFrm
     // Fuer das Anlegen und Zerstoeren des virtuellen Outputdevice-Managers
     friend void _FrmInit();     //erzeugt pVout
     friend void _FrmFinit();    //loescht pVout
+
+    // PAGES01
+    std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
+                                    // the rectangle is extended to the top/bottom/left/right
+                                    // for pages located at the outer borders
+    SwRect  maPagesArea;            // the area covered by the pages
+    long    mnViewWidth;            // the current page layout bases on this view width
+    USHORT  mnColumns;              // the current page layout bases on this number of columns
+    bool    mbBookMode;             // the current page layout is in book view
+    bool    mbSidebarChanged;       // the notes sidebar state has changed
+    // <--
 
     static SwLayVout     *pVout;
     static BOOL           bInPaint;     //Schutz gegen doppelte Paints.
@@ -92,7 +106,6 @@ class SwRootFrm: public SwLayoutFrm
     BOOL    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
     BOOL    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
                                     //siehe dcontact.cxx, ::Changed()
-
     //Fuer den BrowseMode. nBrowseWidth ist die Aeussere Kante des am weitesten
     //rechts stehenden Objectes. Die rechte Kante der Seiten soll im BrowseMode
     //nicht kleiner werden als dieser Wert.
@@ -246,7 +259,12 @@ public:
     inline  void SetVirtPageNum( const BOOL bOf ) const;
     BOOL    IsDummyPage( USHORT nPageNum ) const;
 
-    const SwPageFrm* GetPageAtPos( const Point &rPt ) const;
+    // Point rPt: The point that should be used to find the page
+    // Size pSize: If given, we return the (first) page that overlaps with the
+    // rectangle defined by rPt and pSize
+    // bool bExtend: Extend each page to the left/right/top/botton up to the
+    // next page border
+    const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
 
     //Der Crsr moechte die zu selektierenden Bereiche wissen.
     void CalcFrmRects( SwShellCrsr&, BOOL bIsTblSel );
@@ -322,6 +340,13 @@ public:
         @return pointer to the page frame with the given physical page number
     */
     SwPageFrm* GetPageByPageNum( sal_uInt16 _nPageNum ) const;
+
+    // --> PAGES01
+    void CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea );
+    bool IsLeftToRightViewLayout() const;
+    const SwRect& GetPagesArea() const { return maPagesArea; }
+    void SetSidebarChanged() { mbSidebarChanged = true; }
+    // <--
 };
 
 inline long SwRootFrm::GetBrowseWidth() const
