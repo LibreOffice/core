@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:24:14 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,27 @@ void FrameworkStatusBar::DataChanged( const DataChangedEvent& rDCEvt )
     StatusBar::DataChanged( rDCEvt );
     if ( m_pMgr )
         m_pMgr->DataChanged( rDCEvt );
+}
+
+void FrameworkStatusBar::MouseMove( const MouseEvent& rMEvt )
+{
+    StatusBar::MouseMove( rMEvt );
+    if ( m_pMgr )
+        m_pMgr->MouseMove( rMEvt );
+}
+
+void FrameworkStatusBar::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    StatusBar::MouseButtonDown( rMEvt );
+    if ( m_pMgr )
+        m_pMgr->MouseButtonDown( rMEvt );
+}
+
+void FrameworkStatusBar::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    StatusBar::MouseButtonUp( rMEvt );
+    if ( m_pMgr )
+        m_pMgr->MouseButtonUp( rMEvt );
 }
 
 }

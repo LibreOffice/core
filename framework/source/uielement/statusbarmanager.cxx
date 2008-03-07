@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:24:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,7 @@ void StatusBarManager::CreateControllers()
             if ( bInit )
             {
                 beans::PropertyValue aPropValue;
-                uno::Sequence< uno::Any > aArgs( 4 );
+                uno::Sequence< uno::Any > aArgs( 5 );
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                 aPropValue.Value    = uno::makeAny( m_xFrame );
                 aArgs[0] = uno::makeAny( aPropValue );
@@ -531,6 +531,9 @@ void StatusBarManager::CreateControllers()
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value    = uno::makeAny( xStatusbarWindow );
                 aArgs[3] = uno::makeAny( aPropValue );
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Value    = uno::makeAny( nId );
+                aArgs[4] = uno::makeAny( aPropValue );
                 xInit->initialize( aArgs );
             }
         }
@@ -720,6 +723,78 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
                 aPos.Y = rEvt.GetMousePosPixel().Y();
                 xController->command( aPos, awt::Command::CONTEXTMENU, sal_True, uno::Any() );
             }
+        }
+    }
+}
+
+void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
+{
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return;
+
+    USHORT nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    {
+        uno::Reference< frame::XStatusbarController > xController(
+            m_aControllerVector[nId-1], uno::UNO_QUERY );
+        if ( xController.is() )
+        {
+            ::com::sun::star::awt::MouseEvent aMouseEvent;
+            aMouseEvent.Buttons = rMEvt.GetButtons();
+            aMouseEvent.X = rMEvt.GetPosPixel().X();
+            aMouseEvent.Y = rMEvt.GetPosPixel().Y();
+            aMouseEvent.ClickCount = rMEvt.GetClicks();
+            xController->mouseMove( aMouseEvent );
+        }
+    }
+}
+
+void StatusBarManager::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return;
+
+    USHORT nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    {
+        uno::Reference< frame::XStatusbarController > xController(
+            m_aControllerVector[nId-1], uno::UNO_QUERY );
+        if ( xController.is() )
+        {
+            ::com::sun::star::awt::MouseEvent aMouseEvent;
+            aMouseEvent.Buttons = rMEvt.GetButtons();
+            aMouseEvent.X = rMEvt.GetPosPixel().X();
+            aMouseEvent.Y = rMEvt.GetPosPixel().Y();
+            aMouseEvent.ClickCount = rMEvt.GetClicks();
+            xController->mouseButtonDown( aMouseEvent );
+        }
+    }
+}
+
+void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return;
+
+    USHORT nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
+    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    {
+        uno::Reference< frame::XStatusbarController > xController(
+            m_aControllerVector[nId-1], uno::UNO_QUERY );
+        if ( xController.is() )
+        {
+            ::com::sun::star::awt::MouseEvent aMouseEvent;
+            aMouseEvent.Buttons = rMEvt.GetButtons();
+            aMouseEvent.X = rMEvt.GetPosPixel().X();
+            aMouseEvent.Y = rMEvt.GetPosPixel().Y();
+            aMouseEvent.ClickCount = rMEvt.GetClicks();
+            xController->mouseButtonUp( aMouseEvent );
         }
     }
 }
