@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:53:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:02:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,12 @@
 #endif
 #ifndef _TMPLCTRL_HXX
 #include <tmplctrl.hxx>
+#endif
+#ifndef _VIEWLAYOUTCTRL_HXX
+#include <viewlayoutctrl.hxx>
+#endif
+#ifndef _ZOOMSLIDER_STBCONTRL_HXX
+#include <svx/zoomsliderctrl.hxx>
 #endif
 #ifndef _TBLCTRL_HXX
 #include <tblctrl.hxx>
@@ -596,6 +602,8 @@ void SwDLL::RegisterControls()
 
     SwBookmarkControl::RegisterControl(FN_STAT_PAGE, pMod );
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
+    SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );
+    SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
     SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
 
