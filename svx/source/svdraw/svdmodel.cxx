@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,7 +642,7 @@ void SdrModel::BegUndo(const XubString& rComment, const XubString& rObjDescr, Sd
         String aComment(rComment);
         if( aComment.Len() && rObjDescr.Len() )
         {
-            String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%O"));
+            String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
             aComment.SearchAndReplace(aSearchString, rObjDescr);
         }
         const String aEmpty;
