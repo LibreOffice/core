@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:21:18 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,12 @@
 #define IMG_SORTUP_HC           149
 #define IMG_SORTDOWN_HC         150
 #define ST_NO_BRACKET           151
+
+#define FT_LEVEL_OL             152
+#define NF_LEVEL_OL             153
+#define FT_ENTRY_NO             154
+#define LB_ENTRY_NO             155
+
 #define TO_CONTENT          1
 #define TO_INDEX            2
 #define TO_ILLUSTRATION     4
