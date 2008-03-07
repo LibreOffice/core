@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgviset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:13:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@ ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r )
     bEveryoneButMe  =r.bEveryoneButMe;
     bShowAccepted   =r.bShowAccepted;
     bShowRejected   =r.bShowRejected;
+    mbIsActionRange = r.mbIsActionRange;
+    mnFirstAction   = r.mnFirstAction;
+    mnLastAction    = r.mnLastAction;
 
 }
 
@@ -88,6 +91,9 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     bEveryoneButMe  =r.bEveryoneButMe;
     bShowAccepted   =r.bShowAccepted;
     bShowRejected   =r.bShowRejected;
+    mbIsActionRange = r.mbIsActionRange;
+    mnFirstAction   = r.mnFirstAction;
+    mnLastAction    = r.mnLastAction;
 
     return *this;
 }
