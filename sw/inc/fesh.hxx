@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:17:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,9 @@ enum CurRectType
     RECT_OUTTABSECTION_PRT,     //Rect der aktuellen PrtArea des Bereichs,
                                 // aber ausserhalb der Tabelle
     RECT_HEADERFOOTER,          //Rect des aktuellen Headers/Footer
-    RECT_HEADERFOOTER_PRT       //Rect der PrtArea des aktuellen Headers/Footers
+    RECT_HEADERFOOTER_PRT,      //Rect der PrtArea des aktuellen Headers/Footers
+
+    RECT_PAGES_AREA             //Rect covering the pages area
 };
 
 struct SwGetCurColNumPara
@@ -657,7 +659,7 @@ public:
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
     // pEnd will be used during MouseMove
-    bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0 );
+    bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
     // <--
 
     // #i24134# adjustment of table rows via Ruler
