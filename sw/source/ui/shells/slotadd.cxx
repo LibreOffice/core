@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:29:21 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,12 @@
 #endif
 #ifndef _SVX_ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
+#endif
+#ifndef _SVX_VIEWLAYOUTITEM_HXX
+#include <svx/viewlayoutitem.hxx>
+#endif
+#ifndef _SVX_ZOOMSLIDERITEM_HXX
+#include <svx/zoomslideritem.hxx>
 #endif
 #ifndef _SVX_HLNKITEM_HXX //autogen
 #include <svx/hlnkitem.hxx>
