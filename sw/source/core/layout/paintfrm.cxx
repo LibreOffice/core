@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:46:00 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,9 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -210,10 +212,7 @@
 #endif
 // <--
 
-#ifndef _VIEW_HXX
-#include "../../ui/inc/view.hxx"
-#endif
-#include "../../../inc/PostItMgr.hxx"
+#include <PostItMgr.hxx>
 
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
@@ -1599,8 +1598,8 @@ inline BOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
 {
     //Wenn der Frm vollstaendig rechts neben bzw. unter dem
     //Rect sitzt ist's genug mit Painten.
-    return ( (rFrmRect.Top()  > rRect.Bottom()) ||
-             (rFrmRect.Left() > rRect.Right()) );
+    return rFrmRect.Top() > rRect.Bottom();
+        // PAGES01 || (rFrmRect.Left() > rRect.Right()) );
 }
 
 //---------------- Ausgabe fuer das BrushItem ----------------
@@ -2879,172 +2878,257 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage();
 
+    const bool bBookMode = pGlobalShell->GetViewOptions()->IsViewLayoutBookMode();
+    if ( bBookMode && pPage->GetPrev() && static_cast<const SwPageFrm*>(pPage->GetPrev())->IsEmptyPage() )
+        pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
+
+    const bool bLTR = IsLeftToRightViewLayout();
+
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
 
     while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
     {
-        SwRect aPaintRect;
-        pPage->GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect );
-        if ( !pPage->IsEmptyPage() && aRect.IsOver( aPaintRect ) )
+        const bool bPaintRightShadow =  !bBookMode || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
+        const bool bRightSidebar = !pPage->MarginSide();
+
+        if ( !pPage->IsEmptyPage() )
         {
-            if ( pSh->GetWin() )
-            {
-                pSubsLines = new SwSubsRects;
-                // OD 18.11.2002 #99672# - create array for special sub-lines
-                pSpecSubsLines = new SwSubsRects;
-            }
-             aPaintRect._Intersection( aRect );
+            SwRect aPaintRect;
+            SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect, bRightSidebar );
 
-            // --> OD 2007-11-14 #i82616#
-            // Invalidate area for extra data (line numbers or change tracking
-            // marks), if painting on a window and the paint is trigger by an
-            // end action. The inefficient and simple enlargement of the
-            // paint area is replaced by this invalidation.
-//            if ( bExtraData )
-//            {
-//                //Ja, das ist grob, aber wie macht man es besser?
-//                SWRECTFN( pPage )
-//                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
-//                    (pPage->Frm().*fnRect->fnGetLeft)(),
-//                    (pPage->Frm().*fnRect->fnGetWidth)() );
-//                aPaintRect._Intersection( pSh->VisArea() );
-//            }
-            if ( bExtraData &&
-                 pSh->GetWin() && pSh->IsInEndAction() )
-            {
-                // enlarge paint rectangle to complete page width, subtract
-                // current paint area and invalidate the resulting region.
-                SWRECTFN( pPage )
-                SwRect aPageRectTemp( aPaintRect );
-                (aPageRectTemp.*fnRect->fnSetLeftAndWidth)(
-                     (pPage->Frm().*fnRect->fnGetLeft)(),
-                     (pPage->Frm().*fnRect->fnGetWidth)() );
-                aPageRectTemp._Intersection( pSh->VisArea() );
-                Region aPageRectRegion( aPageRectTemp.SVRect() );
-                aPageRectRegion.Exclude( aPaintRect.SVRect() );
-                pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
-            }
-
-            // --> OD 2007-08-20 #i80793#
-            // enlarge paint rectangle for objects overlapping the same pixel
-            // in all cases and before the DrawingLayer overlay is initialized.
-            lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+            if ( aRect.IsOver( aPaintRect ) )
             // <--
+            {
+                if ( pSh->GetWin() )
+                {
+                    pSubsLines = new SwSubsRects;
+                    // OD 18.11.2002 #99672# - create array for special sub-lines
+                    pSpecSubsLines = new SwSubsRects;
+                }
 
-            // #i68597#
-            // moved paint pre-process for DrawingLayer overlay here since the above
-            // code dependent from bExtraData may expand the PaintRect
+                aPaintRect._Intersection( aRect );
+
+                // --> OD 2007-11-14 #i82616#
+                // Invalidate area for extra data (line numbers or change tracking
+                // marks), if painting on a window and the paint is trigger by an
+                // end action. The inefficient and simple enlargement of the
+                // paint area is replaced by this invalidation.
+    //            if ( bExtraData )
+    //            {
+    //                //Ja, das ist grob, aber wie macht man es besser?
+    //                SWRECTFN( pPage )
+    //                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
+    //                    (pPage->Frm().*fnRect->fnGetLeft)(),
+    //                    (pPage->Frm().*fnRect->fnGetWidth)() );
+    //                aPaintRect._Intersection( pSh->VisArea() );
+    //            }
+                if ( bExtraData &&
+                     pSh->GetWin() && pSh->IsInEndAction() )
+                {
+                    // enlarge paint rectangle to complete page width, subtract
+                    // current paint area and invalidate the resulting region.
+                    SWRECTFN( pPage )
+                    SwRect aPageRectTemp( aPaintRect );
+                    (aPageRectTemp.*fnRect->fnSetLeftAndWidth)(
+                         (pPage->Frm().*fnRect->fnGetLeft)(),
+                         (pPage->Frm().*fnRect->fnGetWidth)() );
+                    aPageRectTemp._Intersection( pSh->VisArea() );
+                    Region aPageRectRegion( aPageRectTemp.SVRect() );
+                    aPageRectRegion.Exclude( aPaintRect.SVRect() );
+                    pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
+                }
+                // <--
+
+                // --> OD 2007-08-20 #i80793#
+                // enlarge paint rectangle for objects overlapping the same pixel
+                // in all cases and before the DrawingLayer overlay is initialized.
+                lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+                // <--
+
+                // #i68597#
+                // moved paint pre-process for DrawingLayer overlay here since the above
+                // code dependent from bExtraData may expand the PaintRect
+                {
+                    // #i75172# if called from ViewShell::ImplEndAction it sould no longer
+                    // really be used but handled by ViewShell::ImplEndAction already
+                    const Region aDLRegion(aPaintRect.SVRect());
+                    pSh->DLPrePaint2(aDLRegion);
+                }
+
+                if(OUTDEV_WINDOW == pGlobalShell->GetOut()->GetOutDevType())
+                {
+                    /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
+                    /// 2nd parameter is no longer <const> and will be set to the
+                    /// rectangle the virtual output device is calculated from <aPaintRect>,
+                    /// if the virtual output is used.
+                    pVout->Enter( pSh, aPaintRect, !bNoVirDev );
+
+                    /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
+                    /// Thus, all objects overlapping on pixel level with the unadjusted
+                    /// paint rectangle will be considered in the paint.
+                    lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+                }
+
+                // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
+                pVout->SetOrgRect( aPaintRect );
+
+                /// OD 29.08.2002 #102450#
+                /// determine background color of page for <PaintLayer> method
+                /// calls, paint <hell> or <heaven>
+                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+
+                pPage->PaintBaBo( aPaintRect, pPage, TRUE );
+
+                if ( pSh->Imp()->HasDrawView() )
+                {
+                    pLines->LockLines( TRUE );
+                    // OD 29.08.2002 #102450# - add 3rd parameter
+                    // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
+                    const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), aPaintRect,
+                                            &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
+                    pLines->PaintLines( pSh->GetOut() );
+                    pLines->LockLines( FALSE );
+                }
+
+                if( pSh->GetWin() )
+                {
+                    // OD 18.11.2002 #99672# - collect sub-lines
+                    pPage->RefreshSubsidiary( aPaintRect );
+                    // OD 18.11.2002 #99672# - paint special sub-lines
+                    pSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL );
+                }
+
+                pPage->Paint( aPaintRect );
+
+                // OD 20.12.2002 #94627# - no paint of page border and shadow, if
+                // writer is in place mode.
+                if( pSh->GetWin() &&
+                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
+                {
+                    // OD 12.02.2003 #i9719#, #105645# - use new method
+                    // <SwPageFrm::PaintBorderAndShadow(..)>.
+                    SwPageFrm::PaintBorderAndShadow( pPage->Frm(), pSh, bPaintRightShadow, bRightSidebar );
+                    SwPageFrm::PaintNotesSidebar( pPage->Frm(), pSh, pPage->GetPhyPageNum(), bRightSidebar);
+                }
+
+                pLines->PaintLines( pSh->GetOut() );
+
+                if ( pSh->Imp()->HasDrawView() )
+                {
+                    /// OD 29.08.2002 #102450# - add 3rd parameter
+                    // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
+                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
+                                            &aPageBackgrdColor,
+                                            (pPage->IsRightToLeft() ? true : false) );
+                }
+
+                if ( bExtraData )
+                    pPage->RefreshExtraData( aPaintRect );
+
+                if ( pSh->GetWin() )
+                {
+                    pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
+                    DELETEZ( pSubsLines );
+                    DELETEZ( pSpecSubsLines );
+                }
+                pVout->Leave();
+
+                // #i68597#
+                // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
+                // output rect for it accordingly
+                if(bGridPainting)
+                {
+                    SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
+                    SdrPageView* pPageView = pPaintView->GetSdrPageView();
+                    pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), SwViewOption::GetTextGridColor() );
+                }
+
+                // #i68597#
+                // moved paint post-process for DrawingLayer overlay here, see above
+                {
+                    pSh->DLPostPaint2();
+                }
+            }
+        }
+        else if ( bBookMode && pSh->GetWin() && !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
+        {
+            // paint empty page
+            SwRect aPaintRect;
+            SwRect aEmptyPageRect( pPage->Frm() );
+
+            // code from vprint.cxx
+            const SwPageFrm& rFormatPage = pPage->GetFormatPage();
+            aEmptyPageRect.SSize() = rFormatPage.Frm().SSize();
+
+            SwPageFrm::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, aPaintRect, bRightSidebar );
+            aPaintRect._Intersection( aRect );
+
+            if ( aRect.IsOver( aEmptyPageRect ) )
             {
                 // #i75172# if called from ViewShell::ImplEndAction it sould no longer
                 // really be used but handled by ViewShell::ImplEndAction already
-                const Region aDLRegion(aPaintRect.SVRect());
-                pSh->DLPrePaint2(aDLRegion);
+                {
+                    const Region aDLRegion(aPaintRect.SVRect());
+                    pSh->DLPrePaint2(aDLRegion);
+                }
+
+                if( pSh->GetOut()->GetFillColor() != aGlobalRetoucheColor )
+                    pSh->GetOut()->SetFillColor( aGlobalRetoucheColor );
+
+                pSh->GetOut()->SetLineColor(); // OD 20.02.2003 #107369# - no line color
+                // OD 20.02.2003 #107369# - use aligned page rectangle
+                {
+                    SwRect aTmpPageRect( aEmptyPageRect );
+                    ::SwAlignRect( aTmpPageRect, pSh );
+                    aEmptyPageRect = aTmpPageRect;
+                }
+
+                pSh->GetOut()->DrawRect( aEmptyPageRect.SVRect() );
+
+                // paint empty page text
+                const Font& rEmptyPageFont = SwPageFrm::GetEmptyPageFont();
+                const Font aOldFont( pSh->GetOut()->GetFont() );
+
+                pSh->GetOut()->SetFont( rEmptyPageFont );
+                pSh->GetOut()->DrawText( aEmptyPageRect.SVRect(), SW_RESSTR( STR_EMPTYPAGE ),
+                                    TEXT_DRAW_VCENTER |
+                                    TEXT_DRAW_CENTER |
+                                    TEXT_DRAW_CLIP );
+
+                pSh->GetOut()->SetFont( aOldFont );
+                // paint shadow and border for empty page
+                // OD 19.02.2003 #107369# - use new method to paint page border and
+                // shadow
+                SwPageFrm::PaintBorderAndShadow( aEmptyPageRect, pSh, bPaintRightShadow, bRightSidebar );
+                SwPageFrm::PaintNotesSidebar( aEmptyPageRect, pSh, pPage->GetPhyPageNum(), bRightSidebar);
+
+                {
+                    pSh->DLPostPaint2();
+                }
             }
-
-            if(OUTDEV_WINDOW == pGlobalShell->GetOut()->GetOutDevType())
-            {
-                /// OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
-                /// 2nd parameter is no longer <const> and will be set to the
-                /// rectangle the virtual output device is calculated from <aPaintRect>,
-                /// if the virtual output is used.
-                pVout->Enter( pSh, aPaintRect, !bNoVirDev );
-
-                /// OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
-                /// Thus, all objects overlapping on pixel level with the unadjusted
-                /// paint rectangle will be considered in the paint.
-                lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
-            }
-
-            // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
-            pVout->SetOrgRect( aPaintRect );
-
-            /// OD 29.08.2002 #102450#
-            /// determine background color of page for <PaintLayer> method
-            /// calls, paint <hell> or <heaven>
-            const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
-
-            pPage->PaintBaBo( aPaintRect, pPage, TRUE );
-
-            if ( pSh->Imp()->HasDrawView() )
-            {
-                pLines->LockLines( TRUE );
-                // OD 29.08.2002 #102450# - add 3rd parameter
-                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
-                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), aPaintRect,
-                                        &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
-                pLines->PaintLines( pSh->GetOut() );
-                pLines->LockLines( FALSE );
-            }
-
-            if( pSh->GetWin() )
-            {
-                // OD 18.11.2002 #99672# - collect sub-lines
-                pPage->RefreshSubsidiary( aPaintRect );
-                // OD 18.11.2002 #99672# - paint special sub-lines
-                pSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL );
-            }
-
-            pPage->Paint( aPaintRect );
-
-            // OD 20.12.2002 #94627# - no paint of page border and shadow, if
-            // writer is in place mode.
-             if( pSh->GetWin() &&
-                !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
-            {
-                // OD 12.02.2003 #i9719#, #105645# - use new method
-                // <SwPageFrm::PaintBorderAndShadow(..)>.
-                pPage->PaintBorderAndShadow( pPage->Frm(), pSh );
-                pPage->PaintNotesSidebar(pSh);
-            }
-
-            pLines->PaintLines( pSh->GetOut() );
-
-            if ( pSh->Imp()->HasDrawView() )
-            {
-                /// OD 29.08.2002 #102450# - add 3rd parameter
-                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
-                                        &aPageBackgrdColor,
-                                        (pPage->IsRightToLeft() ? true : false) );
-            }
-
-            if ( bExtraData )
-                pPage->RefreshExtraData( aPaintRect );
-
-            if ( pSh->GetWin() )
-            {
-                pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
-                DELETEZ( pSubsLines );
-                DELETEZ( pSpecSubsLines );
-            }
-            pVout->Leave();
-
-            // #i68597#
-            // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
-            // output rect for it accordingly
-            if(bGridPainting)
-            {
-                SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
-                SdrPageView* pPageView = pPaintView->GetSdrPageView();
-                pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), SwViewOption::GetTextGridColor() );
-            }
-
-            // #i68597#
-            // moved paint post-process for DrawingLayer overlay here, see above
-            {
-                pSh->DLPostPaint2();
-            }
-
         }
+
         ASSERT( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Nachbar von Seite keine Seite." );
         pPage = (SwPageFrm*)pPage->GetNext();
     }
 
     DELETEZ( pLines );
+
+#ifdef FRANK_TEST
+    if ( pSh->GetWin() )
+    {
+        Rectangle aRect( aFrm.SVRect() );
+        pSh->GetWin()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pSh->GetWin()->SetFillColor();
+        pSh->GetWin()->SetLineColor( COL_LIGHTRED );
+        pSh->GetWin()->DrawRect( aRect );
+        pSh->GetWin()->Pop();
+    }
+#endif
 
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = FALSE;
@@ -5257,12 +5341,13 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 2;
 
     @author OD
 */
-void SwPageFrm::GetBorderRect( const SwRect& _rPageRect,
-                               ViewShell*    _pViewShell,
-                               SwRect& _orBorderRect ) const
+/*static*/ void SwPageFrm::GetBorderRect( const SwRect& _rPageRect,
+                                          ViewShell*    _pViewShell,
+                                          SwRect& _orBorderRect,
+                                          bool bRightSidebar )
 {
     SwRect aAlignedPageRect( _rPageRect );
-    SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell );
     Rectangle aBorderPxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
@@ -5271,7 +5356,7 @@ void SwPageFrm::GetBorderRect( const SwRect& _rPageRect,
     aBorderPxRect.Right() = aBorderPxRect.Right() + mnBorderPxWidth;
     aBorderPxRect.Bottom() = aBorderPxRect.Bottom() + mnBorderPxWidth;
 
-    AddSidebarBorders(aBorderPxRect,_pViewShell,true);
+    AddSidebarBorders(aBorderPxRect,_pViewShell, bRightSidebar, true);
 
     _orBorderRect =
             SwRect( _pViewShell->GetOut()->PixelToLogic( aBorderPxRect ) );
@@ -5283,12 +5368,13 @@ void SwPageFrm::GetBorderRect( const SwRect& _rPageRect,
 
     @author OD
 */
-void SwPageFrm::GetRightShadowRect( const SwRect& _rPageRect,
-                                    ViewShell*    _pViewShell,
-                                    SwRect&       _orRightShadowRect ) const
+/*static*/ void SwPageFrm::GetRightShadowRect( const SwRect& _rPageRect,
+                                               ViewShell*    _pViewShell,
+                                               SwRect&       _orRightShadowRect,
+                                               bool bRightSidebar )
 {
     SwRect aAlignedPageRect( _rPageRect );
-    SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell );
     Rectangle aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
@@ -5298,7 +5384,8 @@ void SwPageFrm::GetRightShadowRect( const SwRect& _rPageRect,
                     aPagePxRect.Right() + mnBorderPxWidth + mnShadowPxWidth,
                     aPagePxRect.Bottom() + mnBorderPxWidth + mnShadowPxWidth );
 
-    AddSidebarBorders(aRightShadowPxRect,_pViewShell,true);
+    if ( bRightSidebar )
+        AddSidebarBorders(aRightShadowPxRect,_pViewShell, bRightSidebar, true);
 
     _orRightShadowRect =
             SwRect( _pViewShell->GetOut()->PixelToLogic( aRightShadowPxRect ) );
@@ -5310,12 +5397,13 @@ void SwPageFrm::GetRightShadowRect( const SwRect& _rPageRect,
 
     @author OD
 */
-void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
-                                     ViewShell*    _pViewShell,
-                                     SwRect&       _orBottomShadowRect ) const
+/*static*/ void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
+                                                ViewShell*    _pViewShell,
+                                                SwRect&       _orBottomShadowRect,
+                                                bool bRightSidebar )
 {
     SwRect aAlignedPageRect( _rPageRect );
-    SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell );
     Rectangle aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
@@ -5325,7 +5413,7 @@ void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
                     aPagePxRect.Right() + mnBorderPxWidth + mnShadowPxWidth,
                     aPagePxRect.Bottom() + mnBorderPxWidth + mnShadowPxWidth );
 
-    AddSidebarBorders(aBottomShadowPxRect,_pViewShell,true);
+    AddSidebarBorders(aBottomShadowPxRect,_pViewShell, bRightSidebar, true);
 
     _orBottomShadowRect =
             SwRect( _pViewShell->GetOut()->PixelToLogic( aBottomShadowPxRect ) );
@@ -5338,8 +5426,10 @@ void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
 
     @author OD
 */
-void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
-                                      ViewShell*    _pViewShell ) const
+/*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
+                                                 ViewShell*    _pViewShell,
+                                                 bool bPaintRightShadow,
+                                                 bool bRightSidebar )
 {
     // --> FME 2004-06-24 #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
@@ -5356,14 +5446,19 @@ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
     _pViewShell->GetOut()->SetFillColor(); // OD 20.02.2003 #107369# - no fill color
     _pViewShell->GetOut()->SetLineColor( rColor );
     SwRect aPaintRect;
-    GetBorderRect( _rPageRect, _pViewShell, aPaintRect );
+    SwPageFrm::GetBorderRect( _rPageRect, _pViewShell, aPaintRect, bRightSidebar );
     _pViewShell->GetOut()->DrawRect( aPaintRect.SVRect() );
 
-    // paint shadow
-    _pViewShell->GetOut()->SetFillColor( rColor );
-    GetRightShadowRect( _rPageRect, _pViewShell, aPaintRect );
-    _pViewShell->GetOut()->DrawRect( aPaintRect.SVRect() );
-    GetBottomShadowRect( _rPageRect, _pViewShell, aPaintRect );
+    // paint right shadow
+    if ( bPaintRightShadow )
+    {
+        _pViewShell->GetOut()->SetFillColor( rColor );
+        SwPageFrm::GetRightShadowRect( _rPageRect, _pViewShell, aPaintRect, bRightSidebar );
+        _pViewShell->GetOut()->DrawRect( aPaintRect.SVRect() );
+    }
+
+    // paint bottom shadow
+    SwPageFrm::GetBottomShadowRect( _rPageRect, _pViewShell, aPaintRect, bRightSidebar );
     _pViewShell->GetOut()->DrawRect( aPaintRect.SVRect() );
 
     _pViewShell->GetOut()->SetFillColor( aFill );
@@ -5372,105 +5467,103 @@ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
 
 //mod #i6193# paint sidebar for notes
 //IMPORTANT: if you change the rects here, also change SwPostItMgr::ScrollbarHit
-void SwPageFrm::PaintNotesSidebar(ViewShell* _pViewShell) const
+/*static*/void SwPageFrm::PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, USHORT nPageNum, bool bRight)
 {
     //TOOD: cut out scrollbar area and arrows out of sidepane rect, otherwise it could flicker when pressing arrow buttons
-    SwRect _rPageRect(Frm());
-    SwAlignRect( _rPageRect, _pViewShell );
+    if (!_pViewShell )
+        return;
 
-    SwView* pView =  _pViewShell->GetDoc()->GetDocShell() ? _pViewShell->GetDoc()->GetDocShell()->GetView() : 0;
-    if (pView)  // do not show anything in print preview
+    SwRect aPageRect( _rPageRect );
+    SwAlignRect( aPageRect, _pViewShell );
+
+    const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
+    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())  // do not show anything in print preview
     {
-        SwPostItMgr *pMgr = pView->GetPostItMgr();
         sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
-        if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
+        const Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
+        //draw border and sidepane
+        _pViewShell->GetOut()->SetLineColor();
+        if (!bRight)
         {
-            bool bRTL = MarginSide();
-            const Rectangle &aVisRect = pView->GetVisArea();
-            //draw border and sidepane
-            _pViewShell->GetOut()->SetLineColor();
-            if (bRTL)
-            {
-                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
-                _pViewShell->GetOut()->DrawRect(Rectangle(Point(_rPageRect.Left()-pMgr->GetSidebarBorderWidth(),_rPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),_rPageRect.Height()))) ;
-                if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                    _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-                else
-                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
-                _pViewShell->GetOut()->DrawRect(Rectangle(Point(_rPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),_rPageRect.Top()),Size(pMgr->GetSidebarWidth(),_rPageRect.Height())))   ;
-            }
+            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+            _pViewShell->GetOut()->DrawRect(Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
+            if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                _pViewShell->GetOut()->SetFillColor(COL_BLACK);
             else
+                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+            _pViewShell->GetOut()->DrawRect(Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
+        }
+        else
+        {
+            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+            SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
+            _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
+            if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                _pViewShell->GetOut()->SetFillColor(COL_BLACK);
+            else
+                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+            SwRect aSidebar(Point(aPageRect.Right()+pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height()));
+            _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
+        }
+        if (pMgr->ShowScrollbar(nPageNum))
+        {
+            // draw scrollbar area and arrows
+            Point aPointBottom;
+            Point aPointTop;
+            aPointBottom = !bRight ? Point(aPageRect.Left() - pMgr->GetSidebarWidth() - pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height()) :
+                                    Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height());
+            aPointTop = !bRight ?    Point(aPageRect.Left() - pMgr->GetSidebarWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height()) :
+                                Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height());
+            Size aSize(pMgr->GetSidebarWidth() - _pViewShell->GetOut()->PixelToLogic(Size(4,0)).Width(), _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()) ;
+            Rectangle aRectBottom(aPointBottom,aSize);
+            Rectangle aRectTop(aPointTop,aSize);
+
+            if (aRectBottom.IsOver(aVisRect))
             {
-                _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
-                SwRect aSidebarBorder(_rPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),_rPageRect.Height()));
-                _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
+
                 if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                {
+                    _pViewShell->GetOut()->SetLineColor(COL_WHITE);
                     _pViewShell->GetOut()->SetFillColor(COL_BLACK);
+                }
                 else
-                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
-                SwRect aSidebar(Point(_rPageRect.Right()+pMgr->GetSidebarBorderWidth(),_rPageRect.Top()),Size(pMgr->GetSidebarWidth(),_rPageRect.Height()));
-                _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
+                {
+                    _pViewShell->GetOut()->SetLineColor(COL_BLACK);
+                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
+                }
+                _pViewShell->GetOut()->DrawRect(aRectBottom);
+                _pViewShell->GetOut()->DrawLine(aPointBottom + Point(pMgr->GetSidebarWidth()/3,0), aPointBottom + Point(pMgr->GetSidebarWidth()/3 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
+
+                _pViewShell->GetOut()->SetLineColor();
+                Point aMiddleFirst(aPointBottom + Point(pMgr->GetSidebarWidth()/6,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+                Point aMiddleSecond(aPointBottom + Point(pMgr->GetSidebarWidth()/3*2,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+                PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell,pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
             }
-            if (pMgr->ShowScrollbar(GetPhyPageNum()))
+            if (aRectTop.IsOver(aVisRect))
             {
-                // draw scrollbar area and arrows
-                Point aPointBottom;
-                Point aPointTop;
-                aPointBottom = bRTL ?   Point(_rPageRect.Left() - pMgr->GetSidebarWidth() - pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),_rPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height()) :
-                                        Point(_rPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),_rPageRect.Bottom()- _pViewShell->GetOut()->PixelToLogic(Size(0,2+pMgr->GetSidebarScrollerHeight())).Height());
-                aPointTop = bRTL ?  Point(_rPageRect.Left() - pMgr->GetSidebarWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),_rPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height()) :
-                                    Point(_rPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),_rPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height());
-                Size aSize(pMgr->GetSidebarWidth() - _pViewShell->GetOut()->PixelToLogic(Size(4,0)).Width(), _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()) ;
-                Rectangle aRectBottom(aPointBottom,aSize);
-                Rectangle aRectTop(aPointTop,aSize);
-
-                if (aRectBottom.IsOver(aVisRect))
+                if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                 {
-
-                    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                    {
-                        _pViewShell->GetOut()->SetLineColor(COL_WHITE);
-                        _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-                    }
-                    else
-                    {
-                        _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-                        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
-                    }
-                    _pViewShell->GetOut()->DrawRect(aRectBottom);
-                    _pViewShell->GetOut()->DrawLine(aPointBottom + Point(pMgr->GetSidebarWidth()/3,0), aPointBottom + Point(pMgr->GetSidebarWidth()/3 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
-
-                    _pViewShell->GetOut()->SetLineColor();
-                    Point aMiddleFirst(aPointBottom + Point(pMgr->GetSidebarWidth()/6,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                    Point aMiddleSecond(aPointBottom + Point(pMgr->GetSidebarWidth()/3*2,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                    PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell,pMgr->GetArrowColor(KEY_PAGEUP,GetPhyPageNum()), pMgr->GetArrowColor(KEY_PAGEDOWN,GetPhyPageNum()));
+                    _pViewShell->GetOut()->SetLineColor(COL_WHITE);
+                    _pViewShell->GetOut()->SetFillColor(COL_BLACK);
                 }
-                if (aRectTop.IsOver(aVisRect))
+                else
                 {
-                    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                    {
-                        _pViewShell->GetOut()->SetLineColor(COL_WHITE);
-                        _pViewShell->GetOut()->SetFillColor(COL_BLACK);
-                    }
-                    else
-                    {
-                        _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-                        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
-                    }
-                    _pViewShell->GetOut()->DrawRect(aRectTop);
-                    _pViewShell->GetOut()->DrawLine(aPointTop + Point(pMgr->GetSidebarWidth()/3*2,0), aPointTop + Point(pMgr->GetSidebarWidth()/3*2 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
-
-                    _pViewShell->GetOut()->SetLineColor();
-                    Point aMiddleFirst(aPointTop + Point(pMgr->GetSidebarWidth()/3,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                    Point aMiddleSecond(aPointTop + Point(pMgr->GetSidebarWidth()/6*5,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
-                    PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell, pMgr->GetArrowColor(KEY_PAGEUP,GetPhyPageNum()), pMgr->GetArrowColor(KEY_PAGEDOWN,GetPhyPageNum()));
+                    _pViewShell->GetOut()->SetLineColor(COL_BLACK);
+                    _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
                 }
+                _pViewShell->GetOut()->DrawRect(aRectTop);
+                _pViewShell->GetOut()->DrawLine(aPointTop + Point(pMgr->GetSidebarWidth()/3*2,0), aPointTop + Point(pMgr->GetSidebarWidth()/3*2 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
+
+                _pViewShell->GetOut()->SetLineColor();
+                Point aMiddleFirst(aPointTop + Point(pMgr->GetSidebarWidth()/3,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+                Point aMiddleSecond(aPointTop + Point(pMgr->GetSidebarWidth()/6*5,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
+                PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell, pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
             }
         }
     }
 }
 
-void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown) const
+/*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown)
 {
     Polygon aTriangleUp(3);
     Polygon aTriangleDown(3);
@@ -5495,51 +5588,50 @@ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &
 
     author OD
 */
-void SwPageFrm::GetBorderAndShadowBoundRect(
-                                const SwRect& _rPageRect,
-                                ViewShell*    _pViewShell,
-                                SwRect& _orBorderAndShadowBoundRect ) const
+/*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
+                                                        ViewShell*    _pViewShell,
+                                                        SwRect& _orBorderAndShadowBoundRect,
+                                                        bool bRightSidebar )
 {
     SwRect aTmpRect;
-    GetBorderRect( _rPageRect, _pViewShell, _orBorderAndShadowBoundRect );
-    GetRightShadowRect( _rPageRect, _pViewShell, aTmpRect );
+    SwPageFrm::GetBorderRect( _rPageRect, _pViewShell, _orBorderAndShadowBoundRect, bRightSidebar );
+    SwPageFrm::GetRightShadowRect( _rPageRect, _pViewShell, aTmpRect, bRightSidebar );
     _orBorderAndShadowBoundRect.Union( aTmpRect );
-    GetBottomShadowRect( _rPageRect, _pViewShell, aTmpRect );
+    SwPageFrm::GetBottomShadowRect( _rPageRect, _pViewShell, aTmpRect, bRightSidebar );
     _orBorderAndShadowBoundRect.Union( aTmpRect );
 
-    AddSidebarBorders(_orBorderAndShadowBoundRect,_pViewShell);
+    AddSidebarBorders(_orBorderAndShadowBoundRect, _pViewShell, bRightSidebar, false);
 }
 
-void SwPageFrm::AddSidebarBorders(SwRect &aRect, ViewShell* _pViewShell,bool bPx) const
+/*static*/ void SwPageFrm::AddSidebarBorders(SwRect &aRect, ViewShell* _pViewShell, bool bRightSidebar, bool bPx)
 {
-    SwView* pView =  _pViewShell->GetDoc()->GetDocShell() ? _pViewShell->GetDoc()->GetDocShell()->GetView() : 0;
-    if (pView)  // do not show anything in print preview
+    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
+    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
     {
-        SwPostItMgr *pMgr = pView->GetPostItMgr();
-        if (pMgr->ShowNotes() && pMgr->HasNotes())
-        {
-            if (MarginSide())
-                aRect.SetLeftAndWidth(aRect.Left() - pMgr->GetSidebarWidth(bPx) - pMgr->GetSidebarBorderWidth(bPx), aRect.Width() + pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-            else
-                aRect.AddRight(pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-        }
+        if (!bRightSidebar)
+            aRect.SetLeftAndWidth(aRect.Left() - pMgr->GetSidebarWidth(bPx) - pMgr->GetSidebarBorderWidth(bPx), aRect.Width() + pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
+        else
+            aRect.AddRight(pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
     }
 }
 
-void SwPageFrm::AddSidebarBorders(Rectangle &aRect, ViewShell* _pViewShell,bool bPx) const
+/*static*/ void SwPageFrm::AddSidebarBorders(Rectangle &aRect, ViewShell* _pViewShell, bool bRightSidebar, bool bPx)
 {
-    SwView* pView =  _pViewShell->GetDoc()->GetDocShell() ? _pViewShell->GetDoc()->GetDocShell()->GetView() : 0;
-    if (pView)  // do not show anything in print preview
+    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
+    if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
     {
-        SwPostItMgr *pMgr = pView->GetPostItMgr();
-        if (pMgr->ShowNotes() && pMgr->HasNotes())
-        {
-            if (MarginSide())
-                aRect.Left() -= (pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
-            else
-                aRect.Right() += pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx);
-        }
+        if (!bRightSidebar)
+            aRect.Left() -= (pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx));
+        else
+            aRect.Right() += pMgr->GetSidebarWidth(bPx) + pMgr->GetSidebarBorderWidth(bPx);
     }
+}
+
+/*static*/ SwTwips SwPageFrm::GetSidebarBorderWidth( const ViewShell* _pViewShell )
+{
+    const SwPostItMgr* pPostItMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
+    const SwTwips nRet = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
+    return nRet;
 }
 
 /*************************************************************************
@@ -6287,6 +6379,32 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
         return aGlobalRetoucheColor;
 }
 
+/*************************************************************************
+|*
+|*    SwPageFrm::GetEmptyPageFont()
+|*
+|*    create/return font used to paint the "empty page" string
+|*
+|*************************************************************************/
+
+const Font& SwPageFrm::GetEmptyPageFont()
+{
+    static Font* pEmptyPgFont = 0;
+    if ( 0 == pEmptyPgFont )
+    {
+        pEmptyPgFont = new Font;
+        pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
+        pEmptyPgFont->SetWeight( WEIGHT_BOLD );
+        pEmptyPgFont->SetStyleName( aEmptyStr );
+        pEmptyPgFont->SetName( String::CreateFromAscii(
+                RTL_CONSTASCII_STRINGPARAM( "Helvetica" )) );
+        pEmptyPgFont->SetFamily( FAMILY_SWISS );
+        pEmptyPgFont->SetTransparent( TRUE );
+        pEmptyPgFont->SetColor( COL_GRAY );
+    }
+
+    return *pEmptyPgFont;
+}
 
 /*************************************************************************
 |*
@@ -6645,3 +6763,5 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
     }
     return aRet;
 }
+
+
