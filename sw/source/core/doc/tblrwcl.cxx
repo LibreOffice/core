@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-05 07:46:09 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3572,7 +3572,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
     for( USHORT n = 0; n < rBoxes.Count(); ++n  )
     {
         const SwTableBox* pBox = rBoxes[ n ];
-        SwTwips nBoxW = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+        const SwTwips nBoxW = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
         nAktSize += nBoxW;
 
         for( USHORT i = 0; i < pBox->GetTabLines().Count(); ++i )
