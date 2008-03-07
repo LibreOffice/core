@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:50:32 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -836,10 +836,10 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
         else
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints));
-            aStr1.SearchAndReplaceAscii("%N", UniString::CreateFromInt32(nMarkPtAnz));
+            aStr1.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nMarkPtAnz));
         }
 
-        aStr1.SearchAndReplaceAscii("%O", aNam);
+        aStr1.SearchAndReplaceAscii("%1", aNam);
         rName = aStr1;
         rNameOk = sal_True;
     }
