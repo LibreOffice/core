@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:40:56 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,6 @@ const BYTE   CR_MANUALSIZE  = 32;
                                     // Ist Bit in Set gesetzt?
 #define IS_SET(bit,set)(((set)&(bit))==(bit))
 
-#define MAX_FUNCCAT     12  // max. Kategorien fuer Funktionen
 #define SEL_ALL         -1  // Eingabezeile: alles Selektieren
 #define RES_CANCEL      0   // Resultate der Funk.AutoPilot-Seiten
 #define RES_BACKWARD    1
@@ -695,121 +694,6 @@ SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicod
     static String           GetOrdinalSuffix( sal_Int32 nNumber);
 };
 #endif
-
-//==================================================================
-
-//===================================================================
-// Funktionsautopilot: Klassen zur Verwaltung der StarCalc-Funktionen
-//===================================================================
-
-class ScFuncDesc
-{
-public:
-                ScFuncDesc();
-                ~ScFuncDesc();
-
-    void        Clear();
-    void        InitArgumentInfo() const;
-
-    /** Returns a semicolon separated list of all parameter names. */
-    String  GetParamList        () const;
-    /** Returns the full function siganture: "FUNCTIONNAME( parameter list )". */
-    String  GetSignature        () const;
-    /** Returns the function siganture with parameters from the passed string array. */
-    String  GetFormulaString    ( String** aArgArr ) const;
-
-    USHORT      nFIndex;        // eindeutiger Funktionsindex
-    USHORT      nCategory;      // Kategorie
-    String*     pFuncName;      // Funktionsname
-    String*     pFuncDesc;      // Funktionsbeschreibung
-    USHORT      nArgCount;      // Parameteranzahl
-    String**    aDefArgNames;   // Parametername(n)
-    String**    aDefArgDescs;   // Parameterbeschreibung(en)
-    BOOL*       aDefArgOpt;     // Flags ob Parameter optional ist
-    USHORT      nHelpId;        // HilfeId der Funktion
-    BOOL        bIncomplete;    // Incomplete argument info (set for add-in info from configuration)
-};
-
-//==================================================================
-
-class ScFunctionMgr
-{
-public:
-                ScFunctionMgr();
-                ~ScFunctionMgr();
-
-    const ScFuncDesc*   Get( const String& rFName );
-    const ScFuncDesc*   Get( USHORT nFIndex );
-    const ScFuncDesc*   First( USHORT nCategory = 0 );
-    const ScFuncDesc*   Next() const;
-
-private:
-    ScFunctionList* pFuncList;
-    List*           aCatLists[MAX_FUNCCAT];
-    List*           pCurCatList;
-};
-
-//==================================================================
-
-class ScFunctionList
-{
-public:
-    ScFunctionList();
-    ~ScFunctionList();
-
-    ULONG           GetCount() const
-                    { return aFunctionList.Count(); }
-
-    const ScFuncDesc*   First()
-                        { return (const ScFuncDesc*) aFunctionList.First(); }
-
-    const ScFuncDesc*   Next()
-                        { return (const ScFuncDesc*) aFunctionList.Next(); }
-
-    const ScFuncDesc*   GetFunction( ULONG nIndex ) const
-                    { return (const ScFuncDesc*) aFunctionList.GetObject( nIndex ); }
-
-    xub_StrLen      GetMaxFuncNameLen() const
-                    { return nMaxFuncNameLen; }
-
-private:
-    List        aFunctionList;
-    xub_StrLen  nMaxFuncNameLen;
-};
-
-//==================================================================
-
-#define FUNC_NOTFOUND 0xffff
-
-class ScFormulaUtil
-{
-public:
-    static BOOL                 GetNextFunc( const String&  rFormula,
-                                             BOOL           bBack,
-                                             xub_StrLen&    rFStart, // Ein- und Ausgabe
-                                             xub_StrLen*    pFEnd = NULL,
-                                             const ScFuncDesc** ppFDesc = NULL,
-                                             String***      pppArgs = NULL );
-
-    static const ScFuncDesc*    GetDefaultFuncDesc();
-
-    static xub_StrLen           GetFunctionStart( const String& rFormula, xub_StrLen nStart,
-                                                    BOOL bBack, String* pFuncName = NULL );
-
-    static xub_StrLen           GetFunctionEnd  ( const String& rFormula, xub_StrLen nStart );
-
-    static xub_StrLen           GetArgStart     ( const String& rFormula, xub_StrLen nStart,
-                                                  USHORT nArg );
-
-    static String**             GetArgStrings   ( const String& rFormula,
-                                                  xub_StrLen    nFuncPos,
-                                                  USHORT        nArgs );
-
-    static void                 FillArgStrings  ( const String& rFormula,
-                                                  xub_StrLen    nFuncPos,
-                                                  USHORT        nArgs,
-                                                  String**      pArgs );
-};
 
 //==================================================================
 // evtl. in dbdata.hxx auslagern (?):
