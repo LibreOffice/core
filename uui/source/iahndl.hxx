@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:23:34 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ namespace com { namespace sun { namespace star {
         class AmbigousFilterRequest;
         class FilterOptionsRequest;
         class NoSuchFilterRequest;
+        class LockedDocumentRequest;
     }
     namespace lang {
         class XMultiServiceFactory;
@@ -392,6 +393,13 @@ private:
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString);
+
+    void handleLockedDocumentRequest(
+    ::com::sun::star::document::LockedDocumentRequest const & aRequest,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations )
+        SAL_THROW((::com::sun::star::uno::RuntimeException));
 };
 
 #endif // UUI_IAHNDL_HXX
