@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,52 +206,6 @@
 
 using namespace ::com::sun::star;
 
-
-/*************************************************************************
-|*
-|*  FindPageFrm(), Sucht den PageFrm zum Pt, die StartPage wird hereingereicht.
-|*
-|*  Ersterstellung      MA 11. Oct. 95
-|*  Letzte Aenderung    MA 11. Oct. 95
-|
-|*************************************************************************/
-const SwFrm *FindPage( const SwFrm *pPg, const Point &rPt )
-{
-    if ( !pPg->Frm().IsInside( rPt ) )
-    {
-        const long nTop = rPt.Y();
-        BOOL bPrvAllowed = TRUE;
-        BOOL bNxtAllowed = TRUE;
-        do
-        {   if ( pPg->Frm().Top() > nTop && bPrvAllowed )
-            {
-                if ( pPg->GetPrev() )
-                {
-                    bNxtAllowed = FALSE;
-                    pPg = pPg->GetPrev();
-                }
-                else
-                    break;
-            }
-            else if ( pPg->Frm().Bottom() < nTop && bNxtAllowed )
-            {
-                if ( pPg->GetNext() )
-                {
-                    bPrvAllowed = FALSE;
-                    pPg = pPg->GetNext();
-                }
-                else
-                    break;
-            }
-            else
-                break;
-
-        } while ( !pPg->Frm().IsInside( rPt ) );
-    }
-    return pPg;
-}
-
-
 /*************************************************************************
 |*
 |*  SwFEShell::Copy()   Copy fuer das Interne Clipboard.
@@ -354,9 +308,6 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     }
     else if ( IsObjSelected() )
     {
-        Size aSiz( 0, - getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
-                        GetAllObjBoundRect().Top() );
-
         SwPosition aPos( aSttIdx, SwIndex( pTxtNd, 0 ));
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -374,9 +325,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 
                 SdrObject* pNew = pClpDoc->CloneSdrObj( *pObj, FALSE, TRUE );
 
-//JP 07.01.00: why move??
-//              pNew->NbcMove(aSiz);
-                   SwPaM aTemp(aPos);
+                SwPaM aTemp(aPos);
                    pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
             }
             else
@@ -545,8 +494,10 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             else if( FLY_PAGE == aAnchor.GetAnchorId() )
             {
                 aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
-                const SwFrm *pPg = ::FindPage( pDestShell->GetLayout()->Lower(), rInsPt);
-                aNewAnch = pPg->Frm().Pos();
+                const SwRootFrm* pTmpRoot = pDestShell->GetLayout();
+                const SwFrm* pPg = pTmpRoot->GetPageAtPos( rInsPt, 0, true );
+                if ( pPg )
+                    aNewAnch = pPg->Frm().Pos();
             }
 
             if( bRet )
@@ -702,8 +653,10 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         else if( FLY_PAGE == aAnchor.GetAnchorId() )
         {
             aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
-            const SwFrm *pPg = ::FindPage( pDestShell->GetLayout()->Lower(), rInsPt);
-            aNewAnch = pPg->Frm().Pos();
+            const SwRootFrm* pTmpRoot = pDestShell->GetLayout();
+            const SwFrm* pPg = pTmpRoot->GetPageAtPos( rInsPt, 0, true );
+            if ( pPg )
+                aNewAnch = pPg->Frm().Pos();
         }
         else
             ASSERT( !this, "was fuer ein Anchor ist es denn?" );
@@ -1070,8 +1023,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
-            // FME: removed for #105977#
-            // Size aSiz( 0, GetCharRect().Top() );
             for ( USHORT i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
             {
                 BOOL bInsWithFmt = TRUE;
@@ -1086,9 +1037,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                     {
                         SdrObject* pNew = GetDoc()->CloneSdrObj( *pSdrObj,
                                                             FALSE, FALSE );
-
-                        // FME: removed for #105977#
-                        // pNew->NbcMove( aSiz );
 
                         // Insert object sets any anchor position to 0.
                         // Therefore we calculate the absolute position here
@@ -1248,8 +1196,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 if( !Imp()->GetDrawView() )
                     MakeDrawView();
 
-                // FME: removed for #105977#
-                // Size aSiz( 0, GetCharRect().Top() );
                 for ( USHORT i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
                 {
                     BOOL bInsWithFmt = TRUE;
@@ -1367,8 +1313,6 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
         if( !rToFill.Imp()->GetDrawView() )
             rToFill.MakeDrawView();
 
-        // FME: removed for #105977#
-        // Size aSiz( 0, GetCharRect().Top() );
         for ( USHORT i = 0; i < GetDoc()->GetSpzFrmFmts()->Count(); ++i )
         {
             const SwFrmFmt& rCpyFmt = *(*GetDoc()->GetSpzFrmFmts())[i];
