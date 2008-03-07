@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:11:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <numeric>
 
 
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
@@ -106,6 +107,7 @@
 #include "unitconv.hxx"
 #include "compiler.hxx"
 #include "parclass.hxx"
+#include "funcdesc.hxx"
 #include "globstr.hrc"
 #include "scfuncs.hrc"
 #include "sc.hrc"
@@ -378,8 +380,40 @@ const String& ScGlobal::GetRscString( USHORT nIndex )
         "-ScGlobal::GetRscString(): Index zu gross!");
     if( !ppRscString[ nIndex ] )
     {
-        ppRscString[ nIndex ] =
-            new String( ScRscStrLoader( RID_GLOBSTR, nIndex ).GetString() );
+        OpCode eOp = ocNone;
+        // Map former globstr.src strings moved to compiler.src
+        switch (nIndex)
+        {
+            case STR_NULL_ERROR:
+                eOp = ocErrNull;
+                break;
+            case STR_DIV_ZERO:
+                eOp = ocErrDivZero;
+                break;
+            case STR_NO_VALUE:
+                eOp = ocErrValue;
+                break;
+            case STR_NOREF_STR:
+                eOp = ocErrRef;
+                break;
+            case STR_NO_NAME_REF:
+                eOp = ocErrName;
+                break;
+            case STR_NUM_ERROR:
+                eOp = ocErrNum;
+                break;
+            case STR_NV_STR:
+                eOp = ocErrNA;
+                break;
+            default:
+                ;   // nothing
+        }
+        if (eOp != ocNone)
+            ppRscString[ nIndex ] = new String(
+                    ScCompiler::GetNativeSymbol( eOp));
+        else
+            ppRscString[ nIndex ] = new String(
+                    ScRscStrLoader( RID_GLOBSTR, nIndex ).GetString());
     }
     return *ppRscString[ nIndex ];
 }
@@ -1052,6 +1086,8 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 //  class ScFormulaUtil - statische Methoden
 //===================================================================
 
+#define FUNC_NOTFOUND 0xffff
+
 ScFuncDesc aDefaultFuncDesc;
 
 const ScFuncDesc* ScFormulaUtil::GetDefaultFuncDesc()
@@ -1370,7 +1406,7 @@ xub_StrLen ScFormulaUtil::GetArgStart( const String& rStr, xub_StrLen nStart, US
 class ScFuncRes : public Resource
 {
 public:
-    ScFuncRes( ResId&, ScFuncDesc* );
+    ScFuncRes( ResId&, ScFuncDesc*, bool & rbSuppressed );
 
 private:
     USHORT GetNum();
@@ -1378,22 +1414,57 @@ private:
 
 //--------------------------------------------------------------------
 
-ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc )
+ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
 {
-    USHORT      nArgs;
-
-    pDesc->nCategory = 1;
+    rbSuppressed = (bool)GetNum();
     pDesc->nCategory = GetNum();
-    pDesc->nHelpId = GetNum() + 32768;      //! Hack, siehe ScFuncs.src
+    pDesc->nHelpId = GetNum() + 32768;      //! Hack, see scfuncs.src
     pDesc->nArgCount = GetNum();
-    nArgs = pDesc->nArgCount;
-    if (nArgs >= VAR_ARGS) nArgs = nArgs-VAR_ARGS+1;
+    USHORT nArgs = pDesc->nArgCount;
+    if (nArgs >= VAR_ARGS)
+        nArgs -= VAR_ARGS - 1;
     if (nArgs)
     {
-        pDesc->aDefArgOpt = new BOOL[nArgs];
+        pDesc->pDefArgFlags = new ScFuncDesc::ParameterFlags[nArgs];
         for (USHORT i = 0; i < nArgs; i++)
-            pDesc->aDefArgOpt[i] = (BOOL)GetNum();
+        {
+            pDesc->pDefArgFlags[i].bOptional = (bool)GetNum();
+        }
+    }
+    // Need to read the value from the resource even if nArgs==0 to advance the
+    // resource position pointer, so this can't be in the if(nArgs) block above.
+    USHORT nSuppressed = GetNum();
+    if (nSuppressed)
+    {
+        if (nSuppressed > nArgs)
+        {
+            DBG_ERROR3( "ScFuncRes: suppressed parameters count mismatch on OpCode %u: suppressed %d > params %d",
+                    aRes.GetId(), (int)nSuppressed, (int)nArgs);
+            nSuppressed = nArgs;    // sanitize
+        }
+        for (USHORT i=0; i < nSuppressed; ++i)
+        {
+            USHORT nParam = GetNum();
+            if (nParam < nArgs)
+            {
+                if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
+                {
+                    DBG_ERROR3( "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d == arg %d-1",
+                            aRes.GetId(), (int)nParam, (int)nArgs);
+                }
+                else
+                {
+                    pDesc->pDefArgFlags[nParam].bSuppress = true;
+                    pDesc->bHasSuppressedArgs = true;
+                }
+            }
+            else
+            {
+                DBG_ERROR3( "ScFuncRes: suppressed parameter exceeds count on OpCode %u: param %d >= args %d",
+                        aRes.GetId(), (int)nParam, (int)nArgs);
+            }
+        }
     }
 
     pDesc->pFuncName = new String( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
@@ -1401,12 +1472,12 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc )
 
     if (nArgs)
     {
-        pDesc->aDefArgNames = new String*[nArgs];
-        pDesc->aDefArgDescs = new String*[nArgs];
+        pDesc->ppDefArgNames = new String*[nArgs];
+        pDesc->ppDefArgDescs = new String*[nArgs];
         for (USHORT i = 0; i < nArgs; i++)
         {
-            pDesc->aDefArgNames[i] = new String(ScResId(2*(i+1)  ));
-            pDesc->aDefArgDescs[i] = new String(ScResId(2*(i+1)+1));
+            pDesc->ppDefArgNames[i] = new String(ScResId(2*(i+1)  ));
+            pDesc->ppDefArgDescs[i] = new String(ScResId(2*(i+1)+1));
         }
     }
 
@@ -1453,24 +1524,34 @@ ScFunctionList::ScFunctionList() :
     {
         ScResourcePublisher* pBlock =
             new ScResourcePublisher( ScResId( nDescBlock[k] ) );
+        // Browse for all possible OpCodes. This is not the fastest method, but
+        // otherwise the sub resources within the resource blocks and the
+        // resource blocks themselfs would had to be ordered according to
+        // OpCodes, which is utopian..
         for (i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; i++)
-        {   // Alle moeglichen OpCodes abgrasen.
-            // Das ist zwar nicht das schnellste, aber sonst muessten
-            // die Sub-Ressources innerhalb der Ressource-Bloecke und die
-            // Ressource-Bloecke selber nach OpCodes geordnet sein,
-            // was wohl eher utopisch ist..
+        {
             ScResId aRes(i);
             aRes.SetRT(RSC_RESOURCE);
+            // Sub resource of OpCode available?
             if (pBlock->IsAvailableRes(aRes))
-            {   // Subresource fuer OpCode vorhanden
+            {
                 pDesc = new ScFuncDesc;
-                ScFuncRes aSubRes(aRes, pDesc);
-                pDesc->nFIndex = i;
-                aFunctionList.Insert( pDesc, LIST_APPEND );
+                bool bSuppressed = false;
+                ScFuncRes aSubRes( aRes, pDesc, bSuppressed);
+                // Instead of dealing with this exceptional case at 1001 places
+                // we simply don't add an entirely suppressed function to the
+                // list and delete it.
+                if (bSuppressed)
+                    delete pDesc;
+                else
+                {
+                    pDesc->nFIndex = i;
+                    aFunctionList.Insert( pDesc, LIST_APPEND );
 
-                nStrLen = (*(pDesc->pFuncName)).Len();
-                if (nStrLen > nMaxFuncNameLen)
-                    nMaxFuncNameLen = nStrLen;
+                    nStrLen = (*(pDesc->pFuncName)).Len();
+                    if (nStrLen > nMaxFuncNameLen)
+                        nMaxFuncNameLen = nStrLen;
+                }
             }
         }
         pBlock->FreeResource();
@@ -1512,62 +1593,63 @@ ScFunctionList::ScFunctionList() :
           pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
-            pDesc->aDefArgOpt   = new BOOL[nArgs];
-            pDesc->aDefArgNames = new String*[nArgs];
-            pDesc->aDefArgDescs = new String*[nArgs];
+            pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
+            pDesc->ppDefArgNames = new String*[nArgs];
+            pDesc->ppDefArgDescs = new String*[nArgs];
             for (j = 0; j < nArgs; j++)
             {
-                pDesc->aDefArgOpt[j] = FALSE;
+                pDesc->pDefArgFlags[j].bOptional = false;
+                pDesc->pDefArgFlags[j].bSuppress = false;
                 pAddInFuncData->GetParamDesc( aArgName, aArgDesc, j+1 );
                 if ( aArgName.Len() )
-                    pDesc->aDefArgNames[j] = new String( aArgName );
+                    pDesc->ppDefArgNames[j] = new String( aArgName );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameValue );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameValue );
                             break;
                         case PTR_STRING:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameString );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameValues );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameStrings );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameCells );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameCells );
                             break;
                         default:
-                            pDesc->aDefArgNames[j] = new String( aDefArgNameNone );
+                            pDesc->ppDefArgNames[j] = new String( aDefArgNameNone );
                             break;
                     }
                 }
                 if ( aArgDesc.Len() )
-                    pDesc->aDefArgDescs[j] = new String( aArgDesc );
+                    pDesc->ppDefArgDescs[j] = new String( aArgDesc );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescValue );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescValue );
                             break;
                         case PTR_STRING:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescString );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescValues );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescStrings );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescCells );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescCells );
                             break;
                         default:
-                            pDesc->aDefArgDescs[j] = new String( aDefArgDescNone );
+                            pDesc->ppDefArgDescs[j] = new String( aDefArgDescNone );
                             break;
                     }
                 }
@@ -1618,17 +1700,18 @@ ScFunctionList::~ScFunctionList()
 //========================================================================
 // class ScFuncDesc:
 
-ScFuncDesc::ScFuncDesc()
-    :   nFIndex         (0),
-        nCategory       (0),
+ScFuncDesc::ScFuncDesc() :
         pFuncName       (NULL),
         pFuncDesc       (NULL),
+        ppDefArgNames   (NULL),
+        ppDefArgDescs   (NULL),
+        pDefArgFlags    (NULL),
+        nFIndex         (0),
+        nCategory       (0),
         nArgCount       (0),
-        aDefArgNames    (NULL),
-        aDefArgDescs    (NULL),
-        aDefArgOpt      (NULL),
         nHelpId         (0),
-        bIncomplete     (FALSE)
+        bIncomplete     (false),
+        bHasSuppressedArgs(false)
 {}
 
 //------------------------------------------------------------------------
@@ -1648,17 +1731,17 @@ void ScFuncDesc::Clear()
     {
         for (USHORT i=0; i<nArgs; i++ )
         {
-            delete aDefArgNames[i];
-            delete aDefArgDescs[i];
+            delete ppDefArgNames[i];
+            delete ppDefArgDescs[i];
         }
-        delete [] aDefArgNames;
-        delete [] aDefArgDescs;
-        delete [] aDefArgOpt;
+        delete [] ppDefArgNames;
+        delete [] ppDefArgDescs;
+        delete [] pDefArgFlags;
     }
     nArgCount = 0;
-    aDefArgNames = NULL;
-    aDefArgDescs = NULL;
-    aDefArgOpt = NULL;
+    ppDefArgNames = NULL;
+    ppDefArgDescs = NULL;
+    pDefArgFlags = NULL;
 
     delete pFuncName;
     pFuncName = NULL;
@@ -1669,7 +1752,8 @@ void ScFuncDesc::Clear()
     nFIndex = 0;
     nCategory = 0;
     nHelpId = 0;
-    bIncomplete = FALSE;
+    bIncomplete = false;
+    bHasSuppressedArgs = false;
 }
 
 //------------------------------------------------------------------------
@@ -1710,25 +1794,45 @@ String ScFuncDesc::GetParamList() const
     {
         if ( nArgCount < VAR_ARGS )
         {
+            USHORT nLastSuppressed = nArgCount;
+            USHORT nLastAdded = nArgCount;
             for ( USHORT i=0; i<nArgCount; i++ )
             {
-                aSig += *(aDefArgNames[i]);
-                if ( i != nArgCount-1 )
-                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                if (pDefArgFlags[i].bSuppress)
+                    nLastSuppressed = i;
+                else
+                {
+                    nLastAdded = i;
+                    aSig += *(ppDefArgNames[i]);
+                    if ( i != nArgCount-1 )
+                        aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                }
             }
+            // If only suppressed parameters follow the last added parameter,
+            // remove one "; "
+            if (nLastSuppressed < nArgCount && nLastAdded < nLastSuppressed &&
+                    aSig.Len() >= 2)
+                aSig.Erase( aSig.Len() - 2 );
         }
         else
         {
             USHORT nFix = nArgCount - VAR_ARGS;
             for ( USHORT nArg = 0; nArg < nFix; nArg++ )
             {
-                aSig += *(aDefArgNames[nArg]);
-                aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                if (!pDefArgFlags[nArg].bSuppress)
+                {
+                    aSig += *(ppDefArgNames[nArg]);
+                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                }
             }
-            aSig += *(aDefArgNames[nFix]);
+            /* NOTE: Currently there are no suppressed var args parameters. If
+             * there were, we'd have to cope with it here and above for the fix
+             * parameters. For now parameters are always added, so no special
+             * treatment of a trailing "; " necessary. */
+            aSig += *(ppDefArgNames[nFix]);
             aSig += '1';
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-            aSig += *(aDefArgNames[nFix]);
+            aSig += *(ppDefArgNames[nFix]);
             aSig += '2';
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ... " ));
         }
@@ -1796,6 +1900,51 @@ String ScFuncDesc::GetFormulaString( String** aArgArr ) const
         aFormula += ')';
     }
     return aFormula;
+}
+
+//------------------------------------------------------------------------
+
+USHORT ScFuncDesc::GetSuppressedArgCount() const
+{
+    if (!bHasSuppressedArgs || !pDefArgFlags)
+        return nArgCount;
+
+    USHORT nArgs = nArgCount;
+    if (nArgs >= VAR_ARGS)
+        nArgs -= VAR_ARGS - 1;
+    USHORT nCount = nArgs;
+    for (USHORT i=0; i < nArgs; ++i)
+    {
+        if (pDefArgFlags[i].bSuppress)
+            --nCount;
+    }
+    if (nArgCount >= VAR_ARGS)
+        nCount += VAR_ARGS - 1;
+    return nCount;
+}
+
+//------------------------------------------------------------------------
+
+::std::vector<USHORT> ScFuncDesc::GetVisibleArgMapping() const
+{
+    ::std::vector<USHORT> aMap;
+    if (!bHasSuppressedArgs || !pDefArgFlags)
+    {
+        aMap.resize( nArgCount);
+        ::std::iota( aMap.begin(), aMap.end(), 0);
+        return aMap;
+    }
+
+    aMap.reserve( nArgCount);
+    USHORT nArgs = nArgCount;
+    if (nArgs >= VAR_ARGS)
+        nArgs -= VAR_ARGS - 1;
+    for (USHORT i=0; i < nArgs; ++i)
+    {
+        if (!pDefArgFlags[i].bSuppress)
+            aMap.push_back(i);
+    }
+    return aMap;
 }
 
 //========================================================================
