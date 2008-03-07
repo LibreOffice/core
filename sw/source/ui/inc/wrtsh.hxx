@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:57:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
-    BOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0 );
+    BOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
     // <--
     BOOL SelectTableRow();
     BOOL SelectTableCol();
