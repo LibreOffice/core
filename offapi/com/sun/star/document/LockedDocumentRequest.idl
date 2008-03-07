@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LockedDocumentRequest.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-03-07 12:30:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_LockedDocumentRequest_idl__
+#define __com_sun_star_document_LockedDocumentRequest_idl__
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** Is used for interaction handle to query user decision regarding locked document.
+
+    @since OOo 3.0
+*/
+published exception LockedDocumentRequest : ::com::sun::star::uno::Exception
+{
+    /** The URL of the locked document.
+     */
+    string DocumentURL;
+
+    /** The user information of the locked document.
+     */
+    string UserInfo;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
