@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:50:10 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,8 +425,13 @@ public:
         @param _bInclPrefixAndSuffixStrings
         optional input parameter - boolean indicating, if the prefix and the
         suffix strings have to been included or not. default value = <true>
+
+        @param _nRestrictToThisLevel
+        optional input parameter - unsigned integer indicating the maximum outline
+        level to which the output string must be restricted to. Default value is
+        MAXLEVEL
     */
-    XubString GetNumString( const bool _bInclPrefixAndSuffixStrings = true ) const;
+    XubString GetNumString( const bool _bInclPrefixAndSuffixStrings = true, const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
