@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:39:47 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@
 #include "cell.hxx"             // fuer Formel-Preview
 #include "compiler.hxx"         // fuer Formel-Preview
 #include "editable.hxx"
+#include "funcdesc.hxx"
 
 #define _INPUTHDL_CXX
 #include "inputhdl.hxx"
