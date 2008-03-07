@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:49:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _SOUND_HXX //autogen
-#include <vcl/sound.hxx>
-#endif
 #ifndef _SVX_DLG_CTRL_HXX //autogen
 #include <svx/dlgctrl.hxx>
 #endif
