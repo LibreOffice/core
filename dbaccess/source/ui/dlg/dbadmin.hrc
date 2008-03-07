@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:10:45 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 11:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #define FT_USERNAME             3
 #define FT_PASSWORD             4
 #define FT_OPTIONS              5
-#define FT_CHARSET              6
+    // FREE
 #define FT_JDBCDRIVERCLASS      7
 #define FT_SPECIAL_MESSAGE      8
 #define FT_FILTER_EXPLANATION   9
@@ -60,7 +60,7 @@
 #define FT_DOCLISTLABEL         19
 
 #define LB_DATATYPE             1
-#define LB_CHARSET              2
+    // FREE
 #define LB_DOCUMENTLIST         3
 
 #define ET_USERNAME             1
@@ -82,9 +82,7 @@
 #define CB_USESSL               3
 #define CB_USECATALOG           4
 
-#define FL_SEPARATOR1           1
-#define FL_SEPARATOR2           2
-#define FL_DATACONVERT          3
+#define FL_SEPARATOR2           1
 
 #define CTL_TABLESUBSCRIPTION   1
 
