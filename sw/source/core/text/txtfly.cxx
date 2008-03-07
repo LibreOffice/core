@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:20:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,9 @@
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
+#endif
+#ifndef _DOC_HXX
+#include "doc.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -682,7 +685,8 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pBody->*fnRect->fnGetPrtLeft)() :
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
-            const USHORT nGridWidth = pGrid->GetBaseHeight();
+            const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
+            const USHORT nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //for textgrid refactor
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )
