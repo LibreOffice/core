@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:27:58 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,12 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_VIEWLAYOUTITEM_HXX
+#include <svx/viewlayoutitem.hxx>
+#endif
+#ifndef _SVX_ZOOMSLIDERITEM_HXX
+#include <svx/zoomslideritem.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
@@ -327,6 +333,7 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+#include <PostItMgr.hxx>
 
 // #ifndef _FRMMGR_HXX
 // #include <frmmgr.hxx>
@@ -1396,8 +1403,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     SvxZoomType eZoom = (SvxZoomType) pVOpt->GetZoomType();
-                    SvxZoomItem aZoom(eZoom,
-                                        pVOpt->GetZoom());
+                    SvxZoomItem aZoom(eZoom, pVOpt->GetZoom());
                     if(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
                     {
                         aZoom.SetValueSet(
@@ -1411,6 +1417,78 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 }
                 else
                     rSet.DisableItem( SID_ATTR_ZOOM );
+            }
+            break;
+            case SID_ATTR_VIEWLAYOUT:
+            {
+                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                {
+                    const SwViewOption* pVOpt = rShell.GetViewOptions();
+                    const USHORT nColumns  = pVOpt->GetViewLayoutColumns();
+                    const bool  bBookMode = pVOpt->IsViewLayoutBookMode();
+                    SvxViewLayoutItem aViewLayout(nColumns, bBookMode);
+                    rSet.Put( aViewLayout );
+                }
+                else
+                    rSet.DisableItem( SID_ATTR_VIEWLAYOUT );
+            }
+            break;
+            case SID_ATTR_ZOOMSLIDER:
+            {
+                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                {
+                    const SwViewOption* pVOpt = rShell.GetViewOptions();
+                    const USHORT nCurrentZoom = pVOpt->GetZoom();
+                    SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
+                    aZoomSliderItem.AddSnappingPoint( 100 );
+
+                    if ( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                    {
+                        const USHORT nColumns = pVOpt->GetViewLayoutColumns();
+                        const bool bAutomaticViewLayout = 0 == nColumns;
+                        const SwPostItMgr* pMgr = GetPostItMgr();
+
+                        // snapping points:
+                        // automatic mode: 1 Page, 2 Pages, 100%
+                        // n Columns mode: n Pages, 100%
+                        // n Columns book mode: nPages without gaps, 100%
+                        const SwRect aPageRect( pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
+                        const SwRect aRootRect( pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) ); // width of columns
+                        Size aPageSize( aPageRect.SSize() );
+                        aPageSize.Width() += pMgr->HasNotes() && pMgr->ShowNotes() ?
+                                             pMgr->GetSidebarWidth() + pMgr->GetSidebarBorderWidth() :
+                                             0;
+
+                        Size aRootSize( aRootRect.SSize() );
+
+                        const MapMode aTmpMap( MAP_TWIP );
+                        const Size& rEditSize = GetEditWin().GetOutputSizePixel();
+                        const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
+
+                        const long nOf = DOCUMENTBORDER * 2L;
+                        long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+                        nTmpWidth += nOf;
+                        aPageSize.Height() += nOf;
+                        long nFac = aWindowSize.Width() * 100 / nTmpWidth;
+
+                        long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
+                        nFac = Min( nFac, nVisPercent );
+
+                        aZoomSliderItem.AddSnappingPoint( nFac );
+
+                        if ( bAutomaticViewLayout )
+                        {
+                            nTmpWidth += aPageSize.Width() + GAPBETWEENPAGES;
+                            nFac = aWindowSize.Width() * 100 / nTmpWidth;
+                            nFac = Min( nFac, nVisPercent );
+                            aZoomSliderItem.AddSnappingPoint( nFac );
+                        }
+                    }
+
+                    rSet.Put( aZoomSliderItem );
+                }
+                else
+                    rSet.DisableItem( SID_ATTR_ZOOMSLIDER );
             }
             break;
             case SID_ATTR_POSITION:
@@ -1601,11 +1679,12 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     pSet = pArgs;
                 else if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
-                    SfxItemSet aCoreSet(pShell->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-                    SvxZoomItem aZoom( (SvxZoomType)rSh.GetViewOptions()->GetZoomType(),
-                                                rSh.GetViewOptions()->GetZoom() );
+                    const SwViewOption& rViewOptions = *rSh.GetViewOptions();
+                    SfxItemSet aCoreSet(pShell->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT, 0 );
+                    SvxZoomItem aZoom( (SvxZoomType)rViewOptions.GetZoomType(), rViewOptions.GetZoom() );
 
-                    if(rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+                    const bool bBrowseMode = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+                    if( bBrowseMode )
                     {
                         aZoom.SetValueSet(
                                 SVX_ZOOM_ENABLE_50|
@@ -1615,6 +1694,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                                 SVX_ZOOM_ENABLE_200);
                     }
                     aCoreSet.Put( aZoom );
+
+                    // PAGES01
+                    if ( !bBrowseMode )
+                    {
+                        const SvxViewLayoutItem aViewLayout( rViewOptions.GetViewLayoutColumns(), rViewOptions.IsViewLayoutBookMode() );
+                        aCoreSet.Put( aViewLayout );
+                    }
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
@@ -1629,6 +1715,15 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                         pSet = pDlg->GetOutputItemSet();
                 }
 
+                // PAGES01
+                const SfxPoolItem* pViewLayoutItem = 0;
+                if ( pSet && SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, TRUE, &pViewLayoutItem))
+                {
+                    const USHORT nColumns = ((const SvxViewLayoutItem *)pViewLayoutItem)->GetValue();
+                    const bool bBookMode  = ((const SvxViewLayoutItem *)pViewLayoutItem)->IsBookMode();
+                    SetViewLayout( nColumns, bBookMode );
+                }
+
                 if ( pSet && SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_ZOOM, TRUE, &pItem))
                 {
                     enum SvxZoomType eType = ((const SvxZoomItem *)pItem)->GetType();
@@ -1638,7 +1733,49 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 if ( pItem )
                     rReq.AppendItem( *pItem );
                 rReq.Done();
+
                 delete pDlg;
+            }
+        }
+        break;
+
+        case SID_ATTR_VIEWLAYOUT:
+        {
+            if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                 GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            {
+                // PAGES01
+                if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, TRUE, &pItem ))
+                {
+                    const USHORT nColumns = ((const SvxViewLayoutItem *)pItem)->GetValue();
+                    const bool bBookMode  = (0 == nColumns || 0 != (nColumns % 2)) ?
+                                            false :
+                                            ((const SvxViewLayoutItem *)pItem)->IsBookMode();
+
+                    SetViewLayout( nColumns, bBookMode );
+                }
+
+                bUp = TRUE;
+                rReq.Done();
+
+                InvalidateRulerPos();
+            }
+        }
+        break;
+
+        case SID_ATTR_ZOOMSLIDER:
+        {
+            if ( pArgs && GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            {
+                // PAGES01
+                if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem ))
+                {
+                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
+                }
+
+                bUp = TRUE;
+                rReq.Done();
             }
         }
         break;
