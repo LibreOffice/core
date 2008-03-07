@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:42:50 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 15:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,11 +879,11 @@ long SwWrtShell::EndDrag(const Point * /*pPt*/, BOOL )
 }
 
 // --> FME 2004-07-30 #i32329# Enhanced table selection
-BOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
+BOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     MV_KONTEXT(this);
     SttSelect();
-    if(SelTblRowCol( rPt, pEnd ))
+    if(SelTblRowCol( rPt, pEnd, bRowDrag ))
     {
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         fnKillSel = &SwWrtShell::ResetSelect;
