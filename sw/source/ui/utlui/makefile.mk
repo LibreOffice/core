@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:29:09 $
+#   last change: $Author: kz $ $Date: 2008-03-07 15:09:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ SRC1FILES =  \
         poolfmt.src \
         attrdesc.src \
         unotools.src \
-        utlui.src
+                utlui.src
 
 EXCEPTIONSFILES= \
         $(SLO)$/unotools.obj	\
@@ -78,7 +78,8 @@ SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/uiitems.obj \
         $(SLO)$/attrdesc.obj \
         $(SLO)$/shdwcrsr.obj \
-        $(SLO)$/zoomctrl.obj
+                $(SLO)$/zoomctrl.obj \
+                $(SLO)$/viewlayoutctrl.obj
 
 # --- Tagets -------------------------------------------------------
 
