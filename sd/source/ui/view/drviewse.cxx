@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:27:28 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,9 +126,6 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
 
 // #UndoRedo#
 #ifndef _SFXSLSTITM_HXX
@@ -217,6 +214,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIAWINDOW_HXX //autogen
+#include <avmedia/mediawindow.hxx>
 #endif
 
 #include "Window.hxx"
@@ -1690,7 +1690,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp <<= eButtonType;
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
-            if ( Sound::IsSoundFile( rURL ) )
+            if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
             {
                 // #105638# OJ
                 aTmp <<= sal_True;
@@ -1731,7 +1731,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         aTmp <<= eButtonType;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
         // #105638# OJ
-        if ( Sound::IsSoundFile( rURL ) )
+        if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
         {
             aTmp <<= sal_True;
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
