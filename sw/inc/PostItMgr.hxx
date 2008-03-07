@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PostItMgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:20:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 14:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,12 +131,12 @@ class SwPostItMgr: public SfxListener
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Rectangle aBorder,long lNeededHeight);
         void            CheckForRemovedPostIts();
-        bool            ArrowEnabled(USHORT aDirection,unsigned long aPage);
-        bool            BorderOverPageBorder(unsigned long aPage);
-        bool            HasScrollbars();
-        sal_Int32       GetInitialAnchorDistance();
-        sal_Int32       GetScrollSize();
-        sal_Int32       GetSpaceBetween();
+        bool            ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
+        bool            BorderOverPageBorder(unsigned long aPage) const;
+        bool            HasScrollbars() const;
+        sal_Int32       GetInitialAnchorDistance() const;
+        sal_Int32       GetScrollSize() const;
+        sal_Int32       GetSpaceBetween() const;
         void            SetReadOnlyState();
                         DECL_LINK( CalcHdl, void*);
 
@@ -158,11 +158,11 @@ class SwPostItMgr: public SfxListener
             bool CalcRects();
 
             void AutoScroll(const SwPostIt* pPostIt);
-            bool ShowScrollbar(const unsigned long aPage);
-            bool HasNotes();
-            bool ShowNotes();
-            unsigned long GetSidebarWidth(bool bPx = false);
-            unsigned long GetSidebarBorderWidth(bool bPx = false);
+            bool ShowScrollbar(const unsigned long aPage) const;
+            bool HasNotes() const ;
+            bool ShowNotes() const;
+            unsigned long GetSidebarWidth(bool bPx = false) const;
+            unsigned long GetSidebarBorderWidth(bool bPx = false) const;
             unsigned long GetNoteWidth();
 
             void PrepareView(bool bIgnoreCount = false);
@@ -182,19 +182,19 @@ class SwPostItMgr: public SfxListener
 
             void Rescale();
 
-            Rectangle GetBottomScrollRect(const unsigned long aPage);
-            Rectangle GetTopScrollRect(const unsigned long aPage);
+            Rectangle GetBottomScrollRect(const unsigned long aPage) const;
+            Rectangle GetTopScrollRect(const unsigned long aPage) const;
 
             bool IsHit(const Point &aPointPixel);
-            Color GetArrowColor(USHORT aDirection,unsigned long aPage);
+            Color GetArrowColor(USHORT aDirection,unsigned long aPage) const;
 
             SwPostIt* GetNextPostIt(USHORT aDirection, SwPostIt* aPostIt);
             long GetNextBorder();
             SwFmtFld* GetFmtFld(SwPostIt* mpPostIt);
             SwPostIt* GetActivePostIt() { return mpActivePostIt; }
             void      SetActivePostIt( SwPostIt* p);
-            sal_Int32 GetMinimumSizeWithMeta();
-            sal_Int32 GetSidebarScrollerHeight();
+            sal_Int32 GetMinimumSizeWithMeta() const;
+            sal_Int32 GetSidebarScrollerHeight() const;
 
             void SetSpellChecking(bool bEnable);
 };
