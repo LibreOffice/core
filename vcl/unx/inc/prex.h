@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:40:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #define Time        XLIB_Time
 #define Region      XLIB_Region
 #define Boolean     XLIB_Boolean
-
-/* fuer Network Audio System */
-#define Sound       XLIB_Sound
 
 #if defined __cplusplus
 extern "C" {
