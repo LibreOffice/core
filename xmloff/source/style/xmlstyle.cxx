@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:45:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-07 16:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     { XML_NAMESPACE_TEXT,   XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG },
     { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
     { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_PAGE_LAYOUT,    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT        },
     XML_TOKEN_MAP_END
 };
 
@@ -546,9 +547,13 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             }
             break;
             case XML_TOK_STYLE_PAGE_MASTER:
+            case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
             {
+                //there is not page family in odf now, so I specify one for it
+                sal_Bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken
+                    ? sal_True: sal_False;
                 pStyle = new PageStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, *this );
+                                                    rLocalName, xAttrList, *this, bDefaultStyle );
             }
             break;
             case XML_TOK_TEXT_LIST_STYLE:
