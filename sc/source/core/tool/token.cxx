@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:38:33 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 13:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,15 +403,15 @@ BOOL ScToken::IsFunction() const
     OpCode eOp = GetOpCode();
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
-           (GetByte() != 0                          // x parameters
-        || (ocEndUnOp < eOp && eOp <= ocEndNoPar)   // no parameter
-        || (ocIf == eOp ||  ocChose ==  eOp     )   // @ jump commands
-        || (ocEndNoPar < eOp && eOp <= ocEnd1Par)   // one parameter
-        || (ocEnd1Par < eOp && eOp <= ocEnd2Par)    // x parameters (cByte==0 in
-                                                    // FuncAutoPilot)
-        || eOp == ocMacro || eOp == ocExternal      // macros, AddIns
-        || eOp == ocAnd || eOp == ocOr              // former binary, now x parameters
-        || eOp == ocNot || eOp == ocNeg             // unary but function
+           (GetByte() != 0                                                  // x parameters
+        || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
+        || (ocIf == eOp ||  ocChose ==  eOp     )                           // @ jump commands
+        || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
+        || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
+                                                                            // FuncAutoPilot)
+        || eOp == ocMacro || eOp == ocExternal                  // macros, AddIns
+        || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
+        || eOp == ocNot || eOp == ocNeg                         // unary but function
         || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
         ));
 }
@@ -420,20 +420,21 @@ BOOL ScToken::IsFunction() const
 BYTE ScToken::GetParamCount() const
 {
     OpCode eOp = GetOpCode();
-    if ( eOp <= ocEndDiv && eOp != ocExternal && eOp != ocMacro &&
+    if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
             eOp != ocIf && eOp != ocChose && eOp != ocPercentSign )
         return 0;       // parameters and specials
                         // ocIf and ocChose not for FAP, have cByte then
 //2do: BOOL parameter whether FAP or not?
     else if ( GetByte() )
         return GetByte();   // all functions, also ocExternal and ocMacro
-    else if ( ocEndDiv < eOp && eOp <= ocEndBinOp )
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
         return 2;           // binary
-    else if ( (ocEndBinOp < eOp && eOp <= ocEndUnOp) || eOp == ocPercentSign )
+    else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
+            || eOp == ocPercentSign)
         return 1;           // unary
-    else if ( ocEndUnOp < eOp && eOp <= ocEndNoPar )
+    else if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         return 0;           // no parameter
-    else if ( ocEndNoPar < eOp && eOp <= ocEnd1Par )
+    else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
         return 1;           // one parameter
     else if ( eOp == ocIf || eOp == ocChose )
         return 1;           // only the condition counts as parameter
@@ -2387,8 +2388,8 @@ bool ScTokenArray::MayReferenceFollow()
         if ( i > 0 || pCode[i]->GetOpCode() != SC_OPCODE_SPACES )
         {
             OpCode eOp = pCode[i]->GetOpCode();
-            if ( ( eOp >= SC_OPCODE_START_BIN_OP && eOp < SC_OPCODE_END_BIN_OP ) ||
-                 ( eOp >= SC_OPCODE_START_UN_OP && eOp < SC_OPCODE_END_UN_OP ) ||
+            if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
+                 (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP ) ||
                  eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
             {
                 return true;
