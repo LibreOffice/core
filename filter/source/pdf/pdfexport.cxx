@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:16:43 $
+ *  last change: $Author: hjs $ $Date: 2008-03-10 09:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -935,7 +935,6 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
     if( ! rErrors.empty() )
     {
         ByteString aResMgrName( "pdffilter" );
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
         ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         if ( pResMgr )
         {
