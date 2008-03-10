@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxmodelfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:56:18 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 08:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,6 @@ namespace sfx2
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstance(  ) throw (Exception, RuntimeException)
     {
-        return impl_createInstance( 0 );
         return createInstanceWithArguments( Sequence< Any >() );
     }
 
