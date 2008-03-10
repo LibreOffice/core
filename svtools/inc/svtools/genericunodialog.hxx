@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:22:08 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 07:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,8 @@ namespace svt
 
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                     m_xORB;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+                                                                      m_xContext; // only filled when correct ctor was called
 
     public:
         inline bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
