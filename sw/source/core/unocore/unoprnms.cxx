@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:43:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 11:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,7 +777,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0719 UNO_NAME_LABEL_FOLLOWED_BY */       {MAP_CHAR_LEN("LabelFollowedBy")},
 /* 0720 UNO_NAME_LISTTAB_STOP_POSITION */   {MAP_CHAR_LEN("ListtabStopPosition")},
 /* 0721 UNO_NAME_FIRST_LINE_INDENT */       {MAP_CHAR_LEN("FirstLineIndent")},
-/* 0722 UNO_NAME_INDENT_AT */               {MAP_CHAR_LEN("IndentAt")}
+/* 0722 UNO_NAME_INDENT_AT */               {MAP_CHAR_LEN("IndentAt")},
 /* 0723 UNO_NAME_CHAPTER_LEVEL */       {MAP_CHAR_LEN("ChapterLevel")},
 /* 0724 UNO_NAME_GRID_BASE_WIDTH*/ {MAP_CHAR_LEN("GridBaseWidth")},
 /* 0725 UNO_NAME_GRID_SNAP_TO_CHARS*/ {MAP_CHAR_LEN("GridSnapToChars")},
