@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SfxDocumentMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:10:42 $
+ *  last change: $Author: hjs $ $Date: 2008-03-10 17:19:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1118,7 +1118,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             m_xDoc, css::uno::UNO_QUERY_THROW);
         m_xParent = xPath->selectSingleNode(xDocNode, prefix);
     }
-    catch(com::sun::star::uno::RuntimeException& rRE)
+    catch(com::sun::star::uno::RuntimeException&)
     {
         DBG_ERROR("caught RuntimeException from libxml!");
     }
