@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:40:13 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 11:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+#include "numrule.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
