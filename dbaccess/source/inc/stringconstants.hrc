@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:07:43 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 10:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,13 @@
 #define PROPERTY_ID_BOOKMARK_SELECTION      133
 #define PROPERTY_ID_COLUMN_NAME             134
 #define PROPERTY_ID_CONNECTION_INFO         135
-#define PROPERTY_ID_HELP_URL                136
+#define PROPERTY_ID_HEADER_LINE             136
+#define PROPERTY_ID_FIELD_DELIMITER         137
+#define PROPERTY_ID_STRING_DELIMITER        138
+#define PROPERTY_ID_DECIMAL_DELIMITER       139
+#define PROPERTY_ID_THOUSAND_DELIMITER      140
+#define PROPERTY_ID_ENCODING                141
+#define PROPERTY_ID_HELP_URL                142
 
 //============================================================
 //= property names
