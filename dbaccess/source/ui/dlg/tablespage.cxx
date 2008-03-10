@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:21:46 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 10:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,9 @@
 #endif
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
+#endif
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
 #endif
 
 //.........................................................................
