@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2008-03-10 08:46:27 $
+#   last change: $Author: obo $ $Date: 2008-03-10 09:00:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,3 +155,6 @@ $(SLO)$/ConnectionPageSetup.obj : $(LOCALIZE_ME_DEST)
 $(SLO)$/DBSetupConnectionPages.obj : $(LOCALIZE_ME_DEST)
 
 $(SLO)$/TextConnectionHelper.obj : $(LOCALIZE_ME_DEST)
+
+$(SLO)$/detailpages.obj : $(LOCALIZE_ME_DEST)
+
