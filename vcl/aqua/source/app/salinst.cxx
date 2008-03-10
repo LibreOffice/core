@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:39:03 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 07:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #include "salobj.h"
 #include "salsys.h"
 #include "salvd.h"
-#include "salsound.h"
 #include "salbmp.h"
 #include "salprn.h"
 #include "salogl.h"
