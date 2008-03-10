@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migrationengine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:04:57 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 11:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,9 @@ namespace dbmm
     //====================================================================
     struct SubDocument
     {
-        const Reference< XCommandProcessor >    xCommandProcessor;
-        const ::rtl::OUString                   sHierarchicalName;
-        const SubDocumentType                   eType;
+        Reference< XCommandProcessor >    xCommandProcessor;
+        ::rtl::OUString                   sHierarchicalName;
+        SubDocumentType                   eType;
 
         SubDocument( const Reference< XCommandProcessor >& _rxCommandProcessor, const ::rtl::OUString& _rName, const SubDocumentType _eType )
             :xCommandProcessor( _rxCommandProcessor )
