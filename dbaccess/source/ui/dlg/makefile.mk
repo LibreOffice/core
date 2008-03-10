@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 11:23:30 $
+#   last change: $Author: obo $ $Date: 2008-03-10 08:46:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,13 +127,13 @@ EXCEPTIONSFILES=						\
         $(SLO)$/odbcconfig.obj          \
         $(SLO)$/ExtensionNotPresent.obj \
         $(SLO)$/advancedsettings.obj    \
-        $(SLO)$/datasourceui.obj
+        $(SLO)$/datasourceui.obj	\
+        $(SLO)$/textconnectionsettings.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
         $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj             \
-        $(SLO)$/textconnectionsettings.obj
+        $(SLO)$/dlgattr.obj 
 
 .IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
 DISABLE_ADO=TRUE
