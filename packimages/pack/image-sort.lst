@@ -80,8 +80,8 @@ uiconfig/modules/dbapp/toolbar/queryobjectbar.xml
 uiconfig/modules/dbapp/toolbar/reportobjectbar.xml
 uiconfig/modules/dbapp/toolbar/tableobjectbar.xml
 uiconfig/modules/dbapp/toolbar/toolbar.xml
-uiconfig/modules/dbbrowser/toolbar/browserobjectbar.xml
-uiconfig/modules/dbbrowser/toolbar/copyobjectbar.xml
+#uiconfig/modules/dbbrowser/toolbar/browserobjectbar.xml
+#uiconfig/modules/dbbrowser/toolbar/copyobjectbar.xml
 uiconfig/modules/dbbrowser/toolbar/toolbar.xml
 uiconfig/modules/dbquery/toolbar/designobjectbar.xml
 uiconfig/modules/dbquery/toolbar/sqlobjectbar.xml
@@ -319,7 +319,7 @@ uiconfig/modules/swriter/toolbar/viewerbar.xml
 
 uiconfig/modules/BasicIDE/menubar/menubar.xml
 uiconfig/modules/dbapp/menubar/menubar.xml
-uiconfig/modules/dbbrowser/menubar/menubar.xml
+#uiconfig/modules/dbbrowser/menubar/menubar.xml
 uiconfig/modules/dbquery/menubar/menubar.xml
 uiconfig/modules/dbrelation/menubar/menubar.xml
 uiconfig/modules/dbtable/menubar/menubar.xml
