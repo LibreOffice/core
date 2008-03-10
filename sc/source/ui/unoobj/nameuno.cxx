@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:17:49 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 14:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
         if( aValue >>= bIsShared )
         {
             sal_uInt16 nNewType = bIsShared ? RT_SHARED : RT_NAME;
-            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType );
+            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType, ScGrammar::GRAM_PODF_A1 );
         }
     }
 }
