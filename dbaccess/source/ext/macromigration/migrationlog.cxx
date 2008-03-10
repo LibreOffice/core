@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migrationlog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:05:24 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 12:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ namespace dbmm
                 ++doc
             )
         {
-            bool bAlreadyKnown = ( doc->second.eType == _eType ) && ( doc->second.sName == _rName );
+            bAlreadyKnown = ( doc->second.eType == _eType ) && ( doc->second.sName == _rName );
         }
         OSL_ENSURE( !bAlreadyKnown, "MigrationLog::startedDocument: document is already known!" );
 #endif
