@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:16:19 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 08:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_GRAMMAR ) )
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
                 aEntry.meGrammar = static_cast<ScGrammar::Grammar>(nVal);
         }
