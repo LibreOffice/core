@@ -6,9 +6,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 11:39:22 $
+#   last change: $Author: hjs $ $Date: 2008-03-10 09:41:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ SLOFILES=$(SLO)$/t602filter.obj \
 LIBNAME=$(TARGET)
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
-SHL1TARGET=$(LIBNAME)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(LIBNAME)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(LIBNAME)
 SHL1VERSIONMAP=$(LIBNAME).map
 #SHL1DEF=$(MISC)$/$(SHL1TARGET).def
