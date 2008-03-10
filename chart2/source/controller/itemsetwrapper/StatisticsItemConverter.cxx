@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:51:55 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 08:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -549,7 +549,7 @@ void StatisticsItemConverter::FillSpecialItem(
                 lcl_GetYErrorBar( GetPropertySet()));
             if( xErrorBarProp.is() )
             {
-                sal_Int32 nStyle;
+                sal_Int32 nStyle = 0;
                 if( xErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= nStyle )
                 {
                     switch( nStyle )

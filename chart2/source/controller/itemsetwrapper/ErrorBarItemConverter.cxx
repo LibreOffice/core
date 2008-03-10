@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBarItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:49:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 08:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ void ErrorBarItemConverter::FillSpecialItem(
             SvxChartKindError eErrorKind = CHERROR_NONE;
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
 
-            sal_Int32 nStyle;
+            sal_Int32 nStyle = 0;
             if( xErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= nStyle )
             {
                 switch( nStyle )
