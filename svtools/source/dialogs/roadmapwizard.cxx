@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:25:09 $
+ *  last change: $Author: obo $ $Date: 2008-03-10 14:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ namespace svt
     {
         OSL_ENSURE( m_pImpl->aStateDescriptors.find( _nState ) == m_pImpl->aStateDescriptors.end(),
             "RoadmapWizard::describeState: there already is a descriptor for this state!" );
-        m_pImpl->aStateDescriptors[ _nState ] = StateDescriptions::data_type( _rStateDisplayName, _pPageFactory );
+        m_pImpl->aStateDescriptors[ _nState ] = StateDescriptions::mapped_type( _rStateDisplayName, _pPageFactory );
     }
 
     //--------------------------------------------------------------------
