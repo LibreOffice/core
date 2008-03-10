@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:16:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-10 13:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3020,10 +3020,16 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
                     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+                    //set the current DBMgr
+                    SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
+                    SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
+                    pWorkDoc->SetNewDBMgr( this );
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
                     MergeNew(aMergeDesc);
+
+                    pWorkDoc->SetNewDBMgr( pWorkDBMgr );
                     //close the temporary file
                     uno::Reference< util::XCloseable > xClose( xWorkDocSh->GetModel(), uno::UNO_QUERY );
                     if (xClose.is())
