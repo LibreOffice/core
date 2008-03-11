@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:09:10 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 08:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2457,7 +2457,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
     // to integrate an intermediate version of the CWS, which should behave as
     // if no macros in DB docs are allowed
     return 0L;
-
+/*
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {
@@ -2489,6 +2489,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
     }
 
     return 1L;
+*/
 }
 
 // -----------------------------------------------------------------------------
