@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconnectionsettings_uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:25:55 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 08:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ namespace dbaui
         // OGenericUnoDialog overridables
         virtual Dialog* createDialog( Window* _pParent );
         virtual void implInitialize( const com::sun::star::uno::Any& _rValue );
+    protected:
+        using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
 
     //====================================================================
