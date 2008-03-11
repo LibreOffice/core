@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmm_module.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:01:52 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 08:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ namespace dbmm
 {
 //........................................................................
 
-    DEFINE_MODULE( MacroMigrationModule, MacroMigrationModuleClient, MacroMigrationResId );
+    DEFINE_MODULE( MacroMigrationModule, MacroMigrationModuleClient, MacroMigrationResId )
 
 //........................................................................
 } // namespace dbmm
