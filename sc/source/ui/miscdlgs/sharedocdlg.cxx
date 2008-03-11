@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedocdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:23:10 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 07:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,12 @@
 #include <osl/security.hxx>
 #include <svtools/sharecontrolfile.hxx>
 #include <svtools/useroptions.hxx>
-#include <sfx2/docinf.hxx>
+
+#include <docsh.hxx>
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 
 #include "sharedocdlg.hxx"
 #include "sharedocdlg.hrc"
@@ -203,8 +208,14 @@ void ScShareDocumentDlg::UpdateView()
         String aString( aUser );
         aString += '\t';
 
-        SfxDocumentInfo& rInfo = mpDocShell->GetDocInfo();
-        DateTime aDateTime( rInfo.GetModificationDate() );
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+
+        util::DateTime uDT(xDocProps->getModificationDate());
+        Date d(uDT.Day, uDT.Month, uDT.Year);
+        Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        DateTime aDateTime(d,t);
+
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
         aString += ' ';
         aString += ScGlobal::pLocaleData->getTime( aDateTime, FALSE );
