@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-11 08:47:14 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 09:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,7 +715,8 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
             xCurrentStorage->copyToStorage( _rxTargetStorage );
 
         // write into target storage
-        writeStorage( _rxTargetStorage, ::comphelper::NamedValueCollection( _rMediaDescriptor ) );
+        ::comphelper::NamedValueCollection aWriteArgs( _rMediaDescriptor );
+        writeStorage( _rxTargetStorage, aWriteArgs );
 
         // commit target storage
         OSL_VERIFY( m_pImpl->commitStorageIfWriteable_ignoreErrors( _rxTargetStorage ) );
