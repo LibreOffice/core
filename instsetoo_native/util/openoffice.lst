@@ -50,7 +50,7 @@ OpenOffice
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.0.0
-			PATCHCODEFILE 
+			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
@@ -105,7 +105,7 @@ OpenOffice_wJRE
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.0.0
-			PATCHCODEFILE 
+			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -160,7 +160,7 @@ OpenOffice_Dev
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.0.0
-			PATCHCODEFILE 
+			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -284,7 +284,7 @@ BrOffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.0.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE 
+			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
@@ -339,7 +339,7 @@ BrOffice_wJRE
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.0.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE 
+			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
