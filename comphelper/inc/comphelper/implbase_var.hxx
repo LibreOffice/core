@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase_var.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:37:17 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 08:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,12 @@
 #include "boost/preprocessor/arithmetic/add.hpp"
 
 namespace comphelper {
+
+// Suppress warnings about hidden functions in case any of the IfcN has
+// functions named dispose, addEventListener, or removeEventListener:
+#if defined __SUNPRO_CC
+#pragma disable_warn
+#endif
 
 namespace detail {
 
