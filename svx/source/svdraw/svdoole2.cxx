@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:19 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 07:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,7 +703,9 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 
 void SdrOle2Obj::BreakFileLink_Impl()
 {
-    uno::Reference<document::XStorageBasedDocument> xDoc( pModel ? pModel->getUnoModel() : uno::Reference<document::XStorageBasedDocument>(),uno::UNO_QUERY);
+    uno::Reference<document::XStorageBasedDocument> xDoc;
+    if ( pModel )
+        xDoc.set( pModel->getUnoModel(),uno::UNO_QUERY);
 
     if ( xDoc.is() )
     {
@@ -1962,7 +1964,10 @@ sal_Bool SdrOle2Obj::IsCalc() const
 // -----------------------------------------------------------------------------
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel()
 {
-    return uno::Reference< frame::XModel >(pModel ? pModel->getUnoModel() : uno::Reference< frame::XModel >(),uno::UNO_QUERY);
+    uno::Reference< frame::XModel > xDoc;
+    if ( pModel )
+        xDoc.set( pModel->getUnoModel(),uno::UNO_QUERY);
+    return xDoc;
 }
 
 // -----------------------------------------------------------------------------
