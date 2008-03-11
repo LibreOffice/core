@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:35:51 $
+ *  last change: $Author: obo $ $Date: 2008-03-11 08:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ namespace abp
         switch ( _nState )
         {
             case STATE_SELECT_ABTYPE:
-                implUpdateRoadmap( static_cast< TypeSelectionPage* >( GetPage( STATE_SELECT_ABTYPE ) )->getSelectedType() );
+                impl_updateRoadmap( static_cast< TypeSelectionPage* >( GetPage( STATE_SELECT_ABTYPE ) )->getSelectedType() );
                 break;
 
             case STATE_FINAL_CONFIRM:
@@ -337,7 +337,7 @@ namespace abp
             break;
         }
 
-        implUpdateRoadmap( m_aSettings.eType );
+        impl_updateRoadmap( m_aSettings.eType );
         return bAllow;
     }
 
@@ -480,7 +480,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    void OAddessBookSourcePilot::implUpdateRoadmap( AddressSourceType _eType )
+    void OAddessBookSourcePilot::impl_updateRoadmap( AddressSourceType _eType )
     {
         bool bSettingsPage = needAdminInvokationPage( _eType );
         bool bTablesPage   = needTableSelection( _eType );
@@ -528,7 +528,7 @@ namespace abp
 
         m_aNewDataSource.disconnect();
         m_aSettings.bIgnoreNoTable = false;
-        implUpdateRoadmap( _eType );
+        impl_updateRoadmap( _eType );
     }
 
 //.........................................................................
