@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:27:45 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,20 @@ public:
         E_SAVEUNPACKED,
         E_DOPRETTYPRINTING,
         E_WARNALIENFORMAT,
-        E_LOADDOCPRINTER
+        E_LOADDOCPRINTER,
+        E_ODFDEFAULTVERSION
     };
-                            SvtSaveOptions();
-                            virtual ~SvtSaveOptions();
+
+    enum ODFDefaultVersion
+    {
+        ODFVER_UNKNOWN = 0, // unknown
+        ODFVER_010,         // ODF 1.0
+        ODFVER_011,         // ODF 1.1
+        ODFVER_012          // ODF 1.2
+    };
+
+    SvtSaveOptions();
+    virtual ~SvtSaveOptions();
 
     void                    SetAutoSaveTime( sal_Int32 n );
     sal_Int32               GetAutoSaveTime() const;
@@ -118,6 +128,9 @@ public:
 
     void                    SetLoadDocumentPrinter( sal_Bool _bEnable );
     sal_Bool                IsLoadDocumentPrinter( ) const;
+
+    void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
+    ODFDefaultVersion       GetODFDefaultVersion() const;
 
     sal_Bool                IsReadOnly( EOption eOption ) const;
 };
