@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formsimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:16:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@
 #include <xmloff/formsimp.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 
 TYPEINIT1( XMLFormsContext, SvXMLImportContext );
 
