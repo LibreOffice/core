@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:08:09 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,11 +316,20 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
     mpCBSpeed = new ComboBox( this, SdResId( CB_SPEED ) );
     mpCBXPReview = new CheckBox( this, SdResId( CBX_PREVIEW ) );
 
+    String sMotionPathLabel( SdResId( STR_USERPATH ) );
+
     FreeResource();
 
     USHORT nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
-    bool bInsertMotionPath = nTabId == MOTIONPATH;
+    if( nTabId == MOTIONPATH )
+    {
+        mpLBEffects->InsertCategory( sMotionPathLabel );
+
+        mnCurvePathPos = nFirstEffect = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
+        mnPolygonPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
+        mnFreeformPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
+    };
 
     PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
     const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
@@ -330,14 +339,6 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
         if( pCategory.get() )
         {
             mpLBEffects->InsertCategory( pCategory->maLabel );
-
-            if( bInsertMotionPath )
-            {
-                mnCurvePathPos = nFirstEffect = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
-                mnPolygonPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
-                mnFreeformPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
-                bInsertMotionPath = false;
-            }
 
             std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
             std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
