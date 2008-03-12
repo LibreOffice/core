@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:58:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,16 @@
 #ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
 #endif
+
+#define ITEMID_BOX SDRATTR_TABLE_BORDER
+#define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER
+#include "svx/boxitem.hxx"
+
+#define ITEMID_SHADOW SDRATTR_TABLE_BORDER_SHADOW
+#include "svx/shaditem.hxx"
+
+#define ITEMID_LINE 0
+#include "bolnitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -333,10 +343,33 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
     mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
 
+    SvxBoxItem* pboxItem = new SvxBoxItem( SDRATTR_TABLE_BORDER );
+    pboxItem->SetDistance( 100 );
+    mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER - SDRATTR_START ] = pboxItem;
+
+    SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );
+
+    pBoxInfoItem->SetTable( TRUE );
+    pBoxInfoItem->SetDist( TRUE);        // Abstandsfeld immer anzeigen
+//  pBoxInfoItem->SetMinDist( TRUE );// Minimalgroesse in Tabellen und Absaetzen setzen
+//  pBoxInfoItem->SetDefDist( MIN_BORDER_DIST );// Default-Abstand immer setzen
+    pBoxInfoItem->SetValid( VALID_DISABLE, TRUE ); // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
+
+    mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
+//  mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_SHADOW - SDRATTR_START ] = new SvxShadowItem( SDRATTR_TABLE_BORDER_SHADOW );
+    mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
+    mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
+
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
     mpLocalItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
+
+    mpLocalItemInfos[SDRATTR_TABLE_BORDER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_OUTER;
+    mpLocalItemInfos[SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_INNER;
+//  mpLocalItemInfos[SDRATTR_TABLE_BORDER_SHADOW - SDRATTR_START ]._nSID = SID_ATTR_BORDER_SHADOW;
+    mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_TLBR;
+    mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_BLTR;
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mppLocalPoolDefaults);
@@ -927,8 +960,7 @@ SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
         xub_StrLen nAnz(2);
 
         const IntlWrapper* pMyIntlWrapper = NULL;
-        DBG_ASSERT( pIntlWrapper, "SdrAngleItem::GetPresentation: "
-            "using default App-IntlWrapper" );
+//        DBG_ASSERT( pIntlWrapper, "SdrAngleItem::GetPresentation: using default App-IntlWrapper" );
         if(!pIntlWrapper)
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 ::comphelper::getProcessServiceFactory(),
