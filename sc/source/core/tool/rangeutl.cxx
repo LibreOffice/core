@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:43:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include "convuno.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
