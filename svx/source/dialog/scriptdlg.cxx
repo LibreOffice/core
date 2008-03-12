@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:35:28 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1587,7 +1587,7 @@ SvxScriptErrorDialog::~SvxScriptErrorDialog()
 {
 }
 
-USHORT SvxScriptErrorDialog::Execute()
+short SvxScriptErrorDialog::Execute()
 {
     // Show Error dialog asynchronously
     //
