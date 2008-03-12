@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:15:38 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:50:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,7 @@ SLO1FILES =      \
         $(SLO)$/unoobj.obj		\
         $(SLO)$/unosrch.obj		\
         $(SLO)$/unowcntr.obj	\
-        $(SLO)$/unogsfm.obj		\
-        $(SLO)$/unogstyl.obj	\
-        $(SLO)$/unopsfm.obj		\
-        $(SLO)$/unopstyl.obj	\
         $(SLO)$/unokywds.obj	\
-        $(SLO)$/unostyls.obj	\
         $(SLO)$/unopback.obj	\
         $(SLO)$/unovwcrs.obj	\
         $(SLO)$/unodoc.obj      \
