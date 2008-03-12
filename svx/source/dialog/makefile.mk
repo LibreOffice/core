@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 12:45:34 $
+#   last change: $Author: rt $ $Date: 2008-03-12 09:38:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -122,10 +122,12 @@ SRC1FILES =  \
         cfg.src \
         optjava.src \
         optupdt.src \
+        splitcelldlg.src\
+        sdrcelldlg.src \
         docrecovery.src \
         securityoptions.src \
-        webconninfo.src
-
+        webconninfo.src \
+        newtabledlg.src
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -462,6 +464,9 @@ LIB2OBJFILES= \
     $(SLO)$/numfmt.obj \
     $(SLO)$/page.obj \
     $(SLO)$/postdlg.obj \
+    $(SLO)$/sdrcelldlg.obj \
+    $(SLO)$/splitcelldlg.obj \
+    $(SLO)$/newtabledlg.obj\
     $(SLO)$/grfpage.obj \
     $(SLO)$/cfgchart.obj \
     $(SLO)$/optchart.obj
