@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:51:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ class XLineAttrSetItem;
 class SfxItemSet;
 class Bitmap;
 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 // #100127# Bracket filled shapes with a comment, if recording a Mtf
@@ -109,10 +110,12 @@ class ImpGraphicFill
 {
 public:
     ImpGraphicFill( const SdrObject& rObj, const XOutputDevice& rXOut, const SfxItemSet& rFillItemSet, bool bIsShadow=false );
+    ImpGraphicFill( const XOutputDevice& rXOut, const SfxItemSet& rSet,basegfx::B2DPolyPolygon& aGeometry, const SfxItemSet& rFillItemSet, bool bIsShadow );
     ~ImpGraphicFill();
 
 private:
-    const SdrObject&        mrObj;
+    void prepare( const XOutputDevice&  rXOut, const SfxItemSet& rSet, basegfx::B2DPolyPolygon& aGeometry, const SfxItemSet& rFillItemSet, bool bIsShadow );
+
     const XOutputDevice&    mrXOut;
     bool                    mbCommentWritten;
 };
