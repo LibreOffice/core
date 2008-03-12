@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 13:55:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@
 #include "swabstdlg.hxx"
 
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 
 // Kontextmenue fuer GlobalTree
