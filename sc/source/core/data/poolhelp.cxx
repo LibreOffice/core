@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolhelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:07:38 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
     pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 
-    pStylePool = new ScStyleSheetPool( *pDocPool, pSourceDoc );
+    mxStylePool = new ScStyleSheetPool( *pDocPool, pSourceDoc );
 
     pFormTable = new SvNumberFormatter( pSourceDoc->GetServiceManager(), ScGlobal::eLnge );
     pFormTable->SetColorLink( LINK( pSourceDoc, ScDocument, GetUserDefinedColor ) );
@@ -78,14 +78,14 @@ ScPoolHelper::~ScPoolHelper()
     delete pEnginePool;
     delete pEditPool;
     delete pFormTable;
-    delete pStylePool;
+    mxStylePool.clear();
     delete pDocPool;
 }
 
 void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document
-    pStylePool->SetDocument( NULL );
+    mxStylePool->SetDocument( NULL );
     pFormTable->SetColorLink( Link() );
 }
 
