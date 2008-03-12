@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:46:25 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
 #endif
@@ -223,7 +224,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -328,6 +330,8 @@ public:
     // --> PB 2007-07-06 #i146851#
     sal_Bool                                            mbSaveBackwardCompatibleODF;
     // <--
+
+    uno::Reference< embed::XStorage >                   mxTargetStorage;
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -804,7 +808,6 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             xValue, UNO_QUERY );
         if( xTmpPropertySet.is() )
             mxExportInfo = xTmpPropertySet;
-
     }
 
     if( mxExportInfo.is() )
@@ -851,6 +854,11 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
         }
         // <--
+
+
+        OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
+            mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
     }
 
 }
@@ -2363,6 +2371,11 @@ const sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }
 // <--
+
+uno::Reference< embed::XStorage > SvXMLExport::GetTargetStorage()
+{
+    return mpImpl->mxTargetStorage;
+}
 
 //=============================================================================
 
