@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:53:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,6 +443,8 @@ public:
 
     void                CreateLayoutTemplates();
     void                RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
+
+    void                CreateDefaultCellStyles();
 
     SD_DLLPUBLIC void   StopWorkStartupDelay();
 
