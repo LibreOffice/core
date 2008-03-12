@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:11:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,15 @@ bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersio
              osvi.dwMinorVersion);
 
     return bRet;
+}
+
+//------------------------------------------------------------
+// determine if we are running under Win2000
+//------------------------------------------------------------
+
+bool SAL_CALL IsWindowsVista()
+{
+    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 0);
 }
 
 //------------------------------------------------------------
