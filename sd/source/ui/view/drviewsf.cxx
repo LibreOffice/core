@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:35:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,6 +369,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             break;
 
             case SID_STYLE_FAMILY2:
+            case SID_STYLE_FAMILY3:
             case SID_STYLE_FAMILY5:
             case SID_STYLE_APPLY: // StyleControl
             {
@@ -382,17 +383,16 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        if (pStyleSheet->GetFamily() == SD_LT_FAMILY)
+                        if (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
                             pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
 
                         if( pStyleSheet )
                         {
                             SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
-                            if ((eFamily == SFX_STYLE_FAMILY_PARA &&
-                                nSlotId == SID_STYLE_FAMILY2)        ||
-                                (eFamily == SFX_STYLE_FAMILY_PSEUDO &&
-                                nSlotId == SID_STYLE_FAMILY5))
+                            if ((eFamily == SD_STYLE_FAMILY_GRAPHICS &&     nSlotId == SID_STYLE_FAMILY2)       ||
+                                (eFamily == SD_STYLE_FAMILY_CELL     && nSlotId == SID_STYLE_FAMILY3)       ||
+                                (eFamily == SD_STYLE_FAMILY_PSEUDO &&   nSlotId == SID_STYLE_FAMILY5))
                             {
                                 SfxTemplateItem aTmpItem ( nWhich, pStyleSheet->GetName() );
                                 aAllSet.Put( aTmpItem, aTmpItem.Which()  );
@@ -425,7 +425,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_WATERCAN:
             {
                 ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SFX_STYLE_FAMILY_PSEUDO)
+                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
                     rSet.Put(SfxBoolItem(nWhich,FALSE));
                 else
                 {
@@ -438,7 +438,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_NEW:
             {
                 ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SFX_STYLE_FAMILY_PSEUDO)
+                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -446,7 +446,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_DRAGHIERARCHIE:
             {
                 ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SFX_STYLE_FAMILY_PSEUDO)
+                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -458,11 +458,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 ISfxTemplateCommon* pTemplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
                 if (pTemplCommon)
                 {
-                    if (pTemplCommon->GetActualFamily() == SFX_STYLE_FAMILY_PSEUDO)
+                    if (pTemplCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else if (pTemplCommon->GetActualFamily() == SFX_STYLE_FAMILY_PARA)
+                    else if (pTemplCommon->GetActualFamily() == SD_STYLE_FAMILY_GRAPHICS)
                     {
                         if (!mpDrawView->AreObjectsMarked())
                         {
