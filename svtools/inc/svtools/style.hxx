@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:55:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,14 @@
 #ifndef _SFXSTYLE_HXX
 #define _SFXSTYLE_HXX
 
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+
+#include <rtl/ref.hxx>
+#include <vector>
+#include <comphelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
+
 #ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
 #endif
@@ -46,9 +54,6 @@
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
-#endif
-#ifndef _LIST_HXX //autogen
-#include <tools/list.hxx>
 #endif
 #ifndef _SFXHINT_HXX //autogen
 #include <svtools/hint.hxx>
@@ -74,45 +79,42 @@ class SfxItemPool;
 class SfxStyleSheetBasePool;
 class SvStream;
 
-/*=========================================================================
+/*
+Everyone changing instances of SfxStyleSheetBasePool or SfxStyleSheetBase
+mußt broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasten.
+The class <SfxStyleSheetHint> is used for this, it contains an Action-Id and a
+pointer to the <SfxStyleSheetBase>. The actions are:
 
-Jeder, der an Intanzen der Klassen SfxStyleSheetBasePool oder am
-SfxStyleSheetBase strukturelle �nderungen vornimmt, mu� diese �ber
-<SfxStyleSheetBasePool::GetBroadcaster()> broadcasten. Daf�r Gibt es die
-Klasse <SfxStyleSheetHint>, die eine Action-Id und einen Pointer auf einen
-<SfxStyleSheetBase> erh�lt. Die Actions sind:
+#define SFX_STYLESHEET_CREATED      // style is created
+#define SFX_STYLESHEET_MODIFIED     // style is modified
+#define SFX_STYLESHEET_CHANGED      // style is replaced
+#define SFX_STYLESHEET_ERASED       // style is deleted
 
-#define SFX_STYLESHEET_CREATED      // neu
-#define SFX_STYLESHEET_MODIFIED     // ver"andert
-#define SFX_STYLESHEET_CHANGED      // ausgetauscht
-#define SFX_STYLESHEET_ERASED       // gel"oscht
+The following methods already broadcast themself
 
-Es machen bereits die folgenden Methoden von sich aus:
-
-SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED) aus:
+SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED) from:
    SfxStyleSheetBase::SetName( const String& rName )
    SfxStyleSheetBase::SetParent( const String& rName )
    SfxStyleSheetBase::SetFollow( const String& rName )
 
-SfxSimpleHint(SFX_HINT_DYING) aus:
+SfxSimpleHint(SFX_HINT_DYING) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
-SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) aus:
+SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
    SfxStyleFamily eFam, USHORT mask, USHORT nPos)
 
-SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) aus:
+SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
 
-SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) aus:
+SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
    SfxStyleSheetBasePool::Erase( SfxStyleSheetBase* p )
    SfxStyleSheetBasePool::Clear()
-
-=========================================================================*/
+*/
 
 #define VIRTUAL510 virtual
 
-class SVT_DLLPUBLIC SfxStyleSheetBase
+class SVT_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
     friend class SfxStyleSheetBasePool;
 
@@ -120,7 +122,8 @@ protected:
     SfxStyleSheetBasePool&  rPool;          // zugehoeriger Pool
     SfxStyleFamily          nFamily;        // Familie
 
-    UniString                   aName, aParent, aFollow;
+    UniString               aName, aParent, aFollow;
+    rtl::OUString           maDisplayName;
     String                  aHelpFile;      // Name der Hilfedatei
     SfxItemSet*             pSet;           // ItemSet
     USHORT                  nMask;          // Flags
@@ -129,8 +132,8 @@ protected:
 
     BOOL                    bMySet;         // TRUE: Set loeschen im dtor
 
-    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&,
-                        SfxStyleFamily eFam, USHORT mask );
+    SfxStyleSheetBase(); // do not use!
+    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, USHORT mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();
     virtual void Load( SvStream&, USHORT );
@@ -138,8 +141,20 @@ protected:
 
 public:
     TYPEINFO();
+
+    // returns the internal name of this style
     virtual const UniString& GetName() const;
+
+    // sets the internal name of this style
     virtual BOOL SetName( const UniString& );
+
+    /** returns the display name of this style, it is used at the user interface.
+        If the display name is empty, this method returns the internal name. */
+    virtual rtl::OUString GetDisplayName() const;
+
+    // sets the display name of this style
+    virtual void SetDisplayName( const rtl::OUString& );
+
     virtual const UniString& GetParent() const;
     virtual BOOL SetParent( const UniString& );
     virtual const UniString& GetFollow() const;
@@ -169,7 +184,7 @@ public:
 
 //=========================================================================
 
-DECLARE_LIST( SfxStyles, SfxStyleSheetBase* )
+typedef std::vector< rtl::Reference< SfxStyleSheetBase > > SfxStyles;
 
 //=========================================================================
 
@@ -218,7 +233,7 @@ friend class SfxStyleSheetBasePool;
 
 class SfxStyleSheetBasePool_Impl;
 
-class SVT_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster
+class SVT_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphelper::OWeakTypeObject
 {
 friend class SfxStyleSheetIterator;
 friend class SfxStyleSheetBase;
@@ -240,10 +255,11 @@ protected:
     virtual SfxStyleSheetBase*  Create( const UniString&, SfxStyleFamily, USHORT );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
+                                ~SfxStyleSheetBasePool();
+
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
-                                ~SfxStyleSheetBasePool();
 
     static String               GetStreamName();
 
@@ -261,22 +277,22 @@ public:
                                      USHORT nMask = 0xffff ,
                                      USHORT nPos = 0xffff);
 
-    VIRTUAL510 void             Replace(
+    virtual void             Replace(
         SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget );
-    virtual SfxStyleSheetBase * Remove( SfxStyleSheetBase* );
+
+    virtual void                Remove( SfxStyleSheetBase* );
     virtual void                Insert( SfxStyleSheetBase* );
 
-    virtual void                Erase( SfxStyleSheetBase* );
     virtual void                Clear();
 
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
-    SfxStyles&                  GetStyles() { return aStyles; }
+    const SfxStyles&            GetStyles();
     virtual SfxStyleSheetBase*  First();
     virtual SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const UniString&,
-                                      SfxStyleFamily eFam, USHORT n=0xFFFF );
+    virtual SfxStyleSheetBase*  Find( const UniString&, SfxStyleFamily eFam, USHORT n=0xFFFF );
+
     virtual BOOL                SetParent(SfxStyleFamily eFam,
                                           const UniString &rStyle,
                                           const UniString &rParent);
@@ -300,14 +316,16 @@ class SVT_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
 public:
                         TYPEINFO();
 
-                        SfxStyleSheet( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily, USHORT );
+                        SfxStyleSheet( const UniString&, const SfxStyleSheetBasePool&, SfxStyleFamily, USHORT );
                         SfxStyleSheet( const SfxStyleSheet& );
-
-    virtual             ~SfxStyleSheet();
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType );
     virtual BOOL        SetParent( const UniString& );
+
+protected:
+    SfxStyleSheet(); // do not use!
+    virtual             ~SfxStyleSheet();
 };
 
 //=========================================================================
@@ -320,7 +338,7 @@ protected:
     virtual SfxStyleSheetBase* Create(const SfxStyleSheet &);
 
 public:
-    SfxStyleSheetPool( SfxItemPool& );
+    SfxStyleSheetPool( SfxItemPool const& );
 
 //  virtual BOOL CopyTo(SfxStyleSheetPool &rDest, const String &rSourceName);
 };
@@ -383,6 +401,23 @@ public:
                             USHORT, const String& rOld,
                             SfxStyleSheetBase& );
     const String&       GetOldName() { return aName; }
+};
+
+class SVT_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >
+{
+public:
+    SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, USHORT _nMaske );
+    SfxUnoStyleSheet( const SfxStyleSheet& _rSheet );
+
+    static SfxUnoStyleSheet* getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle );
+
+    // XUnoTunnel
+    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    SfxUnoStyleSheet(); // not implemented
+
+    static const ::com::sun::star::uno::Sequence< ::sal_Int8 >& getIdentifier();
 };
 
 #endif
