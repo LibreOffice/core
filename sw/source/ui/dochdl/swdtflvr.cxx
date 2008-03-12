@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:23:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ extern BOOL bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_DDE               0x00000020
 
 using namespace ::svx;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
@@ -1330,6 +1330,16 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
         }
     }
 
+    // special case for tables from draw application
+    if( EXCHG_OUT_ACTION_INSERT_DRAWOBJ == (nAction & EXCHG_ACTION_MASK) )
+    {
+        if( rData.HasFormat( SOT_FORMAT_RTF ) )
+        {
+            nAction = EXCHG_OUT_ACTION_INSERT_STRING | (nAction & !EXCHG_ACTION_MASK);
+            nFormat = SOT_FORMAT_RTF;
+        }
+    }
+
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nFormat,
                                         nDestination, FALSE, FALSE );
@@ -1344,7 +1354,8 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                             const Point* pPt, sal_Int8 nDropAction,
                             BOOL bPasteSelection )
 {
-    SwWait aWait( *rSh.GetView().GetDocShell(), FALSE );
+    SwWait aWait( *rSh.GetView().
+        GetDocShell(), FALSE );
     SwTrnsfrActionAndUndo* pAction = 0;
     SwModule* pMod = SW_MOD();
 
