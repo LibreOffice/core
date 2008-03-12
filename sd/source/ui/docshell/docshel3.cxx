@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:28:00 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,8 +280,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
 void DrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const
 {
-    pBasePool->SetSearchMask(SFX_STYLE_FAMILY_PARA,
-                             SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
+    pBasePool->SetSearchMask(SD_STYLE_FAMILY_GRAPHICS, SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
 }
 
 
