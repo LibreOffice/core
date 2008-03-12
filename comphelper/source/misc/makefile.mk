@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-30 09:35:36 $
+#   last change: $Author: rt $ $Date: 2008-03-12 13:24:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+            $(SLO)$/weak.obj\
             $(SLO)$/asyncnotification.obj \
             $(SLO)$/listenernotification.obj \
             $(SLO)$/evtlistenerhlp.obj \
