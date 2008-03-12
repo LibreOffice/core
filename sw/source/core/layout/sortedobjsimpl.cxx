@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:11:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,8 @@
 #ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 typedef std::vector< SwAnchoredObject* >::iterator tIter;
 typedef std::vector< SwAnchoredObject* >::const_iterator tConstIter;
