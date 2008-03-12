@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: tables.sdi,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:25:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+shell TableObjectBar
+{
+    SID_TABLE_TOOLBOX // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FRAME_LINESTYLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_FRAME_LINECOLOR
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_BORDER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+    SID_TABLE_MERGE_CELLS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_SPLIT_CELLS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_OPTIMIZE_TABLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_VERT_BOTTOM
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_VERT_CENTER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_VERT_NONE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_COL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_DELETE_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_DELETE_COL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_SELECT_ALL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_SELECT_COL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_SELECT_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_FORMAT_TABLE_DLG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_SORT_DIALOG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_AUTOSUM
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_TABLE_DISTRIBUTE_COLUMNS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_TABLE_DISTRIBUTE_ROWS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+}
+
