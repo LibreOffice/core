@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:16:50 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::rtl;
+using namespace com::sun::star::ui::dialogs;
+using ::rtl::OUString;
 
 
 #define INDEX_SECTION_NAME String::CreateFromAscii( \
