@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:05:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,3 +207,5 @@ hidspecial HID_SD_SLIDESHOW_DISPLAY                             { HelpId = HID_S
 
 hidspecial HID_SD_RULER_HORIZONTAL                              { HelpId = HID_SD_RULER_HORIZONTAL; };
 hidspecial HID_SD_RULER_VERTICAL                                { HelpId = HID_SD_RULER_VERTICAL; };
+
+hidspecial HID_SD_TABLE_DESIGN                                  { HelpId = HID_SD_TABLE_DESIGN; };
