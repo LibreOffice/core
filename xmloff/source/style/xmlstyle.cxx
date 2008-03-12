@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:18:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,9 @@
 #include "PageMasterImportPropMapper.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -655,13 +657,8 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
                                               xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_SCH_CHART_ID:
-#ifndef SVX_LIGHT
             pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
-#else
-            // create default context to skip content
-            pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily );
-#endif
             break;
 
         case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
