@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:32:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,5 +41,6 @@
 #define FT_SPEED                2
 #define CB_SPEED                3
 #define CBX_PREVIEW             4
+#define STR_USERPATH            5
 
 #endif // _SD_CUSTOMANIMATIONCREATEDIALOG_HRC
