@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:04:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,9 @@
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -479,6 +481,20 @@ const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
     DPMAP( "IsPageNumberVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
     DPMAP( "IsDateTimeVisible",             XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
 
+    { 0L, 0, 0, XML_EMPTY, 0, 0 }
+};
+
+/** contains the attribute to property mapping for a drawing layer table
+    WARNING: if attributes are added, SdXMLTableShapeContext::processAttribute needs to be updated!
+*/
+const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
+{
+    _MAP( "UseFirstRowStyle",       XML_NAMESPACE_TABLE, XML_USE_FIRST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    _MAP( "UseLastRowStyle",        XML_NAMESPACE_TABLE, XML_USE_LAST_ROW_STYLES, XML_TYPE_BOOL, 0 ),
+    _MAP( "UseFirstColumnStyle",    XML_NAMESPACE_TABLE, XML_USE_FIRST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    _MAP( "UseLastColumnStyle",     XML_NAMESPACE_TABLE, XML_USE_LAST_COLUMN_STYLES, XML_TYPE_BOOL, 0 ),
+    _MAP( "UseBandingRowStyle",     XML_NAMESPACE_TABLE, XML_USE_BANDING_ROWS_STYLES, XML_TYPE_BOOL, 0 ),
+    _MAP( "UseBandingColumnStyle",  XML_NAMESPACE_TABLE, XML_USE_BANDING_COLUMNS_STYLES, XML_TYPE_BOOL, 0 ),
     { 0L, 0, 0, XML_EMPTY, 0, 0 }
 };
 
