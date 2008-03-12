@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:31:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,9 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
