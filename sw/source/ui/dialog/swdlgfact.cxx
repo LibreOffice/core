@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:37:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 #include "pattern.hxx" //add for SwBackgroundDlg
 #include "rowht.hxx" //add for SwTableHeightDlg
 #include "selglos.hxx" //add for SwSelGlossaryDlg
-#include "split.hxx" //add for SwSplitTableDlg
+#include "splittbl.hxx" //add for SwSplitTblDlg
 #include "splittbl.hxx" //add for SwSplitTblDlg
 #include "srtdlg.hxx" //add for SwSortDlg
 #include "tautofmt.hxx" //add for SwAutoFormatDlg
@@ -142,7 +142,6 @@ IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl); //add for SwInsertDBColA
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl); //add for DropDownFieldDialog
 IMPL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl);//add for SwLabDlg
 IMPL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl);//add for SwSelGlossaryDlg
-IMPL_ABSTDLG_BASE(AbstractSwSplitTableDlg_Impl);//add for SwSplitTableDlg
 IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl); //add for SwAutoFormatDlg
 IMPL_ABSTDLG_BASE(AbstractSwFldDlg_Impl); //add for SwFldDlg
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl); //add for SwRenameXNamedDlg
@@ -328,23 +327,6 @@ void AbstarctSwSelGlossaryDlg_Impl::SelectEntryPos(USHORT nIdx)
 }
 
 //add for SwSelGlossaryDlg end
-
-
-//add for SwSplitTableDlg begin
-BOOL AbstractSwSplitTableDlg_Impl::IsHorizontal() const
-{
-    return pDlg->IsHorizontal();
-}
-BOOL AbstractSwSplitTableDlg_Impl::IsProportional() const
-{
-    return pDlg->IsProportional();
-}
-long AbstractSwSplitTableDlg_Impl:: GetCount() const
-{
-    return pDlg->GetCount();
-}
-//add for SwSplitTableDlg end
-
 
 //add for SwAutoFormatDlg begin
 
@@ -1068,27 +1050,6 @@ AbstarctSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
 }
 
 //add for SwSelGlossaryDlg end
-
-//add for SwSplitTableDlg  begin
-AbstractSwSplitTableDlg * SwAbstractDialogFactory_Impl::CreateSwSplitTableDlg ( Window *pParent, SwWrtShell& rShell,int nResId )
-{
-    SwSplitTableDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_SPLIT :
-            pDlg = new SwSplitTableDlg( pParent, rShell);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwSplitTableDlg_Impl( pDlg );
-    return 0;
-}
-
-//add for SwSplitTableDlg  end
 
 //add for SwAutoFormatDlg begin
 AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
