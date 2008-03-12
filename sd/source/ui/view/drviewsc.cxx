@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:57:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             if( rReq.GetSlot() == SID_STYLE_EDIT && !rReq.GetArgs() )
             {
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
-                if( pStyleSheet && pStyleSheet->GetFamily() == SD_LT_FAMILY)
+                if( pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
                     pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
 
                 if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
@@ -601,7 +601,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     GetView()->SdrEndTextEdit();
 
                     pStyleSheet = mpDrawView->GetStyleSheet();
-                    if(pStyleSheet && pStyleSheet->GetFamily() == SD_LT_FAMILY)
+                    if(pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
                         pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
                 }
 
@@ -842,6 +842,7 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
         case SID_INSERT_APPLET:
+        case SID_INSERT_TABLE:
         {
             nMappedSId = SID_DRAWTBX_INSERT;
         }
