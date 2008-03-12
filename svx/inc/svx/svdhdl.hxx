@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:32:56 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,8 @@ protected:
     unsigned                    b1PixMore : 1; // True=Handle wird 1 Pixel groesser dargestellt
     unsigned                    bPlusHdl : 1;  // u.a. fuer Hld-Paint Optimierung bei MarkPoint/UnmarkPoint, ...
 
+    bool                        mbMoveOutside; // forces this handle to be moved outside of the selection rectangle
+
     // create marker for this kind
     virtual void CreateB2dIAObject();
 
@@ -263,6 +265,8 @@ public:
 
     // #97016# II
     virtual BOOL IsFocusHdl() const;
+
+    void SetMoveOutside( bool bMoveOutside );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
