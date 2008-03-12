@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:50:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,4 +238,3 @@ static rettype calltype func##_##Failure params \
     return (rettype)0; \
 }
 #endif
-
