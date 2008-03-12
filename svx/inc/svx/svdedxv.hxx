@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:19:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef _SVDEDXV_HXX
 #define _SVDEDXV_HXX
 
+#include <rtl/ref.hxx>
+
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
 #endif
@@ -43,6 +45,8 @@
 #ifndef _SVDGLEV_HXX
 #include <svx/svdglev.hxx>
 #endif
+
+#include <svx/selectioncontroller.hxx>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -57,6 +61,10 @@ class ImpSdrEditPara;
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
+
+namespace sdr {
+    class SelectionController;
+}
 
 //************************************************************
 //   Defines
@@ -116,6 +124,9 @@ protected:
     unsigned                    bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
     unsigned                    bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
     unsigned                    bMacroDown : 1;
+
+    rtl::Reference< sdr::SelectionController > mxSelectionController;
+    rtl::Reference< sdr::SelectionController > mxLastSelectionController;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -182,10 +193,8 @@ public:
     // SdrObjEditView setzt dann das Modusflag (EditEngine/Outliner) an
     // dieser Instanz und ausserdem auch den StatusEventHdl.
     // Ebenso kann eine spezifische OutlinerView vorgegeben werden.
-    sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, Window* pWin = 0L,
-        SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
-        sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False);
-    sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
+
+    virtual sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False, sal_Bool bGrabFocus = sal_True);
     // bDontDeleteReally ist ein Spezialparameter fuer den Writer.
@@ -193,7 +202,7 @@ public:
     // nicht geloescht. Stattdessen gibt es dann einen Returncode
     // SDRENDTEXTEDIT_SHOULDBEDELETED (anstelle von SDRENDTEXTEDIT_BEDELETED)
     // der besagt, dass das Objekt geloescht werden sollte.
-    SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
+    virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
     virtual bool IsTextEdit() const;
 
     // TRUE=Es wird ein Textrahmen (OBJ_TEXT,OBJ_OUTLINETEXT,...) editiert
@@ -236,7 +245,7 @@ public:
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
-    BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
     virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
@@ -278,6 +287,10 @@ public:
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */
     void getTextSelection( ::com::sun::star::uno::Any& rSelection );
+
+    virtual void MarkListHasChanged();
+
+    rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
 };
 
 #endif //_SVDEDXV_HXX
