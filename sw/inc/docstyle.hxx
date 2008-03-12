@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _DOCSTYLE_HXX
 #define _DOCSTYLE_HXX
+
+#include <rtl/ref.hxx>
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
@@ -104,6 +106,9 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 
     SW_DLLPRIVATE BOOL FillStyleSheet( FillStyleType eFType );
 
+protected:
+    virtual ~SwDocStyleSheet();
+
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
                      const String&          rName,
@@ -112,7 +117,6 @@ public:
                      USHORT                 nMask);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
-    virtual ~SwDocStyleSheet();
 
     void                    Reset();
 
@@ -177,8 +181,8 @@ public:
 
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 {
-    SwDocStyleSheet     aIterSheet;
-    SwDocStyleSheet     aStyleSheet;
+    rtl::Reference< SwDocStyleSheet > mxIterSheet;
+    rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwPoolFmtList       aLst;
     USHORT              nLastPos;
     BOOL                bFirstCalled;
@@ -208,7 +212,7 @@ public:
 
 class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
-    SwDocStyleSheet     aStyleSheet;
+    rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
     BOOL                bOrganizer : 1;     // TRUE: fuer den Organizer
 
@@ -220,7 +224,6 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 
 public:
     SwDocStyleSheetPool( SwDoc&, BOOL bOrganizer = FALSE );
-    virtual ~SwDocStyleSheetPool();
 
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget );
@@ -232,7 +235,7 @@ public:
     virtual BOOL SetParent( SfxStyleFamily eFam, const String &rStyle,
                             const String &rParent );
 
-    virtual void Erase( SfxStyleSheetBase* pStyle);
+    virtual void Remove( SfxStyleSheetBase* pStyle);
 
     void    SetOrganizerMode( BOOL bMode )  { bOrganizer = bMode; }
     BOOL    IsOrganizerMode() const         { return bOrganizer; }
@@ -241,6 +244,14 @@ public:
                                                     USHORT nMask );
 
     SwDoc& GetDoc() const { return rDoc; }
+
+    void dispose();
+
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
+protected:
+    virtual ~SwDocStyleSheetPool();
 
     //Fuer die daemlicheren Compiler
 private:
