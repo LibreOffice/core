@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:09:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,34 +104,33 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetControlWord(nStat);
     }
 
-    if (pOutlinerParaObject!=NULL) {
-        rOutl.SetText(*pOutlinerParaObject);
+    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    if(pOutlinerParaObject!=NULL)
+    {
+        rOutl.SetText(*GetOutlinerParaObject());
     }
     // ggf. Rahmenattribute am 1. (neuen) Absatz des Outliners setzen
-    if (rOutl.GetParagraphCount()==1) { // bei nur einem Para nachsehen ob da ueberhaupt was drin steht
-        XubString aStr( rOutl.GetText( rOutl.GetParagraph( 0 ) ) );
+    if( !HasTextImpl( &rOutl ) )
+    {
+        // Outliner has no text so we must set some
+        // empty text so the outliner initialise itself
+        rOutl.SetText( String(), rOutl.GetParagraph( 0 ) );
 
-        if(!aStr.Len())
-        {
-            // Aha, steht nix drin!
-            // damit sich der Outliner initiallisiert
-            rOutl.SetText( String(), rOutl.GetParagraph( 0 ) );
+        if(GetStyleSheet())
+            rOutl.SetStyleSheet( 0, GetStyleSheet());
 
-            if(GetStyleSheet())
-                rOutl.SetStyleSheet( 0, GetStyleSheet());
-
-            // Beim setzen der harten Attribute an den ersten Absatz muss
-            // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
-            // werden, da sonst bei SetParaAttribs() auch alle in diesem
-            // Parent enthaltenen Items hart am Absatz attributiert werden.
-            // -> BugID 22467
-            const SfxItemSet& rSet = GetObjectItemSet();
-            SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-            aFilteredSet.Put(rSet);
-            rOutl.SetParaAttribs(0, aFilteredSet);
-        }
+        // Beim setzen der harten Attribute an den ersten Absatz muss
+        // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
+        // werden, da sonst bei SetParaAttribs() auch alle in diesem
+        // Parent enthaltenen Items hart am Absatz attributiert werden.
+        // -> BugID 22467
+        const SfxItemSet& rSet = GetObjectItemSet();
+        SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+        aFilteredSet.Put(rSet);
+        rOutl.SetParaAttribs(0, aFilteredSet);
     }
-    if (bFitToSize) {
+    if (bFitToSize)
+    {
         Rectangle aAnchorRect;
         Rectangle aTextRect;
         TakeTextRect(rOutl, aTextRect, FALSE,
@@ -279,31 +278,14 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     if(rOutl.IsModified())
     {
         OutlinerParaObject* pNewText = NULL;
-        Paragraph* p1stPara = rOutl.GetParagraph( 0 );
-        UINT32 nParaAnz = rOutl.GetParagraphCount();
 
-        if(p1stPara)
+        if(HasTextImpl( &rOutl ) )
         {
-            if(nParaAnz == 1)
-            {
-                // bei nur einem Para nachsehen ob da ueberhaupt was drin steht
-                XubString aStr(rOutl.GetText(p1stPara));
-
-                if(!aStr.Len())
-                {
-                    // Aha, steht nix drin!
-                    nParaAnz = 0;
-                }
-            }
-
             // Damit der grauen Feldhintergrund wieder verschwindet
             rOutl.UpdateFields();
 
-            if(nParaAnz != 0)
-            {
-                // Wirklich Textobjekt kreieren
-                pNewText = rOutl.CreateParaObject( 0, (sal_uInt16)nParaAnz );
-            }
+            sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );
+            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
         }
         SetOutlinerParaObject(pNewText);
     }
