@@ -4,9 +4,9 @@
 ;
 ;   $RCSfile: uwinapi.dxp,v $
 ;
-;   $Revision: 1.9 $
+;   $Revision: 1.10 $
 ;
-;   last change: $Author: ihi $ $Date: 2007-08-20 13:36:23 $
+;   last change: $Author: rt $ $Date: 2008-03-12 07:39:09 $
 ;
 ;   The Contents of this file are made available subject to
 ;   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,4 +91,4 @@ PathRemoveExtensionW
 PathRemoveFileSpecW
 PathSetDlgItemPathW
 PathStripToRootW
-
+SHCreateItemFromParsingName
