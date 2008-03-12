@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 13:54:08 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
     Beschreibung: Datenbanktrenner durch Punkte fuer Anzeige ersetzen
