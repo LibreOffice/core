@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:40:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,10 +137,10 @@
 #include <comcore.hrc>
 #endif
 
+using rtl::OUString;
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star;
 
 class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
 {
