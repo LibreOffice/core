@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:55:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ class EventMultiplexerEvent;
 
 namespace sd {
 
+class DrawDocShell;
 class OutlineViewShell;
 class OutlineViewModelChangeGuard;
 class DrawDocShell;
