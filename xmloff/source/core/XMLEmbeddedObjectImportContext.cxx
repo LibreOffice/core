@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:21:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,9 @@
 #include "XMLEmbeddedObjectImportContext.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
