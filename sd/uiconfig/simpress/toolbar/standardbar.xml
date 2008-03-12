@@ -26,7 +26,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700"  />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertSpreadsheet" toolbar:helpid="10217"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="helpid:10141"  />
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"  />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322"  toolbar:style="auto" />
