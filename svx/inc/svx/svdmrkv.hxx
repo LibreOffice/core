@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:51:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,8 @@ enum SdrHitKind {SDRHIT_NONE,      // Nicht getroffen, Schnaps gesoffen
                  SDRHIT_URLFIELD,        // Feld im TextObj getroffen (wird gerade nicht editiert)
                  SDRHIT_MACRO,           // Objekt fuer BegMacroObj
                  SDRHIT_MARKEDOBJECT,    // Markiertes Objekt (z.B. zum Draggen)
-                 SDRHIT_UNMARKEDOBJECT}; // nichtmarkiertes Objekt (z.B. zum markieren)
+                 SDRHIT_UNMARKEDOBJECT, // nichtmarkiertes Objekt (z.B. zum markieren)
+                 SDRHIT_CELL};          // hit on a cell inside a table shape (outside of the cells text area)
 
 enum SdrViewEditMode {SDREDITMODE_EDIT,           // Auch bekannt aus Pfeil- oder Zeigermodus
                       SDREDITMODE_CREATE,         // Objekterzeugungswerkzeug
