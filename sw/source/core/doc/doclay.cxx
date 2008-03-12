@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:23:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@
 // <--
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 #define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
 
