@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:50:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 08:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,8 @@
   * encoding for resources: windows-1252
   */
 
- #include "wizard.hrc"
+#include "wizard.hrc"
+#include <svtools/controldims.hrc>
 
 ModalDialog DLG_FIRSTSTART_WIZARD
 {
@@ -112,6 +113,11 @@ String STR_FINISH
     Text [ en-US ] = "~Finish";
 };
 
+String STR_REGISTRATION_OOO
+{
+    Text [ en-US ] = "You now have the opportunity to support and contribute to the fastest growing open source community in the world.\n\nHelp us prove that %PRODUCTNAME has already significant market share by registering %PRODUCTNAME.\n\nRegistering is voluntary and is without obligation.";
+};
+
 ErrorBox ERRBOX_REG_NOSYSBROWSER
 {
     BUTTONS = WB_OK ;
@@ -137,7 +143,7 @@ QueryBox QB_ASK_DECLINE
 #define MARGINBOTTOM 2
 #define BODYHEIGHT TP_HEIGHT-MARGINTOP-MARGINBOTTOM
 #define INDENT 10
-#define INDENT2 25
+#define INDENT2 12
 
 TabPage TP_WELCOME
 {
@@ -386,12 +392,14 @@ TabPage TP_USER
     };
 };
 
+#define RB_HEIGHT   (RSC_CD_CHECKBOX_HEIGHT+RSC_SP_GRP_SPACE_Y)
+
 TabPage TP_REGISTRATION
 {
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
-    HelpID          = HID_FIRSTSTART_REGISTRATION;
+    HelpID = HID_FIRSTSTART_REGISTRATION;
     FixedText FT_REGISTRATION_HEADER
     {
         NoLabel = TRUE;
@@ -399,61 +407,38 @@ TabPage TP_REGISTRATION
         Pos = MAP_APPFONT(MARGINLEFT, MARGINRIGHT);
         Size = MAP_APPFONT(BODYWIDTH, MARGINRIGHT);
     };
-
-    FixedImage IMG_REGISTRATION
-    {
-        Pos = MAP_APPFONT ( MARGINLEFT , MARGINTOP+ROWHEIGHT*2 ) ;
-        Size = MAP_PIXEL ( 32 , 32 ) ;
-        Fixed = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "regkey.png" ;
-            };
-            MaskColor = Color { Red = 0x0000 ; Green = 0x0000 ; Blue = 0xFFFF ; };
-        };
-    };
     FixedText FT_REGISTRATION_BODY
     {
         NoLabel = TRUE;
         Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user. Registration is voluntary and is without obligation.\n\nIf you register, we can inform you about new developments concerning this product.";
         WordBreak = TRUE;
-        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, MARGINTOP+ROWHEIGHT*2);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*7);
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
     };
-
     RadioButton RB_REGISTRATION_NOW
     {
         Text [ en-US ] = "I want to register ~now";
-        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*11);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
         Check = TRUE;
     };
     RadioButton RB_REGISTRATION_LATER
     {
         Text [ en-US ] = "I want to register ~later";
-        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*13);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
     };
     RadioButton RB_REGISTRATION_NEVER
     {
         Text [ en-US ] = "I do not want to ~register";
-        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*15);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*12+2+RB_HEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, RSC_CD_CHECKBOX_HEIGHT);
     };
-    RadioButton RB_REGISTRATION_REG
-    {
-        Text [ en-US ] = "I have ~already registered";
-        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*17);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
-    };
-
     FixedLine FL_REGISTRATION
     {
         Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*6);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT);
     };
-
     FixedText FT_REGISTRATION_END
     {
         NoLabel = TRUE;
@@ -462,3 +447,4 @@ TabPage TP_REGISTRATION
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*4);
     };
 };
+
