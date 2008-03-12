@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextvclcontrol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:28:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ namespace frm
         {
             if ( EVENT_KEYINPUT == _rNEvt.GetType() )
             {
-                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+                const ::KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
 
                 sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
                 sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
@@ -303,7 +303,7 @@ namespace frm
                     // Ctrl-Tab is used to step out of the control
                     // -> build a new key event without the Ctrl-key, and let the very base class handle it
                     KeyCode aNewCode( KEY_TAB, bShift, sal_False, sal_False );
-                    KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
+                    ::KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
                     Control::KeyInput( aNewEvent );
                     return 1;   // handled
                 }
