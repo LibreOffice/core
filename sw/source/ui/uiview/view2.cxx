@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:07:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ static String sLstPg;
 static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace sfx2;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
