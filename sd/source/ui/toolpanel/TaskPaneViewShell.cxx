@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:21:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "controls/MasterPagesPanel.hxx"
 #include "controls/MasterPagesSelector.hxx"
+#include "controls/TableDesignPanel.hxx"
 #include "controls/CustomAnimationPanel.hxx"
 #include "controls/SlideTransitionPanel.hxx"
 #include "controls/AnimationSchemesPanel.hxx"
@@ -276,6 +277,22 @@ void TaskPaneViewShell::Implementation::Setup (
             pToolPanel->GetControlContainer()));
     AddPanel (nId, PID_LAYOUT);
     nIdOfControlToExpand = nId;
+
+    {
+        DummyControl aControl (pToolPanel, SdResId(DLG_TABLEDESIGNPANE));
+
+        // TableDesignPanel
+        nId = pToolPanel->AddControl (
+            controls::TableDesignPanel::CreateControlFactory(rBase),
+            aControl.GetText(),
+            HID_SD_TABLE_DESIGN,
+            ResourceActivationClickHandler(
+                pFrameworkHelper,
+                    pFrameworkHelper->CreateResourceId(
+                        FrameworkHelper::msTableDesignPanelURL, xTaskPaneId),
+                pToolPanel->GetControlContainer()));
+        AddPanel (nId, PID_TABLE_DESIGN);
+    }
 
     {
         DummyControl aControl (pToolPanel, SdResId(RID_CUSTOMANIMATION_START+0));
