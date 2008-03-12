@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:21:24 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,23 +590,17 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
     while (pLayout)
     {
-        List* pCreatedStyles = new List;
+        SdStyleSheetVector aCreatedStyles;
 
-        ((SdStyleSheetPool*) GetStyleSheetPool())->
-        CopyLayoutSheets(*pLayout, *pBookmarkStyleSheetPool,pCreatedStyles);
+        ((SdStyleSheetPool*)GetStyleSheetPool())->CopyLayoutSheets(*pLayout, *pBookmarkStyleSheetPool,aCreatedStyles);
 
-        if (pCreatedStyles->Count() > 0)
+        if(!aCreatedStyles.empty())
         {
             if( pUndoMgr )
             {
-                SdMoveStyleSheetsUndoAction* pMovStyles =
-                    new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
-        }
-        else
-        {
-            delete pCreatedStyles;
         }
 
         delete pLayout;
@@ -1473,23 +1467,20 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
 
                 if (bDeleteOldStyleSheets)
                 {
-                    List* pRemove = ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutSheetList( aLayoutName );
+                    SdStyleSheetVector aRemove;
+                    static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutSheetList( aLayoutName, aRemove );
 
                     if( bUndo )
                     {
                         // die Liste gehoert der UndoAction
-                        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, pRemove, FALSE );
+                        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aRemove, false );
 
                         if (pUndoMgr)
                             pUndoMgr->AddUndoAction(pMovStyles);
                     }
 
-                    for ( SfxStyleSheet* pSheet = (SfxStyleSheet*)pRemove->First();
-                           pSheet;
-                           pSheet = (SfxStyleSheet*)pRemove->Next() )
-                    {
-                        ((SdStyleSheetPool*) pStyleSheetPool)->Remove(pSheet);
-                    }
+                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); iter++ )
+                        static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->Remove((*iter).get());
                 }
             }
         }
@@ -1622,11 +1613,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             // nur die Praesentationsvorlagen beachten
             String aName;
             SdStyleSheetPool* pSourceStyleSheetPool = (SdStyleSheetPool*) pSourceDoc->GetStyleSheetPool();
-            pSourceStyleSheetPool->SetSearchMask(SD_LT_FAMILY);
-            ((SdStyleSheetPool*) pStyleSheetPool)->SetSearchMask(SD_LT_FAMILY);
+            pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
+            static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
 
             pReplList = new List;           // Liste fuer ersetzte StyleSheets
-            List* pCreatedStyles = new List;// Liste fuer erzeugte StyleSheets
+            SdStyleSheetVector aCreatedStyles;          // Liste fuer erzeugte StyleSheets
 
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
 
@@ -1636,8 +1627,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
                 if( aName.Search( aNewLayoutName ) == 0 )
                 {
-                    SfxStyleSheet* pMySheet = (SfxStyleSheet*) pStyleSheetPool->Find(
-                                                aName, SD_LT_FAMILY);
+                    SfxStyleSheet* pMySheet = static_cast<SfxStyleSheet*>( mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
 
                     if (pMySheet)
                     {
@@ -1658,11 +1648,10 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                     else
                     {
                        // So eine Vorlage erzeugen
-                        pMySheet = (SfxStyleSheet*)&pStyleSheetPool->Make(
-                                            aName, SD_LT_FAMILY, pHisSheet->GetMask());
+                        pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
                         pMySheet->GetItemSet().ClearItem(0);  // alle loeschen
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
-                        pCreatedStyles->Insert(pMySheet, LIST_APPEND);
+                        aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );
                     }
 
                     StyleReplaceData* pReplData = new StyleReplaceData;
@@ -1684,14 +1673,14 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             // wenn neue Vorlagen erzeugt wurden:
             // eventuell bestehende Parent-Verkettung der Itemsets in den
             // Vorlagen wieder aufbauen
-            if (pCreatedStyles->Count())
+            if(!aCreatedStyles.empty())
             {
                 StyleReplaceData* pRData = (StyleReplaceData*)pReplList->First();
 
                 while (pRData)
                 {
-                    SfxStyleSheetBase* pSOld = pStyleSheetPool->Find(pRData->aName);
-                    SfxStyleSheetBase* pSNew = pStyleSheetPool->Find(pRData->aNewName);
+                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(pRData->aName);
+                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(pRData->aNewName);
 
                     if (pSOld && pSNew)
                     {
@@ -1719,21 +1708,15 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
                 // ab jetzt beim Suchen alle beachten
                 pSourceStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
-                pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
+                mxStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_ALL);
             }
 
-            if (pCreatedStyles->Count() > 0)
+            if( !aCreatedStyles.empty() )
             {
                 // UndoAction fuer das Erzeugen und Einfuegen vorn StyleSheets
                 // auf den UndoManager legen
-                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(
-                                                              this, pCreatedStyles, TRUE);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
-            }
-            else
-            {
-                // Liste zerstoeren
-                delete pCreatedStyles;
             }
         }
 
@@ -1914,10 +1897,10 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         /*********************************************************************
         |* Neue StyleSheets erzeugen
         \********************************************************************/
-        ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutStyleSheets(aName);
-        List* pCreatedStyles = ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutSheetList(aName);
-        SdMoveStyleSheetsUndoAction* pMovStyles =
-            new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
+        static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutStyleSheets(aName);
+        SdStyleSheetVector aCreatedStyles;
+        static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutSheetList(aName, aCreatedStyles);
+        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
         pUndoMgr->AddUndoAction(pMovStyles);
 
         /*********************************************************************
