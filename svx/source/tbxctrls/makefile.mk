@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-19 17:21:20 $
+#   last change: $Author: rt $ $Date: 2008-03-12 10:08:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ SLOFILES=	\
         $(SLO)$/tbxdrctl.obj    \
         $(SLO)$/verttexttbxctrl.obj \
         $(SLO)$/toolbarmenu.obj \
+        $(SLO)$/subtoolboxcontrol.obj \
         $(SLO)$/tbxcolor.obj \
         $(SLO)$/tbxcolorupdate.obj \
         $(SLO)$/tbunocontroller.obj
