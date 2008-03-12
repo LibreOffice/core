@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:08:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,8 @@
 
 FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
 {
-    if (bTextFrame && pModel!=NULL && !rR.IsEmpty()) {
+    if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
+    {
         SdrFitToSizeType eFit=GetFitToSize();
         FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
         FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
@@ -139,7 +140,8 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
         FASTBOOL bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
         FASTBOOL bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
         FASTBOOL bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
-        if (!bFitToSize && (bWdtGrow || bHgtGrow)) {
+        if (!bFitToSize && (bWdtGrow || bHgtGrow))
+        {
             Rectangle aR0(rR);
             long nHgt=0,nMinHgt=0,nMaxHgt=0;
             long nWdt=0,nMinWdt=0,nMaxWdt=0;
@@ -148,14 +150,16 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             Size aTmpSiz(pModel->GetMaxObjSize());
             if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
             if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
-            if (bWdtGrow) {
+            if (bWdtGrow)
+            {
                 nMinWdt=GetMinTextFrameWidth();
                 nMaxWdt=GetMaxTextFrameWidth();
                 if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width()) nMaxWdt=aMaxSiz.Width();
                 if (nMinWdt<=0) nMinWdt=1;
                 aSiz.Width()=nMaxWdt;
             }
-            if (bHgtGrow) {
+            if (bHgtGrow)
+            {
                 nMinHgt=GetMinTextFrameHeight();
                 nMaxHgt=GetMaxTextFrameHeight();
                 if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
@@ -194,12 +198,14 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
                 rOutliner.SetUpdateMode(TRUE);
                 // !!! hier sollte ich wohl auch noch mal die Optimierung mit
                 // bPortionInfoChecked usw einbauen
+                OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                 if ( pOutlinerParaObject != NULL )
                 {
                     rOutliner.SetText(*pOutlinerParaObject);
                     rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
                 }
-                if (bWdtGrow) {
+                if (bWdtGrow)
+                {
                     Size aSiz2(rOutliner.CalcTextSize());
                     nWdt=aSiz2.Width()+1; // lieber etwas Tolleranz
                     if (bHgtGrow) nHgt=aSiz2.Height()+1; // lieber etwas Tolleranz
@@ -296,9 +302,12 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 void SdrTextObj::ImpSetTextStyleSheetListeners()
 {
     SfxStyleSheetBasePool* pStylePool=pModel!=NULL ? pModel->GetStyleSheetPool() : NULL;
-    if (pStylePool!=NULL) {
+    if (pStylePool!=NULL)
+    {
         Container aStyles(1024,64,64);
-        if (pOutlinerParaObject!=NULL) {
+        OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+        if (pOutlinerParaObject!=NULL)
+        {
             // Zunaechst werden alle im ParaObject enthaltenen StyleSheets
             // im Container aStyles gesammelt. Dazu wird die Family jeweils
             // ans Ende des StyleSheet-Namen drangehaengt.
@@ -387,7 +396,9 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
 
 void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact)
 {
-    if (pOutlinerParaObject!=NULL && xFact.IsValid() && yFact.IsValid()) {
+    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    if (pOutlinerParaObject!=NULL && xFact.IsValid() && yFact.IsValid())
+    {
         Fraction n100(100,1);
         long nX=long(xFact*n100);
         long nY=long(yFact*n100);
@@ -444,29 +455,60 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
 */
 void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds )
 {
-    if(pOutlinerParaObject)
+    sal_Int32 nText = getTextCount();
+
+    while( --nText >= 0 )
     {
-        Outliner* pOutliner = pEdtOutl;
+        SdrText* pText = getText( nText );
+        OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : 0;
 
-        if(!pOutliner)
+        if(pOutlinerParaObject)
         {
-            pOutliner = &ImpGetDrawOutliner();
-            pOutliner->SetText(*pOutlinerParaObject);
-        }
+            Outliner* pOutliner = 0;
 
-        ESelection aSelAll( 0, 0, 0xffff, 0xffff );
-        std::vector<sal_uInt16>::const_iterator aIter( rCharWhichIds.begin() );
-        while( aIter != rCharWhichIds.end() )
-        {
-            pOutliner->RemoveAttribs( aSelAll, false, (*aIter++) );
-        }
+            if( pEdtOutl || (pText == getActiveText()) )
+                pOutliner = pEdtOutl;
 
-        if(!pEdtOutl)
-        {
-            const sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
-            pOutliner->Clear();
-            NbcSetOutlinerParaObject(pTemp);
+            if(!pOutliner)
+            {
+                pOutliner = &ImpGetDrawOutliner();
+                pOutliner->SetText(*pOutlinerParaObject);
+            }
+
+            ESelection aSelAll( 0, 0, 0xffff, 0xffff );
+            std::vector<sal_uInt16>::const_iterator aIter( rCharWhichIds.begin() );
+            while( aIter != rCharWhichIds.end() )
+            {
+                pOutliner->RemoveAttribs( aSelAll, false, (*aIter++) );
+            }
+
+            if(!pEdtOutl || (pText != getActiveText()) )
+            {
+                const sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
+                pOutliner->Clear();
+                NbcSetOutlinerParaObjectForText(pTemp, pText);
+            }
         }
     }
+}
+
+bool SdrTextObj::HasText() const
+{
+    if( pEdtOutl )
+        return HasEditText();
+
+    OutlinerParaObject* pOPO = GetOutlinerParaObject();
+
+    bool bHasText = false;
+    if( pOPO )
+    {
+        const EditTextObject& rETO = pOPO->GetTextObject();
+        USHORT nParaCount = rETO.GetParagraphCount();
+
+        if( nParaCount > 0 )
+            bHasText = (nParaCount > 1) || (rETO.GetText( 0 ).Len() != 0);
+    }
+
+    return bHasText;
 }
