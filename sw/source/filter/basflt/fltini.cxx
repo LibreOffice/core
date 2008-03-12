@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:16:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,8 +145,8 @@
 #endif
 
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
+using rtl::OUString;
+using namespace com::sun::star::uno;
 
 SwRead ReadRtf = 0, ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
