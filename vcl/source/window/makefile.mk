@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:54:46 $
+#   last change: $Author: rt $ $Date: 2008-03-12 13:04:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ SLOFILES= \
             $(SLO)$/introwin.obj	\
             $(SLO)$/keycod.obj		\
             $(SLO)$/keyevent.obj	\
+            $(SLO)$/mouseevent.obj	\
             $(SLO)$/menu.obj		\
             $(SLO)$/mnemonic.obj	\
             $(SLO)$/mnemonicengine.obj  \
