@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:29:01 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,8 @@
 #include <xmloff/xmlictxt.hxx>
 #endif
 
+#include "xmloff/table/XMLTableImport.hxx"
+
 #ifndef _BGFX_VECTOR_B3DVECTOR_HXX
 #include <basegfx/vector/b3dvector.hxx>
 #endif
@@ -137,6 +139,7 @@ enum SdXMLFrameShapeElemTokenMap
     XML_TOK_FRAME_FRAME,
     XML_TOK_FRAME_FLOATING_FRAME,
     XML_TOK_FRAME_APPLET,
+    XML_TOK_FRAME_TABLE,
 
     XML_TOK_FRAME_LAST
 };
@@ -350,6 +353,8 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public UniRefBase
     const ::rtl::OUString       msStartGluePointIndex;
     const ::rtl::OUString       msEndGluePointIndex;
 
+    rtl::Reference< XMLTableImport > mxShapeTableImport;
+
 protected:
     SvXMLImport& mrImporter;
 
@@ -468,6 +473,8 @@ public:
     sal_Bool IsPresentationShapesSupported();
 
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
+
+    const rtl::Reference< XMLTableImport >&     GetShapeTableImport();
 };
 
 #endif // _XMLOFF_SHAPEIMPORT_HXX_
