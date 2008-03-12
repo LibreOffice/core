@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:26:28 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@
 #include <svx/eeitem.hxx>
 #endif
 #include <svx/flditem.hxx>
+
+#include <svx/svdotable.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -285,7 +287,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-        if ( mpViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
+        if ( eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.pObj ) != NULL ) )
         {
             bTextEdit = TRUE;
         }
