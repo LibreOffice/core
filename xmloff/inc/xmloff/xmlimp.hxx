@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:23:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 17:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ protected:
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     sal_Bool                    mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
-    bool                        mbIsGraphicLoadOnDemmandSupported;
+    bool                        mbIsGraphicLoadOnDemandSupported;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
