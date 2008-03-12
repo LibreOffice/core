@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:33:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         String aName(rPage.GetLayoutName());
                         aName += (sal_Unicode)(' ');
                         aName += String::CreateFromInt32( (sal_Int32)nDepth );
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_LT_FAMILY);
+                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                         DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
                         SfxItemSet aTempSet( pSheet->GetItemSet() );
@@ -341,7 +341,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                             String aSheetName(rPage.GetLayoutName());
                             aSheetName += (sal_Unicode)(' ');
                             aSheetName += String::CreateFromInt32( (sal_Int32)nChild );
-                            SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_LT_FAMILY));
+                            SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
 
                             if( pOutlSheet )
                                 pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -414,7 +414,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                             aName += (sal_Unicode)(' ');
                             aName += String::CreateFromInt32( (sal_Int32)nLevel );
                             SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
-                                                Find(aName, SD_LT_FAMILY);
+                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                             DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
                             SfxItemSet aTempSet( pSheet->GetItemSet() );
