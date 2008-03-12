@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:59:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 #include <svtools/moduleoptions.hxx>
 
