@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinImplHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:56:24 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 // deklarations
 //------------------------------------------------------------------------
 
+bool SAL_CALL IsWindowsVista();
 bool SAL_CALL IsWindows2000();
 bool SAL_CALL IsWindowsXP();
 bool SAL_CALL IsWindows98();
