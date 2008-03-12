@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffdef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:00:25 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_dxWrapDistRight             902  //  LONG            Right wrapping distance from text (Word)
 #define DFF_Prop_dyWrapDistBottom            903  //  LONG            Bottom wrapping distance from text (Word)
 #define DFF_Prop_lidRegroup                  904  //  LONG            Regroup ID
+#define DFF_Prop_tableProperties             927  //  LONG
+#define DFF_Prop_tableRowProperties          928  //  LONG*
 #define DFF_Prop_fEditedWrap                 953  //  BOOL            Has the wrap polygon been edited?
 #define DFF_Prop_fBehindDocument             954  //  BOOL            Word-only (shape is behind text)
 #define DFF_Prop_fOnDblClickNotify           955  //  BOOL            Notify client on a double click
