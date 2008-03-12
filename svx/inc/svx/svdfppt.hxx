@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:32:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -552,13 +552,14 @@ struct ProcessData
     PptSlidePersistEntry&   rPersistEntry;
     SdPage*                 pPage;
     List*                   pBackgroundColoredObjects;
-    sal_uInt32              nGroupingFlags;             // a special textgrouping happened
+    sal_uInt32*             pTableRowProperties;
 
     ProcessData( PptSlidePersistEntry& rP, SdPage* pP ) :
         rPersistEntry               ( rP ),
         pPage                       ( pP ),
-        pBackgroundColoredObjects   ( NULL ) {};
-    ~ProcessData() { delete pBackgroundColoredObjects; };
+        pBackgroundColoredObjects   ( NULL ),
+        pTableRowProperties         ( NULL ) {};
+    ~ProcessData() { delete pBackgroundColoredObjects; delete[] pTableRowProperties; };
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -643,6 +644,7 @@ public:
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const;
     const PptDocumentAtom&              GetDocumentAtom() const { return aDocAtom; }
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const;
+    SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry ) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
