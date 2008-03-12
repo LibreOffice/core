@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:43:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include "xmlimprt.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 
