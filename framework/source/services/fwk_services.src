@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwk_services.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:23:44 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,19 +47,19 @@ Window DLG_BACKING
     };
     String STR_BACKING_WELCOMEPRODUCT
     {
-        Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
+        Text [ en-US ] = "%PRODUCTNAME";
     };
     String STR_BACKING_CREATE
     {
-        Text [ en-US ] = "New %s";
+        Text [ en-US ] = "Create a new document";
     };
     String STR_BACKING_TEMPLATE
     {
-        Text [ en-US ] = "~New document from template";
+        Text [ en-US ] = "~Templates...";
     };
     String STR_BACKING_FILE
     {
-        Text [ en-US ] = "~Open an existing document";
+        Text [ en-US ] = "~Open a document...";
     };
     Bitmap BMP_BACKING_BACKGROUND_LEFT
     {
