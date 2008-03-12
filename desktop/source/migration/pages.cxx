@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:48:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 08:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -46,6 +46,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
 #include <svtools/regoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -485,18 +486,51 @@ RegistrationPage::RegistrationPage( Window* pParent, const ResId& rResid )
     : OWizardPage( pParent, rResid )
     , m_ftHeader(this, WizardResId(FT_REGISTRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_REGISTRATION_BODY))
-    , m_fiImage(this, WizardResId(IMG_REGISTRATION))
     , m_rbNow(this, WizardResId(RB_REGISTRATION_NOW))
     , m_rbLater(this, WizardResId(RB_REGISTRATION_LATER))
     , m_rbNever(this, WizardResId(RB_REGISTRATION_NEVER))
-    , m_rbReg(this, WizardResId(RB_REGISTRATION_REG))
     , m_flSeparator(this, WizardResId(FL_REGISTRATION))
     , m_ftEnd(this, WizardResId(FT_REGISTRATION_END))
     , m_bNeverVisible( sal_True )
 {
     FreeResource();
-    _setBold(m_ftHeader);
 
+    // another text for OOo
+    sal_Int32 nOpenSourceContext = 0;
+    try
+    {
+        ::utl::ConfigManager::GetDirectConfigProperty(
+            ::utl::ConfigManager::OPENSOURCECONTEXT ) >>= nOpenSourceContext;
+    }
+    catch( Exception& )
+    {
+        DBG_ERRORFILE( "RegistrationPage::RegistrationPage(): error while getting open source context" );
+    }
+
+    if ( nOpenSourceContext > 0 )
+    {
+        String sBodyText( WizardResId( STR_REGISTRATION_OOO ) );
+        m_ftBody.SetText( sBodyText );
+    }
+
+    // calculate height of body text and rearrange the buttons
+    Size aSize = m_ftBody.GetSizePixel();
+    Size aMinSize = m_ftBody.CalcMinimumSize( aSize.Width() );
+    long nTxtH = aMinSize.Height();
+    long nCtrlH = aSize.Height();
+    long nDelta = ( nCtrlH - nTxtH );
+    aSize.Height() -= nDelta;
+    m_ftBody.SetSizePixel( aSize );
+    Window* pWins[] = { &m_rbNow, &m_rbLater, &m_rbNever };
+    Window** pCurrent = pWins;
+    for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+    {
+        Point aNewPos = (*pCurrent)->GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        (*pCurrent)->SetPosPixel( aNewPos );
+    }
+
+    _setBold(m_ftHeader);
     impl_retrieveConfigurationData();
     updateButtonStates();
 }
@@ -536,13 +570,7 @@ void RegistrationPage::impl_retrieveConfigurationData()
 
 void RegistrationPage::updateButtonStates()
 {
-    if ( !m_bNeverVisible )
-    {
-        ::Point aNeverPos = m_rbNever.GetPosPixel();
-
-        m_rbReg.SetPosPixel( aNeverPos );
-        m_rbNever.Show( FALSE );
-    }
+    m_rbNever.Show( m_bNeverVisible );
 }
 
 sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
@@ -597,8 +625,6 @@ RegistrationPage::RegistrationMode RegistrationPage::getRegistrationMode() const
         eMode = rmLater;
     else if ( m_rbNever.IsChecked() )
         eMode = rmNever;
-    else if ( m_rbReg.IsChecked() )
-        eMode = rmAlready;
     return eMode;
 }
 
