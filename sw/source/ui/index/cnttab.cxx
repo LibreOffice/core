@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:01:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::rtl;
+using namespace com::sun::star::ui::dialogs;
+using ::rtl::OUString;
 using namespace ::sfx2;
 
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
