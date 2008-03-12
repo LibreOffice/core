@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:12:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
     void ImpSetGraphicStyles() const;
+    void ImpSetCellStyles() const;
     void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles,
         sal_uInt16 nFamily, const UniString& rPrefix) const;
 
