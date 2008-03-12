@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ void StyleSheetUndoAction::Undo()
     mpDoc->MigrateItemSet( pOldSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
-    if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
+    if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
         ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
@@ -164,7 +164,7 @@ void StyleSheetUndoAction::Redo()
     mpDoc->MigrateItemSet( pNewSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
-    if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
+    if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
         ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
