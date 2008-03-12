@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:22:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,11 +208,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     aOldFullName += sal_Unicode( ' ' );
                     aOldFullName += String::CreateFromInt32( (sal_Int32)i );
 
-                    pSheet = pStShPool->Find(aOldFullName, SD_LT_FAMILY);
+                    pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
                     aOldOutlineStyles.Insert(pSheet, LIST_APPEND);
 
-                    pSheet = pStShPool->Find(aFullName, SD_LT_FAMILY);
+                    pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "neue Gliederungsvorlage nicht gefunden");
                     aOutlineStyles.Insert(pSheet, LIST_APPEND);
 
@@ -231,7 +231,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
 
                         if( pOPO )
-                            pOPO->SetStyleSheets( i,  aFullName, SD_LT_FAMILY );
+                            pOPO->SetStyleSheets( i,  aFullName, SD_STYLE_FAMILY_MASTERPAGE );
                     }
                 }
 
