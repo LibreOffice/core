@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:48:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:48:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,14 +295,14 @@ void DocumentHelper::ProvideStyles (
         static_cast<SdStyleSheetPool*>(rSourceDocument.GetStyleSheetPool());
     SdStyleSheetPool* pTargetStyleSheetPool =
         static_cast<SdStyleSheetPool*>(rTargetDocument.GetStyleSheetPool());
-    List* pCreatedStyles = new List();
+    SdStyleSheetVector aCreatedStyles;
     pTargetStyleSheetPool->CopyLayoutSheets (
         sLayoutName,
         *pSourceStyleSheetPool,
-        pCreatedStyles);
+        aCreatedStyles);
 
     // Add an undo action for the copied style sheets.
-    if (pCreatedStyles->Count() > 0)
+    if( !aCreatedStyles.empty() )
     {
          SfxUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
        if (pUndoManager != NULL)
@@ -310,14 +310,10 @@ void DocumentHelper::ProvideStyles (
            SdMoveStyleSheetsUndoAction* pMovStyles =
                new SdMoveStyleSheetsUndoAction (
                    &rTargetDocument,
-                   pCreatedStyles,
+                   aCreatedStyles,
                    TRUE);
            pUndoManager->AddUndoAction (pMovStyles);
        }
-    }
-    else
-    {
-        delete pCreatedStyles;
     }
 }
 
