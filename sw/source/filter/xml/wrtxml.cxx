@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:09:00 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/embed/XStorage.hpp>
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -125,7 +126,7 @@
 #endif
 
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -236,11 +237,17 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
+        { "TargetStorage", sizeof("TargetStorage")-1,0, &embed::XStorage::static_type(),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
+
+    const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+    xInfoSet->setPropertyValue( sTargetStorage, Any( xStg ) );
 
     // create XStatusIndicator
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
