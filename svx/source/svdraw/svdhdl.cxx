@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:37:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,8 +324,8 @@ SdrHdl::SdrHdl():
     nSourceHdlNum(0),
     bSelect(FALSE),
     b1PixMore(FALSE),
-    bPlusHdl(FALSE)
-
+    bPlusHdl(FALSE),
+    mbMoveOutside(false)
 {
     if(!pSimpleSet)
         pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
@@ -354,8 +354,8 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     nSourceHdlNum(0),
     bSelect(FALSE),
     b1PixMore(FALSE),
-    bPlusHdl(FALSE)
-
+    bPlusHdl(FALSE),
+    mbMoveOutside(false)
 {
     if(!pSimpleSet)
         pSimpleSet = new SdrHdlBitmapSet(SIP_SA_MARKERS);
@@ -381,6 +381,17 @@ void SdrHdl::Set1PixMore(BOOL bJa)
     if(b1PixMore != bJa)
     {
         b1PixMore = bJa;
+
+        // create new display
+        Touch();
+    }
+}
+
+void SdrHdl::SetMoveOutside( bool bMoveOutside )
+{
+    if(mbMoveOutside != bMoveOutside)
+    {
+        mbMoveOutside = bMoveOutside;
 
         // create new display
         Touch();
@@ -608,7 +619,7 @@ void SdrHdl::CreateB2dIAObject()
                     Point aMoveOutsideOffset(0, 0);
 
                     // add offset if necessary
-                    if(pHdlList->IsMoveOutside())
+                    if(pHdlList->IsMoveOutside() || mbMoveOutside)
                     {
                         OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
