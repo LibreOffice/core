@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:21:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
+
+#include <svtools/smplhint.hxx>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -2125,9 +2127,9 @@ void  SwDocStyleSheet::SetHelpId( const String& r, ULONG nId )
  --------------------------------------------------------------------*/
 
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, BOOL bOrg )
-    : SfxStyleSheetBasePool( rDocument.GetAttrPool() ),
-    aStyleSheet( rDocument, aEmptyStr, *this, SFX_STYLE_FAMILY_CHAR, 0 ),
-    rDoc( rDocument )
+: SfxStyleSheetBasePool( rDocument.GetAttrPool() )
+, mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyStr, *this, SFX_STYLE_FAMILY_CHAR, 0 ) )
+, rDoc( rDocument )
 {
     bOrganizer = bOrg;
 }
@@ -2136,21 +2138,31 @@ SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, BOOL bOrg )
 {
 }
 
+void SAL_CALL SwDocStyleSheetPool::acquire(  ) throw ()
+{
+    comphelper::OWeakTypeObject::acquire();
+}
+
+void SAL_CALL SwDocStyleSheetPool::release(  ) throw ()
+{
+    comphelper::OWeakTypeObject::release();
+}
+
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make(
         const String&   rName,
         SfxStyleFamily  eFam,
         USHORT          _nMask,
         USHORT          /*nPos*/ )
 {
-    aStyleSheet.PresetName(rName);
-    aStyleSheet.PresetParent(aEmptyStr);
-    aStyleSheet.PresetFollow(aEmptyStr);
-    aStyleSheet.SetMask(_nMask) ;
-    aStyleSheet.SetFamily(eFam);
-    aStyleSheet.SetPhysical(TRUE);
-    aStyleSheet.Create();
+    mxStyleSheet->PresetName(rName);
+    mxStyleSheet->PresetParent(aEmptyStr);
+    mxStyleSheet->PresetFollow(aEmptyStr);
+    mxStyleSheet->SetMask(_nMask) ;
+    mxStyleSheet->SetFamily(eFam);
+    mxStyleSheet->SetPhysical(TRUE);
+    mxStyleSheet->Create();
 
-    return aStyleSheet;
+    return *mxStyleSheet.get();
 }
 
 
@@ -2274,7 +2286,12 @@ SfxStyleSheetIterator*  SwDocStyleSheetPool::CreateIterator(
     return new SwStyleSheetIterator( this, eFam, _nMask );
 }
 
-void   SwDocStyleSheetPool::Erase( SfxStyleSheetBase* pStyle)
+void SwDocStyleSheetPool::dispose()
+{
+    mxStyleSheet.clear();
+}
+
+void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
 {
     if( !pStyle )
         return;
@@ -2373,16 +2390,16 @@ BOOL  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         if( bRet )
         {
             // nur fuer das Broadcasting
-            aStyleSheet.PresetName( rStyle );
-            aStyleSheet.PresetParent( rParent );
+            mxStyleSheet->PresetName( rStyle );
+            mxStyleSheet->PresetParent( rParent );
             if( SFX_STYLE_FAMILY_PARA == eFam )
-                aStyleSheet.PresetFollow( ((SwTxtFmtColl*)pFmt)->
+                mxStyleSheet->PresetFollow( ((SwTxtFmtColl*)pFmt)->
                         GetNextTxtFmtColl().GetName() );
             else
-                aStyleSheet.PresetFollow( aEmptyStr );
+                mxStyleSheet->PresetFollow( aEmptyStr );
 
             Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED,
-                                            aStyleSheet ) );
+                                            *(mxStyleSheet.get()) ) );
         }
     }
 
@@ -2409,34 +2426,34 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
                              n & SFXSTYLEBIT_USED ) ? TRUE : FALSE;
     const SwModify* pMod = 0;
 
-    aStyleSheet.SetPhysical( FALSE );
-    aStyleSheet.PresetName( rName );
-    aStyleSheet.SetFamily( eFam );
-    BOOL bFnd = aStyleSheet.FillStyleSheet( SwDocStyleSheet::FillOnlyName );
+    mxStyleSheet->SetPhysical( FALSE );
+    mxStyleSheet->PresetName( rName );
+    mxStyleSheet->SetFamily( eFam );
+    BOOL bFnd = mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
 
-    if( aStyleSheet.IsPhysical() )
+    if( mxStyleSheet->IsPhysical() )
     {
         switch( eFam )
         {
         case SFX_STYLE_FAMILY_CHAR:
-            pMod = aStyleSheet.GetCharFmt();
+            pMod = mxStyleSheet->GetCharFmt();
             break;
 
         case SFX_STYLE_FAMILY_PARA:
-            pMod = aStyleSheet.GetCollection();
+            pMod = mxStyleSheet->GetCollection();
             break;
 
         case SFX_STYLE_FAMILY_FRAME:
-            pMod = aStyleSheet.GetFrmFmt();
+            pMod = mxStyleSheet->GetFrmFmt();
             break;
 
         case SFX_STYLE_FAMILY_PAGE:
-            pMod = aStyleSheet.GetPageDesc();
+            pMod = mxStyleSheet->GetPageDesc();
             break;
 
         case SFX_STYLE_FAMILY_PSEUDO:
             {
-                const SwNumRule* pRule = aStyleSheet.GetNumRule();
+                const SwNumRule* pRule = mxStyleSheet->GetNumRule();
                 if( pRule &&
                     !(bSearchUsed && (bOrganizer || rDoc.IsUsed(*pRule)) ) &&
                     (( nSMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
@@ -2465,7 +2482,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
             : bSearchUsed )
             bFnd = FALSE;
     }
-    return bFnd ? &aStyleSheet : 0;
+    return bFnd ? mxStyleSheet.get() : 0;
 }
 
 /*  */
@@ -2473,8 +2490,8 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                                 SfxStyleFamily eFam, USHORT n )
     : SfxStyleSheetIterator( pBase, eFam, n ),
-    aIterSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 ),
-    aStyleSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 )
+    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
+    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, *pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
 {
     bFirstCalled = FALSE;
     nLastPos = 0;
@@ -2483,7 +2500,7 @@ SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
 
  SwStyleSheetIterator::~SwStyleSheetIterator()
 {
-    EndListening( aIterSheet.GetPool() );
+    EndListening( mxIterSheet->GetPool() );
 }
 
 USHORT  SwStyleSheetIterator::Count()
@@ -2499,11 +2516,11 @@ SfxStyleSheetBase*  SwStyleSheetIterator::operator[]( USHORT nIdx )
     // gefunden
     if( !bFirstCalled )
         First();
-    aStyleSheet.PresetNameAndFamily( *aLst[ nIdx ] );
-    aStyleSheet.SetPhysical( FALSE );
-    aStyleSheet.FillStyleSheet( SwDocStyleSheet::FillOnlyName );
+    mxStyleSheet->PresetNameAndFamily( *aLst[ nIdx ] );
+    mxStyleSheet->SetPhysical( FALSE );
+    mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
 
-    return &aStyleSheet;
+    return mxStyleSheet.get();
 }
 
 SfxStyleSheetBase*  SwStyleSheetIterator::First()
@@ -2514,7 +2531,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     aLst.Erase();
 
     // aktuellen loeschen
-    aIterSheet.Reset();
+    mxIterSheet->Reset();
 
     SwDoc& rDoc = ((SwDocStyleSheetPool*)pBasePool)->GetDoc();
     const USHORT nSrchMask = nMask;
@@ -2844,15 +2861,15 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Next()
     nLastPos++;
     if(aLst.Count() > 0 && nLastPos < aLst.Count())
     {
-        aIterSheet.PresetNameAndFamily(*aLst[nLastPos]);
-        aIterSheet.SetPhysical( FALSE );
-        aIterSheet.SetMask( nMask );
-        if(aIterSheet.pSet)
+        mxIterSheet->PresetNameAndFamily(*aLst[nLastPos]);
+        mxIterSheet->SetPhysical( FALSE );
+        mxIterSheet->SetMask( nMask );
+        if(mxIterSheet->pSet)
         {
-            aIterSheet.pSet->ClearItem(0);
-            aIterSheet.pSet= 0;
+            mxIterSheet->pSet->ClearItem(0);
+            mxIterSheet->pSet= 0;
         }
-        return &aIterSheet;
+        return mxIterSheet.get();
     }
     return 0;
 }
@@ -2867,13 +2884,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
     if( USHRT_MAX != nLastPos )
     {
         // gefunden
-        aStyleSheet.PresetNameAndFamily(*aLst[nLastPos]);
+        mxStyleSheet->PresetNameAndFamily(*aLst[nLastPos]);
         // neuer Name gesetzt, also bestimme seine Daten
-        aStyleSheet.FillStyleSheet( SwDocStyleSheet::FillOnlyName );
-        if( !aStyleSheet.IsPhysical() )
-            aStyleSheet.SetPhysical( FALSE );
+        mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
+        if( !mxStyleSheet->IsPhysical() )
+            mxStyleSheet->SetPhysical( FALSE );
 
-        return &aStyleSheet;
+        return mxStyleSheet.get();
     }
     return 0;
 }
