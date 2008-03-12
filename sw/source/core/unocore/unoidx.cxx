@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:00:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 String lcl_AnyToString(uno::Any rVal) throw(lang::IllegalArgumentException)
