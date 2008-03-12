@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:37:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@
 #define STR_SLIDE_OBJ_TOOLBOX       RID_SLIDE_OBJ_TOOLBOX
 #define STR_BEZIER_TOOLBOX          RID_BEZIER_TOOLBOX
 #define STR_DRAW_TEXT_TOOLBOX       RID_DRAW_TEXT_TOOLBOX
+#define STR_DRAW_TABLE_TOOLBOX      RID_DRAW_TABLE_TOOLBOX
 #define STR_OUTLINE_TOOLBOX         RID_OUTLINE_TOOLBOX
 #define STR_DRAW_POLYLINEOBJ_POPUP  RID_DRAW_POLYLINEOBJ_POPUP
 #define STR_GLUEPOINTS_TOOLBOX      RID_GLUEPOINTS_TOOLBOX
@@ -508,10 +509,11 @@
 #define STR_GRAPHICS_STYLE_FAMILY                       (RID_APP_START+715)
 
 #define STR_TITLE_SAVE_AS_PICTURE                       (RID_APP_START+716)
+#define STR_CELL_STYLE_FAMILY                           (RID_APP_START+717)
 
-#define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+717)
-#define STR_NAVIGATOR_SHOW_ALL_SHAPES                   (RID_APP_START+718)
-#define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+719)
+#define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+718)
+#define STR_NAVIGATOR_SHOW_ALL_SHAPES                   (RID_APP_START+719)
+#define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+720)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
