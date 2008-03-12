@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 08:47:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ String STR_LAYER_CONTROLS
 };
 String STR_LAYER_MEASURELINES
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maßlinien : Ma˜linien */
     Text [ en-US ] = "Dimension Lines" ;
 };
 String STR_PAGE
@@ -107,7 +106,6 @@ String STR_PRESOBJ_MPOUTLLAYER4
 };
 String STR_PRESOBJ_MPOUTLLAYER5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fünfte Gliederungsebene : F³nfte Gliederungsebene */
     Text [ en-US ] = "Fifth Outline Level" ;
 };
 String STR_PRESOBJ_MPOUTLLAYER6
@@ -136,47 +134,38 @@ String STR_PRESOBJ_MPNOTESTEXT
 };
 String STR_PRESOBJ_TITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Titel durch Klicken hinzufügen : Titel durch Klicken hinzuf³gen */
     Text [ en-US ] = "Click to add title" ;
 };
 String STR_PRESOBJ_OUTLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Gliederung durch Klicken hinzufügen : Gliederung durch Klicken hinzuf³gen */
     Text [ en-US ] = "Click to add an outline" ;
 };
 String STR_PRESOBJ_TEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Text durch Klicken hinzufügen : Text durch Klicken hinzuf³gen */
     Text [ en-US ] = "Click to add text" ;
 };
 String STR_PRESOBJ_NOTESTEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Notizen durch Klicken hinzufügen : Notizen durch Klicken hinzuf³gen */
     Text [ en-US ] = "Click to add notes" ;
 };
 String STR_PRESOBJ_GRAPHIC
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Graphik durch Doppelklicken hinzufügen : Graphik durch Doppelklicken hinzuf³gen */
     Text [ en-US ] = "Double-click to add graphics" ;
 };
 String STR_PRESOBJ_OBJECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt durch Doppelklicken hinzufügen : Objekt durch Doppelklicken hinzuf³gen */
     Text [ en-US ] = "Double-click to add an object" ;
 };
 String STR_PRESOBJ_CHART
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Diagramm durch Doppelklicken hinzufügen : Diagramm durch Doppelklicken hinzuf³gen */
     Text [ en-US ] = "Double-click to add a chart" ;
 };
 String STR_PRESOBJ_ORGCHART
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Organisationsdiagramm durch Doppelklicken hinzufügen : Organisationsdiagramm durch Doppelklicken hinzuf³gen */
     Text [ en-US ] = "Double-click to add an organization chart" ;
 };
 String STR_PRESOBJ_TABLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle durch Doppelklicken hinzufügen : Tabelle durch Doppelklicken hinzuf³gen */
     Text [ en-US ] = "Double-click to add a spreadsheet" ;
 };
 String STR_SLIDEVIEWSHELL
@@ -209,14 +198,10 @@ String STR_STDOBJECTBARSHELL
 };
 String STR_BEZIEROBJECTBARSHELL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Béziermodus : BÚziermodus */
     Text [ en-US ] = "BÃ©zier mode" ;
 };
 String STR_APPLICATIONOBJECTBAR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? StarImpress 4.0 : StarDraw 3.1 */
-    /* ### ACHTUNG: Neuer Text in Resource? StarImpress 4.0 : StarDraw 3.1 */
-    /* ### ACHTUNG: Neuer Text in Resource? StarImpress 4.0 : StarDraw 3.1 */
     Text [ en-US ] = "StarImpress 4.0" ;
 };
 String STR_GLUEPOINTSOBJECTBARSHELL
@@ -262,7 +247,6 @@ String STR_STANDARD_STYLESHEET_NAME
 };
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Das Paßwort ist falsch oder die Datei beschädigt. : Das Pa˜wort ist falsch oder die Datei beschõdigt. */
     Text [ en-US ] = "The password is incorrect or the file is damaged." ;
 };
 String STR_UNDO_MOVEPAGES
@@ -278,14 +262,8 @@ String STR_LAYOUT_SUBTITLE
 {
     Text = "Untertitel" ;
 };
- // Zusatz NT fuer nicht zu uebersetzende Strings
-String STR_POOLSHEET_MEASURE_NT
-{
-    Text = "Maßlinie" ;
-};
 String STR_POOLSHEET_MEASURE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maßlinie : Ma˜linie */
     Text [ en-US ] = "Dimension Line" ;
 };
 String STR_POOLSHEET_OBJWITHARROW
@@ -296,44 +274,24 @@ String STR_POOLSHEET_OBJWITHSHADOW
 {
     Text [ en-US ] = "Object with shadow" ;
 };
-String STR_POOLSHEET_OBJWITHOUTFILL_NT
-{
-    Text = "Objekt ohne Füllung" ;
-};
 String STR_POOLSHEET_OBJWITHOUTFILL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt ohne Füllung : Objekt ohne F³llung */
     Text [ en-US ] = "Object without fill" ;
 };
 String STR_POOLSHEET_TEXT
 {
     Text [ en-US ] = "Text" ;
 };
-String STR_POOLSHEET_TEXTBODY_NT
-{
-    Text = "Textkörper" ;
-};
 String STR_POOLSHEET_TEXTBODY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper : Textk÷rper */
     Text [ en-US ] = "Text body" ;
-};
-String STR_POOLSHEET_TEXTBODY_JUSTIFY_NT
-{
-    Text = "Textkörper Blocksatz" ;
 };
 String STR_POOLSHEET_TEXTBODY_JUSTIFY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper Blocksatz : Textk÷rper Blocksatz */
     Text [ en-US ] = "Text body justified" ;
-};
-String STR_POOLSHEET_TEXTBODY_INDENT_NT
-{
-    Text = "Textkörper Einzug" ;
 };
 String STR_POOLSHEET_TEXTBODY_INDENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textkörper Einzug : Textk÷rper Einzug */
     Text [ en-US ] = "First line indent" ;
 };
 String STR_POOLSHEET_TITLE
@@ -348,31 +306,17 @@ String STR_POOLSHEET_TITLE2
 {
     Text [ en-US ] = "Title2" ;
 };
-String STR_POOLSHEET_HEADLINE_NT
-{
-    Text = "Überschrift" ;
-};
 String STR_POOLSHEET_HEADLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
     Text [ en-US ] = "Heading" ;
-};
-String STR_POOLSHEET_HEADLINE1_NT
-{
-    Text = "Überschrift1" ;
 };
 String STR_POOLSHEET_HEADLINE1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift1 : šberschrift1 */
     Text [ en-US ] = "Heading1" ;
 };
-String STR_POOLSHEET_HEADLINE2_NT
-{
-    Text = "Überschrift2" ;
-};
+
 String STR_POOLSHEET_HEADLINE2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift2 : šberschrift2 */
     Text [ en-US ] = "Heading2" ;
 };
 String STR_EMPTY_STYLESHEET_NAME
@@ -411,6 +355,13 @@ String STR_GRAFOBJECTBARSHELL
 String STR_MEDIAOBJECTBARSHELL
 {
     Text [ en-US ] = "Media Playback" ;
+};
+
+String STR_TABLEOBJECTBARSHELL
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_POWERPOINT_IMPORT
@@ -461,3 +412,32 @@ String STR_FONTWORKOBJECTBARSHELL
     Text [ en-US ] = "Fontwork" ;
 };
 
+String STR_POOLSHEET_BANDED_CELL
+{
+    Text [ en-US ] = "Banding cell" ;
+    Text [ DE ] = "Alternierende Zelle" ;
+};
+
+String STR_POOLSHEET_HEADER
+{
+    Text [ en-US ] = "Header" ;
+    Text [ DE ] = "Kopfzeile" ;
+};
+
+String STR_POOLSHEET_TOTAL
+{
+    Text [ en-US ] = "Total line" ;
+    Text [ DE ] = "Summenzeile" ;
+};
+
+String STR_POOLSHEET_FIRST_COLUMN
+{
+    Text [ en-US ] = "First column" ;
+    Text [ DE ] = "Erste Spalte" ;
+};
+
+String STR_POOLSHEET_LAST_COLUMN
+{
+    Text [ en-US ] = "Last column" ;
+    Text [ DE ] = "Letzte Spalte" ;
+};
