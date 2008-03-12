@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:33:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@
 #include <unomid.h>
 
 
+using rtl::OUString;
 using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -108,7 +109,7 @@ SwXTextDefaults::~SwXTextDefaults ()
 }
 
 
-Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
+uno::Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
         throw(RuntimeException)
 {
     static uno::Reference < XPropertySetInfo > xRef = aPropSet.getPropertySetInfo();
@@ -150,17 +151,17 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             SwFmtCharFmt *pCharFmt = 0;
             if(pStyle)
             {
-                SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pStyle );
+                rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
                     pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem ist const...
-                    pDrop->SetCharFmt(aStyle.GetCharFmt());
+                    pDrop->SetCharFmt(xStyle->GetCharFmt());
                     pDoc->SetDefault(*pDrop);
                 }
                 else // RES_TXTATR_CHARFMT == pMap->nWID
                 {
                     pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem ist const...
-                    pCharFmt->SetCharFmt(aStyle.GetCharFmt());
+                    pCharFmt->SetCharFmt(xStyle->GetCharFmt());
                     pDoc->SetDefault(*pCharFmt);
                 }
             }
@@ -198,28 +199,28 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
 }
 
 
-void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
