@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:36:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::vos;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -314,6 +314,50 @@ void ImplLocalRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOrigin
 
 namespace svx
 {
+    struct ExportSettings
+    {
+        OUString maFilterName;
+        OUString maMediaType;
+        URL maURL;
+        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutputStream;
+        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > mxGraphicRenderer;
+        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
+        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > mxInteractionHandler;
+
+        sal_Int32 mnWidth;
+        sal_Int32 mnHeight;
+        sal_Bool mbExportOnlyBackground;
+        sal_Bool mbVerboseComments;
+        sal_Bool mbScrollText;
+        sal_Bool mbUseHighContrast;
+        sal_Bool mbTranslucent;
+
+        Sequence< PropertyValue >   maFilterData;
+
+        Fraction    maScaleX;
+        Fraction    maScaleY;
+
+        ExportSettings( SdrModel* pDoc );
+    };
+
+    ExportSettings::ExportSettings( SdrModel* pDoc )
+    : mnWidth( 0 )
+    , mnHeight( 0 )
+    , mbExportOnlyBackground( false )
+    , mbVerboseComments( false )
+    , mbScrollText( false )
+    , mbUseHighContrast( false )
+    , mbTranslucent( sal_False )
+    , maScaleX( 1, 1 )
+    , maScaleY( 1, 1 )
+    {
+        if( pDoc )
+        {
+            maScaleX = pDoc->GetScaleFraction();
+            maScaleY = pDoc->GetScaleFraction();
+        }
+    }
+
     /** implements a component to export shapes or pages to external graphic formats.
 
         @implements com.sun.star.drawing.GraphicExportFilter
@@ -329,7 +373,7 @@ namespace svx
         virtual void SAL_CALL cancel(  ) throw(RuntimeException);
 
         // XExporter
-        virtual void SAL_CALL setSourceDocument( const Reference< lang::XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
+        virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
@@ -343,6 +387,9 @@ namespace svx
         VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
+
+        void ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings );
+        bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType );
 
     private:
         Reference< XShape >     mxShape;
@@ -616,210 +663,177 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     return pVDev;
 }
 
-// XFilter
-sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw(RuntimeException)
+void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( NULL == mpUnoPage )
-        return sal_False;
-
-    GraphicFilter*              pFilter = GetGrfFilter();
-    SdrPage*                    pPage = mpUnoPage->GetSdrPage();
-    Sequence< PropertyValue >   aFilterData;
-
-    sal_Int32 nWidth = 0;
-    sal_Int32 nHeight = 0;
-    sal_Bool bExportOnlyBackground = false;
-    sal_Bool bVerboseComments = false;
-    sal_Bool bScrollText = false;
-    sal_Bool bUseHighContrast = false;
-
-    if( NULL == pFilter || NULL == pPage || NULL == mpDoc )
-        return sal_False;
-
-    // get the arguments from the descriptor
-
-    sal_Bool bTranslucent = sal_False; /* pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii().EqualsAscii( "gif" ); */
-
-    OUString aFilterName, aMediaType;
-    URL aURL;
-
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >         xOutputStream;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > xGraphicRenderer;
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    xStatusIndicator;
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler;
-    Fraction    aScaleX( mpDoc->GetScaleFraction() );
-    Fraction    aScaleY( mpDoc->GetScaleFraction() );
+    sal_Int32 nArgs = aDescriptor.getLength();
+    const PropertyValue* pValues = aDescriptor.getConstArray();
+    while( nArgs-- )
     {
-        sal_Int32 nArgs = aDescriptor.getLength();
-        const PropertyValue* pValues = aDescriptor.getConstArray();
-        while( nArgs-- )
+        if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
         {
-            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
-            {
-                pValues->Value >>= aFilterName;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
-            {
-                pValues->Value >>= aMediaType;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
-            {
-                if( !( pValues->Value >>= aURL ) )
-                {
-                    pValues->Value >>= aURL.Complete;
-                }
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
-            {
-                pValues->Value >>= xOutputStream;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicRenderer" ) ) )
-            {
-                pValues->Value >>= xGraphicRenderer;
-            }
-            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
-            {
-                pValues->Value >>= xStatusIndicator;
-            }
-            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
-            {
-                pValues->Value >>= xInteractionHandler;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
-            {
-                pValues->Value >>= nWidth;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
-            {
-                pValues->Value >>= nHeight;
-            }
-            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )   // for compatibility reasons, deprecated
-            {
-                pValues->Value >>= bExportOnlyBackground;
-            }
-            else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
-            {
-                pValues->Value >>= aFilterData;
-
-                sal_Int32 nFilterArgs = aFilterData.getLength();
-                PropertyValue* pDataValues = aFilterData.getArray();
-                while( nFilterArgs-- )
-                {
-                    if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
-                    {
-                        if ( !( pDataValues->Value >>= bTranslucent ) ) // SJ: TODO: The GIF Transparency is stored as int32 in
-                        {                                               // configuration files, this has to be changed to boolean
-                            sal_Int32 nTranslucent = 0;
-                            if ( pDataValues->Value >>= nTranslucent )
-                                bTranslucent = nTranslucent != 0;
-                        }
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelWidth" ) ) )
-                    {
-                        pDataValues->Value >>= nWidth;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelHeight" ) ) )
-                    {
-                        pDataValues->Value >>= nHeight;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
-                    {
-                        pDataValues->Value >>= nWidth;
-                        pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) );
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
-                    {
-                        pDataValues->Value >>= nHeight;
-                        pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
-                    {
-                        pDataValues->Value >>= bExportOnlyBackground;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HighContrast" ) ) )
-                    {
-                        pDataValues->Value >>= bUseHighContrast;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
-                    {
-                        pDataValues->Value >>= mnPageNumber;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerboseComments" ) ) )
-                    {
-                        // #110496# Read flag for verbose metafile comments
-                        pDataValues->Value >>= bVerboseComments;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScrollText" ) ) )
-                    {
-                        // #110496# Read flag solitary scroll text metafile
-                        pDataValues->Value >>= bScrollText;
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CurrentPage" ) ) )
-                    {
-                        Reference< XDrawPage >  xPage;
-                        pDataValues->Value >>= xPage;
-                        if( xPage.is() )
-                        {
-                            SvxDrawPage* pUnoPage = SvxDrawPage::getImplementation( xPage );
-                            if( pUnoPage && pUnoPage->GetSdrPage() )
-                                mpCurrentPage = pUnoPage->GetSdrPage();
-                        }
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXNumerator" ) ) )
-                    {
-                        sal_Int32 nVal = 1;
-                        if( pDataValues->Value >>= nVal )
-                            aScaleX = Fraction( nVal, aScaleX.GetDenominator() );
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXDenominator" ) ) )
-                    {
-                        sal_Int32 nVal = 1;
-                        if( pDataValues->Value >>= nVal )
-                            aScaleX = Fraction( aScaleX.GetNumerator(), nVal );
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYNumerator" ) ) )
-                    {
-                        sal_Int32 nVal = 1;
-                        if( pDataValues->Value >>= nVal )
-                            aScaleY = Fraction( nVal, aScaleY.GetDenominator() );
-                    }
-                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYDenominator" ) ) )
-                    {
-                        sal_Int32 nVal = 1;
-                        if( pDataValues->Value >>= nVal )
-                            aScaleY = Fraction( aScaleY.GetNumerator(), nVal );
-                    }
-
-                    pDataValues++;
-                }
-            }
-
-            pValues++;
+            pValues->Value >>= rSettings.maFilterName;
         }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        {
+            pValues->Value >>= rSettings.maMediaType;
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        {
+            if( !( pValues->Value >>= rSettings.maURL ) )
+            {
+                pValues->Value >>= rSettings.maURL.Complete;
+            }
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
+        {
+            pValues->Value >>= rSettings.mxOutputStream;
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicRenderer" ) ) )
+        {
+            pValues->Value >>= rSettings.mxGraphicRenderer;
+        }
+        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+        {
+            pValues->Value >>= rSettings.mxStatusIndicator;
+        }
+        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+        {
+            pValues->Value >>= rSettings.mxInteractionHandler;
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+        {
+            pValues->Value >>= rSettings.mnWidth;
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+        {
+            pValues->Value >>= rSettings.mnHeight;
+        }
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )   // for compatibility reasons, deprecated
+        {
+            pValues->Value >>= rSettings.mbExportOnlyBackground;
+        }
+        else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        {
+            pValues->Value >>= rSettings.maFilterData;
+
+            sal_Int32 nFilterArgs = rSettings.maFilterData.getLength();
+            PropertyValue* pDataValues = rSettings.maFilterData.getArray();
+            while( nFilterArgs-- )
+            {
+                if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
+                {
+                    if ( !( pDataValues->Value >>= rSettings.mbTranslucent ) )  // SJ: TODO: The GIF Transparency is stored as int32 in
+                    {                                               // configuration files, this has to be changed to boolean
+                        sal_Int32 nTranslucent = 0;
+                        if ( pDataValues->Value >>= nTranslucent )
+                            rSettings.mbTranslucent = nTranslucent != 0;
+                    }
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelWidth" ) ) )
+                {
+                    pDataValues->Value >>= rSettings.mnWidth;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PixelHeight" ) ) )
+                {
+                    pDataValues->Value >>= rSettings.mnHeight;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+                {
+                    pDataValues->Value >>= rSettings.mnWidth;
+                    pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) );
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+                {
+                    pDataValues->Value >>= rSettings.mnHeight;
+                    pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+                {
+                    pDataValues->Value >>= rSettings.mbExportOnlyBackground;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HighContrast" ) ) )
+                {
+                    pDataValues->Value >>= rSettings.mbUseHighContrast;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
+                {
+                    pDataValues->Value >>= mnPageNumber;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerboseComments" ) ) )
+                {
+                    // #110496# Read flag for verbose metafile comments
+                    pDataValues->Value >>= rSettings.mbVerboseComments;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScrollText" ) ) )
+                {
+                    // #110496# Read flag solitary scroll text metafile
+                    pDataValues->Value >>= rSettings.mbScrollText;
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CurrentPage" ) ) )
+                {
+                    Reference< XDrawPage >  xPage;
+                    pDataValues->Value >>= xPage;
+                    if( xPage.is() )
+                    {
+                        SvxDrawPage* pUnoPage = SvxDrawPage::getImplementation( xPage );
+                        if( pUnoPage && pUnoPage->GetSdrPage() )
+                            mpCurrentPage = pUnoPage->GetSdrPage();
+                    }
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXNumerator" ) ) )
+                {
+                    sal_Int32 nVal = 1;
+                    if( pDataValues->Value >>= nVal )
+                        rSettings.maScaleX = Fraction( nVal, rSettings.maScaleX.GetDenominator() );
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXDenominator" ) ) )
+                {
+                    sal_Int32 nVal = 1;
+                    if( pDataValues->Value >>= nVal )
+                        rSettings.maScaleX = Fraction( rSettings.maScaleX.GetNumerator(), nVal );
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYNumerator" ) ) )
+                {
+                    sal_Int32 nVal = 1;
+                    if( pDataValues->Value >>= nVal )
+                        rSettings.maScaleY = Fraction( nVal, rSettings.maScaleY.GetDenominator() );
+                }
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYDenominator" ) ) )
+                {
+                    sal_Int32 nVal = 1;
+                    if( pDataValues->Value >>= nVal )
+                        rSettings.maScaleY = Fraction( rSettings.maScaleY.GetNumerator(), nVal );
+                }
+
+                pDataValues++;
+            }
+        }
+
+        pValues++;
     }
 
     // putting the StatusIndicator that we got from the MediaDescriptor into our local FilterData copy
-    if ( xStatusIndicator.is() )
+    if ( rSettings.mxStatusIndicator.is() )
     {
         rtl::OUString sStatusIndicator( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) );
-        int i = aFilterData.getLength();
-        aFilterData.realloc( i + 1 );
-        aFilterData[ i ].Name = sStatusIndicator;
-        aFilterData[ i ].Value <<= xStatusIndicator;
+        int i = rSettings.maFilterData.getLength();
+        rSettings.maFilterData.realloc( i + 1 );
+        rSettings.maFilterData[ i ].Name = sStatusIndicator;
+        rSettings.maFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
     }
+}
 
-    // create the output stuff
+bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType )
+{
+    if( !mpDoc || !mpUnoPage )
+        return false;
 
-    Graphic             aGraphic;
+    SdrPage* pPage = mpUnoPage->GetSdrPage();
+    if( !pPage )
+        return false;
+
     VirtualDevice       aVDev;
-    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), aScaleX, aScaleY );
-    const sal_uInt16    nFilter = aMediaType.getLength()
-                            ? pFilter->GetExportFormatNumberForMediaType( aMediaType )
-                            : pFilter->GetExportFormatNumberForShortName( aFilterName );
-    sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
+    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
     // create a view
     SdrView*        pView;
@@ -837,8 +851,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     pView->SetPageVisible( FALSE );
     pView->ShowSdrPage( pPage );
 
-    USHORT nStatus = GRFILTER_OK;
-
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
@@ -846,10 +858,12 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     std::vector< SdrObject* > aShapes;
 
+    bool bRet = true;
+
     // export complete page?
     if ( !mxShape.is() )
     {
-        if( bExportOnlyBackground )
+        if( rSettings.mbExportOnlyBackground )
         {
             if( pPage->IsMasterPage() )
             {
@@ -867,14 +881,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             // generate a bitmap to convert it to a pixel format.
             // For gif pictures there can also be a vector format used (bTranslucent)
-            if ( !bVectorType && !bTranslucent )
+            if ( !bVectorType && !rSettings.mbTranslucent )
             {
                 long nWidthPix = 0;
                 long nHeightPix = 0;
-                if ( nWidth > 0 && nHeight > 0 )
+                if ( rSettings.mnWidth > 0 && rSettings.mnHeight > 0 )
                 {
-                    nWidthPix = nWidth;
-                    nHeightPix = nHeight;
+                    nWidthPix = rSettings.mnWidth;
+                    nHeightPix = rSettings.mnHeight;
                 }
                 else
                 {
@@ -932,7 +946,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 GDIMetaFile aMtf;
 
                 aVDev.SetMapMode( aMap );
-                if( bUseHighContrast )
+                if( rSettings.mbUseHighContrast )
                     aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
                 aVDev.EnableOutput( FALSE );
                 aMtf.Record( &aVDev );
@@ -958,7 +972,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     sal_uInt16 nPaintMode(0);
 
                     // #110496# Enable verbose metafile comments
-                    if( bVerboseComments )
+                    if( rSettings.mbVerboseComments )
                         nPaintMode|=SDRPAINTMODE_VERBOSE_MTF;
 
                     // Use new StandardCheckVisisbilityRedirector
@@ -977,10 +991,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     aGraphic = Graphic( RemoveClipRegionActions( aMtf2, aMtf ) );
                 }
 
-                if( bTranslucent )
+                if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( nWidth, nHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -1012,10 +1026,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
 
         if( 0 == aShapes.size() )
-            nStatus = GRFILTER_FILTERERROR;
+            bRet = false;
     }
 
-    if( ( nStatus == GRFILTER_OK ) && aShapes.size() )
+    if( bRet && aShapes.size() )
     {
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;
@@ -1031,17 +1045,17 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
                     {
                         Size aSizePixel( aGraphic.GetSizePixel() );
-                        if ( nWidth && nHeight && ( nWidth != aSizePixel.Width() ) || ( nHeight != aSizePixel.Height() ) )
+                        if ( rSettings.mnWidth && rSettings.mnHeight && ( rSettings.mnWidth != aSizePixel.Width() ) || ( rSettings.mnHeight != aSizePixel.Height() ) )
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                            aBmpEx.Scale( Size( nWidth, nHeight ) );
+                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ) );
                             aGraphic = aBmpEx;
                         }
                     }
                     bSingleGraphic = sal_True;
                 }
             }
-            else if( bScrollText )
+            else if( rSettings.mbScrollText )
             {
                 SdrObject* pObj = aShapes.front();
                 if( pObj && pObj->ISA( SdrTextObj )
@@ -1115,7 +1129,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
-            if( bUseHighContrast )
+            if( rSettings.mbUseHighContrast )
                 aOut.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
             GDIMetaFile aMtf;
@@ -1130,7 +1144,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
 
             // #110496# Enable verbose metafile comments
-            if( bVerboseComments )
+            if( rSettings.mbVerboseComments )
                 aInfoRec.nPaintMode|=SDRPAINTMODE_VERBOSE_MTF;
 
             sdr::contact::DisplayInfo aDisplayInfo;
@@ -1171,50 +1185,11 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             if( !bVectorType )
             {
                 Size aOutSize;
-                aGraphic = GetBitmapFromMetaFile( aMtf, bTranslucent, CalcSize( nWidth, nHeight, aBoundSize, aOutSize ) );
+                aGraphic = GetBitmapFromMetaFile( aMtf, rSettings.mbTranslucent, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aBoundSize, aOutSize ) );
             }
             else
             {
                 aGraphic = aMtf;
-            }
-        }
-    }
-
-    if( nStatus == GRFILTER_OK )
-    {
-        // export graphic only if it has a size
-        const Size aGraphSize( aGraphic.GetPrefSize() );
-        if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
-        {
-            nStatus = GRFILTER_FILTERERROR;
-        }
-        else
-        {
-            // now we have a graphic, so export it
-            if( xGraphicRenderer.is() )
-            {
-                // render graphic directly into given renderer
-                xGraphicRenderer->render( aGraphic.GetXGraphic() );
-            }
-            else if( xOutputStream.is() )
-            {
-                // TODO: Either utilize optional XSeekable functionality for the
-                // SvOutputStream, or adapt the graphic filter to not seek anymore.
-                SvMemoryStream aStream( 1024, 1024 );
-
-                nStatus = pFilter->ExportGraphic( aGraphic, String(), aStream, nFilter, &aFilterData );
-
-                // copy temp stream to XOutputStream
-                SvOutputStream aOutputStream( xOutputStream );
-                aStream.Seek(0);
-                aOutputStream << aStream;
-            }
-            else
-            {
-                INetURLObject aURLObject( aURL.Complete );
-                DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-                nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, &aFilterData );
             }
         }
     }
@@ -1227,7 +1202,78 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
 
-    if ( xInteractionHandler.is() && ( nStatus != GRFILTER_OK ) )
+    return bRet;
+
+}
+
+// XFilter
+sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
+    throw(RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( NULL == mpUnoPage )
+        return sal_False;
+
+    GraphicFilter*              pFilter = GetGrfFilter();
+
+    if( NULL == pFilter || NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
+        return sal_False;
+
+    // get the arguments from the descriptor
+    ExportSettings aSettings( mpDoc );
+    ParseSettings( aDescriptor, aSettings );
+
+    const sal_uInt16    nFilter = aSettings.maMediaType.getLength()
+                            ? pFilter->GetExportFormatNumberForMediaType( aSettings.maMediaType )
+                            : pFilter->GetExportFormatNumberForShortName( aSettings.maFilterName );
+    sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
+
+    // create the output stuff
+    Graphic aGraphic;
+
+    USHORT nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
+
+    if( nStatus == GRFILTER_OK )
+    {
+        // export graphic only if it has a size
+        const Size aGraphSize( aGraphic.GetPrefSize() );
+        if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
+        {
+            nStatus = GRFILTER_FILTERERROR;
+        }
+        else
+        {
+            // now we have a graphic, so export it
+            if( aSettings.mxGraphicRenderer.is() )
+            {
+                // render graphic directly into given renderer
+                aSettings.mxGraphicRenderer->render( aGraphic.GetXGraphic() );
+            }
+            else if( aSettings.mxOutputStream.is() )
+            {
+                // TODO: Either utilize optional XSeekable functionality for the
+                // SvOutputStream, or adapt the graphic filter to not seek anymore.
+                SvMemoryStream aStream( 1024, 1024 );
+
+                nStatus = pFilter->ExportGraphic( aGraphic, String(), aStream, nFilter, &aSettings.maFilterData );
+
+                // copy temp stream to XOutputStream
+                SvOutputStream aOutputStream( aSettings.mxOutputStream );
+                aStream.Seek(0);
+                aOutputStream << aStream;
+            }
+            else
+            {
+                INetURLObject aURLObject( aSettings.maURL.Complete );
+                DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+                nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, &aSettings.maFilterData );
+            }
+        }
+    }
+
+    if ( aSettings.mxInteractionHandler.is() && ( nStatus != GRFILTER_OK ) )
     {
         Any aInteraction;
         Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
@@ -1239,7 +1285,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         aInteraction <<= aErrorCode;
         framework::InteractionRequest* pRequest = new framework::InteractionRequest( aInteraction, lContinuations );
         Reference< XInteractionRequest >xRequest( static_cast< XInteractionRequest* >(pRequest), UNO_QUERY );
-        xInteractionHandler->handle( xRequest );
+        aSettings.mxInteractionHandler->handle( xRequest );
     }
     return nStatus == GRFILTER_OK;
 }
@@ -1427,5 +1473,23 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) thr
         aSeq.realloc( nFound );
 
     return aSeq;
+}
+
+Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
+{
+    Graphic aGraphic;
+    try
+    {
+        rtl::Reference< GraphicExporter > xExporter( new GraphicExporter() );
+        Reference< XComponent > xComp( rShape.getUnoShape(), UNO_QUERY_THROW );
+        xExporter->setSourceDocument( xComp );
+        ExportSettings aSettings( rShape.GetModel() );
+        xExporter->GetGraphic( aSettings, aGraphic, bVector );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SvxGetGraphicForShape(), exception caught!");
+    }
+    return aGraphic;
 }
 
