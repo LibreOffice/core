@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:09:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,9 +355,10 @@ SdrObject* SdrTextObj::ImpConvertObj(FASTBOOL bToPoly) const
 {
     if (!ImpCanConvTextToCurve()) return NULL;
     SdrObjGroup* pGroup=new SdrObjGroup();
-    SdrOutliner& rOutl=ImpGetDrawOutliner();
-    rOutl.SetUpdateMode(TRUE);
-    ImpTextPortionHandler aConverter(rOutl,*this);
+
+    boost::shared_ptr< SdrOutliner > xOutl( const_cast< SdrTextObj* >(this)->CreateDrawOutliner() );
+    xOutl->SetUpdateMode(TRUE);
+    ImpTextPortionHandler aConverter(*(xOutl.get()),*this);
 
     aConverter.ConvertToPathObj(*pGroup,bToPoly);
 
