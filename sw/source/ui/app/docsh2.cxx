@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:02:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:44:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,9 +504,9 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 
             // Da Replace den aStyleSheet-Member selbst benoetigt, muss
             // das Ergebnis vom Find kopiert werden (s.u.))
-            SwDocStyleSheet aExist(
-                    *(SwDocStyleSheet*)pMyPool->Find( rOldName, eOldFamily ) );
-            pMyPool->Replace( *pHisSheet, aExist );
+            rtl::Reference< SwDocStyleSheet > xExist( new SwDocStyleSheet(
+                    *(SwDocStyleSheet*)pMyPool->Find( rOldName, eOldFamily ) ) );
+            pMyPool->Replace( *pHisSheet, *xExist.get() );
 
             // An der Reihenfolge der Vorlagen im Pool aendert sich nichts.
             rIdx2 = rIdx1 = INDEX_IGNORE;
@@ -526,22 +526,22 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         // ein SwDocStyleSheetPool::Find auf, do dass es nicht genuegt
         // die Find-Aufrufe in dieser Methode zu eleminieren.
 
-        SwDocStyleSheet aNewSheet( (SwDocStyleSheet&)pMyPool
-                ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) );
+        rtl::Reference< SwDocStyleSheet > xNewSheet( new SwDocStyleSheet( (SwDocStyleSheet&)pMyPool
+                ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) ) );
         if( SFX_STYLE_FAMILY_PAGE == eOldFamily && rSource.ISA(SwDocShell) )
         {
             // gesondert behandeln!!
-            SwPageDesc* pDestDsc = (SwPageDesc*)aNewSheet.GetPageDesc();
+            SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
             SwPageDesc* pCpyDsc = (SwPageDesc*)((SwDocStyleSheet*)pHisSheet)->GetPageDesc();
             pDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
         }
         else
             // die neue Vorlage mit den Attributen fuellen
-            aNewSheet.SetItemSet( pHisSheet->GetItemSet() );
+            xNewSheet->SetItemSet( pHisSheet->GetItemSet() );
 
         pMyPool->SetSearchMask( SFX_STYLE_FAMILY_ALL, nMySrchMask );
 
-        if( aNewSheet.IsUserDefined() || aNewSheet.IsUsed() )
+        if( xNewSheet->IsUserDefined() || xNewSheet->IsUsed() )
         {
             // Benutzte und Benutzer-definierte Vorlagen werden angezeigt.
             // Dshalb muss hier der Index der neuen Vorlage im Pool
@@ -607,7 +607,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                                                                 eOldFamily);
                 if (pParentOfNew)
                 {
-                    aNewSheet.SetParent(rParentName);
+                    xNewSheet->SetParent(rParentName);
                 }
                 pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
             }
@@ -623,7 +623,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                                                                 eOldFamily);
                 if (pFollowOfNew)
                 {
-                    aNewSheet.SetFollow(rFollowName);
+                    xNewSheet->SetFollow(rFollowName);
                 }
                 pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
             }
@@ -690,7 +690,7 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
             return FALSE;
 
         // also loeschen
-        pMyPool->Erase( pMySheet );
+        pMyPool->Remove( pMySheet );
 
         // jetzt noch die Parents/Follows aller Instanziierten korrigieren
         pMyPool->SetOrganizerMode( TRUE );
