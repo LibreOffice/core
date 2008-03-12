@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtwrapinfluenceonobjpos.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:05:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ public:
     // --> OD 2004-10-18 #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
-                com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+            com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     // <--
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
