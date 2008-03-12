@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:45:56 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 
 #include <algorithm>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 //==============================================================================
