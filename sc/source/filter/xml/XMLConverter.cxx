@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:01:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
