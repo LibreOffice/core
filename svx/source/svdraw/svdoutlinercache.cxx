@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutlinercache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:10:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,18 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             mpModeOutline = pOutliner;
             pOutliner->Clear();
             pOutliner->SetVertical( false );
+
+            // #101088# Deregister on outliner, might be reused from outliner cache
+            pOutliner->SetNotifyHdl( Link() );
         }
         else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (NULL == mpModeText) )
         {
             mpModeText = pOutliner;
             pOutliner->Clear();
             pOutliner->SetVertical( false );
+
+            // #101088# Deregister on outliner, might be reused from outliner cache
+            pOutliner->SetNotifyHdl( Link() );
         }
         else
         {
