@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:36:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1732,6 +1732,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
         switch ( nSlotId )
         {
             case SID_STYLE_FAMILY2:
+            case SID_STYLE_FAMILY3:
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1765,7 +1766,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 ISfxTemplateCommon* pTmplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
 
-                if (pTmplCommon && pTmplCommon->GetActualFamily() == SFX_STYLE_FAMILY_PSEUDO)
+                if (pTmplCommon && pTmplCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
                 {
                     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
                     GetStatusBarState(aSet);
@@ -2012,7 +2013,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
             {
                 DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
                 if( !bNewObject && pOlView->isRecordingUndo() )
-                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
                 pTO->SetOutlinerParaObject( pOPO );
                 pTO->SetEmptyPresObj( FALSE );
@@ -2033,7 +2034,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
                 // make it empty
                 if( pOlView->isRecordingUndo() )
-                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
                 pPage->RestoreDefaultText( pTO );
                 pTO->SetEmptyPresObj(TRUE);
                 pTO->ActionChanged();
@@ -2122,7 +2123,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
             else
             {
                 if( !bNewObject && pOlView->isRecordingUndo() )
-                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
                 pTO->SetOutlinerParaObject( pOPO );
                 pTO->SetEmptyPresObj( FALSE );
@@ -2143,7 +2144,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 
                 // loescht auch altes OutlinerParaObject
                 if( pOlView->isRecordingUndo() )
-                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO));
+                    pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
                 pPage->RestoreDefaultText( pTO );
                 pTO->SetEmptyPresObj(TRUE);
                 pTO->ActionChanged();
