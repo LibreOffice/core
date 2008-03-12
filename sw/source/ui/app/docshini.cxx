@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:32:01 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,8 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
+
 /*-----------------21.09.96 15.29-------------------
 
 --------------------------------------------------*/
@@ -503,7 +504,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport ) :
     SfxObjectShell ( eMode ),
     pDoc(0),
-    pBasePool(0),
     pFontList(0),
     pView( 0 ),
     pWrtShell( 0 ),
@@ -525,7 +525,6 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport )
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     SfxObjectShell ( eMode ),
     pDoc(pD),
-    pBasePool(0),
     pFontList(0),
     pView( 0 ),
     pWrtShell( 0 ),
@@ -647,7 +646,11 @@ void SwDocShell::RemoveLink()
     aFinishedTimer.Stop();
     if(pDoc)
     {
-        DELETEZ(pBasePool);
+        if( mxBasePool.is() )
+        {
+            static_cast<SwDocStyleSheetPool*>(mxBasePool.get())->dispose();
+            mxBasePool.clear();
+        }
         sal_Int8 nRefCt = static_cast< sal_Int8 >(pDoc->release());
         pDoc->SetOle2Link(Link());
         pDoc->SetDocShell( 0 );
@@ -688,9 +691,8 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 
         // Das Laden
         // fuer MD
-            ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-            pBasePool = new SwDocStyleSheetPool( *pDoc,
-                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+            ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+            mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
                 SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -816,9 +818,8 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             // Das Laden
             SwWait aWait( *this, sal_True );
             {
-                ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-                pBasePool = new SwDocStyleSheetPool( *pDoc,
-                                SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+                ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+                mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( TRUE );
@@ -864,9 +865,8 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
 void SwDocShell::SubInitNew()
 {
-    ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-    pBasePool = new SwDocStyleSheetPool( *pDoc,
-                    SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+    ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+    mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
     InitDraw();
 
