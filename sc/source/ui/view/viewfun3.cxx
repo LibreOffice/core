@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:40:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,7 +478,17 @@ void ScViewFunc::PasteFromSystem()
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)
 
             if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
-                PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
+            {
+                // special case for tables from drawing
+                if( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                {
+                    PasteFromSystem( FORMAT_RTF );
+                }
+                else
+                {
+                    PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
+                }
+            }
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
                 PasteFromSystem( SOT_FORMATSTR_ID_SVXB );
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
