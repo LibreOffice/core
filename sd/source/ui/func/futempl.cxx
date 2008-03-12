@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:31:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,12 @@
 #include "helpids.h"
 #include "sdabstdlg.hxx"
 
+using rtl::OUString;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::style;
+
 namespace sd
 {
 
@@ -186,9 +192,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     {
         String sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
         if (sFamily.CompareToAscii("graphics") == COMPARE_EQUAL)
-            nFamily = SFX_STYLE_FAMILY_PARA;
+            nFamily = SD_STYLE_FAMILY_GRAPHICS;
         else
-            nFamily = SFX_STYLE_FAMILY_PSEUDO;
+            nFamily = SD_STYLE_FAMILY_PSEUDO;
     }
 
     String aStyleName;
@@ -206,20 +212,19 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
             if ( pFamilyItem && pNameItem )
             {
-                com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(mpDoc->GetDocSh()->GetModel(), com::sun::star::uno::UNO_QUERY);
                 try
                 {
-                    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xStyles;
-                    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xCont = xModel->getStyleFamilies();
-                    xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
-                    xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
-                    ::rtl::OUString aUIName;
+                    Reference< XStyleFamiliesSupplier > xModel(mpDoc->GetDocSh()->GetModel(), UNO_QUERY_THROW );
+                    Reference< XNameAccess > xCont( xModel->getStyleFamilies() );
+                    Reference< XNameAccess > xStyles( xCont->getByName(pFamilyItem->GetValue()), UNO_QUERY_THROW );
+                    Reference< XPropertySet > xInfo( xStyles->getByName( pNameItem->GetValue() ), UNO_QUERY_THROW );
+
+                    OUString aUIName;
                     xInfo->getPropertyValue( ::rtl::OUString::createFromAscii("DisplayName") ) >>= aUIName;
                     if ( aUIName.getLength() )
                         rReq.AppendItem( SfxStringItem( nSId, aUIName ) );
                 }
-                catch( com::sun::star::uno::Exception& )
+                catch( Exception& )
                 {
                 }
             }
@@ -233,15 +238,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     {
         case SID_STYLE_NEW:
         {
-            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily,
-                                                    SFXSTYLEBIT_ALL );
+            SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
             if(p)
             {
-                pSSPool->Erase(p);
+                pSSPool->Remove(p);
                 p = 0;
             }
-            pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily,
-                                                    SFXSTYLEBIT_USERDEF );
+            pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
 
             if (pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_ON)
             {
@@ -261,14 +264,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             // der Vorlage einzugeben.
             if( mpView->AreObjectsMarked() || TRUE )
             {
-                SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily,
-                                                        SFXSTYLEBIT_ALL );
-                if(p) {
-                    pSSPool->Erase(p);
+                SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
+                if(p)
+                {
+                    pSSPool->Remove(p);
                     p = 0;
                 }
-                pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily,
-                                                        SFXSTYLEBIT_USERDEF );
+                pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
                 pStyleSheet->SetParent(String(SdResId(STR_STANDARD_STYLESHEET_NAME)));
             }
         }
@@ -282,29 +284,37 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
             if( pStyleSheet )
             {
-                pSSPool->Erase( pStyleSheet );
+                pSSPool->Remove( pStyleSheet );
                 nRetMask = TRUE;
                 mpDoc->SetChanged(TRUE);
             }
-            nRetMask = FALSE;
+            else
+            {
+                nRetMask = FALSE;
+            }
         break;
 
         case SID_STYLE_APPLY:
             // Anwenden der Vorlage auf das Dokument
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
 
-            // keine Praesentationsobjektvorlagen, die werden nur
-            // implizit zugewiesen
-            if ( pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PSEUDO )
+            // do not set presentation styles, they will be set implicit
+            if ( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
             {
-                // Es darf auch keinen Praesentationsobjekten Vorlagen zugewiesen werden
-                // Ausnahme: Hintergrundobjekte oder Draw (damit Praesentationsobjektvorlagen ueberteuert werden koennen)
                 SfxStyleSheet* pOldStyleSheet = mpView->GetStyleSheet();
                 String aStr;
-                if( !pOldStyleSheet ||
-                    pOldStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PARA ||
-                    pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS ||
-                    mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
+
+                if( // if the object had no style sheet, allow all
+                    !pOldStyleSheet ||
+
+                    // allow if old and new style sheet has same family
+                    pStyleSheet->GetFamily() == pOldStyleSheet->GetFamily() ||
+
+                    // allow if old was background objects and new is graphics
+                    pStyleSheet->GetFamily() == SD_STYLE_FAMILY_GRAPHICS && pOldStyleSheet->GetHelpId( aStr ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS ||
+
+                    // allow if old was presentation and we are a drawing document
+                    pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
                 {
                     mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
                     mpDoc->SetChanged(TRUE);
@@ -328,7 +338,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
                 // keine Praesentationsobjektvorlagen, die werden nur
                 // implizit zugewiesen
-                if( pStyleSheet && pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PSEUDO )
+                if( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
                 {
                     ( (SdStyleSheetPool*) pSSPool )->SetActualStyleSheet( pStyleSheet );
 
@@ -370,11 +380,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
-                if (eFamily == SFX_STYLE_FAMILY_PARA)
+                if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
                     pStdDlg = pFact ? pFact->CreateSdTabTemplateDlg( 0, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : 0;
                 }
-                else if (eFamily == SFX_STYLE_FAMILY_PSEUDO)
+                else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
                     String aName(pStyleSheet->GetName());
                     USHORT nDlgId = 0;
@@ -441,6 +451,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         pPresDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : 0;
                     }
                 }
+                else if (eFamily == SD_STYLE_FAMILY_CELL)
+                {
+                }
 
                 USHORT nResult = RET_CANCEL;
                 const SfxItemSet* pOutSet = NULL;
@@ -461,7 +474,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     {
                         nRetMask = pStyleSheet->GetMask();
 
-                        if (eFamily == SFX_STYLE_FAMILY_PSEUDO)
+                        if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                         {
                             SfxItemSet aTempSet(*pOutSet);
                             ((SdStyleSheet*)pStyleSheet)->AdjustToFontHeight(aTempSet);
@@ -481,7 +494,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                                     String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
                                     sStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SFX_STYLE_FAMILY_PSEUDO);
+                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
 
                                     if(pFirstStyleSheet)
                                     {
@@ -508,7 +521,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     String aName( sStyleName );
                                     aName.Append( String::CreateFromInt32( (sal_Int32) n ));
 
-                                    SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SFX_STYLE_FAMILY_PSEUDO);
+                                    SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
 
                                     if(pSheet)
                                     {
@@ -542,7 +555,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     // so put it into Outline 1 then..
                                     String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
                                     sStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SFX_STYLE_FAMILY_PSEUDO);
+                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
 
                                     if(pFirstStyleSheet)
                                     {
@@ -681,7 +694,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     default:
                     {
                         if( nSId == SID_STYLE_NEW )
-                            pSSPool->Erase( pStyleSheet );
+                            pSSPool->Remove( pStyleSheet );
                         delete pStdDlg;
                         delete pPresDlg;
                     }
