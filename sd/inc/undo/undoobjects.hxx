@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoobjects.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:27:52 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ private:
 class UndoObjectSetText : public SdrUndoObjSetText
 {
 public:
-    UndoObjectSetText( SdrObject& rNewObj );
+    UndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
     virtual ~UndoObjectSetText();
 
     virtual void Undo();
