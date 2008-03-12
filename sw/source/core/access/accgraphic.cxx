@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accgraphic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:21:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextGraphicObject";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleGraphic";
