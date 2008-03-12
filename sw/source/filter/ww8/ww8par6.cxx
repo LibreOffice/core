@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:31:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,7 @@
 
 using namespace sw::util;
 using namespace sw::types;
+using namespace ::com::sun::star;
 using namespace nsHdFtFlags;
 
 //-----------------------------------------
