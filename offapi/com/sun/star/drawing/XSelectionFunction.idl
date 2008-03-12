@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSelectionFunction.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:17:50 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_XSelectionFunction_idl__
+#define __com_sun_star_drawing_XSelectionFunction_idl__
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatch_idl__
+#include <com/sun/star/frame/XDispatch.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XKeyHandler_idl__
+#include <com/sun/star/awt/XKeyHandler.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMouseClickHandler_idl__
+#include <com/sun/star/awt/XMouseClickHandler.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMouseMotionHandler_idl__
+#include <com/sun/star/awt/XMouseMotionHandler.idl>
+#endif
+
+#ifndef __com_sun_star_view_XSelectionChangeListener_idl__
+#include <com/sun/star/view/XSelectionChangeListener.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/**
+ */
+published interface XSelectionFunction
+{
+    interface ::com::sun::star::lang::XComponent;
+    interface ::com::sun::star::lang::XServiceInfo;
+    interface ::com::sun::star::frame::XDispatch;
+    interface ::com::sun::star::awt::XKeyHandler;
+    interface ::com::sun::star::awt::XMouseClickHandler;
+    interface ::com::sun::star::awt::XMouseMotionHandler;
+    interface ::com::sun::star::view::XSelectionChangeListener;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
