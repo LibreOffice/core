@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:10:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,9 +419,6 @@ public:
                                                     UINT16 nDefPage = 0) = 0;
 
     virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
-
-    virtual AbstractSwSplitTableDlg * CreateSwSplitTableDlg ( Window *pParent, SwWrtShell& rShell,int nResId ) = 0; //add for SwSplitTableDlg
-
 
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
 
