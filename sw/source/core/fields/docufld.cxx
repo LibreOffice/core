@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:10:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:19:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,9 +215,9 @@
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 using namespace nsSwDocInfoSubType;
 
 /*--------------------------------------------------------------------
