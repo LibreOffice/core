@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XBroadcaster.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:19:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XBroadcaster_idl__
+#define __com_sun_star_util_XBroadcaster_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** allows to control notification behaviour of a broadcaster.
+
+    @since 3.0
+ */
+interface XBroadcaster: com::sun::star::uno::XInterface
+{
+    /** suspends broadcasts to the registered listeners.
+
+        <p>
+        The calls to <member>XBroadcaster::lockBroadcast()</member> and
+        <member>XBroadcaster::unlockBroadcasts()</member> may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, no broadcasts are
+        send to registered listeners.
+        </p>
+     */
+    [oneway] void lockBroadcasts();
+
+    //-------------------------------------------------------------------------
+    /** resumes the broadcasts which were suspended by
+        <member>XBroadcaster::lockBroadcasts()</member>.
+
+        <p>
+        The calls to <member>XBroadcaster::lockBroadcast()</member> and
+        <member>XBroadcaster::unlockBroadcasts()</member> may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, no broadcasts are
+        send to registered listeners.
+        </p>
+
+        <p> Pending broadcasts will be send immediately after the last
+        call to <member>XBroadcaster::lockBroadcast()</member> is matched
+        by a call to <member>XBroadcaster::unlockBroadcasts()</member>.
+        An implementation can decide to broadcast all pending notification in
+        order or batch them in single broadcasts.
+        </p>
+    */
+    [oneway] void unlockBroadcasts();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
