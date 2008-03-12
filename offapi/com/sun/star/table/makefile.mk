@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:16:19 $
+#   last change: $Author: rt $ $Date: 2008-03-12 09:19:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ IDLFILES=\
         TableSortFieldType.idl\
     XAutoFormattable.idl\
     XCell.idl\
+    XMergeableCell.idl\
+    XMergeableCellRange.idl\
     XCellCursor.idl\
     XCellRange.idl\
     XColumnRowRange.idl\
@@ -89,6 +91,7 @@ IDLFILES=\
     CellRangeListSource.idl\
     CellValueBinding.idl\
     ListPositionCellBinding.idl\
+    XTable.idl
 
 # ------------------------------------------------------------------
 
