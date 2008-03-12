@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameworkHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:59:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,8 @@ const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("MasterPages"));
 const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("Layouts"));
+const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL(
+    msTaskPanelURLPrefix + OUString::createFromAscii("TableDesign"));
 const ::rtl::OUString FrameworkHelper::msCustomAnimationTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("CustomAnimations"));
 const ::rtl::OUString FrameworkHelper::msSlideTransitionTaskPanelURL(
