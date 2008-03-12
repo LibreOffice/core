@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:55:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ public:
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
 };
 
+/* cl removed because not needed anymore since binfilter
 struct LoadStoreTempInfos
 {
     ByteString              aOrgString_Load;
@@ -147,6 +148,7 @@ struct LoadStoreTempInfos
 
     LoadStoreTempInfos() { bSymbolParagraph_Store = FALSE; hOldSymbolConv_Store = NULL; }
 };
+*/
 
 class ContentInfo
 {
@@ -160,7 +162,9 @@ private:
     SfxItemSet          aParaAttribs;
     WrongList*          pWrongs;
 
+/* cl removed because not needed anymore since binfilter
     LoadStoreTempInfos* pTempLoadStoreInfos;
+*/
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
@@ -183,10 +187,11 @@ public:
     WrongList*          GetWrongList() const            { return pWrongs; }
     void                SetWrongList( WrongList* p )    { pWrongs = p; }
 
+/* cl removed because not needed anymore since binfilter
     LoadStoreTempInfos* GetLoadStoreTempInfos() const   { return pTempLoadStoreInfos; }
     void                CreateLoadStoreTempInfos();
     void                DestroyLoadStoreTempInfos();
-
+*/
     bool                operator==( const ContentInfo& rCompare ) const;
 };
 
@@ -297,9 +302,11 @@ public:
     BOOL                    IsOwnerOfPool() const       { return bOwnerOfPool; }
     void                    StoreUnicodeStrings( BOOL b ) { bStoreUnicodeStrings = b; }
 
+/* cl removed because not needed anymore since binfilter
     void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
     void                    FinishStore();
     void                    FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
+*/
 
     bool                    operator==( const BinTextObject& rCompare ) const;
 
