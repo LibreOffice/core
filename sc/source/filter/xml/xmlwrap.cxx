@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:55:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -806,6 +806,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StyleNames" ), 0, &::getCppuType( (uno::Sequence<rtl::OUString>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StyleFamilies" ), 0, &::getCppuType( (uno::Sequence<sal_Int32>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "TargetStorage" ), 0, &embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
@@ -824,6 +825,9 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         SvtSaveOptions aSaveOpt;
         sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(bUsePrettyPrinting));
+
+        const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : ::rtl::OUString();
