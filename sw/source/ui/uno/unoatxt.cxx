@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:49:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 /******************************************************************
  *
