@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddlgfact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:39:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual USHORT  Execute() ;
+    virtual short   Execute() ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
     delete pDlg;                                    \
 }                                                   \
-USHORT Class::Execute()                             \
+short Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
 }
