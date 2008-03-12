@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,11 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
 #include "svditer.hxx"
-#include <svx/svdpagv.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdetc.hxx>   // fuer GetDraftFillColor
+#include "svx/svdpagv.hxx"
+#include "svx/svdpage.hxx"
+#include "svx/svdetc.hxx"   // fuer GetDraftFillColor
+#include "svx/svdotable.hxx"
+#include <svx/selectioncontroller.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -487,7 +489,12 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
         SdrTextObj* pText = dynamic_cast< SdrTextObj * >( mxTextEditObj.get());
         if (pText!=NULL && pText->IsClosedObj())
         {
-            bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
+            ::sdr::table::SdrTableObj* pTable = dynamic_cast< ::sdr::table::SdrTableObj * >( pText );
+            if( pTable )
+                bFound = GetDraftFillColor(pTable->GetActiveCellItemSet(), aBackground );
+
+            if( !bFound )
+                bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
         }
         if (!bFound && pTextEditPV!=NULL && pText)
         {
@@ -554,20 +561,13 @@ BOOL SdrObjEditView::IsTextEditFrame() const
 
 IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
 {
-    if(pTextEditOutliner==NULL || !mxTextEditObj.is() )
-        return 0;
-    ULONG nStat=pEditStat->GetStatusWord();
-    BOOL bGrowX=(nStat & EE_STAT_TEXTWIDTHCHANGED) !=0;
-    BOOL bGrowY=(nStat & EE_STAT_TEXTHEIGHTCHANGED) !=0;
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
-    BOOL bTextFrame = pTextObj && pTextObj->IsTextFrame();
-    if (!bTextFrame || (!bGrowX && !bGrowY)) return 0;
-    BOOL bAutoGrowHgt= bTextFrame && pTextObj->IsAutoGrowHeight();
-    BOOL bAutoGrowWdt= bTextFrame && pTextObj->IsAutoGrowWidth();
-
-    if ((bGrowX && bAutoGrowWdt) || (bGrowY && bAutoGrowHgt))
+    if(pTextEditOutliner )
     {
-        pTextObj->AdjustTextFrameWidthAndHeight();
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
+        if( pTextObj )
+        {
+            pTextObj->onEditOutlinerStatusEvent( pEditStat );
+        }
     }
     return 0;
 }
@@ -605,15 +605,6 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
         return aOldCalcFieldValueLink.Call(pFI);
     }
     return 0;
-}
-
-sal_Bool SdrObjEditView::SdrBeginTextEdit(
-    SdrObject* pObj, SdrPageView* pPV, Window* pWin,
-    SdrOutliner* pGivenOutliner, OutlinerView* pGivenOutlinerView,
-    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView)
-{
-    return SdrBeginTextEdit(
-        pObj, pPV, pWin, sal_False, pGivenOutliner, pGivenOutlinerView, bDontDeleteOutliner, bOnlyOneView);
 }
 
 sal_Bool SdrObjEditView::SdrBeginTextEdit(
@@ -841,6 +832,10 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             }
 
             pTextEditOutliner->ClearPaintInfoRec();
+
+            if( mxSelectionController.is() )
+                mxSelectionController->onSelectionHasChanged();
+
             return sal_True; // Gut gelaufen, TextEdit laeuft nun
         }
         else
@@ -888,7 +883,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
 {
     SdrEndTextEditKind eRet=SDRENDTEXTEDIT_UNCHANGED;
-    SdrObject* pTEObj = mxTextEditObj.get();
+    SdrTextObj* pTEObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
     Window*       pTEWin         =pTextEditWin;
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
@@ -916,54 +911,68 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
         {
             pTEOutlinerView->HideCursor();
         }
-        if (pTEObj!=NULL) {
+        if (pTEObj!=NULL)
+        {
             pTEOutliner->CompleteOnlineSpelling();
-            SdrUndoObjSetText* pTxtUndo= bModified ?
-                dynamic_cast< SdrUndoObjSetText* >( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTEObj) ) : NULL;
+
+            SdrUndoObjSetText* pTxtUndo = 0;
+
+            if( bModified )
+            {
+                sal_Int32 nText;
+                for( nText = 0; nText < pTEObj->getTextCount(); ++nText )
+                    if( pTEObj->getText( nText ) == pTEObj->getActiveText() )
+                        break;
+
+                pTxtUndo = dynamic_cast< SdrUndoObjSetText* >( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTEObj, nText ) );
+            }
             DBG_ASSERT( !bModified || pTxtUndo, "svx::SdrObjEditView::EndTextEdit(), could not create undo action!" );
             // Den alten CalcFieldValue-Handler wieder setzen
             // Muss vor Obj::EndTextEdit() geschehen, da dort ein UpdateFields() gemacht wird.
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
 
+            XubString aObjName;
+            pTEObj->TakeObjNameSingul(aObjName);
+            BegUndo(ImpGetResStr(STR_UndoObjSetText),aObjName);
+
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if ( pTEObj->GetRotateAngle() != 0 )
+            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && pTEObj->ISA(SdrTextObj) && ((SdrTextObj*)pTEObj)->IsFontwork())  )
             {
                 // obviously a repaint
                 pTEObj->ActionChanged();
             }
 
-            // #90468# invalidate here for FontWork object to force complete redraw
-            if(pTEObj && pTEObj->ISA(SdrTextObj) && ((SdrTextObj*)pTEObj)->IsFontwork())
+            if (pTxtUndo!=NULL)
             {
-                // obviously a repaint
-                pTEObj->ActionChanged();
-            }
-
-            if (pTxtUndo!=NULL) {
                 pTxtUndo->AfterSetText();
-                if (!pTxtUndo->IsDifferent()) { delete pTxtUndo; pTxtUndo=NULL; }
+                if (!pTxtUndo->IsDifferent())
+                {
+                    delete pTxtUndo;
+                    pTxtUndo=NULL;
+                }
             }
             // Loeschung des gesamten TextObj checken
             SdrUndoAction* pDelUndo=NULL;
             BOOL bDelObj=FALSE;
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pTEObj);
-            if (pTextObj!=NULL && bTextEditNewObj) {
+            if (pTextObj!=NULL && bTextEditNewObj)
+            {
                 bDelObj=pTextObj->IsTextFrame() &&
-                        pTextObj->GetOutlinerParaObject()==NULL &&
+                        !pTextObj->HasText() &&
                         !pTextObj->IsEmptyPresObj() &&
                         !pTextObj->HasFill() &&
                         !pTextObj->HasLine();
-                if (pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor && !bDontDeleteReally) {
+
+                if(pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor && !bDontDeleteReally)
+                {
                     SdrObjKind eIdent=(SdrObjKind)pTextObj->GetObjIdentifier();
-                    if (eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT) {
+                    if (eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
+                    {
                         pDelUndo= GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);
                     }
                 }
             }
-            XubString aObjName;
-            pTEObj->TakeObjNameSingul(aObjName);
-            BegUndo(ImpGetResStr(STR_UndoObjSetText),aObjName);
             if (pTxtUndo!=NULL) { AddUndo(pTxtUndo); eRet=SDRENDTEXTEDIT_CHANGED; }
             if (pDelUndo!=NULL) {
                 AddUndo(pDelUndo);
@@ -1410,36 +1419,32 @@ BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
 BOOL SdrObjEditView::ImpIsTextEditAllSelected() const
 {
     BOOL bRet=FALSE;
-    if (pTextEditOutliner!=NULL && pTextEditOutlinerView!=NULL) {
-        BOOL bEmpty=FALSE;
-        ULONG nParaAnz=pTextEditOutliner->GetParagraphCount();
-        Paragraph* p1stPara=pTextEditOutliner->GetParagraph( 0 );
-        Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaAnz > 1 ? nParaAnz - 1 : 0 );
-        if (p1stPara==NULL) nParaAnz=0;
-        if (nParaAnz==1) { // bei nur einem Para nachsehen ob da ueberhaupt was drin steht
-            XubString aStr(pTextEditOutliner->GetText(p1stPara));
+    if (pTextEditOutliner!=NULL && pTextEditOutlinerView!=NULL)
+    {
+        if(SdrTextObj::HasTextImpl( pTextEditOutliner ) )
+        {
+            const sal_uInt32 nParaAnz=pTextEditOutliner->GetParagraphCount();
+            Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaAnz > 1 ? nParaAnz - 1 : 0 );
 
-            // Aha, steht nix drin!
-            if(!aStr.Len())
-                nParaAnz = 0;
-        }
-        bEmpty=nParaAnz==0;
-        if (!bEmpty) {
             ESelection aESel(pTextEditOutlinerView->GetSelection());
-            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==USHORT(nParaAnz-1)) {
+            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==USHORT(nParaAnz-1))
+            {
                 XubString aStr(pTextEditOutliner->GetText(pLastPara));
 
                 if(aStr.Len() == aESel.nEndPos)
                     bRet = TRUE;
             }
             // und nun auch noch fuer den Fall, das rueckwaerts selektiert wurde
-            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==USHORT(nParaAnz-1)) {
+            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==USHORT(nParaAnz-1))
+            {
                 XubString aStr(pTextEditOutliner->GetText(pLastPara));
 
                 if(aStr.Len() == aESel.nStartPos)
                     bRet = TRUE;
             }
-        } else {
+        }
+        else
+        {
             bRet=TRUE;
         }
     }
@@ -1495,6 +1500,10 @@ USHORT SdrObjEditView::GetScriptType() const
 /* new interface src537 */
 BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) const
 {
+    if( mxSelectionController.is() )
+        if( mxSelectionController->GetAttributes( rTargetSet, bOnlyHardAttr ) )
+            return TRUE;
+
     if(IsTextEdit())
     {
         DBG_ASSERT(pTextEditOutlinerView!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutlinerView=NULL");
@@ -1542,7 +1551,13 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     if (!bTextEdit)
     {
         // Kein TextEdit aktiv -> alle Items ans Zeichenobjekt
-        bRet=SdrGlueEditView::SetAttributes(*pSet,bReplaceAll);
+        if( mxSelectionController.is() )
+            bRet=mxSelectionController->SetAttributes(*pSet,bReplaceAll );
+
+        if( !bRet )
+        {
+            bRet=SdrGlueEditView::SetAttributes(*pSet,bReplaceAll);
+        }
     }
     else
     {
@@ -1578,27 +1593,36 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
         // und falls keine EEItems, dann Attrs nur an den Rahmen
         if (bAllTextSelected || bNoEEItems)
         {
-            String aStr;
-            ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-            BegUndo(aStr);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
+            if( mxSelectionController.is() )
+                bRet=mxSelectionController->SetAttributes(*pSet,bReplaceAll );
 
-            // #i43537#
-            // If this is a text object also rescue the OutlinerParaObject since
-            // applying attributes to the object may change text layout when
-            // multiple portions exist with multiple formats. If a OutlinerParaObject
-            // really exists and needs to be rescued is evaluated in the undo
-            // implementation itself.
-            sal_Bool bRescueText(mxTextEditObj->ISA(SdrTextObj));
+            if( !bRet )
+            {
+                String aStr;
+                ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+                BegUndo(aStr);
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
 
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,!bNoEEItems || bRescueText));
-            EndUndo();
+                // #i43537#
+                // If this is a text object also rescue the OutlinerParaObject since
+                // applying attributes to the object may change text layout when
+                // multiple portions exist with multiple formats. If a OutlinerParaObject
+                // really exists and needs to be rescued is evaluated in the undo
+                // implementation itself.
+                sal_Bool bRescueText(mxTextEditObj->ISA(SdrTextObj));
 
-            mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,!bNoEEItems || bRescueText));
+                EndUndo();
 
-            FlushComeBackTimer(); // Damit ModeHasChanged sofort kommt
-            bRet=TRUE;
-        } else if (!bOnlyEEItems) { // sonst Set ggf. splitten
+                mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
+
+                FlushComeBackTimer(); // Damit ModeHasChanged sofort kommt
+                bRet=TRUE;
+            }
+        }
+        else if (!bOnlyEEItems)
+        {
+            // sonst Set ggf. splitten
             // Es wird nun ein ItemSet aSet gemacht, in den die EE_Items von
             // *pSet nicht enhalten ist (ansonsten ist es eine Kopie).
             USHORT* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
@@ -1606,24 +1630,33 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             /*90353*/ delete[] pNewWhichTable;
             SfxWhichIter aIter(aSet);
             USHORT nWhich=aIter.FirstWhich();
-            while (nWhich!=0) {
+            while (nWhich!=0)
+            {
                 const SfxPoolItem* pItem;
                 SfxItemState eState=pSet->GetItemState(nWhich,FALSE,&pItem);
                 if (eState==SFX_ITEM_SET) aSet.Put(*pItem);
                 nWhich=aIter.NextWhich();
             }
-            String aStr;
-            ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-            BegUndo(aStr);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,false));
-            EndUndo();
 
-            mxTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
 
-            if (GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
+            if( mxSelectionController.is() )
+                bRet=mxSelectionController->SetAttributes(aSet,bReplaceAll );
+
+            if( !bRet )
             {
-                SetNotPersistAttrToMarked(aSet,bReplaceAll);
+                String aStr;
+                ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+                BegUndo(aStr);
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get(),false,false));
+                EndUndo();
+
+                mxTextEditObj->SetMergedItemSetAndBroadcast(aSet, bReplaceAll);
+
+                if (GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
+                {
+                    SetNotPersistAttrToMarked(aSet,bReplaceAll);
+                }
             }
             FlushComeBackTimer();
             bRet=TRUE;
@@ -1650,22 +1683,35 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     return bRet;
 }
 
-SfxStyleSheet* SdrObjEditView::GetStyleSheet() const // SfxStyleSheet* SdrObjEditView::GetStyleSheet(BOOL& rOk) const
+SfxStyleSheet* SdrObjEditView::GetStyleSheet() const
 {
+    SfxStyleSheet* pSheet = 0;
+
+    if( mxSelectionController.is() )
+    {
+        if( mxSelectionController->GetStyleSheet( pSheet ) )
+            return pSheet;
+    }
+
     if ( pTextEditOutlinerView )
     {
-        // rOk=TRUE;
-        SfxStyleSheet* pSheet = pTextEditOutlinerView->GetStyleSheet();
-        return pSheet;
+        pSheet = pTextEditOutlinerView->GetStyleSheet();
     }
     else
     {
-        return SdrGlueEditView::GetStyleSheet(); // SdrGlueEditView::GetStyleSheet(rOk);
+        pSheet = SdrGlueEditView::GetStyleSheet();
     }
+    return pSheet;
 }
 
 BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
+    if( mxSelectionController.is() )
+    {
+        if( mxSelectionController->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr ) )
+            return TRUE;
+    }
+
     // if we are currently in edit mode we must also set the stylesheet
     // on all paragraphs in the Outliner for the edit view
     // #92191#
@@ -1856,6 +1902,46 @@ void SdrObjEditView::getTextSelection( ::com::sun::star::uno::Any& rSelection )
                         rSelection <<= pRange->createTextCursorBySelection( pOutlinerView->GetSelection() );
                     }
                 }
+            }
+        }
+    }
+}
+
+namespace sdr { namespace table {
+extern rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController );
+} }
+
+/* check if we have a single selection and that single object likes
+    to handle the mouse and keyboard events itself
+
+    @todo: the selection controller should be queried from the
+    object specific view contact. Currently this method only
+    works for tables.
+*/
+void SdrObjEditView::MarkListHasChanged()
+{
+    SdrGlueEditView::MarkListHasChanged();
+
+    if( mxSelectionController.is() )
+    {
+        mxLastSelectionController = mxSelectionController;
+        mxSelectionController->onSelectionHasChanged();
+    }
+
+    mxSelectionController.clear();
+
+    const SdrMarkList& rMarkList=GetMarkedObjectList();
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        const SdrObject* pObj= rMarkList.GetMark(0)->GetMarkedSdrObj();
+        // check for table
+        if( pObj && (pObj->GetObjInventor() == SdrInventor ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        {
+            mxSelectionController = sdr::table::CreateTableController( this, pObj, mxLastSelectionController );
+            if( mxSelectionController.is() )
+            {
+                mxLastSelectionController.clear();
+                mxSelectionController->onSelectionHasChanged();
             }
         }
     }
