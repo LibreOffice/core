@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:15:16 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,8 @@ public:
     virtual void SetValidateFramePosLink( const Link& rLink ) = 0;
 };
 
+//-------------------------------------------------------------
+
 class AbstractSvxPostItDialog :public VclAbstractDialog  //add for SvxPostItDialog
 {
 public:
@@ -355,6 +357,26 @@ public:
 };
 
 //-------------------------------------------------------------
+
+class SvxAbstractSplittTableDialog : public VclAbstractDialog
+{
+public:
+    virtual bool IsHorizontal() const = 0;
+    virtual bool IsProportional() const = 0;
+    virtual long GetCount() const = 0;
+};
+
+//-------------------------------------------------------------
+
+class SvxAbstractNewTableDialog : public VclAbstractDialog
+{
+public:
+    virtual sal_Int32 getRows() const = 0;
+    virtual sal_Int32 getColumns() const = 0;
+};
+
+//-------------------------------------------------------------
+
 class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory
 {
 public:
@@ -541,6 +563,12 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
+
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = NULL )=0;
+
+    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
+
+    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) = 0;
 };
 
 #endif
