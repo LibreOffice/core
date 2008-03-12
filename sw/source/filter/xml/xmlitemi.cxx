@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:13:27 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@
 #include "xmlimp.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
