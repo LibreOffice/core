@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:47:45 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,12 +141,12 @@
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
