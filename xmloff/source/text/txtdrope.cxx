@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtdrope.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:13:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::xmloff::token;
 
 
