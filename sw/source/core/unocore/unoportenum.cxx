@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:43:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::std;
 /******************************************************************
  *  SwXTextPortionEnumeration
