@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:49:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 08:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,11 +179,9 @@ class RegistrationPage : public svt::OWizardPage
 private:
     FixedText   m_ftHeader;
     FixedText   m_ftBody;
-    FixedImage  m_fiImage;
     RadioButton m_rbNow;
     RadioButton m_rbLater;
     RadioButton m_rbNever;
-    RadioButton m_rbReg;
     FixedLine   m_flSeparator;
     FixedText   m_ftEnd;
 
@@ -205,8 +203,7 @@ public:
     {
         rmNow,      // register now
         rmLater,    // register later
-        rmNever,    // register never
-        rmAlready   // already registered
+        rmNever     // register never
     };
 
     RegistrationMode    getRegistrationMode() const;
