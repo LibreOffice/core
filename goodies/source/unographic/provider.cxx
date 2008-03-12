@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 17:24:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,6 +784,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     /* sj: using a temporary memory stream, because some graphic filters are seeking behind
                        stream end (which leads to an invalid argument exception then). */
                     SvMemoryStream aMemStrm;
+                    aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
                         aMemStrm << aGraphic;
                     else
