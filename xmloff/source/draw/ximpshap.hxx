@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:11:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,6 +669,34 @@ public:
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// draw:table
+
+class SdXMLTableShapeContext : public SdXMLShapeContext
+{
+public:
+    TYPEINFO();
+
+    SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes );
+    virtual ~SdXMLTableShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+
+private:
+    SvXMLImportContextRef mxTableImportContext;
+    rtl::OUString msTemplateStyleName;
+    sal_Bool maTemplateStylesUsed[6];
 };
 
 #endif  //  _XIMPSHAPE_HXX
