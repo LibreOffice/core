@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:42:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
 #include <svx/AccessibleControlShape.hxx>
 #endif
+#include <svx/AccessibleTableShape.hxx>
 
 namespace accessibility {
 
@@ -99,6 +100,9 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_OLE:
         case DRAWING_PLUGIN:
             return new AccessibleOLEShape (rShapeInfo, rShapeTreeInfo);
+
+        case DRAWING_TABLE:
+            return new AccessibleTableShape( rShapeInfo, rShapeTreeInfo );
 
         default:
             return NULL;
@@ -192,12 +196,13 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
     ShapeTypeDescriptor (   DRAWING_3D_EXTRUDE,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DExtrudeObject"),
         CreateSvxAccessibleShape ),
-    // --> OD 2004-11-29 #i37790# - default accessiblility shape for
-    // com::sun::star::drawing::CustomShape
     ShapeTypeDescriptor (   DRAWING_CUSTOM,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.CustomShape"),
-        CreateSvxAccessibleShape )
-    // <--
+        CreateSvxAccessibleShape ),
+    ShapeTypeDescriptor (   DRAWING_TABLE,
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ),
+        CreateSvxAccessibleShape ),
+
 };
 
 
