@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:23:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@
 #include <svx/pageitem.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/grafctrl.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/bolnitem.hxx>
 #include "sdattr.hxx"
 
 #ifndef _SVX_XFTSTIT_HXX //autogen
