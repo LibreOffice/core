@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:35:00 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,33 +653,29 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
                 pUndo= rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
             }
         }
+
+        if( pUndo )
+            rView.BegUndo( pUndo->GetComment() );
+        else
+            rView.BegUndo();
+
         bRet=pObj->EndDrag(DragStat());
 
         if(bRet)
         {
             if(pUndo)
-            {
-                // #109992#
-                // Rescue the UNDO text if a 2nd undo is done here and put it
-                // into BegUndo() to have a comment in the UNDO field.
-                if(pUndo2)
-                {
-                    rView.BegUndo(pUndo->GetComment());
-                }
-
                 rView.AddUndo(pUndo);
 
-                if(pUndo2)
-                {
-                    rView.AddUndo(pUndo2);
-                    rView.EndUndo();
-                }
-            }
+            if(pUndo2)
+                rView.AddUndo(pUndo2);
         }
         else
         {
             delete pUndo;
+            delete pUndo2;
         }
+
+        rView.EndUndo();
     }
     return bRet;
 }
