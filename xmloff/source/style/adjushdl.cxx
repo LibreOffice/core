@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:34:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,9 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
