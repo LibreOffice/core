@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:45:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,8 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
     if ( rName.EqualsAscii(STRING_STANDARD) && Find( rName, eFam ) != NULL )
     {
         DBG_ERROR("renaming additional default style");
-        long nCount = aStyles.Count();
-        for ( long nAdd = 1; nAdd <= nCount; nAdd++ )
+        sal_uInt32 nCount = aStyles.size();
+        for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
             String aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
             aNewName += String::CreateFromInt32( nAdd );
@@ -156,7 +156,7 @@ SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create( const SfxStyleSheetBase& r
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScStyleSheetPool::Erase( SfxStyleSheetBase* pStyle )
+void __EXPORT ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
     if ( pStyle )
     {
@@ -164,7 +164,7 @@ void __EXPORT ScStyleSheetPool::Erase( SfxStyleSheetBase* pStyle )
                     "SFXSTYLEBIT_USERDEF not set!" );
 
         ((ScDocumentPool&)rPool).StyleDeleted((ScStyleSheet*)pStyle);
-        SfxStyleSheetPool::Erase(pStyle);
+        SfxStyleSheetPool::Remove(pStyle);
     }
 }
 
@@ -521,10 +521,10 @@ void ScStyleSheetPool::UpdateStdNames()
     //  Standard-Styles den richtigen Namen in der Programm-Sprache geben
 
     String aHelpFile;
-    ULONG nCount = aStyles.Count();
-    for (ULONG n=0; n<nCount; n++)
+    sal_uInt32 nCount = aStyles.size();
+    for (sal_uInt32 n=0; n<nCount; n++)
     {
-        SfxStyleSheetBase* pStyle = aStyles.GetObject(n);
+        SfxStyleSheetBase* pStyle = aStyles[n].get();
         if (!pStyle->IsUserDefined())
         {
             String aOldName     = pStyle->GetName();
@@ -630,10 +630,10 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily
     String aUpSearch = rName;
     ScGlobal::pCharClass->toUpper(aUpSearch);
 
-    ULONG nCount = aStyles.Count();
-    for (ULONG n=0; n<nCount; n++)
+    sal_uInt32 nCount = aStyles.size();
+    for (sal_uInt32 n=0; n<nCount; n++)
     {
-        SfxStyleSheetBase* pStyle = aStyles.GetObject(n);
+        SfxStyleSheetBase* pStyle = aStyles[n].get();
         if ( pStyle->GetFamily() == eFam )
         {
             String aUpName = pStyle->GetName();
