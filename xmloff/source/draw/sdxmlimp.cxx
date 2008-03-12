@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-03 07:12:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -564,6 +566,22 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     // #88546# enable progress bar increments, SdXMLImport is only used for
     // draw/impress import
     GetShapeImport()->enableHandleProgressBar();
+
+    uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
+    if( xFac.is() )
+    {
+        uno::Sequence< OUString > sSNS( xFac->getAvailableServiceNames() );
+        sal_Int32 n = sSNS.getLength();
+        const OUString* pSNS( sSNS.getConstArray() );
+        while( --n > 0 )
+        {
+            if( (*pSNS++).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+            {
+                mbIsTableShapeSupported = true;
+                break;
+            }
+        }
+    }
 }
 
 // XInitialization
