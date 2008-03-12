@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:32:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@
 #define STR_ObjNamePluralGRUP        (STR_ObjNameBegin +  3)
 #define STR_ObjNameSingulGRUPEMPTY   (STR_ObjNameBegin +  4)
 #define STR_ObjNamePluralGRUPEMPTY   (STR_ObjNameBegin +  5)
-//BFS01#define STR_ObjNameSingulGRUPLNK     (STR_ObjNameBegin +  6)
-//BFS01#define STR_ObjNamePluralGRUPLNK     (STR_ObjNameBegin +  7)
+#define STR_ObjNameSingulTable       (STR_ObjNameBegin + 6)
+#define STR_ObjNamePluralTable       (STR_ObjNameBegin + 7)
 #define STR_ObjNameSingulLINE        (STR_ObjNameBegin +  8)
 #define STR_ObjNameSingulLINE_Hori   (STR_ObjNameBegin +  9)
 #define STR_ObjNameSingulLINE_Vert   (STR_ObjNameBegin + 10)
@@ -765,9 +765,22 @@
 // #101928#
 #define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 261)
 
-#define SIP_SA_CROP_MARKERS                 (SIP_Begin + 262)
-#define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 263)
-#define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 264)
+#define STR_TABLE_ATTR                      (SIP_Begin + 262)
+#define STR_TABLE_AUTOFMT                   (SIP_Begin + 263)
+#define STR_TABLE_INSCOL                    (SIP_Begin + 264)
+#define STR_TABLE_INSROW                    (SIP_Begin + 265)
+#define STR_UNDO_COL_DELETE                 (SIP_Begin + 266)
+#define STR_UNDO_ROW_DELETE                 (SIP_Begin + 267)
+#define STR_TABLE_SPLIT                     (SIP_Begin + 268)
+#define STR_TABLE_MERGE                     (SIP_Begin + 269)
+#define STR_TABLE_NUMFORMAT                 (SIP_Begin + 270)
+#define STR_TABLE_DISTRIBUTE_ROWS           (SIP_Begin + 271)
+#define STR_TABLE_DISTRIBUTE_COLUMNS        (SIP_Begin + 272)
+#define STR_TABLE_STYLE                     (SIP_Begin + 273)
+#define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 274)
+#define SIP_SA_CROP_MARKERS                 (SIP_Begin + 275)
+#define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 276)
+#define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 278)
 
 #define SIP_End                             (SIP_SA_ACCESSIBILITY_CROP_MARKERS)
 
