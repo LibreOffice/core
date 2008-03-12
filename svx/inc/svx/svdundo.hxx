@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:30:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,9 +488,10 @@ protected:
     OutlinerParaObject*         pNewText;
     FASTBOOL                    bNewTextAvailable;
     BOOL                        bEmptyPresObj;
+    sal_Int32                   mnText;
 
 public:
-    SdrUndoObjSetText(SdrObject& rNewObj);
+    SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );
     virtual ~SdrUndoObjSetText();
 
     FASTBOOL IsDifferent() const { return pOldText!=pNewText; }
@@ -847,7 +848,7 @@ public:
 
     virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
     virtual SdrUndoAction* CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
-    virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj );
+    virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
     // layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
