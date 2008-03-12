@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterContainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:14:09 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,12 @@ public:
     // returns true if another filter has been retrieved
     sal_Bool SAL_CALL getNextFilter( FILTER_ENTRY_T& nextFilterEntry );
 
+    // cache current filter
+    void SAL_CALL setCurrentFilter( const ::rtl::OUString& aName );
+
+    // returns cached current filter
+    ::rtl::OUString SAL_CALL getCurrentFilter() const;
+
 protected:
     typedef std::vector< FILTER_ENTRY_T > FILTER_VECTOR_T;
 
@@ -109,6 +115,7 @@ private:
     FILTER_VECTOR_T                 m_vFilters;
     FILTER_VECTOR_T::const_iterator m_iter;
     sal_Bool                        m_bIterInitialized;
+    ::rtl::OUString                 m_sCurrentFilter;
 };
 
 //----------------------------------------------------------------
