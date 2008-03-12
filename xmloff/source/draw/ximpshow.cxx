@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:11:56 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,9 @@
 #include "ximpshow.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
