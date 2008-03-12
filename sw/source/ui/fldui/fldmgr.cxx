@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:24:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,15 +202,15 @@
 #include <fldui.hrc>
 #endif
 
-using namespace ::rtl;
+using rtl::OUString;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::text;
+using namespace com::sun::star::style;
+using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::sdbc;
 using namespace nsSwDocInfoSubType;
 
 /*--------------------------------------------------------------------
