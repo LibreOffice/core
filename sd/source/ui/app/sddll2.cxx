@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:13:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,9 @@
 #ifndef _AVMEDIA_MEDIATOOLBOX_HXX
 #include <avmedia/mediatoolbox.hxx>
 #endif
+
+#include <svx/layctrl.hxx>
+#include <svx/subtoolboxcontrol.hxx>
 
 #include "sddll.hxx"
 #define _SD_DIACTRL_CXX
@@ -296,4 +299,9 @@ void SdDLL::RegisterControllers()
     svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
+    SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
+    SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
+    SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
+    SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
+    SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 }
