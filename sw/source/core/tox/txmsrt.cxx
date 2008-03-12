@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:09:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
 /*--------------------------------------------------------------------
     Beschreibung: Strings initialisieren
  --------------------------------------------------------------------*/
