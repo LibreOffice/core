@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:52:28 $
+#   last change: $Author: rt $ $Date: 2008-03-12 07:34:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,13 @@ COMP1TYPELIST=$(TARGET)
 
 # ------------------------------------------------------------------
 
-CDEFS+=-D_WIN32_WINNT=0x0500 -D_UNICODE -DUNICODE
+CDEFS+=-D_UNICODE
+CDEFS+=-DUNICODE
+#CDEFS+=-DWIN32_LEAN_AND_MEAN
+#CDEFS+=-DWIN32
+
+CDEFS+=-Ic:\progra~1\micros~3\windows\v6.0\include
+CDEFS+=-If:\lu\n\msvc8p\atlmfc\include
 
 # --- Resources ----------------------------------------------------
 
@@ -75,7 +81,11 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/customcontrol.obj\
          $(SLO)$/customcontrolcontainer.obj\
          $(SLO)$/customcontrolfactory.obj\
-         $(SLO)$/dialogcustomcontrols.obj
+         $(SLO)$/dialogcustomcontrols.obj\
+         $(SLO)$/asyncrequests.obj\
+         $(SLO)$/VistaFilePickerEventHandler.obj\
+         $(SLO)$/VistaFilePickerImpl.obj\
+         $(SLO)$/VistaFilePicker.obj
 
 # --- Targets ------------------------------------------------------
 
