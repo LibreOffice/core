@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 12:33:31 $
+#   last change: $Author: rt $ $Date: 2008-03-12 13:00:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,6 @@ LIB3OBJFILES = \
             $(SLO)$/pgfnote.obj \
             $(SLO)$/rowht.obj \
             $(SLO)$/selglos.obj \
-            $(SLO)$/split.obj \
             $(SLO)$/splittbl.obj \
              $(SLO)$/srtdlg.obj	\
              $(SLO)$/tautofmt.obj	\
