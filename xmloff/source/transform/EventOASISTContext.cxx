@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventOASISTContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:23:18 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,8 @@
 
 #include <hash_map>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
