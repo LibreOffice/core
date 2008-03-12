@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:41:07 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #define _SVSTDARR_BYTESTRINGS
 #define _SVSTDARR_BYTESTRINGSSORTDTOR
 
+#include <rtl/uuid.h>
+
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
 #endif
@@ -66,10 +68,27 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#include <algorithm>
+
 #define STYLESTREAM             "SfxStyleSheets"
 #define STYLESTREAM_VERSION     USHORT(50)
 
+#ifdef DBG_UTIL
+class DbgStyleSheetReferences
+{
+public:
+    DbgStyleSheetReferences() : mnStyles(0), mnPools(0) {}
+    ~DbgStyleSheetReferences()
+    {
+        OSL_TRACE("DbgStyleSheetReferences\nSfxStyleSheetBase left %ld\nSfxStyleSheetBasePool left %ld\n", mnStyles, mnPools );
+    }
 
+    sal_uInt32 mnStyles;
+    sal_uInt32 mnPools;
+}
+aDbgStyleSheetReferences;
+
+#endif
 
 TYPEINIT0(SfxStyleSheetBase)
 
@@ -135,8 +154,7 @@ class SfxStyleSheetBasePool_Impl
 
 // Konstruktoren
 
-SfxStyleSheetBase::SfxStyleSheetBase
-    ( const XubString& rName, SfxStyleSheetBasePool& r, SfxStyleFamily eFam, USHORT mask )
+SfxStyleSheetBase::SfxStyleSheetBase( const XubString& rName, SfxStyleSheetBasePool& r, SfxStyleFamily eFam, USHORT mask )
     : rPool( r )
     , nFamily( eFam )
     , aName( rName )
@@ -147,10 +165,14 @@ SfxStyleSheetBase::SfxStyleSheetBase
     , nHelpId( 0 )
     , bMySet( FALSE )
 {
+#ifdef DBG_UTIL
+    aDbgStyleSheetReferences.mnStyles++;
+#endif
 }
 
 SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
-    : rPool( r.rPool )
+    : comphelper::OWeakTypeObject()
+    , rPool( r.rPool )
     , nFamily( r.nFamily )
     , aName( r.aName )
     , aParent( r.aParent )
@@ -160,14 +182,39 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
     , nHelpId( r.nHelpId )
     , bMySet( r.bMySet )
 {
+#ifdef DBG_UTIL
+    aDbgStyleSheetReferences.mnStyles++;
+#endif
     if( r.pSet )
         pSet = bMySet ? new SfxItemSet( *r.pSet ) : r.pSet;
     else
         pSet = NULL;
 }
 
+static SfxStyleSheetBasePool& implGetStaticPool()
+{
+    static SfxStyleSheetBasePool* pSheetPool = 0;
+    if( !pSheetPool )
+    {
+        UniString aName;
+        static SfxItemPool aPool( aName, 0, 0, 0 );
+        pSheetPool = new SfxStyleSheetBasePool( aPool );
+    }
+    return *pSheetPool;
+}
+
+SfxStyleSheetBase::SfxStyleSheetBase()
+: comphelper::OWeakTypeObject()
+, rPool( implGetStaticPool() )
+{
+}
+
 SfxStyleSheetBase::~SfxStyleSheetBase()
 {
+#ifdef DBG_UTIL
+    --aDbgStyleSheetReferences.mnStyles;
+#endif
+
     if( bMySet )
     {
         delete pSet;
@@ -213,6 +260,23 @@ BOOL SfxStyleSheetBase::SetName( const XubString& rName )
             SFX_STYLESHEET_MODIFIED, aOldName, *this ) );
     }
     return TRUE;
+}
+
+rtl::OUString SfxStyleSheetBase::GetDisplayName() const
+{
+    if( maDisplayName.getLength() == 0 )
+    {
+        return aName;
+    }
+    else
+    {
+        return maDisplayName;
+    }
+}
+
+void SfxStyleSheetBase::SetDisplayName( const rtl::OUString& rDisplayName )
+{
+    maDisplayName = rDisplayName;
 }
 
 // Parent aendern
@@ -407,11 +471,11 @@ USHORT SfxStyleSheetIterator::Count()
 {
     USHORT n = 0;
     if( IsTrivialSearch())
-        n = (USHORT) pBasePool->aStyles.Count();
+        n = (USHORT) pBasePool->aStyles.size();
     else
-        for(USHORT i=0; i<pBasePool->aStyles.Count(); i++)
+        for(USHORT i=0; i<pBasePool->aStyles.size(); i++)
         {
-            SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(i);
+            SfxStyleSheetBase* pStyle = pBasePool->aStyles[i].get();
             if(DoesStyleMatch(pStyle))
                 n++;
         }
@@ -421,12 +485,12 @@ USHORT SfxStyleSheetIterator::Count()
 SfxStyleSheetBase* SfxStyleSheetIterator::operator[](USHORT nIdx)
 {
     if( IsTrivialSearch())
-        return pBasePool->aStyles.GetObject(nIdx);
+        return pBasePool->aStyles[nIdx].get();
 
     USHORT z = 0;
-    for(USHORT n=0; n<pBasePool->aStyles.Count(); n++)
+    for(USHORT n=0; n<pBasePool->aStyles.size(); n++)
     {
-        SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(n);
+        SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
         if( DoesStyleMatch(pStyle))
         {
             if(z == nIdx)
@@ -445,12 +509,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::First()
 {
     INT32 nIdx = -1;
 
-    if ( IsTrivialSearch() && pBasePool->aStyles.Count() )
+    if ( IsTrivialSearch() && pBasePool->aStyles.size() )
         nIdx = 0;
     else
-        for( USHORT n = 0; n < pBasePool->aStyles.Count(); n++ )
+        for( USHORT n = 0; n < pBasePool->aStyles.size(); n++ )
         {
-            SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(n);
+            SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
 
             if ( DoesStyleMatch( pStyle ) )
             {
@@ -462,7 +526,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::First()
     if ( nIdx != -1 )
     {
         nAktPosition = (USHORT)nIdx;
-        return pAktStyle = pBasePool->aStyles.GetObject(nIdx);
+        return pAktStyle = pBasePool->aStyles[nIdx].get();
     }
     return 0;
 }
@@ -473,12 +537,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     INT32 nIdx = -1;
 
     if ( IsTrivialSearch() &&
-         (USHORT)pBasePool->aStyles.Count() > nAktPosition + 1 )
+         (USHORT)pBasePool->aStyles.size() > nAktPosition + 1 )
         nIdx = nAktPosition + 1;
     else
-        for( USHORT n = nAktPosition + 1; n < pBasePool->aStyles.Count(); n++ )
+        for( USHORT n = nAktPosition + 1; n < pBasePool->aStyles.size(); n++ )
         {
-            SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(n);
+            SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
 
             if ( DoesStyleMatch( pStyle ) )
             {
@@ -490,7 +554,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     if ( nIdx != -1 )
     {
         nAktPosition = (USHORT)nIdx;
-        return pAktStyle = pBasePool->aStyles.GetObject(nIdx);
+        return pAktStyle = pBasePool->aStyles[nIdx].get();
     }
     return 0;
 }
@@ -498,9 +562,9 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
 
 SfxStyleSheetBase* SfxStyleSheetIterator::Find(const XubString& rStr)
 {
-    for ( USHORT n = 0; n < pBasePool->aStyles.Count(); n++ )
+    for ( USHORT n = 0; n < pBasePool->aStyles.size(); n++ )
     {
-        SfxStyleSheetBase* pStyle = pBasePool->aStyles.GetObject(n);
+        SfxStyleSheetBase* pStyle = pBasePool->aStyles[n].get();
 
         // #98454# performance: in case of bSearchUsed==TRUE it may be
         // significant to first compare the name and only if it matches to call
@@ -526,7 +590,6 @@ USHORT SfxStyleSheetIterator::GetSearchMask() const
 
 /////////////////////////// SfxStyleSheetBasePool ///////////////////////////////
 
-
 void SfxStyleSheetBasePool::Replace(
     SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget )
 {
@@ -541,8 +604,7 @@ void SfxStyleSheetBasePool::Replace(
 SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
 {
     SfxStyleSheetIterator*& rpIter = pImp->pIter;
-    if( !rpIter || rpIter->GetSearchMask() != nMask ||
-        rpIter->GetSearchFamily() != nSearchFamily )
+    if( !rpIter || (rpIter->GetSearchMask() != nMask) || (rpIter->GetSearchFamily() != nSearchFamily) )
     {
         delete rpIter;
         rpIter = CreateIterator( nSearchFamily, nMask );
@@ -557,22 +619,35 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r )
     , nSearchFamily(SFX_STYLE_FAMILY_PARA)
     , nMask(0xFFFF)
 {
+#ifdef DBG_UTIL
+    aDbgStyleSheetReferences.mnPools++;
+#endif
+
     pImp = new SfxStyleSheetBasePool_Impl;
 }
 
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r )
     : SfxBroadcaster( r )
+    , comphelper::OWeakTypeObject()
     , aAppName(r.aAppName)
     , rPool(r.rPool)
     , nSearchFamily(r.nSearchFamily)
     , nMask( r.nMask )
 {
+#ifdef DBG_UTIL
+    aDbgStyleSheetReferences.mnPools++;
+#endif
+
     pImp = new SfxStyleSheetBasePool_Impl;
     *this += r;
 }
 
 SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 {
+#ifdef DBG_UTIL
+    aDbgStyleSheetReferences.mnPools--;
+#endif
+
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     Clear();
     delete pImp;
@@ -638,30 +713,30 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
     return new SfxStyleSheetBase( r );
 }
 
-SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const XubString& rName,
-                            SfxStyleFamily eFam, USHORT mask, USHORT nPos)
+SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const XubString& rName, SfxStyleFamily eFam, USHORT mask, USHORT nPos)
 {
-    DBG_ASSERT( eFam != SFX_STYLE_FAMILY_ALL, "FamilyAll als Familie nicht erlaubt" );
+    DBG_ASSERT( eFam != SFX_STYLE_FAMILY_ALL, "svtools::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
 
     SfxStyleSheetIterator aIter(this, eFam, mask);
-    SfxStyleSheetBase* p = aIter.Find( rName );
-    DBG_ASSERT( !p, "StyleSheet bereits vorhanden" );
+    rtl::Reference< SfxStyleSheetBase > xStyle( aIter.Find( rName ) );
+    DBG_ASSERT( !xStyle.is(), "svtools::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
     SfxStyleSheetIterator& rIter = GetIterator_Impl();
 
-    if( !p )
+    if( !xStyle.is() )
     {
-        p = Create( rName, eFam, mask );
-        if(0xffff == nPos || nPos == aStyles.Count() ||
-           nPos == rIter.Count())
-            aStyles.Insert( p, aStyles.Count() );
+        xStyle = Create( rName, eFam, mask );
+        if(0xffff == nPos || nPos == aStyles.size() || nPos == rIter.Count())
+        {
+            aStyles.push_back( xStyle );
+        }
         else
         {
             rIter[nPos];
-            aStyles.Insert(p, rIter.GetPos());
+            aStyles.insert( aStyles.begin() + rIter.GetPos(), xStyle );
         }
-        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) );
+        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xStyle.get() ) );
     }
-    return *p;
+    return *xStyle.get();
 }
 
 /////////////////////////////// Kopieren ///////////////////////////////////
@@ -674,11 +749,11 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
 {
     SfxStyleSheetIterator aIter(this, rSheet.GetFamily(), nMask);
     SfxStyleSheetBase* pOld = aIter.Find( rSheet.GetName() );
-    Erase( pOld );
-    SfxStyleSheetBase* pNew = Create( rSheet );
-    aStyles.Insert( pNew, aStyles.Count() );
-    Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) );
-    return *pNew;
+    Remove( pOld );
+    rtl::Reference< SfxStyleSheetBase > xNew( Create( rSheet ) );
+    aStyles.push_back( xNew );
+    Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *xNew.get() ) );
+    return *xNew.get();
 }
 
 SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBasePool& r )
@@ -691,15 +766,15 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBase
     return *this;
 }
 
-SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBasePool& rP )
+SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBasePool& r )
 {
-    if( &rP != this )
+    if( &r != this )
     {
-        // kopieren
-        SfxStyleSheetBasePool& r = (SfxStyleSheetBasePool&) rP;
-        for( SfxStyleSheetBase* p = r.aStyles.First(); p; p = r.aStyles.Next() )
-            Add(*p);
-
+        SfxStyles::const_iterator aIter( r.aStyles.begin() );
+        while( aIter != r.aStyles.end() )
+        {
+            Add(*(*aIter++).get());
+        }
     }
     return *this;
 }
@@ -724,6 +799,11 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const XubString& rName,
     return aIter.Find(rName);
 }
 
+const SfxStyles& SfxStyleSheetBasePool::GetStyles()
+{
+    return aStyles;
+}
+
 SfxStyleSheetBase* SfxStyleSheetBasePool::First()
 {
     return GetIterator_Impl().First();
@@ -736,51 +816,46 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Next()
 
 //////////////////////////////// Loeschen /////////////////////////////////
 
-SfxStyleSheetBase* SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
+void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 {
     if( p )
     {
-        // Alle Styles umsetzen, deren Parent dieser hier ist
-        ChangeParent( p->GetName(), p->GetParent() );
-        aStyles.Remove( p );
-        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
-    }
-    return p;
-}
-
-void SfxStyleSheetBasePool::Erase( SfxStyleSheetBase* p )
-{
-    if( p )
-    {
-        Remove(p);
-        delete p;
+        SfxStyles::iterator aIter( std::find( aStyles.begin(), aStyles.end(), rtl::Reference< SfxStyleSheetBase >( p ) ) );
+        if( aIter != aStyles.end() )
+        {
+            // Alle Styles umsetzen, deren Parent dieser hier ist
+            ChangeParent( p->GetName(), p->GetParent() );
+            aStyles.erase(aIter);
+            Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
+        }
     }
 }
 
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 {
-    DBG_ASSERT( p, "Kein StyleSheet?" );
-    SfxStyleSheetIterator aIter(
-        this, p->GetFamily(), p->GetMask());
+    DBG_ASSERT( p, "svtools::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
+
+    SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
     SfxStyleSheetBase* pOld = aIter.Find( p->GetName() );
-    DBG_ASSERT( !pOld, "StyleSheet bereits vorhanden" );
+    DBG_ASSERT( !pOld, "svtools::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
     if( p->GetParent().Len() )
     {
         pOld = aIter.Find( p->GetParent() );
-        DBG_ASSERT( pOld, "Parent nicht mehr vorhanden" );
+        DBG_ASSERT( pOld, "svtools::SfxStyleSheetBasePool::Insert(), Parent not found!" );
     }
-    aStyles.Insert( p, aStyles.Count() );
+    aStyles.push_back( rtl::Reference< SfxStyleSheetBase >( p ) );
     Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) );
 }
 
 void SfxStyleSheetBasePool::Clear()
 {
-    while( aStyles.Count() )
+    SfxStyles aClearStyles;
+    aClearStyles.swap( aStyles );
+
+    SfxStyles::iterator aIter( aClearStyles.begin() );
+    while( aIter != aClearStyles.end() )
     {
-        SfxStyleSheetBase* p = aStyles.First();
-        aStyles.Remove( p );
-        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
-        delete p;
+        Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *(*aIter++).get() ) );
     }
 }
 
@@ -790,7 +865,6 @@ void SfxStyleSheetBasePool::ChangeParent(const XubString& rOld,
                                          const XubString& rNew,
                                          BOOL bVirtual)
 {
-    const ULONG nPos = aStyles.GetCurPos();
     const USHORT nTmpMask = GetSearchMask();
     SetSearchMask(GetSearchFamily(), 0xffff);
     for( SfxStyleSheetBase* p = First(); p; p = Next() )
@@ -804,7 +878,6 @@ void SfxStyleSheetBasePool::ChangeParent(const XubString& rOld,
         }
     }
     SetSearchMask(GetSearchFamily(), nTmpMask);
-    aStyles.Seek(nPos);
 }
 
 /////////////////////////// Laden/Speichern /////////////////////////////////
@@ -899,7 +972,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         }
 
         //  #72939# only loop through the styles that were really inserted
-        ULONG n = aStyles.Count();
+        ULONG n = aStyles.size();
 
         //! delete pTmpPool;
         // Jetzt Parent und Follow setzen. Alle Sheets sind geladen.
@@ -907,7 +980,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         // virtuellen Methoden evtl. ueberlagert sind.
         for ( ULONG i = 0; i < n; i++ )
         {
-            SfxStyleSheetBase* p = aStyles.GetObject( i );
+            SfxStyleSheetBase* p = aStyles[ i ].get();
             XubString aText = p->aParent;
             p->aParent.Erase();
             p->SetParent( aText );
@@ -1004,7 +1077,7 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
     // virtuellen Methoden evtl. ueberlagert sind.
     for ( i = 0; i < nStyles; i++ )
     {
-        SfxStyleSheetBase* p = aStyles.GetObject( i );
+        SfxStyleSheetBase* p = aStyles[ i ].get();
         XubString aText = p->aParent;
         p->aParent.Erase();
         p->SetParent( aText );
@@ -1175,10 +1248,10 @@ const SfxItemPool& SfxStyleSheetBasePool::GetPool() const
 /////////////////////// SfxStyleSheet /////////////////////////////////
 
 SfxStyleSheet::SfxStyleSheet(const XubString &rName,
-                             SfxStyleSheetBasePool& r_Pool,
+                             const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,
                              USHORT mask ):
-    SfxStyleSheetBase(rName, r_Pool, eFam, mask)
+    SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool& >( r_Pool ), eFam, mask)
 {}
 
 SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
@@ -1186,6 +1259,10 @@ SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
     SfxListener( rStyle ),
     SfxBroadcaster( rStyle )
 {}
+
+SfxStyleSheet::SfxStyleSheet()
+{
+}
 
 SfxStyleSheet::~SfxStyleSheet()
 {
@@ -1228,9 +1305,10 @@ void SfxStyleSheet::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 
 //////////////////////// SfxStyleSheetPool ///////////////////////////////
 
-SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool& rSet):
-    SfxStyleSheetBasePool(rSet)
-{}
+SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)
+: SfxStyleSheetBasePool( const_cast< SfxItemPool& >( rSet ) )
+{
+}
 
 /////////////////////////////////// Factory ////////////////////////////////
 
@@ -1251,3 +1329,67 @@ BOOL SfxStyleSheetPool::CopyTo(SfxStyleSheetPool &, const String &)
 }
 */
 
+// --------------------------------------------------------------------
+// class SfxUnoStyleSheet
+// --------------------------------------------------------------------
+
+SfxUnoStyleSheet::SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, USHORT _nMaske )
+: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
+{
+}
+
+// --------------------------------------------------------------------
+SfxUnoStyleSheet::SfxUnoStyleSheet( const SfxStyleSheet& _rSheet )
+: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rSheet )
+{
+}
+
+// --------------------------------------------------------------------
+
+SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle )
+{
+    SfxUnoStyleSheet* pRet = dynamic_cast< SfxUnoStyleSheet* >( xStyle.get() );
+    if( !pRet )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xStyle, ::com::sun::star::uno::UNO_QUERY );
+        if( xUT.is() )
+            pRet = reinterpret_cast<SfxUnoStyleSheet*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SfxUnoStyleSheet::getIdentifier())));
+    }
+    return pRet;
+}
+
+// --------------------------------------------------------------------
+// XUnoTunnel
+// --------------------------------------------------------------------
+
+::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// --------------------------------------------------------------------
+
+const ::com::sun::star::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+    if( !pSeq )
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// --------------------------------------------------------------------
