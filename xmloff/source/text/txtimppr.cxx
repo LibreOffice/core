@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:15:45 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,8 @@
 #define XML_LINE_BOTTOM 3
 #define MIN_BORDER_DIST 49
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
