@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:35:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <rsc/rscsfx.hxx>
 
 //------------------------------------------------------------------
 
@@ -73,6 +75,7 @@
 #define SD_IF_SDLEFTIMPRESSPANESHELL    SFX_INTERFACE_SD_START + 24
 #define SD_IF_SDLEFTDRAWPANESHELL       SFX_INTERFACE_SD_START + 25
 #define SD_IF_SDRIGHTPANESHELL          SFX_INTERFACE_SD_START + 26
+#define SD_IF_SDDRAWTABLEOBJECTBAR      SFX_INTERFACE_SD_START + 27
 
 // Inventor-Id fuer StarDraw UserData
 const UINT32 SdUDInventor=UINT32('S')*0x00000001+
@@ -85,7 +88,10 @@ const UINT32 SdUDInventor=UINT32('S')*0x00000001+
 #define SD_IMAPINFO_ID      2
 
 // FamilyId der Praesentationsvorlagen
-#define SD_LT_FAMILY (SfxStyleFamily)0xaffe
+#define SD_STYLE_FAMILY_GRAPHICS        SFX_STYLE_FAMILY_PARA
+#define SD_STYLE_FAMILY_PSEUDO          SFX_STYLE_FAMILY_PSEUDO
+#define SD_STYLE_FAMILY_CELL            SFX_STYLE_FAMILY_FRAME
+#define SD_STYLE_FAMILY_MASTERPAGE      SFX_STYLE_FAMILY_PAGE       // ex LT_FAMILY
 
 // Trennzeichen zwischen Layoutname und Vorlagenname der Praesentationsvorlagen
 #define SD_LT_SEPARATOR "~LT~"
