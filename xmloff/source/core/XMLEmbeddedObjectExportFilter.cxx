@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectExportFilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:20:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,8 @@
 #include "XMLEmbeddedObjectExportFilter.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
