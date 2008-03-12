@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:28:52 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,7 +720,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                             Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
                                 SFX_CALLMODE_RECORD, &aItem, 0L);
                         // Put text object into edit mode.
-                        GetView()->BeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
+                        GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
                         break;
                     }
                 }
