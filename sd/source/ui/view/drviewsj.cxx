@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:35:53 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEHIND_OBJ ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
-             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVEGRAPHIC ) )
+             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVEGRAPHIC ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             UINT32 nInv = pObj->GetObjInventor();
@@ -255,9 +256,13 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
 
-            if(nInv == SdrInventor &&
-               (nId == OBJ_TITLETEXT || nId == OBJ_OUTLINETEXT))
+            if(nInv == SdrInventor && (nId == OBJ_TITLETEXT || nId == OBJ_OUTLINETEXT))
                 rSet.DisableItem( SID_TEXTATTR_DLG );
+
+            if(nInv == SdrInventor && nId == OBJ_TABLE )
+            {
+                rSet.DisableItem( SID_TEXTATTR_DLG );
+            }
 
             if( nInv != SdrInventor || nId != OBJ_MEASURE )
                 rSet.DisableItem( SID_MEASURE_DLG );
@@ -396,6 +401,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             BOOL bDrawObj = FALSE;
             BOOL b3dObj = FALSE;
             BOOL bTitOutText = FALSE;
+            bool bTable = false;
             BOOL bMeasureObj = FALSE;
             BOOL bEdgeObj = FALSE; // Connector
             BOOL bE3dCompoundObject = FALSE;
@@ -436,6 +442,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
                         case OBJ_TITLETEXT:
                         case OBJ_OUTLINETEXT: bTitOutText = TRUE; break;
+                        case OBJ_TABLE: bTable = true; break;
                     }
                 }
                 else if (nInv == E3dInventor)
@@ -482,7 +489,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_UNGROUP );
             }
-            if( bTitOutText )
+            if( bTitOutText || bTable )
                 rSet.DisableItem( SID_TEXTATTR_DLG );
 
             if( !bMeasureObj )
