@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:53:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,9 @@
 #include "animations.hxx"
 #include "animationexport.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::animations;
