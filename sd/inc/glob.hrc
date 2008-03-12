@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:35:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,14 +108,13 @@
 #define STR_POOLSHEET_HEADLINE2                 RID_GLOB_START+67
 #define STR_POOLSHEET_MEASURE                   RID_GLOB_START+68
 #define STR_POOLSHEET_ARROW                     RID_GLOB_START+69
-#define STR_POOLSHEET_OBJWITHOUTFILL_NT         RID_GLOB_START+70
-#define STR_POOLSHEET_TEXTBODY_NT               RID_GLOB_START+71
-#define STR_POOLSHEET_TEXTBODY_JUSTIFY_NT       RID_GLOB_START+72
-#define STR_POOLSHEET_TEXTBODY_INDENT_NT        RID_GLOB_START+73
-#define STR_POOLSHEET_HEADLINE_NT               RID_GLOB_START+74
-#define STR_POOLSHEET_HEADLINE1_NT              RID_GLOB_START+75
-#define STR_POOLSHEET_HEADLINE2_NT              RID_GLOB_START+76
-#define STR_POOLSHEET_MEASURE_NT                RID_GLOB_START+77
+//
+#define STR_POOLSHEET_BANDED_CELL               RID_GLOB_START+70
+#define STR_POOLSHEET_HEADER                    RID_GLOB_START+71
+#define STR_POOLSHEET_TOTAL                     RID_GLOB_START+72
+#define STR_POOLSHEET_FIRST_COLUMN              RID_GLOB_START+73
+#define STR_POOLSHEET_LAST_COLUMN               RID_GLOB_START+74
+//
 #define STR_PSEUDOSHEET_TITLE                   RID_GLOB_START+80
 #define STR_PSEUDOSHEET_OUTLINE                 RID_GLOB_START+81
 #define STR_PSEUDOSHEET_BACKGROUNDOBJECTS       RID_GLOB_START+82
@@ -154,3 +153,8 @@
 #define STR_UNDO_ANIMATION                      RID_GLOB_START+221
 #define STR_UNDO_SLIDE_PARAMS                   RID_GLOB_START+222
 #define RID_SLIDESHOW_CONTEXTMENU               RID_GLOB_START+223
+
+#define DLG_TABLEDESIGNPANE                     RID_GLOB_START+224
+#define STR_TABLEOBJECTBARSHELL                 RID_GLOB_START+225
+
+
