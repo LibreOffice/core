@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-17 16:15:37 $
+#   last change: $Author: rt $ $Date: 2008-03-12 09:46:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES=\
         $(SLO)$/overlayhelpline.obj				\
         $(SLO)$/overlayrollingrectangle.obj		\
         $(SLO)$/overlaypolypolygon.obj			\
-        $(SLO)$/overlaysdrobject.obj
+        $(SLO)$/overlaysdrobject.obj			\
+        $(SLO)$/overlayobjectcell.obj
 
 .INCLUDE :  target.mk
