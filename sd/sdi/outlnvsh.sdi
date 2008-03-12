@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:00:24 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,13 @@ interface OutlineView
      // Vorlagen
      // kein Menueeintrag
     SID_STYLE_FAMILY2 // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_STYLE_FAMILY3 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
