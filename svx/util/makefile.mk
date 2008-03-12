@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 12:46:14 $
+#   last change: $Author: rt $ $Date: 2008-03-12 10:14:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,8 @@ LIB4FILES=\
     $(SLB)$/engine3d.lib \
     $(SLB)$/msfilter.lib \
     $(SLB)$/xout.lib \
-    $(SLB)$/xml.lib
+    $(SLB)$/xml.lib \
+    $(SLB)$/table.lib
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
