@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:30:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,8 @@ protected:
 
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
     sal_Bool                    mbIsFormsSupported;
-    bool                        mbIsGraphicLoadOnDemandSupported;
+    bool                        mbIsTableShapeSupported;
+    bool                        mbIsGraphicLoadOnDemmandSupported;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -410,7 +411,10 @@ public:
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );
 
+    bool IsTableShapeSupported() const { return mbIsTableShapeSupported; }
+
     ::rtl::OUString GetODFVersion() const;
+
     /**
      * Record an error condition that occured during import. The
      * behavior of SetError can be modified using the error flag
