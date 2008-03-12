@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.280 $
+ *  $Revision: 1.281 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 17:04:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1949,6 +1949,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Go, bf_go)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Sch, bf_sch)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Xo, bf_xo)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Svx, bf_svx)
+STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Svt, bf_svt)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Frm, bf_frm)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Ofa, bf_ofa)
 STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Sb, bf_sb)
