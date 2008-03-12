@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmovss.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:51:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,19 @@
 #define _SD_UNMOVSS_HXX
 
 #include "sdundo.hxx"
+#include <stlsheet.hxx>
+#include <vector>
 
-class List;
 class SdDrawDocument;
 
 class SdMoveStyleSheetsUndoAction : public SdUndoAction
 {
-    List* pStyles;
-    List* pListOfChildLists;
-    BOOL  bMySheets;
+    SdStyleSheetVector                  maStyles;
+    std::vector< SdStyleSheetVector >   maListOfChildLists;
+    bool                                mbMySheets;
 
 public:
-    TYPEINFO();
-    SdMoveStyleSheetsUndoAction(SdDrawDocument* pTheDoc,
-                                List*           pTheStyles,
-                                BOOL            bInserted);
+    SdMoveStyleSheetsUndoAction(SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted);
 
     virtual ~SdMoveStyleSheetsUndoAction();
     virtual void Undo();
