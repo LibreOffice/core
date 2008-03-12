@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:46:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,6 +402,7 @@ const ::rtl::OUString ToolBarManager::msTextObjectBar(OUSTRING("textobjectbar"))
 const ::rtl::OUString ToolBarManager::msBezierObjectBar(OUSTRING("bezierobjectbar"));
 const ::rtl::OUString ToolBarManager::msGraphicObjectBar(OUSTRING("graphicobjectbar"));
 const ::rtl::OUString ToolBarManager::msMediaObjectBar(OUSTRING("mediaobjectbar"));
+const ::rtl::OUString ToolBarManager::msTableObjectBar(OUSTRING("tableobjectbar"));
 
 
 ::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
@@ -773,7 +774,7 @@ void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
 void ToolBarManager::Implementation::ResetAllToolBars (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("resetting all tool bars");
+    OSL_TRACE("resetting all tool bars\n");
 #endif
     for (int i=TBG__FIRST; i<=TBG__LAST; ++i)
         ResetToolBars((ToolBarGroup)i);
@@ -902,7 +903,7 @@ void ToolBarManager::Implementation::PreUpdate (void)
         }
 
 #ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PreUpdate ]");
+        OSL_TRACE("ToolBarManager::PreUpdate ]\n");
 #endif
     }
 }
@@ -942,7 +943,7 @@ void ToolBarManager::Implementation::PostUpdate (void)
         }
 
 #ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PostUpdate ]");
+        OSL_TRACE("ToolBarManager::PostUpdate ]\n");
 #endif
     }
 }
@@ -971,7 +972,7 @@ bool ToolBarManager::Implementation::IsUpdateLocked (void) const
 void ToolBarManager::Implementation::LockUpdate (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("LockUpdate %d", mnLockCount);
+    OSL_TRACE("LockUpdate %d\n", mnLockCount);
 #endif
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -991,7 +992,7 @@ void ToolBarManager::Implementation::LockUpdate (void)
 void ToolBarManager::Implementation::UnlockUpdate (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("UnlockUpdate %d", mnLockCount);
+    OSL_TRACE("UnlockUpdate %d\n", mnLockCount);
 #endif
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -1361,38 +1362,50 @@ void ToolBarRules::SelectionHasChanged (
 {
     ::sd::ToolBarManager::UpdateLock aLock (mpToolBarManager);
     mpToolBarManager->LockViewShellManager();
+    bool bTextEdit = rView.IsTextEdit();
+
+    mpToolBarManager->ResetToolBars(ToolBarManager::TBG_FUNCTION);
 
     switch (rView.GetContext())
     {
         case SDRCONTEXT_GRAPHIC:
-            mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_GRAF_TOOLBOX);
+            if( !bTextEdit )
+                mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_GRAF_TOOLBOX);
             break;
 
         case SDRCONTEXT_MEDIA:
-            mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_MEDIA_TOOLBOX);
+            if( !bTextEdit )
+                mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_MEDIA_TOOLBOX);
             break;
 
-        case SDRCONTEXT_TEXTEDIT:
-            mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_TEXT_TOOLBOX);
+        case SDRCONTEXT_TABLE:
+            mpToolBarManager->SetToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_TABLE_TOOLBOX);
+            bTextEdit = true;
             break;
 
         case SDRCONTEXT_STANDARD:
         default:
-            switch(rViewShell.GetShellType())
+            if( !bTextEdit )
             {
-                case ::sd::ViewShell::ST_IMPRESS:
-                case ::sd::ViewShell::ST_DRAW:
-                case ::sd::ViewShell::ST_NOTES:
-                case ::sd::ViewShell::ST_HANDOUT:
-                    mpToolBarManager->SetToolBar(
-                        ToolBarManager::TBG_FUNCTION,
-                        ToolBarManager::msDrawingObjectToolBar);
-                    break;
-                default:
-                    break;
+                switch(rViewShell.GetShellType())
+                {
+                    case ::sd::ViewShell::ST_IMPRESS:
+                    case ::sd::ViewShell::ST_DRAW:
+                    case ::sd::ViewShell::ST_NOTES:
+                    case ::sd::ViewShell::ST_HANDOUT:
+                        mpToolBarManager->SetToolBar(
+                            ToolBarManager::TBG_FUNCTION,
+                            ToolBarManager::msDrawingObjectToolBar);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             }
-            break;
     }
+
+    if( bTextEdit )
+        mpToolBarManager->AddToolBarShell(ToolBarManager::TBG_FUNCTION, RID_DRAW_TEXT_TOOLBOX);
 
     SdrView* pView = &const_cast<SdrView&>(rView);
     // Check if the extrusion tool bar and the fontwork tool bar have to
@@ -1434,6 +1447,10 @@ void ToolBarRules::SubShellAdded (
         case RID_BEZIER_TOOLBOX:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msBezierObjectBar);
             break;
+
+        case RID_DRAW_TABLE_TOOLBOX:
+            mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTableObjectBar);
+            break;
     }
 }
 
@@ -1462,6 +1479,10 @@ void ToolBarRules::SubShellRemoved (
 
         case RID_BEZIER_TOOLBOX:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msBezierObjectBar);
+            break;
+
+        case RID_DRAW_TABLE_TOOLBOX:
+            mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msTableObjectBar);
             break;
     }
 }
@@ -1748,7 +1769,7 @@ void ToolBarShellList::UpdateShells (
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
 #ifdef VERBOSE
-            OSL_TRACE("deactivating tool bar shell %d", iShell->mnId);
+            OSL_TRACE("deactivating tool bar shell %d\n", iShell->mnId);
 #endif
             rManager.DeactivateSubShell(*pMainViewShell, iShell->mnId);
         }
@@ -1762,7 +1783,7 @@ void ToolBarShellList::UpdateShells (
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
 #ifdef VERBOSE
-            OSL_TRACE("activating tool bar shell %d", iShell->mnId);
+            OSL_TRACE("activating tool bar shell %d\n", iShell->mnId);
 #endif
             rManager.ActivateSubShell(*pMainViewShell, iShell->mnId);
         }
