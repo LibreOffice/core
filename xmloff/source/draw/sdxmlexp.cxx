@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:18:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -622,7 +624,6 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)),
           GetPresPagePropsMapper(),
           OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX)));
-
     // prepare access to styles
     Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), UNO_QUERY );
     if(xFamSup.is())
@@ -2339,6 +2340,8 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
 
     // write draw:style-name for object graphic-styles
     GetShapeExport()->ExportGraphicDefaults();
+
+    GetShapeExport()->GetShapeTableExport()->exportTableStyles();
 
     // write presentation styles
     ImpWritePresentationStyles();
