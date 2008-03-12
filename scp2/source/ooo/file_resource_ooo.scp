@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:47:13 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ STD_RES_FILE( gid_File_Res_San, san )
 #ifndef WITHOUT_BINFILTER
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Sch, bf_sch )
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Svx, bf_svx )
+STD_RES_FILE_PATCH( gid_File_Res_Bf_Svt, bf_svt )
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Frm, bf_frm )
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Ofa, bf_ofa )
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Sd, bf_sd )
