@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 17:08:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,26 +59,27 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, INFO_TEXT_LINES*RSC_CD_FIXEDTEXT_HEIGHT );
         NoLabel = TRUE;
         Wordbreak = TRUE;
-        Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\n- Click 'Yes' to save in %FORMATNAME file format.\n- Click 'No' to use the latest OpenDocument file format and be sure all formatting and content is saved correctly.";
+        Text [ en-US-old ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\n- Click 'Yes' to save in %FORMATNAME file format.\n- Click 'No' to use the latest OpenDocument file format and be sure all formatting and content is saved correctly.";
+        Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\nUse the latest ODF file format and be sure all formatting and content is saved correctly.";
     };
-    OKButton PB_YES
+    OKButton PB_NO
     {
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "~Yes";
+        DefButton = TRUE ;
+        Text [ en-US ] = "~Keep Current Format";
     };
-    CancelButton PB_NO
+    CancelButton PB_YES
     {
         Pos = MAP_APPFONT( AW_COL_3, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        DefButton = TRUE ;
-        Text [ en-US ] = "~No";
+        Text [ en-US ] = "~Save in ODF Format";
     };
     HelpButton PB_MOREINFO
     {
         Pos = MAP_APPFONT( AW_COL_4, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        DefButton = TRUE ;
+        Hide = TRUE ;
         Text [ en-US ] = "~More Information...";
     };
     FixedLine FL_OPTION
@@ -91,7 +92,7 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_4 );
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
         WordBreak = TRUE ;
-        Text [ en-US ] = "Do not show this warning again";
+        Text [ en-US ] = "~Ask when not saving in ODF format";
     };
 };
 
