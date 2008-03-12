@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:56 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:29:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #include <svtools/hint.hxx>
 #endif
 
+#include <svtools/style.hxx>
+
 #ifndef _SVX_PAGEITEM_HXX
 #include <svx/pageitem.hxx>
 #endif
@@ -74,6 +76,8 @@
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
+
+#include <boost/shared_ptr.hpp>
 
 class OutputDevice;
 
@@ -117,7 +121,6 @@ class SfxItemPool;
 class SfxItemSet;
 class SfxRepeatTarget;
 class SfxStyleSheet;
-class SfxStyleSheetBasePool;
 class SfxUndoAction;
 class SfxUndoManager;
 class SvxLinkManager;
@@ -247,7 +250,7 @@ protected:
     ULONG           nProgressAkt;   // fuer den
     ULONG           nProgressMax;   // ProgressBar-
     ULONG           nProgressOfs;   // -Handler
-    SfxStyleSheetBasePool* pStyleSheetPool;
+    rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
     SvxLinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
@@ -408,6 +411,12 @@ public:
     SfxItemPool&         GetItemPool()                          { return *pItemPool; }
 
     SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=NULL) const;
+
+    /** returns a new created and non shared outliner.
+        The outliner will not get updated when the SdrModel is changed.
+    */
+    boost::shared_ptr< SdrOutliner > CreateDrawOutliner(const SdrTextObj* pObj=NULL);
+
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
     // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten
@@ -429,7 +438,7 @@ public:
     // Der DefaultStyleSheet wird jedem Zeichenobjekt verbraten das in diesem
     // Model eingefuegt wird und kein StyleSheet gesetzt hat.
     SfxStyleSheet*       GetDefaultStyleSheet() const             { return pDefaultStyleSheet; }
-    void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet=pDefSS; }
+    void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet = pDefSS; }
 
     SvxLinkManager*      GetLinkManager()                         { return pLinkManager; }
     void                 SetLinkManager(SvxLinkManager* pLinkMgr) { pLinkManager = pLinkMgr; }
@@ -702,8 +711,8 @@ public:
 
     // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.
     // Zu loeschen hat ihn schliesslich der, der ihn auch konstruiert hat.
-    SfxStyleSheetBasePool* GetStyleSheetPool() const         { return pStyleSheetPool; }
-    void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { pStyleSheetPool=pPool; }
+    SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
+    void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
     // Diese Methode fuert einen Konsistenzcheck auf die Struktur des Models
     // durch. Geprueft wird insbesondere die Verkettung von Verschachtelten
