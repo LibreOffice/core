@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:16:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@
 #endif
 
 using namespace ::vos;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
