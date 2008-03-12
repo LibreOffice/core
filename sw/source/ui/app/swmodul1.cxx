@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:32:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@
 #include <tools/color.hxx>
 #include "PostItMgr.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
