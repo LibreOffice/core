@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:59:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,6 +384,19 @@ sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 }
 #endif
 
+static sal_uInt16 getStylePos( const SfxStyles& rStyles, SfxStyleSheet* pSheet )
+{
+    sal_uInt16 nNumber = 0;
+    SfxStyles::const_iterator iter( rStyles.begin() );
+    while( iter != rStyles.end() )
+    {
+        if( (*iter++).get() == pSheet )
+            return nNumber;
+        ++nNumber;
+    }
+    return 0;
+}
+
 sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
 #ifndef SVX_LIGHT
@@ -523,7 +536,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {
-        sal_uInt16 nStyles = (sal_uInt16)GetStyleSheetPool()->GetStyles().Count();
+        sal_uInt16 nStyles = (sal_uInt16)GetStyleSheetPool()->GetStyles().size();
         if ( nStyles )
         {
             rOutput << '{' << sRTF_STYLESHEET;
@@ -531,7 +544,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             for ( sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++ )
             {
 
-                SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->GetStyles().GetObject( nStyle );
+                SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->GetStyles()[ nStyle ].get();
 
                 rOutput << endl << '{' << sRTF_S;
                 sal_uInt16 nNumber = (sal_uInt16) (nStyle + 1);
@@ -553,7 +566,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     SfxStyleSheet* pParent = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() );
                     DBG_ASSERT( pParent, "Parent nicht gefunden!" );
                     rOutput << sRTF_SBASEDON;
-                    nNumber = (sal_uInt16) GetStyleSheetPool()->GetStyles().GetPos( pParent ) + 1;
+                    nNumber = (sal_uInt16) getStylePos( GetStyleSheetPool()->GetStyles(), pParent ) + 1;
                     rOutput.WriteNumber( nNumber );
                 }
 
@@ -564,7 +577,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
                 DBG_ASSERT( pNext, "Naechsten nicht gefunden!" );
                 rOutput << sRTF_SNEXT;
-                nNumber = (sal_uInt16) GetStyleSheetPool()->GetStyles().GetPos( pNext ) + 1;
+                nNumber = (sal_uInt16) getStylePos( GetStyleSheetPool()->GetStyles(), pNext ) + 1;
                 rOutput.WriteNumber( nNumber );
 
                 // Namen der Vorlage...
@@ -616,7 +629,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         {
             // Nummer der Vorlage
             rOutput << sRTF_S;
-            sal_uInt16 nNumber = (sal_uInt16) GetStyleSheetPool()->GetStyles().GetPos( pNode->GetStyleSheet() ) + 1;
+            sal_uInt16 nNumber = (sal_uInt16) getStylePos( GetStyleSheetPool()->GetStyles(), pNode->GetStyleSheet() ) + 1;
             rOutput.WriteNumber( nNumber );
 
             // Alle Attribute
