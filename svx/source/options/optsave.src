@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:47:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,57 +53,57 @@ TabPage RID_SFXPAGE_SAVE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine LB_LOAD
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Load";
     };
     CheckBox CB_LOAD_SETTINGS
     {
-        Pos = MAP_APPFONT ( 12 , 13 ) ;
+        Pos = MAP_APPFONT ( 12 , 11 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Load user-specific settings with the document";
     };
     CheckBox CB_LOAD_DOCPRINTER
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 22 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Load printer settings with the document";
     };
     FixedLine GB_SAVE
     {
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Save" ;
     };
     CheckBox BTN_DOCINFO
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Edit document properties before saving" ;
         TabStop = TRUE ;
     };
     FixedImage FI_BACKUP
     {
-        Pos = MAP_APPFONT ( 5, 59 ) ;
+        Pos = MAP_APPFONT ( 5, 53 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     CheckBox BTN_BACKUP
     {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Al~ways create backup copy" ;
     };
     CheckBox BTN_AUTOSAVE
     {
-        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "Save ~AutoRecovery information every" ;
     };
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 180 , 68 ) ;
+        Pos = MAP_APPFONT ( 180 , 62 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -118,63 +118,73 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 204 , 70 ) ;
+        Pos = MAP_APPFONT ( 204 , 63 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "Minutes" ;
     };
-    CheckBox BTN_NOPRETTYPRINTING
-    {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ en-US ] = "Size optimization for XML format" ;
-    };
-    CheckBox BTN_WARNALIENFORMAT
-    {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT ( 248 , 16 ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "Warn when not saving in OpenDocument or default format" ;
-    };
-    FixedLine GB_RELATIVE
-    {
-        Pos = MAP_APPFONT ( 6 , 111 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Save URLs relative to" ;
-    };
     CheckBox BTN_RELATIVE_FSYS
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ en-US ] = "~File system" ;
-        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Save URLs relative to file system" ;
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 136 , 121 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ en-US ] = "~Internet" ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ en-US ] = "Save URLs relative to internet" ;
     };
     FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Pos = MAP_APPFONT ( 6 , 97 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Default file format";
+        Text [ en-US ] = "Default file format and ODF settings" ;
+    };
+    FixedText FT_ODF_VERSION
+    {
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "ODF format version" ;
+    };
+    ListBox LB_ODF_VERSION
+    {
+        Pos = MAP_APPFONT ( 136 , 105 ) ;
+        Size = MAP_APPFONT ( 108 , 58 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "1.0/1.1 (OpenOffice.org 2.x)" ;  2 ; > ;
+            < "1.2 (recommended)" ;             3 ;  > ;
+        };
+    };
+    CheckBox BTN_NOPRETTYPRINTING
+    {
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ en-US ] = "Size optimization for ODF format" ;
+    };
+    CheckBox BTN_WARNALIENFORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ en-US ] = "Warn when not saving in ODF or default format" ;
     };
     FixedText FT_APP
     {
-        Pos = MAP_APPFONT ( 12 , 143 ) ;
+        Pos = MAP_APPFONT ( 12 , 142 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 143 ) ;
+        Pos = MAP_APPFONT ( 136 , 142 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
     {
-        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         DropDown = TRUE;
@@ -191,24 +201,46 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedImage FI_FILTER
     {
-        Pos = MAP_APPFONT ( 129, 155 ) ;
+        Pos = MAP_APPFONT ( 129, 154 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     ListBox LB_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 154 ) ;
+        Pos = MAP_APPFONT ( 136 , 153 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
         DropDown = TRUE;
     };
+    FixedImage FI_ODF_WARNING
+    {
+        Pos = MAP_APPFONT ( 12, 169 ) ;
+        Size = MAP_APPFONT ( 8 , 8 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_WARN
     {
-        Pos = MAP_APPFONT ( 12 , 168 ) ;
-        Size = MAP_APPFONT ( 250 , 16 ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "Note: Not using OpenDocument as the default format may cause formatting or content to be lost.";
+        Pos = MAP_APPFONT ( 23 , 169 ) ;
+        Size = MAP_APPFONT ( 239 , 8 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Not using ODF 1.2 may cause infomation to be lost.";
+    };
+    Image IMG_ODF_WARNING
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "odfwarning.png";
+        };
+        MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+    };
+    Image IMG_ODF_WARNING_HC
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "odfwarning_h.png";
+        };
+        MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
     };
 };
 
