@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredlines.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:39:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 /*-- 11.01.01 15:28:54---------------------------------------------------
 
