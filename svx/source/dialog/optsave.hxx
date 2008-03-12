@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:47:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,41 +71,43 @@ namespace com { namespace sun { namespace star {
 // class SvxSaveTabPage --------------------------------------------------
 
 struct SvxSaveTabPage_Impl;
+
 class SvxSaveTabPage : public SfxTabPage
 {
 private:
-    FixedLine           aLoadFL;
-    CheckBox            aLoadUserSettingsCB;
-    CheckBox            aLoadDocPrinterCB;
-    FixedLine           aSaveBox;
-    CheckBox            aDocInfoBtn;
-    ReadOnlyImage       aBackupFI;
-    CheckBox            aBackupBtn;
-    CheckBox            aAutoSaveBtn;
-    NumericField        aAutoSaveEdit;
-    FixedText           aMinuteText;
-    CheckBox            aNoPrettyPrintingBtn;
-    CheckBox            aWarnAlienFormatBtn;
+    FixedLine               aLoadFL;
+    CheckBox                aLoadUserSettingsCB;
+    CheckBox                aLoadDocPrinterCB;
 
-    FixedLine           aRelBox;
-    CheckBox            aRelFsysBtn;
-    CheckBox            aRelInetBtn;
+    FixedLine               aSaveFL;
+    CheckBox                aDocInfoCB;
+    ReadOnlyImage           aBackupFI;
+    CheckBox                aBackupCB;
+    CheckBox                aAutoSaveCB;
+    NumericField            aAutoSaveEdit;
+    FixedText               aMinuteFT;
+    CheckBox                aRelativeFsysCB;
+    CheckBox                aRelativeInetCB;
 
-    FixedLine           aFilterFL;
-    FixedText           aApplicationFT;
-    ListBox             aApplicationLB;
-    FixedText           aFiltersFT;
-    ReadOnlyImage       aFiltersFI;
-    ListBox             aFiltersLB;
-    FixedText           aWarningFT;
+    FixedLine               aDefaultFormatFL;
+    FixedText               aODFVersionFT;
+    ListBox                 aODFVersionLB;
+    CheckBox                aSizeOptimizationCB;
+    CheckBox                aWarnAlienFormatCB;
+    FixedText               aDocTypeFT;
+    ListBox                 aDocTypeLB;
+    FixedText               aSaveAsFT;
+    ReadOnlyImage           aSaveAsFI;
+    ListBox                 aSaveAsLB;
+    FixedImage              aODFWarningFI;
+    FixedText               aODFWarningFT;
 
-    String              sAlienMsg;
-
-    SvxSaveTabPage_Impl* pImpl;
+    SvxSaveTabPage_Impl*    pImpl;
 
 #ifdef _SVX_OPTSAVE_CXX
     DECL_LINK( AutoClickHdl_Impl, CheckBox * );
     DECL_LINK( FilterHdl_Impl, ListBox * );
+    DECL_LINK( ODFVersionHdl_Impl, ListBox * );
 
     bool    AcceptFilter( USHORT nPos );
     void    DetectHiddenControls();
