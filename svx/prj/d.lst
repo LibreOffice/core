@@ -606,6 +606,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlayobjectlist.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectlist.hxx
 ..\inc\svx\sdr\overlay\overlaytriangle.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytriangle.hxx
 ..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
+..\inc\svx\sdr\overlay\overlayobjectcell.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectcell.hxx
 ..\inc\svx\sdr\overlay\overlaysdrobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaysdrobject.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
@@ -616,6 +617,9 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\animationstate.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\animationstate.hxx
 ..\inc\svx\sdr\animation\objectanimator.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\objectanimator.hxx
 ..\inc\svx\sdr\animation\scheduler.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\scheduler.hxx
+
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
+..\inc\svx\sdr\table\tabledesign.hxx %_DEST%\inc%_EXT%\svx\sdr\table\tabledesign.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
@@ -648,3 +652,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US\*.xml
 ..\uiconfig\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es\*.xml
 
+..\inc\svx\subtoolboxcontrol.hxx %_DEST%\inc%_EXT%\svx\subtoolboxcontrol.hxx
+..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
+..\inc\svx\svdotable.hxx %_DEST%\inc%_EXT%\svx\svdotable.hxx
+..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
