@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:00:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@
 #define     ESCHER_ClientRule    0xF015 /* host-defined              host-defined                                                                     */
 #define     ESCHER_CalloutRule   0xF017 /*                           an FCORU                                                           X   X   X   0 */
 #define ESCHER_Selection         0xF119 /*                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0 */
+#define ESCHER_UDefProp          0xF122
 
 #define SHAPEFLAG_GROUP         0x001   // This shape is a group shape
 #define SHAPEFLAG_CHILD         0x002   // Not a top-level shape
@@ -964,6 +965,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_dxWrapDistRight             902  /*  LONG            Right wrapping distance from text (Word)                                                               */
 #define ESCHER_Prop_dyWrapDistBottom            903  /*  LONG            Bottom wrapping distance from text (Word)                                                              */
 #define ESCHER_Prop_lidRegroup                  904  /*  LONG            Regroup ID                                                                                             */
+#define ESCHER_Prop_tableProperties             927
+#define ESCHER_Prop_tableRowProperties          928
 #define ESCHER_Prop_fEditedWrap                 953  /*  BOOL            Has the wrap polygon been edited?                                                                      */
 #define ESCHER_Prop_fBehindDocument             954  /*  BOOL            Word-only (shape is behind text)                                                                       */
 #define ESCHER_Prop_fOnDblClickNotify           955  /*  BOOL            Notify client on a double click                                                                        */
@@ -1184,7 +1187,7 @@ class SVX_DLLPUBLIC EscherPropertyContainer
 
         sal_Bool    GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
 
-        void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3 );
+        void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
         sal_Bool    CreateOLEGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject );
 
