@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:36:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:00:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,6 +428,34 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             pImageMap = new ImageMap;
             // mba: clipboard always must contain absolute URLs (could be from alien source)
             pImageMap->Read( *xStm, String() );
+        }
+    }
+
+    bool bTable = false;
+    // check special cases for pasting table formats as RTL
+    if( !bLink && (!nFormat || (nFormat == SOT_FORMAT_RTF)) )
+    {
+        // if the objekt supports rtf and there is a table involved, default is to create a table
+        if( aDataHelper.HasFormat( SOT_FORMAT_RTF ) && ! aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+        {
+            SotStorageStreamRef xStm;
+
+            if( aDataHelper.GetSotStorageStream( FORMAT_RTF, xStm ) )
+            {
+                xStm->Seek( 0 );
+
+                ByteString aLine;
+                while( xStm->ReadLine(aLine) )
+                {
+                    xub_StrLen x = aLine.Search( "\\trowd" );
+                    if( x != STRING_NOTFOUND )
+                    {
+                        bTable = true;
+                        nFormat = FORMAT_RTF;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -1376,26 +1404,33 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( FORMAT_RTF, xStm ) )
         {
-            OutlinerView* pOLV = GetTextEditOutlinerView();
-
             xStm->Seek( 0 );
 
-            if( pOLV )
+            if( bTable )
             {
-                Rectangle   aRect( pOLV->GetOutputArea() );
-                   Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
-
-                if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
-                {
-                    // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, String(), EE_FORMAT_RTF, FALSE, mpDocSh->GetHeaderAttributes() );
-                    bReturn = TRUE;
-                }
+                bReturn = PasteRTFTable( xStm, pPage, nPasteOptions );
             }
+            else
+            {
+                OutlinerView* pOLV = GetTextEditOutlinerView();
 
-            if( !bReturn )
-                // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
+                if( pOLV )
+                {
+                    Rectangle   aRect( pOLV->GetOutputArea() );
+                       Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
+
+                    if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
+                    {
+                        // mba: clipboard always must contain absolute URLs (could be from alien source)
+                        pOLV->Read( *xStm, String(), EE_FORMAT_RTF, FALSE, mpDocSh->GetHeaderAttributes() );
+                        bReturn = TRUE;
+                    }
+                }
+
+                if( !bReturn )
+                    // mba: clipboard always must contain absolute URLs (could be from alien source)
+                    bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
+            }
         }
     }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
@@ -1458,6 +1493,29 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     delete pImageMap;
 
     return bReturn;
+}
+
+extern void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel  );
+
+bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, ULONG nPasteOptions )
+{
+    SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh );
+    pModel->NewOrLoadCompleted(NEW_DOC);
+    pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    pModel->InsertPage(pModel->AllocPage(false));
+
+    Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
+    pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+
+    CreateTableFromRTF( *xStm, pModel );
+    bool bRet = Paste( *pModel, maDropPos, pPage, nPasteOptions );
+
+    xComponent->dispose();
+    xComponent.clear();
+
+    delete pModel;
+
+    return bRet;
 }
 
 } // end of namespace sd
