@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:21:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemS
 BOOL lcl_FontChangedHint( const SfxHint &rHint );
 
 // namespaces
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
