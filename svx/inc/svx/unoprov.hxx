@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:45:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,8 @@ public:
 #define SVXMAP_TEXT                 21
 #define SVXMAP_CUSTOMSHAPE          22
 #define SVXMAP_MEDIA                23
-#define SVXMAP_END                  24  // last+1 !
-
+#define SVXMAP_TABLE                24
+#define SVXMAP_END                  25  // last+1 !
 /***********************************************************************
 * SvxUnoPropertyMapProvider                                            *
 ***********************************************************************/

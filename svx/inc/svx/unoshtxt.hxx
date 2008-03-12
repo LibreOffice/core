@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:46:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,18 +56,19 @@ class SdrModel;
 class SdrView;
 class Window;
 class SvxTextEditSourceImpl;
+class SdrText;
 
 class SVX_DLLPUBLIC SvxTextEditSource : public SvxEditSource, public SvxViewForwarder
 {
 public:
-    SvxTextEditSource( SdrObject* pObj, ::com::sun::star::uno::XInterface* pOwner);
+    SvxTextEditSource( SdrObject* pObj, SdrText* pText, ::com::sun::star::uno::XInterface* pOwner);
 
     /** Since the views don't broadcast their dying, make sure that
         this object gets destroyed if the view becomes invalid
 
         The window is necessary, since our views can display on multiple windows
      */
-    SvxTextEditSource( SdrObject& rObj, SdrView& rView, const Window& rViewWindow );
+    SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const Window& rViewWindow );
 
     virtual ~SvxTextEditSource();
 
