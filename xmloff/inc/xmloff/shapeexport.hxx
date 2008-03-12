@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:27:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,29 +47,17 @@
 #include "sal/types.h"
 #endif
 
-#ifndef _RTL_USTRING_HXX_
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #ifndef _UNIVERSALL_REFERENCE_HXX
 #include <xmloff/uniref.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <map>
@@ -89,6 +77,8 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
+
+#include "xmloff/table/XMLTableExport.hxx"
 
 // shape export features are bits used for the nFeature
 // parameter of XMLShapeExport::exportShape
@@ -132,7 +122,7 @@ enum XmlShapeType
     XmlShapeTypeDrawTextShape,                      // "com.sun.star.drawing.TextShape"
     XmlShapeTypeDrawOLE2Shape,                      // "com.sun.star.drawing.OLE2Shape"
     XmlShapeTypeDrawChartShape,                     // embedded com.sun.star.chart
-    XmlShapeTypeDrawTableShape,                     // embedded com.sun.star.sheet
+    XmlShapeTypeDrawSheetShape,                     // embedded com.sun.star.sheet
     XmlShapeTypeDrawPageShape,                      // "com.sun.star.drawing.PageShape"
     XmlShapeTypeDrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
     XmlShapeTypeDrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
@@ -152,7 +142,7 @@ enum XmlShapeType
     XmlShapeTypePresPageShape,                      // "com.sun.star.presentation.PageShape"
     XmlShapeTypePresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
     XmlShapeTypePresChartShape,                     // "com.sun.star.presentation.ChartShape"
-    XmlShapeTypePresTableShape,                     // "com.sun.star.presentation.TableShape"
+    XmlShapeTypePresSheetShape,                     // "com.sun.star.presentation.OLE2Shape"
     XmlShapeTypePresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
     XmlShapeTypePresNotesShape,                     // "com.sun.star.presentation.NotesShape"
     XmlShapeTypeHandoutShape,                       // "com.sun.star.presentation.HandoutShape"
@@ -164,6 +154,8 @@ enum XmlShapeType
 
     XmlShapeTypeDrawCustomShape,                    // "com.sun.star.draw.CustomShape"
     XmlShapeTypeDrawMediaShape,                     // "com.sun.star.draw.MediaShape"
+
+    XmlShapeTypeDrawTableShape,                     // "com.sun.star.drawing.TableShape"
 
     XmlShapeTypeNotYetSet
 };
@@ -217,6 +209,8 @@ private:
 
     // #88546# possibility to swich progress bar handling on/off
     sal_Bool                                    mbHandleProgressBar;
+
+    rtl::Reference< XMLTableExport >            mxShapeTableExport;
 
 protected:
     SvXMLExport& GetExport() { return mrExport; }
@@ -274,7 +268,6 @@ private:
     SAL_DLLPRIVATE void ImpExportTextBoxShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportGraphicObjectShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportChartShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL, SvXMLAttributeList* pAttrList = NULL );
-    SAL_DLLPRIVATE void ImpExportSpreadsheetShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportControlShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportConnectorShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportMeasureShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
@@ -287,6 +280,7 @@ private:
     SAL_DLLPRIVATE void ImpExportAppletShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportCustomShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportMediaShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
+    SAL_DLLPRIVATE void ImpExportTableShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,    com::sun::star::awt::Point* pRefPoint = NULL );
 public:
     XMLShapeExport(SvXMLExport& rExp, SvXMLExportPropertyMapper *pExtMapper=0 );
     virtual ~XMLShapeExport();
@@ -366,6 +360,8 @@ public:
 
     /** is called before a shape element for the given XShape is exported */
     virtual void onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape );
+
+    const rtl::Reference< XMLTableExport >&     GetShapeTableExport();
 };
 
 
