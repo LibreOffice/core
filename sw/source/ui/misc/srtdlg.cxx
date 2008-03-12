@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:23:31 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ static sal_Unicode    cDeli  = '\t';
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
