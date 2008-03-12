@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:26:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ OutlineBulletDlg::OutlineBulletDlg(
             SfxStyleSheetBasePool* pSSPool = pView->GetDocSh()->GetStyleSheetPool();
             String aStyleName((SdResId(STR_LAYOUT_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-            SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
+            SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
             if( pFirstStyleSheet )
                 pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pItem);
         }
