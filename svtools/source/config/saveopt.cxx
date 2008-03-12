@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:57:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,11 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROSaveUnpacked,
                                         bROWarnAlienFormat,
                                         bRODoPrettyPrinting,
-                                        bROLoadDocPrinter;
+                                        bROLoadDocPrinter,
+                                        bROODFDefaultVersion;
+
+    SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
+
 public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
@@ -141,6 +145,8 @@ public:
     sal_Bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
     sal_Bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     sal_Bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
+    SvtSaveOptions::ODFDefaultVersion
+                            GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
     void                    SetAutoSaveTime( sal_Int32 n );
     void                    SetUseUserData( BOOL b );
@@ -157,6 +163,7 @@ public:
     void                    EnablePrettyPrinting( sal_Bool _bDoPP );
     void                    SetWarnAlienFormat( sal_Bool _bDoPP );
     void                    SetLoadDocPrinter( sal_Bool bNew );
+    void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
     sal_Bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
@@ -298,6 +305,15 @@ void SvtSaveOptions_Impl::SetLoadDocPrinter( sal_Bool bNew )
     }
 }
 
+void SvtSaveOptions_Impl::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew )
+{
+    if ( !bROODFDefaultVersion && eODFDefaultVersion != eNew )
+    {
+        eODFDefaultVersion = eNew;
+        SetModified();
+    }
+}
+
 sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
     sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
@@ -348,26 +364,30 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
         case SvtSaveOptions::E_LOADDOCPRINTER :
             bReadOnly = bROLoadDocPrinter;
             break;
+        case SvtSaveOptions::E_ODFDEFAULTVERSION :
+            bReadOnly = bROLoadDocPrinter;
+            break;
     }
     return bReadOnly;
 }
 
-#define FORMAT           0
-#define TIMEINTERVALL    1
-#define USEUSERDATA      2
-#define CREATEBACKUP     3
-#define AUTOSAVE         4
-#define PROMPT           5
-#define EDITPROPERTY     6
-#define SAVEDOCWINS      7
-#define SAVEVIEWINFO     8
-#define UNPACKED         9
-#define PRETTYPRINTING  10
-#define WARNALIENFORMAT 11
-#define LOADDOCPRINTER  12
-#define FILESYSTEM      13
-#define INTERNET        14
-#define SAVEWORKINGSET  15
+#define FORMAT              0
+#define TIMEINTERVALL       1
+#define USEUSERDATA         2
+#define CREATEBACKUP        3
+#define AUTOSAVE            4
+#define PROMPT              5
+#define EDITPROPERTY        6
+#define SAVEDOCWINS         7
+#define SAVEVIEWINFO        8
+#define UNPACKED            9
+#define PRETTYPRINTING      10
+#define WARNALIENFORMAT     11
+#define LOADDOCPRINTER      12
+#define FILESYSTEM          13
+#define INTERNET            14
+#define SAVEWORKINGSET      15
+#define ODFDEFAULTVERSION   16
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -389,6 +409,7 @@ Sequence< OUString > GetPropertyNames()
         "URL/FileSystem",
         "URL/Internet",
         "WorkingSet",
+        "ODF/DefaultVersion"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -434,6 +455,8 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
+    , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
+    , eODFDefaultVersion( SvtSaveOptions::ODFVER_012 )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -460,6 +483,17 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                             DBG_ERROR( "Wrong Type!" );
                         bROAutoSaveTime = pROStates[nProp];
                         break;
+
+                    case ODFDEFAULTVERSION :
+                    {
+                        sal_Int16 nTmp;
+                        if ( pValues[nProp] >>= nTmp )
+                            eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
+                        else
+                            DBG_ERRORFILE( "SvtSaveOptions_Impl::SvtSaveOptions_Impl(): Wrong Type!" );
+                        bROAutoSaveTime = pROStates[nProp];
+                        break;
+                    }
 
                     case FORMAT:
                         // not supported anymore
@@ -704,6 +738,15 @@ void SvtSaveOptions_Impl::Commit()
                 if (!bROLoadDocPrinter)
                 {
                     pValues[nRealCount] <<= bLoadDocPrinter;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
+                break;
+
+            case ODFDEFAULTVERSION:
+                if (!bROODFDefaultVersion)
+                {
+                    pValues[nRealCount] <<= sal_Int16( eODFDefaultVersion );
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -998,6 +1041,16 @@ void SvtSaveOptions::SetLoadDocumentPrinter( sal_Bool _bEnable )
 sal_Bool SvtSaveOptions::IsLoadDocumentPrinter() const
 {
     return pImp->pSaveOpt->IsLoadDocPrinter();
+}
+
+void SvtSaveOptions::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion )
+{
+    pImp->pSaveOpt->SetODFDefaultVersion( eVersion );
+}
+
+SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
+{
+    return pImp->pSaveOpt->GetODFDefaultVersion();
 }
 
 sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
