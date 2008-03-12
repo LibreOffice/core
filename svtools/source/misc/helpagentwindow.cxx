@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:50:13 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ namespace svt
 //........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
 
     //====================================================================
