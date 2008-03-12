@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:24:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleTableView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTableView";
