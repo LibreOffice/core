@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: celltempl.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:36:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "enumdlg.hrc"
+#include "celltempl.hrc"
+#include <svx/dialogs.hrc>
+
+TabDialog TAB_CELL_TEMPLATE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "Cell Style" ;
+    Text [ DE ] = "Zellvorlagen" ;
+
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_NAME ;
+                PageResID = RID_SVXPAGE_CHAR_NAME ;
+                Text [ de ] = "Schrift" ;
+                Text [ en-US ] = "Font" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
+                PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
+                Text [ de ] = "Schrifteffekt" ;
+                Text [ en-US ] = "Font Effects" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_BORDER;
+                PageResID = RID_SVXPAGE_BORDER;
+                Text [ de ] = "Umrandung" ;
+                Text [ en-US ] = "Borders" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ de ] = "Hintergrund";
+                Text [ en-US ] = "Background";
+            };
+        };
+    };
+};
