@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:14:16 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,10 +205,9 @@
 #include <svx/outliner.hxx>
 #include <docsh.hxx>
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace nsSwDocInfoSubType;
-
 
 #define COM_TEXT_FLDMASTER      "com.sun.star.text.FieldMaster."
 
