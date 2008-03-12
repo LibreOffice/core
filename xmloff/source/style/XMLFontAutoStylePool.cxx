@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFontAutoStylePool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:32:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,9 @@
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
