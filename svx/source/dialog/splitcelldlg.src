@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: splitcelldlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:41:50 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "splitcelldlg.hrc"
+
+ModalDialog RID_SVX_SPLITCELLDLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 169 , 108 ) ;
+    Text [ en-US ] = "Split Cells" ;
+    Moveable = TRUE ;
+
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 115 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 115 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 115 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_COUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "~Split cell into" ;
+        Left = TRUE ;
+    };
+    NumericField ED_COUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 14 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        Maximum = 20 ;
+        First = 2 ;
+        Last = 5 ;
+    };
+    FixedLine FL_COUNT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Text [ en-US ] = "Split" ;
+    };
+    ImageRadioButton RB_HORZ
+    {
+        Pos = MAP_APPFONT ( 12 , 47 ) ;
+        Size = MAP_APPFONT ( 90 , 18 ) ;
+        Group = TRUE;
+        Text [ en-US ] = "H~orizontally" ;
+        RadioButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "zetlhor2.bmp" ; };
+        };
+        TabStop = TRUE ;
+        Check = TRUE ;
+    };
+    CheckBox CB_PROP
+    {
+        Pos = MAP_APPFONT ( 18 , 68 ) ;
+        Size = MAP_APPFONT ( 91 , 12 ) ;
+        Text [ en-US ] = "~Into equal proportions";
+    };
+    Image BMP_SPLIT_VERT
+        {
+            ImageBitmap = Bitmap { File = "zetlver2_h.bmp" ; };
+        };
+    Image BMP_SPLIT_HORZ
+        {
+            ImageBitmap = Bitmap { File = "zetlhor2_h.bmp" ; };
+        };
+    ImageRadioButton RB_VERT
+    {
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 90 , 18 ) ;
+        Text [ en-US ] = "~Vertically" ;
+        RadioButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "zetlver2.bmp" ; };
+        };
+        TabStop = TRUE ;
+    };
+    FixedLine FL_DIR
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Text [ en-US ] = "Direction" ;
+    };
+};
+
+
