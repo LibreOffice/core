@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undomanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:18:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:30:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,31 +54,39 @@ UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
 
 void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId /* =0 */)
 {
-    DBG_ASSERT( !isInUndo(), "sd::UndoManager::EnterListAction(), calling me during Undo, are you nuts!?" );
-
-    mnListLevel++;
-    SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
+    if( !isInUndo() )
+    {
+        mnListLevel++;
+        SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
+    }
 }
 
 void UndoManager::LeaveListAction()
 {
-    DBG_ASSERT( !isInUndo(), "sd::UndoManager::LeaveListAction(), calling me during Undo, are you nuts!?" );
-
-    SfxUndoManager::LeaveListAction();
-    if( mnListLevel )
+    if( !isInUndo() )
     {
-        mnListLevel--;
-    }
-    else
-    {
-        DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
+        SfxUndoManager::LeaveListAction();
+        if( mnListLevel )
+        {
+            mnListLevel--;
+        }
+        else
+        {
+            DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
+        }
     }
 }
 
 void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
 {
-    DBG_ASSERT( !isInUndo(), "sd::UndoManager::AddUndoAction(), calling me during Undo, are you nuts!?" );
-    SfxUndoManager::AddUndoAction( pAction, bTryMerg );
+    if( !isInUndo() )
+    {
+        SfxUndoManager::AddUndoAction( pAction, bTryMerg );
+    }
+    else
+    {
+        delete pAction;
+    }
 }
 
 
