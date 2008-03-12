@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:21:27 $
+#   last change: $Author: rt $ $Date: 2008-03-12 07:36:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ USE_LDUMP2=TRUE
 
 COMMON_LIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
+            $(COMPHELPERLIB)\
             $(SALLIB)\
             $(VCLLIB)\
             $(TOOLSLIB)
@@ -65,7 +66,7 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             $(OLEAUT32LIB)\
             $(COMDLG32LIB)\
             $(KERNEL32LIB)\
-            $(OLEAUT32LIB)
+            $(UUIDLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
