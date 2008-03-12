@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:47:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Bf_Go,
 	gid_File_Lib_Bf_Xo,
 	gid_File_Lib_Bf_Svx,
+	gid_File_Lib_Bf_Svt,
 	gid_File_Lib_Bf_Frm,
 	gid_File_Lib_Bf_Ofa,
 	gid_File_Lib_Bf_Sd,
