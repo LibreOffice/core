@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:33:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,12 @@
 #define STORAGE_CREATE_UNPACKED 0x44
 typedef short StorageMode;
 
+class SvStorage;
+namespace binfilter
+{
+    class SvStorage;
+}
+
 /*************************************************************************
 *************************************************************************/
 class SotStorage;
@@ -137,6 +143,8 @@ class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 {
 friend class SotStorageStream;
 friend class SvStorage;
+friend class ::binfilter::SvStorage;
+
     BaseStorage *   m_pTmpStg;   // Temp-Storage fuer Transacted, nur auf diesem schreiben!        ??? Useless ???
     BaseStorage *   m_pOwnStg;   // Zielstorage
     SvStream *  m_pStorStm;  // nur fuer SDSTORAGES
