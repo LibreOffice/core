@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:45:08 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,35 +50,40 @@
 #define BTN_NOPRETTYPRINTING    20
 #define FI_BACKUP               21
 #define BTN_WARNALIENFORMAT     22
+#define FT_ODF_VERSION          23
+#define LB_ODF_VERSION          24
 
-#define GB_RELATIVE         40
-#define BTN_RELATIVE_FSYS   41
-#define BTN_RELATIVE_INET   42
+#define GB_RELATIVE             40
+#define BTN_RELATIVE_FSYS       41
+#define BTN_RELATIVE_INET       42
 
-#define FL_FILTER           43
-#define FT_APP              44
-#define LB_APP              45
-#define FT_FILTER           46
-#define LB_FILTER           47
-#define FI_FILTER           48
-#define FT_WARN             49
+#define FL_FILTER               43
+#define FT_APP                  44
+#define LB_APP                  45
+#define FT_FILTER               46
+#define LB_FILTER               47
+#define FI_FILTER               48
+#define FT_WARN                 49
+#define FI_ODF_WARNING          50
 
-#define APP_WRITER          0
-#define APP_WRITER_WEB      1
-#define APP_WRITER_GLOBAL   2
-#define APP_CALC            3
-#define APP_IMPRESS         4
-#define APP_DRAW            5
-#define APP_MATH            6
-#define APP_COUNT           7
+#define IMG_ODF_WARNING         1
+#define IMG_ODF_WARNING_HC      2
+
+#define APP_WRITER              0
+#define APP_WRITER_WEB          1
+#define APP_WRITER_GLOBAL       2
+#define APP_CALC                3
+#define APP_IMPRESS             4
+#define APP_DRAW                5
+#define APP_MATH                6
+#define APP_COUNT               7
 
 //Filter warning
-#define PB_OK               1
-#define FT_FILTER_WARNING   2
-#define CB_DONT_SHOW_AGAIN  3
-#define IMG_WARNING         4
-#define PB_CANCEL           5
-#endif // #ifndef _SVX_OPTSAVE_HRC
+#define PB_OK                   1
+#define FT_FILTER_WARNING       2
+#define CB_DONT_SHOW_AGAIN      3
+#define IMG_WARNING             4
+#define PB_CANCEL               5
 
-// ******************************************************************* EOF
+#endif // #ifndef _SVX_OPTSAVE_HRC
 
