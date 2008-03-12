@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:41:45 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,6 +797,7 @@ class TextObj
 };
 
 // ------------------------------------------------------------------------
+struct CellBorder;
 class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvider
 {
         sal_Bool                        mbStatus;
@@ -935,7 +936,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                     PageType ePageType,
                                                         sal_Bool bMaster,
                                                             int nPageNumber = 0 );
-
+        void                ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
+        void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
+                                EscherPropertyContainer& aPropOpt );
         ::com::sun::star::awt::Point        ImplMapPoint( const ::com::sun::star::awt::Point& );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& );
         Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
