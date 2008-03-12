@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ public:
     const static ::rtl::OUString msBezierObjectBar;          // RID_BEZIER_TOOLBOX, 23015
     const static ::rtl::OUString msGraphicObjectBar;         // RID_DRAW_GRAF_TOOLBOX, 23030
     const static ::rtl::OUString msMediaObjectBar;           // RID_DRAW_MEDIA_TOOLBOX, 23031
+    const static ::rtl::OUString msTableObjectBar;           // RID_DRAW_TABLE_TOOLBOX
 
     /** The set of tool bar groups.
     */
