@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfldexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:12 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 #endif
 
 using namespace com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 /* -----------------28.11.2002 17:53-----------------
  *
