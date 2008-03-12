@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:46:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1966,7 +1966,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 			</set>
 		</group>
-		<group oor:name="Save">
+        <group oor:name="Save">
 			<info>
 				<author>MBA</author>
 				<desc>Contains general settings about the saving process.</desc>
@@ -2199,6 +2199,42 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<value>true</value>
 				</prop>
 			</group>
+            <group oor:name="ODF">
+                <info>
+                    <author>PB</author>
+                    <desc>Specifies ODF settings.</desc>
+                </info>
+                <prop oor:name="DefaultVersion" oor:type="xs:short">
+                    <!-- UIHints: Tools - Options - Load/Save - General - ODF version -->
+                    <info>
+                        <author>PB</author>
+                        <desc>Specifies the default ODF version for saving documents.</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>ODFVER_UNKNOWN</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>ODFVER_010</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="2">
+                            <info>
+                                <desc>ODFVER_011</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="3">
+                            <info>
+                                <desc>ODFVER_012</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                    <value>3</value>
+                </prop>
+            </group>
 		</group>
 		<group oor:name="Load">
 			<info>
@@ -4951,7 +4987,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</prop>
 				</group>
 			</group>
-			
+
             <group oor:name="PDF">
 				<info>
 					<author>KA</author>
