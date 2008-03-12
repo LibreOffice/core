@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:46:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,6 +239,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
       mpObj(NULL),
       mpFirstObj(NULL),
       mpTextObj(NULL),
+      mnText(0),
       mpParaObj(NULL),
       meStartViewMode(PK_STANDARD),
       meStartEditMode(EM_PAGE),
@@ -1013,7 +1014,7 @@ void Outliner::RestoreStartPosition (void)
                     ToolBarManager::TBG_FUNCTION,
                     RID_DRAW_TEXT_TOOLBOX);
 
-                mpView->BeginTextEdit(mpStartEditedObject);
+                mpView->SdrBeginTextEdit(mpStartEditedObject);
                 ::Outliner* pOutliner =
                       static_cast<DrawView*>(mpView)->GetTextEditOutliner();
                 if (pOutliner!=NULL && pOutliner->GetViewCount()>0)
@@ -1252,24 +1253,20 @@ bool Outliner::ShowWrapArroundDialog (void)
 
 bool Outliner::IsValidTextObject (const ::sd::outliner::IteratorPosition& rPosition)
 {
-    SdrObject* pObject = rPosition.mpObject;
-    return pObject != NULL
-        && pObject->ISA(SdrTextObj)
-        && static_cast<SdrTextObj*>(pObject)->HasText()
-        && ! pObject->IsEmptyPresObj();
+    SdrTextObj* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
+    return (pObject != NULL) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
 
 
 
 
-void Outliner::PutTextIntoOutliner (void)
+void Outliner::PutTextIntoOutliner()
 {
-    if ( mpObj && mpObj->ISA(SdrTextObj)
-        && static_cast<SdrTextObj*>(mpObj)->HasText()
-        && !mpObj->IsEmptyPresObj() )
+    mpTextObj = dynamic_cast<SdrTextObj*>( mpObj );
+    if ( mpTextObj && mpTextObj->HasText() && !mpTextObj->IsEmptyPresObj() )
     {
-        mpTextObj = (SdrTextObj*) mpObj;
-        mpParaObj = mpTextObj->GetOutlinerParaObject();
+        SdrText* pText = mpTextObj->getText( mnText );
+        mpParaObj = pText ? pText->GetOutlinerParaObject() : NULL;
 
         if (mpParaObj != NULL)
         {
@@ -1439,8 +1436,11 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
         mpView->UnmarkAllObj (pPV);
         mpView->MarkObj (mpTextObj, pPV);
 
+        if( mpTextObj )
+            mpTextObj->setActiveText( mnText );
+
         // Turn on the edit mode for the text object.
-        mpView->BeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
+        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
 
         SetUpdateMode(TRUE);
         mbFoundObject = TRUE;
@@ -1573,7 +1573,8 @@ SdrObject* Outliner::SetObject (
 {
     SetViewMode (rPosition.mePageKind);
     SetPage (rPosition.meEditMode, (USHORT)rPosition.mnPageIndex);
-    return rPosition.mpObject;
+    mnText = rPosition.mnText;
+    return rPosition.mxObject.get();
 }
 
 
@@ -1761,7 +1762,7 @@ sal_Bool Outliner::ConvertNextDocument()
     // time and stop at the start shape
     if( mpFirstObj )
     {
-        if( mpFirstObj == mpObj )
+        if( (mnText == 0) && (mpFirstObj == mpObj) )
             return false;
     }
     else
