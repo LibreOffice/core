@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgids.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:23:07 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #define RID_BEZIER_TOOLBOX          (SFX_ITEMTYPE_SD_BEGIN + 15)
 #define RID_DRAW_TEXT_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 16)
 #define RID_OUTLINE_TOOLBOX         (SFX_ITEMTYPE_SD_BEGIN + 17)
-//#define RID_DRAW_POLYLINEOBJ_POPUP    (SFX_ITEMTYPE_SD_BEGIN + 18)
+#define RID_DRAW_TABLE_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 18)
 #define RID_GLUEPOINTS_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 19)
 #define RID_DRAW_OPTIONS_TOOLBOX    (SFX_ITEMTYPE_SD_BEGIN + 20)
 #define RID_DRAW_COMMONTASK_TOOLBOX (SFX_ITEMTYPE_SD_BEGIN + 21)
