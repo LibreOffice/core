@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:32:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,9 @@
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -402,7 +404,8 @@ SvXMLImport::SvXMLImport(
     // #110680#
     mxServiceFactory(xServiceFactory),
     mbIsFormsSupported( sal_True ),
-    mbIsGraphicLoadOnDemandSupported( true )
+    mbIsTableShapeSupported( false ),
+    mbIsGraphicLoadOnDemmandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
@@ -430,7 +433,8 @@ SvXMLImport::SvXMLImport(
     // #110680#
     mxServiceFactory(xServiceFactory),
     mbIsFormsSupported( sal_True ),
-    mbIsGraphicLoadOnDemandSupported( true )
+    mbIsTableShapeSupported( false ),
+    mbIsGraphicLoadOnDemmandSupported( true )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
