@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlscript.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:22:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include "xmlexp.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // ---------------------------------------------------------------------
