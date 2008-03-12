@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:35:57 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,11 +436,11 @@ void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
         SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
         if (pBase)
         {
-            SwDocStyleSheet aStyle(*(SwDocStyleSheet*)pBase);
-            SfxItemSet& rStyleSet = aStyle.GetItemSet();
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            SfxItemSet& rStyleSet = xStyle->GetItemSet();
             SfxItemSet aSet(*rStyleSet.GetPool(), RES_FRMMACRO, RES_FRMMACRO);
             aSet.Put(rItem);
-            aStyle.SetItemSet(aSet);
+            xStyle->SetItemSet(aSet);
         }
     }
 }
@@ -457,8 +457,8 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
         SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
         if (pBase)
         {
-            SwDocStyleSheet aStyle(*(SwDocStyleSheet*)pBase);
-            return (const SvxMacroItem&)aStyle.GetItemSet().Get(RES_FRMMACRO);
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase) );
+            return (const SvxMacroItem&)xStyle->GetItemSet().Get(RES_FRMMACRO);
         }
         else
             return aEmptyMacroItem;
