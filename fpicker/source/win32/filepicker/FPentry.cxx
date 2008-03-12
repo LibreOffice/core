@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPentry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:25:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,11 @@
 #include "FPServiceInfo.hxx"
 #endif
 
+#pragma warning (disable:4917)
+#include "VistaFilePicker.hxx"
+#include "..\misc\WinImplHelper.hxx"
+#include <stdio.h>
+
 //-----------------------------------------------
 // namespace directives
 //-----------------------------------------------
@@ -80,9 +85,25 @@ using ::com::sun::star::ui::dialogs::XFilePicker2;
 static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    return Reference< XInterface >(
-        static_cast< XFilePicker2* >(
-            new CFilePicker( rServiceManager ) ) );
+    Reference< XInterface > xDlg;
+    bool                    bVista = IsWindowsVista();
+
+    if (bVista)
+    {
+        fprintf(stdout, "use special (vista) system file picker ...\n");
+        xDlg.set(
+            static_cast< XFilePicker2* >(
+                new ::fpicker::win32::vista::VistaFilePicker( rServiceManager ) ) );
+    }
+    else
+    {
+        fprintf(stdout, "use normal system file picker ...\n");
+        xDlg.set(
+            static_cast< XFilePicker2* >(
+                new CFilePicker( rServiceManager ) ) );
+    }
+
+    return xDlg;
 }
 
 //------------------------------------------------
