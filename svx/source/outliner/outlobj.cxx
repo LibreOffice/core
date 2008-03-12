@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:41:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,7 @@ void OutlinerParaObject::MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nS
     pText->MergeParaAttribs( rAttribs, nStart, nEnd );
 }
 
+/* cl removed because not needed anymore since binfilter
 void OutlinerParaObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
 {
     pText->PrepareStore( pStyleSheetPool );
@@ -287,6 +288,7 @@ void OutlinerParaObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
 {
     pText->FinishLoad( pStyleSheetPool );
 }
+*/
 
 void OutlinerParaObject::SetVertical( BOOL bVertical )
 {
