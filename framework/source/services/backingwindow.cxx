@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:23:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ using namespace framework;
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
+        SetBackground();
+        SetPaintTransparent( TRUE );
 }
 
 void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
@@ -88,6 +90,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
+        SetPaintTransparent( TRUE );
     }
 }
 
@@ -114,6 +117,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent, FwkResId( DLG_BACKING ) ),
     maWelcome( this, WB_LEFT ),
     maProduct( this, WB_LEFT ),
+    maCreateText( this, WB_LEFT ),
     maWriterText( this, WB_WORDBREAK | WB_VCENTER ),
     maWriterButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maCalcText( this, WB_WORDBREAK | WB_VCENTER ),
@@ -240,11 +244,21 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maProduct.SetControlBackground( Color( COL_WHITE ) );
     maProduct.Show();
 
-    nYPos += maProductSize.Height()*2;
+    nYPos += (maProductSize.Height()*3)/2;
 
     // set a slighly larger font than normal labels on the texts
     maTextFont.SetSize( Size( 0, 11 ) );
     maTextFont.SetWeight( WEIGHT_NORMAL );
+
+    maCreateText.SetText( maCreateString );
+    maCreateText.SetFont( maTextFont );
+    maCreateText.SetControlFont( maTextFont );
+    maCreateSize = Size( maCreateText.GetTextWidth( maCreateString ), maCreateText.GetTextHeight() );
+    maCreateText.SetControlBackground( Color( COL_WHITE ) );
+    maCreateText.SetControlForeground( maLabelTextColor );
+    maCreateText.Show();
+
+    nYPos += (maCreateSize.Height()*3)/2;
 
     // collect the URLs of the entries in the File/New menu
     SvtModuleOptions    aModuleOptions;
@@ -280,14 +294,14 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     layoutButtonAndText( BASE_URL, 0, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SDATABASE,
                          maDBButton, maDBText );
-    nYPos += maButtonImageSize.Height() + 30;
+    layoutButtonAndText( NULL, 1, aFileNewAppsAvailable,
+                         aModuleOptions, SvtModuleOptions::E_SWRITER,
+                         maTemplateButton, maTemplateText, maTemplateString );
+
+    nYPos += 2*maButtonImageSize.Height();
     layoutButtonAndText( NULL, -1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
                          maOpenButton, maOpenText, maOpenString );
-    nYPos += maButtonImageSize.Height() + 10;
-    layoutButtonAndText( NULL, -1, aFileNewAppsAvailable,
-                         aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maTemplateButton, maTemplateText, maTemplateString );
     nYPos += 10;
 
     DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" )
@@ -369,9 +383,7 @@ void BackingWindow::layoutButtonAndText(
         rtl::OUStringBuffer aBuf( 128 );
         aBuf.append( sal_Unicode( '~') );
         aBuf.append( SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
-        String aStr( maCreateString );
-        aStr.SearchAndReplaceAscii( "%s", aBuf.makeStringAndClear() );
-        i_rText.SetText( aStr );
+        i_rText.SetText( aBuf.makeStringAndClear() );
     }
     long nTextWidth = i_rText.GetTextWidth( i_rText.GetText() );
     i_rText.SetPaintTransparent( TRUE );
@@ -443,7 +455,13 @@ void BackingWindow::Resize()
                                 Size( maControlRect.GetWidth() - nBtnPos - 5, (maWelcomeSize.Height()*20)/19 ) );
     nYPos += maWelcomeSize.Height();
     maProduct.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), Size( maControlRect.GetWidth() - nBtnPos - 5, (maProductSize.Height()*20)/19 ) );
-    nYPos += maProductSize.Height()*2;
+    nYPos += (maProductSize.Height()*3)/2;
+
+    maCreateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ),
+                                  Size( maControlRect.GetWidth() - nBtnPos - 5, maCreateSize.Height() ) );
+
+    nYPos += (maCreateSize.Height()*3)/2;
+
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maWriterText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                   Size( mnColumnWidth[0] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
@@ -461,14 +479,13 @@ void BackingWindow::Resize()
     maDBButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maDBText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                   Size( mnColumnWidth[0] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 20;
+    maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + mnColumnWidth[0], nYPos ), maButtonImageSize );
+    maTemplateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
+                                    Size( mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
+    nYPos += 2*maButtonImageSize.Height();
     maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maOpenText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                 Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += maButtonImageSize.Height() + 10;
-    maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
-    maTemplateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
-                                  Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
     nYPos += maButtonImageSize.Height() + 10;
 
     maToolbox.calcMinSize();
@@ -501,46 +518,41 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
     }
     if( pNodePath && pNode )
     {
-        Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-            UNO_QUERY);
-        if( xConfig.is() )
+        try
         {
-            Sequence<Any> args(1);
-            PropertyValue val(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath") ),
-                0,
-                Any(rtl::OUString::createFromAscii(pNodePath)),
-                PropertyState_DIRECT_VALUE);
-            args.getArray()[0] <<= val;
-            Reference<container::XNameAccess> xNameAccess(
-                xConfig->createInstanceWithArguments(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
-                                                     args), UNO_QUERY);
-            if( xNameAccess.is() )
+            Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+                UNO_QUERY);
+            if( xConfig.is() )
             {
-                rtl::OUString sURL;
-                try
-                {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+                Sequence<Any> args(1);
+                PropertyValue val(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath") ),
+                    0,
+                    Any(rtl::OUString::createFromAscii(pNodePath)),
+                    PropertyState_DIRECT_VALUE);
+                args.getArray()[0] <<= val;
+                Reference<container::XNameAccess> xNameAccess(
+                    xConfig->createInstanceWithArguments(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                        args), UNO_QUERY);
+                if( xNameAccess.is() )
+                {
+                    rtl::OUString sURL;
+                    //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
                     Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
                     sURL = value.get<rtl::OUString> ();
 
-                    try
-                    {
-                        Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                            comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                                UNO_QUERY_THROW);
-                        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                        xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
-                    }
-                    catch (Exception& )
-                    {
-                    }
-                }
-                catch (Exception& )
-                {
+                    Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                        comphelper::getProcessServiceFactory()->createInstance(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                        UNO_QUERY_THROW);
+                    //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
                 }
             }
+        }
+        catch (Exception& )
+        {
         }
     }
 
