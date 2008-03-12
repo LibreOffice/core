@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:25:38 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,49 +35,4 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#include "futext.hxx"
-
-#include <svx/editdata.hxx>
-#ifndef _EDITSTAT_HXX //autogen
-#include <svx/editstat.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
-
-#include <comphelper/extract.hxx>
-
-#include "app.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "optsitem.hxx"
-
-using namespace ::com::sun::star;
-
-namespace sd {
-
-/*************************************************************************
-|*
-|* Setzen der Spell Optionen
-|*
-\************************************************************************/
-
-void FuText::SetSpellOptions( ULONG& rCntrl )
-{
-    BOOL bHideSpell = mpDoc->GetHideSpell();
-    BOOL bOnlineSpell = mpDoc->GetOnlineSpell();
-
-    if( bHideSpell )
-        rCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        rCntrl &= ~EE_CNTRL_NOREDLINES;
-
-    if( bOnlineSpell )
-        rCntrl |= EE_CNTRL_ONLINESPELLING;
-    else
-        rCntrl &= ~EE_CNTRL_ONLINESPELLING;
-}
-
-} // end of namespace sd
 
