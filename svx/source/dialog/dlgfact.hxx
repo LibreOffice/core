@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:24:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual USHORT  Execute() ;
+    virtual short   Execute() ;
 //  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
@@ -104,7 +104,7 @@ Class::~Class()                                     \
 {                                                   \
     delete pDlg;                                    \
 }                                                   \
-USHORT Class::Execute()                             \
+short Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
 }
@@ -827,6 +827,12 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& _rxEvents,
                 const sal_uInt16 _nInitiallySelectedEvent
             );
+
+    virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj = NULL );
+
+    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
+
+    virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) ;
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
