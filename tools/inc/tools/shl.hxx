@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:41:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,10 @@
 #define BF_SHL_CALC     59
 #define BF_SHL_DRAW     60
 #define BF_SHL_WRITER   61
+#define BF_SHL_SVT      62
+#define BF_SHL_SVDDE    63
 
-#define SHL_COUNT       62
+#define SHL_COUNT       64
 
 TOOLS_DLLPUBLIC void** GetAppData( USHORT nSharedLib );
 
