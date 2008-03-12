@@ -1,0 +1,568 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMLTableExport.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:59:17 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
+#include "sal/config.h"
+#include <osl/diagnose.h>
+
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/CellContentType.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+
+#include "xmloff/table/XMLTableExport.hxx"
+#include "xmlnmspe.hxx"
+#include <xmloff/xmlprmap.hxx>
+#include <xmloff/xmlexppr.hxx>
+#include <xmloff/xmlexp.hxx>
+#include "table.hxx"
+
+using ::rtl::OUString;
+using namespace ::xmloff::token;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
+
+// --------------------------------------------------------------------
+
+#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
+#define CMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
+#define RMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define MAP_END { 0L, 0, 0, XML_EMPTY, 0, 0 }
+
+// --------------------------------------------------------------------
+
+const XMLPropertyMapEntry* getColumnPropertiesMap()
+{
+    static const XMLPropertyMapEntry aXMLColumnProperties[] =
+    {
+        CMAP( "Width",          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,               XML_TYPE_MEASURE,   0 ),
+        CMAP( "OptimalWidth",   XML_NAMESPACE_STYLE,    XML_USE_OPTIMAL_COLUMN_WIDTH,   XML_TYPE_BOOL, 0 ),
+        MAP_END
+    };
+
+    return &aXMLColumnProperties[0];
+}
+
+// --------------------------------------------------------------------
+
+const XMLPropertyMapEntry* getRowPropertiesMap()
+{
+    static const XMLPropertyMapEntry aXMLRowProperties[] =
+    {
+        RMAP( "Height",         XML_NAMESPACE_STYLE, XML_ROW_HEIGHT,                    XML_TYPE_MEASURE,   0 ),
+        RMAP( "OptimalHeight",  XML_NAMESPACE_STYLE, XML_MIN_ROW_HEIGHT,                XML_TYPE_MEASURE,   0 ),
+        RMAP( "OptimalWidth",   XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT,        XML_TYPE_BOOL, 0 ),
+        MAP_END
+    };
+
+    return &aXMLRowProperties[0];
+}
+
+// --------------------------------------------------------------------
+
+class StringStatisticHelper : public std::map< OUString, sal_Int32 >
+{
+public:
+    void add( const OUString& rStyleName );
+    void clear() { std::map< OUString, sal_Int32 >::clear(); }
+
+    sal_Int32 getModeString( /* out */ OUString& rModeString );
+};
+
+// --------------------------------------------------------------------
+
+void StringStatisticHelper::add( const OUString& rStyleName )
+{
+    std::map< OUString, sal_Int32 >::iterator iter( find( rStyleName ) );
+    if( iter == end() )
+    {
+        (*this)[rStyleName] = 1;
+    }
+    else
+    {
+        (*iter).second += 1;
+    }
+}
+
+// --------------------------------------------------------------------
+
+sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
+{
+    sal_Int32 nMax = 0;
+    for( std::map< OUString, sal_Int32 >::iterator iter( begin() ); iter != end(); iter++ )
+    {
+        if( (*iter).second > nMax )
+        {
+            rStyleName = (*iter).first;
+            nMax = (*iter).second;
+        }
+    }
+
+    return nMax;
+}
+
+// --------------------------------------------------------------------
+// class XMLTableExport
+// --------------------------------------------------------------------
+
+XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
+: mrExport( rExp )
+{
+    mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper( xCellPropertySetMapper.get() );
+    mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+
+    mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get() ) );
+    mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get() ) );
+
+    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN,
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
+        mxColumnExportPropertySetMapper.get(),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
+    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW,
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
+        mxRowExportPropertySetMapper.get(),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
+//  mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE
+//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
+//      xTableStylesExportPropertySetMapper,
+//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
+    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL,
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
+        mxCellExportPropertySetMapper.get(),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
+}
+
+// --------------------------------------------------------------------
+
+XMLTableExport::~XMLTableExport ()
+{
+}
+
+// --------------------------------------------------------------------
+
+static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
+{
+    if( !xPropStates.empty() )
+    {
+        std::vector< XMLPropertyState >::const_iterator aIter( xPropStates.begin() );
+        std::vector< XMLPropertyState >::const_iterator aEnd( xPropStates.end() );
+        while( aIter != aEnd )
+        {
+            if( aIter->mnIndex != -1 )
+                return true;
+            aIter++;
+        }
+    }
+    return false;
+}
+
+// --------------------------------------------------------------------
+
+ void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)
+ {
+    boost::shared_ptr< XMLTableInfo > pTableInfo( new XMLTableInfo() );
+    maTableInfoMap[xColumnRowRange] = pTableInfo;
+
+    try
+    {
+        Reference< XIndexAccess > xIndexAccessCols( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
+        const sal_Int32 nColumnCount = xIndexAccessCols->getCount();
+         for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
+        {
+             Reference< XPropertySet > xPropSet( xIndexAccessCols->getByIndex(nColumn) , UNO_QUERY_THROW );
+            std::vector< XMLPropertyState > xPropStates( mxColumnExportPropertySetMapper->Filter( xPropSet ) );
+
+            if( has_states( xPropStates ) )
+            {
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, xPropStates) );
+                Reference< XInterface > xKey( xPropSet, UNO_QUERY );
+                pTableInfo->maColumnStyleMap[xKey] = sStyleName;
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+        }
+
+        Reference< XIndexAccess > xIndexAccessRows( xColumnRowRange->getRows(), UNO_QUERY_THROW );
+        const sal_Int32 nRowCount = xIndexAccessRows->getCount();
+        pTableInfo->maDefaultRowCellStyles.resize(nRowCount);
+
+        StringStatisticHelper aStringStatistic;
+
+         for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow ) try
+        {
+             Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
+            std::vector< XMLPropertyState > xRowPropStates( mxRowExportPropertySetMapper->Filter( xPropSet ) );
+
+            if( has_states( xRowPropStates ) )
+            {
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, xRowPropStates) );
+                Reference< XInterface > xKey( xPropSet, UNO_QUERY );
+                pTableInfo->maRowStyleMap[xKey] = sStyleName;
+            }
+
+            // get the current row
+            Reference< XCellRange > xCellRange( xPropSet, UNO_QUERY_THROW );
+            for ( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
+            {
+                // get current cell, remarks row index is 0, because we get the range for each row seperate
+                Reference< XPropertySet > xCellSet( xCellRange->getCellByPosition(nColumn, 0), UNO_QUERY_THROW );
+
+                // get style
+                OUString sParentStyleName;
+                Reference< XPropertySetInfo > xPropertySetInfo( xCellSet->getPropertySetInfo() );
+                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
+                {
+                    Reference< XStyle > xStyle( xCellSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))), UNO_QUERY );
+                    if( xStyle.is() )
+                        sParentStyleName = xStyle->getName();
+                }
+
+                // create auto style, if needed
+                OUString sStyleName;
+                std::vector< XMLPropertyState > xCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
+                if( has_states( xCellPropStates ) )
+                    sStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, xCellPropStates);
+                else
+                    sStyleName = sParentStyleName;
+
+                if( sStyleName.getLength() )
+                {
+                    Reference< XInterface > xKey( xCellSet, UNO_QUERY );
+                    pTableInfo->maCellStyleMap[xKey] = sStyleName;
+                }
+
+                // create auto style for text
+                Reference< XText > xText(xCellSet, UNO_QUERY);
+                if(xText.is() && xText->getString().getLength())
+                    GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
+
+                aStringStatistic.add( sStyleName );
+            }
+
+            OUString sDefaultCellStyle;
+            if( aStringStatistic.getModeString( sDefaultCellStyle ) > 1 )
+                pTableInfo->maDefaultRowCellStyles[nRow] = sDefaultCellStyle;
+
+            aStringStatistic.clear();
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception caught!");
+    }
+ }
+
+ // --------------------------------------------------------------------
+
+ void XMLTableExport::exportTable( const Reference < XColumnRowRange >& xColumnRowRange )
+ {
+     try
+    {
+        boost::shared_ptr< XMLTableInfo > pTableInfo( maTableInfoMap[xColumnRowRange] );
+
+        // get row and column count
+        Reference< XIndexAccess > xIndexAccess( xColumnRowRange->getRows(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xIndexAccessCols( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
+
+        const sal_Int32 rowCount = xIndexAccess->getCount();
+        const sal_Int32 columnCount = xIndexAccessCols->getCount();
+
+        SvXMLElementExport tableElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
+
+        // export table columns
+        ExportTableColumns( xIndexAccessCols, pTableInfo );
+
+        // start iterating rows and columns
+        for ( sal_Int32 rowIndex = 0; rowIndex < rowCount; rowIndex++ )
+        {
+            // get the current row
+            Reference< XCellRange > xCellRange( xIndexAccess->getByIndex(rowIndex), UNO_QUERY_THROW );
+
+            // table:style-name
+            if( pTableInfo.get() )
+            {
+                Reference< XInterface > xKey( xCellRange, UNO_QUERY );
+                const OUString sStyleName( pTableInfo->maRowStyleMap[xKey] );
+                if( sStyleName.getLength() )
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
+            }
+
+            const OUString sDefaultCellStyle( pTableInfo->maDefaultRowCellStyles[rowIndex] );
+            if( sDefaultCellStyle.getLength() )
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, sDefaultCellStyle );
+
+            // write row element
+            SvXMLElementExport tableRowElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
+
+            for ( sal_Int32 columnIndex = 0; columnIndex < columnCount; columnIndex++ )
+            {
+                // get current cell, remarks row index is 0, because we get the range for each row seperate
+                Reference< XCell > xCell( xCellRange->getCellByPosition(columnIndex, 0), UNO_QUERY_THROW );
+
+                // use XMergeableCell interface from offapi
+                Reference< XMergeableCell > xMergeableCell( xCell, UNO_QUERY_THROW );
+
+                // export cell
+                ExportCell( xCell, pTableInfo, sDefaultCellStyle );
+            }
+        }
+     }
+     catch( Exception )
+    {
+         DBG_ERROR( "XMLTableExport::exportTable(), exception cought!" );
+     }
+ }
+
+// --------------------------------------------------------------------
+// Export the table columns
+// --------------------------------------------------------------------
+
+ void XMLTableExport::ExportTableColumns( const Reference < XIndexAccess >& xtableColumnsIndexAccess, const boost::shared_ptr< XMLTableInfo >& pTableInfo )
+ {
+    const sal_Int32 nColumnCount = xtableColumnsIndexAccess->getCount();
+     for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
+    {
+         Reference< XPropertySet > xColumnProperties( xtableColumnsIndexAccess->getByIndex(nColumn) , UNO_QUERY );
+         if ( xColumnProperties.is() )
+        {
+            // table:style-name
+            if( pTableInfo.get() )
+            {
+                Reference< XInterface > xKey( xColumnProperties, UNO_QUERY );
+                const OUString sStyleName( pTableInfo->maColumnStyleMap[xKey] );
+                if( sStyleName.getLength() )
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
+            }
+
+             // TODO: All columns first have to be checked if some ones
+             // have identical properties. If yes, attr table:number-columns-repeated
+             // has to be written.
+             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+         }
+     }
+ }
+
+// --------------------------------------------------------------------
+// ODF export for a table cell.
+// --------------------------------------------------------------------
+
+ void XMLTableExport::ExportCell( const Reference < XCell >& xCell, const boost::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& rDefaultCellStyle )
+ {
+    bool bIsMerged = false;
+    sal_Int32 nRowSpan = 0;
+    sal_Int32 nColSpan = 0;
+
+     try
+    {
+        if( pTableInfo.get() )
+        {
+            // table:style-name
+            Reference< XInterface > xKey( xCell, UNO_QUERY );
+            const OUString sStyleName( pTableInfo->maCellStyleMap[xKey] );
+            if( sStyleName.getLength() && (sStyleName != rDefaultCellStyle) )
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
+        }
+
+        Reference< XMergeableCell > xMerge( xCell, UNO_QUERY );
+        if( xMerge.is() )
+        {
+            bIsMerged = xMerge->isMerged();
+            nRowSpan = xMerge->getRowSpan();
+            nColSpan = xMerge->getColumnSpan();
+        }
+        DBG_ASSERT( (nRowSpan >= 1) && (nColSpan >= 1), "xmloff::XMLTableExport::ExportCell(), illegal row or col span < 1?" );
+    }
+    catch ( Exception )
+    {
+        DBG_ERROR( "exception while exporting a table cell" );
+    }
+
+    // table:number-columns-repeated
+    // todo
+
+    // table:number-columns-spanned
+    if( nColSpan > 1 )
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, OUString::valueOf( nColSpan ) );
+
+    // table:number-rows-spanned
+    if( nRowSpan > 1 )
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::valueOf( nRowSpan ) );
+
+     // <table:table-cell> or <table:covered-table-cell>
+    SvXMLElementExport tableCellElement( mrExport, XML_NAMESPACE_TABLE, bIsMerged ? XML_COVERED_TABLE_CELL : XML_TABLE_CELL, sal_True, sal_True );
+
+    // export cells text content
+    ImpExportText( xCell );
+ }
+
+// --------------------------------------------------------------------
+// ODF export of the text contents of a table cell.
+// Remarks: Up to now we only export text contents!
+// TODO: Check against nested tables ....
+// --------------------------------------------------------------------
+
+ void XMLTableExport::ImpExportText( const Reference< XCell >& xCell )
+ {
+    Reference< XText > xText( xCell, UNO_QUERY );
+    if( xText.is() && xText->getString().getLength())
+        mrExport.GetTextParagraphExport()->exportText( xText );
+ }
+
+// --------------------------------------------------------------------
+
+void XMLTableExport::exportTableStyles()
+{
+    XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
+
+    // write graphic family styles
+    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), TRUE, XML_STYLE_FAMILY_TABLE_CELL);
+
+    exportTableTemplates();
+}
+
+// --------------------------------------------------------------------
+// Export the collected automatic styles
+// --------------------------------------------------------------------
+
+void XMLTableExport::exportAutoStyles()
+{
+    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_COLUMN, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
+    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_ROW, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
+    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_CELL, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
+}
+
+// --------------------------------------------------------------------
+
+const TableStyleElement* getTableStyleMap()
+{
+    static struct TableStyleElement gTableStyleElements[] =
+    {
+        { XML_FIRST_ROW, OUString( RTL_CONSTASCII_USTRINGPARAM( "first-row" ) ) },
+        { XML_LAST_ROW, OUString( RTL_CONSTASCII_USTRINGPARAM( "last-row" ) ) },
+        { XML_FIRST_COLUMN, OUString( RTL_CONSTASCII_USTRINGPARAM( "first-column" ) ) },
+        { XML_LAST_COLUMN, OUString( RTL_CONSTASCII_USTRINGPARAM( "last-column" ) ) },
+        { XML_EVEN_ROWS, OUString( RTL_CONSTASCII_USTRINGPARAM( "even-rows" ) ) },
+        { XML_ODD_ROWS, OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-rows" ) ) },
+        { XML_EVEN_COLUMNS, OUString( RTL_CONSTASCII_USTRINGPARAM( "even-columns" ) ) },
+        { XML_ODD_COLUMNS, OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-columns" ) ) },
+        { XML_BODY, OUString( RTL_CONSTASCII_USTRINGPARAM( "body" ) ) },
+        { XML_TOKEN_END, OUString() }
+    };
+
+    return &gTableStyleElements[0];
+}
+
+// --------------------------------------------------------------------
+
+void XMLTableExport::exportTableTemplates()
+{
+    try
+    {
+        Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
+        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+        const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM("table" ) );
+        Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+
+        for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try
+        {
+            Reference< XStyle > xTableStyle( xTableFamily->getByIndex( nIndex ), UNO_QUERY_THROW );
+            if( !xTableStyle->isInUse() )
+                continue;
+
+            Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
+
+            mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
+             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, sal_True, sal_True );
+
+            const TableStyleElement* pElements = getTableStyleMap();
+            while( pElements->meElement != XML_TOKEN_END )
+            {
+                try
+                {
+                    Reference< XStyle > xStyle( xStyleNames->getByName( pElements->msStyleName ), UNO_QUERY );
+                    if( xStyle.is() )
+                    {
+                        mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xStyle->getName() ) );
+                         SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, sal_True, sal_True );
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERROR("xmloff::XMLTableExport::exportTableTemplates(), exception caught!");
+                }
+
+                pElements++;
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("xmloff::XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
+    }
+}
+
+// --------------------------------------------------------------------
+
