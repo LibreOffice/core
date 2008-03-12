@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:52:33 $
+#   last change: $Author: rt $ $Date: 2008-03-12 07:38:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,9 @@ SLOFILES=\
         $(SLO)$/PathRemoveExtensionW.obj\
         $(SLO)$/PathRemoveFileSpecW.obj\
         $(SLO)$/PathSetDlgItemPathW.obj\
-        $(SLO)$/PathStripToRootW.obj
-
+        $(SLO)$/PathStripToRootW.obj\
+        $(SLO)$/SHCreateItemFromParsingName.obj
+        
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
@@ -156,7 +157,7 @@ SHL1STDLIBS+=\
         $(LIBCMT)\
         $(SHLWAPILIB)
 
-        
+
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -167,4 +168,3 @@ $(LB)$/libuwinapi.a: $(MISC)$/uwinapi.def
 .ENDIF
 
 .INCLUDE : target.mk
-
