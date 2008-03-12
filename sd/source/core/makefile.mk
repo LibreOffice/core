@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 14:26:10 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:27:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES = glob.src
 
 SLOFILES = $(SLO)$/stlsheet.obj  \
+           $(SLO)$/stlfamily.obj \
            $(SLO)$/stlpool.obj	\
            $(SLO)$/drawdoc.obj \
            $(SLO)$/drawdoc2.obj \
