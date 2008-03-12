@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:12:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using std::auto_ptr;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
@@ -772,8 +773,8 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                                 pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                             if(!pDrop)
                                 pDrop = new SwFmtDrop();
-                            SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pStyle );
-                            pDrop->SetCharFmt(aStyle.GetCharFmt());
+                            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
+                            pDrop->SetCharFmt(xStyle->GetCharFmt());
                         }
                         else
                              throw lang::IllegalArgumentException();
