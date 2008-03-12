@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:49:28 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,17 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#include "swmodule.hxx"
+#include "cfgitems.hxx"
+#include "prtopt.hxx"
+
 
 #include "swmodule.hxx"
 #include "cfgitems.hxx"
 #include "prtopt.hxx"
 
-using namespace rtl;
+using rtl::OUString;
+
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
