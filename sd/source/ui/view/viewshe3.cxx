@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:40:57 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,15 +199,17 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
             SfxStyleSheet* pStyleSheet = pDrView->GetStyleSheet();
             if( pStyleSheet )
             {
-                if (pStyleSheet->GetFamily() == SD_LT_FAMILY)
+                if (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
                     pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
 
                 if( pStyleSheet )
                 {
                     SfxStyleFamily eFamily = pStyleSheet->GetFamily();
-                    if(eFamily == SFX_STYLE_FAMILY_PARA)
+                    if(eFamily == SD_STYLE_FAMILY_GRAPHICS)
                         nFamily = 2;
-                    else
+                    else if(eFamily == SD_STYLE_FAMILY_CELL )
+                        nFamily = 3;
+                    else // SD_STYLE_FAMILY_PSEUDO
                         nFamily = 5;
 
                     GetDocSh()->SetStyleFamily(nFamily);
