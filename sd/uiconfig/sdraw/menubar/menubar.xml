@@ -153,6 +153,7 @@
                     </menu:menu>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuitem menu:id=".uno:InsertAVMedia"/>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
@@ -163,7 +164,6 @@
                     <menu:menuitem menu:id=".uno:InsertMath"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertSpreadsheet"/>
             <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
