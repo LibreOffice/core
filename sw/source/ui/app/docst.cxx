@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:19:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,7 +568,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         else
             nMask = SFXSTYLEBIT_USERDEF;
 
-        pStyle = &pBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
+        pStyle = &mxBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
 
         // die aktuellen als Parent setzen
         SwDocStyleSheet* pDStyle = (SwDocStyleSheet*)pStyle;
@@ -641,7 +641,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     }
     else
     {
-        pStyle = pBasePool->Find( rName, (SfxStyleFamily)nFamily );
+        pStyle = mxBasePool->Find( rName, (SfxStyleFamily)nFamily );
         ASSERT(pStyle, "Vorlage nicht gefunden");
     }
 
@@ -650,10 +650,10 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
     // Dialoge zusammenstoepseln
     //
-    SwDocStyleSheet aTmp( *(SwDocStyleSheet*)pStyle );
+    rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
     if( SFX_STYLE_FAMILY_PARA == nFamily )
     {
-        SfxItemSet& rSet = aTmp.GetItemSet();
+        SfxItemSet& rSet = xTmp->GetItemSet();
         ::SwToSfxPageDescAttr( rSet );
         // erstmal nur eine Null
         rSet.Put(SwBackgroundDestinationItem(SID_PARA_BACKGRND_DESTINATION, 0));
@@ -676,7 +676,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     }*/
     else if( SFX_STYLE_FAMILY_CHAR == nFamily )
     {
-        SfxItemSet& rSet = aTmp.GetItemSet();
+        SfxItemSet& rSet = xTmp->GetItemSet();
         const SfxPoolItem *pTmpBrush;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             TRUE, &pTmpBrush ) )
@@ -705,7 +705,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
-                                                    0, aTmp, nFamily, bColumn,
+                                                    0, *(xTmp.get()), nFamily, bColumn,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         if(RET_OK == pDlg->Execute())
@@ -716,11 +716,11 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             if( bNew )
             {
                 nRet = SFX_STYLE_FAMILY_PARA == pStyle->GetFamily()
-                        ? aTmp.GetMask()
+                        ? xTmp->GetMask()
                         : SFXSTYLEBIT_USERDEF;
             }
-            else if( pStyle->GetMask() != aTmp.GetMask() )
-                nRet = aTmp.GetMask();
+            else if( pStyle->GetMask() != xTmp->GetMask() )
+                nRet = xTmp->GetMask();
 
             if( SFX_STYLE_FAMILY_PARA == nFamily )
             {
@@ -729,7 +729,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 // --> OD 2008-02-12 #newlistlevelattrs#
                 // reset indent attributes at paragraph style, if a list style
                 // will be applied and no indent attributes will be applied.
-                aTmp.SetItemSet( aSet, true );
+                xTmp->SetItemSet( aSet, true );
                 // <--
             }
             else
@@ -755,13 +755,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                     }
                     aTmpSet.ClearItem( RES_BACKGROUND );
                 }
-                aTmp.SetItemSet( aTmpSet );
+                xTmp->SetItemSet( aTmpSet );
             }
             if(SFX_STYLE_FAMILY_PAGE == nFamily)
                 pView->InvalidateRulerPos();
 
             if( bNew )
-                pBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, aTmp ) );
+                mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
             // JP 19.09.97:
             // Dialog vorm EndAction zerstoeren - bei Seitenvorlagen kann
@@ -801,17 +801,17 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         if( bNew )
         {
             nRet = SFX_STYLE_FAMILY_PARA == pStyle->GetFamily()
-                    ? aTmp.GetMask()
+                    ? xTmp->GetMask()
                     : SFXSTYLEBIT_USERDEF;
         }
-        else if( pStyle->GetMask() != aTmp.GetMask() )
-            nRet = aTmp.GetMask();
+        else if( pStyle->GetMask() != xTmp->GetMask() )
+            nRet = xTmp->GetMask();
 
         if( SFX_STYLE_FAMILY_PARA == nFamily )
-            ::SfxToSwPageDescAttr( *GetWrtShell(), aTmp.GetItemSet() );
+            ::SfxToSwPageDescAttr( *GetWrtShell(), xTmp->GetItemSet() );
         else
         {
-            SfxItemSet aTmpSet( aTmp.GetItemSet() );
+            SfxItemSet aTmpSet( xTmp->GetItemSet() );
             if( SFX_STYLE_FAMILY_CHAR == nFamily )
             {
                 const SfxPoolItem *pTmpBrush;
@@ -824,13 +824,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 }
                 aTmpSet.ClearItem( RES_BACKGROUND );
             }
-            aTmp.SetItemSet( aTmpSet );
+            xTmp->SetItemSet( aTmpSet );
         }
         if(SFX_STYLE_FAMILY_PAGE == nFamily)
             pView->InvalidateRulerPos();
 
         if( bNew )
-            pBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, aTmp ) );
+            mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
         pDoc->SetModified();
         if( !bModified )        // Bug 57028
@@ -848,14 +848,14 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
 USHORT SwDocShell::Delete(const String &rName, USHORT nFamily)
 {
-    SfxStyleSheetBase *pStyle = pBasePool->Find(rName, (SfxStyleFamily)nFamily);
+    SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
     if(pStyle)
     {
         ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
 
         GetWrtShell()->StartAllAction();
-        pBasePool->Erase(pStyle);
+        mxBasePool->Remove(pStyle);
         GetWrtShell()->EndAllAction();
 
         return TRUE;
@@ -872,7 +872,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
                                SwWrtShell* pShell, USHORT nMode )
 {
     SwDocStyleSheet* pStyle =
-        (SwDocStyleSheet*)pBasePool->Find(rName, (SfxStyleFamily)nFamily);
+        (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
     ASSERT(pStyle, "Wo ist der StyleSheet");
     if(!pStyle)
@@ -950,7 +950,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
     if(bWaterCan)
     {
         SwDocStyleSheet* pStyle =
-            (SwDocStyleSheet*)pBasePool->Find(rName, (SfxStyleFamily)nFamily);
+            (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
         ASSERT(pStyle, "Wo ist der StyleSheet");
         if(!pStyle) return nFamily;
@@ -997,7 +997,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
     ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
 
     SwDocStyleSheet* pStyle =
-        (SwDocStyleSheet*)pBasePool->Find(rName, (SfxStyleFamily)nFamily);
+        (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
     if(!pStyle)
         return nFamily;
@@ -1094,7 +1094,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                                     USHORT nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
-    SwDocStyleSheet* pStyle = (SwDocStyleSheet*)pBasePool->Find(
+    SwDocStyleSheet* pStyle = (SwDocStyleSheet*)mxBasePool->Find(
                                             rName, (SfxStyleFamily)nFamily );
     if(!pStyle)
     {
@@ -1105,7 +1105,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
         else
             nMask |= SFXSTYLEBIT_USERDEF;
 
-        pStyle = (SwDocStyleSheet*)&pBasePool->Make(rName,
+        pStyle = (SwDocStyleSheet*)&mxBasePool->Make(rName,
                                 (SfxStyleFamily)nFamily, nMask );
     }
 
