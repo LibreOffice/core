@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:22:30 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/app.hxx>
 
-//#include <svx/dialmgr.hxx>
+#include "splitcelldlg.hxx"
 #include <svx/dialogs.hrc>
 #include "fmresids.hrc"
 #include "gallery.hrc"
@@ -119,6 +119,8 @@
 #include "scriptdlg.hxx" // for ScriptOrgDialog
 #include "selector.hxx" // for SvxScriptSelectorDialog
 #include "macropg.hxx" // for SvxMacroAssignDlg
+#include "sdrcelldlg.hxx"
+#include "newtabledlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -2373,9 +2375,23 @@ SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* p
     return new AbstractLinksDialog_Impl( pLinkDlg );
 }
 
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* /*pObj*/ )
+{
+    return new AbstractTabDialog_Impl( new SvxFormatCellsDialog( pParent, pAttr, pModel ) );
+}
+
+SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
+{
+    return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
+}
+
+SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( Window* pParent )
+{
+    return new SvxNewTableDialog( pParent );
+}
+
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
     Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& /*rApplicationContext*/ )
 {
     return new VclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
 }
-
