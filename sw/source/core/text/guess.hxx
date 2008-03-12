@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:37:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,13 @@
 
 class SwTxtFormatInfo;
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::linguistic2;
-
 /*************************************************************************
  *                      class SwTxtGuess
  *************************************************************************/
 
 class SwTxtGuess
 {
-    uno::Reference< XHyphenatedWord >  xHyphWord;
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
     xub_StrLen nCutPos;         // this character doesn't fit
     xub_StrLen nBreakStart;     // start index of word containing line break
@@ -79,7 +76,7 @@ public:
     inline xub_StrLen BreakStart() const { return nBreakStart; }
     inline xub_StrLen BreakPos() const {return nBreakPos; }
     inline xub_StrLen FieldDiff() const {return nFieldDiff; }
-    inline uno::Reference< XHyphenatedWord > HyphWord() const
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
 };
 
