@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:48:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@
 #include "htmlform.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 /*  */
 
 const sal_uInt32 HTML_FRMOPTS_CONTROL   =
