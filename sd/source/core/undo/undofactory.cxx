@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undofactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:18:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,9 @@ SdrUndoAction* UndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOr
     return new UndoDeleteObject( rObject, bOrdNumDirect );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj )
+SdrUndoAction* UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
 {
-    return new UndoObjectSetText( rNewObj );
+    return new UndoObjectSetText( rNewObj, nText );
 }
 
 SdrUndoAction* UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
