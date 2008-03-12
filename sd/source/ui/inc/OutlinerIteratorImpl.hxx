@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlinerIteratorImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:36:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SD_OUTLINER_ITERATOR_IMPL_HXX
 #define SD_OUTLINER_ITERATOR_IMPL_HXX
 
+#include <svx/svdobj.hxx>
 #include "OutlinerIterator.hxx"
 
 class SdDrawDocument;
@@ -74,11 +75,12 @@ public:
         bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode);
     virtual ~IteratorImplBase (void);
 
-    /** Advance to the next object.  This takes the iteration direction into
+    /** Advance to the next text of the current object or to the next object.
+        This takes the iteration direction into
         account.  The new object pointed to can be retrieved (among other
         information) by calling the <member>GetPosition</member> method.
     */
-    virtual void GotoNextObject (void) = 0;
+    virtual void GotoNextText (void) = 0;
     /** Return an object that describes the current object.
         @return
             The returned object describes the current object pointed to by
@@ -148,7 +150,7 @@ class SelectionIteratorImpl
 {
 public:
     SelectionIteratorImpl (
-        const ::std::vector<SdrObject*>& rObjectList,
+        const ::std::vector< SdrObjectWeakRef >& rObjectList,
         sal_Int32 nObjectIndex,
         SdDrawDocument* pDocument,
         DrawViewShell* pViewShell,
@@ -156,13 +158,13 @@ public:
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
     virtual ~SelectionIteratorImpl (void);
 
-    virtual void GotoNextObject (void);
+    virtual void GotoNextText (void);
     virtual const IteratorPosition& GetPosition (void);
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
     virtual bool operator== (const IteratorImplBase& rIterator) const;
 
 private:
-    const ::std::vector<SdrObject*>& mrObjectList;
+    const ::std::vector<SdrObjectWeakRef>& mrObjectList;
     sal_Int32 mnObjectIndex;
 
     /** Compare the given iterator with this object.  This method handles
@@ -205,7 +207,7 @@ public:
         EditMode eEditMode);
     virtual ~ViewIteratorImpl (void);
 
-    virtual void GotoNextObject (void);
+    virtual void GotoNextText (void);
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
     virtual void Reverse (void);
 
@@ -259,7 +261,7 @@ public:
         bool bDirectionIsForward);
     virtual ~DocumentIteratorImpl (void);
 
-    virtual void GotoNextObject (void);
+    virtual void GotoNextText (void);
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
 
 private:
