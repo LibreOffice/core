@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshprp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:46:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,7 @@
 #define OWN_ATTR_FILLBMP_MODE                   (OWN_ATTR_VALUE_START+45)
 #define OWN_ATTR_TRANSFORMATION                 (OWN_ATTR_VALUE_START+46)
 #define OWN_ATTR_BASE_GEOMETRY                  (OWN_ATTR_VALUE_START+47)
+
 #define OWN_ATTR_APPLET_DOCBASE                 (OWN_ATTR_VALUE_START+48)
 #define OWN_ATTR_APPLET_CODEBASE                (OWN_ATTR_VALUE_START+49)
 #define OWN_ATTR_APPLET_NAME                    (OWN_ATTR_VALUE_START+50)
@@ -248,6 +249,17 @@
 #define OWN_ATTR_FRAME_ISBORDER                 (OWN_ATTR_VALUE_START+60)
 #define OWN_ATTR_FRAME_MARGIN_WIDTH             (OWN_ATTR_VALUE_START+61)
 #define OWN_ATTR_FRAME_MARGIN_HEIGHT            (OWN_ATTR_VALUE_START+62)
+
+// reuse own attr from ole shapes for tables
+#define OWN_ATTR_TABLETEMPLATE                  (OWN_ATTR_VALUE_START+48)
+#define OWN_ATTR_TABLETEMPLATE_FIRSTROW         (OWN_ATTR_VALUE_START+49)
+#define OWN_ATTR_TABLETEMPLATE_LASTROW          (OWN_ATTR_VALUE_START+50)
+#define OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN      (OWN_ATTR_VALUE_START+51)
+#define OWN_ATTR_TABLETEMPLATE_LASTCOLUMN       (OWN_ATTR_VALUE_START+52)
+#define OWN_ATTR_TABLETEMPLATE_BANDINGROWS      (OWN_ATTR_VALUE_START+53)
+#define OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS  (OWN_ATTR_VALUE_START+54)
+#define OWN_ATTR_TABLEBORDER                    (OWN_ATTR_VALUE_START+55)
+
 #define OWN_ATTR_OLE_VISAREA                    (OWN_ATTR_VALUE_START+63)
 #define OWN_ATTR_CAPTION_POINT                  (OWN_ATTR_VALUE_START+64)
 #define OWN_ATTR_PAGE_NUMBER                    (OWN_ATTR_VALUE_START+65)
@@ -271,7 +283,15 @@
 #define OWN_ATTR_MISC_OBJ_TITLE                 (OWN_ATTR_VALUE_START+81)
 #define OWN_ATTR_MISC_OBJ_DESCRIPTION           (OWN_ATTR_VALUE_START+82)
 
-#define OWN_ATTR_VALUE_END                      OWN_ATTR_MISC_OBJ_DESCRIPTION // WARNING: ee items start at 3991!
+#define OWN_ATTR_GRAPHIC_STREAM                 (OWN_ATTR_VALUE_START+83)
+#define OWN_ATTR_3D_VALUE_NORMALSPOLYGON3D      (OWN_ATTR_VALUE_START+84)
+#define OWN_ATTR_3D_VALUE_TEXTUREPOLYGON3D      (OWN_ATTR_VALUE_START+85)
+
+#define OWN_ATTR_OLE_LINKURL                    (OWN_ATTR_VALUE_START+86)
+
+#define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
+
+#define OWN_ATTR_VALUE_END                      OWN_ATTR_STYLE // WARNING: ee items start at 3991!
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -601,8 +621,8 @@
 #define SPECIAL_3DPOLYGONOBJECT_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_3D_TRANSFORM_MATRIX ),OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX    , &::getCppuType((const ::com::sun::star::drawing::HomogenMatrix*)0), 0, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_3D_POLYPOLYGON3D    ),OWN_ATTR_3D_VALUE_POLYPOLYGON3D   , &::getCppuType((const ::com::sun::star::drawing::PolyPolygonShape3D*)0), 0, 0}, \
-    { MAP_CHAR_LEN(UNO_NAME_3D_NORMALSPOLYGON3D ),OWN_ATTR_3D_VALUE_POLYPOLYGON3D   , &::getCppuType((const ::com::sun::star::drawing::PolyPolygonShape3D*)0), 0, 0}, \
-    { MAP_CHAR_LEN(UNO_NAME_3D_TEXTUREPOLYGON3D ),OWN_ATTR_3D_VALUE_POLYPOLYGON3D   , &::getCppuType((const ::com::sun::star::drawing::PolyPolygonShape3D*)0), 0, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_3D_NORMALSPOLYGON3D ),OWN_ATTR_3D_VALUE_NORMALSPOLYGON3D, &::getCppuType((const ::com::sun::star::drawing::PolyPolygonShape3D*)0), 0, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_3D_TEXTUREPOLYGON3D ),OWN_ATTR_3D_VALUE_TEXTUREPOLYGON3D, &::getCppuType((const ::com::sun::star::drawing::PolyPolygonShape3D*)0), 0, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_3D_LINEONLY         ),OWN_ATTR_3D_VALUE_LINEONLY        , &::getBooleanCppuType(), 0, 0},
 
 #define SPECIAL_3DBACKSCALE_PROPERTIES \
