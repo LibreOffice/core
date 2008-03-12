@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:22:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::std;
 
 #define ASCII_STR(s)        OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
