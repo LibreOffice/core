@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:29:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,8 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
-
+using rtl::OUString;
+using namespace com::sun::star::uno;
 
 #define SEL_TYPE_TABLE_TEXT     0
 #define SEL_TYPE_LIST_TEXT      1
