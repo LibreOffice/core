@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:36:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,10 @@
 #define RID_SLIDE_SORTER_DRAW_NOSEL_POPUP   RID_APP_START+88
 #define RID_SLIDE_SORTER_MASTER_SEL_POPUP   RID_APP_START+89
 #define RID_SLIDE_SORTER_MASTER_NOSEL_POPUP RID_APP_START+90
+
+#define RID_DRAW_TABLE_POPUP                RID_APP_START+91
+#define RID_GRAPHIC_TABLE_POPUP             RID_APP_START+92
+
 /*
  * Pointer (Mauszeiger)
  */
@@ -337,3 +341,5 @@
 
 #define RID_GRAPHICSTYLEFAMILY      RID_APP_START+395
 #define RID_PRESENTATIONSTYLEFAMILY RID_APP_START+396
+#define RID_GRAPHICSCELLFAMILY      RID_APP_START+397
+
