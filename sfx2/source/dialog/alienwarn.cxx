@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:09:13 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
 
     SfxModalDialog( pParent, SfxResId( RID_DLG_ALIEN_WARNING ) ),
 
-    m_aQueryImage   ( this, SfxResId( FI_QUERY ) ),
-    m_aInfoText     ( this, SfxResId( FT_INFOTEXT ) ),
-    m_aYesBtn       ( this, SfxResId( PB_YES ) ),
-    m_aNoBtn        ( this, SfxResId( PB_NO ) ),
-    m_aMoreInfoBtn  ( this, SfxResId( PB_MOREINFO ) ),
-    m_aOptionLine   ( this, SfxResId( FL_OPTION ) ),
-    m_aWarningOffBox( this, SfxResId( CB_WARNING_OFF ) )
+    m_aQueryImage       ( this, SfxResId( FI_QUERY ) ),
+    m_aInfoText         ( this, SfxResId( FT_INFOTEXT ) ),
+    m_aKeepCurrentBtn   ( this, SfxResId( PB_NO ) ),
+    m_aSaveODFBtn       ( this, SfxResId( PB_YES ) ),
+    m_aMoreInfoBtn      ( this, SfxResId( PB_MOREINFO ) ),
+    m_aOptionLine       ( this, SfxResId( FL_OPTION ) ),
+    m_aWarningOnBox     ( this, SfxResId( CB_WARNING_OFF ) )
 
 {
     FreeResource();
@@ -75,15 +75,15 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
     sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
     m_aInfoText.SetText( sInfoText );
 
-    // load value of "warning off" checkbox from save options
-    m_aWarningOffBox.Check( SvtSaveOptions().IsWarnAlienFormat() == sal_False );
+    // load value of "warning on" checkbox from save options
+    m_aWarningOnBox.Check( SvtSaveOptions().IsWarnAlienFormat() == sal_True );
 
-    // set focus to "No" button
-    m_aNoBtn.GrabFocus();
+    // set focus to "Keep Current Format" button
+    m_aKeepCurrentBtn.GrabFocus();
 
     // pb: #i43989# we have no online help for this dialog at the moment
     // -> hide the "more info" button
-    m_aMoreInfoBtn.Hide();
+    //m_aMoreInfoBtn.Hide();
 
     // calculate and set the size of the dialog and its controls
     InitSize();
@@ -95,7 +95,7 @@ SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
     // save value of "warning off" checkbox, if necessary
     SvtSaveOptions aSaveOpt;
-    sal_Bool bChecked = !m_aWarningOffBox.IsChecked();
+    sal_Bool bChecked = m_aWarningOnBox.IsChecked();
     if ( aSaveOpt.IsWarnAlienFormat() != bChecked )
         aSaveOpt.SetWarnAlienFormat( bChecked );
 }
@@ -105,14 +105,14 @@ SfxAlienWarningDialog::~SfxAlienWarningDialog()
 void SfxAlienWarningDialog::InitSize()
 {
     // if the button text is too wide, then broaden the button
-    long nTxtW = m_aMoreInfoBtn.GetTextWidth( m_aMoreInfoBtn.GetText() );
+    long nTxtW = m_aMoreInfoBtn.GetCtrlTextWidth( m_aMoreInfoBtn.GetText() );
     long nCtrlW = m_aMoreInfoBtn.GetSizePixel().Width();
     if ( nTxtW >= nCtrlW )
     {
         long nDelta = nTxtW - nCtrlW;
-        nDelta += 6; // a little more space looks better
-        Point aNextPoint = m_aNoBtn.GetPosPixel();
-        aNextPoint.X() += m_aNoBtn.GetSizePixel().Width();
+        nDelta += IMPL_EXTRA_BUTTON_WIDTH;
+        Point aNextPoint = m_aKeepCurrentBtn.GetPosPixel();
+        aNextPoint.X() += m_aKeepCurrentBtn.GetSizePixel().Width();
         Point aNewPoint = m_aMoreInfoBtn.GetPosPixel();
         aNewPoint.X() -= nDelta;
         if ( aNextPoint.X() >= aNewPoint.X() )
@@ -128,14 +128,14 @@ void SfxAlienWarningDialog::InitSize()
     }
 
     // text of checkbox to wide -> add new line
-    nTxtW = m_aWarningOffBox.GetTextWidth( m_aWarningOffBox.GetText() );
-    nCtrlW = m_aWarningOffBox.GetSizePixel().Width();
+    nTxtW = m_aWarningOnBox.GetCtrlTextWidth( m_aWarningOnBox.GetText() ) + IMPL_EXTRA_BUTTON_WIDTH;
+    nCtrlW = m_aWarningOnBox.GetSizePixel().Width();
     if ( nTxtW >= nCtrlW )
     {
-        long nTextHeight = m_aWarningOffBox.GetTextHeight();
-        Size aNewSize = m_aWarningOffBox.GetSizePixel();
+        long nTextHeight = m_aWarningOnBox.GetTextHeight();
+        Size aNewSize = m_aWarningOnBox.GetSizePixel();
         aNewSize.Height() += nTextHeight;
-        m_aWarningOffBox.SetSizePixel( aNewSize );
+        m_aWarningOnBox.SetSizePixel( aNewSize );
         aNewSize = GetSizePixel();
         aNewSize.Height() += nTextHeight;
         SetSizePixel( aNewSize );
@@ -153,7 +153,7 @@ void SfxAlienWarningDialog::InitSize()
     // new position for the succeeding windows
     Window* pWins[] =
     {
-        &m_aYesBtn, &m_aNoBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOffBox
+        &m_aSaveODFBtn, &m_aKeepCurrentBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOnBox
     };
     Window** pCurrent = pWins;
     for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
@@ -167,5 +167,24 @@ void SfxAlienWarningDialog::InitSize()
     aNewSize = GetSizePixel();
     aNewSize.Height() -= nDelta;
     SetSizePixel( aNewSize );
+
+    // recalculate the size and position of the buttons
+    m_aMoreInfoBtn.Hide();
+    nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
+    long nTemp = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
+    if ( nTemp > nTxtW )
+        nTxtW = nTemp;
+    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+    Point aPos = m_aKeepCurrentBtn.GetPosPixel();
+    aPos.X() = ( aNewSize.Width() - (2*nTxtW) - a3Size.Width() ) / 2;
+    long nDefX = m_aWarningOnBox.GetPosPixel().X();
+    if ( nDefX < aPos.X() )
+        aPos.X() = nDefX;
+    aNewSize = m_aKeepCurrentBtn.GetSizePixel();
+    aNewSize.Width() = nTxtW;
+    m_aKeepCurrentBtn.SetPosSizePixel( aPos, aNewSize );
+    aPos.X() += nTxtW + a3Size.Width();
+    m_aSaveODFBtn.SetPosSizePixel( aPos, aNewSize );
 }
 
