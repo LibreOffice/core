@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:22:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,10 @@
 #include <svx/frmdiritem.hxx>
 #endif
 #include <svtools/fltcall.hxx>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
+#include <set>
 
 //#include <svx/xbtmpit.hxx>
 
@@ -5150,6 +5154,23 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                 }
             }
+            else if ( mType == "drawing.Table" )
+            {
+                SvMemoryStream* pTmp = NULL;
+                if ( bEffect && !mbUseNewAnimations )
+                {
+                    pTmp = new SvMemoryStream( 0x200, 0x200 );
+                    ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
+                }
+                if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
+                {
+                    if ( !pTmp )
+                        pTmp = new SvMemoryStream( 0x200, 0x200 );
+                    ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
+                }
+                ImplCreateTable( mXShape, aSolverContainer, aPropOpt );
+                continue;
+            }
             else if ( mType == "drawing.dontknow" )
             {
                 mnAngle = 0;
@@ -5437,3 +5458,307 @@ Rectangle PPTWriter::ImplMapRectangle( const ::com::sun::star::awt::Rectangle& r
 }
 
 //  -----------------------------------------------------------------------
+
+struct CellBorder
+{
+    sal_Int32                       mnPos;      // specifies the distance to the top/left position of the table
+    sal_Int32                       mnLength;
+    table::BorderLine               maCellBorder;
+
+    CellBorder() : mnPos ( 0 ), mnLength( 0 ){};
+};
+
+void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 )
+{
+    mnAngle = 0;
+    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+    EscherPropertyContainer aPropOptSp;
+
+    sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
+    aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+
+    sal_Int32 nLineWidth = pCellBorder->maCellBorder.OuterLineWidth + pCellBorder->maCellBorder.InnerLineWidth;
+    if ( !nLineWidth )
+        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );  // no line
+    else
+        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80008 );
+
+    aPropOptSp.AddOpt( ESCHER_Prop_lineColor, pCellBorder->maCellBorder.Color );
+    aPropOptSp.AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );
+    aPropOptSp.Commit( *mpStrm );
+    mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+    *mpStrm     << nX1
+                << nY1
+                << nX2
+                << nY2;
+    mpPptEscherEx->CloseContainer();
+}
+
+void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
+                                EscherPropertyContainer& aPropOpt )
+{
+    mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
+    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+    mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
+    *mpStrm     << (INT32)maRect.Left() // Bounding box fuer die Gruppierten shapes an die sie attached werden
+                << (INT32)maRect.Top()
+                << (INT32)maRect.Right()
+                << (INT32)maRect.Bottom();
+
+    sal_uInt32 nShapeId = mpPptEscherEx->GetShapeID();
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
+    aSolverContainer.AddShape( rXShape, nShapeId );
+    EscherPropertyContainer aPropOpt2;
+    try
+    {
+        static const rtl::OUString  sModel( RTL_CONSTASCII_USTRINGPARAM ( "Model" ) );
+        static const rtl::OUString sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
+        static const rtl::OUString sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
+
+        uno::Reference< table::XTable > xTable;
+        if ( mXPropSet->getPropertyValue( sModel ) >>= xTable )
+        {
+            uno::Reference< table::XColumnRowRange > xColumnRowRange( xTable, uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xColumns( xColumnRowRange->getColumns(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xRows( xColumnRowRange->getRows(), uno::UNO_QUERY_THROW );
+            sal_uInt16 nRowCount = static_cast< sal_uInt16 >( xRows->getCount() );
+            sal_uInt16 nColumnCount = static_cast< sal_uInt16 >( xColumns->getCount() );
+
+            std::vector< std::pair< sal_Int32, sal_Int32 > > aColumns;
+            std::vector< std::pair< sal_Int32, sal_Int32 > > aRows;
+
+            awt::Point aPosition( ImplMapPoint( rXShape->getPosition() ) );
+            sal_uInt32 nPosition = aPosition.X;
+            for ( sal_Int32 x = 0; x < nColumnCount; x++ )
+            {
+                uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( x ), uno::UNO_QUERY_THROW );
+                awt::Size aS( 0, 0 );
+                xPropSet->getPropertyValue( sWidth ) >>= aS.Width;
+                awt::Size aM( ImplMapSize( aS ) );
+                aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Width ) );
+                nPosition += aM.Width;
+            }
+
+            nPosition = aPosition.Y;
+            for ( sal_Int32 y = 0; y < nRowCount; y++ )
+            {
+                uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( y ), uno::UNO_QUERY_THROW );
+                awt::Size aS( 0, 0 );
+                xPropSet->getPropertyValue( sHeight ) >>= aS.Height;
+                awt::Size aM( ImplMapSize( aS ) );
+                aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Height ) );
+                nPosition += aM.Height;
+            }
+
+            if ( nRowCount )
+            {
+                SvMemoryStream aMemStrm;
+                aMemStrm.ObjectOwnsMemory( FALSE );
+                aMemStrm << nRowCount
+                         << nRowCount
+                         << (sal_uInt16)4;
+
+                std::vector< std::pair< sal_Int32, sal_Int32 > >::const_iterator aIter( aRows.begin() );
+                while( aIter != aRows.end() )
+                    aMemStrm << (*aIter++).second;
+
+                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
+                aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
+                aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, sal_True, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+                aPropOpt.Commit( *mpStrm );
+                aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
+                mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
+                *mpStrm << (sal_Int16)maRect.Top()
+                        << (sal_Int16)maRect.Left()
+                        << (sal_Int16)( maRect.GetWidth()  + maRect.Left() )
+                        << (sal_Int16)( maRect.GetHeight() + maRect.Top() );
+                mpPptEscherEx->CloseContainer();
+
+
+                uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
+                for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
+                {
+                    for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
+                    {
+                        uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ), uno::UNO_QUERY_THROW );
+                        if ( !xCell->isMerged() )
+                        {
+                            sal_Int32 nLeft   = aColumns[ nColumn ].first;
+                            sal_Int32 nTop    = aRows[ nRow ].first;
+                            sal_Int32 nRight  = nLeft + aColumns[ nColumn ].second;
+                            sal_Int32 nBottom = nTop + aRows[ nRow ].second;
+
+                            for ( sal_Int32 nColumnSpan = 1; nColumnSpan < xCell->getColumnSpan(); nColumnSpan++ )
+                            {
+                                sal_uInt32 nC = nColumnSpan + nColumn;
+                                if ( nC < aColumns.size() )
+                                    nRight += aColumns[ nC ].second;
+                                else
+                                    nRight = maRect.Right();
+                            }
+                            for ( sal_Int32 nRowSpan = 1; nRowSpan < xCell->getRowSpan(); nRowSpan++ )
+                            {
+                                sal_uInt32 nR = nRowSpan + nRow;
+                                if ( nR < aColumns.size() )
+                                    nBottom += aRows[ nR ].second;
+                                else
+                                    nBottom = maRect.Bottom();
+                            }
+
+                            mbFontIndependentLineSpacing = sal_False;
+                            mXPropSet = uno::Reference< beans::XPropertySet >( xCell, uno::UNO_QUERY_THROW );
+                            mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
+                            mnTextSize = mXText->getString().getLength();
+
+                            ::com::sun::star::uno::Any aAny;
+                            if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), sal_True )
+                                aAny >>= mbFontIndependentLineSpacing;
+
+                            EscherPropertyContainer aPropOptSp;
+                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                            ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa02 );          // Flags: Connector | HasSpt | Child
+                            aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
+                            if ( mnTextSize )
+                                aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.Commit( *mpStrm );
+                            mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+                            *mpStrm     << nLeft
+                                        << nTop
+                                           << nRight
+                                        << nBottom;
+                            if ( mnTextSize )
+                            {
+                                SvMemoryStream aClientTextBox( 0x200, 0x200 );
+                                SvMemoryStream  aExtBu( 0x200, 0x200 );
+
+                                ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu );
+
+                                *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                                        << (sal_uInt32)aClientTextBox.Tell();
+
+                                mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
+                            }
+                            mpPptEscherEx->CloseContainer();
+                        }
+                    }
+                }
+
+                static const rtl::OUString sTopBorder( String( RTL_CONSTASCII_USTRINGPARAM( "TopBorder" ) ) );
+                static const rtl::OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
+                static const rtl::OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
+                static const rtl::OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
+                static const rtl::OUString  sDiagonalTLBR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalTLBR" ) );
+                static const rtl::OUString  sDiagonalBLTR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalBLTR" ) );
+
+                // creating horz lines
+                sal_Int32 nYPos = ImplMapPoint( rXShape->getPosition() ).Y;
+                for( sal_Int32 nLine = 0; nLine < ( xRows->getCount() + 1 ); nLine++ )
+                {
+                    sal_Int32 nXPos = ImplMapPoint( rXShape->getPosition() ).X;
+                    std::vector< CellBorder > vCellBorders;
+                    for( sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); nColumn++ )
+                    {
+                        uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( nColumn ), uno::UNO_QUERY_THROW );
+                        awt::Size aS( 0, 0 );
+                        xPropSet->getPropertyValue( sWidth ) >>= aS.Width;
+                        awt::Size aM( ImplMapSize( aS ) );
+
+                        CellBorder aCellBorder;
+                        aCellBorder.mnPos = nXPos;
+                        aCellBorder.mnLength = aM.Width;
+                        if ( nLine < xRows->getCount() )
+                        {   // top border
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nLine ), uno::UNO_QUERY_THROW );
+                            uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xPropSet2->getPropertyValue( sTopBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                        }
+                        if ( nLine )
+                        {   // bottom border
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nLine - 1 ), uno::UNO_QUERY_THROW );
+                            uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xPropSet2->getPropertyValue( sBottomBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                        }
+                        vCellBorders.push_back( aCellBorder );
+                        nXPos += aM.Width;
+                    }
+                    std::vector< CellBorder >::const_iterator aCellBorderIter( vCellBorders.begin() );
+                    while( aCellBorderIter != vCellBorders.end() )
+                    {
+                        ImplCreateCellBorder( &*aCellBorderIter, aCellBorderIter->mnPos, nYPos,
+                            static_cast< sal_Int32 >( aCellBorderIter->mnPos + aCellBorderIter->mnLength ), nYPos );
+                        aCellBorderIter++;
+                    }
+                    if ( nLine < xRows->getCount() )
+                    {
+                        uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( nLine ), uno::UNO_QUERY_THROW );
+                        awt::Size aS( 0, 0 );
+                        xPropSet->getPropertyValue( sHeight ) >>= aS.Height;
+                        awt::Size aM( ImplMapSize( aS ) );
+                        nYPos += aM.Height;
+                    }
+                }
+
+                // creating vertical lines
+                sal_Int32 nXPos = ImplMapPoint( rXShape->getPosition() ).X;
+                for( sal_Int32 nLine = 0; nLine < ( xColumns->getCount() + 1 ); nLine++ )
+                {
+                    nYPos = ImplMapPoint( rXShape->getPosition() ).Y;
+                    std::vector< CellBorder > vCellBorders;
+                    for( sal_Int32 nRow = 0; nRow < xRows->getCount(); nRow++ )
+                    {
+                        uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( nRow ), uno::UNO_QUERY_THROW );
+                        awt::Size aS( 0, 0 );
+                        xPropSet->getPropertyValue( sHeight ) >>= aS.Height;
+                        awt::Size aM( ImplMapSize( aS ) );
+
+                        CellBorder aCellBorder;
+                        aCellBorder.mnPos = nYPos;
+                        aCellBorder.mnLength = aM.Height;
+                        if ( nLine < xColumns->getCount() )
+                        {   // left border
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nLine, nRow ), uno::UNO_QUERY_THROW );
+                            uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xCellSet->getPropertyValue( sLeftBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                        }
+                        if ( nLine )
+                        {   // right border
+                            uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nLine - 1, nRow ), uno::UNO_QUERY_THROW );
+                            uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
+                            table::BorderLine aBorderLine;
+                            if ( xCellSet->getPropertyValue( sRightBorder ) >>= aBorderLine )
+                                aCellBorder.maCellBorder = aBorderLine;
+                        }
+                        vCellBorders.push_back( aCellBorder );
+                        nYPos += aM.Height;
+                    }
+                    std::vector< CellBorder >::const_iterator aCellBorderIter( vCellBorders.begin() );
+                    while( aCellBorderIter != vCellBorders.end() )
+                    {
+                        ImplCreateCellBorder( &*aCellBorderIter, nXPos, aCellBorderIter->mnPos,
+                            nXPos, static_cast< sal_Int32 >( aCellBorderIter->mnPos + aCellBorderIter->mnLength ) );
+                        aCellBorderIter++;
+                    }
+                    if ( nLine < xColumns->getCount() )
+                    {
+                        uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( nLine ), uno::UNO_QUERY_THROW );
+                        awt::Size aS( 0, 0 );
+                        xPropSet->getPropertyValue( sWidth ) >>= aS.Width;
+                        awt::Size aM( ImplMapSize( aS ) );
+                        nXPos += aM.Width;
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+    mpPptEscherEx->CloseContainer();
+}
