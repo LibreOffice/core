@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:18:44 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 #define PSH         (&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
      Beschreibung: Interaktive Trennung
