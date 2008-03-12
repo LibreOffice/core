@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:22:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         }
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName,
-                            (SfxStyleFamily) SD_LT_FAMILY );
+        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SD_STYLE_FAMILY_MASTERPAGE );
         DBG_ASSERT(pStyleSheet, "StyleSheet nicht gefunden");
 
         if( pStyleSheet )
