@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:03:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _SWDOCSH_HXX
 #define _SWDOCSH_HXX
+
+#include <rtl/ref.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -84,7 +86,7 @@ class IDocumentChartDataProviderAccess;
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
     SwDoc*                  pDoc;           // Document
-    SfxStyleSheetBasePool*  pBasePool;      // Durchreiche fuer Formate
+    rtl::Reference< SfxStyleSheetBasePool > mxBasePool;     // Durchreiche fuer Formate
     FontList*               pFontList;      // aktuelle FontListe
 
     // Nix geht ohne die WrtShell (historische Gruende)
