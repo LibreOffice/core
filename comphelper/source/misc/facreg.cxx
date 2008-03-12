@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:14:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,11 +92,18 @@ extern uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService_getSupport
 extern OUString SAL_CALL SequenceOutputStreamService_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService_createInstance(const uno::Reference< uno::XComponentContext >& rxContext) throw( uno::Exception );
 
+namespace comphelper
+{
+// UNOMemoryStream
+extern uno::Sequence< OUString > SAL_CALL UNOMemoryStream_getSupportedServiceNames() throw();
+extern OUString SAL_CALL UNOMemoryStream_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL UNOMemoryStream_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
+}
+
 // PropertyBag
 extern uno::Sequence< OUString > SAL_CALL PropertyBag_getSupportedServiceNames() throw();
 extern OUString SAL_CALL PropertyBag_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL PropertyBag_createInstance(const uno::Reference< uno::XComponentContext >& rxContext) throw( uno::Exception );
-
 
 //
 static void writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
@@ -156,9 +163,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void *, void * pRegi
             writeInfo( pKey, SequenceInputStreamService_getImplementationName(), SequenceInputStreamService_getSupportedServiceNames() );
             // SequenceOutputStreamService
             writeInfo( pKey, SequenceOutputStreamService_getImplementationName(), SequenceOutputStreamService_getSupportedServiceNames() );
+            // UNOMemoryStream
+            writeInfo( pKey, comphelper::UNOMemoryStream_getImplementationName(), comphelper::UNOMemoryStream_getSupportedServiceNames() );
             // PropertyBag
             writeInfo( pKey, PropertyBag_getImplementationName(), PropertyBag_getSupportedServiceNames() );
-
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -217,6 +225,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
                 SequenceInputStreamService_createInstance,
                 SequenceInputStreamService_getImplementationName(),
                 SequenceInputStreamService_getSupportedServiceNames() );
+        }
+        else if( comphelper::UNOMemoryStream_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xComponentFactory = ::cppu::createSingleComponentFactory(
+                comphelper::UNOMemoryStream_createInstance,
+                comphelper::UNOMemoryStream_getImplementationName(),
+                comphelper::UNOMemoryStream_getSupportedServiceNames() );
         }
         else if ( SequenceOutputStreamService_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
