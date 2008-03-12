@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:57:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,3 +275,12 @@
 
 #define HID_SD_RULER_HORIZONTAL                             (HID_SD_START + 191)
 #define HID_SD_RULER_VERTICAL                               (HID_SD_START + 192)
+
+#define HID_SD_CELL_STYLE_DEFAULT                           (HID_SD_START + 193)
+#define HID_SD_CELL_STYLE_BANDED                            (HID_SD_START + 194)
+#define HID_SD_CELL_STYLE_HEADER                            (HID_SD_START + 195)
+#define HID_SD_CELL_STYLE_TOTAL                             (HID_SD_START + 196)
+#define HID_SD_CELL_STYLE_FIRST_COLUMN                      (HID_SD_START + 197)
+#define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 198)
+
+#define HID_SD_TABLE_DESIGN                                 (HID_SD_START + 199)
