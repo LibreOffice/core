@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlinerIterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:51:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef SD_OUTLINER_ITERATOR_HXX
 #define SD_OUTLINER_ITERATOR_HXX
 
+#include <svx/svdobj.hxx>
+
 #include "pres.hxx"
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
@@ -43,7 +45,6 @@
 #include <vector>
 
 class SdDrawDocument;
-class SdrObject;
 
 namespace sd {
 
@@ -271,7 +272,7 @@ private:
             This specifies at which object the iterator points initially.
     */
     Iterator CreateSelectionIterator (
-        const ::std::vector<SdrObject*>& rObjectList,
+        const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
         DrawViewShell* pViewShell,
         bool bDirectionIsForward=true,
@@ -365,8 +366,8 @@ public:
     IteratorPosition (const IteratorPosition& aPosition);
     /** Create a new object and set its data members to the given values.
     */
-    IteratorPosition (SdrObject* pObject, sal_Int32 nPageIndex,// SdView* pView,
-        PageKind ePageKind, EditMode eEditMode);
+    IteratorPosition (SdrObject* pObject, sal_Int32 nText, sal_Int32 nPageIndex, PageKind ePageKind, EditMode eEditMode);
+
     /// The destructor is a no-op at the moment.
     ~IteratorPosition (void);
     /** Assign the content of the given position to this one.
@@ -385,7 +386,11 @@ public:
     bool operator== (const IteratorPosition& aPosition) const;
 
     /// Pointer to the actual <type>SdrObject</type> object.
-    SdrObject* mpObject;
+    SdrObjectWeakRef mxObject;
+
+    /// Number of the actual SdrText from the current <type>SdrObject</type>
+    sal_Int32 mnText;
+
     /// The index of a page where the object is located on.
     sal_Int32 mnPageIndex;
     /// Page kind of the view.
