@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvxShapeTypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:37:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,9 @@ enum SvxShapeTypes
     DRAWING_3D_SPHERE,
     DRAWING_3D_LATHE,
     DRAWING_3D_EXTRUDE,
-    DRAWING_CUSTOM, /* = 29 */
-    DRAWING_END = DRAWING_CUSTOM
+    DRAWING_CUSTOM,
+    DRAWING_TABLE, /* = 30 */
+    DRAWING_END = DRAWING_TABLE
 };
 
 /** List of shape type descriptors corresponding to the
