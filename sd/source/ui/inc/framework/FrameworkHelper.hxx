@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameworkHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:26:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@ public:
     static const ::rtl::OUString msTaskPanelURLPrefix;
     static const ::rtl::OUString msMasterPagesTaskPanelURL;
     static const ::rtl::OUString msLayoutTaskPanelURL;
+    static const ::rtl::OUString msTableDesignPanelURL;
     static const ::rtl::OUString msCustomAnimationTaskPanelURL;
     static const ::rtl::OUString msSlideTransitionTaskPanelURL;
 
