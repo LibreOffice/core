@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:15:15 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:49:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ SLOFILES =      							\
     $(SLO)$/RecentMasterPagesSelector.obj	\
     $(SLO)$/CustomAnimationPanel.obj		\
     $(SLO)$/SlideTransitionPanel.obj		\
+    $(SLO)$/TableDesignPanel.obj			\
     $(SLO)$/AnimationSchemesPanel.obj
 
 
