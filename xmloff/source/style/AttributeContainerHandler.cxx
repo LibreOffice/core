@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AttributeContainerHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:44:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,9 @@
 
 #include "AttributeContainerHandler.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
