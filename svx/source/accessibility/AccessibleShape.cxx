@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:38:53 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@
 #include <svx/svdview.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -205,7 +205,7 @@ void AccessibleShape::Init (void)
                 else
                 {
                     // non-empty text -> use full-fledged edit source right away
-                    ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, *pView, *pWindow) );
+                    ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, 0, *pView, *pWindow) );
                     mpText = new AccessibleTextHelper( pEditSource );
                 }
 
