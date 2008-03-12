@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abstdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:26:07 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ class Link;
 class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
-    virtual USHORT          Execute() = 0;
+    virtual short           Execute() = 0;
     //virtual void          Show( BOOL bVisible = TRUE, USHORT nFlags = 0 ) = 0;
     virtual                 ~VclAbstractDialog();
 };
