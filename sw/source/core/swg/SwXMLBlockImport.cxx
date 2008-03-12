@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:09:31 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
