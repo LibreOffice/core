@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:49:27 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         {
             case FUNIT_M:
             case FUNIT_KM:
+            case FUNIT_CM:
                 eFUnit = FUNIT_MM;
                 break;
             default: ; //prevent warning
@@ -404,7 +405,12 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     // connections
 
-    AddItemConnection( svx::CreateShadowConnection( rCoreAttrs, aWndShadows, aEdShadowSize, aLbShadowColor ) );
+    bool bSupportsShadow = !SfxItemPool::IsSlot( GetWhich( SID_ATTR_BORDER_SHADOW ) );
+    if( bSupportsShadow )
+        AddItemConnection( svx::CreateShadowConnection( rCoreAttrs, aWndShadows, aEdShadowSize, aLbShadowColor ) );
+    else
+        HideShadowControls();
+
     if( mbUseMarginItem )
         AddItemConnection( svx::CreateMarginConnection( rCoreAttrs, aLeftMF, aRightMF, aTopMF, aBottomMF ) );
     if( aFrameSel.IsBorderEnabled( svx::FRAMEBORDER_TLBR ) )
