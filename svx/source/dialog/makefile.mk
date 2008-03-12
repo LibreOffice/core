@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 09:38:12 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,14 @@ SLOFILES+=\
     $(SLO)$/optchart.obj \
     $(SLO)$/optinet2.obj    \
     $(SLO)$/securityoptions.obj \
-    $(SLO)$/webconninfo.obj
+    $(SLO)$/webconninfo.obj \
+    $(SLO)$/optgdlg.obj \
+    $(SLO)$/optdict.obj \
+    $(SLO)$/optaccessibility.obj    \
+    $(SLO)$/optsave.obj \
+    $(SLO)$/optasian.obj \
+    $(SLO)$/optpath.obj    \
+    $(SLO)$/optjava.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
