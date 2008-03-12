@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:09:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,7 @@ BOOL SfxObjectShell::Remove
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
         if (pMySheet)
         {
-            pMyPool->Erase(pMySheet);
+            pMyPool->Remove(pMySheet);
             bRet = TRUE;
         }
 
