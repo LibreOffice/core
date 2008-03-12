@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:07:30 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,9 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
