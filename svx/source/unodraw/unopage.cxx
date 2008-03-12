@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,7 +694,15 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
 {
     sal_uInt32 nTempType = aSdrShapeIdentifierMap.getId( aName );
 
-    if(nTempType & E3D_INVENTOR_FLAG)
+    if( nTempType == UHASHMAP_NOTFOUND )
+    {
+        if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape")) )
+        {
+            rInventor = SdrInventor;
+            rType = OBJ_TABLE;
+        }
+    }
+    else if(nTempType & E3D_INVENTOR_FLAG)
     {
         rInventor = E3dInventor;
         rType = (sal_uInt16)(nTempType & ~E3D_INVENTOR_FLAG);
@@ -887,6 +895,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     break;
                 case OBJ_MEDIA:
                     pRet = new SvxMediaShape( pObj );
+                    break;
+                case OBJ_TABLE:
+                    pRet = new SvxTableShape( pObj );
                     break;
                 default: // unbekanntes 2D-Objekt auf der Page
                     DBG_ERROR("Nicht implementierter Starone-Shape erzeugt! [CL]");
