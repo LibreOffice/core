@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 19:22:27 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SV_VIRDEV_HXX
-#include <vcl/virdev.hxx>
-#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -80,15 +77,14 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#include <sot/storage.hxx>
 #include <comphelper/extract.hxx>
 
 #include <toolkit/unohlp.hxx>
-#include <sot/exchange.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <vcl/gfxlink.hxx>
+#include <vcl/virdev.hxx>
 
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
@@ -97,49 +93,48 @@
 #include <sfx2/viewsh.hxx>
 #endif
 #ifndef _SVDOPAGE_HXX
-#include <svx/svdopage.hxx>
+#include "svx/svdopage.hxx"
 #endif
 #ifndef _SVX_XFLBSTIT_HXX
-#include <svx/xflbstit.hxx>
+#include "svx/xflbstit.hxx"
 #endif
 #ifndef _SVX_XFLBMTIT_HXX
-#include <svx/xflbmtit.hxx>
+#include "svx/xflbmtit.hxx"
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include <svx/xlnstit.hxx>
+#include "svx/xlnstit.hxx"
 #endif
 #ifndef _SVX_XLNEDIT_HXX
-#include <svx/xlnedit.hxx>
+#include "svx/xlnedit.hxx"
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svx/svdogrp.hxx>
+#include "svx/svdogrp.hxx"
 #endif
 #ifndef _E3D_SCENE3D_HXX
-#include <svx/scene3d.hxx>
+#include "svx/scene3d.hxx"
 #endif
-#include <svx/svdmodel.hxx>
+#include "svx/svdmodel.hxx"
 #include "globl3d.hxx"
-#include <svx/fmglob.hxx>
-#include <svx/unopage.hxx>
-#include <svx/view3d.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/svxids.hrc>
-#include <svx/unoshtxt.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/unoshprp.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/sxciaitm.hxx> // todo: remove
-#include <svx/svdograf.hxx>
+#include "svx/fmglob.hxx"
+#include "svx/unopage.hxx"
+#include "svx/view3d.hxx"
+#include "svx/unoshape.hxx"
+#include "svx/svxids.hrc"
+#include "svx/unoshtxt.hxx"
+#include "svx/svdpage.hxx"
+#include "svx/unoshprp.hxx"
+#include "svx/sxciaitm.hxx" // todo: remove
+#include "svx/svdograf.hxx"
 #include "unoapi.hxx"
-#include <svx/svdomeas.hxx>
-#include <svx/svdpagv.hxx>
+#include "svx/svdomeas.hxx"
+#include "svx/svdpagv.hxx"
 
 #include <tools/shl.hxx>    //
-#include <svx/dialmgr.hxx>      // not nice, we need our own resources some day
-#include <svx/dialogs.hrc>      //
+#include "svx/dialmgr.hxx"      // not nice, we need our own resources some day
+#include "svx/dialogs.hrc"      //
 
 #ifndef _SVDCAPT_HXX
-#include <svx/svdocapt.hxx>
+#include "svx/svdocapt.hxx"
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
@@ -147,35 +142,35 @@
 #endif
 
 #ifndef _SVX_XFLFTRIT_HXX
-#include <svx/xflftrit.hxx>
+#include "svx/xflftrit.hxx"
 #endif
 
 #ifndef _XTABLE_HXX
-#include <svx/xtable.hxx>
+#include "svx/xtable.hxx"
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include <svx/xbtmpit.hxx>
+#include "svx/xbtmpit.hxx"
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX
-#include <svx/xflgrit.hxx>
+#include "svx/xflgrit.hxx"
 #endif
 
 #ifndef _SVX_XFLHTIT_HXX
-#include <svx/xflhtit.hxx>
+#include "svx/xflhtit.hxx"
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX
-#include <svx/xlnedit.hxx>
+#include "svx/xlnedit.hxx"
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX
-#include <svx/xlnstit.hxx>
+#include "svx/xlnstit.hxx"
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include <svx/xlndsit.hxx>
+#include "svx/xlndsit.hxx"
 #endif
 
 #ifndef _SVDGLOB_HXX
@@ -196,10 +191,10 @@
 
 // #i68523#
 #ifndef _E3D_LATHE3D_HXX
-#include <svx/lathe3d.hxx>
+#include "svx/lathe3d.hxx"
 #endif
 #ifndef _E3D_EXTRUD3D_HXX
-#include <svx/extrud3d.hxx>
+#include "svx/extrud3d.hxx"
 #endif
 
 #include <comphelper/scopeguard.hxx>
@@ -270,7 +265,7 @@ struct SvxShapeImpl
     SfxItemSet*     mpItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
-    bool            mbHasSdrObjectOwnerhship;
+    bool            mbHasSdrObjectOwnership;
 
     /** CL, OD 2005-07-19 #i52126# - this is initially 0 and set when
      *  a SvxShape::Create() call is executed. It is then set to the created
@@ -280,7 +275,6 @@ struct SvxShapeImpl
     SdrObject*      mpCreatedObj;
 };
 
-//UNO3_GETIMPLEMENTATION_IMPL( SvxShape );
 DBG_NAME(SvxShape)
 
 SvxShape::SvxShape( SdrObject* pObject ) throw()
@@ -340,12 +334,12 @@ SvxShape::~SvxShape() throw()
     if( mpModel )
         EndListening( *mpModel );
 
-    if (mpImpl && mpImpl->mpMaster )
+    if(mpImpl && mpImpl->mpMaster)
         mpImpl->mpMaster->dispose();
 
     if( HasSdrObjectOwnership() && mpObj.is() )
     {
-        mpImpl->mbHasSdrObjectOwnerhship = false;
+        mpImpl->mbHasSdrObjectOwnership = false;
         SdrObject* pObject = mpObj.get();
         SdrObject::Free( pObject );
     }
@@ -360,7 +354,7 @@ SvxShape::~SvxShape() throw()
 void SvxShape::TakeSdrObjectOwnership()
 {
     if ( mpImpl )
-        mpImpl->mbHasSdrObjectOwnerhship = true;
+        mpImpl->mbHasSdrObjectOwnership = true;
 }
 
 //----------------------------------------------------------------------
@@ -371,7 +365,7 @@ bool SvxShape::HasSdrObjectOwnership() const
     if ( !mpImpl )
         return false;
 
-    if ( !mpImpl->mbHasSdrObjectOwnerhship )
+    if ( !mpImpl->mbHasSdrObjectOwnership )
         return false;
 
     OSL_ENSURE( mpObj.is(), "SvxShape::HasSdrObjectOwnership: have the ownership of an object which I don't know!" );
@@ -478,7 +472,7 @@ void SvxShape::Init() throw()
         mpImpl->mpItemSet = NULL;
         mpImpl->mpMaster = NULL;
         mpImpl->mnObjId = 0;
-        mpImpl->mbHasSdrObjectOwnerhship = false;
+        mpImpl->mbHasSdrObjectOwnership= false;
         // --> CL, OD 2005-07-19 #i52126#
         mpImpl->mpCreatedObj = NULL;
         // <--
@@ -964,6 +958,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case OBJ_GRAF:
     case OBJ_TEXT:
     case OBJ_CAPTION:
+    case OBJ_TABLE:
     case OBJ_CUSTOMSHAPE:
     default:
         {
@@ -1036,7 +1031,6 @@ Reference< uno::XInterface > SvxShape_NewInstance()
     return uno::Reference< uno::XInterface >(static_cast< OWeakObject* >( new SvxShape() ) );
 }
 
-
 //----------------------------------------------------------------------
 
 /** called from SdrObject::SendUserCall
@@ -1063,6 +1057,7 @@ void SvxShape::onUserCall(SdrUserCallType eUserCall, const Rectangle& )
 //----------------------------------------------------------------------
 // SfxListener
 //----------------------------------------------------------------------
+
 void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -1345,19 +1340,19 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
     aEvt.Source = *(OWeakAggObject*) this;
     maDisposeListeners.disposeAndClear(aEvt);
 
-    if ( mpObj.is() && mpObj->IsInserted() && mpObj->GetPage() )
+    if(mpObj.is() && mpObj->IsInserted() && mpObj->GetPage() )
     {
         SdrPage* pPage = mpObj->GetPage();
         // SdrObject aus der Page loeschen
         sal_uInt32 nCount = pPage->GetObjCount();
         for( sal_uInt32 nNum = 0; nNum < nCount; nNum++ )
         {
-            if ( pPage->GetObj( nNum ) == mpObj.get() )
+            if(pPage->GetObj(nNum) == mpObj.get())
             {
                 OSL_VERIFY( pPage->RemoveObject(nNum) == mpObj.get() );
                 // in case we have the ownership of the SdrObject, a Free
                 // would do nothing. So ensure the ownership is reset.
-                mpImpl->mbHasSdrObjectOwnerhship = false;
+                mpImpl->mbHasSdrObjectOwnership = false;
                 SdrObject* pObject = mpObj.get();
                 SdrObject::Free( pObject );
                 break;
@@ -1852,466 +1847,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         mpModel->SetChanged();
 
-        switch( pMap->nWID )
-        {
-        case OWN_ATTR_CAPTION_POINT:
-        {
-            awt::Point aPnt;
-            if( rVal >>= aPnt )
-            {
-                Point aVclPoint( aPnt.X, aPnt.Y );
-
-                // #90763# position is relative to top left, make it absolute
-                basegfx::B2DPolyPolygon aNewPolyPolygon;
-                basegfx::B2DHomMatrix aNewHomogenMatrix;
-                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-
-                aVclPoint.X() += FRound(aNewHomogenMatrix.get(0, 2));
-                aVclPoint.Y() += FRound(aNewHomogenMatrix.get(1, 2));
-
-                // #88657# metric of pool maybe twips (writer)
-                ForceMetricToItemPoolMetric(aVclPoint);
-
-                // #88491# position relative to anchor
-                if( mpModel->IsWriter() )
-                {
-                    aVclPoint += mpObj->GetAnchorPos();
-                }
-
-                ((SdrCaptionObj*)mpObj.get())->SetTailPos(aVclPoint);
-
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_TRANSFORMATION:
-        {
-            drawing::HomogenMatrix3 aMatrix;
-            if(rVal >>= aMatrix)
-            {
-                basegfx::B2DPolyPolygon aNewPolyPolygon;
-                basegfx::B2DHomMatrix aNewHomogenMatrix;
-
-                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-
-                aNewHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
-                aNewHomogenMatrix.set(0, 1, aMatrix.Line1.Column2);
-                aNewHomogenMatrix.set(0, 2, aMatrix.Line1.Column3);
-                aNewHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
-                aNewHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
-                aNewHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
-                aNewHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
-                aNewHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
-                aNewHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
-
-                mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                return;
-            }
-            break;
-        }
-
-        case OWN_ATTR_ZORDER:
-        {
-            sal_Int32 nNewOrdNum = 0;
-            if(rVal >>= nNewOrdNum)
-            {
-                SdrObjList* pObjList = mpObj->GetObjList();
-                if( pObjList )
-                {
-#ifdef DBG_UTIL
-                    SdrObject* pCheck =
-#endif
-                                pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (ULONG)nNewOrdNum );
-                    DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
-                    return;
-                }
-            }
-            break;
-        }
-        case OWN_ATTR_FRAMERECT:
-        {
-            awt::Rectangle aUnoRect;
-            if(rVal >>= aUnoRect)
-            {
-                Point aTopLeft( aUnoRect.X, aUnoRect.Y );
-                Size aObjSize( aUnoRect.Width, aUnoRect.Height );
-                ForceMetricToItemPoolMetric(aTopLeft);
-                ForceMetricToItemPoolMetric(aObjSize);
-                Rectangle aRect;
-                aRect.SetPos(aTopLeft);
-                aRect.SetSize(aObjSize);
-                mpObj->SetSnapRect(aRect);
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_MIRRORED:
-        {
-            sal_Bool bMirror = sal_Bool();
-            if(rVal >>= bMirror )
-            {
-                if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
-                {
-                    ((SdrGrafObj*)mpObj.get())->SetMirrored(bMirror);
-                    return;
-                }
-            }
-            break;
-        }
-        case OWN_ATTR_CLSID:
-        {
-            OUString aCLSID;
-            if( rVal >>= aCLSID )
-            {
-                // init an ole object with a global name
-                if( mpObj.is() && mpObj->ISA(SdrOle2Obj))
-                {
-                    uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)mpObj.get())->GetObjRef();
-                    if ( !xObj.is() )
-                    {
-                        SvGlobalName aClassName;
-                        if( aClassName.MakeId( aCLSID ) )
-                        {
-                            ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
-                            ::rtl::OUString aPersistName;
-                            Any aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
-                            aAny >>= aPersistName;
-
-                            //TODO/LATER: how to cope with creation failure?!
-                            xObj = pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
-                            if( xObj.is() )
-                            {
-                                aAny <<= aPersistName;
-                                setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
-                                static_cast< SdrOle2Obj* >( mpObj.get() )->SetObjRef( xObj );
-
-                                Rectangle aRect = static_cast< SdrOle2Obj* >( mpObj.get() )->GetLogicRect();
-                                awt::Size aSz;
-                                Size aSize( static_cast< SdrOle2Obj* >( mpObj.get() )->GetLogicRect().GetSize() );
-                                aSz.Width = aSize.Width();
-                                aSz.Height = aSize.Height();
-                                xObj->setVisualAreaSize( static_cast< SdrOle2Obj* >( mpObj.get() )->GetAspect(), aSz );
-                            }
-                        }
-                    }
-                }
-            }
-            break;
-        }
-        case OWN_ATTR_EDGE_START_OBJ:
-        case OWN_ATTR_EDGE_END_OBJ:
-        case OWN_ATTR_GLUEID_HEAD:
-        case OWN_ATTR_GLUEID_TAIL:
-        case OWN_ATTR_EDGE_START_POS:
-        case OWN_ATTR_EDGE_END_POS:
-        {
-            SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >(mpObj.get());
-            if(pEdgeObj)
-            {
-                switch(pMap->nWID)
-                {
-                case OWN_ATTR_EDGE_START_OBJ:
-                case OWN_ATTR_EDGE_END_OBJ:
-                    {
-                        Reference< drawing::XShape > xShape;
-                        if( rVal >>= xShape )
-                        {
-                            SdrObject* pNode = GetSdrObjectFromXShape( xShape );
-                            if( pNode )
-                            {
-                                pEdgeObj->ConnectToNode( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
-                                pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, -1 );
-                                return;
-                            }
-                        }
-                        break;
-                    }
-
-                case OWN_ATTR_EDGE_START_POS:
-                case OWN_ATTR_EDGE_END_POS:
-                    {
-                        awt::Point aUnoPoint;
-                        if( rVal >>= aUnoPoint )
-                        {
-                            Point aPoint( aUnoPoint.X, aUnoPoint.Y );
-                            if( mpModel->IsWriter() )
-                                aPoint += mpObj->GetAnchorPos();
-
-                            ForceMetricToItemPoolMetric( aPoint );
-                            pEdgeObj->SetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
-                            return;
-                        }
-                        break;
-                    }
-
-                case OWN_ATTR_GLUEID_HEAD:
-                case OWN_ATTR_GLUEID_TAIL:
-                    {
-                        sal_Int32 nId = 0;
-                        if( rVal >>= nId )
-                        {
-                            pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD, nId );
-                            return;
-                        }
-                    }
-                }
-            }
-            break;
-        }
-        case OWN_ATTR_MEASURE_START_POS:
-        case OWN_ATTR_MEASURE_END_POS:
-        {
-            SdrMeasureObj* pMeasureObj = dynamic_cast< SdrMeasureObj* >(mpObj.get());
-            awt::Point aUnoPoint;
-            if(pMeasureObj && ( rVal >>= aUnoPoint ) )
-            {
-                Point aPoint( aUnoPoint.X, aUnoPoint.Y );
-
-                if( mpModel->IsWriter() )
-                    aPoint += mpObj->GetAnchorPos();
-
-                pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0L : 1L );
-                pMeasureObj->SetChanged();
-                pMeasureObj->BroadcastObjectChange();
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_FILLBMP_MODE:
-            do
-            {
-                drawing::BitmapMode eMode;
-                if(!(rVal >>= eMode) )
-                {
-                    sal_Int32 nMode = 0;
-                    if(!(rVal >>= nMode))
-                        break;
-
-                    eMode = (drawing::BitmapMode)nMode;
-                }
-                mpObj->SetMergedItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
-                mpObj->SetMergedItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
-                return;
-            }
-            while(0);
-            break;
-
-        case SDRATTR_LAYERID:
-        {
-            sal_Int16 nLayerId = sal_Int16();
-            if( rVal >>= nLayerId )
-            {
-                SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
-                if( pLayer )
-                {
-                    mpObj->SetLayer((unsigned char)nLayerId);
-                    return;
-                }
-            }
-            break;
-        }
-
-        case SDRATTR_LAYERNAME:
-        {
-            OUString aLayerName;
-            if( rVal >>= aLayerName )
-            {
-                const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, TRUE);
-                if( pLayer != NULL )
-                {
-                    mpObj->SetLayer( pLayer->GetID() );
-                    return;
-                }
-            }
-            break;
-        }
-        case SDRATTR_ROTATEANGLE:
-        {
-            sal_Int32 nAngle = 0;
-            if( rVal >>= nAngle )
-            {
-                Point aRef1(mpObj->GetSnapRect().Center());
-                nAngle -= mpObj->GetRotateAngle();
-                if (nAngle!=0)
-                {
-                    double nSin=sin(nAngle*nPi180);
-                    double nCos=cos(nAngle*nPi180);
-                    mpObj->Rotate(aRef1,nAngle,nSin,nCos);
-                }
-                return;
-            }
-
-            break;
-        }
-
-        case SDRATTR_SHEARANGLE:
-        {
-            sal_Int32 nShear = 0;
-            if( rVal >>= nShear )
-            {
-                nShear -= mpObj->GetShearAngle();
-                if(nShear != 0 )
-                {
-                    Point aRef1(mpObj->GetSnapRect().Center());
-                    double nTan=tan(nShear*nPi180);
-                    mpObj->Shear(aRef1,nShear,nTan,FALSE);
-                    return;
-                }
-            }
-
-            break;
-        }
-
-        case SDRATTR_OBJMOVEPROTECT:
-        {
-            sal_Bool bMoveProtect = sal_Bool();
-            if( rVal >>= bMoveProtect )
-            {
-                mpObj->SetMoveProtect(bMoveProtect);
-                return;
-            }
-            break;
-        }
-        case SDRATTR_OBJECTNAME:
-        {
-            OUString aName;
-            if( rVal >>= aName )
-            {
-                mpObj->SetName( aName );
-                return;
-            }
-            break;
-        }
-
-        // #i68101#
-        case OWN_ATTR_MISC_OBJ_TITLE:
-        {
-            OUString aTitle;
-            if( rVal >>= aTitle )
-            {
-                mpObj->SetTitle( aTitle );
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_MISC_OBJ_DESCRIPTION:
-        {
-            OUString aDescription;
-            if( rVal >>= aDescription )
-            {
-                mpObj->SetDescription( aDescription );
-                return;
-            }
-            break;
-        }
-
-        case SDRATTR_OBJPRINTABLE:
-        {
-            sal_Bool bPrintable = sal_Bool();
-            if( rVal >>= bPrintable )
-            {
-                mpObj->SetPrintable(bPrintable);
-                return;
-            }
-            break;
-        }
-        case SDRATTR_OBJSIZEPROTECT:
-        {
-            sal_Bool bResizeProtect = sal_Bool();
-            if( rVal >>= bResizeProtect )
-            {
-                mpObj->SetResizeProtect(bResizeProtect);
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_PAGE_NUMBER:
-        {
-            sal_Int32 nPageNum = 0;
-            if( (rVal >>= nPageNum) && ( nPageNum >= 0 ) && ( nPageNum <= 0xffff ) )
-            {
-                SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(mpObj.get());
-                if( pPageObj )
-                {
-                    SdrModel* pModel = pPageObj->GetModel();
-                    SdrPage* pNewPage = 0L;
-                    const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1L) - 1L));
-
-                    if(pModel)
-                    {
-                        if(nDestinationPageNum < pModel->GetPageCount())
-                        {
-                            pNewPage = pModel->GetPage(nDestinationPageNum);
-                        }
-                    }
-
-                    pPageObj->SetReferencedPage(pNewPage);
-                }
-
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_OLE_VISAREA:
-        {
-            // TODO/LATER: seems to make no sence for iconified object
-
-            awt::Rectangle aVisArea;
-            if( (rVal >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
-            {
-                Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
-                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)mpObj.get())->GetObjRef();
-                if( xObj.is() )
-                {
-                    try
-                    {
-                        MapUnit aMapUnit( MAP_100TH_MM ); // the API handles with MAP_100TH_MM map mode
-                        MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
-                        aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
-                           xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
-                    }
-                    catch( uno::Exception& )
-                    {
-                        OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
-                    }
-                }
-
-                return;
-            }
-            break;
-        }
-        case OWN_ATTR_OLE_ASPECT:
-        {
-            sal_Int64 nAspect = 0;
-            if( (rVal >>= nAspect) && mpObj->ISA(SdrOle2Obj))
-            {
-                ((SdrOle2Obj*)mpObj.get())->SetAspect( nAspect );
-                return;
-            }
-            break;
-        }
-        case XATTR_FILLBITMAP:
-        case XATTR_FILLGRADIENT:
-        case XATTR_FILLHATCH:
-        case XATTR_FILLFLOATTRANSPARENCE:
-        case XATTR_LINEEND:
-        case XATTR_LINESTART:
-        case XATTR_LINEDASH:
-        {
-            if( pMap->nMemberId == MID_NAME )
-            {
-                OUString aApiName;
-                if( rVal >>= aApiName )
-                {
-                    if( SetFillAttribute( pMap->nWID, aApiName ) )
-                        return;
-                }
-                break;
-            }
-
-            // warning, this fall-through is intended
-        }
-        default:
+        if(!setPropertyValueImpl( pMap, rVal ) )
         {
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
@@ -2323,29 +1859,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 sal_Int32 nCornerRadius = 0;
                 if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
                     throw IllegalArgumentException();
-            }
-
-            // HACK-fix #99090#
-            // since SdrTextObj::SetVerticalWriting exchanges
-            // SDRATTR_TEXT_AUTOGROWWIDTH and SDRATTR_TEXT_AUTOGROWHEIGHT,
-            // we have to set the textdirection here
-
-            if( pMap->nWID == SDRATTR_TEXTDIRECTION && mpObj->ISA(SdrTextObj))
-            {
-                com::sun::star::text::WritingMode eMode;
-                rVal >>= eMode;
-                bool bVertical = eMode == com::sun::star::text::WritingMode_TB_RL;
-                OutlinerParaObject* pOPO = mpObj->GetOutlinerParaObject();
-                if( bVertical || pOPO )
-                {
-                    if( NULL == pOPO )
-                    {
-                        ((SdrTextObj*)mpObj.get())->ForceOutlinerParaObject();
-                        pOPO = mpObj->GetOutlinerParaObject();
-                    }
-
-                    pOPO->SetVertical(bVertical);
-                }
             }
 
             SfxItemSet* pSet;
@@ -2412,9 +1925,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             }
             return;
         }
-        }
-
-        throw lang::IllegalArgumentException();
     }
     else
     {
@@ -2431,47 +1941,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 //        if they may be not supported after creation
             maPropSet.setPropertyValue( pMap, rVal );
     }
-}
-
-//----------------------------------------------------------------------
-
-const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
-{
-    DBG_TESTSOLARMUTEX();
-    SvGlobalName aClassName;
-    SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-
-    if( pOle2Obj )
-    {
-        rHexCLSID = rtl::OUString();
-
-        if( pOle2Obj->IsEmpty() )
-        {
-            ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
-            if( pPersist )
-            {
-                uno::Reference < embed::XEmbeddedObject > xObj =
-                        pPersist->getEmbeddedObjectContainer().GetEmbeddedObject( pOle2Obj->GetPersistName() );
-                if ( xObj.is() )
-                {
-                    aClassName = SvGlobalName( xObj->getClassID() );
-                    rHexCLSID = aClassName.GetHexName();
-                }
-            }
-        }
-
-        if (!rHexCLSID.getLength())
-        {
-            uno::Reference < embed::XEmbeddedObject > xObj( pOle2Obj->GetObjRef() );
-            if ( xObj.is() )
-            {
-                aClassName = SvGlobalName( xObj->getClassID() );
-                rHexCLSID = aClassName.GetHexName();
-            }
-        }
-    }
-
-    return aClassName;
 }
 
 //----------------------------------------------------------------------
@@ -2500,478 +1969,35 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
         if(pMap == NULL )
             throw beans::UnknownPropertyException();
 
-        switch( pMap->nWID )
+        if( !getPropertyValueImpl( pMap, aAny ) )
         {
-            case OWN_ATTR_HASLEVELS:
-            {
-                aAny <<= SvxTextEditSource::hasLevels( mpObj.get() );
-                break;
-            }
-            case OWN_ATTR_CAPTION_POINT:
-            {
-                Point aVclPoint = ((SdrCaptionObj*)mpObj.get())->GetTailPos();
+            DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
+            DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-                // #88491# make pos relative to anchor
-                if( mpModel->IsWriter() )
+            SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
+            aSet.Put(mpObj->GetMergedItem(pMap->nWID));
+
+            if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
+                return aAny;
+
+            if(!aSet.Count())
+            {
+                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
                 {
-                    aVclPoint -= mpObj->GetAnchorPos();
+                    // Not-Persistant Attribute, hole diese extra
+                    mpObj->TakeNotPersistAttr(aSet, sal_False);
                 }
-
-                // #88657# metric of pool maybe twips (writer)
-                ForceMetricTo100th_mm(aVclPoint);
-
-                // #90763# pos is absolute, make it relative to top left
-                basegfx::B2DPolyPolygon aNewPolyPolygon;
-                basegfx::B2DHomMatrix aNewHomogenMatrix;
-                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-
-                aVclPoint.X() -= FRound(aNewHomogenMatrix.get(0, 2));
-                aVclPoint.Y() -= FRound(aNewHomogenMatrix.get(1, 2));
-
-                awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
-                aAny <<= aPnt;
-                break;
             }
-            case OWN_ATTR_INTERNAL_OLE:
+
+            if(!aSet.Count())
             {
-                rtl::OUString sCLSID;
-                sal_Bool bInternal = SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
-                aAny <<= bInternal;
-                break;
-            }
-            case OWN_ATTR_TRANSFORMATION:
-            {
-                basegfx::B2DPolyPolygon aNewPolyPolygon;
-                basegfx::B2DHomMatrix aNewHomogenMatrix;
-                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                drawing::HomogenMatrix3 aMatrix;
-
-                aMatrix.Line1.Column1 = aNewHomogenMatrix.get(0, 0);
-                aMatrix.Line1.Column2 = aNewHomogenMatrix.get(0, 1);
-                aMatrix.Line1.Column3 = aNewHomogenMatrix.get(0, 2);
-                aMatrix.Line2.Column1 = aNewHomogenMatrix.get(1, 0);
-                aMatrix.Line2.Column2 = aNewHomogenMatrix.get(1, 1);
-                aMatrix.Line2.Column3 = aNewHomogenMatrix.get(1, 2);
-                aMatrix.Line3.Column1 = aNewHomogenMatrix.get(2, 0);
-                aMatrix.Line3.Column2 = aNewHomogenMatrix.get(2, 1);
-                aMatrix.Line3.Column3 = aNewHomogenMatrix.get(2, 2);
-
-                aAny <<= aMatrix;
-
-                break;
-            }
-            case OWN_ATTR_ZORDER:
-            {
-                aAny <<= (sal_Int32)mpObj->GetOrdNum();
-                break;
-            }
-            case OWN_ATTR_BITMAP:
-            {
-                aAny = GetBitmap();
-                if(!aAny.hasValue())
-                    throw uno::RuntimeException();
-
-                break;
-            }
-            case OWN_ATTR_ISFONTWORK:
-            {
-                aAny <<= (sal_Bool)(mpObj->ISA(SdrTextObj) && ((SdrTextObj*)mpObj.get())->IsFontwork());
-                break;
-            }
-            case OWN_ATTR_FRAMERECT:
-            {
-                Rectangle aRect( mpObj->GetSnapRect() );
-                Point aTopLeft( aRect.TopLeft() );
-                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-                ForceMetricTo100th_mm(aTopLeft);
-                ForceMetricTo100th_mm(aObjSize);
-                ::com::sun::star::awt::Rectangle aUnoRect(
-                    aTopLeft.X(), aTopLeft.Y(),
-                    aObjSize.getWidth(), aObjSize.getHeight() );
-                aAny <<= aUnoRect;
-                break;
-            }
-            case OWN_ATTR_BOUNDRECT:
-            {
-                Rectangle aRect( mpObj->GetCurrentBoundRect() );
-                Point aTopLeft( aRect.TopLeft() );
-                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-                ForceMetricTo100th_mm(aTopLeft);
-                ForceMetricTo100th_mm(aObjSize);
-                ::com::sun::star::awt::Rectangle aUnoRect(
-                    aTopLeft.X(), aTopLeft.Y(),
-                    aObjSize.getWidth(), aObjSize.getHeight() );
-                aAny <<= aUnoRect;
-                break;
-            }
-            case OWN_ATTR_LDNAME:
-            {
-                OUString aName( mpObj->GetName() );
-                aAny <<= aName;
-                break;
-            }
-            case OWN_ATTR_LDBITMAP:
-            {
-                sal_uInt16 nId;
-                if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_OLE2 )
-                {
-                    nId = RID_UNODRAW_OLE2;
-                }
-                else if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_GRAF )
-                {
-                    nId = RID_UNODRAW_GRAPHICS;
-                }
-                else
-                {
-                    nId = RID_UNODRAW_OBJECTS;
-                }
-
-                BitmapEx aBmp( SVX_RES(nId) );
-                Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
-
-                aAny <<= xBmp;
-                break;
-            }
-            case OWN_ATTR_OLE_VISAREA:
-            {
-                awt::Rectangle aVisArea;
-                if( mpObj->ISA(SdrOle2Obj))
-                {
-                    MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
-                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
-                    aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
-                }
-
-                aAny <<= aVisArea;
-                break;
-            }
-            case OWN_ATTR_OLESIZE:
-            {
-                awt::Size aSize;
-                if( mpObj->ISA(SdrOle2Obj))
-                {
-                    Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize();
-                    aSize = awt::Size( aTmp.Width(), aTmp.Height() );
-                }
-
-                aAny <<= aSize;
-                break;
-            }
-            case OWN_ATTR_OLE_ASPECT:
-            {
-                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                if( mpObj->ISA(SdrOle2Obj))
-                    nAspect = ((SdrOle2Obj*)mpObj.get())->GetAspect();
-
-                aAny <<= nAspect;
-                break;
-            }
-            case OWN_ATTR_VALUE_GRAPHIC:
-            {
-                uno::Reference< graphic::XGraphic > xGraphic;
-                SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
-                if( pObj )
-                {
-                    Graphic* pGraphic = pObj->GetGraphic();
-                    if ( pGraphic )
-                        xGraphic = pGraphic->GetXGraphic();
-                }
-
-                aAny <<= xGraphic;
-                break;
-            }
-            case OWN_ATTR_OLEMODEL:
-            case OWN_ATTR_OLE_EMBEDDED_OBJECT:
-            {
-                SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
-                if( pObj )
-                {
-                    uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
-                    if ( xObj.is()
-                      && ( pMap->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
-                    {
-                        const SdrPageView* pPageView = mpModel->GetPaintingPageView();
-                        sal_Bool bSuccess = sal_False;
-
-                        if ( pPageView )
-                        {
-                            SdrView* pView = (SdrView*)&(pPageView->GetView());
-                            if ( pView->ISA( SdrPaintView ) )
-                            {
-                                SdrPaintView* pPaintView = (SdrPaintView*)pView;
-                                pPaintView->DoConnect( pObj );
-                                bSuccess = sal_True;
-                            }
-                        }
-
-                        if ( !bSuccess )
-                            bSuccess = pObj->AddOwnLightClient();
-
-                        OSL_ENSURE( bSuccess, "An object without client is provided!" );
-
-                        if ( pMap->nWID == OWN_ATTR_OLEMODEL )
-                            return makeAny( pObj->GetObjRef()->getComponent() );
-                        else
-                            return makeAny( xObj );
-                    }
-                }
-
-                break;
-            }
-            case OWN_ATTR_MIRRORED:
-            {
-                sal_Bool bMirror = sal_False;
-                if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
-                    bMirror = ((SdrGrafObj*)mpObj.get())->IsMirrored();
-
-                return uno::Any( &bMirror, ::getCppuBooleanType() );
-            }
-            case OWN_ATTR_CLSID:
-            {
-                OUString aCLSID;
-                SvGlobalName aClassName = GetClassName_Impl(aCLSID);
-                aAny <<= aCLSID;
-                break;
-            }
-            case OWN_ATTR_METAFILE:
-            {
-                SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
-                if( pObj )
-                {
-                    Graphic* pGraphic = pObj->GetGraphic();
-                    if( pGraphic )
-                    {
-                        BOOL bIsWMF = FALSE;
-                        if ( pGraphic->IsLink() )
-                        {
-                            GfxLink aLnk = pGraphic->GetLink();
-                            if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
-                            {
-                                bIsWMF = TRUE;
-                                uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
-                                aAny <<= aSeq;
-                            }
-                        }
-                        if ( !bIsWMF )
-                        {
-                            GDIMetaFile aMtf;
-                            if ( pGraphic->GetType() != GRAPHIC_BITMAP )
-                                aMtf = pObj->GetGraphic()->GetGDIMetaFile();
-                            else
-                            {
-                                VirtualDevice aVirDev;
-                                aMtf.Record( &aVirDev );
-                                pGraphic->Draw( &aVirDev, Point(),  pGraphic->GetPrefSize() );
-                                aMtf.Stop();
-                                aMtf.SetPrefSize( pGraphic->GetPrefSize() );
-                                aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
-                            }
-                            SvMemoryStream aDestStrm( 65535, 65535 );
-                            ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-                            uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-                            aAny <<= aSeq;
-                        }
-                    }
-                }
-                else
-                {
-                    aAny = GetBitmap( sal_True );
-                }
-                break;
-            }
-            case OWN_ATTR_EDGE_START_OBJ:
-            case OWN_ATTR_EDGE_START_POS:
-            case OWN_ATTR_EDGE_END_POS:
-            case OWN_ATTR_EDGE_END_OBJ:
-            case OWN_ATTR_GLUEID_HEAD:
-            case OWN_ATTR_GLUEID_TAIL:
-            {
-                SdrEdgeObj* pEdgeObj = dynamic_cast<SdrEdgeObj*>(mpObj.get());
-                if(pEdgeObj)
-                {
-                    switch(pMap->nWID)
-                    {
-                    case OWN_ATTR_EDGE_START_OBJ:
-                    case OWN_ATTR_EDGE_END_OBJ:
-                        {
-                            SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
-                            if(pNode)
-                            {
-                                Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
-                                if(xShape.is())
-                                    aAny <<= xShape;
-
-                            }
-                            break;
-                        }
-
-                    case OWN_ATTR_EDGE_START_POS:
-                    case OWN_ATTR_EDGE_END_POS:
-                        {
-                            Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
-                            if( mpModel->IsWriter() )
-                                aPoint -= mpObj->GetAnchorPos();
-
-                            ForceMetricTo100th_mm( aPoint );
-                            awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
-
-                            aAny <<= aUnoPoint;
-                            break;
-                        }
-                    case OWN_ATTR_GLUEID_HEAD:
-                    case OWN_ATTR_GLUEID_TAIL:
-                        {
-                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD );
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-            case OWN_ATTR_MEASURE_START_POS:
-            case OWN_ATTR_MEASURE_END_POS:
-            {
-                SdrMeasureObj* pMeasureObj = dynamic_cast<SdrMeasureObj*>(mpObj.get());
-                if(pMeasureObj)
-                {
-                    Point aPoint( pMeasureObj->GetPoint( pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 ) );
-                    if( mpModel->IsWriter() )
-                        aPoint -= mpObj->GetAnchorPos();
-
-                    awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
-
-                    aAny <<= aUnoPoint;
-                    break;
-                }
-                break;
-            }
-            case OWN_ATTR_FILLBMP_MODE:
-            {
-                const SfxItemSet& rObjItemSet = mpObj->GetMergedItemSet();
-
-                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
-                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&rObjItemSet.Get(XATTR_FILLBMP_TILE);
-
-                if( pTileItem && pTileItem->GetValue() )
-                {
-                    aAny <<= drawing::BitmapMode_REPEAT;
-                }
-                else if( pStretchItem && pStretchItem->GetValue() )
-                {
-                    aAny <<= drawing::BitmapMode_STRETCH;
-                }
-                else
-                {
-                    aAny <<= drawing::BitmapMode_NO_REPEAT;
-                }
-                break;
-            }
-            case SDRATTR_LAYERID:
-                aAny <<= (sal_Int16)mpObj->GetLayer();
-                break;
-            case SDRATTR_LAYERNAME:
-                {
-                    SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID(mpObj->GetLayer());
-                    if( pLayer )
-                    {
-                        OUString aName( pLayer->GetName() );
-                        aAny <<= aName;
-                    }
-                }
-                break;
-            case SDRATTR_ROTATEANGLE:
-                aAny <<= mpObj->GetRotateAngle();
-                break;
-            case SDRATTR_SHEARANGLE:
-                aAny <<= mpObj->GetShearAngle();
-                break;
-            case SDRATTR_OBJMOVEPROTECT:
-                aAny = uno::makeAny( (sal_Bool) mpObj->IsMoveProtect() );
-                break;
-            case SDRATTR_OBJECTNAME:
-            {
-                OUString aName( mpObj->GetName() );
-                aAny <<= aName;
-                break;
+                // Default aus ItemPool holen
+                if(mpModel->GetItemPool().IsWhich(pMap->nWID))
+                    aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
             }
 
-            // #i68101#
-            case OWN_ATTR_MISC_OBJ_TITLE:
-            {
-                OUString aTitle( mpObj->GetTitle() );
-                aAny <<= aTitle;
-                break;
-            }
-            case OWN_ATTR_MISC_OBJ_DESCRIPTION:
-            {
-                OUString aDescription( mpObj->GetDescription() );
-                aAny <<= aDescription;
-                break;
-            }
-
-            case SDRATTR_OBJPRINTABLE:
-                aAny = uno::makeAny( (sal_Bool) mpObj->IsPrintable() );
-                break;
-            case SDRATTR_OBJSIZEPROTECT:
-                aAny = uno::makeAny( (sal_Bool)mpObj->IsResizeProtect() );
-                break;
-            case OWN_ATTR_PAGE_NUMBER:
-            {
-                SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(mpObj.get());
-                if(pPageObj)
-                {
-                    SdrPage* pPage = pPageObj->GetReferencedPage();
-                    sal_Int32 nPageNumber = (pPage) ? pPage->GetPageNum() : 0L;
-                    nPageNumber++;
-                    nPageNumber >>= 1;
-                    aAny <<= nPageNumber;
-                }
-                break;
-            }
-            case OWN_ATTR_UINAME_SINGULAR:
-                {
-                    String aTmp;
-                    mpObj->TakeObjNameSingul( aTmp );
-                    aAny <<= OUString( aTmp );
-                }
-                break;
-            case OWN_ATTR_UINAME_PLURAL:
-                {
-                    String aTmp;
-                    mpObj->TakeObjNamePlural( aTmp );
-                    aAny <<= OUString( aTmp );
-                }
-                break;
-            default:
-            {
-                DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
-                DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
-
-                SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
-                aSet.Put(mpObj->GetMergedItem(pMap->nWID));
-
-                if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
-                    return aAny;
-
-                if(!aSet.Count())
-                {
-                    if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                    {
-                        // Not-Persistant Attribute, hole diese extra
-                        mpObj->TakeNotPersistAttr(aSet, sal_False);
-                    }
-                }
-
-                if(!aSet.Count())
-                {
-                    // Default aus ItemPool holen
-                    if(mpModel->GetItemPool().IsWhich(pMap->nWID))
-                        aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
-                }
-
-                if(aSet.Count())
-                    aAny = GetAnyForItem( aSet, pMap );
-            }
+            if(aSet.Count())
+                aAny = GetAnyForItem( aSet, pMap );
         }
     }
     else
@@ -3020,7 +2046,6 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
             catch( uno::Exception& ex )
             {
                 (void)ex;
-                DBG_ERROR("svx::SvxShape::setPropertyValues(), uno::Exception caught!" );
             }
         }
     }
@@ -3042,7 +2067,6 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
             catch( uno::Exception& ex )
             {
                 (void)ex;
-                DBG_ERROR("svx::SvxShape::setPropertyValues(), uno::Exception caught!" );
             }
         }
     }
@@ -3227,30 +2251,10 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
     if( !mpObj.is() || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    beans::PropertyState eState;
+    if( !getPropertyStateImpl( pMap, eState ) )
     {
         const SfxItemSet& rSet = mpObj->GetMergedItemSet();
-
-        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
-            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
-        {
-            return beans::PropertyState_DIRECT_VALUE;
-        }
-        else
-        {
-            return beans::PropertyState_AMBIGUOUS_VALUE;
-        }
-    }
-    else if((( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
-       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST )) && ( pMap->nWID != SDRATTR_TEXTDIRECTION ) )
-    {
-        return beans::PropertyState_DIRECT_VALUE;
-    }
-    else
-    {
-        const SfxItemSet& rSet = mpObj->GetMergedItemSet();
-
-        beans::PropertyState eState;
 
         switch( rSet.GetItemState( pMap->nWID, sal_False ) )
         {
@@ -3304,7 +2308,780 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
                 break;
             }
         }
-        return eState;
+    }
+    return eState;
+}
+
+//----------------------------------------------------------------------
+
+bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_CAPTION_POINT:
+    {
+        awt::Point aPnt;
+        if( rValue >>= aPnt )
+        {
+            Point aVclPoint( aPnt.X, aPnt.Y );
+
+            // #90763# position is relative to top left, make it absolute
+            basegfx::B2DPolyPolygon aNewPolyPolygon;
+            basegfx::B2DHomMatrix aNewHomogenMatrix;
+            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+            aVclPoint.X() += FRound(aNewHomogenMatrix.get(0, 2));
+            aVclPoint.Y() += FRound(aNewHomogenMatrix.get(1, 2));
+
+            // #88657# metric of pool maybe twips (writer)
+            ForceMetricToItemPoolMetric(aVclPoint);
+
+            // #88491# position relative to anchor
+            if( mpModel->IsWriter() )
+            {
+                aVclPoint += mpObj->GetAnchorPos();
+            }
+
+            ((SdrCaptionObj*)mpObj.get())->SetTailPos(aVclPoint);
+
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_TRANSFORMATION:
+    {
+        drawing::HomogenMatrix3 aMatrix;
+        if(rValue >>= aMatrix)
+        {
+            basegfx::B2DPolyPolygon aNewPolyPolygon;
+            basegfx::B2DHomMatrix aNewHomogenMatrix;
+
+            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+            aNewHomogenMatrix.set(0, 0, aMatrix.Line1.Column1);
+            aNewHomogenMatrix.set(0, 1, aMatrix.Line1.Column2);
+            aNewHomogenMatrix.set(0, 2, aMatrix.Line1.Column3);
+            aNewHomogenMatrix.set(1, 0, aMatrix.Line2.Column1);
+            aNewHomogenMatrix.set(1, 1, aMatrix.Line2.Column2);
+            aNewHomogenMatrix.set(1, 2, aMatrix.Line2.Column3);
+            aNewHomogenMatrix.set(2, 0, aMatrix.Line3.Column1);
+            aNewHomogenMatrix.set(2, 1, aMatrix.Line3.Column2);
+            aNewHomogenMatrix.set(2, 2, aMatrix.Line3.Column3);
+
+            mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            return true;
+        }
+        break;
+    }
+
+    case OWN_ATTR_ZORDER:
+    {
+        sal_Int32 nNewOrdNum = 0;
+        if(rValue >>= nNewOrdNum)
+        {
+            SdrObjList* pObjList = mpObj->GetObjList();
+            if( pObjList )
+            {
+#ifdef DBG_UTIL
+                SdrObject* pCheck =
+#endif
+                            pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (ULONG)nNewOrdNum );
+                DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
+            }
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_FRAMERECT:
+    {
+        awt::Rectangle aUnoRect;
+        if(rValue >>= aUnoRect)
+        {
+            Point aTopLeft( aUnoRect.X, aUnoRect.Y );
+            Size aObjSize( aUnoRect.Width, aUnoRect.Height );
+            ForceMetricToItemPoolMetric(aTopLeft);
+            ForceMetricToItemPoolMetric(aObjSize);
+            Rectangle aRect;
+            aRect.SetPos(aTopLeft);
+            aRect.SetSize(aObjSize);
+            mpObj->SetSnapRect(aRect);
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_MIRRORED:
+    {
+        sal_Bool bMirror = sal_Bool();
+        if(rValue >>= bMirror )
+        {
+            SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >( mpObj.get() );
+            if( pObj )
+                pObj->SetMirrored(bMirror);
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_EDGE_START_OBJ:
+    case OWN_ATTR_EDGE_END_OBJ:
+    case OWN_ATTR_GLUEID_HEAD:
+    case OWN_ATTR_GLUEID_TAIL:
+    case OWN_ATTR_EDGE_START_POS:
+    case OWN_ATTR_EDGE_END_POS:
+    {
+        SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >(mpObj.get());
+        if(pEdgeObj)
+        {
+            switch(pProperty->nWID)
+            {
+            case OWN_ATTR_EDGE_START_OBJ:
+            case OWN_ATTR_EDGE_END_OBJ:
+                {
+                    Reference< drawing::XShape > xShape;
+                    if( rValue >>= xShape )
+                    {
+                        SdrObject* pNode = GetSdrObjectFromXShape( xShape );
+                        if( pNode )
+                        {
+                            pEdgeObj->ConnectToNode( pProperty->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
+                            pEdgeObj->setGluePointIndex( pProperty->nWID == OWN_ATTR_EDGE_START_OBJ, -1 );
+                            return true;
+                        }
+                    }
+                    break;
+                }
+
+            case OWN_ATTR_EDGE_START_POS:
+            case OWN_ATTR_EDGE_END_POS:
+                {
+                    awt::Point aUnoPoint;
+                    if( rValue >>= aUnoPoint )
+                    {
+                        Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+                        if( mpModel->IsWriter() )
+                            aPoint += mpObj->GetAnchorPos();
+
+                        ForceMetricToItemPoolMetric( aPoint );
+                        pEdgeObj->SetTailPoint( pProperty->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
+                        return true;
+                    }
+                    break;
+                }
+
+            case OWN_ATTR_GLUEID_HEAD:
+            case OWN_ATTR_GLUEID_TAIL:
+                {
+                    sal_Int32 nId = 0;
+                    if( rValue >>= nId )
+                    {
+                        pEdgeObj->setGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD, nId );
+                        return true;
+                    }
+                }
+            }
+        }
+        break;
+    }
+    case OWN_ATTR_MEASURE_START_POS:
+    case OWN_ATTR_MEASURE_END_POS:
+    {
+        SdrMeasureObj* pMeasureObj = dynamic_cast< SdrMeasureObj* >(mpObj.get());
+        awt::Point aUnoPoint;
+        if(pMeasureObj && ( rValue >>= aUnoPoint ) )
+        {
+            Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+
+            if( mpModel->IsWriter() )
+                aPoint += mpObj->GetAnchorPos();
+
+            pMeasureObj->NbcSetPoint( aPoint, pProperty->nWID == OWN_ATTR_MEASURE_START_POS ? 0L : 1L );
+            pMeasureObj->SetChanged();
+            pMeasureObj->BroadcastObjectChange();
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_FILLBMP_MODE:
+        {
+            drawing::BitmapMode eMode;
+            if(!(rValue >>= eMode) )
+            {
+                sal_Int32 nMode = 0;
+                if(!(rValue >>= nMode))
+                    break;
+
+                eMode = (drawing::BitmapMode)nMode;
+            }
+            mpObj->SetMergedItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+            mpObj->SetMergedItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
+            return true;
+        }
+
+    case SDRATTR_LAYERID:
+    {
+        sal_Int16 nLayerId = sal_Int16();
+        if( rValue >>= nLayerId )
+        {
+            SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
+            if( pLayer )
+            {
+                mpObj->SetLayer((unsigned char)nLayerId);
+                return true;
+            }
+        }
+        break;
+    }
+
+    case SDRATTR_LAYERNAME:
+    {
+        OUString aLayerName;
+        if( rValue >>= aLayerName )
+        {
+            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, TRUE);
+            if( pLayer != NULL )
+            {
+                mpObj->SetLayer( pLayer->GetID() );
+                return true;
+            }
+        }
+        break;
+    }
+    case SDRATTR_ROTATEANGLE:
+    {
+        sal_Int32 nAngle = 0;
+        if( rValue >>= nAngle )
+        {
+            Point aRef1(mpObj->GetSnapRect().Center());
+            nAngle -= mpObj->GetRotateAngle();
+            if (nAngle!=0)
+            {
+                double nSin=sin(nAngle*nPi180);
+                double nCos=cos(nAngle*nPi180);
+                mpObj->Rotate(aRef1,nAngle,nSin,nCos);
+            }
+            return true;
+        }
+
+        break;
+    }
+
+    case SDRATTR_SHEARANGLE:
+    {
+        sal_Int32 nShear = 0;
+        if( rValue >>= nShear )
+        {
+            nShear -= mpObj->GetShearAngle();
+            if(nShear != 0 )
+            {
+                Point aRef1(mpObj->GetSnapRect().Center());
+                double nTan=tan(nShear*nPi180);
+                mpObj->Shear(aRef1,nShear,nTan,FALSE);
+                return true;
+            }
+        }
+
+        break;
+    }
+
+    case SDRATTR_OBJMOVEPROTECT:
+    {
+        sal_Bool bMoveProtect = sal_Bool();
+        if( rValue >>= bMoveProtect )
+        {
+            mpObj->SetMoveProtect(bMoveProtect);
+            return true;
+        }
+        break;
+    }
+    case SDRATTR_OBJECTNAME:
+    {
+        OUString aName;
+        if( rValue >>= aName )
+        {
+            mpObj->SetName( aName );
+            return true;
+        }
+        break;
+    }
+
+    // #i68101#
+    case OWN_ATTR_MISC_OBJ_TITLE:
+    {
+        OUString aTitle;
+        if( rValue >>= aTitle )
+        {
+            mpObj->SetTitle( aTitle );
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_MISC_OBJ_DESCRIPTION:
+    {
+        OUString aDescription;
+        if( rValue >>= aDescription )
+        {
+            mpObj->SetDescription( aDescription );
+            return true;
+        }
+        break;
+    }
+
+    case SDRATTR_OBJPRINTABLE:
+    {
+        sal_Bool bPrintable = sal_Bool();
+        if( rValue >>= bPrintable )
+        {
+            mpObj->SetPrintable(bPrintable);
+            return true;
+        }
+        break;
+    }
+    case SDRATTR_OBJSIZEPROTECT:
+    {
+        sal_Bool bResizeProtect = sal_Bool();
+        if( rValue >>= bResizeProtect )
+        {
+            mpObj->SetResizeProtect(bResizeProtect);
+            return true;
+        }
+        break;
+    }
+    case OWN_ATTR_PAGE_NUMBER:
+    {
+        sal_Int32 nPageNum = 0;
+        if( (rValue >>= nPageNum) && ( nPageNum >= 0 ) && ( nPageNum <= 0xffff ) )
+        {
+            SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(mpObj.get());
+            if( pPageObj )
+            {
+                SdrModel* pModel = pPageObj->GetModel();
+                SdrPage* pNewPage = 0L;
+                const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1L) - 1L));
+
+                if(pModel)
+                {
+                    if(nDestinationPageNum < pModel->GetPageCount())
+                    {
+                        pNewPage = pModel->GetPage(nDestinationPageNum);
+                    }
+                }
+
+                pPageObj->SetReferencedPage(pNewPage);
+            }
+
+            return true;
+        }
+        break;
+    }
+    case XATTR_FILLBITMAP:
+    case XATTR_FILLGRADIENT:
+    case XATTR_FILLHATCH:
+    case XATTR_FILLFLOATTRANSPARENCE:
+    case XATTR_LINEEND:
+    case XATTR_LINESTART:
+    case XATTR_LINEDASH:
+    {
+        if( pProperty->nMemberId == MID_NAME )
+        {
+            OUString aApiName;
+            if( rValue >>= aApiName )
+            {
+                if( SetFillAttribute( pProperty->nWID, aApiName ) )
+                    return true;
+            }
+            break;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    default:
+    {
+        return false;
+    }
+    }
+    throw lang::IllegalArgumentException();
+}
+
+//----------------------------------------------------------------------
+
+bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_HASLEVELS:
+    {
+        rValue <<= SvxTextEditSource::hasLevels( mpObj.get() );
+        break;
+    }
+
+    case OWN_ATTR_CAPTION_POINT:
+    {
+        Point aVclPoint = ((SdrCaptionObj*)mpObj.get())->GetTailPos();
+
+        // #88491# make pos relative to anchor
+        if( mpModel->IsWriter() )
+        {
+            aVclPoint -= mpObj->GetAnchorPos();
+        }
+
+        // #88657# metric of pool maybe twips (writer)
+        ForceMetricTo100th_mm(aVclPoint);
+
+        // #90763# pos is absolute, make it relative to top left
+        basegfx::B2DPolyPolygon aNewPolyPolygon;
+        basegfx::B2DHomMatrix aNewHomogenMatrix;
+        mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+
+        aVclPoint.X() -= FRound(aNewHomogenMatrix.get(0, 2));
+        aVclPoint.Y() -= FRound(aNewHomogenMatrix.get(1, 2));
+
+        awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
+        rValue <<= aPnt;
+        break;
+    }
+
+    case OWN_ATTR_TRANSFORMATION:
+    {
+        basegfx::B2DPolyPolygon aNewPolyPolygon;
+        basegfx::B2DHomMatrix aNewHomogenMatrix;
+        mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+        drawing::HomogenMatrix3 aMatrix;
+
+        aMatrix.Line1.Column1 = aNewHomogenMatrix.get(0, 0);
+        aMatrix.Line1.Column2 = aNewHomogenMatrix.get(0, 1);
+        aMatrix.Line1.Column3 = aNewHomogenMatrix.get(0, 2);
+        aMatrix.Line2.Column1 = aNewHomogenMatrix.get(1, 0);
+        aMatrix.Line2.Column2 = aNewHomogenMatrix.get(1, 1);
+        aMatrix.Line2.Column3 = aNewHomogenMatrix.get(1, 2);
+        aMatrix.Line3.Column1 = aNewHomogenMatrix.get(2, 0);
+        aMatrix.Line3.Column2 = aNewHomogenMatrix.get(2, 1);
+        aMatrix.Line3.Column3 = aNewHomogenMatrix.get(2, 2);
+
+        rValue <<= aMatrix;
+
+        break;
+    }
+
+    case OWN_ATTR_ZORDER:
+    {
+        rValue <<= (sal_Int32)mpObj->GetOrdNum();
+        break;
+    }
+
+    case OWN_ATTR_BITMAP:
+    {
+        rValue = GetBitmap();
+        if(!rValue.hasValue())
+            throw uno::RuntimeException();
+
+        break;
+    }
+
+    case OWN_ATTR_ISFONTWORK:
+    {
+        rValue <<= (sal_Bool)(mpObj->ISA(SdrTextObj) && ((SdrTextObj*)mpObj.get())->IsFontwork());
+        break;
+    }
+
+    case OWN_ATTR_FRAMERECT:
+    {
+        Rectangle aRect( mpObj->GetSnapRect() );
+        Point aTopLeft( aRect.TopLeft() );
+        Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+        ForceMetricTo100th_mm(aTopLeft);
+        ForceMetricTo100th_mm(aObjSize);
+        ::com::sun::star::awt::Rectangle aUnoRect(
+            aTopLeft.X(), aTopLeft.Y(),
+            aObjSize.getWidth(), aObjSize.getHeight() );
+        rValue <<= aUnoRect;
+        break;
+    }
+
+    case OWN_ATTR_BOUNDRECT:
+    {
+        Rectangle aRect( mpObj->GetCurrentBoundRect() );
+        Point aTopLeft( aRect.TopLeft() );
+        Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+        ForceMetricTo100th_mm(aTopLeft);
+        ForceMetricTo100th_mm(aObjSize);
+        ::com::sun::star::awt::Rectangle aUnoRect(
+            aTopLeft.X(), aTopLeft.Y(),
+            aObjSize.getWidth(), aObjSize.getHeight() );
+        rValue <<= aUnoRect;
+        break;
+    }
+
+    case OWN_ATTR_LDNAME:
+    {
+        OUString aName( mpObj->GetName() );
+        rValue <<= aName;
+        break;
+    }
+
+    case OWN_ATTR_LDBITMAP:
+    {
+        sal_uInt16 nId;
+        if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_OLE2 )
+        {
+            nId = RID_UNODRAW_OLE2;
+        }
+        else if( mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_GRAF )
+        {
+            nId = RID_UNODRAW_GRAPHICS;
+        }
+        else
+        {
+            nId = RID_UNODRAW_OBJECTS;
+        }
+
+        BitmapEx aBmp( SVX_RES(nId) );
+        Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
+
+        rValue <<= xBmp;
+        break;
+    }
+
+    case OWN_ATTR_MIRRORED:
+    {
+        sal_Bool bMirror = sal_False;
+        if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
+            bMirror = ((SdrGrafObj*)mpObj.get())->IsMirrored();
+
+        rValue <<= bMirror;
+    }
+
+    case OWN_ATTR_EDGE_START_OBJ:
+    case OWN_ATTR_EDGE_START_POS:
+    case OWN_ATTR_EDGE_END_POS:
+    case OWN_ATTR_EDGE_END_OBJ:
+    case OWN_ATTR_GLUEID_HEAD:
+    case OWN_ATTR_GLUEID_TAIL:
+    {
+        SdrEdgeObj* pEdgeObj = dynamic_cast<SdrEdgeObj*>(mpObj.get());
+        if(pEdgeObj)
+        {
+            switch(pProperty->nWID)
+            {
+            case OWN_ATTR_EDGE_START_OBJ:
+            case OWN_ATTR_EDGE_END_OBJ:
+                {
+                    SdrObject* pNode = pEdgeObj->GetConnectedNode(pProperty->nWID == OWN_ATTR_EDGE_START_OBJ);
+                    if(pNode)
+                    {
+                        Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
+                        if(xShape.is())
+                            rValue <<= xShape;
+
+                    }
+                    break;
+                }
+
+            case OWN_ATTR_EDGE_START_POS:
+            case OWN_ATTR_EDGE_END_POS:
+                {
+                    Point aPoint( pEdgeObj->GetTailPoint( pProperty->nWID == OWN_ATTR_EDGE_START_POS ) );
+                    if( mpModel->IsWriter() )
+                        aPoint -= mpObj->GetAnchorPos();
+
+                    ForceMetricTo100th_mm( aPoint );
+                    awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+
+                    rValue <<= aUnoPoint;
+                    break;
+                }
+            case OWN_ATTR_GLUEID_HEAD:
+            case OWN_ATTR_GLUEID_TAIL:
+                {
+                    rValue <<= pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
+                    break;
+                }
+            }
+        }
+        break;
+    }
+
+    case OWN_ATTR_MEASURE_START_POS:
+    case OWN_ATTR_MEASURE_END_POS:
+    {
+        SdrMeasureObj* pMeasureObj = dynamic_cast<SdrMeasureObj*>(mpObj.get());
+        if(pMeasureObj)
+        {
+            Point aPoint( pMeasureObj->GetPoint( pProperty->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 ) );
+            if( mpModel->IsWriter() )
+                aPoint -= mpObj->GetAnchorPos();
+
+            awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+
+            rValue <<= aUnoPoint;
+            break;
+        }
+        break;
+    }
+
+    case OWN_ATTR_FILLBMP_MODE:
+    {
+        const SfxItemSet& rObjItemSet = mpObj->GetMergedItemSet();
+
+        XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
+        XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&rObjItemSet.Get(XATTR_FILLBMP_TILE);
+
+        if( pTileItem && pTileItem->GetValue() )
+        {
+            rValue <<= drawing::BitmapMode_REPEAT;
+        }
+        else if( pStretchItem && pStretchItem->GetValue() )
+        {
+            rValue <<= drawing::BitmapMode_STRETCH;
+        }
+        else
+        {
+            rValue <<= drawing::BitmapMode_NO_REPEAT;
+        }
+        break;
+    }
+    case SDRATTR_LAYERID:
+        rValue <<= (sal_Int16)mpObj->GetLayer();
+        break;
+
+    case SDRATTR_LAYERNAME:
+    {
+        SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID(mpObj->GetLayer());
+        if( pLayer )
+        {
+            OUString aName( pLayer->GetName() );
+            rValue <<= aName;
+        }
+        break;
+    }
+
+    case SDRATTR_ROTATEANGLE:
+        rValue <<= mpObj->GetRotateAngle();
+        break;
+
+    case SDRATTR_SHEARANGLE:
+        rValue <<= mpObj->GetShearAngle();
+        break;
+
+    case SDRATTR_OBJMOVEPROTECT:
+        rValue = uno::makeAny( (sal_Bool) mpObj->IsMoveProtect() );
+        break;
+
+    case SDRATTR_OBJECTNAME:
+    {
+        OUString aName( mpObj->GetName() );
+        rValue <<= aName;
+        break;
+    }
+
+    // #i68101#
+    case OWN_ATTR_MISC_OBJ_TITLE:
+    {
+        OUString aTitle( mpObj->GetTitle() );
+        rValue <<= aTitle;
+        break;
+    }
+
+    case OWN_ATTR_MISC_OBJ_DESCRIPTION:
+    {
+        OUString aDescription( mpObj->GetDescription() );
+        rValue <<= aDescription;
+        break;
+    }
+
+    case SDRATTR_OBJPRINTABLE:
+        rValue = uno::makeAny( (sal_Bool) mpObj->IsPrintable() );
+        break;
+
+    case SDRATTR_OBJSIZEPROTECT:
+        rValue = uno::makeAny( (sal_Bool)mpObj->IsResizeProtect() );
+        break;
+
+    case OWN_ATTR_PAGE_NUMBER:
+    {
+        SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(mpObj.get());
+        if(pPageObj)
+        {
+            SdrPage* pPage = pPageObj->GetReferencedPage();
+            sal_Int32 nPageNumber = (pPage) ? pPage->GetPageNum() : 0L;
+            nPageNumber++;
+            nPageNumber >>= 1;
+            rValue <<= nPageNumber;
+        }
+        break;
+    }
+
+    case OWN_ATTR_UINAME_SINGULAR:
+    {
+        String aTmp;
+        mpObj->TakeObjNameSingul( aTmp );
+        rValue <<= OUString( aTmp );
+        break;
+    }
+
+    case OWN_ATTR_UINAME_PLURAL:
+    {
+        String aTmp;
+        mpObj->TakeObjNamePlural( aTmp );
+        rValue <<= OUString( aTmp );
+        break;
+    }
+
+    default:
+        return false;
+    }
+    return true;
+}
+
+//----------------------------------------------------------------------
+
+bool SvxShape::getPropertyStateImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        const SfxItemSet& rSet = mpObj->GetMergedItemSet();
+
+        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
+            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+        {
+            rState = beans::PropertyState_DIRECT_VALUE;
+        }
+        else
+        {
+            rState = beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+    }
+    else if((( pProperty->nWID >= OWN_ATTR_VALUE_START && pProperty->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pProperty->nWID >= SDRATTR_NOTPERSIST_FIRST && pProperty->nWID <= SDRATTR_NOTPERSIST_LAST )) && ( pProperty->nWID != SDRATTR_TEXTDIRECTION ) )
+    {
+        rState = beans::PropertyState_DIRECT_VALUE;
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//----------------------------------------------------------------------
+
+bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertyMap* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        mpObj->ClearMergedItem( XATTR_FILLBMP_STRETCH );
+        mpObj->ClearMergedItem( XATTR_FILLBMP_TILE );
+        return true;
+    }
+    else if((pProperty->nWID >= OWN_ATTR_VALUE_START && pProperty->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pProperty->nWID >= SDRATTR_NOTPERSIST_FIRST && pProperty->nWID <= SDRATTR_NOTPERSIST_LAST ))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -3354,24 +3131,14 @@ void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertyMap* pProperty = maPropSet.getPropertyMapEntry(PropertyName);
 
-    if( !mpObj.is() || mpModel == NULL || pMap == NULL )
+    if( !mpObj.is() || mpModel == NULL || pProperty == NULL )
         throw beans::UnknownPropertyException();
 
-    if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    if( !setPropertyToDefaultImpl( pProperty ) )
     {
-        mpObj->ClearMergedItem( XATTR_FILLBMP_STRETCH );
-        mpObj->ClearMergedItem( XATTR_FILLBMP_TILE );
-    }
-    else if((pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
-       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
-    {
-        return;
-    }
-    else
-    {
-        mpObj->ClearMergedItem( pMap->nWID );
+        mpObj->ClearMergedItem( pProperty->nWID );
     }
 
     mpModel->SetChanged();
@@ -4145,8 +3912,8 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
         static uno::Sequence< OUString > *pSeq = 0;
         if( 0 == pSeq )
         {
-//          OGuard aGuard( Application::GetSolarMutex() );
-//          if( 0 == pSeq )
+//                  OGuard aGuard( Application::GetSolarMutex() );
+//                  if( 0 == pSeq )
             {
                 static uno::Sequence< OUString > SvxShape_UnoServices;
                 SvxServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
@@ -4361,7 +4128,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, static_cast< uno::XWeak * >( this ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4369,7 +4136,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMap* pPrope
 : SvxShape( pObject, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, static_cast< uno::XWeak * >( this ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4378,26 +4145,12 @@ SvxShapeText::~SvxShapeText() throw ()
     // check if only this instance is registered at the ranges
     DBG_ASSERT( (NULL == GetEditSource()) || (GetEditSource()->getRanges().size()==1),
         "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
-    if ( mpModel )
-    {
-        SvxEditSource* pEditSource = GetEditSource();
-        if (pEditSource != NULL)
-        {
-            const SvxUnoTextRangeBaseList& rRanges = pEditSource->getRanges();
-            SvxUnoTextRangeBaseList::const_iterator aIter;
-            for( aIter = rRanges.begin(); aIter != rRanges.end(); aIter++ )
-            {
-                SvxUnoTextRangeBase* pRange = (*aIter);
-                pRange = pRange;
-            }
-        }
-    }
 }
 
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
 {
     if( pNewObj && (NULL == GetEditSource()))
-        SetEditSource( new SvxTextEditSource( pNewObj, static_cast< uno::XWeak* >(this) ) );
+        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< uno::XWeak* >(this) ) );
 
     SvxShape::Create( pNewObj, pNewPage );
 }
@@ -4555,6 +4308,44 @@ void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::Runt
     SvxUnoTextBase::setString( aString );
 }
 
+// overide these for special property handling in subcasses. Return true if property is handled
+bool SvxShapeText::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    // HACK-fix #99090#
+    // since SdrTextObj::SetVerticalWriting exchanges
+    // SDRATTR_TEXT_AUTOGROWWIDTH and SDRATTR_TEXT_AUTOGROWHEIGHT,
+    // we have to set the textdirection here
+
+    if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObj.get() );
+        if( pTextObj )
+        {
+            com::sun::star::text::WritingMode eMode;
+            if( rValue >>= eMode )
+            {
+                pTextObj->SetVerticalWriting( eMode == com::sun::star::text::WritingMode_TB_RL );
+            }
+        }
+        return true;
+    }
+    return SvxShape::setPropertyValueImpl( pProperty, rValue );
+}
+
+bool SvxShapeText::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    return SvxShape::getPropertyValueImpl( pProperty, rValue );
+}
+
+bool SvxShapeText::getPropertyStateImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    return SvxShape::getPropertyStateImpl( pProperty, rState );
+}
+
+bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertyMap* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    return SvxShape::setPropertyToDefaultImpl( pProperty );
+}
 
 /***********************************************************************
 * class SvxShapeRect                                                   *
