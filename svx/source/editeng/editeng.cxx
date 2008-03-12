@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:51:53 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2772,7 +2772,7 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
     }
 }
 
-BOOL EditEngine::HasValidData( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
+BOOL EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
 {
     BOOL bValidData = FALSE;
 
