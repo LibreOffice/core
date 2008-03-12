@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:47:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,8 @@
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
+
+#include "svx/svdotable.hxx"
 
 using namespace ::com::sun::star;
 
@@ -2801,6 +2803,10 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemov
 
 void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
+    // only allow graphic and presentation styles for shapes
+    if( pNewStyleSheet && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PARA) && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PAGE) )
+        return;
+
     GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 }
 
@@ -3766,6 +3772,7 @@ SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* 
             case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
             case USHORT(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
             case USHORT(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+            case USHORT(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
         }
     }
 
