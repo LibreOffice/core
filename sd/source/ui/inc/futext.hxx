@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:18:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
+#include <svx/svdotext.hxx>
 
 struct StyleRequestData;
 class SdrTextObj;
@@ -78,10 +79,7 @@ public:
 
     void    SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag);
     BOOL    DeleteDefaultText();
-    BOOL    RestoreDefaultText();
-    void    ObjectChanged();
-    SdrTextObj* GetTextObj() { return pTextObj; }
-    void    SetSpellOptions( ULONG& rCntrl );
+    SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     DECL_LINK(SpellError, void* );
 
@@ -96,26 +94,6 @@ public:
     */
     virtual bool cancel();
 
-    /** Call this method to tell a text function that the specified
-        object is not in the edit mode anymore, respectively will not
-        be in a short time.  If this method is not called and the edit
-        mode of the object is canceled from the outside, i.e. not by
-        the text function itself, the text function the pointer to the
-        text object is not valid anymore and must not be accessed.
-
-        <p>A better solution would be to make the text function a
-        listener at the text object when the former starts the editing
-        mode of the later.  This, however, would require changes
-        beyond the scope of a bug fix, which brought up the
-        problem (#111862#).</p>
-
-        @param pTextObject
-            The text object which is not being edited anymore.  When
-            this object is not the one used by this text function the
-            call is silentyl ignored.
-    */
-    void TextEditingHasEnded (const SdrTextObj* pTextObject);
-
 protected:
     FuText (ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -125,7 +103,7 @@ protected:
 
     virtual void disposing();
 
-    SdrTextObj*         pTextObj;
+    SdrObjectWeakRef    mxTextObj;
     Link                aOldLink;
     BOOL                bFirstObjCreated;
 
