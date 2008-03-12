@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:34:24 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SD_OUTLINER_HXX
 #define SD_OUTLINER_HXX
 
+#include <svx/svdobj.hxx>
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
 #endif
@@ -277,7 +278,7 @@ private:
         selection.  This copy is necessary because during the search
         process the mark list is modified.
     */
-    ::std::vector<SdrObject*> maMarkListCopy;
+    ::std::vector<SdrObjectWeakRef> maMarkListCopy;
 
     /**  This flag inidcates that only the current view is to be used for
          searching and spelling.  Automatically switching to other view does
@@ -301,6 +302,9 @@ private:
 
     /// Candidate for being searched/spell checked.
     SdrTextObj* mpTextObj;
+
+    /// Current text to be searched/spelled inside the current text object
+    sal_Int32 mnText;
 
     /// Paragraph object of <member>mpTextObj</member>.
     OutlinerParaObject* mpParaObj;
