@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:04:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ using namespace ::com::sun::star::sdbcx;
 
 using rtl::OUString;
 
-//using namespace ::rtl;
+//using ::rtl::OUString;
 
 namespace SwMailMergeHelper
 {
