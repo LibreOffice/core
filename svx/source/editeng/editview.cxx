@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:43:08 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@
 #endif
 
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
