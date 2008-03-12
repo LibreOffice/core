@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 16:22:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1239,8 +1239,9 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) 
 // XCloneable
 Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeException)
 {
-    Reference< XCloneable > xNewNode;
+    Guard< Mutex > aGuard( maMutex );
 
+    Reference< XCloneable > xNewNode;
     try
     {
         xNewNode = new AnimationNode( *this );
@@ -1255,11 +1256,16 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
                 while( aIter != aEnd )
                 {
                     Reference< XCloneable > xCloneable((*aIter++), UNO_QUERY );
-                    if( xCloneable.is() )
+                    if( xCloneable.is() ) try
                     {
                         Reference< XAnimationNode > xNewChildNode( xCloneable->createClone(), UNO_QUERY );
                         if( xNewChildNode.is() )
                             xContainer->appendChild( xNewChildNode );
+                    }
+                    catch( Exception& e )
+                    {
+                        (void)e;
+                        OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
                     }
                 }
             }
@@ -1268,7 +1274,7 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
     catch( Exception& e )
     {
         (void)e;
-        OSL_TRACE( "animations::AnimationNode::createClone(), exception catched!" );
+        OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
     }
 
     return xNewNode;
@@ -2014,9 +2020,14 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
     if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
         throw ElementExistException();
 
+    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    Reference< XInterface > xChild( newChild );
+
+    if( xThis == xChild )
+        throw IllegalArgumentException();
+
     maChilds.push_back( newChild );
 
-    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
     newChild->setParent( xThis );
 
     return newChild;
