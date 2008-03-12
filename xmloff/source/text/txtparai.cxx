@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:46:21 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,9 @@ SV_IMPL_PTRARR( XMLHints_Impl, XMLHint_ImplPtr )
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
