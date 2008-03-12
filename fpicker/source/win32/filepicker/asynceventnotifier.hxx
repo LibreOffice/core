@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:49:56 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,11 @@ public:
     // this class is responsible for the memory management of
     // the CEventNotification instance
     void SAL_CALL notifyEvent(CEventNotification* EventNotification);
+
+    void SAL_CALL addListener   (const ::com::sun::star::uno::Type&                                           aType    ,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener);
+    void SAL_CALL removeListener(const ::com::sun::star::uno::Type&                                           aType    ,
+                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener);
 
 private:
     size_t              SAL_CALL getEventListSize();
