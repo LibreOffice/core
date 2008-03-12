@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitmpr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:30:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "xmlitmap.hxx"
 #endif
 
-using namespace rtl;
+using rtl::OUString;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
