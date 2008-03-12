@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:23:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@
 #include "DrawAspectHdl.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
