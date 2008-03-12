@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:16:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2932,6 +2932,15 @@ namespace xmloff { namespace token {
         XML_GREATER_EQUAL,
         XML_BETWEEN,
         XML_NOT_BETWEEN,
+        XML_TABLE_TEMPLATE,
+        XML_FIRST_ROW,
+        XML_LAST_ROW,
+        XML_FIRST_COLUMN,
+        XML_LAST_COLUMN,
+        XML_EVEN_ROWS,
+        XML_ODD_ROWS,
+        XML_EVEN_COLUMNS,
+        XML_ODD_COLUMNS,
         // <--
         XML_HORIZONTAL_ON_ODD,
         // <--
@@ -2963,6 +2972,14 @@ namespace xmloff { namespace token {
         XML_NEAR_ORIGIN,
         XML_DEPENDENCY,
         XML_NAV_ORDER,
+
+        XML_USE_FIRST_ROW_STYLES,
+        XML_USE_LAST_ROW_STYLES,
+        XML_USE_FIRST_COLUMN_STYLES,
+        XML_USE_LAST_COLUMN_STYLES,
+        XML_USE_BANDING_ROWS_STYLES,
+        XML_USE_BANDING_COLUMNS_STYLES,
+
         XML_AUTOMATIC_CONTENT,
         XML_DISPLAY_R_SQUARE,
         XML_DISPLAY_EQUATION,
