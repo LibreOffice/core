@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:15:01 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,11 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
         Size = MAP_APPFONT ( 143 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Automatic preview" ;
+    };
+
+    String STR_USERPATH
+    {
+        Text [ en-US ] = "User paths";
     };
 };
 
