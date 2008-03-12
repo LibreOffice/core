@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:46:52 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 ScFilterDetect::ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& /* xFactory */ )
 {
