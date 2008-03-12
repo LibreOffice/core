@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:54:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,9 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -1335,15 +1337,6 @@ void XMLShapeExport::ImpExportChartShape(
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XMLShapeExport::ImpExportSpreadsheetShape(
-    const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
-{
-    ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportControlShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
@@ -1668,7 +1661,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
         else if(eShapeType == XmlShapeTypePresChartShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_CHART) );
-        else if(eShapeType == XmlShapeTypePresTableShape)
+        else if(eShapeType == XmlShapeTypePresSheetShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
