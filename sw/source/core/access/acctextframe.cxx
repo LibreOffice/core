@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:24:38 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 using utl::AccessibleRelationSetHelper;
 using ::com::sun::star::accessibility::XAccessibleContext;
