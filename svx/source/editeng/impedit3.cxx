@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:35:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3132,6 +3132,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aText += CH_HYPH;
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
+
+                                    // #b6668980# crash when accessing 0 pointer in pDXArray
+                                    pTmpDXArray = new sal_Int32[ aText.Len() ];
+                                    pDXArray = pTmpDXArray;
+                                    Font _aOldFont( GetRefDevice()->GetFont() );
+                                    aTmpFont.SetPhysFont( GetRefDevice() );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.Len(), pTmpDXArray );
+                                    if ( aStatus.DoRestoreFont() )
+                                        GetRefDevice()->SetFont( _aOldFont );
                                 }
 
                                 long nTxtWidth = pTextPortion->GetSize().Width();
