@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:07:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-using namespace ::rtl;
-
+using ::rtl::OUString;
 
 /*-- 02.04.2004 16:42:49---------------------------------------------------
 
