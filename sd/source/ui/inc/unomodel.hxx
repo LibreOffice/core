@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:27:26 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,6 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxLayerManager;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameContainer > mxCustomPresentationAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::presentation::XPresentation > mxPresentation;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxStyleFamilies;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::i18n::XForbiddenCharacters > mxForbidenCharacters;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLinks;
 
