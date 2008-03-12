@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:33:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
+using rtl::OUString;
+using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
      Beschreibung: Ctor
