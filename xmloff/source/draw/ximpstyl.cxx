@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:19:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,42 +66,18 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
+#include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
-#include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
-#endif
-
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include <xmloff/xmlprcon.hxx>
@@ -143,7 +119,9 @@
 #include "xmlerror.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -1151,6 +1129,11 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         }
     }
 
+    if(!pContext && (nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken( rLocalName, XML_TABLE_TEMPLATE ) )
+    {
+        pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nPrefix, rLocalName, xAttrList );
+    }
+
     // call base class
     if(!pContext)
         pContext = SvXMLStylesContext::CreateStyleChildContext(nPrefix, rLocalName, xAttrList);
@@ -1172,6 +1155,11 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     {
     case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
         pContext = new SdXMLDrawingPageStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
+        break;
+    case XML_STYLE_FAMILY_TABLE_CELL:
+    case XML_STYLE_FAMILY_TABLE_COLUMN:
+    case XML_STYLE_FAMILY_TABLE_ROW:
+        pContext = new XMLShapeStyleContext( GetSdImport(), nPrefix, rLocalName, xAttrList, *this, nFamily );
         break;
     }
 
@@ -1250,7 +1238,9 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
 //      return xMapper;
 //  }
 
-    if(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID == nFamily)
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
     {
         if(!xPresImpPropMapper.is())
         {
@@ -1259,11 +1249,29 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
                 aImpHelper->GetPresPagePropsMapper();
         }
         xMapper = xPresImpPropMapper;
-        return xMapper;
+        break;
+    }
+
+    case XML_STYLE_FAMILY_TABLE_COLUMN:
+    case XML_STYLE_FAMILY_TABLE_ROW:
+    case XML_STYLE_FAMILY_TABLE_CELL:
+    {
+        const rtl::Reference< XMLTableImport >& xTableImport( const_cast< SvXMLImport& >( GetImport() ).GetShapeImport()->GetShapeTableImport() );
+
+        switch( nFamily )
+        {
+        case XML_STYLE_FAMILY_TABLE_COLUMN: xMapper = xTableImport->GetColumnImportPropertySetMapper().get(); break;
+        case XML_STYLE_FAMILY_TABLE_ROW: xMapper = xTableImport->GetRowImportPropertySetMapper().get(); break;
+        case XML_STYLE_FAMILY_TABLE_CELL: xMapper = xTableImport->GetCellImportPropertySetMapper().get(); break;
+        }
+        break;
+    }
     }
 
     // call base class
-    return SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    if( !xMapper.is() )
+        xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    return xMapper;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1314,6 +1322,8 @@ void SdXMLStylesContext::EndElement()
     {
         // Process styles list
         ImpSetGraphicStyles();
+        ImpSetCellStyles();
+        GetImport().GetShapeImport()->GetShapeTableImport()->finishStyles();
 
         // put style infos in the info set for other components ( content import f.e. )
         uno::Reference< beans::XPropertySet > xInfoSet( GetImport().getImportInfo() );
@@ -1337,13 +1347,14 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     UniString sPrefix(rMaster.GetDisplayName(), (sal_uInt16)rMaster.GetDisplayName().getLength());
     sPrefix += sal_Unicode('-');
 
-    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName()))
+    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName())) try
     {
-        uno::Reference< container::XNameAccess > xMasterPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()), UNO_QUERY );
-        if(xMasterPageStyles.is())
-        {
-            ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
-        }
+        uno::Reference< container::XNameAccess > xMasterPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
+        ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
     }
 }
 
@@ -1353,36 +1364,40 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
 //
 void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
-    if(GetSdImport().GetLocalDocStyleFamilies().is())
+    if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        uno::Reference< container::XNameAccess > xGraphicPageStyles;
-        try
-        {
-            const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics")));
-            GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName) >>= xGraphicPageStyles;
+        const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics")));
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
-            if(xGraphicPageStyles.is())
-            {
-                UniString aPrefix;
-                ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, aPrefix);
-            }
-        }
-        catch( uno::Exception& e )
-        {
-            (void)e;
-        }
+        UniString aPrefix;
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, aPrefix);
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
+    }
+}
 
-        DBG_ASSERT( xGraphicPageStyles.is(), "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), no graphic style" );
+void SdXMLStylesContext::ImpSetCellStyles() const
+{
+    if(GetSdImport().GetLocalDocStyleFamilies().is()) try
+    {
+        const OUString sCellStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("cell")));
+        uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
+
+        UniString aPrefix;
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, aPrefix);
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 //
-void SdXMLStylesContext::ImpSetGraphicStyles(
-    uno::Reference< container::XNameAccess >& xPageStyles,
-    sal_uInt16 nFamily,
-    const UniString& rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const UniString& rPrefix) const
 {
     xub_StrLen nPrefLen(rPrefix.Len());
 
@@ -1454,13 +1469,10 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 else
                 {
                     // graphics style does not exist, create and add it
-                    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                    uno::Reference< lang::XSingleServiceFactory > xServiceFact(xPageStyles, uno::UNO_QUERY);
                     if(xServiceFact.is())
                     {
-                        uno::Reference< style::XStyle > xNewStyle(
-                            xServiceFact->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"))),
-                            uno::UNO_QUERY);
+                        uno::Reference< style::XStyle > xNewStyle( xServiceFact->createInstance(), uno::UNO_QUERY);
 
                         if(xNewStyle.is())
                         {
@@ -1478,8 +1490,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 if(xStyle.is())
                 {
                     // set properties at style
-                    XMLShapeStyleContext* pPropStyle =
-                        (pStyle->ISA(XMLShapeStyleContext)) ? (XMLShapeStyleContext*)pStyle : 0L;
+                    XMLPropStyleContext* pPropStyle = dynamic_cast< XMLPropStyleContext* >( const_cast< SvXMLStyleContext* >( pStyle ) );
                     uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
 
                     if(xPropSet.is() && pPropStyle)
@@ -1490,9 +1501,8 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 }
             }
         }
-        catch( Exception&e )
+        catch( Exception& e)
         {
-            (void)e;
             uno::Sequence<OUString> aSeq(0);
             const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
         }
@@ -1533,7 +1543,6 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
         }
         catch( Exception& e )
         {
-            (void)e;
             uno::Sequence<OUString> aSeq(0);
             const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
         }
@@ -1641,8 +1650,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
             }
         }
     }
-    else if( nPrefix == XML_NAMESPACE_DRAW
-        && IsXMLToken( rLocalName, XML_LAYER_SET ) )
+    else if( (nPrefix == XML_NAMESPACE_DRAW )&& IsXMLToken( rLocalName, XML_LAYER_SET ) )
     {
         pContext = new SdXMLLayerSetContext( GetImport(), nPrefix, rLocalName, xAttrList );
     }
