@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:48:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ public:
     const List&                     GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
+    sal_Bool                        SetTableRTF( SdDrawDocument*, const ::com::sun::star::datatransfer::DataFlavor& );
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
     static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
