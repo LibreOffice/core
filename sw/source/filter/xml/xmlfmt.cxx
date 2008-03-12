@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:10:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,8 @@
 #include <docsh.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 class SwXMLConditionParser_Impl
