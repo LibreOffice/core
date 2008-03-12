@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:25:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,10 @@
 #include <svx/xtextit0.hxx>
 #endif
 
+#include "svdtext.hxx"
+
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
@@ -71,9 +74,16 @@ class SdrOutliner;
 class SdrTextObj;
 class SvxFieldItem;
 class ImpSdrObjTextLink;
+class EditStatus;
 
 namespace sdr { namespace properties {
     class TextProperties;
+}}
+
+namespace sdr { namespace table {
+    class Cell;
+    class SdrTableRtfExporter;
+    class SdrTableRTFParser;
 }}
 
 //************************************************************
@@ -122,6 +132,7 @@ namespace sdr
     namespace properties
     {
         class CustomShapeProperties;
+        class CellProperties;
     } // end of namespace properties
 } // end of namespace sdr
 
@@ -132,6 +143,11 @@ namespace sdr
 class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj
 {
 private:
+    // Cell needs access to ImpGetDrawOutliner();
+
+    friend class                sdr::table::Cell;
+    friend class                sdr::table::SdrTableRtfExporter;
+    friend class                sdr::table::SdrTableRTFParser;
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
@@ -158,6 +174,7 @@ private:
     // to allow sdr::properties::TextProperties access to SetPortionInfoChecked()
     // and GetTextEditOutliner()
     friend class sdr::properties::TextProperties;
+    friend class sdr::properties::CellProperties;
 
     friend class                ImpTextPortionHandler;
     friend class                ImpSdrObjTextLink;
@@ -169,6 +186,7 @@ private:
     friend class                SdrMeasureObj;   // fuer ImpGetDrawOutliner
     friend class                SvxMSDffManager; // fuer ImpGetDrawOutliner
     friend class                SdrObjCustomShape;// fuer ImpGetDrawOutliner
+    friend class                SdrText;        // fuer ImpGetDrawOutliner
 
 protected:
     // Das aRect ist gleichzeig auch das Rect vom RectObj und CircObj.
@@ -179,8 +197,8 @@ protected:
     // Der GeoStat enthaelt den Drehwinkel und einen Shearwinkel
     GeoStat                     aGeo;
 
-    // Im pOutlinerParaObject steckt der Text drin
-    OutlinerParaObject*         pOutlinerParaObject;
+    // this is the active text
+    SdrText*                    mpText;
 
     // Hier merke ich mir die Ausmasse des Textes (n.i.)
     Size                        aTextSize;
@@ -248,6 +266,8 @@ protected:
     // Flag for allowing text animation. Default is sal_true.
     BOOL                        mbTextAnimationAllowed : 1;
 
+    SVX_DLLPRIVATE SdrOutliner& ImpGetDrawOutliner() const;
+
 private:
     SVX_DLLPRIVATE void ImpCheckMasterCachable();
     // #101029#: Extracted from ImpGetDrawOutliner()
@@ -259,7 +279,6 @@ private:
                                        Rectangle&       rAnchorRect,
                                        Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
-    SVX_DLLPRIVATE SdrOutliner& ImpGetDrawOutliner() const;
     SVX_DLLPRIVATE SdrObject* ImpConvertObj(FASTBOOL bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();
     SVX_DLLPRIVATE void ImpLinkAbmeldung();
@@ -267,7 +286,7 @@ private:
 //  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
 protected:
-    FASTBOOL ImpCanConvTextToCurve() const { return pOutlinerParaObject!=NULL && pModel!=NULL && !IsOutlText() && !IsFontwork(); }
+    FASTBOOL ImpCanConvTextToCurve() const { return GetOutlinerParaObject()!=NULL && pModel!=NULL && !IsOutlText() && !IsFontwork(); }
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const;
     void ImpSetTextStyleSheetListeners();
@@ -336,12 +355,27 @@ public:
     FASTBOOL IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
     SdrObjKind GetTextKind() const { return eTextKind; }
 
-    FASTBOOL HasText() const { return pEdtOutl==NULL ? pOutlinerParaObject!=NULL : HasEditText(); }
+    virtual bool HasText() const;
     FASTBOOL HasEditText() const;
     sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
 
+    /** returns the currently active text. */
+    virtual SdrText* getActiveText() const;
+
+    /** returns the nth available text. */
+    virtual SdrText* getText( sal_Int32 nIndex ) const;
+
+    /** returns the number of texts available for this object. */
+    virtual sal_Int32 getTextCount() const;
+
     /** returns true only if we are in edit mode and the user actually changed anything */
-    bool IsRealyEdited() const;
+    virtual bool IsRealyEdited() const;
+
+    /** changes the current active text */
+    virtual void setActiveText( sal_Int32 nIndex );
+
+    /** returns the index of the text that contains the given point or -1 */
+    virtual sal_Int32 CheckTextHit(const Point& rPnt) const;
 
     void SetDisableAutoWidthOnDragging(FASTBOOL bOn) { bDisableAutoWidthOnDragging=bOn; }
     FASTBOOL IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
@@ -358,7 +392,7 @@ public:
     // der des EditOutliners) und die PaperSize gesetzt.
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
         Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
-    virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
+    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 
     long GetEckenradius() const;
@@ -373,7 +407,7 @@ public:
     const Rectangle &GetGeoRect() const { return aRect; }
 
     // Feststellen, ob TextFontwork
-    FASTBOOL IsFontwork() const;
+    virtual FASTBOOL IsFontwork() const;
 
     // Soll die Fontwork-Kontour versteckt werden?
     FASTBOOL IsHideContour() const;
@@ -455,8 +489,10 @@ public:
     void StopTextAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
+    void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
-    OutlinerParaObject* GetEditOutlinerParaObject() const;
+    virtual OutlinerParaObject* GetEditOutlinerParaObject() const;
+    virtual bool HasOutlinerParaObject() const;
 
     virtual void NbcReformatText();
     virtual void ReformatText();
@@ -500,8 +536,11 @@ public:
      */
     void UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const;
     void ForceOutlinerParaObject();
-    sal_Bool IsVerticalWriting() const;
+    virtual sal_Bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(sal_Bool bVertical);
+
+    /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
+    virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -523,7 +562,7 @@ public:
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
     //          hard set character attributes with the which ids contained in the
     //          given vector
-    void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
+    virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     // #111096#
     // Access to thext hidden flag
@@ -540,7 +579,16 @@ public:
     sal_Bool IsTextAnimationAllowed() const;
     void SetTextAnimationAllowed(sal_Bool bNew);
 
-    const OutlinerParaObject* getOutlinerParaObject() const { return pOutlinerParaObject; }
+    /** returns false if the given pointer is NULL
+        or if the given SdrOutliner contains no text.
+        Also checks for one empty paragraph.
+    */
+    static bool HasTextImpl( SdrOutliner* pOutliner );
+
+    /** returns a new created and non shared outliner.
+        The outliner will not get updated when the SdrModel is changed.
+    */
+    boost::shared_ptr< SdrOutliner > CreateDrawOutliner();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
