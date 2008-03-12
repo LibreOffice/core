@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:01:45 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -286,7 +285,7 @@
 
 #include <unomid.h>
 
-using namespace ::rtl;
+using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -448,9 +447,8 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
         AddLink();
 
-        if ( !pBasePool )
-            pBasePool = new SwDocStyleSheetPool( *pDoc,
-                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+        if ( !mxBasePool.is() )
+            mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     }
 
     UpdateFontList();
@@ -1344,7 +1342,7 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
 
 SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
 {
-    return pBasePool;
+    return mxBasePool.get();
 }
 
 
