@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:51:15 $
+#   last change: $Author: rt $ $Date: 2008-03-12 12:05:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
+    $(SRS)$/uitable.srs			\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
@@ -124,6 +125,7 @@ LIB3FILES=      \
             $(SLB)$/helper.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
+            $(SLB)$/uitable.lib		\
             $(SLB)$/grf.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
