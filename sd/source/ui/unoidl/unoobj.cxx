@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:38:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <com/sun/star/style/XStyle.hpp>
 
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -130,10 +132,6 @@
 #include "ViewShell.hxx"
 #endif
 #include "unokywds.hxx"
-#include "unostyls.hxx"
-#include "unopsfm.hxx"
-#include "unogsfm.hxx"
-#include "unopstyl.hxx"
 #include "unopage.hxx"
 #ifndef SVX_LIGHT
 #ifndef SD_DRAW_DOC_SHELL_HXX
@@ -158,8 +156,9 @@
  #endif
 #endif
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using namespace ::vos;
-using namespace ::rtl;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
@@ -1089,41 +1088,31 @@ void SdXShape::SetMasterDepend( sal_Bool bDepend ) throw()
 
 void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumentException )
 {
-    SdUnoPseudoStyle* pStyleSheet = NULL;
-
-    if( rAny.hasValue() && rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
-        pStyleSheet = SdUnoPseudoStyle::getImplementation(*(uno::Reference< uno::XInterface > *)rAny.getValue() );
-
     SdrObject* pObj = mpShape->GetSdrObject();
+    if( pObj == NULL )
+        throw beans::UnknownPropertyException();
 
-    // check if it is a style and if its not a presentation style
-    if( NULL == pObj || NULL == pStyleSheet || pStyleSheet->getStyleSheet()->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
-        throw lang::IllegalArgumentException();
+    uno::Reference< style::XStyle > xStyle( rAny, uno::UNO_QUERY );
+    SfxStyleSheet* pStyleSheet = SfxUnoStyleSheet::getUnoStyleSheet( xStyle );
 
-    // check if this is a praesentation object by checking the stylesheet
     const SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
-    const SfxStyleSheet* pNewStyleSheet = (SfxStyleSheet*)pStyleSheet->getStyleSheet();
-
-    if( pOldStyleSheet == pNewStyleSheet )
-        return;
-
-    if( pOldStyleSheet && (pOldStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA) )
-        throw lang::IllegalArgumentException();
-
-    pObj->SetStyleSheet( (SfxStyleSheet*)pStyleSheet->getStyleSheet(), sal_False );
-
-    SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : NULL;
-
-#ifndef SVX_LIGHT
-    if( pDoc )
+    if( pOldStyleSheet != pStyleSheet )
     {
-        ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
-        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        if( pStyleSheet == 0 || (pStyleSheet->GetFamily() != SD_STYLE_FAMILY_GRAPHICS && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_MASTERPAGE) )
+            throw lang::IllegalArgumentException();
 
-        if( pViewSh )
-            pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+        pObj->SetStyleSheet( pStyleSheet, sal_False );
+
+        SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : NULL;
+        if( pDoc )
+        {
+            ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
+            ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+
+            if( pViewSh )
+                pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+        }
     }
-#endif
 }
 
 uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException  )
@@ -1132,60 +1121,13 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
     if( pObj == NULL )
         throw beans::UnknownPropertyException();
 
-    uno::Any aAny;
-
     SfxStyleSheet* pStyleSheet = pObj->GetStyleSheet();
-    if(!pStyleSheet)
-        return aAny;
-
     // it is possible for shapes inside a draw to have a presentation style
     // but we don't want this for the api
-    if( pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA && !mpModel->IsImpressDocument() )
-        return aAny;
+    if( (pStyleSheet == NULL) || ((pStyleSheet->GetFamily() != SD_STYLE_FAMILY_GRAPHICS) && !mpModel->IsImpressDocument()) )
+        return Any();
 
-    // style::XStyleFamiliesSupplier
-    uno::Reference< container::XNameAccess >  xFamilies( mpModel->getStyleFamilies() );
-
-    uno::Reference< style::XStyle >  xStyle;
-
-    if( pStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA )
-    {
-        SdrPage* pPage = pObj->GetPage();
-        if( !pPage->IsMasterPage() )
-        {
-            if(!pPage->TRG_HasMasterPage())
-                return aAny;
-
-            pPage = &(pPage->TRG_GetMasterPage());
-        }
-
-        String aLayoutName( pPage->GetLayoutName() );
-        aLayoutName = aLayoutName.Erase(aLayoutName.Search( String( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) )));
-
-        aAny = xFamilies->getByName( aLayoutName );
-        uno::Reference< container::XNameAccess >  xStyleFam( *(uno::Reference< container::XNameAccess > *)aAny.getValue() );
-
-        SdUnoPseudoStyleFamily *pStyleFamily = SdUnoPseudoStyleFamily::getImplementation( xStyleFam );
-        if( pStyleFamily )
-            pStyleFamily->createStyle( pStyleSheet, xStyle );
-    }
-    else
-    {
-        const OUString aSFN( OUString::createFromAscii( sUNO_Graphic_Style_Family_Name ) );
-        aAny = xFamilies->getByName( aSFN );
-        uno::Reference< container::XNameAccess > xStyleFam( *(uno::Reference< container::XNameAccess > *)aAny.getValue() );
-
-        SdUnoGraphicStyleFamily *pStyleFamily = SdUnoGraphicStyleFamily::getImplementation(xStyleFam);
-
-        if( pStyleFamily )
-        {
-            pStyleFamily->createStyle( pStyleSheet, aAny );
-            return aAny;
-        }
-    }
-
-    aAny.setValue( &xStyle, ITYPE( style::XStyle ) );
-    return aAny;
+    return Any( uno::Reference< style::XStyle >( dynamic_cast< SfxUnoStyleSheet* >( pStyleSheet ) ) );
 }
 
 class SdUnoEventsAccess : public cppu::WeakImplHelper2< com::sun::star::container::XNameReplace, com::sun::star::lang::XServiceInfo >
