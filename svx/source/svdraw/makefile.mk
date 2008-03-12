@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 13:52:58 $
+#   last change: $Author: rt $ $Date: 2008-03-12 09:48:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
          $(SLO)$/svdxcgv.obj		 \
+         $(SLO)$/svdmodel.obj		\
          $(SLO)$/svdpage.obj         \
          $(SLO)$/svdoimp.obj         \
          $(SLO)$/svdobj.obj          \
@@ -67,6 +68,7 @@ SLOFILES=\
          $(SLO)$/svdpntv.obj         \
          $(SLO)$/svdsnpv.obj         \
          $(SLO)$/svdview.obj         \
+         $(SLO)$/svdtext.obj		\
          $(SLO)$/svdoashp.obj		 \
          $(SLO)$/svdoattr.obj        \
          $(SLO)$/svdotext.obj        \
@@ -100,7 +102,6 @@ SLOFILES=\
          $(SLO)$/svditer.obj         \
          $(SLO)$/svdlayer.obj        \
          $(SLO)$/svdmark.obj         \
-         $(SLO)$/svdmodel.obj        \
          $(SLO)$/svdmrkv1.obj        \
          $(SLO)$/impgrfll.obj        \
          $(SLO)$/sdrcomment.obj         \
@@ -113,10 +114,11 @@ SLOFILES=\
          $(SLO)$/svdtrans.obj        \
          $(SLO)$/svdtxhdl.obj        \
          $(SLO)$/svdundo.obj         \
-     $(SLO)$/svdviter.obj        \
+         $(SLO)$/svdviter.obj        \
          $(SLO)$/clonelist.obj		 \
          $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/svdedtv.obj         \
+         $(SLO)$/selectioncontroller.obj \
          $(SLO)$/polypolygoneditor.obj \
          $(SLO)$/svdomedia.obj
 
