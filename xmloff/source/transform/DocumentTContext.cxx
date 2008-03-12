@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:22:07 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@
 #include "DocumentTContext.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
