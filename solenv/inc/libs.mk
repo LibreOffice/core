@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.128 $
+#   $Revision: 1.129 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 17:21:21 $
+#   last change: $Author: rt $ $Date: 2008-03-12 10:17:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.128 $$"
+LIBSMKREV!:="$$Revision: 1.129 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -303,7 +303,7 @@ BFXMLOFFLIB=-lbf_xo$(DLLPOSTFIX)
 BFGOODIESLIB=-lbf_go$(DLLPOSTFIX)
 BFBASICLIB=-lbf_sb$(DLLPOSTFIX)
 BFSO3LIB=-lbf_so$(DLLPOSTFIX)
-
+BFSVTOOLLIB=-lbf_svt$(DLLPOSTFIX)
 
 #
 # USED_%NAME%_LIBS
@@ -480,6 +480,7 @@ BFGOODIESLIB=bf_go.lib
 BFBASICLIB=bf_sb.lib
 BFSO3LIB=bf_so.lib
 LEGACYSMGRLIB=ilegacy_binfilters.lib
+BFSVTOOLLIB=bf_svt.lib
 
 SABLOT3RDLIB= $(LIBPRE) sablot.lib
 APP3RDLIB= $(LIBPRE) app.lib
