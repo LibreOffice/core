@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:49:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdouno.hxx>
 #include "shapeimpl.hxx"
+#include "svx/unoshprp.hxx"
 #include <svx/svdoashp.hxx>
 
 // #i29181#
@@ -1146,67 +1147,70 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
 
 //----------------------------------------------------------------------
 
-void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+bool SvxShapePolyPolygon::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
+    switch( pProperty->nWID )
     {
-        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
-            throw lang::IllegalArgumentException();
-
-        basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( (drawing::PointSequenceSequence*)aValue.getValue()));
-        SetPolygon(aNewPolyPolygon);
-    }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    case OWN_ATTR_VALUE_POLYPOLYGON:
     {
-        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
-            throw lang::IllegalArgumentException();
-
-        if( mpObj.is() )
+        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ) )
         {
-            basegfx::B2DPolyPolygon aNewPolyPolygon;
-            basegfx::B2DHomMatrix aNewHomogenMatrix;
-
-            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-            aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon((drawing::PointSequenceSequence*)aValue.getValue());
-            mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( (drawing::PointSequenceSequence*)rValue.getValue()));
+            SetPolygon(aNewPolyPolygon);
+            return true;
         }
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
+    case OWN_ATTR_BASE_GEOMETRY:
     {
-        drawing::PointSequence* pSequence = (drawing::PointSequence*)aValue.getValue();
-
-        if( !pSequence || aValue.getValueType() != ::getCppuType((const drawing::PointSequence*)0 ) )
-            throw lang::IllegalArgumentException();
-
-        // Neues Polygon vorbereiten
-        basegfx::B2DPolygon aNewPolygon;
-
-        // Zeiger auf Arrays holen
-        // Zeiger auf Arrays holen
-        const awt::Point* pArray    = pSequence->getConstArray();
-        const awt::Point* pArrayEnd = pArray + pSequence->getLength();
-
-        for(;pArray != pArrayEnd;++pArray)
+        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0)))
         {
-            aNewPolygon.append(basegfx::B2DPoint(pArray->X, pArray->Y));
+            if( mpObj.is() )
+            {
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+                aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon((drawing::PointSequenceSequence*)rValue.getValue());
+                mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            }
+            return true;
         }
-
-        // check for closed state flag
-        basegfx::tools::checkClosed(aNewPolygon);
-
-        // Polygon setzen
-        SetPolygon(basegfx::B2DPolyPolygon(aNewPolygon));
+        break;
     }
-    else
+    case OWN_ATTR_VALUE_POLYGON:
     {
-        SvxShape::setPropertyValue(aPropertyName, aValue);
+        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ))
+        {
+            drawing::PointSequence* pSequence = (drawing::PointSequence*)rValue.getValue();
+
+            // Neues Polygon vorbereiten
+            basegfx::B2DPolygon aNewPolygon;
+
+            // Zeiger auf Arrays holen
+            // Zeiger auf Arrays holen
+            const awt::Point* pArray    = pSequence->getConstArray();
+            const awt::Point* pArrayEnd = pArray + pSequence->getLength();
+
+            for(;pArray != pArrayEnd;++pArray)
+            {
+                aNewPolygon.append(basegfx::B2DPoint(pArray->X, pArray->Y));
+            }
+
+            // check for closed state flag
+            basegfx::tools::checkClosed(aNewPolygon);
+
+            // Polygon setzen
+            SetPolygon(basegfx::B2DPolyPolygon(aNewPolygon));
+            return true;
+        }
+        break;
+    }
+    default:
+        return SvxShapeText::setPropertyValueImpl( pProperty, rValue );
     }
 
-    if( mpModel )
-        mpModel->SetChanged();
+    throw lang::IllegalArgumentException();
 }
 
 void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
@@ -1253,12 +1257,11 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
 
 //----------------------------------------------------------------------
 
-uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+bool SvxShapePolyPolygon::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_VALUE_POLYPOLYGON:
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
@@ -1266,34 +1269,31 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
 
         B2DPolyPolygonToSvxPointSequenceSequence( rPolyPoly, aRetval );
 
-        return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
+        rValue <<= aRetval;
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    case OWN_ATTR_BASE_GEOMETRY:
     {
         // pack a PolyPolygon in struct PolyPolygon
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
-        SdrObject* pObject = mpObj.get();
 
-        if(pObject)
-        {
+        if(mpObj.is())
             mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-        }
 
         drawing::PointSequenceSequence aRetval(aNewPolyPolygon.count());
         B2DPolyPolygonToSvxPointSequenceSequence(aNewPolyPolygon, aRetval);
-        return uno::Any( aRetval );
+        rValue <<= aRetval;
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
+    case OWN_ATTR_VALUE_POLYGON:
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
 
         sal_Int32 nCount = 0;
         if( rPolyPoly.count() > 0 )
-        {
             nCount = rPolyPoly.getB2DPolygon(0L).count();
-        }
 
         drawing::PointSequence aRetval( nCount );
 
@@ -1312,16 +1312,19 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
             }
         }
 
-        return uno::Any( aRetval );
+        rValue <<= aRetval;
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
+    case OWN_ATTR_VALUE_POLYGONKIND:
     {
-        return Any( GetPolygonKind() );
+        rValue <<= GetPolygonKind();
+        break;
     }
-    else
-    {
-        return SvxShape::getPropertyValue(aPropertyName);
+    default:
+        return SvxShapeText::getPropertyValueImpl( pProperty, rValue );
     }
+
+    return true;
 }
 
 //----------------------------------------------------------------------
@@ -1509,41 +1512,43 @@ basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon(const drawin
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException )
+
+bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
+    switch( pProperty->nWID )
     {
-        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
-            throw IllegalArgumentException();
-
-        basegfx::B2DPolyPolygon aNewPolyPolygon(SvxConvertPolyPolygonBezierToB2DPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue()));
-        SetPolygon(aNewPolyPolygon);
-    }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
-        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
-            throw IllegalArgumentException();
-
-        if( mpObj.is() )
+        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0) ) )
         {
-            basegfx::B2DPolyPolygon aNewPolyPolygon;
-            basegfx::B2DHomMatrix aNewHomogenMatrix;
-
-            mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-            aNewPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon((drawing::PolyPolygonBezierCoords*)aValue.getValue());
-            mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            basegfx::B2DPolyPolygon aNewPolyPolygon(SvxConvertPolyPolygonBezierToB2DPolyPolygon( (drawing::PolyPolygonBezierCoords*)rValue.getValue()));
+            SetPolygon(aNewPolyPolygon);
+            return true;
         }
+        break;
     }
-    else
+    case OWN_ATTR_BASE_GEOMETRY:
     {
-        SvxShape::setPropertyValue(aPropertyName, aValue);
+        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0)) )
+        {
+            if( mpObj.is() )
+            {
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+                basegfx::B2DHomMatrix aNewHomogenMatrix;
+
+                mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+                aNewPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon((drawing::PolyPolygonBezierCoords*)rValue.getValue());
+                mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
+            }
+            return true;
+        }
+        break;
+    }
+    default:
+        return SvxShapeText::setPropertyValueImpl( pProperty, rValue );
     }
 
-    if( mpModel )
-        mpModel->SetChanged();
+    throw IllegalArgumentException();
 }
 
 void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
@@ -1585,25 +1590,23 @@ void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon&
 }
 
 //----------------------------------------------------------------------
-uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
 
-    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
+bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
         SvxConvertB2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval );
 
-        return uno::Any( aRetval );
+        rValue <<= aRetval;
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    case OWN_ATTR_BASE_GEOMETRY:
     {
-        if( !mpObj.is() )
-            throw lang::DisposedException();
-
         // PolyPolygon in eine struct PolyPolygon packen
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
@@ -1611,16 +1614,18 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         drawing::PolyPolygonBezierCoords aRetval;
         SvxConvertB2DPolyPolygonToPolyPolygonBezier(aNewPolyPolygon, aRetval);
 
-        return uno::Any( aRetval );
+        rValue <<= aRetval;
+        break;
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
+    case OWN_ATTR_VALUE_POLYGONKIND:
     {
-        return uno::Any( mePolygonKind );
+        rValue <<= mePolygonKind;
+        break;
     }
-    else
-    {
-        return SvxShape::getPropertyValue(aPropertyName);
+    default:
+        return SvxShapeText::getPropertyValueImpl( pProperty, rValue );
     }
+    return true;
 }
 
 //----------------------------------------------------------------------
@@ -1635,7 +1640,7 @@ void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) 
     OGuard aGuard( Application::GetSolarMutex() );
 
     if(mpObj.is())
-        ((SdrPathObj*)mpObj.get())->SetPathPoly(rNew);
+        static_cast<SdrPathObj*>(mpObj.get())->SetPathPoly(rNew);
 }
 
 //----------------------------------------------------------------------
@@ -1645,7 +1650,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
 
     if(mpObj.is())
     {
-        return ((SdrPathObj*)mpObj.get())->GetPathPoly();
+        return static_cast<SdrPathObj*>(mpObj.get())->GetPathPoly();
     }
     else
     {
@@ -1699,167 +1704,175 @@ SvxGraphicObject::~SvxGraphicObject() throw()
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+
+bool SvxGraphicObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
+    bool bOk = false;
+    switch( pProperty->nWID )
     {
-        if( aValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
+    case OWN_ATTR_VALUE_FILLBITMAP:
+    {
+        if( rValue.getValue() )
         {
-            uno::Sequence<sal_Int8>* pSeq( (uno::Sequence<sal_Int8>*)aValue.getValue() );
-            SvMemoryStream  aMemStm;
-            Graphic         aGraphic;
-
-            aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), sal_False, pSeq->getLength() );
-
-            if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
+            if( rValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
             {
-                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+                uno::Sequence<sal_Int8>* pSeq( (uno::Sequence<sal_Int8>*)rValue.getValue() );
+                SvMemoryStream  aMemStm;
+                Graphic         aGraphic;
+
+                aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), sal_False, pSeq->getLength() );
+
+                if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
+                {
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
+                    bOk = true;
+                }
             }
         }
-        else if( (aValue.getValueType() == awt::XBitmap::static_type()) || (aValue.getValueType() == graphic::XGraphic::static_type()))
+        else if( (rValue.getValueType() == awt::XBitmap::static_type()) || (rValue.getValueType() == graphic::XGraphic::static_type()))
         {
-            Reference< graphic::XGraphic> xGraphic( aValue, UNO_QUERY );
+            Reference< graphic::XGraphic> xGraphic( rValue, UNO_QUERY );
             if( xGraphic.is() )
             {
                 ((SdrGrafObj*)mpObj.get())->SetGraphic(Graphic(xGraphic));
+                bOk = true;
             }
             else
             {
                 // Bitmap in das Objekt packen
-                Reference< awt::XBitmap > xBmp( aValue, UNO_QUERY );
+                Reference< awt::XBitmap > xBmp( rValue, UNO_QUERY );
                 if( xBmp.is() )
                 {
                     // Bitmap einsetzen
                     Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
                     ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+                    bOk = true;
                 }
             }
         }
-        else if( aValue.getValueType() == INTERFACE_TYPE( graphic::XGraphic ))
-        {
-            Reference< graphic::XGraphic > xGraphic( aValue, UNO_QUERY );
-            if( xGraphic.is() )
-            {
-                Graphic aGraphic( xGraphic );
-                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
-            }
-        }
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)))
+    case OWN_ATTR_GRAFURL:
     {
         OUString aURL;
-        if(!(aValue >>= aURL))
-            throw lang::IllegalArgumentException();
-
-        if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+        if( rValue >>= aURL )
         {
-            // graphic manager url
-            aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-            String aTmpStr(aURL);
-            ByteString aUniqueID( aTmpStr, RTL_TEXTENCODING_UTF8 );
-            GraphicObject aGrafObj( aUniqueID );
-
-            // #101808# since loading a graphic can cause a reschedule of the office
-            //          it is possible that our shape is removed while where in this
-            //          method.
-            if( mpObj.is() )
+            if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
             {
-                ((SdrGrafObj*)mpObj.get())->ReleaseGraphicLink();
-                ((SdrGrafObj*)mpObj.get())->SetGraphicObject( aGrafObj );
-            }
-        }
-        else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
-        {
-            // normal link
-            String              aFilterName;
-            const SfxFilter*    pSfxFilter = NULL;
-            SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                // graphic manager url
+                aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
+                String aTmpStr(aURL);
+                ByteString aUniqueID( aTmpStr, RTL_TEXTENCODING_UTF8 );
+                GraphicObject aGrafObj( aUniqueID );
 
-            SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-
-            if( !pSfxFilter )
-            {
-                INetURLObject aURLObj( aURL );
-
-                if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
+                // #101808# since loading a graphic can cause a reschedule of the office
+                //          it is possible that our shape is removed while where in this
+                //          method.
+                if( mpObj.is() )
                 {
-                    String aValidURL;
-
-                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
-                        aURLObj = INetURLObject( aValidURL );
-                }
-
-                if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
-                {
-                    GraphicFilter* pGrfFilter = GetGrfFilter();
-                    aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                    static_cast<SdrGrafObj*>(mpObj.get())->ReleaseGraphicLink();
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicObject( aGrafObj );
                 }
             }
-            else
-                aFilterName = pSfxFilter->GetFilterName();
+            else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
+            {
+                // normal link
+                String              aFilterName;
+                const SfxFilter*    pSfxFilter = NULL;
+                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
 
-            // #101808# since loading a graphic can cause a reschedule of the office
-            //          it is possible that our shape is removed while where in this
-            //          method.
-            if( mpObj.is() )
-                ((SdrGrafObj*)mpObj.get())->SetGraphicLink( aURL, aFilterName );
-        }
-        else
-        {
-        }
+                SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
+                if( !pSfxFilter )
+                {
+                    INetURLObject aURLObj( aURL );
+
+                    if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
+                    {
+                        String aValidURL;
+
+                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
+                            aURLObj = INetURLObject( aValidURL );
+                    }
+
+                    if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
+                    {
+                        GraphicFilter* pGrfFilter = GetGrfFilter();
+                        aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                    }
+                }
+                else
+                    aFilterName = pSfxFilter->GetFilterName();
+
+                // #101808# since loading a graphic can cause a reschedule of the office
+                //          it is possible that our shape is removed while where in this
+                //          method.
+                if( mpObj.is() )
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicLink( aURL, aFilterName );
+
+            }
+            bOk = true;
+        }
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)))
+
+    case OWN_ATTR_GRAFSTREAMURL:
     {
         OUString aStreamURL;
 
-        if( !( aValue >>= aStreamURL ) )
-            throw lang::IllegalArgumentException();
-
-
-        if( aStreamURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
+        if( rValue >>= aStreamURL )
         {
-            aStreamURL = OUString();
+            if( aStreamURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
+                aStreamURL = OUString();
+
+            if( mpObj.is() )
+            {
+                static_cast<SdrGrafObj*>(mpObj.get())->SetGrafStreamURL( aStreamURL );
+                static_cast<SdrGrafObj*>(mpObj.get())->ForceSwapOut();
+            }
+            bOk = true;
         }
-
-        ((SdrGrafObj*)mpObj.get())->SetGrafStreamURL( aStreamURL );
-        ((SdrGrafObj*)mpObj.get())->ForceSwapOut();
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)))
+
+    case OWN_ATTR_VALUE_GRAPHIC:
     {
-        Reference< graphic::XGraphic > xGraphic( aValue, UNO_QUERY );
-
-        if( !xGraphic.is() )
-            throw lang::IllegalArgumentException();
-
-        static_cast< SdrGrafObj*>( mpObj.get() )->SetGraphic( xGraphic );
+        Reference< graphic::XGraphic > xGraphic( rValue, uno::UNO_QUERY );
+        if( xGraphic.is() )
+        {
+            static_cast< SdrGrafObj*>( mpObj.get() )->SetGraphic( xGraphic );
+            bOk = true;
+        }
+        break;
     }
-    else
-    {
-        SvxShape::setPropertyValue(aPropertyName, aValue);
+    default:
+        return SvxShapeText::setPropertyValueImpl( pProperty, rValue );
     }
+
+    if( !bOk )
+        throw lang::IllegalArgumentException();
+
     if( mpModel )
         mpModel->SetChanged();
+
+    return true;
 }
 
 //----------------------------------------------------------------------
-uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
 
-    if(mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
+bool SvxGraphicObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    switch( pProperty->nWID )
     {
-        const Graphic& rGraphic = ((SdrGrafObj*)mpObj.get())->GetGraphic();
+    case OWN_ATTR_VALUE_FILLBITMAP:
+    {
+        const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
         {
             // Objekt in eine Bitmap packen
-            Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(((SdrGrafObj*)mpObj.get())->GetGraphic().GetBitmapEx()) );
-            return uno::Any( xBitmap );
+            Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );
+            rValue <<= xBitmap;
         }
         else
         {
@@ -1867,113 +1880,53 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
 
             ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, sal_False );
             uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-            return uno::Any( aSeq );
+            rValue <<= aSeq;
         }
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) )
+
+    case OWN_ATTR_GRAFURL:
     {
-        if( ((SdrGrafObj*)mpObj.get())->IsLinkedGraphic() )
+        if( static_cast< SdrGrafObj*>( mpObj.get() )->IsLinkedGraphic() )
         {
-            return uno::Any( OUString( ((SdrGrafObj*)mpObj.get())->GetFileName() ) );
+            rValue <<= OUString( static_cast< SdrGrafObj*>( mpObj.get() )->GetFileName() );
         }
         else
         {
-            const GraphicObject& rGrafObj = ((SdrGrafObj*)mpObj.get())->GetGraphicObject();
+            const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject();
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
             aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
-            return uno::Any( aURL );
+            rValue <<= aURL;
         }
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)) )
+
+    case OWN_ATTR_GRAFSTREAMURL:
     {
         const OUString  aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
-        uno::Any aAny;
-
         if( aStreamURL.getLength() )
-            aAny <<= aStreamURL;
-
-        return aAny;
+            rValue <<= aStreamURL;
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)) )
+
+    case OWN_ATTR_VALUE_GRAPHIC:
     {
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
-        return uno::Any( xGraphic );
+        rValue <<= xGraphic;
+        break;
     }
-    else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicStream" ) ) )
+
+    case OWN_ATTR_GRAPHIC_STREAM:
     {
-        return Any( static_cast< SdrGrafObj* >( mpObj.get() )->getInputStream() );
+        rValue <<= static_cast< SdrGrafObj* >( mpObj.get() )->getInputStream();
+        break;
     }
-    else
-    {
-        return SvxShape::getPropertyValue(aPropertyName);
+    default:
+        return SvxShapeText::getPropertyValueImpl(pProperty,rValue);
     }
+
+    return true;
 }
-
-// ::com::sun::star::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    return SvxShapeText::getSupportedServiceNames();
-}
-
-
-//basegfx::B2DPolygon SvxConvertPolyPolygonBezierToB2DPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
-//  throw( lang::IllegalArgumentException )
-//{
-//  sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-//  if( nOuterSequenceCount != 1 || pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
-//      throw lang::IllegalArgumentException();
-//
-//  // Zeiger auf innere sequences holen
-//  const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
-//  const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
-//
-//  sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
-//
-//  if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
-//      throw lang::IllegalArgumentException();
-//
-//  // Zeiger auf Arrays holen
-//  const awt::Point* pArray = pInnerSequence->getConstArray();
-//  const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
-//  XPolygon aNewPolygon;
-//
-//  for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
-//  {
-//      aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
-//      pArray++;
-//      aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
-//  }
-//
-//  return aNewPolygon.getB2DPolygon();
-//}
-
-//void SvxConvertB2DPolygonToPolyPolygonBezier( const basegfx::B2DPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval ) throw()
-//{
-//  const XPolygon aPolygon(rPolygon);
-//
-//  // Polygone innerhalb vrobereiten
-//  rRetval.Coordinates.realloc(1);
-//  rRetval.Flags.realloc(1);
-//
-//  // Zeiger auf aeussere Arrays holen
-//  drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
-//  drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
-//
-//  // Platz in Arrays schaffen
-//  pOuterSequence->realloc((sal_Int32)aPolygon.GetPointCount());
-//  pOuterFlags->realloc((sal_Int32)aPolygon.GetPointCount());
-//
-//  // Pointer auf arrays holen
-//  awt::Point* pInnerSequence = pOuterSequence->getArray();
-//  drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
-//
-//  for(sal_uInt16 b=0;b<aPolygon.GetPointCount();b++)
-//  {
-//      *pInnerSequence++ = awt::Point( aPolygon[b].X(), aPolygon[b].Y() );
-//      *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)aPolygon.GetFlags(b));
-//  }
-//}
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -2166,42 +2119,26 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 }
 
 //----------------------------------------------------------------------
-// ::com::sun::star::lang::XServiceInfo
 
-uno::Sequence< OUString > SAL_CALL SvxCustomShape::getSupportedServiceNames()
-    throw(uno::RuntimeException)
+bool SvxCustomShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    return SvxShapeText::getSupportedServiceNames();
-}
-
-//----------------------------------------------------------------------
-void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-    SdrObject* pObject = mpObj.get();
-
-    sal_Bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
-
-    sal_Bool bMirroredX = sal_False;
-    sal_Bool bMirroredY = sal_False;
-
-    if ( bCustomShapeGeometry )
+    switch( pProperty->nWID )
     {
-        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
-        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
-    }
-
-    SvxShape::setPropertyValue( aPropertyName, aValue );
-
-    if ( bCustomShapeGeometry )
+    case SDRATTR_CUSTOMSHAPE_GEOMETRY:
     {
-        ((SdrObjCustomShape*)pObject)->MergeDefaultAttributes(0);
+        SdrObjCustomShape* pObject = static_cast< SdrObjCustomShape* >( mpObj.get() );
+
+        sal_Bool bMirroredX = pObject->IsMirroredX();
+        sal_Bool bMirroredY = pObject->IsMirroredY();
+
+        SvxShapeText::setPropertyValueImpl( pProperty, rValue );
+
+        pObject->MergeDefaultAttributes(0);
         Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
-        bool bNeedsMirrorX = ((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX;
-        bool bNeedsMirrorY = ((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY;
+        bool bNeedsMirrorX = pObject->IsMirroredX() != bMirroredX;
+        bool bNeedsMirrorY = pObject->IsMirroredY() != bMirroredY;
 
         boost::scoped_ptr< SdrGluePointList > pListCopy;
         if( bNeedsMirrorX || bNeedsMirrorY )
@@ -2215,19 +2152,19 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
         {
             Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            ((SdrObjCustomShape*)pObject)->NbcMirror( aTop, aBottom );
+            pObject->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+            pObject->SetMirroredX( bMirroredX ? sal_False : sal_True );
         }
         if ( bNeedsMirrorY )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            ((SdrObjCustomShape*)pObject)->NbcMirror( aLeft, aRight );
+            pObject->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+            pObject->SetMirroredY( bMirroredY ? sal_False : sal_True );
         }
 
         if( pListCopy )
@@ -2236,27 +2173,28 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             if(pNewList)
                 *pNewList = *pListCopy;
         }
+        return true;
+    }
+    default:
+        return SvxShapeText::setPropertyValueImpl( pProperty, rValue );
     }
 }
 
-uno::Any SAL_CALL SvxCustomShape::getPropertyValue( const OUString& aPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+bool SvxCustomShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RotateAngle" ) ) )
+    switch( pProperty->nWID )
     {
-        double fAngle = ((SdrObjCustomShape*)mpObj.get())->GetObjectRotation();
+    case SDRATTR_ROTATEANGLE:
+    {
+        double fAngle = static_cast<SdrObjCustomShape*>(mpObj.get())->GetObjectRotation();
         fAngle *= 100;
-        return Any( (sal_Int32)fAngle );
+        rValue <<= (sal_Int32)fAngle;
+        return true;
     }
-    else
-    {
-        return SvxShape::getPropertyValue( aPropertyName );
+    default:
+        return SvxShape::getPropertyValueImpl( pProperty, rValue );
     }
-
 }
-
 //----------------------------------------------------------------------
 
 void SvxCustomShape::createCustomShapeDefaults( const rtl::OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException)
