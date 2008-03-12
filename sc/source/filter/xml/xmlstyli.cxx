@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:07:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@
 #define XML_LINE_TLBR 0
 #define XML_LINE_BLTR 1
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -311,7 +311,7 @@ public:
     ScXMLMapContext(
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const rtl::OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~ScXMLMapContext();
 
     const rtl::OUString& GetApplyStyle() const { return sApplyStyle; }
@@ -320,7 +320,7 @@ public:
 };
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName, const Reference< xml::sax::XAttributeList > & xAttrList )
+            const OUString& rLName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )
     : SvXMLImportContext( rImport, nPrfx, rLName ),
     sApplyStyle(),
     sCondition(),
@@ -574,7 +574,7 @@ TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        const uno::Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sDataStyleName(),
@@ -593,7 +593,7 @@ XMLTableStyleContext::~XMLTableStyleContext()
 SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext(NULL);
 
@@ -615,7 +615,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
 }
 
 void XMLTableStyleContext::FillPropertySet(
-            const Reference< XPropertySet > & rPropSet )
+    const uno::Reference< XPropertySet > & rPropSet )
 {
     if (!IsDefaultStyle())
     {
@@ -729,7 +729,7 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
                                                             rLocalName,
@@ -779,7 +779,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
-        const Reference< XAttributeList > & xAttrList,
+        const uno::Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) )),
@@ -858,10 +858,10 @@ UniReference < SvXMLImportPropertyMapper >
     return xMapper;
 }
 
-Reference < XNameContainer >
+uno::Reference < XNameContainer >
         XMLTableStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
 {
-    Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
+    uno::Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
         OUString sName;
@@ -906,11 +906,11 @@ Reference < XNameContainer >
         }
         if( !xStyles.is() && sName.getLength() && GetScImport().GetModel().is() )
         {
-            Reference< XStyleFamiliesSupplier > xFamiliesSupp(
+            uno::Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                             GetScImport().GetModel(), UNO_QUERY );
             if (xFamiliesSupp.is())
             {
-                Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
+                uno::Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
                 xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
                 switch( nFamily )
@@ -1004,7 +1004,7 @@ sal_Bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 ScXMLMasterStylesContext::ScXMLMasterStylesContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList ) :
+        const uno::Reference< XAttributeList > & xAttrList ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
 {
 }
@@ -1016,7 +1016,7 @@ ScXMLMasterStylesContext::~ScXMLMasterStylesContext()
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pContext(0);
 
@@ -1036,7 +1036,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 /* nFamily */,
         sal_uInt16 /* nPrefix */,
         const OUString& /* rLocalName */,
-        const Reference< XAttributeList > & /* xAttrList */ )
+        const uno::Reference< XAttributeList > & /* xAttrList */ )
 {
     return 0;
 }
@@ -1050,7 +1050,7 @@ TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
 
 ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        const uno::Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite ) :
     XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
     bContainsRightHeader(sal_False),
@@ -1065,7 +1065,7 @@ ScMasterPageContext::~ScMasterPageContext()
 SvXMLImportContext *ScMasterPageContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        const uno::Reference< XAttributeList > & xAttrList )
 {
     return XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
@@ -1098,7 +1098,7 @@ void ScMasterPageContext::ClearContent(const rtl::OUString& rContent)
 
     if (xPropSet.is())
     {
-        Reference < sheet::XHeaderFooterContent > xHeaderFooterContent(xPropSet->getPropertyValue( rContent ), uno::UNO_QUERY);
+        uno::Reference < sheet::XHeaderFooterContent > xHeaderFooterContent(xPropSet->getPropertyValue( rContent ), uno::UNO_QUERY);
         if (xHeaderFooterContent.is())
         {
             xHeaderFooterContent->getLeftText()->setString(sEmpty);
