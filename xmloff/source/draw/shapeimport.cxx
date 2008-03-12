@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:07:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,9 @@
 #include <map>
 #include <vector>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -353,6 +355,7 @@ static __FAR_DATA SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN        },
     { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
     { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET        },
+    { XML_NAMESPACE_TABLE,          XML_TABLE,          XML_TOK_FRAME_TABLE         },
     XML_TOKEN_MAP_END
 };
 
@@ -934,6 +937,14 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
             pContext = new SdXMLObjectShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
+        case XML_TOK_FRAME_TABLE:
+        {
+            // draw:object or draw:object_ole
+            if( rImport.IsTableShapeSupported() )
+                pContext = new SdXMLTableShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+
+        }
         case XML_TOK_FRAME_PLUGIN:
         {
             // draw:plugin
@@ -1409,3 +1420,14 @@ sal_Bool XMLShapeImportHelper::IsPresentationShapesSupported()
     return mpImpl->mbIsPresentationShapesSupported;
 }
 
+const rtl::Reference< XMLTableImport >& XMLShapeImportHelper::GetShapeTableImport()
+{
+    if( !mxShapeTableImport.is() )
+    {
+        rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrImporter.GetModel(), mrImporter ) );
+        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        mxShapeTableImport = new XMLTableImport( mrImporter, xPropertySetMapper, xFactory );
+    }
+
+    return mxShapeTableImport;
+}
