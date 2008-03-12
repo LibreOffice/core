@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:54:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,8 @@
 #include "dcontact.hxx"
 #endif
 // <--
+
+using namespace ::com::sun::star;
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
