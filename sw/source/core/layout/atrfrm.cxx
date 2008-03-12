@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:25:44 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 SV_IMPL_PTRARR(SwColumns,SwColumn*)
 
