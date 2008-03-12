@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:48:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,18 +61,6 @@ String STR_ObjNamePluralGRUPEMPTY
 {
     Text [ en-US ] = "Blank group objects" ;
 };
-//BFS01String STR_ObjNameSingulGRUPLNK
-//BFS01{
-//BFS01 Text [ de ] = "verknüpftes Gruppenobjekt" ;
-//BFS01 Text [ en-US ] = "Linked group object" ;
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
-//BFS01String STR_ObjNamePluralGRUPLNK
-//BFS01{
-//BFS01 Text [ de ] = "verknüpfte Gruppenobjekte" ;
-//BFS01 Text [ en-US ] = "Linked group objects" ;
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulLINE
 {
@@ -568,14 +556,10 @@ String STR_ObjNamePluralPAGE
 };
 String STR_ObjNameSingulMEASURE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekt : Bema˜ungsobjekt */
-    /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekt : Bema˜ungsobjekt */
     Text [ en-US ] = "Dimension line" ;
 };
 String STR_ObjNamePluralMEASURE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekte : Bema˜ungsobjekte */
-    /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekte : Bema˜ungsobjekte */
     Text [ en-US ] = "Dimensioning objects" ;
 };
 String STR_ObjNamePlural
@@ -649,13 +633,6 @@ String STR_ObjNamePluralObj3d
 {
     Text [ en-US ] = "3D objects";
 };
-
-//BFS01String STR_ObjNameSingulPoly3d
-//BFS01{
-//BFS01 Text [ de ] = "3D Polygon" ;
-//BFS01 Text [ en-US ] = "3D polygon";
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
 
 String STR_ObjNamePluralPoly3d
 {
@@ -920,8 +897,6 @@ String STR_EditImportDXF
 };
 String STR_ExchangePaste
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     Text [ en-US ] = "Insert object(s)" ;
 };
 String STR_ExchangeClpCut
@@ -930,8 +905,6 @@ String STR_ExchangeClpCut
 };
 String STR_ExchangeClpPaste
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zwischenablage einfügen : Zwischenablage einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Zwischenablage einfügen : Zwischenablage einf³gen */
     Text [ en-US ] = "Paste Clipboard" ;
 };
 String STR_ExchangeDD
@@ -940,8 +913,6 @@ String STR_ExchangeDD
 };
 String STR_ExchangeDDPaste
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Drag&Drop einfügen : Drag&Drop einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Drag&Drop einfügen : Drag&Drop einf³gen */
     Text [ en-US ] = "Insert Drag and Drop" ;
 };
 String STR_DragInsertPoint
@@ -1115,14 +1086,10 @@ String STR_UndoObjSetText
 };
 String STR_UndoNewPage
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seite einfügen : Seite einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Seite einfügen : Seite einf³gen */
     Text [ en-US ] = "Insert page" ;
 };
 String STR_UndoDelPage
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seite löschen : Seite l÷schen */
-    /* ### ACHTUNG: Neuer Text in Resource? Seite löschen : Seite l÷schen */
     Text [ en-US ] = "Delete page" ;
 };
 String STR_UndoCopPage
@@ -1131,8 +1098,6 @@ String STR_UndoCopPage
 };
 String STR_UndoMovPage
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Seiten verändern : Reihenfolge der Seiten verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Seiten verändern : Reihenfolge der Seiten verõndern */
     Text [ en-US ] = "Change order of pages" ;
 };
 String STR_UndoNewPageMasterDscr
@@ -1149,32 +1114,22 @@ String STR_UndoMovPageMasterDscr
 };
 String STR_UndoChgPageMasterDscr
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hintergrundseitenzuordnung ändern : Hintergrundseitenzuordnung õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Hintergrundseitenzuordnung ändern : Hintergrundseitenzuordnung õndern */
     Text [ en-US ] = "Change background page assignment" ;
 };
 String STR_UndoMergeModel
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Dokument einfügen : Dokument einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Dokument einfügen : Dokument einf³gen */
     Text [ en-US ] = "Insert document" ;
 };
 String STR_UndoNewLayer
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene einfügen : Ebene einf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene einfügen : Ebene einf³gen */
     Text [ en-US ] = "Insert Layer" ;
 };
 String STR_UndoDelLayer
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene löschen : Ebene l÷schen */
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene löschen : Ebene l÷schen */
     Text [ en-US ] = "Delete layer" ;
 };
 String STR_UndoMovLayer
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Ebenen verändern : Reihenfolge der Ebenen verõndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Ebenen verändern : Reihenfolge der Ebenen verõndern */
     Text [ en-US ] = "Change order of layers" ;
 };
 String STR_StandardLayerName
@@ -1261,8 +1216,6 @@ String STR_ItemValTEXTVADJBOTTOM
 };
 String STR_ItemValTEXTVADJBLOCK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ausnutzung der gesamten Höhe : Ausnutzung der gesamten H÷he */
-    /* ### ACHTUNG: Neuer Text in Resource? Ausnutzung der gesamten Höhe : Ausnutzung der gesamten H÷he */
     Text [ en-US ] = "Use entire height" ;
 };
 String STR_ItemValTEXTVADJSTRETCH
@@ -1358,8 +1311,6 @@ String STR_ItemValMEASURE_TEXTHAUTO
 };
 String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? links außen : links au˜en */
-    /* ### ACHTUNG: Neuer Text in Resource? links außen : links au˜en */
     Text [ en-US ] = "left outside" ;
 };
 String STR_ItemValMEASURE_TEXTINSIDE
@@ -1368,8 +1319,6 @@ String STR_ItemValMEASURE_TEXTINSIDE
 };
 String STR_ItemValMEASURE_TEXTRIGHTOUTSID
 {
-    /* ### ACHTUNG: Neuer Text in Resource? rechts außen : rechts au˜en */
-    /* ### ACHTUNG: Neuer Text in Resource? rechts außen : rechts au˜en */
     Text [ en-US ] = "right outside" ;
 };
 String STR_ItemValMEASURE_TEXTVAUTO
@@ -1439,17 +1388,6 @@ String STR_ItemNam_SHADOWPERSP
 {
     Text [ en-US ] = "Perspective shadow" ;
 };
-//BFS01String STR_ItemNam_SHADOWRESERVE1 { Text = "" ; };
-//BFS01String STR_ItemNam_SHADOWRESERVE2 { Text = "" ; };
-//BFS01String STR_ItemNam_SHADOWRESERVE3 { Text = "" ; };
-//BFS01String STR_ItemNam_SHADOWRESERVE4 { Text = "" ; };
-//BFS01String STR_ItemNam_SHADOWRESERVE5 { Text = "" ; };
-//BFS01String STR_ItemNamSET_SHADOW
-//BFS01{
-//BFS01 Text [ de ] = "Schattenattribute" ;
-//BFS01 Text [ en-US ] = "Shadow attributes" ;
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
 String STR_ItemNam_CAPTIONTYPE
 {
     Text [ en-US ] = "Callout type" ;
@@ -1484,33 +1422,12 @@ String STR_ItemNam_CAPTIONESCABS
 };
 String STR_ItemNam_CAPTIONLINELEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Linienlänge : Linienlõnge */
-    /* ### ACHTUNG: Neuer Text in Resource? Linienlänge : Linienlõnge */
     Text [ en-US ] = "Line length" ;
 };
 String STR_ItemNam_CAPTIONFITLINELEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Automatische Linienlänge : Automatische Linienlõnge */
-    /* ### ACHTUNG: Neuer Text in Resource? Automatische Linienlänge : Automatische Linienlõnge */
     Text [ en-US ] = "Auto line length" ;
 };
-//BFS01String STR_ItemNam_CAPTIONRESERVE1 { Text = "" ; };
-//BFS01String STR_ItemNam_CAPTIONRESERVE2 { Text = "" ; };
-//BFS01String STR_ItemNam_CAPTIONRESERVE3 { Text = "" ; };
-//BFS01String STR_ItemNam_CAPTIONRESERVE4 { Text = "" ; };
-//BFS01String STR_ItemNam_CAPTIONRESERVE5 { Text = "" ; };
-//BFS01String STR_ItemNamSET_CAPTION
-//BFS01{
-//BFS01 Text [ de ] = "Legendenattribute" ;
-//BFS01 Text [ en-US ] = "Callout attributes" ;
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
-//BFS01String STR_ItemNamSET_OUTLINER
-//BFS01{
-//BFS01 Text [ de ] = "Textattribute" ;
-//BFS01 Text [ en-US ] = "Text attributes" ;
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
 String STR_ItemNam_ECKENRADIUS
 {
     Text [ en-US ] = "Corner radius" ;
@@ -1533,20 +1450,14 @@ String STR_ItemNam_TEXT_LOWERDIST
 };
 String STR_ItemNam_TEXT_AUTOGROWHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Automatische Anpassung der Rahmenhöhe : Automatische Anpassung der Rahmenh÷he */
-    /* ### ACHTUNG: Neuer Text in Resource? Automatische Anpassung der Rahmenhöhe : Automatische Anpassung der Rahmenh÷he */
     Text [ en-US ] = "AutoFit frame height" ;
 };
 String STR_ItemNam_TEXT_MINFRAMEHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Minimale Rahmenhöhe : Minimale Rahmenh÷he */
-    /* ### ACHTUNG: Neuer Text in Resource? Minimale Rahmenhöhe : Minimale Rahmenh÷he */
     Text [ en-US ] = "Min. frame height" ;
 };
 String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maximale Rahmenhöhe : Maximale Rahmenh÷he */
-    /* ### ACHTUNG: Neuer Text in Resource? Maximale Rahmenhöhe : Maximale Rahmenh÷he */
     Text [ en-US ] = "Max. frame height" ;
 };
 String STR_ItemNam_TEXT_AUTOGROWWIDTH
@@ -1627,8 +1538,6 @@ String STR_ItemNam_OBJMOVEPROTECT
 };
 String STR_ItemNam_OBJSIZEPROTECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größenschutz : Gr÷˜enschutz */
-    /* ### ACHTUNG: Neuer Text in Resource? Größenschutz : Gr÷˜enschutz */
     Text [ en-US ] = "Size Protection" ;
 };
 String STR_ItemNam_OBJPRINTABLE
@@ -1669,8 +1578,6 @@ String STR_ItemNam_SIZEWIDTH
 };
 String STR_ItemNam_SIZEHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
-    /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
     Text [ en-US ] = "Height" ;
 };
 String STR_ItemNam_ROTATEANGLE
@@ -2027,13 +1934,6 @@ String SIP_XA_FTRESERVED_LAST
     Text [ en-US ] = "Fontwork reserved for 6";
 };
 
-//BFS01String SIP_XATTRSET_TEXT
-//BFS01{
-//BFS01 Text [ de ] = "Fontworkattribute";
-//BFS01 Text [ en-US ] = "Fontwork attributes";
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
-
 String SIP_SA_SHADOW
 {
     Text [ en-US ] = "Shadow";
@@ -2068,42 +1968,6 @@ String SIP_SA_SHADOWPERSP
 {
     Text [ en-US ] = "Perspective shadow";
 };
-
-//BFS01String SIP_SA_SHADOWRESERVE1
-//BFS01{
-//BFS01 Text [ de ] = "Schatten Reserve 1";
-//BFS01 Text [ en-US ] = "Shadow reserved for 1";
-//BFS01};
-
-//BFS01String SIP_SA_SHADOWRESERVE2
-//BFS01{
-//BFS01 Text [ de ] = "Schatten Reserve 2";
-//BFS01 Text [ en-US ] = "Shadow reserved for 2";
-//BFS01};
-
-//BFS01String SIP_SA_SHADOWRESERVE3
-//BFS01{
-//BFS01 Text [ de ] = "Schatten Reserve 3";
-//BFS01 Text [ en-US ] = "Shadow reserved for 3";
-//BFS01};
-
-//BFS01String SIP_SA_SHADOWRESERVE4
-//BFS01{
-//BFS01 Text [ de ] = "Schatten Reserve 4";
-//BFS01 Text [ en-US ] = "Shadow reserved for 4";
-//BFS01};
-
-//BFS01String SIP_SA_SHADOWRESERVE5
-//BFS01{
-//BFS01 Text [ de ] = "Schatten Reserve 5";
-//BFS01 Text [ en-US ] = "Shadow reserved for 5";
-//BFS01};
-
-//BFS01String SIP_SDRATTRSET_SHADOW
-//BFS01{
-//BFS01 Text [ de ] = "Schattenattribute";
-//BFS01 Text [ en-US ] = "Shadow attributes";
-//BFS01};
 
 String SIP_SA_CAPTIONTYPE
 {
@@ -2154,49 +2018,6 @@ String SIP_SA_CAPTIONFITLINELEN
 {
     Text [ en-US ] = "AutoLength of legend lines";
 };
-
-//BFS01String SIP_SA_CAPTIONRESERVE1
-//BFS01{
-//BFS01 Text [ de ] = "Legende Reserve 1";
-//BFS01 Text [ en-US ] = "Legend reserved for 1";
-//BFS01};
-
-//BFS01String SIP_SA_CAPTIONRESERVE2
-//BFS01{
-//BFS01 Text [ de ] = "Legende Reserve 2";
-//BFS01 Text [ en-US ] = "Legend reserved for 2";
-//BFS01};
-
-//BFS01String SIP_SA_CAPTIONRESERVE3
-//BFS01{
-//BFS01 Text [ de ] = "Legende Reserve 3";
-//BFS01 Text [ en-US ] = "Legend reserved for 3";
-//BFS01};
-
-//BFS01String SIP_SA_CAPTIONRESERVE4
-//BFS01{
-//BFS01 Text [ de ] = "Legende Reserve 4";
-//BFS01 Text [ en-US ] = "Legend reserved for 4";
-//BFS01};
-
-//BFS01String SIP_SA_CAPTIONRESERVE5
-//BFS01{
-//BFS01 Text [ de ] = "Legende Reserve 5";
-//BFS01 Text [ en-US ] = "Legend reserved 5";
-//BFS01};
-
-//BFS01String SIP_SDRATTRSET_CAPTION
-//BFS01{
-//BFS01 Text [ de ] = "Legendenattribute";
-//BFS01 Text [ en-US ] = "Legend attributes";
-//BFS01};
-
-//BFS01String SIP_SDRATTRSET_OUTLINER
-//BFS01{
-//BFS01 Text [ de ] = "Textattribute";
-//BFS01 Text [ en-US ] = "Text attributes";
-//BFS01 Text [ x-comment ] = " ";
-//BFS01};
 
 String SIP_SA_ECKENRADIUS
 {
@@ -2343,12 +2164,6 @@ String SIP_SA_RESERVE19
     Text [ en-US ] = "SvDraw reserved for 19";
 };
 
-//BFS01String SIP_SDRATTRSET_MISC
-//BFS01{
-//BFS01 Text [ de ] = "Diverse Attribute";
-//BFS01 Text [ en-US ] = "Various attributes";
-//BFS01};
-
 String SIP_SA_EDGEKIND
 {
     Text [ en-US ] = "Type of connector";
@@ -2403,60 +2218,6 @@ String SIP_SA_EDGELINE3DELTA
 {
     Text [ en-US ] = "Offset line 3";
 };
-
-//BFS01String SIP_SA_EDGERESERVE02
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 2";
-//BFS01 Text [ en-US ] = "Connector reserved 2";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE03
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 3";
-//BFS01 Text [ en-US ] = "Connector reserved 3";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE04
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 4";
-//BFS01 Text [ en-US ] = "Connector reserved 4";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE05
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 5";
-//BFS01 Text [ en-US ] = "Connector reserved 5";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE06
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 6";
-//BFS01 Text [ en-US ] = "Connector reserved 6";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE07
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 7";
-//BFS01 Text [ en-US ] = "Connector reserved 7";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE08
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 8";
-//BFS01 Text [ en-US ] = "Connector reserved 8";
-//BFS01};
-
-//BFS01String SIP_SA_EDGERESERVE09
-//BFS01{
-//BFS01 Text [ de ] = "Verbinder Reserve 9";
-//BFS01 Text [ en-US ] = "Connector reserved 9";
-//BFS01};
-
-//BFS01String SIP_SDRATTRSET_EDGE
-//BFS01{
-//BFS01 Text [ de ] = "Verbinderattribute";
-//BFS01 Text [ en-US ] = "Connector attributes";
-//BFS01};
 
 String SIP_SA_MEASUREKIND
 {
@@ -2578,12 +2339,6 @@ String SIP_SA_MEASURERESERVE07
     Text [ en-US ] = "Dimensioning reserved for 7";
 };
 
-//BFS01String SIP_SDRATTRSET_MEASURE
-//BFS01{
-//BFS01 Text [ de ] = "Bemassungsattribute";
-//BFS01 Text [ en-US ] = "Dimensioning attributes";
-//BFS01};
-
 String SIP_SA_CIRCKIND
 {
     Text [ en-US ] = "Type of circle";
@@ -2618,12 +2373,6 @@ String SIP_SA_CIRCRESERVE3
 {
     Text [ en-US ] = "Circle reserved for 3";
 };
-
-//BFS01String SIP_SDRATTRSET_CIRC
-//BFS01{
-//BFS01 Text [ de ] = "Kreisattribute";
-//BFS01 Text [ en-US ] = "Circle attributes";
-//BFS01};
 
 String SIP_SA_OBJMOVEPROTECT
 {
@@ -2980,11 +2729,6 @@ String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
 String SIP_SA_GRAFRESERVE5 { Text = "" ; };
 String SIP_SA_GRAFRESERVE6 { Text = "" ; };
-//BFS01String SIP_SDRATTRSET_GRAF
-//BFS01{
-//BFS01 Text [ de ] = "Grafikattribute";
-//BFS01 Text [ en-US ] = "Graphics attributes";
-//BFS01};
 
 Bitmap SIP_SA_MARKERS
 {
@@ -3015,6 +2759,89 @@ String STR_ObjNameSingulMEDIA
 String STR_ObjNamePluralMEDIA
 {
     Text [ en-US ] = "Media objects" ;
+};
+
+// drawing layer table strings
+
+String STR_TABLE_ATTR
+{
+    Text [ en-US ] = "Apply table attributes" ;
+};
+String STR_TABLE_AUTOFMT
+{
+    Text [ en-US ] = "AutoFormat table" ;
+};
+String STR_TABLE_INSCOL
+{
+    Text [ en-US ] = "Insert column" ;
+};
+String STR_TABLE_INSROW
+{
+    Text [ en-US ] = "Insert row" ;
+};
+String STR_UNDO_COL_DELETE
+{
+    Text [ en-US ] = "Delete column" ;
+};
+String STR_UNDO_ROW_DELETE
+{
+    Text [ en-US ] = "Delete row" ;
+};
+String STR_TABLE_SPLIT
+{
+    Text [ en-US ] = "Split cells" ;
+};
+String STR_TABLE_MERGE
+{
+    Text [ en-US ] = "Merge cells" ;
+};
+String STR_TABLE_NUMFORMAT
+{
+    Text [ en-US ] = "Format cell" ;
+};
+
+String STR_TABLE_DISTRIBUTE_ROWS
+{
+    Text [ en-US ] = "Distribute rows" ;
+};
+
+String STR_TABLE_DISTRIBUTE_COLUMNS
+{
+    Text [ en-US ] = "Distribute columns" ;
+};
+
+String STR_TABLE_STYLE
+{
+    Text [ en-US ] = "Table style" ;
+};
+
+String STR_TABLE_STYLE_SETTINGS
+{
+    Text [ en-US ] = "Table style settings" ;
+};
+
+String STR_ObjNameSingulTable
+{
+    Text [ en-US ] = "Table";
+};
+String STR_ObjNamePluralTable
+{
+    Text [ en-US ] = "Tables";
+};
+
+Bitmap SIP_SA_CROP_MARKERS
+{
+    File = "cropmarkers.bmp";
+};
+
+Bitmap SIP_SA_CROP_FINE_MARKERS
+{
+    File = "cropmarkers2.bmp";
+};
+
+Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
+{
+    File = "cropmarkersACC.bmp";
 };
 
 Bitmap SIP_SA_CROP_MARKERS
