@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:27:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ private:
     oslInterlockedCount maRefCount;
 
     SdrObject*                      mpObject;
+    SdrText*                        mpText;
     SdrView*                        mpView;
     const Window*                   mpWindow;
     SdrModel*                       mpModel;
@@ -191,8 +192,8 @@ private:
     void                            dispose();
 
 public:
-    SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pOwner );
-    SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow );
+    SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner );
+    SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow );
     ~SvxTextEditSourceImpl();
 
     void SAL_CALL acquire();
@@ -229,9 +230,10 @@ public:
 
 //------------------------------------------------------------------------
 
-SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pOwner )
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
   : maRefCount      ( 0 ),
     mpObject        ( pObject ),
+    mpText          ( pText ),
     mpView          ( NULL ),
     mpWindow        ( NULL ),
     mpModel         ( pObject ? pObject->GetModel() : NULL ),
@@ -250,6 +252,13 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pO
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
+    if( !mpText )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+        if( pTextObj )
+            mpText = pTextObj->getText( 0 );
+    }
+
     if( mpModel )
         StartListening( *mpModel );
 
@@ -259,9 +268,10 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, XInterface* pO
 
 //------------------------------------------------------------------------
 
-SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow )
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow )
   : maRefCount      ( 0 ),
     mpObject        ( &rObject ),
+    mpText          ( pText ),
     mpView          ( &rView ),
     mpWindow        ( &rWindow ),
     mpModel         ( rObject.GetModel() ),
@@ -278,6 +288,13 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mbNotificationsDisabled ( FALSE ),
     mpOwner(0)
 {
+    if( !mpText )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+        if( pTextObj )
+            mpText = pTextObj->getText( 0 );
+    }
+
     if( mpModel )
         StartListening( *mpModel );
     if( mpView )
@@ -348,8 +365,6 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
         if( mpOutliner )
         {
-            mpOutliner->SetNotifyHdl( Link() );
-
             if( mpModel )
                 mpModel->disposeOutliner( mpOutliner );
             else
@@ -511,9 +526,6 @@ void SvxTextEditSourceImpl::dispose()
 
     if( mpOutliner )
     {
-        // #101088# Deregister on outliner, might be reused from outliner cache
-        mpOutliner->SetNotifyHdl( Link() );
-
         if( mpModel )
         {
             mpModel->disposeOutliner( mpOutliner );
@@ -658,30 +670,30 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbForwarderIsEditMode = sal_False;
     }
 
-    if( mpObject && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
+    if( mpObject && mpText && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
     {
         mpTextForwarder->flushCache();
 
         OutlinerParaObject* mpOutlinerParaObject = NULL;
         BOOL bTextEditActive = FALSE;
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-        if( pTextObj )
+        if( pTextObj && pTextObj->getActiveText() == mpText )
             mpOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
 
         if( mpOutlinerParaObject )
             bTextEditActive = TRUE; // text edit active
         else
-            mpOutlinerParaObject = mpObject->GetOutlinerParaObject();
+            mpOutlinerParaObject = mpText->GetOutlinerParaObject();
 
         if( mpOutlinerParaObject && ( bTextEditActive || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
         {
             mpOutliner->SetText( *mpOutlinerParaObject );
 
             // #91254# put text to object and set EmptyPresObj to FALSE
-            if( pTextObj && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
+            if( mpText && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
                 mpObject->SetEmptyPresObj( FALSE );
-                pTextObj->SetOutlinerParaObject( mpOutlinerParaObject );
+                mpText->SetOutlinerParaObject( mpOutlinerParaObject );
             }
         }
         else
@@ -886,7 +898,7 @@ void SvxTextEditSourceImpl::UpdateData()
         }
         else
         {
-            if( mpOutliner && mpObject && !mbDestroyed )
+            if( mpOutliner && mpObject && mpText && !mbDestroyed )
             {
                 if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                 {
@@ -903,10 +915,10 @@ void SvxTextEditSourceImpl::UpdateData()
                         }
                     }
 
-                    mpObject->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
+                    mpText->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
                 }
                 else
-                    mpObject->SetOutlinerParaObject( NULL );
+                    mpText->SetOutlinerParaObject( NULL );
 
                 if( mpObject->IsEmptyPresObj() )
                     mpObject->SetEmptyPresObj(sal_False);
@@ -1061,16 +1073,16 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 // SvxTextEditSource
 // --------------------------------------------------------------------
 
-SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, XInterface* pOwner )
+SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
 {
-    mpImpl = new SvxTextEditSourceImpl( pObject, pOwner );
+    mpImpl = new SvxTextEditSourceImpl( pObject, pText, pOwner );
     mpImpl->acquire();
 }
 
 // --------------------------------------------------------------------
-SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrView& rView, const Window& rWindow )
+SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const Window& rWindow )
 {
-    mpImpl = new SvxTextEditSourceImpl( rObj, rView, rWindow );
+    mpImpl = new SvxTextEditSourceImpl( rObj, pText, rView, rWindow );
     mpImpl->acquire();
 }
 
