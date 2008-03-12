@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:40:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,10 +255,10 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         // iterate over all styles
         SdStyleSheetPool* pStyleSheetPool = dynamic_cast< SdStyleSheetPool* >( pDocument->GetStyleSheetPool() );
 
-        ULONG nStyles = pStyleSheetPool ? pStyleSheetPool->GetStyles().Count() : 0;
-        for (ULONG nStyle = 0; nStyle < nStyles; nStyle++)
+        sal_uInt32 nStyles = pStyleSheetPool ? pStyleSheetPool->GetStyles().size() : 0;
+        for (sal_uInt32 nStyle = 0; nStyle < nStyles; nStyle++)
         {
-            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pStyleSheetPool->GetStyles().GetObject(nStyle) );
+            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pStyleSheetPool->GetStyles()[nStyle].get() );
             SfxItemSet& rSet = pSheet->GetItemSet();
 
             // if autokerning is set in style, override it, ppt has no autokerning
@@ -699,7 +699,7 @@ sal_Bool ImplSdPPTImport::Import()
                         ///////////////////
                         // standardsheet //
                         ///////////////////
-                        pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SFX_STYLE_FAMILY_PARA );
+                        pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SD_STYLE_FAMILY_GRAPHICS );
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -712,7 +712,7 @@ sal_Bool ImplSdPPTImport::Import()
                     }
 
                     // PSEUDO
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SFX_STYLE_FAMILY_PSEUDO );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SD_STYLE_FAMILY_PSEUDO );
                     if ( pSheet )
                     {
                         SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -782,7 +782,7 @@ sal_Bool ImplSdPPTImport::Import()
                             String aName( pPage->GetLayoutName() );
                             aName.Append( (sal_Unicode)( ' ' ) );
                             aName.Append( String::CreateFromInt32( nLevel + 1 ) );
-                            SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_LT_FAMILY );
+                            SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                             DBG_ASSERT( pOutlineSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden" );
                             if ( pOutlineSheet )
                             {
@@ -2364,7 +2364,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 String aName( pPage->GetLayoutName() );
                 aName.Append( (sal_Unicode)( ' ' ) );
                 aName.Append( String::CreateFromInt32( nLevel ) );
-                pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_LT_FAMILY );
+                pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
                 if ( pSheet )
                     pText->StartListening( *pSheet );
                 pStyleSheetAry[ nLevel - 1 ] = pSheet;
@@ -2403,10 +2403,10 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 case PRESOBJ_SLIDENUMBER :
                 case PRESOBJ_FOOTER :
                 case PRESOBJ_HEADER :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SFX_STYLE_FAMILY_PSEUDO );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SD_STYLE_FAMILY_PSEUDO );
                 break;
                 default :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SFX_STYLE_FAMILY_PARA );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SD_STYLE_FAMILY_GRAPHICS );
             }
         }
         break;
