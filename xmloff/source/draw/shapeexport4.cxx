@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:19:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XSeekableInputStream.hpp>
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -67,6 +73,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #endif
+
+#include <com/sun/star/table/XColumnRowRange.hpp>
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
@@ -151,11 +159,21 @@
 #endif
 
 #include "xmlnmspe.hxx"
+#include "XMLBase64Export.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
+
+using ::com::sun::star::embed::XStorage;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1163,3 +1181,142 @@ void XMLShapeExport::ImpExportCustomShape(
     }
 }
 
+void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType /*eShapeType*/, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint )
+{
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
+
+    DBG_ASSERT( xPropSet.is() && xNamed.is(), "xmloff::XMLShapeExport::ImpExportTableShape(), tabe shape is not implementing needed interfaces");
+    if(xPropSet.is() && xNamed.is()) try
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        sal_Bool bIsEmptyPresObj = sal_False;
+
+        // presentation settings
+//      if(eShapeType == XmlShapeTypePresTableShape)
+//          bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
+
+        const bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 );
+        const bool bExportEmbedded(0 != (mrExport.getExportFlags() & EXPORT_EMBEDDED));
+
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, sal_True );
+
+        if( !bIsEmptyPresObj )
+        {
+            uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), uno::UNO_QUERY );
+            if( xTemplate.is() )
+            {
+                const OUString sTemplate( xTemplate->getName() );
+                if( sTemplate.getLength() )
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
+
+                    const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
+
+                    while( pEntry->msApiName ) try
+                    {
+                        sal_Bool bBool = sal_False;
+                        const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+
+                        xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
+                        if( bBool )
+                            mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
+                        pEntry++;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                    }
+                }
+            }
+            uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+
+            GetShapeTableExport()->exportTable( xRange );
+
+            uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ReplacementGraphic" ) ) ), uno::UNO_QUERY );
+            if( xGraphic.is() ) try
+            {
+                Reference< lang::XMultiServiceFactory > xSM( GetExport().getServiceFactory(), UNO_QUERY_THROW );
+
+                uno::Reference< embed::XStorage > xPictureStorage;
+                uno::Reference< embed::XStorage > xStorage;
+                uno::Reference< io::XStream > xPictureStream;
+
+                OUString sPictureName;
+                if( bExportEmbedded )
+                {
+                    xPictureStream.set( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) ) ), UNO_QUERY_THROW );
+                }
+                else
+                {
+                    xStorage.set( GetExport().GetTargetStorage(), UNO_QUERY_THROW );
+
+                    xPictureStorage.set( xStorage->openStorageElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ), ::embed::ElementModes::READWRITE ), uno::UNO_QUERY_THROW );
+                    const OUString sPrefix( RTL_CONSTASCII_USTRINGPARAM("TablePreview") );
+                    const OUString sSuffix( RTL_CONSTASCII_USTRINGPARAM(".svm") );
+
+                    sal_Int32 nIndex = 0;
+                    do
+                    {
+                        sPictureName = sPrefix;
+                        sPictureName += OUString::valueOf( ++nIndex );
+                        sPictureName += sSuffix;
+                    }
+                    while( xPictureStorage->hasByName( sPictureName ) );
+
+                    xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
+                }
+
+                Reference< graphic::XGraphicProvider > xProvider( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ), UNO_QUERY_THROW );
+                Sequence< beans::PropertyValue > aArgs( 2 );
+                aArgs[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) );
+                aArgs[ 0 ].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "image/x-vclgraphic" ) );
+                aArgs[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
+                aArgs[ 1 ].Value <<= xPictureStream->getOutputStream();
+                xProvider->storeGraphic( xGraphic, aArgs );
+
+                if( xPictureStorage.is() )
+                {
+                    Reference< embed::XTransactedObject > xTrans( xPictureStorage, UNO_QUERY );
+                    if( xTrans.is() )
+                        xTrans->commit();
+                }
+
+                if( !bExportEmbedded )
+                {
+                    OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
+                    sURL += sPictureName;
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                }
+
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, sal_False, sal_True );
+
+                if( bExportEmbedded )
+                {
+                    Reference< XSeekableInputStream > xSeekable( xPictureStream, UNO_QUERY_THROW );
+                    xSeekable->seek(0);
+
+                    XMLBase64Export aBase64Exp( GetExport() );
+                    aBase64Exp.exportOfficeBinaryDataElement( Reference < XInputStream >( xPictureStream, UNO_QUERY_THROW ) );
+                }
+            }
+            catch( uno::Exception& )
+            {
+                DBG_ERROR("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
+            }
+        }
+
+        ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
+        ImpExportDescription( xShape ); // #i68101#
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
+    }
+}
