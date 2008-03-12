@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 15:32:15 $
+#   last change: $Author: rt $ $Date: 2008-03-12 09:18:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,7 @@ IDLFILES=\
     XShapeMirror.idl\
     XShapes.idl\
     XUniversalShapeDescriptor.idl\
+    XSelectionFunction.idl
 
 # ------------------------------------------------------------------
 
