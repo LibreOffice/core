@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:18:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,15 @@
 #define SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL     (SDRATTR_CUSTOMSHAPE_FIRST + 3) /* 1337 V4+++*/
 #define SDRATTR_CUSTOMSHAPE_LAST                    (SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL)   /* 1357 V4+++*/
 
-#define SDRATTR_END                             SDRATTR_CUSTOMSHAPE_LAST        /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
+#define SDRATTR_TABLE_FIRST                     (SDRATTR_CUSTOMSHAPE_LAST+1)
+#define SDRATTR_TABLE_BORDER                    (SDRATTR_TABLE_FIRST+0)
+#define SDRATTR_TABLE_BORDER_INNER              (SDRATTR_TABLE_FIRST+1)
+#define SDRATTR_TABLE_BORDER_TLBR               (SDRATTR_TABLE_FIRST+2)
+#define SDRATTR_TABLE_BORDER_BLTR               (SDRATTR_TABLE_FIRST+3)
+
+#define SDRATTR_TABLE_LAST                      (SDRATTR_TABLE_BORDER_BLTR)
+
+#define SDRATTR_END                             SDRATTR_TABLE_LAST      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
 
 #endif // _SVDDEF_HXX
 
