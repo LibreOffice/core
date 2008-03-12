@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:59:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,7 @@
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::container::XNameAccess;
@@ -756,8 +756,8 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, 
     GetProperty (RES_COL, MID_COLUMNS, pColumns);
     if ( pStyle )
     {
-        SwDocStyleSheet aStyle (*pStyle);
-        const SfxItemSet *pItemSet = &aStyle.GetItemSet();
+        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
+        const SfxItemSet *pItemSet = &xStyle->GetItemSet();
            bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
@@ -841,8 +841,8 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
 
     if ( pStyle )
     {
-        SwDocStyleSheet aStyle (*pStyle);
-        const SfxItemSet *pItemSet = &aStyle.GetItemSet();
+        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
+        const SfxItemSet *pItemSet = &xStyle->GetItemSet();
         bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
