@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIsPercentagePropertyHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:50:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 
 XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()
 {
