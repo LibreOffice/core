@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:42:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
-using namespace ::rtl;
+using ::rtl::OUString;
 
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
