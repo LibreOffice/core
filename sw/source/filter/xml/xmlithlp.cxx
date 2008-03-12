@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:12:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@
 #include <xmloff/xmluconv.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
