@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:46:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
+
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -234,10 +237,14 @@
 #endif
 // <--
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
@@ -3588,3 +3595,157 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
                                                          xAttrList);
     return pContext;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLTableShapeContext, SdXMLShapeContext );
+
+SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, sal_False )
+{
+    memset( &maTemplateStylesUsed, 0, sizeof( maTemplateStylesUsed ) );
+}
+
+SdXMLTableShapeContext::~SdXMLTableShapeContext()
+{
+}
+
+void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    const char* pService = "com.sun.star.drawing.TableShape";
+
+    sal_Bool bIsPresShape = sal_False; //maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+/*
+    if( bIsPresShape )
+    {
+        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
+        {
+            pService = "com.sun.star.presentation.TableShape";
+        }
+    }
+*/
+    AddShape( pService );
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+
+        if(bIsPresShape)
+        {
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
+
+        SetStyle();
+
+        if( xProps.is() )
+        {
+            if( msTemplateStyleName.getLength() ) try
+            {
+                Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetImport().GetModel(), UNO_QUERY_THROW );
+                Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+                const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM("table" ) );
+                Reference< XNameAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+                Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ), Any( xTableStyle ) );
+            }
+            catch( Exception& )
+            {
+                DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+            }
+
+            const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
+            int i = 0;
+            while( pEntry->msApiName && (i < 6) ) try
+            {
+                const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i++] ) );
+                pEntry++;
+            }
+            catch( Exception& )
+            {
+                DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+            }
+        }
+
+        GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+
+        const rtl::Reference< XMLTableImport >& xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
+        if( xTableImport.is() && xProps.is() )
+        {
+            uno::Reference< table::XColumnRowRange > xColumnRowRange(
+                xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ), uno::UNO_QUERY );
+
+            if( xColumnRowRange.is() )
+                mxTableImportContext = xTableImport->CreateTableContext( GetPrefix(), GetLocalName(), xColumnRowRange );
+
+            if( mxTableImportContext.Is() )
+                mxTableImportContext->StartElement( xAttrList );
+        }
+    }
+}
+
+void SdXMLTableShapeContext::EndElement()
+{
+    if( mxTableImportContext.Is() )
+        mxTableImportContext->EndElement();
+
+    if( mxShape.is() )
+    {
+        // set pos, size, shear and rotate
+        SetTransformation();
+    }
+    SdXMLShapeContext::EndElement();
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( nPrefix == XML_NAMESPACE_TABLE )
+    {
+        if( IsXMLToken( rLocalName, XML_TEMPLATE_NAME ) )
+        {
+            msTemplateStyleName = rValue;
+        }
+        else
+        {
+            int i = 0;
+            const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
+            while( pEntry->msApiName && (i < 6) )
+            {
+                if( IsXMLToken( rLocalName, pEntry->meXMLName ) )
+                {
+                    if( IsXMLToken( rValue, XML_TRUE ) )
+                        maTemplateStylesUsed[i] = sal_True;
+                    break;
+                }
+                pEntry++;
+                i++;
+            }
+        }
+    }
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    if( mxTableImportContext.Is() )
+        return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);
+    else
+        return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+}
+
