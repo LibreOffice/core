@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:22:31 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -786,4 +786,9 @@ ToolBox RID_DRAW_MEDIA_TOOLBOX
 String RID_DRAW_MEDIA_TOOLBOX
 {
     Text [ en-US ] = "Media Playback" ;
+};
+String RID_DRAW_TABLE_TOOLBOX
+{
+    TEXT [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
 };
