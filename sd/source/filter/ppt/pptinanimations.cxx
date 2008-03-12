@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:22:27 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3222,7 +3222,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
 
-                        const OutlinerParaObject* pOPO = pTextObj->getOutlinerParaObject();
+                        const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
                         if( pOPO == NULL )
                             break;
 
