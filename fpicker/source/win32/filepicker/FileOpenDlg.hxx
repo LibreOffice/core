@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:48:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,13 +52,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+#include "platform_xp.h"
 
 #ifndef _GETFILENAMEWRAPPER_HXX_
 #include "getfilenamewrapper.hxx"
@@ -141,13 +135,15 @@ typedef _LPOPENFILENAMEA _LPOPENFILENAME;
 #endif // UNICODE
 
 #if (_WIN32_WINNT >= 0x0500)
-#define _OPENFILENAME_SIZE_VERSION_400A  _CDSIZEOF_STRUCT(_OPENFILENAMEA,lpTemplateName)
-#define _OPENFILENAME_SIZE_VERSION_400W  _CDSIZEOF_STRUCT(_OPENFILENAMEW,lpTemplateName)
-#ifdef UNICODE
-#define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400W
+    #define _OPENFILENAME_SIZE_VERSION_400A  _CDSIZEOF_STRUCT(_OPENFILENAMEA,lpTemplateName)
+    #define _OPENFILENAME_SIZE_VERSION_400W  _CDSIZEOF_STRUCT(_OPENFILENAMEW,lpTemplateName)
+    #ifdef UNICODE
+        #define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400W
+    #else
+        #define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400A
+    #endif // !UNICODE
 #else
-#define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400A
-#endif // !UNICODE
+    #error _WIN32_WINNT seams not to be valid.
 #endif // (_WIN32_WINNT >= 0x0500)
 
 
