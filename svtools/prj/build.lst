@@ -1,4 +1,4 @@
-st	svtools	:	offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper sal jvmfwk NULL
+st	svtools	:	offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal jvmfwk NULL
 st	svtools						usr1	-	all	st_mkout NULL
 st	svtools\inc					nmake	-	all	st_inc NULL
 st	svtools\inc\sane				get	-	all	st_incsa NULL
