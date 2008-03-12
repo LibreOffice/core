@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undostyl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:39:41 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
                 pDoc->RemovePageStyleInUse( rName );
 
             // delete style
-            pStlPool->Erase( pStyle );
+            pStlPool->Remove( pStyle );
         }
         else
         {
