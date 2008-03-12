@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:11:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #define AW_ROW_1            (RSC_SP_DLG_INNERBORDER_TOP)
 #define AW_ROW_2            (AW_ROW_1+INFO_TEXT_LINES*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_Y)
 #define AW_ROW_3            (AW_ROW_2+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define AW_ROW_4            (AW_ROW_3+RSC_CD_FIXEDLINE_HEIGHT)
+#define AW_ROW_4            (AW_ROW_3+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_CTRL_DESC_Y)
 
 #define DIALOG_HEIGHT       (AW_ROW_4+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM)
 
