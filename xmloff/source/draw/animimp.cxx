@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:01:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,9 @@
 #include "animimp.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
