@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:11:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,9 @@
 #endif
 
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
