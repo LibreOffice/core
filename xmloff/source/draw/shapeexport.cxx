@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:28:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
 #include <com/sun/star/drawing/EscapeDirection.hpp>
 #endif
+#include <com/sun/star/table/XColumnRowRange.hpp>
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -142,7 +144,9 @@
 
 #include "xmlnmspe.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -182,7 +186,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 {
     // construct PropertyHandlerFactory
     mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), rExp );
-
     // construct PropertySetMapper
     mxPropertySetMapper = CreateShapePropMapper( mrExport );
     if( pExtMapper )
@@ -208,6 +211,9 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX)));
 
     maCurrentInfo = maShapeInfos.end();
+
+    // create table export helper and let him add his families in time
+    GetShapeTableExport();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -305,6 +311,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
         aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawSheetShape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresSheetShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DSceneObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DCubeObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DSphereObject &&
@@ -372,7 +380,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     {
                         OUString aFamilyName;
                         xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
-                        if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
+                        if(aFamilyName.getLength() && !aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics"))))
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
                 }
@@ -522,21 +530,39 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->prepare( xShape, mrExport );
 
-    // -------------------
-    // check for connector
-    // -------------------
-    if( aShapeInfo.meShapeType == XmlShapeTypeDrawConnectorShape )
+    // check for special shapes
+
+    switch( aShapeInfo.meShapeType )
     {
-        uno::Reference< uno::XInterface > xConnection;
+        case XmlShapeTypeDrawConnectorShape:
+        {
+            uno::Reference< uno::XInterface > xConnection;
 
-        // create shape ids for export later
-        xPropSet->getPropertyValue( msStartShape ) >>= xConnection;
-        if( xConnection.is() )
-            mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+            // create shape ids for export later
+            xPropSet->getPropertyValue( msStartShape ) >>= xConnection;
+            if( xConnection.is() )
+                mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
 
-        xPropSet->getPropertyValue( msEndShape ) >>= xConnection;
-        if( xConnection.is() )
-            mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+            xPropSet->getPropertyValue( msEndShape ) >>= xConnection;
+            if( xConnection.is() )
+                mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
+            break;
+        }
+        case XmlShapeTypeDrawTableShape:
+        {
+            try
+            {
+                uno::Reference< table::XColumnRowRange > xRange( xSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+                GetShapeTableExport()->collectTableAutoStyles( xRange );
+            }
+            catch( uno::Exception& )
+            {
+                DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): exception caught while collection auto styles for a table!" );
+            }
+            break;
+        }
+        default:
+            break;
     }
 
     maShapeInfos.push_back( aShapeInfo );
@@ -762,13 +788,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
-        case XmlShapeTypeDrawTableShape:
-        case XmlShapeTypePresTableShape:
-        {
-            ImpExportSpreadsheetShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
-            break;
-        }
-
         case XmlShapeTypeDrawControlShape:
         {
             ImpExportControlShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -789,8 +808,16 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawOLE2Shape:
         case XmlShapeTypePresOLE2Shape:
+        case XmlShapeTypeDrawSheetShape:
+        case XmlShapeTypePresSheetShape:
         {
             ImpExportOLE2Shape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawTableShape:
+        {
+            ImpExportTableShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
 
@@ -984,6 +1011,9 @@ void XMLShapeExport::exportAutoStyles()
             GetExport().GetNamespaceMap()
             );
     }
+
+    if( mxShapeTableExport.is() )
+        mxShapeTableExport->exportAutoStyles();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1058,10 +1088,8 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
                     if(xPropSet.is())
                     {
-                        uno::Any aAny;
-                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")));
                         rtl::OUString sCLSID;
-                        if (aAny >>= sCLSID)
+                        if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
                         {
                             if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()))
                             {
@@ -1074,32 +1102,13 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                                 || sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName()))
                                 )
                             {
-                                eShapeType = XmlShapeTypeDrawTableShape;
+                                eShapeType = XmlShapeTypeDrawSheetShape;
                             }
                             else
                             {
                                 // general OLE2 Object
                             }
                         }
-/*                      uno::Reference <lang::XServiceInfo> xObjectInfo;
-
-                        if(aAny >>= xObjectInfo)
-                        {
-                            if(xObjectInfo->supportsService(OUString(RTL_CONSTASCII_USTRINGPARAM
-                                ("com.sun.star.chart.ChartDocument"))))
-                            {
-                                eShapeType = XmlShapeTypeDrawChartShape;
-                            }
-                            else if(xObjectInfo->supportsService(OUString(RTL_CONSTASCII_USTRINGPARAM
-                                ("com.sun.star.sheet.SpreadsheetDocument"))))
-                            {
-                                eShapeType = XmlShapeTypeDrawTableShape;
-                            }
-                            else
-                            {
-                                // general OLE2 Object
-                            }
-                        }*/
                     }
                 }
                 else if(aType.EqualsAscii("Page", 21, 4)) { eShapeType = XmlShapeTypeDrawPageShape; }
@@ -1107,7 +1116,8 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("Caption", 21, 7)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
                 else if(aType.EqualsAscii("Plugin", 21, 6)) { eShapeType = XmlShapeTypeDrawPluginShape; }
                 else if(aType.EqualsAscii("Applet", 21, 6)) { eShapeType = XmlShapeTypeDrawAppletShape; }
-                else if(aType.EqualsAscii("MediaShape", 21, 9)) { eShapeType = XmlShapeTypeDrawMediaShape; }
+                else if(aType.EqualsAscii("MediaShape", 21, 10)) { eShapeType = XmlShapeTypeDrawMediaShape; }
+                else if(aType.EqualsAscii("TableShape", 21, 10)) { eShapeType = XmlShapeTypeDrawTableShape; }
 
                 // 3D shapes
                 else if(aType.EqualsAscii("Scene", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
@@ -1124,10 +1134,29 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("Subtitle", 26, 8)) { eShapeType = XmlShapeTypePresSubtitleShape;  }
                 else if(aType.EqualsAscii("GraphicObject", 26, 13)) { eShapeType = XmlShapeTypePresGraphicObjectShape;  }
                 else if(aType.EqualsAscii("Page", 26, 4)) { eShapeType = XmlShapeTypePresPageShape;  }
-                else if(aType.EqualsAscii("OLE2", 26, 4)) { eShapeType = XmlShapeTypePresOLE2Shape; }
+                else if(aType.EqualsAscii("OLE2", 26, 4))
+                {
+                    eShapeType = XmlShapeTypePresOLE2Shape;
+
+                    // get info about presentation shape
+                    uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+                    if(xPropSet.is())
+                    {
+                        rtl::OUString sCLSID;
+                        if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
+                        {
+                            if( sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) ||
+                                sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName())) )
+                            {
+                                eShapeType = XmlShapeTypePresSheetShape;
+                            }
+                        }
+                    }
+                }
                 else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
-                else if(aType.EqualsAscii("Table", 26, 5)) { eShapeType = XmlShapeTypePresTableShape;  }
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
+                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresSheetShape; }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
                 else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
                 else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
@@ -1232,3 +1261,14 @@ void XMLShapeExport::onExport( const com::sun::star::uno::Reference < com::sun::
 {
 }
 
+const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
+{
+    if( !mxShapeTableExport.is() )
+    {
+        rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
+        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );
+    }
+
+    return mxShapeTableExport;
+}
