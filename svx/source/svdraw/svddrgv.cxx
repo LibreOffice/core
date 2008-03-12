@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:46:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,6 +468,7 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
         Point aPnt(rPnt);
         if(pHdl == NULL
+            || pHdl->GetKind() == HDL_MOVE
             || pHdl->GetKind() == HDL_MIRX
             || pHdl->GetKind() == HDL_TRNS
             || pHdl->GetKind() == HDL_GRAD)
@@ -710,12 +711,12 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
         bRet=pDragBla->End(bCopy);
         if (IsInsertGluePoint()) EndUndo();
         delete pDragBla;
+        pDragBla=NULL;
         if (bEliminatePolyPoints) { // IBM Special
             if (nHdlAnzMerk!=GetMarkablePointCount()) {
                 UnmarkAllPoints();
             }
         }
-        pDragBla=NULL;
         if (bInsPolyPoint) {
             //HMHBOOL bVis=IsMarkHdlShown();
             //HMHif (bVis) HideMarkHdl();
@@ -726,16 +727,19 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
             AddUndo(pInsPointUndo);
             EndUndo();
         }
-        if (!bSomeObjChgdFlag) { // Aha, Obj hat nicht gebroadcastet (z.B. Writer FlyFrames)
-            if (/*HMHIsDragHdlHide() &&*/ !bDragHdl &&
-                !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
+
+        eDragHdl=HDL_MOVE;
+        pDragHdl=NULL;
+
+        if (!bSomeObjChgdFlag)
+        {
+            // Aha, Obj hat nicht gebroadcastet (z.B. Writer FlyFrames)
+            if(/*HMHIsDragHdlHide() &&*/ !bDragHdl && !IS_TYPE(SdrDragMirror,pDragBla) && !IS_TYPE(SdrDragRotate,pDragBla))
             {
                 AdjustMarkHdl();
                 //HMHShowMarkHdl();
             }
         }
-        eDragHdl=HDL_MOVE;
-        pDragHdl=NULL;
         SetDragPolys(true);
     } else {
         BrkDragObj();
