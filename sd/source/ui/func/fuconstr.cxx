@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:16:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         aName.Append( String ( SdResId( STR_LAYOUT_BACKGROUNDOBJECTS ) ) );
         SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                                 GetStyleSheetPool()->
-                                                Find(aName, SD_LT_FAMILY);
+                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
         DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
         if (pSheet)
         {
@@ -435,7 +435,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             String aName(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
             SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                          GetStyleSheetPool()->
-                                         Find(aName, SFX_STYLE_FAMILY_PARA);
+                                         Find(aName, SD_STYLE_FAMILY_GRAPHICS);
             DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
             if (pSheet)
             {
