@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:29:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #ifndef _SVX_NUMINF_HXX //autogen
 #include <svx/numinf.hxx>
 #endif
+#include <svx/svxdlg.hxx>
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
@@ -1110,22 +1111,22 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
-
-                AbstractSwSplitTableDlg* pDlg = pFact->CreateSwSplitTableDlg( GetView().GetWindow(), rSh, DLG_SPLIT );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
-                if ( pDlg->Execute() == RET_OK )
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if( pFact )
                 {
-                    nCount = pDlg->GetCount();
-                    bHorizontal = pDlg->IsHorizontal();
-                    bProportional = pDlg->IsProportional();
-                    rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
-                    rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
-                    rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
+                    const long nMaxVert = rSh.GetAnyCurRect( RECT_FRM ).Width() / MINLAY;
+                    SvxAbstractSplittTableDialog* pDlg = pFact->CreateSvxSplittTableDialog( GetView().GetWindow(), rSh.IsTableVertical(), nMaxVert, 99 );
+                    if( pDlg && (pDlg->Execute() == RET_OK) )
+                    {
+                        nCount = pDlg->GetCount();
+                        bHorizontal = pDlg->IsHorizontal();
+                        bProportional = pDlg->IsProportional();
+                        rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
+                        rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
+                        rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
+                    }
+                    delete pDlg;
                 }
-
-                delete pDlg;
             }
 
             if ( nCount>1 )
