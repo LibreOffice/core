@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLElementPropertyContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:49:18 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,7 @@
 #include "XMLElementPropertyContext.hxx"
 #endif
 
-using namespace ::rtl;
-
+using ::rtl::OUString;
 
 TYPEINIT1( XMLElementPropertyContext , SvXMLImportContext );
 
