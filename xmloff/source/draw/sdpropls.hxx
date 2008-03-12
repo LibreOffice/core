@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:04:48 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
 extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
+
+//////////////////////////////////////////////////////////////////////////////
+
+/** contains the attribute to property mapping for a drawing layer table */
+extern const XMLPropertyMapEntry aXMLTableShapeAttributes[];
 
 //////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties
