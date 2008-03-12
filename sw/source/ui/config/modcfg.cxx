@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:20:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,8 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
-
+using rtl::OUString;
+using namespace com::sun::star::uno;
 
 #define GLOB_NAME_CALC      0
 #define GLOB_NAME_IMPRESS   1
