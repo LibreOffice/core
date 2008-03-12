@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:48:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,8 +185,9 @@ enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
                  OBJ_DUMMY      =30,  // Dummyobjekt zum speichern von Luecken (zur anschliessenden Wiederherstellung der Surrogate)
                  OBJ_FRAME      =31,  // staendig aktives OLE (PlugIn-Frame oder sowas)
                  OBJ_UNO        =32,  // Universal Network Object im SvDraw-Obj eingepackt
-                 OBJ_CUSTOMSHAPE    =33,  // CustomShape
+                 OBJ_CUSTOMSHAPE=33,  // CustomShape
                  OBJ_MEDIA      =34,  // Media shape
+                 OBJ_TABLE      =35,  // Table
                  OBJ_MAXI};
 
 // Paintmodes, die den SdrObject::Paint-Methoden mitgegeben werden.
