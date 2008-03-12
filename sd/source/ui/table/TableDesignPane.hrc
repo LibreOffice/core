@@ -1,0 +1,58 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: TableDesignPane.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:46:47 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SD_TABLEDESIGNPANE_HRC
+#define _SD_TABLEDESIGNPANE_HRC
+
+#define FL_STYLE_OPTIONS    0
+#define CB_HEADER_ROW       1
+#define CB_TOTAL_ROW        2
+#define CB_BANDED_ROWS      3
+#define CB_FIRST_COLUMN     4
+#define CB_LAST_COLUMN      5
+#define CB_BANDED_COLUMNS   6
+
+#define FL_TABLE_STYLES     7
+#define CT_TABLE_STYLES     8
+
+#define DESIGNPANE_CONTROL_COUNT 9
+
+#define FL_SEP1 10
+#define FL_SEP2 11
+#define BTN_HELP 12
+#define BTN_OK 13
+#define BTN_CANCEL 14
+
+#endif // _SD_TABLEDESIGNPANE_HRC
