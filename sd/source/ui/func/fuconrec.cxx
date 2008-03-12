@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:42:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:38:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         String aName(SdResId(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
                                      GetStyleSheetPool()->
-                                     Find(aName, SFX_STYLE_FAMILY_PARA);
+                                     Find(aName, SD_STYLE_FAMILY_GRAPHICS);
         DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
 
         if (pSheet)
