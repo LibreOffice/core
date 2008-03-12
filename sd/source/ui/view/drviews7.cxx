@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:27:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1441,6 +1441,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         BOOL bFoundObjNoArea      = FALSE;
         BOOL bFoundNoGraphicObj = FALSE;
         BOOL bFoundAny            = FALSE;
+        bool bFoundTable = false;
 
 //      const int nMarkCount = (int) aMarkList.GetMarkCount();
         for (ULONG i=0; i < nMarkCount && !bFoundAny; i++)
@@ -1485,6 +1486,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         // #i25616# bFoundObjNoLine = TRUE;
                         // #i25616# bFoundObjNoArea = TRUE;
                         break;
+                    case OBJ_TABLE:
+                        bFoundTable = true;
+                        break;
                     default :
                         bFoundAny = TRUE;
                 }
@@ -1495,6 +1499,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 bFoundAny = TRUE;
             }
         }
+
+        if( bFoundTable )
+            rSet.DisableItem( SID_ATTRIBUTES_LINE );
 
         if (!bFoundAny)
         {
