@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:23:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@ namespace framework
         Size                            maWelcomeSize;
         FixedText                       maProduct;
         Size                            maProductSize;
+        FixedText                       maCreateText;
+        Size                            maCreateSize;
         FixedText                       maWriterText;
         ImageButton                     maWriterButton;
         FixedText                       maCalcText;
