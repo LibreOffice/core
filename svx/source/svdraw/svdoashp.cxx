@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:35:01 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1821,7 +1821,7 @@ void SdrObjCustomShape::RecalcBoundRect()
     }
 
     // add text to ImpAddTextToBoundrect:
-    if ( pOutlinerParaObject )
+    if ( GetOutlinerParaObject() )
     {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
         Rectangle aTextRect;
@@ -2914,6 +2914,8 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
 {
     ForceOutlinerParaObject();
 
+    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
     if( pOutlinerParaObject )
@@ -3027,7 +3029,8 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOO
                 rOutliner.SetUpdateMode(TRUE);
                 // !!! hier sollte ich wohl auch noch mal die Optimierung mit
                 // bPortionInfoChecked usw einbauen
-                if ( pOutlinerParaObject != NULL )
+                OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+                if( pOutlinerParaObject != NULL )
                 {
                     rOutliner.SetText(*pOutlinerParaObject);
                     rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
@@ -3370,7 +3373,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rOutliner.SetPaperSize( aNullSize );
 
     // Text in den Outliner stecken - ggf. den aus dem EditOutliner
-    OutlinerParaObject* pPara=pOutlinerParaObject;
+    OutlinerParaObject* pPara= GetOutlinerParaObject();
     if (pEdtOutl && !bNoEditText)
         pPara=pEdtOutl->CreateParaObject();
 
@@ -3382,7 +3385,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
 
         const SdrTextObj* pTestObj = rOutliner.GetTextObj();
         if( !pTestObj || !bHitTest || pTestObj != this ||
-            pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
+            pTestObj->GetOutlinerParaObject() != GetOutlinerParaObject() )
         {
             if( bHitTest )
                 rOutliner.SetTextObj( this );
@@ -3401,13 +3404,9 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rOutliner.SetUpdateMode(TRUE);
     rOutliner.SetControlWord(nStat0);
 
-    if (!bPortionInfoChecked)
-    {
-        // Optimierung: ggf. BigTextObject erzeugen
-        ((SdrObjCustomShape*)this)->bPortionInfoChecked=TRUE;
-        if (pOutlinerParaObject!=NULL && rOutliner.ShouldCreateBigTextObject())
-            ((SdrObjCustomShape*)this)->pOutlinerParaObject=rOutliner.CreateParaObject();
-    }
+    SdrText* pText = getActiveText();
+    if( pText )
+        pText->CheckPortionInfo( rOutliner );
 
     Point aTextPos(aAnkRect.TopLeft());
     Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() hat etwas Toleranz drauf, oder?
