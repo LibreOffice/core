@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:38:18 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ class SwConvertTableDlg;
 class SwInsertDBColAutoPilot;
 class SwLabDlg;
 class SwSelGlossaryDlg;
-class SwSplitTableDlg;
 class SwAutoFormatDlg;
 class SwFldDlg;
 class SwRenameXNamedDlg;
@@ -71,7 +70,7 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual USHORT  Execute() ;
+    virtual short   Execute() ;
 //  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
@@ -79,7 +78,7 @@ Class::~Class()                                     \
 {                                                   \
     delete pDlg;                                    \
 }                                                   \
-USHORT Class::Execute()                             \
+short Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
 }
@@ -206,16 +205,6 @@ class AbstarctSwSelGlossaryDlg_Impl : public AbstarctSwSelGlossaryDlg
     virtual void SelectEntryPos(USHORT nIdx);   // inline
 };
 //add for SwSelGlossaryDlg end
-
-//add for SwSplitTableDlg begin
-class AbstractSwSplitTableDlg_Impl :public AbstractSwSplitTableDlg
-{
-    DECL_ABSTDLG_BASE(AbstractSwSplitTableDlg_Impl,SwSplitTableDlg)
-    virtual BOOL                IsHorizontal() const;
-    virtual BOOL                IsProportional() const;
-    virtual long                GetCount() const;
-};
-//add for SwSplitTableDlg end
 
 //add for SwAutoFormatDlg begin
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
@@ -475,7 +464,6 @@ public:
                                                     UINT16 nDefPage = 0);
 
     virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
-    virtual AbstractSwSplitTableDlg * CreateSwSplitTableDlg ( Window *pParent, SwWrtShell& rShell,int nResId ); //add for SwSplitTableDlg
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
