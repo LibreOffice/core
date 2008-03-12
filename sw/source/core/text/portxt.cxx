@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:46:52 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
 /*************************************************************************
