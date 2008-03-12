@@ -4,9 +4,9 @@
 ;
 ;   $RCSfile: unicows.dxp,v $
 ;
-;   $Revision: 1.5 $
+;   $Revision: 1.6 $
 ;
-;   last change: $Author: vg $ $Date: 2007-10-15 12:52:46 $
+;   last change: $Author: rt $ $Date: 2008-03-12 07:38:55 $
 ;
 ;   The Contents of this file are made available subject to
 ;   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 ; Functions that are exported but not implemented by unicows.dll
 ; are only inserted as comment.
 ;
-; In addition to MSDN Platform SDK documentation the following functions 
+; In addition to MSDN Platform SDK documentation the following functions
 ; are not implemented too:
 ; AddMonitorW, FreeContextBufferW, GetPrinterDriverDirectoryW,
 ; MCIWndCreateW
@@ -46,15 +46,15 @@
 ;
 ; The following functions of unicows.dll are wrapped but the ANSI versions
 ; do not exist on Win9x so the wrapper is useless:
-; MoveFileExW, CopyFileExW (both implemented in uwinapi.dll along with the 
+; MoveFileExW, CopyFileExW (both implemented in uwinapi.dll along with the
 ; ANSI versions )
 ;
 ; These functions do not exist on Win 95 and NT neither as Unicode
 ; nor as ANSI version, so the wrapper will fail on NT4 and Win 95
-; GetLongPathNameW ( implemented in uwinapi.dll along with the 
+; GetLongPathNameW ( implemented in uwinapi.dll along with the
 ; ANSI version )
 ;
-; These essential functions aren't implemented by unicows.dll because 
+; These essential functions aren't implemented by unicows.dll because
 ; there's no ANSI version:
 ; CommandLineToArgvW (implemented by uwinapi.dll)
 ;
