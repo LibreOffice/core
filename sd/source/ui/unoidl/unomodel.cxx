@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,10 +171,8 @@
 #include <unopres.hxx>
 #include <unocpres.hxx>
 #include <unoobj.hxx>
-#include <unostyls.hxx>
 #include <stlpool.hxx>
 #include <unopback.hxx>
-#include <unogstyl.hxx>
 #include <unokywds.hxx>
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
@@ -1020,12 +1018,6 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
             static_cast<uno::XWeak*>(new SdUnoPageBackground( mpDoc )));
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.Style") ) )
-    {
-        uno::Reference<uno::XInterface> xStyle(
-            static_cast<uno::XWeak*>(new SdUnoGraphicStyle()));
-        return xStyle;
-    }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
     {
         if( !mxDrawingPool.is() )
@@ -1182,6 +1174,10 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         {
             nType = OBJ_TEXT;
         }
+        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        {
+            nType = OBJ_TABLE;
+        }
         else
         {
             throw lang::ServiceNotRegisteredException();
@@ -1191,6 +1187,14 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
 
         // set shape type
+        if( pShape && !mbClipBoard )
+            pShape->SetShapeType(aServiceSpecifier);
+
+        xRet = (uno::XWeak*)pShape;
+    }
+    else if( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+    {
+        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
@@ -1223,7 +1227,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? (30 + 4) : (18 + 4) );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? (34) : (19) );
 
     sal_uInt16 i(0);
 
@@ -1236,7 +1240,6 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapRectangleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapCircleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapPolygonObject));
@@ -1247,6 +1250,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TableShape"));
 
     if(mbImpressDoc)
     {
@@ -1512,11 +1516,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
-
-    if( !xStyles.is() )
-        mxStyleFamilies = xStyles = new SdUnoStyleFamilies( this );
-
+    uno::Reference< container::XNameAccess > xStyles( dynamic_cast< container::XNameAccess* >( mpDoc->GetStyleSheetPool()) );
     return xStyles;
 }
 
@@ -2242,16 +2242,6 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             // As a consequence the following code has to be able to be run twice.
             SfxBaseModel::dispose();
             mbDisposed = true;
-
-            uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
-            if( xStyles.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xStyles, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xStyles = 0;
-            }
 
             uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
             if( xPresentation.is() )
