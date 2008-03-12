@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:13:13 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,12 +151,13 @@ public:
     inline SdDrawDocument* GetDoc (void) const;
     inline ViewShell* GetViewShell (void) const;
 
-    sal_Bool BeginTextEdit(
-        SdrObject* pObj, SdrPageView* pPV = 0L, Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
+    virtual sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False, sal_Bool bGrabFocus = sal_True);
+
     virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
-    SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally, FunctionReference xFunc);
+
+    bool RestoreDefaultText( SdrTextObj* pTextObj );
 
     BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
@@ -174,6 +175,8 @@ public:
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
     SdrMediaObj*            InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
+
+    bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, ULONG nPasteOptions );
 
     BOOL                    IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
 
