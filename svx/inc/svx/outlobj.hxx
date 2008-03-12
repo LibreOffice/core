@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:03:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,11 @@ public:
     void                        SetLRSpaceItemFlags( BOOL bOutlineMode );
     void                        MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
 
+/* cl removed because not needed anymore since binfilter
     void                        PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
     void                        FinishStore();
     void                        FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
+*/
 };
 
 #endif
