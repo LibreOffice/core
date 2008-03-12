@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:25:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1662,16 +1662,31 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxBorderLine  --------------------------------------------------
 
-SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn,
-                              sal_uInt16 nDist ) :
-
-    nOutWidth( nOut ),
-    nInWidth ( nIn ),
-    nDistance( nDist )
-
+SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
+: nOutWidth( nOut )
+, nInWidth ( nIn )
+, nDistance( nDist )
 {
     if ( pCol )
         aColor = *pCol;
+}
+
+// -----------------------------------------------------------------------
+
+SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
+{
+    *this = r;
+}
+
+// -----------------------------------------------------------------------
+
+SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
+{
+    aColor = r.aColor;
+    nOutWidth = r.nOutWidth;
+    nInWidth = r.nInWidth;
+    nDistance = r.nDistance;
+    return *this;
 }
 
 // -----------------------------------------------------------------------
@@ -1783,6 +1798,36 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
 #else
     return UniString();
 #endif
+}
+
+bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
+{
+    const USHORT nThisSize = GetOutWidth() + GetDistance() + GetInWidth();
+    const USHORT nOtherSize = rOtherLine.GetOutWidth() + rOtherLine.GetDistance() + rOtherLine.GetInWidth();
+
+    if (nThisSize > nOtherSize)
+    {
+        return true;
+    }
+    else if (nThisSize < nOtherSize)
+    {
+        return false;
+    }
+    else
+    {
+        if ( rOtherLine.GetInWidth() && !GetInWidth() )
+        {
+            return true;
+        }
+        else if ( GetInWidth() && !rOtherLine.GetInWidth() )
+        {
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 // class SvxBoxItem ------------------------------------------------------
