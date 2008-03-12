@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:23:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,11 +171,11 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
+using namespace com::sun::star::i18n;
+using ::rtl::OUString;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
