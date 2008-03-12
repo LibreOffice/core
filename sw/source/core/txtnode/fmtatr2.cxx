@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:26:18 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
