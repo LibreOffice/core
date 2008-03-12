@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:29:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::comphelper;
 
 #define SW_PROP_NMID(id)    ((const char*)id), 0
