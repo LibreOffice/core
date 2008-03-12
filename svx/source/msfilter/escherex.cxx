@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:31:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,9 +444,9 @@ extern "C" int __LOADONCALLAPI EscherPropSortFunc( const void* p1, const void* p
         return 0;
 }
 
-void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion )
+void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
-    rSt << (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) << (sal_uInt16)ESCHER_OPT << nCountSize;
+    rSt << (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) << nRecType << nCountSize;
     if ( nSortCount )
     {
         qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
