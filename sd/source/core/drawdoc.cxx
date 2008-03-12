@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:20:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,13 +576,17 @@ SdrModel* SdDrawDocument::AllocModel() const
         SdStyleSheetPool* pNewStylePool = (SdStyleSheetPool*) pNewModel->GetStyleSheetPool();
 
         pNewStylePool->CopyGraphicSheets(*pOldStylePool);
+        pNewStylePool->CopyCellSheets(*pOldStylePool);
+        pNewStylePool->CopyTableStyles(*pOldStylePool);
+
 
         for (USHORT i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
             // Alle Layouts der MasterPage mitnehmen
             String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
             aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-            pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool);
+            SdStyleSheetVector aCreatedSheets;
+            pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
         }
 
         pNewModel->NewOrLoadCompleted( DOC_LOADED );  // loaded from source document
@@ -674,8 +678,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // Praesentations- und Standardvorlagen erzeugen,
         // Pool fuer virtuelle Controls erzeugen
         CreateLayoutTemplates();
+        CreateDefaultCellStyles();
 
-        ((SdStyleSheetPool*)pStyleSheetPool)->CreatePseudosIfNecessary();
+        static_cast< SdStyleSheetPool* >( mxStyleSheetPool.get() )->CreatePseudosIfNecessary();
     }
     else if (eMode == DOC_LOADED)
     {
@@ -737,15 +742,15 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         RestoreLayerNames();
 
         // Sprachabhaengige Namen der Vorlagen setzen
-        ((SdStyleSheetPool*)pStyleSheetPool)->UpdateStdNames();
+        static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->UpdateStdNames();
 
         // Ggf. fehlende Vorlagen erzeugen (es gab z.B. frueher keinen Subtitle)
-        ((SdStyleSheetPool*)pStyleSheetPool)->CreatePseudosIfNecessary();
+        static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->CreatePseudosIfNecessary();
     }
 
     // Standardvorlage an der Drawing Engine setzen
     String aName( SdResId(STR_STANDARD_STYLESHEET_NAME));
-    SetDefaultStyleSheet((SfxStyleSheet*)pStyleSheetPool->Find(aName, SFX_STYLE_FAMILY_PARA));
+    SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
     // Draw-Outliner und  Dokument Outliner initialisieren,
     // aber nicht den globalen Outliner, den der ist ja nicht
@@ -856,6 +861,7 @@ void SdDrawDocument::UpdateAllLinks()
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
 {
+/* cl removed because not needed anymore since binfilter
     SdrObjListIter aShapeIter( *pPage );
     while( aShapeIter.IsMore() )
     {
@@ -868,6 +874,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
             pOPO->FinishLoad( pSPool );
         }
     }
+*/
 
     const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
