@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:15:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:19:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3107,8 +3107,8 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetPosition(
-                                static_cast<SCCOL>(nCol),
-                                static_cast<SCROW>(nRow) );
+                                sal::static_int_cast<SCCOL>(nCol),
+                                sal::static_int_cast<SCROW>(nRow) );
                         if (pPos)
                         {
                             double fVal = pArray[nCol];
@@ -3244,7 +3244,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetColHeaderPosition(
-                                static_cast<SCCOL>(nCol) );
+                            sal::static_int_cast<SCCOL>(nCol) );
                         if (pPos)
                         {
                             String aStr(pArray[nCol]);
