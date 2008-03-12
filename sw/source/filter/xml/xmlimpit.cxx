@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:11:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
