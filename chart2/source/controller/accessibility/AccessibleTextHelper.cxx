@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:15:05 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             SdrObject * pTextObj = m_pDrawViewWrapper->getNamedSdrObject( aCID );
             if( pTextObj )
             {
-                SvxEditSource * pEditSource = new SvxTextEditSource( *pTextObj, *pView, *pWindow );
+                SvxEditSource * pEditSource = new SvxTextEditSource( *pTextObj, 0, *pView, *pWindow );
                 m_pTextHelper = new ::accessibility::AccessibleTextHelper(
                     ::std::auto_ptr< SvxEditSource >( pEditSource ));
                 if( m_pTextHelper )
