@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:49:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,41 @@ CAsyncEventNotifier::~CAsyncEventNotifier()
 
     CloseHandle(m_hEvents[0]);
     CloseHandle(m_hEvents[1]);
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                         aType    ,
+                                               const uno::Reference< uno::XInterface >& xListener)
+{
+    if ( m_rBroadcastHelper.bDisposed )
+        throw lang::DisposedException(
+            ::rtl::OUString::createFromAscii( "FilePicker is already disposed" ),
+            uno::Reference< uno::XInterface >() );
+
+    if ( m_rBroadcastHelper.bInDispose )
+        throw lang::DisposedException(
+            ::rtl::OUString::createFromAscii( "FilePicker will be disposed now." ),
+            uno::Reference< uno::XInterface >() );
+
+    m_rBroadcastHelper.aLC.addInterface( aType, xListener );
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&                         aType    ,
+                                                  const uno::Reference< uno::XInterface >& xListener)
+{
+    if ( m_rBroadcastHelper.bDisposed )
+        throw lang::DisposedException(
+            ::rtl::OUString::createFromAscii( "FilePicker is already disposed." ),
+            uno::Reference< uno::XInterface >() );
+
+    m_rBroadcastHelper.aLC.removeInterface( aType, xListener );
 }
 
 //------------------------------------------------
