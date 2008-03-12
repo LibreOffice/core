@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:30:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:23:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
+
+#include <com/sun/star/embed/XStorage.hpp>
+
 #ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #endif
@@ -616,6 +619,8 @@ public:
     const sal_Bool writeOutlineStyleAsNormalListStyle() const;
     // <--
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
