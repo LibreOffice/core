@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxids.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:14:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@
 // ID-Bereiche --------------------------------------------------------------
 
 // Slot-Id's
-#define SID_SVX_FIRSTFREE                   1070
-#define SID_SVX_END                                             (SID_LIB_START + 1199)
+#define SID_SVX_END                         (SID_LIB_START + 1199)
 
 // --------------------------------------------------------------------------
 // Member-Id's
@@ -350,6 +349,12 @@
 #define SID_DASH                            (SID_SD_START+267)
 #define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
 #define SID_GRID_VISIBLE                    (SID_SD_START+322)
+#define ID_VAL_USEFIRSTROWSTYLE             (SID_SD_START+323)
+#define ID_VAL_USELASTROWSTYLE              (SID_SD_START+324)
+#define ID_VAL_USEBANDINGROWSTYLE           (SID_SD_START+325)
+#define ID_VAL_USEFIRSTCOLUMNSTYLE          (SID_SD_START+326)
+#define ID_VAL_USELASTCOLUMNSTYLE           (SID_SD_START+327)
+#define ID_VAL_USEBANDINGCOLUMNSTYLE        (SID_SD_START+328)
 
 // --------------------------------------------------------------------------
 // Calc-Id's
@@ -830,6 +835,7 @@
 //#define SID_SD_AUTOPILOT                                ( SID_SVX_START + 425 )   -> sfxsids.hrc
 #define SID_AUTOPILOT                                       SID_SD_AUTOPILOT
 // 4 defines of Writer's old wizards have been removed here
+#define SID_TABLEDESIGN                                 ( SID_SVX_START + 429 )
 #define SID_MN_AUTOPILOT                                ( SID_SVX_START + 430 )
 #define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )
 #define SID_SW_EDITOPTIONS                              ( SID_SVX_START + 433 )
@@ -1315,17 +1321,38 @@
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
 #define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
 #define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )
-#define SID_FONTNAMELIST                                                                ( SID_SVX_START + 1066 )
+#define SID_FONTNAMELIST                                ( SID_SVX_START + 1066 )
 #define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1067 )
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
 #define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )
 
+#define SID_TABLE_MERGE_CELLS                           (SID_SVX_START+1070)
+#define SID_TABLE_SPLIT_CELLS                           (SID_SVX_START+1071)
+#define SID_OPTIMIZE_TABLE                              (SID_SVX_START+1072)
+#define SID_TABLE_VERT_BOTTOM                           (SID_SVX_START+1073)
+#define SID_TABLE_VERT_CENTER                           (SID_SVX_START+1074)
+#define SID_TABLE_VERT_NONE                             (SID_SVX_START+1075)
+#define SID_TABLE_INSERT_ROW                            (SID_SVX_START+1076)
+#define SID_TABLE_INSERT_COL                            (SID_SVX_START+1077)
+#define SID_TABLE_DELETE_ROW                            (SID_SVX_START+1078)
+#define SID_TABLE_DELETE_COL                            (SID_SVX_START+1079)
+#define SID_TABLE_SELECT_ALL                            (SID_SVX_START+1080)
+#define SID_TABLE_SELECT_COL                            (SID_SVX_START+1081)
+#define SID_TABLE_SELECT_ROW                            (SID_SVX_START+1082)
+#define SID_FORMAT_TABLE_DLG                            (SID_SVX_START+1083)
+#define SID_TABLE_SORT_DIALOG                           (SID_SVX_START+1084)
+#define SID_TABLE_AUTOSUM                               (SID_SVX_START+1085)
+#define SID_TABLE_DISTRIBUTE_COLUMNS                    (SID_SVX_START+1086)
+#define SID_TABLE_DISTRIBUTE_ROWS                       (SID_SVX_START+1087)
+#define SID_TABLE_STYLE                                 (SID_SVX_START+1088)
+#define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
+#define SID_SVX_FIRSTFREE                               SID_TABLE_STYLE_SETTINGS + 1
+
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs
 // --------------------------------------------------------------------------
-#define ACT_SID_END             (SID_SVX_START + SID_SVX_FIRSTFREE)
 
-#if ACT_SID_END > SID_SVX_END
+#if SID_SVX_FIRSTFREE > SID_SVX_END
 #error Resource-Ueberlauf in #line, #file
 #endif
 
