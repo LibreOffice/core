@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:22:57 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -100,7 +101,7 @@
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
 #endif
-
+#include <svx/sdr/table/tabledesign.hxx>
 #include <svx/akrnitem.hxx>
 
 #include <svx/svdattr.hxx>
@@ -130,89 +131,91 @@
 #include <svtools/itemset.hxx>
 #endif
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
+using ::rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::container;
 
-SdStyleSheetPool::SdStyleSheetPool(SfxItemPool& _rPool, SdDrawDocument* pDocument)
-:   SfxStyleSheetPool(_rPool)
+// ----------------------------------------------------------
+
+SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pDocument)
+:   SdStyleSheetPoolBase( _rPool )
 ,   mpActualStyleSheet(NULL)
 ,   mpDoc(pDocument)
 {
+    if( mpDoc )
+    {
+        rtl::Reference< SfxStyleSheetPool > xPool( this );
+
+        // create graphics family
+        mxGraphicFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_GRAPHICS );
+        mxCellFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_CELL );
+
+        mxTableFamily = sdr::table::CreateTableDesignFamily();
+        Reference< XNamed > xNamed( mxTableFamily, UNO_QUERY );
+        if( xNamed.is() )
+            msTableFamilyName = xNamed->getName();
+
+        // create presentation families, one for each master page
+        const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
+        for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
+            AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PK_STANDARD) );
+
+        StartListening( *mpDoc );
+    }
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
+// ----------------------------------------------------------
 
 SdStyleSheetPool::~SdStyleSheetPool()
 {
+    DBG_ASSERT( mpDoc == NULL, "sd::SdStyleSheetPool::~SdStyleSheetPool(), dispose me first!" );
 }
 
-/*************************************************************************
-|*
-|* Vorlage erzeugen
-|*
-\************************************************************************/
+// ----------------------------------------------------------
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName,
-                                            SfxStyleFamily eFamily,
-                                            USHORT _nMask )
+SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName, SfxStyleFamily eFamily, USHORT _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
 
-
-/*************************************************************************
-|*
-|* Vorlage nach Vorbild erzeugen
-|*
-\************************************************************************/
+// ----------------------------------------------------------
 
 SfxStyleSheetBase* SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
 {
-    return new SdStyleSheet(rStyle);
+    return new SdStyleSheet( rStyle );
 }
 
-/*************************************************************************
-|*
-|* eine Titelvorlage fuer ein Praesentationslayout suchen
-|*
-\************************************************************************/
+// ----------------------------------------------------------
 
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 {
     String aName(rLayoutName);
     aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     aName += String(SdResId(STR_LAYOUT_TITLE));
-    SfxStyleSheetBase* pResult = Find(aName, SD_LT_FAMILY);
+    SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return pResult;
 }
 
-/*************************************************************************
-|*
-|* LayoutName des ersten Layouts ermitteln
-|*
-\************************************************************************/
+// ----------------------------------------------------------
+// find layout name of first layout
+// ----------------------------------------------------------
 
 String SdStyleSheetPool::GetLayoutName() const
 {
     String aName( SdResId(STR_LAYOUT_DEFAULT_NAME ) );
-    ULONG  nCount = aStyles.Count();
+    sal_uInt32  nCount = aStyles.size();
 
-    for( ULONG n = 0; n < nCount; n++ )
+    for( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        aName = aStyles.GetObject( n )->GetName();
-        USHORT nPos = aName.SearchAscii( SD_LT_SEPARATOR );
+        aName = aStyles[n]->GetName();
+        sal_uInt16 nPos = aName.SearchAscii( SD_LT_SEPARATOR );
         if( nPos != STRING_NOTFOUND )
             break;
     }
 
-    USHORT nPos = aName.Search( sal_Unicode( ' ' ));
+    sal_uInt16 nPos = aName.Search( sal_Unicode( ' ' ));
     if( nPos != STRING_NOTFOUND )
         aName.Erase( nPos );       // removing blanks and number (e.g. "Gliederung 1")
 
@@ -237,7 +240,7 @@ List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
         String aFullName(aName);
         aFullName.Append( sal_Unicode( ' ' ));
         aFullName.Append( String::CreateFromInt32( (sal_Int32)nSheet ));
-        SfxStyleSheetBase* pSheet = Find(aFullName, SD_LT_FAMILY);
+        SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
         pList->Insert(pSheet, LIST_APPEND);
     }
     return pList;
@@ -295,10 +298,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
         aLevelName.Insert(aPrefix, 0);
 
-        if (!Find(aLevelName, SD_LT_FAMILY))
+        if (!Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE))
         {
             bCreated = sal_True;
-            pSheet = &Make(aLevelName, SD_LT_FAMILY);
+            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_MASTERPAGE);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
             pSheet->SetParent( String() );
@@ -411,7 +414,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
             aLevelName.Insert(aPrefix, 0);
 
-            pSheet = Find(aLevelName, SD_LT_FAMILY);
+            pSheet = Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE);
 
             DBG_ASSERT( pSheet, "missing layout style!");
 
@@ -430,11 +433,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     aName = String(SdResId(STR_LAYOUT_TITLE));
     aName.Insert(aPrefix, 0);
 
-    if (!Find(aName, SD_LT_FAMILY))
+    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_LT_FAMILY);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
         pSheet->SetParent(String());
         SfxItemSet& rTitleSet = pSheet->GetItemSet();
@@ -475,11 +478,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     aName = String(SdResId(STR_LAYOUT_SUBTITLE));
     aName.Insert(aPrefix, 0);
 
-    if (!Find(aName, SD_LT_FAMILY))
+    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_LT_FAMILY);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
         pSheet->SetParent(String());
         SfxItemSet& rSubtitleSet = pSheet->GetItemSet();
@@ -523,11 +526,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     aName = String(SdResId(STR_LAYOUT_NOTES));
     aName.Insert(aPrefix, 0);
 
-    if (!Find(aName, SD_LT_FAMILY))
+    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_LT_FAMILY);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
         pSheet->SetParent(String());
         SfxItemSet& rNotesSet = pSheet->GetItemSet();
@@ -572,11 +575,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     aName = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
     aName.Insert(aPrefix, 0);
 
-    if (!Find(aName, SD_LT_FAMILY))
+    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_LT_FAMILY);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
@@ -594,11 +597,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     aName = String(SdResId(STR_LAYOUT_BACKGROUND));
     aName.Insert(aPrefix, 0);
 
-    if (!Find(aName, SD_LT_FAMILY))
+    if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_LT_FAMILY);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundSet = pSheet->GetItemSet();
@@ -626,10 +629,10 @@ void SdStyleSheetPool::EraseLayoutStyleSheets(const String& rLayoutName)
     String* pName = (String*)pNameList->First();
     while (pName)
     {
-        pSheet = Find(*pName, SD_LT_FAMILY);
+        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
         DBG_ASSERT(pSheet, "EraseLayoutStyleSheets: Vorlage nicht gefunden");
         if (pSheet)
-            Erase(pSheet);
+            Remove(pSheet);
         delete pName;
         pName = (String*)pNameList->Next();
     }
@@ -648,38 +651,100 @@ void SdStyleSheetPool::EraseLayoutStyleSheets(const String& rLayoutName)
 
 void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
 {
-    ULONG nCount = rSourcePool.aStyles.Count();
+    CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS );
+}
 
-    std::vector< std::pair< SfxStyleSheetBase*, String > > aNewStyles;
+void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
+{
+    CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL );
+}
 
-    for (ULONG n = 0; n < nCount; n++)
+void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
+{
+    Reference< XIndexAccess > xSource( rSourcePool.mxTableFamily, UNO_QUERY );
+    Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
+    Reference< XSingleServiceFactory > xFactory( mxTableFamily, UNO_QUERY );
+
+    if( xSource.is() && xFactory.is() && mxTableFamily.is() )
     {
-        SfxStyleSheet* pSheet = (SfxStyleSheet*) rSourcePool.aStyles.GetObject(n);
-
-        if( pSheet->GetFamily() == SFX_STYLE_FAMILY_PARA )
+        for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
         {
-            String aName( pSheet->GetName() );
-            if ( !Find( aName, SFX_STYLE_FAMILY_PARA ) )
+            Reference< XStyle > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY );
+            if( xSourceTableStyle.is() )
             {
-                SfxStyleSheetBase& rNewSheet = Make( aName, SFX_STYLE_FAMILY_PARA );
+                Reference< XStyle > xNewTableStyle( xFactory->createInstance(), UNO_QUERY );
+                if( xNewTableStyle.is() )
+                {
+                    Reference< XNameAccess> xSourceNames( xSourceTableStyle, UNO_QUERY_THROW );
 
-                rNewSheet.SetMask( pSheet->GetMask() );
+                    Sequence< OUString > aStyleNames( xSourceNames->getElementNames() );
+                    OUString* pStyleNames( aStyleNames.getArray() );
+
+                    Reference< XNameReplace > xTargetNames( xNewTableStyle, UNO_QUERY );
+
+                    sal_Int32 nNames = aStyleNames.getLength();
+                    while( nNames-- )
+                    {
+                        const OUString aName( *pStyleNames++ );
+                        Reference< XStyle > xSourceStyle( xSourceNames->getByName( aName ), UNO_QUERY );
+                        Reference< XStyle > xTargetStyle;
+                        if( xSourceStyle.is() ) try
+                        {
+                            mxCellFamily->getByName( xSourceStyle->getName() ) >>= xTargetStyle;
+                        }
+                        catch( Exception& )
+                        {
+                            DBG_ERROR( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                        }
+
+                        if( xTargetStyle.is() )
+                            xTargetNames->replaceByName( aName, Any( xTargetStyle ) );
+                    }
+                }
+                xTarget->insertByName( Reference< XNamed >( xSourceTableStyle, UNO_QUERY_THROW )->getName(), Any( xNewTableStyle ) );
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
+        }
+    }
+}
+
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
+{
+    sal_uInt32 nCount = rSourcePool.aStyles.size();
+
+    std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > > aNewStyles;
+
+    for (sal_uInt32 n = 0; n < nCount; n++)
+    {
+        rtl::Reference< SfxStyleSheetBase > xSheet( rSourcePool.aStyles[sal::static_int_cast<sal_uInt16>(n)] );
+
+        if( xSheet->GetFamily() == eFamily )
+        {
+            String aName( xSheet->GetName() );
+            if ( !Find( aName, eFamily ) )
+            {
+                rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
+
+                xNewSheet->SetMask( xSheet->GetMask() );
 
                 // #91588# Also set parent relation for copied style sheets
-                String aParent( pSheet->GetParent() );
+                String aParent( xSheet->GetParent() );
                 if( aParent.Len() )
-                    aNewStyles.push_back( std::pair< SfxStyleSheetBase*, String >( &rNewSheet, aParent ) );
+                    aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, String >( xNewSheet, aParent ) );
 
-                rNewSheet.GetItemSet().Put( pSheet->GetItemSet() );
+                xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
             }
         }
     }
 
     // set parents on newly added stylesheets
-    std::vector< std::pair< SfxStyleSheetBase*, String > >::iterator aIter;
+    std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > >::iterator aIter;
     for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); aIter++ )
     {
-        DBG_ASSERT( rSourcePool.Find( (*aIter).second, SFX_STYLE_FAMILY_PARA ), "StyleSheet has invalid parent: Family mismatch" );
+        DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
         (*aIter).first->SetParent( (*aIter).second );
     }
 }
@@ -698,9 +763,7 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName,
-                                        SdStyleSheetPool& rSourcePool,
-                                        List* pCreatedSheets)
+void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets)
 {
     SfxStyleSheetBase* pSheet = NULL;
 
@@ -711,19 +774,17 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName,
     String* pName = (String*)pNameList->First();
     while (pName)
     {
-        pSheet = Find(*pName, SD_LT_FAMILY);
+        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet =
-                                rSourcePool.Find(*pName, SD_LT_FAMILY);
-            DBG_ASSERT(pSourceSheet,
-                       "CopyLayoutSheets: Quellvorlage nicht gefunden");
-            if (pSourceSheet)   // falls einer mit Methusalem-Doks. ankommt
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
+            DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
+            if (pSourceSheet)
             {
-                SfxStyleSheetBase& rNewSheet = Make(*pName, SD_LT_FAMILY);
+                // falls einer mit Methusalem-Doks. ankommt
+                SfxStyleSheetBase& rNewSheet = Make(*pName, SD_STYLE_FAMILY_MASTERPAGE);
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
-                if (pCreatedSheets)
-                    pCreatedSheets->Insert(&rNewSheet, LIST_APPEND);
+                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
         }
         delete pName;
@@ -803,23 +864,21 @@ List* SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName) const
 |*
 \************************************************************************/
 
-List* SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName)
+void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets )
 {
-    List* pList = new List;             // die kriegt der Caller
     String aLayoutNameWithSep(rLayoutName);
     aLayoutNameWithSep.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     USHORT nLen = aLayoutNameWithSep.Len();
 
-    SfxStyleSheetIterator aIter(this, SD_LT_FAMILY);
+    SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)
     {
         if (pSheet->GetName().Match(aLayoutNameWithSep) == nLen)
-            pList->Insert(pSheet, LIST_APPEND);
+            rLayoutSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pSheet ) ) );
         pSheet = aIter.Next();
     }
-    return pList;
 }
 
 /*************************************************************************
@@ -839,52 +898,52 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     USHORT nUsedMask = SFXSTYLEBIT_USED;
 
     aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
-    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
     aName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
-    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent(String());
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
     aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
-    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
     aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
-    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
     aName = String(SdResId(STR_PSEUDOSHEET_NOTES));
-    if( (pSheet = Find(aName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+    if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
-        pSheet = &Make(aName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( String() );
         ((SfxStyleSheet*)pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
 
     pParent = NULL;
-    SetSearchMask(SFX_STYLE_FAMILY_PSEUDO);
+    SetSearchMask(SD_STYLE_FAMILY_PSEUDO);
     aName = String(SdResId(STR_PSEUDOSHEET_OUTLINE));
     for (USHORT nLevel = 1; nLevel < 10; nLevel++)
     {
@@ -892,9 +951,9 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
         aLevelName.Append( sal_Unicode( ' ' ));
         aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
 
-        if( (pSheet = Find(aLevelName, SFX_STYLE_FAMILY_PSEUDO)) == 0 )
+        if( (pSheet = Find(aLevelName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
         {
-            pSheet = &Make(aLevelName, SFX_STYLE_FAMILY_PSEUDO, nUsedMask);
+            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
 
             if (pSheet)
             {
@@ -917,14 +976,13 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
 void SdStyleSheetPool::UpdateStdNames()
 {
-    BOOL bNewHelpIds = FALSE;
     String aHelpFile;
-    ULONG  nCount = aStyles.Count();
+    sal_uInt32  nCount = aStyles.size();
     List* pEraseList = NULL;
 
-    for( ULONG n=0; n < nCount; n++ )
+    for( sal_uInt32 n=0; n < nCount; n++ )
     {
-        SfxStyleSheetBase* pStyle = aStyles.GetObject( n );
+        SfxStyleSheetBase* pStyle = aStyles[ n ].get();
 
         if( !pStyle->IsUserDefined() )
         {
@@ -968,6 +1026,13 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_PSEUDOSHEET_BACKGROUND:    nNameId = STR_PSEUDOSHEET_BACKGROUND;   break;
                 case HID_PSEUDOSHEET_NOTES:         nNameId = STR_PSEUDOSHEET_NOTES;        break;
 
+                case HID_SD_CELL_STYLE_DEFAULT:         nNameId = STR_STANDARD_STYLESHEET_NAME; break;
+                case HID_SD_CELL_STYLE_BANDED:          nNameId = STR_POOLSHEET_BANDED_CELL; break;
+                case HID_SD_CELL_STYLE_HEADER:          nNameId = STR_POOLSHEET_HEADER; break;
+                case HID_SD_CELL_STYLE_TOTAL:           nNameId = STR_POOLSHEET_TOTAL; break;
+                case HID_SD_CELL_STYLE_FIRST_COLUMN:    nNameId = STR_POOLSHEET_FIRST_COLUMN; break;
+                case HID_SD_CELL_STYLE_LAST_COLUMN:     nNameId = STR_POOLSHEET_LAST_COLUMN; break;
+
                 default:
                     // 0 oder falsche (alte) HelpId
                     bHelpKnown = FALSE;
@@ -1005,130 +1070,6 @@ void SdStyleSheetPool::UpdateStdNames()
                     }
                 }
             }
-            else
-            {
-                //  falsche oder keine HelpId -> neue generieren
-
-                DBG_WARNING("Default-Vorlage mit falscher oder keiner HelpId");
-
-                // Da bisher nur deutsche Dokumente erzeugt worden sein koennen,
-                // kann hier auch der deutsche Text abgefragt werden, damit man
-                // nicht in einer anderssprachigen Version auf die deutsche
-                // Version zurueckgreifen muss!
-
-                USHORT nNewId = 0;
-                if( eFam == SFX_STYLE_FAMILY_PARA )
-                {
-                    if( aOldName == String( SdResId( STR_STANDARD_STYLESHEET_NAME ) ) ||
-                        aOldName.EqualsAscii( "Standard", 0, RTL_CONSTASCII_LENGTH( "Standard" )) )
-                        nNewId = HID_STANDARD_STYLESHEET_NAME;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_OBJWITHARROW ) ) ||
-                        aOldName.EqualsAscii( "Objekt mit Pfeilspitze", 0, RTL_CONSTASCII_LENGTH( "Objekt mit Pfeilspitze" )) )
-                        nNewId = HID_POOLSHEET_OBJWITHARROW;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_OBJWITHSHADOW ) ) ||
-                        aOldName.EqualsAscii( "Objekt mit Schatten", 0, RTL_CONSTASCII_LENGTH( "Objekt mit Schatten" )) )
-                        nNewId = HID_POOLSHEET_OBJWITHSHADOW;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_OBJWITHOUTFILL ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_OBJWITHOUTFILL_NT ) ) )
-                        //aOldName.EqualsAscii( "Objekt ohne Füllung", 0, RTL_CONSTASCII_LENGTH( "Objekt ohne Füllung" )) )
-                        nNewId = HID_POOLSHEET_OBJWITHOUTFILL;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TEXT ) ) ||
-                        aOldName.EqualsAscii( "Text", 0, RTL_CONSTASCII_LENGTH( "Text" )) )
-                        nNewId = HID_POOLSHEET_TEXT;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY_NT ) ) )
-                        //aOldName.EqualsAscii( "Textkörper", 0, RTL_CONSTASCII_LENGTH( "Textkörper" )) )
-                        nNewId = HID_POOLSHEET_TEXTBODY;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY_JUSTIFY ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY_JUSTIFY_NT ) ) )
-                        //aOldName.EqualsAscii( "Textkörper Blocksatz", 0, RTL_CONSTASCII_LENGTH( "Textkörper Blocksatz" )) )
-                        nNewId = HID_POOLSHEET_TEXTBODY_JUSTIFY;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY_INDENT ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_TEXTBODY_INDENT_NT ) ) )
-                        //aOldName.EqualsAscii( "Textkörper Einzug", 0, RTL_CONSTASCII_LENGTH( "Textkörper Einzug" )) )
-                        nNewId = HID_POOLSHEET_TEXTBODY_INDENT;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TITLE ) ) ||
-                        aOldName.EqualsAscii( "Titel", 0, RTL_CONSTASCII_LENGTH( "Titel" )) )
-                        nNewId = HID_POOLSHEET_TITLE;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TITLE1 ) ) ||
-                        aOldName.EqualsAscii( "Titel1", 0, RTL_CONSTASCII_LENGTH( "Titel1" )) )
-                        nNewId = HID_POOLSHEET_TITLE1;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_TITLE2 ) ) ||
-                        aOldName.EqualsAscii( "Titel2", 0, RTL_CONSTASCII_LENGTH( "Titel2" )) )
-                        nNewId = HID_POOLSHEET_TITLE2;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_HEADLINE ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_HEADLINE_NT ) ) )
-                        //aOldName.EqualsAscii( "Überschrift", 0, RTL_CONSTASCII_LENGTH( "Überschrift" )) )
-                        nNewId = HID_POOLSHEET_HEADLINE;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_HEADLINE1 ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_HEADLINE1_NT ) ) )
-                        //aOldName.EqualsAscii( "Überschrift1", 0, RTL_CONSTASCII_LENGTH( "Überschrift1" )) )
-                        nNewId = HID_POOLSHEET_HEADLINE1;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_HEADLINE2 ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_HEADLINE2_NT ) ) )
-                        //aOldName.EqualsAscii( "Überschrift2", 0, RTL_CONSTASCII_LENGTH( "Überschrift2" )) )
-                        nNewId = HID_POOLSHEET_HEADLINE2;
-                    else if( aOldName == String( SdResId( STR_POOLSHEET_MEASURE ) ) ||
-                        aOldName == String( SdResId( STR_POOLSHEET_MEASURE_NT ) ) )
-                        //aOldName.EqualsAscii( "Maßlinie", 0, RTL_CONSTASCII_LENGTH( "Maßlinie" )) )
-                        nNewId = HID_POOLSHEET_MEASURE;
-                }
-                else if( eFam == SFX_STYLE_FAMILY_PSEUDO )
-                {
-                    String aStr( SdResId( STR_PSEUDOSHEET_OUTLINE ) );
-                    aStr.Append( sal_Unicode( ' ' ));
-                    String aStr2( RTL_CONSTASCII_USTRINGPARAM( "Gliederung " ));
-
-                    if( aOldName == String( SdResId( STR_PSEUDOSHEET_TITLE ) ) ||
-                        aOldName.EqualsAscii( "Titel", 0, RTL_CONSTASCII_LENGTH( "Titel" )))
-                        nNewId = HID_PSEUDOSHEET_TITLE;
-                    else if( aOldName == String( SdResId( STR_PSEUDOSHEET_SUBTITLE ) ) ||
-                        aOldName.EqualsAscii( "Untertitel", 0, RTL_CONSTASCII_LENGTH( "Untertitel" )) )
-                        nNewId = HID_PSEUDOSHEET_SUBTITLE;
-                    else if( aOldName == String( SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS ) ) ||
-                        aOldName.EqualsAscii( "Hintergrundobjekte", 0, RTL_CONSTASCII_LENGTH( "Hintergrundobjekte" )) )
-                        nNewId = HID_PSEUDOSHEET_BACKGROUNDOBJECTS;
-                    else if( aOldName == String( SdResId( STR_PSEUDOSHEET_BACKGROUND ) ) ||
-                        aOldName.EqualsAscii( "Hintergrund", 0, RTL_CONSTASCII_LENGTH( "Hintergrund" )) )
-                        nNewId = HID_PSEUDOSHEET_BACKGROUND;
-                    else if( aOldName == String( SdResId( STR_PSEUDOSHEET_NOTES ) ) ||
-                        aOldName.EqualsAscii( "Notizen", 0, RTL_CONSTASCII_LENGTH( "Notizen" )) )
-                        nNewId = HID_PSEUDOSHEET_NOTES;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE1;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "2" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "2" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE2;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "3" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "3" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE3;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "4" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "4" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE4;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "5" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "5" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE5;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "6" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "6" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE6;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "7" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "7" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE7;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "8" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "8" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE8;
-                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "9" ) ) ) ) ) ) ||
-                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "9" ) ) ) ) ) ) )
-                        nNewId = HID_PSEUDOSHEET_OUTLINE9;
-                }
-
-                if ( nNewId )
-                {
-                    bNewHelpIds = TRUE;
-                    pStyle->SetHelpId( aHelpFile, nNewId );
-                }
-            }
         }
     }
 
@@ -1138,23 +1079,16 @@ void SdStyleSheetPool::UpdateStdNames()
         for ( ULONG i = 0; i < pEraseList->Count(); i++ )
         {
             SfxStyleSheetBase* pEraseSheet = ( SfxStyleSheetBase* ) pEraseList->GetObject( i );
-            Erase( pEraseSheet );
+            Remove( pEraseSheet );
         }
 
         delete pEraseList;
         pEraseList = NULL;
     }
-
-    // Wenn neue HelpIDs gefunden wurden koennen die Namen auch gleich ersetzt werden
-    if( bNewHelpIds )
-        UpdateStdNames();
 }
-
-/*************************************************************************
-|*
-|* Neues SvxNumBulletItem fuer das jeweilige StyleSheet setzen
-|*
-\************************************************************************/
+// --------------------------------------------------------------------
+// Neues SvxNumBulletItem fuer das jeweilige StyleSheet setzen
+// --------------------------------------------------------------------
 
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          Font& rBulletFont )
@@ -1313,7 +1247,287 @@ Font SdStyleSheetPool::GetBulletFont() const
     return aBulletFont;
 }
 
+// --------------------------------------------------------------------
 
+void SdStyleSheetPool::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+    if( pSdrHint && pSdrHint->GetKind() == HINT_PAGEORDERCHG )
+    {
+        const SdPage* pPage = static_cast< const SdPage* >( pSdrHint->GetPage() );
+        if( pPage && pPage->IsMasterPage() )
+        {
+            if( pPage->IsInserted() )
+            {
+                // new master page created, add its style family
+                AddStyleFamily( pPage );
+            }
+            else
+            {
+                // master page removed, remove its style family
+                RemoveStyleFamily( pPage );
+            }
+        }
+    }
+}
 
+// --------------------------------------------------------------------
 
+void SdStyleSheetPool::AddStyleFamily( const SdPage* pPage )
+{
+    rtl::Reference< SfxStyleSheetPool > xPool( this );
+    maStyleFamilyMap[pPage] = new SdStyleFamily( xPool, pPage );
+}
 
+// --------------------------------------------------------------------
+
+void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
+{
+    SdStyleFamilyMap::iterator iter( maStyleFamilyMap.find( pPage ) );
+    if( iter != maStyleFamilyMap.end() )
+    {
+        SdStyleFamilyRef xStyle( (*iter).second );
+        maStyleFamilyMap.erase( iter );
+
+        if( xStyle.is() ) try
+        {
+            xStyle->dispose();
+        }
+        catch( Exception& )
+        {
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+
+void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeException)
+{
+    if( mpDoc == NULL )
+        throw DisposedException();
+}
+
+// --------------------------------------------------------------------
+// XServiceInfo
+// --------------------------------------------------------------------
+
+OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdStyleSheetPool") );
+}
+
+// --------------------------------------------------------------------
+
+static const sal_Char* gpServiceName = "com.sun.star.style.StyleFamilies";
+
+sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+{
+    return ServiceName.equalsAscii( gpServiceName );
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames() throw(RuntimeException)
+{
+    OUString aStr( OUString::createFromAscii( gpServiceName ) );
+    return Sequence< OUString >( &aStr, 1 );
+}
+
+// --------------------------------------------------------------------
+// XNameAccess
+// --------------------------------------------------------------------
+
+Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    throwIfDisposed();
+
+    if( mxGraphicFamily->getName() == aName )
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
+
+    if( mxCellFamily->getName() == aName )
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
+
+    if( msTableFamilyName == aName )
+        return Any( mxTableFamily );
+
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    {
+        if( (*iter).second->getName() == aName )
+            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
+    }
+
+    throw NoSuchElementException();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException)
+{
+    throwIfDisposed();
+
+    Sequence< OUString > aNames( maStyleFamilyMap.size() + 3 );
+    OUString* pNames = aNames.getArray();
+
+    *pNames++ = mxGraphicFamily->getName();
+    *pNames++ = mxCellFamily->getName();
+    *pNames++ = msTableFamilyName;
+
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    {
+        *pNames++ = (*iter).second->getName();
+    }
+
+    return aNames;
+}
+
+// --------------------------------------------------------------------
+
+sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(RuntimeException)
+{
+    throwIfDisposed();
+
+    if( mxGraphicFamily->getName() == aName )
+        return sal_True;
+
+    if( mxCellFamily->getName() == aName )
+        return sal_True;
+
+    if( msTableFamilyName == aName )
+        return sal_True;
+
+    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); iter++ )
+    {
+        if( (*iter).second->getName() == aName )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+// --------------------------------------------------------------------
+// XElementAccess
+// --------------------------------------------------------------------
+
+Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
+{
+    throwIfDisposed();
+
+    return XNameAccess::static_type();
+}
+
+// --------------------------------------------------------------------
+
+sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException)
+{
+    return sal_True;
+}
+
+// --------------------------------------------------------------------
+// XIndexAccess
+// --------------------------------------------------------------------
+
+sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException)
+{
+    throwIfDisposed();
+
+    return maStyleFamilyMap.size() + 3;
+}
+
+// --------------------------------------------------------------------
+
+Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+{
+    switch( Index )
+    {
+    case 0:
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxGraphicFamily.get() ) ) );
+
+    case 1:
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( mxCellFamily.get() ) ) );
+
+    case 2:
+        return Any( mxTableFamily );
+
+    default:
+        {
+            Index -= 3;
+            if( (Index < 0) || (Index >= sal::static_int_cast<sal_Int32>(maStyleFamilyMap.size())) )
+                throw IndexOutOfBoundsException();
+            SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
+            while( Index-- )
+                iter++;
+
+            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
+        }
+    }
+}
+
+// --------------------------------------------------------------------
+// XComponent
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
+{
+    if( mpDoc )
+    {
+        mxGraphicFamily->dispose();
+        mxGraphicFamily.clear();
+        mxCellFamily->dispose();
+        mxCellFamily.clear();
+
+        Reference< XComponent > xComp( mxTableFamily, UNO_QUERY );
+        if( xComp.is() )
+            xComp->dispose();
+        mxTableFamily = 0;
+
+        SdStyleFamilyMap aTempMap;
+        aTempMap.swap( maStyleFamilyMap );
+
+        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); iter++ ) try
+        {
+            (*iter).second->dispose();
+        }
+        catch( Exception& )
+        {
+        }
+
+        EndListening( *mpDoc );
+        mpDoc = 0;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
+{
+}
+
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
+{
+}
+
+// --------------------------------------------------------------------
+
+SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
+{
+    SdStyleSheetVector aResult;
+
+    USHORT nListenerCount = pSheet->GetListenerCount();
+    if (nListenerCount > 0)
+    {
+        for (USHORT n = 0; n < nListenerCount; n++)
+        {
+            SdStyleSheet* pChild = static_cast< SdStyleSheet* >( pSheet->GetListener(n) );
+            if(pChild && pChild->GetParent() == pSheet->GetName())
+            {
+                aResult.push_back( SdStyleSheetRef( pChild ) );
+            }
+        }
+    }
+
+    return aResult;
+}
+
+// --------------------------------------------------------------------
