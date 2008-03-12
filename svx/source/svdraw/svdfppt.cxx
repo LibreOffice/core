@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:50:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svdattr.hxx>
 #include "xattr.hxx"
@@ -89,6 +90,8 @@
 #ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
+#include <svx/unoprnms.hxx>
+
 #if defined(JOEENV) && defined(JOEDEBUG)
 #include "impinccv.h" // etwas Testkram
 #endif
@@ -226,6 +229,9 @@
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
 #endif
@@ -247,8 +253,12 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
+#include "com/sun/star/awt/Gradient.hpp"
+#include <com/sun/star/table/XMergeableCellRange.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
 #include <vcl/virdev.hxx>
 #include <algorithm>
+#include <set>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -294,6 +304,7 @@ using namespace uno                 ;
 using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
+using namespace table               ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1400,6 +1411,33 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     else
                         pRet = pTObj;
+                }
+            }
+        }
+    }
+    else
+    {
+        if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
+        {
+            maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+            DffPropertyReader aSecPropSet( *this );
+            aSecPropSet.ReadPropSet( rSt, (ProcessData*)pData );
+            sal_Int32 nTableProperties = aSecPropSet.GetPropertyValue( DFF_Prop_tableProperties, 0 );
+            if ( nTableProperties & 3 )
+            {
+                if ( aSecPropSet.SeekToContent( DFF_Prop_tableRowProperties, rSt ) )
+                {
+                    sal_Int16 i, nRowCount = 0;
+                    rSt >> nRowCount >> i >> i;
+                    if ( nRowCount )
+                    {
+                        sal_uInt32* pTableArry = new sal_uInt32[ nRowCount + 2 ];
+                        pTableArry[ 0 ] = nTableProperties;
+                        pTableArry[ 1 ] = nRowCount;
+                        for ( i = 0; i < nRowCount; i++ )
+                            rSt >> pTableArry[ i + 2 ];
+                        rData.pTableRowProperties = pTableArry;
+                    }
                 }
             }
         }
@@ -3046,6 +3084,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
+                                                    if ( aProcessData.pTableRowProperties )
+                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties );
+
                                                     pRet->NbcInsertObject( pObj );
 
                                                     if( nShapeId )
@@ -7332,6 +7373,474 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
     }
     return *this;
 }
+
+sal_Bool IsLine( const SdrObject* pObj )
+{
+    return pObj->ISA( SdrPathObj ) && ((SdrPathObj*)pObj)->IsLine() && (((SdrPathObj*)pObj)->GetPointCount() == 2 );
+}
+
+sal_Bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+                            sal_Int32& nTableIndex, sal_Int32& nRow, sal_Int32& nRowCount, sal_Int32& nColumn, sal_Int32& nColumnCount )
+{
+    Rectangle aSnapRect( pObj->GetSnapRect() );
+    sal_Bool bCellObject = ( aSnapRect.GetWidth() > 1 ) && ( aSnapRect.GetHeight() > 1 );
+    if ( bCellObject )
+    {
+        std::set< sal_Int32 >::const_iterator aRowIter( rRows.find( aSnapRect.Top() ) );
+        std::set< sal_Int32 >::const_iterator aColumnIter( rColumns.find( aSnapRect.Left() ) );
+        if ( ( aRowIter == rRows.end() ) || ( aColumnIter == rColumns.end() ) )
+            bCellObject = sal_False;
+        else
+        {
+            nRowCount = 1;
+            nRow = std::distance( rRows.begin(), aRowIter );
+            while( ++aRowIter != rRows.end() )
+            {
+                if ( *aRowIter >= aSnapRect.Bottom() )
+                    break;
+                nRowCount++;
+            }
+            nColumnCount = 1;
+            nColumn = std::distance( rColumns.begin(), aColumnIter );
+            while( ++aColumnIter != rColumns.end() )
+            {
+                if ( *aColumnIter >= aSnapRect.Right() )
+                    break;
+                nColumnCount++;
+            }
+            nTableIndex = nRow * rColumns.size() + nColumn;
+        }
+    }
+    return bCellObject;
+}
+
+#define LinePositionLeft    0x01000000
+#define LinePositionTop     0x02000000
+#define LinePositionRight   0x04000000
+#define LinePositionBottom  0x08000000
+#define LinePositionTLBR    0x10000000
+#define LinePositionBLTR    0x20000000
+
+
+void GetRowPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
+                        const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
+{
+    std::set< sal_Int32 >::const_iterator aRow( rRows.find( rSnapRect.Top() ) );
+    if ( aRow != rRows.end() )
+    {
+        sal_Int32 nRow = std::distance( rRows.begin(), aRow );
+        while( ( aRow != rRows.end() ) && ((*aRow) < rSnapRect.Bottom() ) )
+        {
+            if ( nFlags & LinePositionLeft )
+                rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionLeft );
+            if ( nFlags & LinePositionRight )
+                rPositions.push_back( ( ( nRow * rColumns.size() ) + ( nColumn - 1 ) ) | LinePositionRight );
+
+            nRow++;
+            aRow++;
+        }
+    }
+}
+
+
+void GetColumnPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& /* rRows */,
+                        const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
+{
+    std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
+    if ( aColumn != rColumns.end() )
+    {
+        sal_Int32 nColumn = std::distance( rColumns.begin(), aColumn );
+        while( ( aColumn != rColumns.end() ) && ((*aColumn) < rSnapRect.Right() ) )
+        {
+            if ( nFlags & LinePositionTop )
+                rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionTop );
+            if ( nFlags & LinePositionBottom )
+                rPositions.push_back( ( ( ( nRow - 1 ) * rColumns.size() ) + nColumn ) | LinePositionBottom );
+
+            nColumn++;
+            aColumn++;
+        }
+    }
+}
+
+void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+                        std::vector< sal_Int32 >& rPositions, const Rectangle& rGroupSnap )
+{
+    Rectangle aSnapRect( pObj->GetSnapRect() );
+    if ( aSnapRect.Left() == aSnapRect.Right() )
+    {
+        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aSnapRect.Left() ) );
+        if ( ( aColumn != rColumns.end() ) || ( aSnapRect.Left() == rGroupSnap.Right() ) )
+        {
+            sal_Int32 nColumn, nFlags;
+            if ( aColumn != rColumns.end() )
+            {
+                nColumn = std::distance( rColumns.begin(), aColumn );
+                nFlags = LinePositionLeft;
+                if ( aColumn != rColumns.begin() )
+                    nFlags |= LinePositionRight;
+            }
+            else
+            {
+                nColumn = rColumns.size();
+                nFlags = LinePositionRight;
+            }
+            GetRowPositions( aSnapRect, rRows, rColumns, rPositions, nColumn, nFlags );
+        }
+    }
+    else if ( aSnapRect.Top() == aSnapRect.Bottom() )
+    {
+        std::set< sal_Int32 >::const_iterator aRow( rRows.find( aSnapRect.Top() ) );
+        if ( ( aRow != rRows.end() ) || ( aSnapRect.Top() == rGroupSnap.Bottom() ) )
+        {
+            sal_Int32 nRow, nFlags;
+            if ( aRow != rRows.end() )
+            {
+                nRow = std::distance( rRows.begin(), aRow );
+                nFlags = LinePositionTop;
+                if ( aRow != rRows.begin() )
+                    nFlags |= LinePositionBottom;
+            }
+            else
+            {
+                nRow = rRows.size();
+                nFlags = LinePositionBottom;
+            }
+            GetColumnPositions( aSnapRect, rRows, rColumns, rPositions, nRow, nFlags );
+        }
+    }
+    else
+    {
+        sal_uInt32 nPosition = 0;
+        Point aPt1( ((SdrPathObj*)pObj)->GetPoint( 0 ) );
+        Point aPt2( ((SdrPathObj*)pObj)->GetPoint( 1 ) );
+        if ( aPt1.X() < aPt2.X() )
+            nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionTLBR : LinePositionBLTR;
+        else
+            nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionBLTR : LinePositionTLBR;
+
+        std::set< sal_Int32 >::const_iterator aRow( rRows.find( aPt1.Y() < aPt2.Y() ? aPt1.Y() : aPt2.Y() ) );
+        std::set< sal_Int32 >::const_iterator aColumn( rRows.find( aPt1.X() < aPt2.X() ? aPt1.X() : aPt2.X() ) );
+        if ( ( aRow != rRows.end() ) && ( aColumn != rColumns.end() ) )
+        {
+            nPosition |= ( std::distance( rRows.begin(), aRow ) * rColumns.size() ) + std::distance( rColumns.begin(), aColumn );
+            rPositions.push_back( nPosition );
+        }
+    }
+}
+
+void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
+{
+    if ( rRows.size() > 1 )
+        xTableRows->insertByIndex( 0, rRows.size() - 1 );
+
+    std::set< sal_Int32 >::const_iterator aIter( rRows.begin() );
+    sal_Int32 nLastPosition( *aIter );
+    Reference< XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
+    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    {
+        sal_Int32 nHeight;
+        if ( ++aIter != rRows.end() )
+        {
+            nHeight = *aIter - nLastPosition;
+            nLastPosition = *aIter;
+        }
+        else
+            nHeight = nTableBottom - nLastPosition;
+
+        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
+        Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
+    }
+}
+
+void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
+{
+    if ( rColumns.size() > 1 )
+        xTableColumns->insertByIndex( 0, rColumns.size() - 1 );
+
+    std::set< sal_Int32 >::const_iterator aIter( rColumns.begin() );
+    sal_Int32 nLastPosition( *aIter );
+    Reference< XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
+    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    {
+        sal_Int32 nWidth;
+        if ( ++aIter != rColumns.end() )
+        {
+            nWidth = *aIter - nLastPosition;
+            nLastPosition = *aIter;
+        }
+        else
+            nWidth = nTableRight - nLastPosition;
+
+        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
+        Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
+    }
+}
+
+void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
+{
+   DBG_ASSERT( (nColSpan > 1) || (nRowSpan > 1), "nonsense parameter!!" );
+   DBG_ASSERT( (nCol >= 0) && (nCol < xTable->getColumnCount()) && (nRow >= 0) && (nRow < xTable->getRowCount()), "die celle gibts nicht!!" );
+   DBG_ASSERT( (nColSpan >= 1) && ((nCol  + nColSpan - 1) < xTable->getColumnCount()), "nColSpan murks!" );
+   DBG_ASSERT(  (nRowSpan >= 1) && ((nRow  + nRowSpan - 1) < xTable->getRowCount()), "nRowSpan murks!" );
+
+   if( xTable.is() ) try
+   {
+       Reference< XMergeableCellRange > xRange( xTable->createCursorByRange( xTable->getCellRangeByPosition( nCol, nRow,nCol + nColSpan - 1, nRow + nRowSpan - 1 ) ), UNO_QUERY_THROW );
+       if( xRange->isMergeable() )
+               xRange->merge();
+   }
+   catch( Exception& )
+   {
+       DBG_ASSERT( false, "exception caught!" );
+   }
+}
+
+void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
+{
+    try
+    {
+        Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
+
+        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+        static const rtl::OUString  sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
+        static const rtl::OUString  sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
+        static const rtl::OUString  sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
+        static const rtl::OUString  sRightBorder( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
+        xPropSet->setPropertyValue( sTopBorder, Any( nUpperDist ) );
+        xPropSet->setPropertyValue( sRightBorder, Any( nRightDist ) );
+        xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
+        xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
+
+        SfxItemSet aSet( pObj->GetMergedItemSet() );
+        XFillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
+        ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
+        switch( eFillStyle )
+        {
+            case XFILL_SOLID :
+                {
+                    static const rtl::OUString sFillColor( String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) );
+                    eFS = com::sun::star::drawing::FillStyle_SOLID;
+                    Color aFillColor( ((XFillColorItem&)pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
+                    sal_Int32 nFillColor( aFillColor.GetColor() );
+                    xPropSet->setPropertyValue( sFillColor, Any( nFillColor ) );
+                }
+                break;
+            case XFILL_GRADIENT :
+                {
+                    eFS = com::sun::star::drawing::FillStyle_GRADIENT;
+                    XGradient aXGradient(((const XFillGradientItem&)pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+
+                    com::sun::star::awt::Gradient aGradient;
+                    aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
+                    aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+                    aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
+                    aGradient.Angle = (short)aXGradient.GetAngle();
+                    aGradient.Border = aXGradient.GetBorder();
+                    aGradient.XOffset = aXGradient.GetXOffset();
+                    aGradient.YOffset = aXGradient.GetYOffset();
+                    aGradient.StartIntensity = aXGradient.GetStartIntens();
+                    aGradient.EndIntensity = aXGradient.GetEndIntens();
+                    aGradient.StepCount = aXGradient.GetSteps();
+
+                    static const rtl::OUString sFillGradient( String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) );
+                    xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
+                }
+                break;
+            case XFILL_HATCH :
+                eFS = com::sun::star::drawing::FillStyle_HATCH;
+            break;
+            case XFILL_BITMAP :
+                {
+                    eFS = com::sun::star::drawing::FillStyle_BITMAP;
+
+                    XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
+                    XOBitmap aLocalXOBitmap( aXFillBitmapItem.GetBitmapValue() );
+                    rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                    aURL += rtl::OUString::createFromAscii( aLocalXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
+
+                    static const rtl::OUString sFillBitmapURL( String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) );
+                    xPropSet->setPropertyValue( sFillBitmapURL, Any( aURL ) );
+                }
+            break;
+            case XFILL_NONE :
+                eFS = com::sun::star::drawing::FillStyle_NONE;
+            break;
+
+        }
+        static const rtl::OUString sFillStyle( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
+        xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
+        if ( eFillStyle != XFILL_NONE )
+        {
+            sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
+            if ( nFillTransparence != 100 )
+            {
+                nFillTransparence *= 100;
+                static const rtl::OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
+                xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 > vPositions, sal_Int32 nColumns )
+{
+    try
+    {
+        SfxItemSet aSet( pLine->GetMergedItemSet() );
+        XLineStyle eLineStyle(((XLineStyleItem&)pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
+        com::sun::star::table::BorderLine aBorderLine;
+        switch( eLineStyle )
+        {
+            case XLINE_DASH :
+            case XLINE_SOLID :
+                {
+                    Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
+                    aBorderLine.Color = aLineColor.GetColor();
+                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() );
+                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.LineDistance = 0;
+                }
+                break;
+            case XLINE_NONE :
+                {
+                    aBorderLine.OuterLineWidth = 0;
+                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.LineDistance = 0;
+                }
+            break;
+        }
+        Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
+        std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
+        while( aIter != vPositions.end() )
+        {
+            static const rtl::OUString sTopBorder( String( RTL_CONSTASCII_USTRINGPARAM( "TopBorder" ) ) );
+            static const rtl::OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
+            static const rtl::OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
+            static const rtl::OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
+            static const rtl::OUString  sDiagonalTLBR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalTLBR" ) );
+            static const rtl::OUString  sDiagonalBLTR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalBLTR" ) );
+
+            sal_Int32 nPosition = *aIter & 0xffffff;
+            sal_Int32 nFlags = *aIter &~0xffffff;
+            sal_Int32 nRow = nPosition / nColumns;
+            sal_Int32 nColumn = nPosition - ( nRow * nColumns );
+            Reference< XCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ) );
+            Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
+
+            if ( nFlags & LinePositionLeft )
+                xPropSet->setPropertyValue( sLeftBorder, Any( aBorderLine ) );
+            if ( nFlags & LinePositionTop )
+                xPropSet->setPropertyValue( sTopBorder, Any( aBorderLine ) );
+            if ( nFlags & LinePositionRight )
+                xPropSet->setPropertyValue( sRightBorder, Any( aBorderLine ) );
+            if ( nFlags & LinePositionBottom )
+                xPropSet->setPropertyValue( sBottomBorder, Any( aBorderLine ) );
+            if ( nFlags & LinePositionTLBR )
+                xPropSet->setPropertyValue( sDiagonalTLBR, Any( sal_True ) );
+            if ( nFlags & LinePositionBLTR )
+                xPropSet->setPropertyValue( sDiagonalBLTR, Any( sal_True ) );
+            aIter++;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry ) const
+{
+    SdrObject* pRet = pGroup;
+    sal_uInt32 nRows = pTableArry[ 1 ];
+    if ( nRows && pGroup->ISA( SdrObjGroup ) )
+    {
+        SdrObjList* pSubList(((SdrObjGroup*)pGroup)->GetSubList());
+        if ( pSubList )
+        {
+            std::set< sal_Int32 > aRows;
+            std::set< sal_Int32 > aColumns;
+
+            SdrObjListIter aGroupIter( *pSubList, IM_DEEPNOGROUPS, FALSE );
+            while( aGroupIter.IsMore() )
+            {
+                const SdrObject* pObj( aGroupIter.Next() );
+                if ( !IsLine( pObj ) )
+                {
+                    Rectangle aSnapRect( pObj->GetSnapRect() );
+                    aRows.insert( aSnapRect.Top() );
+                    aColumns.insert( aSnapRect.Left() );
+                }
+            }
+            ::sdr::table::SdrTableObj* pTable = new ::sdr::table::SdrTableObj( pSdrModel );
+            pTable->SetSnapRect( pGroup->GetSnapRect() );
+            Reference< XTable > xTable( pTable->getTable() );
+            try
+            {
+                Reference< XColumnRowRange > xColumnRowRange( xTable, UNO_QUERY_THROW );
+
+                CreateTableRows( xColumnRowRange->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
+                CreateTableColumns( xColumnRowRange->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
+
+                aGroupIter.Reset();
+                while( aGroupIter.IsMore() )
+                {
+                    SdrObject* pObj( aGroupIter.Next() );
+                    if ( !IsLine( pObj ) )
+                    {
+                        Rectangle aSnapRect( pObj->GetSnapRect() );
+                        sal_Int32 nTableIndex = 0;
+                        sal_Int32 nRow = 0;
+                        sal_Int32 nRowCount = 0;
+                        sal_Int32 nColumn = 0;
+                        sal_Int32 nColumnCount = 0;
+                        if ( GetCellPosition( pObj, aRows, aColumns, nTableIndex, nRow, nRowCount, nColumn, nColumnCount ) )
+                        {
+                            Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
+                            Reference< XCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ) );
+
+                            ApplyCellAttributes( pObj, xCell );
+
+                            if ( ( nRowCount > 1 ) || ( nColumnCount > 1 ) )    // cell merging
+                                MergeCells( xTable, nColumn, nRow, nColumnCount, nRowCount );
+
+                            // applying text
+                            OutlinerParaObject* pParaObject = pObj->GetOutlinerParaObject();
+                            if ( pParaObject )
+                            {
+                                SdrText* pSdrText = pTable->getText( nTableIndex );
+                                if ( pSdrText )
+                                    pSdrText->SetOutlinerParaObject( pParaObject->Clone() );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
+                        GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
+                        ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
+                    }
+                }
+                SdrObject::Free( pGroup );
+                pRet = pTable;
+            }
+            catch( Exception& )
+            {
+                SdrObject* pObj = pTable;
+                SdrObject::Free( pObj );
+            }
+        }
+    }
+    return pRet;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
