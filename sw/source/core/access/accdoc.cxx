@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:13 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDoc
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 using lang::IndexOutOfBoundsException;
 
