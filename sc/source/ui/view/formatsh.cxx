@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:20:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         if ( pStyleSheet )
                         {
                             pTabViewShell->RemoveStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
-                            pStylePool->Erase( pStyleSheet );
+                            pStylePool->Remove( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
                             nRetMask = TRUE;
                             bAddUndo = TRUE;
@@ -555,7 +555,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 //    das fuer einen bestimmten Style macht
                                 pDoc->StylesToNames();
                                 bConvertBack = TRUE;
-                                pStylePool->Erase(pStyleSheet);
+                                pStylePool->Remove(pStyleSheet);
                             }
 
                             // ...und neu anlegen
@@ -630,7 +630,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
                             }
-                            pStylePool->Erase( pStyleSheet );
+                            pStylePool->Remove( pStyleSheet );
                             rBindings.Invalidate( SID_STYLE_FAMILY4 );
                             pDocSh->SetDocumentModified();
                             bAddUndo = TRUE;
@@ -686,7 +686,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // wenn bereits vorhanden, erstmal entfernen...
                             if ( pStyleSheet )
-                                pStylePool->Erase( pStyleSheet );
+                                pStylePool->Remove( pStyleSheet );
 
                             // ...und neu anlegen
                             pStyleSheet = &pStylePool->Make( aStyleName, eFamily,
@@ -889,7 +889,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 else
                 {
                     if ( nSlotId == SID_STYLE_NEW )
-                        pStylePool->Erase( pStyleSheet );
+                        pStylePool->Remove( pStyleSheet );
                     else
                     {
                         //  falls zwischendurch etwas mit dem temporaer geaenderten
