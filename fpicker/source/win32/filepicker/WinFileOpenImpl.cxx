@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:26:44 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
+
+#include "shared.hxx"
 
 #ifndef _WINFILEOPENIMPL_HXX_
 #include "WinFileOpenImpl.hxx"
@@ -138,15 +140,6 @@ struct EnumParam
         m_instance( instance )
     {}
 };
-
-//-------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------
-
-const rtl::OUString BACKSLASH = rtl::OUString::createFromAscii( "\\" );
-const rtl::OUString FILTER_SEPARATOR = rtl::OUString::createFromAscii( "------------------------------------------" );
-const rtl::OUString ALL_FILES_WILDCARD = rtl::OUString::createFromAscii( "*.*" );
-const sal_Bool ALLOW_DUPLICATES = sal_True;
 
 //-------------------------------------------------------------------------
 // ctor
