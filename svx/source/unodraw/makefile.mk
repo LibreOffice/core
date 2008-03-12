@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:44:27 $
+#   last change: $Author: rt $ $Date: 2008-03-12 10:09:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,8 @@ SLOFILES =	\
         $(SLO)$/unomtabl.obj	\
         $(SLO)$/unodtabl.obj	\
         $(SLO)$/gluepts.obj     \
-        $(SLO)$/recoveryui.obj
+        $(SLO)$/recoveryui.obj	\
+        $(SLO)$/tableshape.obj
 
 SRS1NAME=unodraw
 SRC1FILES =  \
