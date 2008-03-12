@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: newtabledlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:39:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "newtabledlg.hrc"
+#include "svx/dialogs.hrc"
+
+ModalDialog RID_SVX_NEWTABLE_DLG
+{
+    OutputSize = TRUE;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 181 , 6+15+15+15+14+6 ) ;
+    Text [ en-US ] = "Insert Table" ;
+
+    FixedText FT_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Number of columns:" ;
+    };
+    NumericField NF_COLUMNS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 6 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 75 ;
+        SpinSize = 1 ;
+        StrictFormat = TRUE ;
+    };
+    FixedText FT_ROWS
+    {
+        Pos = MAP_APPFONT ( 6 , 8+15 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Number of rows:" ;
+    };
+    NumericField NF_ROWS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 6+15 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 75 ;
+        SpinSize = 1 ;
+        StrictFormat = TRUE ;
+    };
+    FixedLine FL_SEP
+    {
+        Pos = MAP_APPFONT ( 0 , 6+15+15 ) ;
+        Size = MAP_APPFONT ( 181 , 12 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 6+15+15+15 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 69 , 6+15+15+15 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 125 , 6+15+15+15 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
