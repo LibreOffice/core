@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:14:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1398,6 +1398,10 @@
 #define RID_SVX_MDLG_HANGULHANJA_EDIT       ( RID_SVX_START +  5 )
 #define RID_SVX_MDLG_HANGULHANJA_NEWDICT    ( RID_SVX_START +  6 )
 
+#define RID_SVX_FORMAT_CELLS_DLG            ( RID_SVX_START + 42 )
+#define RID_SVX_SPLITCELLDLG                ( RID_SVX_START + 43 )
+#define RID_SVX_NEWTABLE_DLG                ( RID_SVX_START + 44 )
+
 // ----------------------------------------------------------------------------
 // "Menu" resource ids
 #define RID_SVX_MDLG_SCRIPTORG_NEWLIB       ( RID_SVX_START +  7 )
@@ -1544,7 +1548,6 @@
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
-
 
 //add for Dialog SchTransformTabDialog,SvxTransformTabDialog //CHINA001
 #define RID_SCH_TransformTabDLG_SVXPAGE_ANGLE           (RID_SVX_START + 998)
