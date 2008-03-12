@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #include <hints.hxx>
 #endif
 
-using namespace rtl;
+using rtl::OUString;
 using namespace ::com::sun::star;
 
 #ifdef PM2
