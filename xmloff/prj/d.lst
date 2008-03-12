@@ -110,3 +110,8 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\inc\xmloff\XMLCharContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLCharContext.hxx
 ..\xml\components.xml %_DEST%\xml%_EXT%\components.xml
 
+mkdir: %_DEST%\inc%_EXT%\xmloff\table
+..\inc\xmloff\table\XMLTableExport.hxx %_DEST%\inc%_EXT%\xmloff\table\XMLTableExport.hxx
+..\inc\xmloff\table\XMLTableImport.hxx %_DEST%\inc%_EXT%\xmloff\table\XMLTableImport.hxx
+
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
