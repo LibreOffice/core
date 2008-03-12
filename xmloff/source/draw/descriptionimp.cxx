@@ -4,9 +4,9 @@
  *
  *  $RCSfile: descriptionimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:01:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,9 @@
 
 #include "descriptionimp.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
