@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:53 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual USHORT  Execute() ;
+    virtual short   Execute() ;
 //  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)        \
@@ -94,7 +94,7 @@ Class::~Class()                                     \
 {                                                   \
     delete pDlg;                                    \
 }                                                   \
-USHORT Class::Execute()                             \
+short Class::Execute()                             \
 {                                                   \
     return pDlg->Execute();                         \
 }
