@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:53:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,10 +152,11 @@
 #include "comcore.hrc"
 #include "editsh.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
+
 //using namespace ::utl;
 #ifndef S2U
 #define S2U(rString) OUString::createFromAscii(rString)
