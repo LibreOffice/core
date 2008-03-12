@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:19:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 void SwAccessibleContext::InitStates()
 {
