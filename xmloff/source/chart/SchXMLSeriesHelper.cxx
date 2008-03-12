@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeriesHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:57:15 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@
 #include <typeinfo>
 
 using namespace ::com::sun::star;
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
