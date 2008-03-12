@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:11:50 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include "xmlitem.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, USHORT nPrfx,
