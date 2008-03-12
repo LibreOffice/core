@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoforou.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:06:06 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ private:
     mutable USHORT      mnParaAttribsCache;
 
 public:
-                        SvxOutlinerForwarder( Outliner& rOutl, SdrObject* pSdrObj );
+                        SvxOutlinerForwarder( Outliner& rOutl, SdrObject* pSdrObj = 0 );
     virtual             ~SvxOutlinerForwarder();
 
     virtual USHORT      GetParagraphCount() const;
