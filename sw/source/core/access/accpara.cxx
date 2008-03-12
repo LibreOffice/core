@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 using beans::PropertyValue;
 using beans::XMultiPropertySet;
