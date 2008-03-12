@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,9 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
