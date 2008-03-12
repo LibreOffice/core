@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:48:57 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1138,17 +1138,19 @@ XubString SdrUndoObjOrdNum::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj):
-    SdrUndoObj(rNewObj),
-    pOldText(NULL),
-    pNewText(NULL),
-    bNewTextAvailable(FALSE),
-    bEmptyPresObj(FALSE)
+SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
+: SdrUndoObj(rNewObj)
+, pOldText(NULL)
+, pNewText(NULL)
+, bNewTextAvailable(FALSE)
+, bEmptyPresObj(FALSE)
+, mnText(nText)
 {
-    pOldText=rNewObj.GetOutlinerParaObject();
+    SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
+    if( pText && pText->GetOutlinerParaObject() )
+        pOldText = pText->GetOutlinerParaObject()->Clone();
+
     bEmptyPresObj = rNewObj.IsEmptyPresObj();
-    if (pOldText!=NULL)
-        pOldText=pOldText->Clone();
 }
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
@@ -1163,8 +1165,9 @@ void SdrUndoObjSetText::AfterSetText()
 {
     if (!bNewTextAvailable)
     {
-        pNewText=pObj->GetOutlinerParaObject();
-        if (pNewText!=NULL) pNewText=pNewText->Clone();
+        SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+        if( pText && pText->GetOutlinerParaObject() )
+            pNewText = pText->GetOutlinerParaObject()->Clone();
         bNewTextAvailable=TRUE;
     }
 }
@@ -1177,20 +1180,33 @@ void SdrUndoObjSetText::Undo()
     // alten Text sichern fuer Redo
     if (!bNewTextAvailable)
         AfterSetText();
+
     // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
-    OutlinerParaObject* pText1=pOldText;
-    if (pText1!=NULL)
-        pText1=pText1->Clone();
-    pObj->SetOutlinerParaObject(pText1);
+    OutlinerParaObject* pText1 = pOldText;
+    if(pText1)
+        pText1 = pText1->Clone();
+
+    SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+    if( pText )
+        pText->SetOutlinerParaObject(pText1);
+
     pObj->SetEmptyPresObj( bEmptyPresObj );
+    pObj->ActionChanged();
 }
 
 void SdrUndoObjSetText::Redo()
 {
     // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
-    OutlinerParaObject* pText1=pNewText;
-    if (pText1!=NULL) pText1=pText1->Clone();
-    pObj->SetOutlinerParaObject(pText1);
+    OutlinerParaObject* pText1 = pNewText;
+
+    if(pText1)
+        pText1 = pText1->Clone();
+
+    SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+    if( pText )
+        static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
+
+    pObj->ActionChanged();
 
     // #94278# Trigger PageChangeCall
     ImpShowPageOfThisObject();
@@ -1212,19 +1228,23 @@ XubString SdrUndoObjSetText::GetSdrRepeatComment(SdrView& /*rView*/) const
 
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 {
-    if (bNewTextAvailable && rView.AreObjectsMarked()) {
+    if (bNewTextAvailable && rView.AreObjectsMarked())
+    {
         const SdrMarkList& rML=rView.GetMarkedObjectList();
         XubString aStr;
         ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
         rView.BegUndo(aStr);
         ULONG nAnz=rML.GetMarkCount();
-        for (ULONG nm=0; nm<nAnz; nm++) {
+        for (ULONG nm=0; nm<nAnz; nm++)
+        {
             SdrObject* pObj2=rML.GetMark(nm)->GetMarkedSdrObj();
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);
-            if (pTextObj!=NULL) {
-                rView.AddUndo(new SdrUndoObjSetText(*pTextObj));
+            if (pTextObj!=NULL)
+            {
+                rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
                 OutlinerParaObject* pText1=pNewText;
-                if (pText1!=NULL) pText1=pText1->Clone();
+                if (pText1!=NULL)
+                    pText1=pText1->Clone();
                 pTextObj->SetOutlinerParaObject(pText1);
             }
         }
@@ -1743,9 +1763,9 @@ SdrUndoAction* SdrUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, 
     return new SdrUndoObjectLayerChange( rObject, aOldLayer, aNewLayer );
 }
 
-SdrUndoAction* SdrUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj )
+SdrUndoAction* SdrUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
 {
-    return new SdrUndoObjSetText( rNewObj );
+    return new SdrUndoObjSetText( rNewObj, nText );
 }
 
 // layer
