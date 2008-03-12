@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:17:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2932,6 +2932,16 @@ namespace xmloff { namespace token {
         TOKEN( "greater_equal",         XML_GREATER_EQUAL   ),
         TOKEN( "between",               XML_BETWEEN         ),
         TOKEN( "not_between",           XML_NOT_BETWEEN     ),
+        TOKEN( "table-template",        XML_TABLE_TEMPLATE  ),
+        TOKEN( "first-row",             XML_FIRST_ROW       ),
+        TOKEN( "last-row",              XML_LAST_ROW        ),
+        TOKEN( "first-column",          XML_FIRST_COLUMN    ),
+        TOKEN( "last-column",           XML_LAST_COLUMN     ),
+        TOKEN( "even-rows",             XML_EVEN_ROWS       ),
+        TOKEN( "odd-rows",              XML_ODD_ROWS        ),
+        TOKEN( "even-columns",          XML_EVEN_COLUMNS    ),
+        TOKEN( "odd-columns",           XML_ODD_COLUMNS     ),
+
         // <--
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
         // --> OD 2005-10-10 #i45874#
@@ -2962,6 +2972,14 @@ namespace xmloff { namespace token {
         TOKEN( "near-origin",                     XML_NEAR_ORIGIN ),
         TOKEN( "dependency",             XML_DEPENDENCY ),
         TOKEN( "nav-order",             XML_NAV_ORDER ),
+
+        TOKEN( "use-first-row-styles",          XML_USE_FIRST_ROW_STYLES ),
+        TOKEN( "use-last-row-styles",           XML_USE_LAST_ROW_STYLES ),
+        TOKEN( "use-first-column-styles",       XML_USE_FIRST_COLUMN_STYLES ),
+        TOKEN( "use-last-column-styles",        XML_USE_LAST_COLUMN_STYLES ),
+        TOKEN( "use-banding-rows-styles",       XML_USE_BANDING_ROWS_STYLES ),
+        TOKEN( "use-banding-columns-styles",    XML_USE_BANDING_COLUMNS_STYLES ),
+
         TOKEN( "automatic-content",     XML_AUTOMATIC_CONTENT ),
         TOKEN( "display-r-square",      XML_DISPLAY_R_SQUARE ),
         TOKEN( "display-equation",      XML_DISPLAY_EQUATION ),
