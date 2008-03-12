@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:58:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,11 @@ class ScStyleSheetPool : public SfxStyleSheetPool
 public:
                         ScStyleSheetPool( SfxItemPool&  rPool,
                                           ScDocument*   pDocument );
-    virtual             ~ScStyleSheetPool();
 
     void                SetDocument( ScDocument* pDocument );
     ScDocument*         GetDocument() const { return pDoc; }
 
-    virtual void        Erase( SfxStyleSheetBase* pStyle );
+    virtual void        Remove( SfxStyleSheetBase* pStyle );
 
     void                SetActualStyleSheet ( SfxStyleSheetBase* pActStyleSheet )
                                 { pActualStyleSheet = pActStyleSheet; }
@@ -80,6 +79,8 @@ public:
     void                ConvertFontsAfterLoad();     // old binary file format
 
 protected:
+    virtual             ~ScStyleSheetPool();
+
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
 
     virtual SfxStyleSheetBase* Create( const String&    rName,
