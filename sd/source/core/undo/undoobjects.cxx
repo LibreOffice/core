@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoobjects.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:35:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,8 +204,8 @@ void UndoReplaceObject::Redo()
 
 ///////////////////////////////////////////////////////////////////////
 
-UndoObjectSetText::UndoObjectSetText( SdrObject& rObject )
-: SdrUndoObjSetText( rObject )
+UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
+: SdrUndoObjSetText( rObject, nText )
 , mpUndoAnimation(0)
 , mbNewEmptyPresObj(false)
 , mxSdrObject( &rObject )
