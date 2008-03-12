@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailconfigpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:22:07 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mail;
 using namespace ::com::sun::star::beans;
-using namespace ::rtl;
+using ::rtl::OUString;
 /*-- 06.05.2004 12:04:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
