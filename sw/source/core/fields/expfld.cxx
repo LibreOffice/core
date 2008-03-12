@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:02:10 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 
