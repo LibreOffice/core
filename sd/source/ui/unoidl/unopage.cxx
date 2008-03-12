@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:47:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2935,7 +2935,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 String aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
                 aLayoutName.Erase(aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
                 aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
-                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, (SfxStyleFamily)SD_LT_FAMILY );
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )
                 {
@@ -2986,7 +2986,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
                 String aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
                 aLayoutName.Erase( aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
                 aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
-                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, (SfxStyleFamily)SD_LT_FAMILY);
+                SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )
                 {
