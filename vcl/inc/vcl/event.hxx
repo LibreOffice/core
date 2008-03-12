@@ -4,9 +4,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:52:30 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,11 @@ class OutputDevice;
 class Window;
 struct IDataObject;
 
+namespace com { namespace sun { namespace star { namespace awt {
+    struct KeyEvent;
+    struct MouseEvent;
+} } } }
+
 enum TextDirectionality {
     TextDirectionality_LeftToRight_TopToBottom,
     TextDirectionality_RightToLeft_TopToBottom,
@@ -80,6 +85,12 @@ public:
                     KeyEvent();
                     KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
                               USHORT nRepeat = 0 );
+
+                    /** inits this vcl KeyEvent with all settings from the given awt event **/
+                    KeyEvent( const ::com::sun::star::awt::KeyEvent& rEvent );
+
+    /** fills out the given awt KeyEvent with all settings from this vcl event **/
+    void InitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent ) const;
 
     xub_Unicode     GetCharCode() const     { return mnCharCode; }
     const KeyCode&  GetKeyCode() const      { return maKeyCode;  }
@@ -149,6 +160,12 @@ public:
 
     const Point&    GetPosPixel() const     { return maPos; }
     USHORT          GetMode() const         { return mnMode; }
+                    /** inits this vcl KeyEvent with all settings from the given awt event **/
+                    MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent );
+
+    /** fills out the given awt KeyEvent with all settings from this vcl event **/
+    void InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent ) const;
+
     USHORT          GetClicks() const       { return mnClicks; }
 
     BOOL            IsEnterWindow() const
