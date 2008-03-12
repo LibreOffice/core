@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 13:48:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,11 @@
 #include "layerimp.hxx"
 #endif
 
-#include <xmloff/xmltoken.hxx>
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 #include "XMLStringBufferImportContext.hxx"
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::xmloff::token;
