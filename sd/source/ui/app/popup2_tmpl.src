@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup2_tmpl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 07:26:40 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,5 +718,163 @@
         MN_EFFECT
         MN_ACTION
 #endif
+    };
+};
+
+//
+// Table shape context menu
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_TABLE_POPUP
+#elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_TABLE_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_TRANSFORM
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = SID_FORMAT_TABLE_DLG;
+            HelpID = SID_FORMAT_TABLE_DLG;
+            Text [ en-US ] = "~Table...";
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 10 ;
+            Command = ".uno:CellMenu" ;
+            Text [ en-US ] = "~Cell" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_MERGE_CELLS;
+                        HelpID = SID_TABLE_MERGE_CELLS;
+                        Text [ en-US ] = "~Merge";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SPLIT_CELLS;
+                        HelpID = SID_TABLE_SPLIT_CELLS;
+                        Text [ en-US ] = "~Split...";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_NONE;
+                        HelpID = SID_TABLE_VERT_NONE;
+                        Text [ en-US ] = "~Top";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_CENTER;
+                        HelpID = SID_TABLE_VERT_CENTER;
+                        Text [ en-US ] = "C~enter";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_BOTTOM;
+                        HelpID = SID_TABLE_VERT_BOTTOM;
+                        Text [ en-US ] = "~Bottom";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 11 ;
+            Command = ".uno:RowMenu" ;
+            Text [ en-US ] = "~Row" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DISTRIBUTE_ROWS;
+                        HelpID = SID_TABLE_DISTRIBUTE_ROWS;
+                        Text [ en-US ] = "Space ~Equally";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SELECT_ROW;
+                        HelpID = SID_TABLE_SELECT_ROW;
+                        Text [ en-US ] = "~Select";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_ROW;
+                        HelpID = SID_TABLE_INSERT_ROW;
+                        Text [ en-US ] = "~Insert";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DELETE_ROW;
+                        HelpID = SID_TABLE_DELETE_ROW;
+                        Text [ en-US ] = "~Delete";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 12 ;
+            Command = ".uno:ColumnMenu" ;
+            Text [ en-US ] = "Colu~mn" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DISTRIBUTE_COLUMNS;
+                        HelpID = SID_TABLE_DISTRIBUTE_COLUMNS;
+                        Text [ en-US ] = "Space ~Equally";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SELECT_COL;
+                        HelpID = SID_TABLE_SELECT_COL;
+                        Text [ en-US ] = "~Select";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_COL;
+                        HelpID = SID_TABLE_INSERT_COL;
+                        Text [ en-US ] = "~Insert";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DELETE_COL;
+                        HelpID = SID_TABLE_DELETE_COL;
+                        Text [ en-US ] = "~Delete";
+                    };
+                };
+            };
+        };
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
     };
 };
