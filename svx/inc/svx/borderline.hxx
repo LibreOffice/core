@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:39:11 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,10 @@ protected:
     USHORT nDistance;
 
 public:
-    SvxBorderLine( const Color *pCol = 0, USHORT nOut = 0,
-                   USHORT nIn = 0, USHORT nDist = 0 );
+    SvxBorderLine( const Color *pCol = 0, USHORT nOut = 0, USHORT nIn = 0, USHORT nDist = 0 );
+    SvxBorderLine( const SvxBorderLine& r );
+
+    SvxBorderLine& operator=( const SvxBorderLine& r );
 
     const Color&    GetColor() const { return aColor; }
     USHORT          GetOutWidth() const { return nOutWidth; }
@@ -133,6 +135,8 @@ public:
     String          GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
                                     const IntlWrapper* pIntl,
                                     BOOL bMetricStr = FALSE ) const;
+
+    bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 };
 
 // ============================================================================
