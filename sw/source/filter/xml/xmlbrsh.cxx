@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:09:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #include "xmlimpit.hxx"
 #include "xmlexpit.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
@@ -104,7 +104,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 TYPEINIT1( SwXMLBrushItemImportContext, SvXMLImportContext );
 
 void SwXMLBrushItemImportContext::ProcessAttrs(
-        const Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv )
 {
     SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
@@ -149,7 +149,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
 
 SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     if( xmloff::token::IsXMLToken( rLocalName,
@@ -195,7 +195,7 @@ void SwXMLBrushItemImportContext::EndElement()
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList >& xAttrList,
+        const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv,
         const SvxBrushItem& rItem ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -210,7 +210,7 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         const SvXMLUnitConverter& rUnitConv,
         sal_uInt16 nWhich ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
