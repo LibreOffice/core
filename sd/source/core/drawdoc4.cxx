@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:21:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
@@ -74,6 +77,9 @@
 #include <svx/bulitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sxmsuitm.hxx>
+#include <svx/borderline.hxx>
+#include <svx/boxitem.hxx>
+
 #ifndef _SVX_XIT_HXX //autogen
 #include <svx/xit.hxx>
 #endif
@@ -231,6 +237,8 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::sd;
 
@@ -261,7 +269,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     USHORT nMask = SFXSTYLEBIT_AUTO;
 
     String aName(aStdName);
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
     SfxItemPool* pPool = rISet.GetPool();
@@ -405,7 +413,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Objekt mit Pfeilspitze ----------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHARROW));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
     pISet = &pSheet->GetItemSet();
@@ -428,7 +436,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Objekt mit Schatten -------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHSHADOW));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
     pISet = &pSheet->GetItemSet();
@@ -441,7 +449,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Objekt ohne Fllung -------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
     pISet = &pSheet->GetItemSet();
@@ -451,7 +459,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Text ----------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXT));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
     pISet = &pSheet->GetItemSet();
@@ -462,7 +470,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textk”rper ----------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
     pISet = &pSheet->GetItemSet();
@@ -475,7 +483,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textk”rper mit Blocksatz --------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY_JUSTIFY));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
     pISet = &pSheet->GetItemSet();
@@ -488,7 +496,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Textkoerper mit Einzug -----------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TEXTBODY_INDENT));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
     pISet = &pSheet->GetItemSet();
@@ -508,7 +516,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel ---------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
     pISet = &pSheet->GetItemSet();
@@ -521,7 +529,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel1 --------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE1));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
     pISet = &pSheet->GetItemSet();
@@ -542,7 +550,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Titel2 --------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE2));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE2 );
     pISet = &pSheet->GetItemSet();
@@ -575,7 +583,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift ---------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
     pISet = &pSheet->GetItemSet();
@@ -591,7 +599,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift1 --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE1));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
     pISet = &pSheet->GetItemSet();
@@ -609,7 +617,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Ueberschrift2 --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_HEADLINE2));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
     pISet = &pSheet->GetItemSet();
@@ -628,7 +636,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // ---- Bemassung --------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_MEASURE));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
+    pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_MEASURE );
     pISet = &pSheet->GetItemSet();
@@ -644,25 +652,229 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_SOLID));
     pISet->Put(SdrMeasureShowUnitItem(true));
 
-/*
-
-    invalidierte Items koennen nicht gespeichert werden;
-    da muessen wir uns was anderes ueberlegen
-
-    // ---- leere Vorlage --------------------------------------------------
-
-    aName = String(SdResId(STR_EMPTY_STYLESHEET_NAME));
-    pSheet = &(pSSPool->Make(aName, SFX_STYLE_FAMILY_PARA, nMask));
-    pISet = &pSheet->GetItemSet();
-    pISet->InvalidateAllItems();      // alle auf DONTCARE setzen
-*/
-
-
     // Praesentationsvorlagen fuer das Standardlayout erzeugen
     String aPrefix = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
+static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString rParent, const Color& rColor )
+{
+    SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
+    pSheet->SetParent(rParent);
+    SfxItemSet* pISet = &pSheet->GetItemSet();
+    pISet->Put(XFillStyleItem(XFILL_SOLID));
+    pISet->Put(XFillColorItem(String(), rColor));
+
+    return Any( Reference< XStyle >( static_cast< XWeak* >( pSheet ), UNO_QUERY ) );
+}
+
+static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFamily, const OUString& rName, const Any& rBody, const Any& rHeading, const Any& rBanding )
+{
+    try
+    {
+        Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
+        Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
+        xTableFamily->insertByName( OUString( rName ), Any( xDefaultTableStyle ) );
+
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("body") ), rBody  );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-rows") ), rBanding );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-columns") ), rBanding );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-row") ), rHeading );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-column") ), rHeading );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-row") ), rHeading );
+        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-column") ), rHeading );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("sd::implCreateTableTemplate(), exception caught!");
+    }
+}
+
+void SdDrawDocument::CreateDefaultCellStyles()
+{
+    SdStyleSheetPool*       pSSPool = static_cast< SdStyleSheetPool* >(GetStyleSheetPool());
+    SfxStyleSheetBase*      pSheet = NULL;
+    String                  aHelpFile;
+
+    const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
+    Reference< XNameContainer > xTableFamily( pSSPool->getByName( sFamilyName ), UNO_QUERY );
+
+    // ---- Default -----------------------------------------------
+
+    USHORT nMask = SFXSTYLEBIT_AUTO;
+
+    OUString aDefaultCellStyleName( RTL_CONSTASCII_USTRINGPARAM("default") );
+
+    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
+    pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
+    SfxItemSet& rISet = pSheet->GetItemSet();
+//  SfxItemPool* pPool = rISet.GetPool();
+
+    String   aNullStr;
+
+    Color    aNullCol(RGB_Color(COL_BLACK));
+
+    XDash     aNullDash;
+    XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
+              aNullGrad.SetStartIntens( 100 );
+              aNullGrad.SetEndIntens( 100 );
+    XHatch    aNullHatch(aNullCol);
+
+    rISet.Put(XFillStyleItem(XFILL_SOLID));
+    rISet.Put(XFillColorItem(String(), RGB_Color(0x00ccccff)));
+
+    Font aLatinFont, aCJKFont, aCTLFont;
+
+    getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
+
+    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
+                              aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
+
+    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
+                                 aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+
+    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
+                                 aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+
+    rISet.Put( aSvxFontItem );
+    rISet.Put( aSvxFontItemCJK );
+    rISet.Put( aSvxFontItemCTL );
+
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
+    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
+
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+
+    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
+    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
+    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
+    rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
+    rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
+
+    // Absatzattribute (Edit Engine)
+    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
+    rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
+
+    rISet.Put( SdrTextLeftDistItem( 250 ) );
+    rISet.Put( SdrTextRightDistItem( 250 ) );
+    rISet.Put( SdrTextUpperDistItem( 130 ) );
+    rISet.Put( SdrTextLowerDistItem( 130 ) );
+
+    rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
+    rISet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
+    rISet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+    rISet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT) );
+
+    Color aWhite( COL_WHITE );
+    SvxBorderLine aBorderLine( &aWhite, 1, 0, 0 );
+
+    SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
+    aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );
+    aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
+    aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
+    aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
+
+    rISet.Put( aBoxItem );
+
+    Any aDefaultCellStyle( Reference< XStyle >( static_cast< XWeak* >( pSheet ), UNO_QUERY ) );
+
+    // ---- default --------------------------------------------------
+
+    Any aBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue1") ), aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
+    Any aBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue2") ), aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
+    Any aBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue3") ), aDefaultCellStyleName, RGB_COLORDATA(0,102,204)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("default")), aBlue1, aBlue3, aBlue2 );
+
+    // ---- BW ------------------------------------------------
+
+    Any aBW1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
+    Any aBW2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw2") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
+    Any aBW3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("bw3") ), aDefaultCellStyleName, RGB_COLORDATA(0,0,0)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("bw") ), aBW1, aBW3, aBW2 );
+
+    // ---- Orange --------------------------------------------------
+
+    Any aOrange1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange1") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+    Any aOrange2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange2") ), aDefaultCellStyleName, RGB_COLORDATA(255,153,102)));
+    Any aOrange3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange3") ), aDefaultCellStyleName, RGB_COLORDATA(255,102,51)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("orange") ), aOrange1, aOrange3, aOrange2 );
+
+    // ---- Turquise --------------------------------------------------
+
+    Any aTurquise1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise1") ), aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
+    Any aTurquise2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise2") ), aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
+    Any aTurquise3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("turquise3") ), aDefaultCellStyleName, RGB_COLORDATA(25,138,138)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("turquise") ), aTurquise1, aTurquise3, aTurquise2 );
+
+    // ---- Gray ------------------------------------------------
+
+    Any aGray1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
+    Any aGray2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
+    Any aGray3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray3") ), aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("gray") ), aGray1, aGray3, aGray2 );
+
+    // ---- Sun ------------------------------------------------
+
+    Any aSun1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
+    Any aSun2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,255)));
+    Any aSun3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("sun3") ), aDefaultCellStyleName, RGB_COLORDATA(153,153,255)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("sun") ), aSun1, aSun3, aSun2 );
+
+    // ---- Earth ----------------------------------------------
+
+    Any aEarth1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aEarth2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth2") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+    Any aEarth3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("earth3") ), aDefaultCellStyleName, RGB_COLORDATA(204,102,51)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("earth") ), aEarth1, aEarth3, aEarth2 );
+
+    // ---- Green ----------------------------------------------
+
+    Any aGreen1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aGreen2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green2") ), aDefaultCellStyleName, RGB_COLORDATA(148,189,94)));
+    Any aGreen3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("green3") ), aDefaultCellStyleName, RGB_COLORDATA(92,133,38)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("green") ), aGreen1, aGreen3, aGreen2 );
+
+    // ---- Seetang ----------------------------------------------
+
+    Any aSeetang1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang1") ), aDefaultCellStyleName, RGB_COLORDATA(204,255,255)));
+    Any aSeetang2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang2") ), aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
+    Any aSeetang3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("seetang3") ), aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("seetang") ), aSeetang1, aSeetang3, aSeetang2 );
+
+    // ---- LightBlue ----------------------------------------------
+
+    Any aLightBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
+    Any aLightBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue2") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
+    Any aLightBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("lightblue3") ), aDefaultCellStyleName, RGB_COLORDATA(153,153,204)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("lightblue") ), aLightBlue1, aLightBlue3, aLightBlue2 );
+
+    // ---- Yellow ----------------------------------------------
+
+    Any aYellow1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow1") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
+    Any aYellow2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow2") ), aDefaultCellStyleName, RGB_COLORDATA(255,255,153)));
+    Any aYellow3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("yellow3") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
+
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("yellow") ), aYellow1, aYellow3, aYellow2 );
+}
 
 /*************************************************************************
 |*
@@ -1154,7 +1366,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     USHORT nLen = aOldName.Len();
 
     List aReplList;
-    SfxStyleSheetIterator aIter(pStyleSheetPool, SD_LT_FAMILY);
+    SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)
@@ -1291,7 +1503,7 @@ void SdDrawDocument::SetTextDefaults() const
 {
     // BulletItem und BulletFont fuer Titel und Gliederung
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
-    Font aBulletFont( ((SdStyleSheetPool*) pStyleSheetPool)->GetBulletFont() );
+    Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
