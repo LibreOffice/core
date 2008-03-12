@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:32:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::comphelper;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 enum SwPrintSettingsPropertyHandles
 {
