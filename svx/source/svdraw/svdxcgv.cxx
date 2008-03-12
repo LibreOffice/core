@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:13:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,6 +332,15 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
 {
     const SdrModel* pSrcMod=&rMod;
     if (pSrcMod==pMod) return FALSE; // na so geht's ja nun nicht
+
+    BegUndo(ImpGetResStr(STR_ExchangePaste));
+
+    if( mxSelectionController.is() && mxSelectionController->PasteObjModel( rMod ) )
+    {
+        EndUndo();
+        return TRUE;
+    }
+
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     SdrPageView* pMarkPV=NULL;
@@ -362,7 +371,6 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     }
     SdrObjList*  pDstLst=pLst;
     USHORT nPg,nPgAnz=pSrcMod->GetPageCount();
-    BegUndo(ImpGetResStr(STR_ExchangePaste));
     for (nPg=0; nPg<nPgAnz; nPg++) {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
 
@@ -755,92 +763,95 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     SdrPage* pNeuPag=pNeuMod->AllocPage(FALSE);
     pNeuMod->InsertPage(pNeuPag);
 
-    ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
-    ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
-    ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
-    const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
-    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
-    sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
-
-    for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
+    if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )
     {
-        SdrMark* pMark = GetSdrMarkByIndex( n );
+        ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
+        ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
+        ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
+        const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
+        const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
+        sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
 
-        // paint objects on control layer on top of all otherobjects
-        if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
-            rObjVector2.push_back( pMark );
-        else
-            rObjVector1.push_back( pMark );
-    }
-
-    // #i13033#
-    // New mechanism to re-create the connections of cloned connectors
-    CloneList aCloneList;
-
-    for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
-    {
-        ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
-
-        for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+        for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
         {
-               const SdrMark*      pMark = rObjVector[ i ];
-            const SdrObject*    pObj = pMark->GetMarkedSdrObj();
-            SdrObject*          pNeuObj;
+            SdrMark* pMark = GetSdrMarkByIndex( n );
 
-            if( pObj->ISA( SdrPageObj ) )
-            {
-                // convert SdrPageObj's to a graphic representation, because
-                // virtual connection to referenced page gets lost in new model
-                pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
-                pNeuObj->SetPage( pNeuPag );
-                pNeuObj->SetModel( pNeuMod );
-            }
+            // paint objects on control layer on top of all otherobjects
+            if( nControlLayerId == pMark->GetMarkedSdrObj()->GetLayer() )
+                rObjVector2.push_back( pMark );
             else
-            {
-                // #116235#
-                // pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
-                pNeuObj = pObj->Clone();
-                pNeuObj->SetPage( pNeuPag );
-                pNeuObj->SetModel( pNeuMod );
-            }
-
-            if( pNeuObj )
-            {
-                SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
-
-                // #i13033#
-                aCloneList.AddPair(pObj, pNeuObj);
-            }
-            else
-                nCloneErrCnt++;
+                rObjVector1.push_back( pMark );
         }
-    }
 
-    // #i13033#
-    // New mechanism to re-create the connections of cloned connectors
-    aCloneList.CopyConnections();
+        // #i13033#
+        // New mechanism to re-create the connections of cloned connectors
+        CloneList aCloneList;
 
-    if(0L != nCloneErrCnt)
-    {
+        for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
+        {
+            ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
+
+            for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+            {
+                   const SdrMark*      pMark = rObjVector[ i ];
+                const SdrObject*    pObj = pMark->GetMarkedSdrObj();
+                SdrObject*          pNeuObj;
+
+                if( pObj->ISA( SdrPageObj ) )
+                {
+                    // convert SdrPageObj's to a graphic representation, because
+                    // virtual connection to referenced page gets lost in new model
+                    pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
+                    pNeuObj->SetPage( pNeuPag );
+                    pNeuObj->SetModel( pNeuMod );
+                }
+                else
+                {
+                    // #116235#
+                    // pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
+                    pNeuObj = pObj->Clone();
+                    pNeuObj->SetPage( pNeuPag );
+                    pNeuObj->SetModel( pNeuMod );
+                }
+
+                if( pNeuObj )
+                {
+                    SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                    pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+
+                    // #i13033#
+                    aCloneList.AddPair(pObj, pNeuObj);
+                }
+                else
+                    nCloneErrCnt++;
+            }
+        }
+
+        // #i13033#
+        // New mechanism to re-create the connections of cloned connectors
+        aCloneList.CopyConnections();
+
+        if(0L != nCloneErrCnt)
+        {
 #ifdef DBG_UTIL
-        ByteString aStr("SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen ");
+            ByteString aStr("SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen ");
 
-        if(nCloneErrCnt == 1)
-        {
-            aStr += "eines Zeichenobjekts.";
-        }
-        else
-        {
-            aStr += "von ";
-            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
-            aStr += " Zeichenobjekten.";
-        }
+            if(nCloneErrCnt == 1)
+            {
+                aStr += "eines Zeichenobjekts.";
+            }
+            else
+            {
+                aStr += "von ";
+                aStr += ByteString::CreateFromInt32( nCloneErrCnt );
+                aStr += " Zeichenobjekten.";
+            }
 
-        aStr += " Objektverbindungen werden nicht mitkopiert.";
+            aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-        DBG_ERROR(aStr.GetBuffer());
+            DBG_ERROR(aStr.GetBuffer());
 #endif
+        }
     }
     return pNeuMod;
 }
