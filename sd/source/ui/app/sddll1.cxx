@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:38:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 #include "sdmod.hxx"
 #include "app.hrc"
 
+namespace sd { namespace ui { namespace table {
+    extern void RegisterInterfaces( SfxModule* pMod );
+} } }
 
 
 /*************************************************************************
@@ -137,7 +140,6 @@ void SdDLL::RegisterFactorys()
 |*
 \************************************************************************/
 
-
 void SdDLL::RegisterInterfaces()
 {
     // Modul
@@ -167,6 +169,9 @@ void SdDLL::RegisterInterfaces()
 
     // Media ObjectShell
     ::sd::MediaObjectBar::RegisterInterface(pMod);
+
+    // Table ObjectShell
+    ::sd::ui::table::RegisterInterfaces(pMod);
 
     // View shells for the side panes.
     ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
