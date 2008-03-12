@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:38:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,9 @@
 
 #include <vector>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
