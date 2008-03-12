@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEmptyEditSource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:06:39 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,7 @@ namespace accessibility
     AccessibleProxyEditSource_Impl::AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                                                     SdrView&        rView,
                                                                     const Window&   rViewWindow ) :
-        maEditSource( rObj, rView, rViewWindow )
+        maEditSource( rObj, 0, rView, rViewWindow )
     {
     }
 
