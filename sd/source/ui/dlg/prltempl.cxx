@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:27:23 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 #include <svtools/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/flagsdef.hxx>
+#include "drawdoc.hxx"
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
 /*************************************************************************
@@ -142,7 +143,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-            SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
+            SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
                 if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem) )
