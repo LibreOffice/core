@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:47:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,11 +180,14 @@
 
 #include <unomid.h>
 
+using rtl::OUString;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::smarttags;
 
 // Wir ersparen uns in Hyphenate ein GetFrm()
 // Achtung: in edlingu.cxx stehen die Variablen!
@@ -774,7 +777,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
         return aText;
 
     Boundary aBndry;
-    const Reference< XBreakIterator > &rxBreak = pBreakIt->xBreak;
+    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->xBreak;
     if (rxBreak.is())
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
@@ -923,7 +926,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
-    Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
+    uno::Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
 
     xub_StrLen nBegin, nEnd;
 
@@ -1276,7 +1279,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         if (!pModule->GetLngSvcEvtListener().is())
             pModule->CreateLngSvcEvtListener();
 
-        Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
+        uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
         SwScanner aScanner( *pNode, WordType::DICTIONARY_WORD,
