@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:40:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,7 @@ public:
     void            ExecCtrl(SfxRequest& rReq);
     void            GetCtrlState(SfxItemSet& rSet);
     void            GetMenuState(SfxItemSet& rSet);
+    void            GetTableMenuState(SfxItemSet& rSet);
     /** Set the items of the given item set that are related to
         switching the editing mode to the correct values.
         <p>This function also sets the states of the mode buttons
@@ -248,6 +249,7 @@ public:
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
+    void            FuTable(SfxRequest& rReq);
 
     void            AttrExec (SfxRequest& rReq);
     void            AttrState (SfxItemSet& rSet);
