@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:22:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,15 +302,15 @@ void FuPresentationLayout::TransferLayoutTemplate(String aFromName,
                                                   SfxStyleSheetBasePool* pFrom,
                                                   SfxStyleSheetBasePool* pTo)
 {
-    SfxStyleSheetBase* pHis = pFrom->Find(aFromName,SD_LT_FAMILY);
-    SfxStyleSheetBase* pMy  = pTo->Find(aToName, SD_LT_FAMILY);
+    SfxStyleSheetBase* pHis = pFrom->Find(aFromName,SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetBase* pMy  = pTo->Find(aToName, SD_STYLE_FAMILY_MASTERPAGE);
 
     DBG_ASSERT(pHis, "neue Layoutvorlage nicht gefunden");
 
     // gibt's noch nicht: neu anlegen
     if (!pMy)
     {
-        pMy = &(pTo->Make(aToName, SD_LT_FAMILY));
+        pMy = &(pTo->Make(aToName, SD_STYLE_FAMILY_MASTERPAGE));
     }
 
     // Inhalte neu setzen
