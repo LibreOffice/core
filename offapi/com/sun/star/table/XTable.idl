@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTable.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:18:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_table_XTable_idl__
+#define __com_sun_star_table_XTable_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_table_XCellRange_idl__
+#include <com/sun/star/table/XCellRange.idl>
+#endif
+
+#ifndef __com_sun_star_table_XColumnRowRange_idl__
+#include <com/sun/star/table/XColumnRowRange.idl>
+#endif
+
+#ifndef __com_sun_star_table_XCellCursor_idl__
+#include <com/sun/star/table/XCellCursor.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModifiable_idl__
+#include <com/sun/star/util/XModifiable.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XFastPropertySet_idl__
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/**
+*/
+interface XTable
+{
+
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::table::XCellRange;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::table::XColumnRowRange;
+
+    //-------------------------------------------------------------------------
+
+    /** interface to make the modify state of the table accessible.
+        <p>Additionally, it makes it possible to register listener objects, which
+        get notification whenever the content of the table changes.
+    */
+    interface ::com::sun::star::util::XModifiable;
+
+    //-------------------------------------------------------------------------
+
+    /* interface ::com::sun::star::beans::XMultiPropertySet; */
+
+    //-------------------------------------------------------------------------
+
+    interface ::com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    interface ::com::sun::star::beans::XFastPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** creates a cell cursor including the whole table
+
+        @see com::sun::star::table::CellCursor
+     */
+    com::sun::star::table::XCellCursor createCursor();
+
+    //-------------------------------------------------------------------------
+
+    /** creates a cell cursor to travel in the given range context.
+
+        @param aRange
+            the cell range for the cursor.
+
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            if the given reference is empty or not a range from this table.
+
+        @see com::sun::star::table::CellCursor
+     */
+    com::sun::star::table::XCellCursor createCursorByRange( [in] com::sun::star::table::XCellRange Range )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** stores the current row count of this table */
+    [readonly, attribute] long RowCount;
+
+    //-------------------------------------------------------------------------
+
+    /** stores the current column count of this table */
+    [readonly, attribute] long ColumnCount;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
