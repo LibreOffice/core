@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:07:33 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ public:
         PID_UNKNOWN = PID__START,
         PID_MASTER_PAGES,
         PID_LAYOUT,
+        PID_TABLE_DESIGN,
         PID_ANIMATION_SCHEMES,
         PID_CUSTOM_ANIMATION,
         PID_SLIDE_TRANSITION,
