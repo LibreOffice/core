@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:55:35 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,9 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) : aParaAttribs( rPool, EE_PARA_ST
 {
     eFamily = SFX_STYLE_FAMILY_PARA;
     pWrongs = NULL;
+/* cl removed because not needed anymore since binfilter
     pTempLoadStoreInfos = NULL;
+*/
 }
 
 // Richtiger CopyCTOR unsinning, weil ich mit einem anderen Pool arbeiten muss!
@@ -203,11 +205,11 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     : aParaAttribs( rPoolToUse, EE_PARA_START, EE_CHAR_END )
 {
     pWrongs = NULL;
+/* cl removed because not needed anymore since binfilter
     pTempLoadStoreInfos = NULL;
-#ifndef SVX_LIGHT
+*/
     if ( rCopyFrom.GetWrongList() )
         pWrongs = rCopyFrom.GetWrongList()->Clone();
-#endif // !SVX_LIGHT
     // So sollten die Items im richtigen Pool landen!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
     aText = rCopyFrom.GetText();
@@ -245,6 +247,7 @@ ContentInfo::~ContentInfo()
 #endif
 }
 
+/* cl removed because not needed anymore since binfilter
 void ContentInfo::CreateLoadStoreTempInfos()
 {
     delete pTempLoadStoreInfos;
@@ -256,6 +259,7 @@ void ContentInfo::DestroyLoadStoreTempInfos()
     delete pTempLoadStoreInfos;
     pTempLoadStoreInfos = NULL;
 }
+*/
 
 bool ContentInfo::operator==( const ContentInfo& rCompare ) const
 {
@@ -575,6 +579,7 @@ void EditTextObject::AdjustImportedLRSpaceItems( BOOL )
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
+/* cl removed because not needed anymore since binfilter
 void EditTextObject::PrepareStore( SfxStyleSheetPool* )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
@@ -589,7 +594,7 @@ void EditTextObject::FinishLoad( SfxStyleSheetPool* )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
-
+*/
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const
 {
     return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
@@ -1133,13 +1138,17 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
         // Symbols?
         BOOL bSymbolPara = FALSE;
+/* cl removed because not needed anymore since binfilter
+
         if ( pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->bSymbolParagraph_Store )
         {
             DBG_ASSERT( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON, "Why bSymbolParagraph_Store?" );
             aText = ByteString( pC->GetText(), RTL_TEXTENCODING_SYMBOL );
             bSymbolPara = TRUE;
         }
-        else if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        else
+*/
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
@@ -1192,11 +1201,13 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
         {
             hConv = CreateFontToSubsFontConverter( ((const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         }
+/* cl removed because not needed anymore since binfilter
+
         else if ( pC->GetStyle().Len() && pC->GetLoadStoreTempInfos() )
         {
             hConv = pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store;
         }
-
+*/
         if ( hConv )
         {
             for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
@@ -1212,8 +1223,10 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
             DestroyFontToSubsFontConverter( hConv );
 
+/* cl removed because not needed anymore since binfilter
             if ( pC->GetLoadStoreTempInfos() )
                 pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store = NULL;
+*/
         }
 
 
@@ -1377,6 +1390,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
         // Symbol-Conversion neccessary?
         // All Strings are converted with the SourceCharSet in CreateData()...
 
+/* cl removed because not needed anymore since binfilter
         // Keep old ByteString, maybe Symbol-Conversion neccessary, will be
         // checked in FinishLoad(), I need the StyleSheetPool for this...
         if ( pC->GetStyle().Len() && ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) )
@@ -1384,6 +1398,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
             pC->CreateLoadStoreTempInfos();
             pC->GetLoadStoreTempInfos()->aOrgString_Load = aByteString;
         }
+*/
 
         // But check for paragraph and character symbol attribs here,
         // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
@@ -1583,6 +1598,7 @@ void BinTextObject::SetLRSpaceItemFlags( BOOL bOutlineMode )
     }
 }
 
+/*
 void BinTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
 {
     // Some Items must be generated for the 5.0 file format,
@@ -1785,6 +1801,7 @@ void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
         pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
     }
 }
+*/
 
 bool BinTextObject::operator==( const BinTextObject& rCompare ) const
 {
