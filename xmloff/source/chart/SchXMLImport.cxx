@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:46:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,12 +117,12 @@
 
 #include <typeinfo>
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
