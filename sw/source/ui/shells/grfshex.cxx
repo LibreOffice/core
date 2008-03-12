@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:20:17 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 {
