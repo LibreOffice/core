@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:52:39 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:17:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ LIB1FILES=	\
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
     $(SLB)$/forms.lib \
-    $(SLB)$/xforms.lib
+    $(SLB)$/xforms.lib \
+    $(SLB)$/table.lib
 
 # --- Shared-Library -----------------------------------------------
 
