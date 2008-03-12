@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:47:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #include "unonames.hxx"
 #include "xmlexprt.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
