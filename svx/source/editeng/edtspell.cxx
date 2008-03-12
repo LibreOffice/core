@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:57:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
