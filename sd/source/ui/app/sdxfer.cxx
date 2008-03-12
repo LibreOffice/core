@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:25:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@
 #include <unotools/streamwrap.hxx>
 #endif
 
+#include <svx/svdotable.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -401,8 +402,11 @@ void SdTransferable::CreateData()
         pPage->SetSize( pOldPage->GetSize() );
         pPage->SetLayoutName( aOldLayoutName );
         pNewStylePool->CopyGraphicSheets( *pOldStylePool );
+        pNewStylePool->CopyCellSheets( *pOldStylePool );
+        pNewStylePool->CopyTableStyles( *pOldStylePool );
         aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-        pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool );
+        SdStyleSheetVector aCreatedSheets;
+        pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
 
     // set VisArea and adjust objects if neccessary
@@ -465,6 +469,22 @@ BOOL lcl_HasOnlyControls( SdrModel* pModel )
 
 // -----------------------------------------------------------------------------
 
+bool lcl_HasOnlyOneTable( SdrModel* pModel )
+{
+    if ( pModel )
+    {
+        SdrPage* pPage = pModel->GetPage(0);
+        if (pPage && pPage->GetObjCount() == 1 )
+        {
+            if( dynamic_cast< sdr::table::SdrTableObj* >( pPage->GetObj(0) ) != 0 )
+                return true;
+        }
+    }
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+
 void SdTransferable::AddSupportedFormats()
 {
     if( !mbPageTransferable || mbPageTransferablePersistent )
@@ -517,6 +537,9 @@ void SdTransferable::AddSupportedFormats()
                 AddFormat( SOT_FORMAT_GDIMETAFILE );
                 AddFormat( SOT_FORMAT_BITMAP );
             }
+
+            if( lcl_HasOnlyOneTable( mpSdDrawDocument ) )
+                AddFormat( SOT_FORMAT_RTF );
         }
 
         if( mpImageMap )
@@ -533,7 +556,11 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
     CreateData();
 
-    if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
+    if( nFormat == SOT_FORMAT_RTF && lcl_HasOnlyOneTable( mpSdDrawDocument ) )
+    {
+        bOK = SetTableRTF( mpSdDrawDocument, rFlavor );
+    }
+    else if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
     {
         ULONG nOldSwapMode = 0;
 
@@ -902,4 +929,24 @@ void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mpSdView = 0;
         }
     }
+}
+
+sal_Bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& rFlavor)
+{
+    if ( pModel )
+    {
+        SdrPage* pPage = pModel->GetPage(0);
+        if (pPage && pPage->GetObjCount() == 1 )
+        {
+            sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( pPage->GetObj(0) );
+            if( pTableObj )
+            {
+                SvMemoryStream aMemStm( 65535, 65535 );
+                sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );
+                return SetAny( Any( Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ), rFlavor );
+            }
+        }
+    }
+
+    return sal_False;
 }
