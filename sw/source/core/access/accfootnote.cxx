@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:51:46 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
 const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";
