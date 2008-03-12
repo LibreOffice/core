@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:47:09 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 #include <svx/svdmodel.hxx>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
+#include <com/sun/star/lang/XComponent.hpp>
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
@@ -177,7 +175,8 @@
 #endif
 
 using namespace ::com::sun::star;
-
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,7 +215,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nProgressAkt=0;
     nProgressMax=0;
     nProgressOfs=0;
-    pStyleSheetPool=NULL;
     pDefaultStyleSheet=NULL;
     pLinkManager=NULL;
     pUndoStack=NULL;
@@ -395,7 +393,8 @@ SdrModel::~SdrModel()
         DBG_ERROR(aStr.GetBuffer());
     }
 #endif
-    if (pAktUndoGroup!=NULL) delete pAktUndoGroup;
+    if (pAktUndoGroup!=NULL)
+        delete pAktUndoGroup;
 
     // #116168#
     ClearModel(sal_True);
@@ -409,12 +408,24 @@ SdrModel::~SdrModel()
     delete pHitTestOutliner;
     delete pDrawOutliner;
 
-    // StyleSheetPool loeschen, abgeleitete Klassen sollten dies nicht tun,
-    // da die DrawingEngine moeglicherweise im Destruktor noch auf den
-    // StyleSheetPool zugreifen muss (SB)
-    delete pStyleSheetPool;
+    // delete StyleSheetPool, derived classes should not do this since
+    // the DrawingEngine may need it in its destrctor (SB)
+    if( mxStyleSheetPool.is() )
+    {
+        Reference< XComponent > xComponent( dynamic_cast< cppu::OWeakObject* >( mxStyleSheetPool.get() ), UNO_QUERY );
+        if( xComponent.is() ) try
+        {
+            xComponent->dispose();
+        }
+        catch( RuntimeException& )
+        {
+        }
+        mxStyleSheetPool.clear();
+    }
 
-    if (bMyPool) { // Pools loeschen, falls es meine sind
+    if (bMyPool)
+    {
+        // Pools loeschen, falls es meine sind
         SfxItemPool* pOutlPool=pItemPool->GetSecondaryPool();
         delete pItemPool;
         // Der OutlinerPool muss nach dem ItemPool plattgemacht werden, da der
@@ -427,7 +438,8 @@ SdrModel::~SdrModel()
         mpForbiddenCharactersTable->release();
 
     // Tabellen, Listen und Paletten loeschen
-    if (!bExtColorTable) delete pColorTable;
+    if (!bExtColorTable)
+        delete pColorTable;
     delete pDashList;
     delete pLineEndList;
     delete pHatchList;
@@ -907,6 +919,14 @@ SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const
 {
     pDrawOutliner->SetTextObj(pObj);
     return *pDrawOutliner;
+}
+
+boost::shared_ptr< SdrOutliner > SdrModel::CreateDrawOutliner(const SdrTextObj* pObj)
+{
+    boost::shared_ptr< SdrOutliner > xDrawOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this ) );
+    ImpSetOutlinerDefaults(xDrawOutliner.get(), TRUE);
+    xDrawOutliner->SetTextObj(pObj);
+    return xDrawOutliner;
 }
 
 const SdrTextObj* SdrModel::GetFormattingTextObj() const
