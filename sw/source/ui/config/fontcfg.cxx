@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:21:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
-using namespace ::com::sun::star::uno;
+using rtl::OUString;
+using namespace com::sun::star::uno;
 
 /* -----------------07.10.2002 12:15-----------------
  *
