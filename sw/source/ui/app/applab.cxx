@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:15:29 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@
 #include <IDocumentDeviceAccess.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 // steht im appenv.cxx
 extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
