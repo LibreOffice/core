@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:39:44 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,11 +381,15 @@ void View::DoCopy (::Window* pWindow)
 
 void View::DoPaste (::Window* pWindow)
 {
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
+    if( !aDataHelper.GetTransferable().is() )
+        return; // empty clipboard?
+
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    if( pOLV )
+    if( pOLV && EditEngine::HasValidData( aDataHelper.GetTransferable() ) )
     {
-        ( (OutlinerView*) pOLV)->PasteSpecial();
+        const_cast< OutlinerView* >(pOLV)->PasteSpecial();
 
         SdrObject*  pObj = GetTextEditObject();
         SdPage*     pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
@@ -426,33 +430,28 @@ void View::DoPaste (::Window* pWindow)
     }
     else
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
+        Point       aPos;
+        sal_Int8    nDnDAction = DND_ACTION_COPY;
 
-        if( aDataHelper.GetTransferable().is() )
+        if( pWindow )
+            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+
+        DrawViewShell* pDrViewSh = (DrawViewShell*) mpDocSh->GetViewShell();
+
+        if (pDrViewSh != NULL)
         {
-            Point       aPos;
-            sal_Int8    nDnDAction = DND_ACTION_COPY;
-
-            if( pWindow )
-                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
-
-            DrawViewShell* pDrViewSh = (DrawViewShell*) mpDocSh->GetViewShell();
-
-            if (pDrViewSh != NULL)
+            if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
             {
-                if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
-                {
-                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
-                    if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-                    {
-                        pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
-                    }
+                if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                {
+                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                 }
             }
         }
