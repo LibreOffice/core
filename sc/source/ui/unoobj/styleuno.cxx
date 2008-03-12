@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:02:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,7 +889,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
                 pDocShell->SetDocumentModified();
 
-                pStylePool->Erase( pStyle );
+                pStylePool->Remove( pStyle );
 
                 //! InvalidateAttribs();        // Bindings-Invalidate
             }
@@ -898,7 +898,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
                 if ( pDoc->RemovePageStyleInUse( aString ) )
                     pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), sal_True );
 
-                pStylePool->Erase( pStyle );
+                pStylePool->Remove( pStyle );
 
                 SfxBindings* pBindings = pDocShell->GetViewBindings();
                 if (pBindings)
