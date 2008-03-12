@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLParagraphContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:48:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
