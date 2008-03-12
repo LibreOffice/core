@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:24:58 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,13 +598,33 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "NotesShape", 26, 13 ) )
+        else if( aType.EqualsAscii( "NotesShape", 26, 10 ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "HandoutShape", 26, 13 ) )
+        else if( aType.EqualsAscii( "HandoutShape", 26, 12 ) )
         {
             nType = OBJ_PAGE;
+        }
+        else if( aType.EqualsAscii( "FooterShape", 26, 12 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "HeaderShape", 26, 12 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "SlideNumberShape", 26, 17 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "DateTimeShape", 26, 17 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        {
+            nType = OBJ_TABLE;
         }
         else
         {
