@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmovss.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:29:34 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,42 +36,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-
 #include "unmovss.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "stlsheet.hxx"
+#include "stlpool.hxx"
 
-
-TYPEINIT1(SdMoveStyleSheetsUndoAction, SdUndoAction);
-
-
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction(
-                                SdDrawDocument* pTheDoc,
-                                List*           pTheStyles,
-                                BOOL            bInserted):
-                      SdUndoAction(pTheDoc)
+SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted)
+: SdUndoAction(pTheDoc)
+, mbMySheets( !bInserted )
 {
-    DBG_ASSERT(pTheStyles, "keine Liste gesetzt!");
-    pStyles   = pTheStyles;
-    bMySheets = !bInserted;
+    maStyles.swap( rTheStyles );
 
-    pListOfChildLists = new List;
-
+    maListOfChildLists.resize( maStyles.size() );
     // Liste mit den Listen der StyleSheet-Kinder erstellen
-    for (SdStyleSheet* pSheet = (SdStyleSheet*)pStyles->First();
-         pSheet;
-         pSheet = (SdStyleSheet*)pStyles->Next())
+    std::size_t i = 0;
+    for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
     {
-        List* pChildList = pSheet->CreateChildList();
-        pListOfChildLists->Insert(pChildList, LIST_APPEND);
+        maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList( (*iter).get() );
     }
 }
 
@@ -84,102 +66,47 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction(
 void SdMoveStyleSheetsUndoAction::Undo()
 {
     SfxStyleSheetBasePool* pPool  = mpDoc->GetStyleSheetPool();
-    SdStyleSheet*          pSheet = NULL;
 
-    /********************************************************************
-    |* die StyleSheets sollen wieder in den Pool eingefuegt werden
-    \*******************************************************************/
-    if (bMySheets)
+    if (mbMySheets)
     {
-        /****************************************************************
-        |* erst alle StyleSheets wieder in den Pool einfuegen
-        \***************************************************************/
-        for (pSheet = (SdStyleSheet*)pStyles->First();
-             pSheet;
-             pSheet = (SdStyleSheet*)pStyles->Next())
+        // the styles have to be inserted in the pool
+
+        // first insert all styles to the pool
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
         {
-            pPool->Insert(pSheet);
+            pPool->Insert((*iter).get());
         }
 
-        /****************************************************************
-        |* jetzt die ehemaligen Kinder wieder zu Kindern machen
-        \***************************************************************/
-        List* pChildList = (List*)pListOfChildLists->First();
-        for (pSheet = (SdStyleSheet*)pStyles->First();
-             pSheet;
-             pSheet = (SdStyleSheet*)pStyles->Next())
+        // now assign the childs again
+        std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++, childlistiter++ )
         {
-            String aParent(pSheet->GetName());
-            for (SfxStyleSheet* pChild = (SfxStyleSheet*)pChildList->First();
-                 pChild;
-                 pChild = (SfxStyleSheet*)pChildList->Next())
+            String aParent((*iter)->GetName());
+            for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); childiter++ )
             {
-                pChild->SetParent(aParent);
+                (*childiter)->SetParent(aParent);
             }
-            pChildList = (List*)pListOfChildLists->Next();
         }
     }
-    /********************************************************************
-    |* die StyleSheets sollen wieder aus dem, Pool entfernt werden
-    \*******************************************************************/
     else
     {
-        for (pSheet = (SdStyleSheet*)pStyles->First();
-             pSheet;
-             pSheet = (SdStyleSheet*)pStyles->Next())
+        // remove the styles again from the pool
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
         {
-            pPool->Remove(pSheet);
+            pPool->Remove((*iter).get());
         }
     }
-    bMySheets = !bMySheets;
+    mbMySheets = !mbMySheets;
 }
-
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void SdMoveStyleSheetsUndoAction::Redo()
 {
     Undo();
 }
 
-/*************************************************************************
-|*
-|* Destruktor, Liste loeschen; ggfs. die enthaltenen StyleSheets loeschen
-|*
-\************************************************************************/
-
 SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
 {
-    if (bMySheets)
-    {
-        // die Liste rueckwaerts aufdroeseln; wenn Gliederungsvorlagen ent-
-        // halten sind gewaehrleistet dies den geringsten Broadcasting-Aufwand
-        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStyles->Last();
-        while (pSheet)
-        {
-            delete pSheet;
-            pSheet = (SfxStyleSheet*)pStyles->Prev();
-        }
-    }
-    delete pStyles;
-
-    for (List* pChildList = (List*)pListOfChildLists->First();
-         pChildList;
-         pChildList = (List*)pListOfChildLists->Next())
-    {
-        delete pChildList;
-    }
-    delete pListOfChildLists;
 }
-
-/*************************************************************************
-|*
-|* Kommentar liefern
-|*
-\************************************************************************/
 
 String SdMoveStyleSheetsUndoAction::GetComment() const
 {
