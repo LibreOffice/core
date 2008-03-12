@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:07:22 $
+#   last change: $Author: rt $ $Date: 2008-03-12 11:24:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ SVSDI1DEPEND= \
     _drvwsh.sdi \
     drviewsh.sdi \
     mediaob.sdi \
+    tables.sdi\
     outlnvsh.sdi \
     slidvish.sdi \
     SlideSorterController.sdi \

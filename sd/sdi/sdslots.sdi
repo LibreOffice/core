@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdslots.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:20 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,5 +109,6 @@ ModulePrefix( "Sd" )
         include "SlideSorterController.sdi"
         include "ViewShellBase.sdi"
         include "mediaob.sdi"
+        include "tables.sdi"
         include "TaskPaneViewShell.sdi"
 }
