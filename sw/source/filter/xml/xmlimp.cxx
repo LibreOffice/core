@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:21:30 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:39:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,8 @@
 
 #include <xmloff/xmlmetai.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
