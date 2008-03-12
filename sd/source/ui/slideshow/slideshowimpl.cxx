@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 15:51:01 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,9 +592,22 @@ SlideshowImpl::~SlideshowImpl()
         setAutoSaveState( true );
 
     if( mnEndShowEvent )
+    {
         Application::RemoveUserEvent( mnEndShowEvent );
+        mnEndShowEvent = 0;
+    }
+
     if( mnContextMenuEvent )
+    {
         Application::RemoveUserEvent( mnContextMenuEvent );
+        mnContextMenuEvent = 0;
+    }
+
+    if( mnUpdateEvent )
+    {
+        Application::RemoveUserEvent( mnUpdateEvent );
+        mnUpdateEvent = 0;
+    }
 
     maInputFreezeTimer.Stop();
 
@@ -1980,7 +1993,8 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
     // doing some nMagic
     const rtl::Reference<SlideshowImpl> this_(this);
 
-    try
+    Reference< XSlideShow > xShow( mxShow );
+    if( mxShow.is() ) try
     {
         // TODO(Q3): Evaluate under various systems and setups,
         // whether this is really necessary. Under WinXP and Matrox
@@ -1990,8 +2004,6 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 // currently no solution, because this kills sound (at least on Windows)
 //         // Boost our prio, as long as we're in the render loop
 //         ::canvas::tools::PriorityBooster aBooster(2);
-
-        Reference< XSlideShow > xShow( mxShow );
 
         double fUpdate = 0.0;
         if( !xShow->update(fUpdate) )
