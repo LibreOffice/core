@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:39:39 $
+#   last change: $Author: rt $ $Date: 2008-03-12 12:55:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ SRC1FILES =  \
         instable.src \
         mergetbl.src \
         rowht.src \
-        split.src \
         splittbl.src \
         table.src \
         tabledlg.src \
@@ -72,7 +71,6 @@ SLOFILES =  \
         $(SLO)$/instable.obj \
         $(SLO)$/mergetbl.obj \
         $(SLO)$/rowht.obj \
-        $(SLO)$/split.obj \
         $(SLO)$/splittbl.obj \
         $(SLO)$/tabledlg.obj \
         $(SLO)$/tablemgr.obj \
