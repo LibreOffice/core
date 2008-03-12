@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:57:02 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,11 +105,30 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                                 const XOutputDevice&    rXOut,
                                 const SfxItemSet&       rFillItemSet,
                                 bool                    bIsShadow       ) :
-    mrObj( rObj ),
     mrXOut( rXOut ),
     mbCommentWritten( false )
 {
-    const SfxItemSet& rSet = rObj.GetMergedItemSet();
+    basegfx::B2DPolyPolygon aGeometry(rObj.TakeXorPoly(sal_True));
+    prepare( rXOut, rObj.GetMergedItemSet(), aGeometry, rFillItemSet, bIsShadow );
+}
+
+ImpGraphicFill::ImpGraphicFill( const XOutputDevice& rXOut,
+                                const SfxItemSet& rSet,
+                                basegfx::B2DPolyPolygon& aGeometry,
+                                const SfxItemSet& rFillItemSet,
+                                bool bIsShadow ) :
+    mrXOut( rXOut ),
+    mbCommentWritten( false )
+{
+    prepare( rXOut, rSet, aGeometry, rFillItemSet, bIsShadow );
+}
+
+void ImpGraphicFill::prepare( const XOutputDevice&  rXOut,
+                         const SfxItemSet& rSet,
+                         basegfx::B2DPolyPolygon& aGeometry,
+                         const SfxItemSet& rFillItemSet,
+                         bool bIsShadow     )
+{
     XFillStyle eFillStyle( ITEMVALUE( rFillItemSet, XATTR_FILLSTYLE, XFillStyleItem ) );
     XGradient aGradient(((const XFillGradientItem&)rFillItemSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
     XHatch aHatch(((const XFillHatchItem&)rFillItemSet.Get(XATTR_FILLHATCH)).GetHatchValue());
@@ -126,8 +145,6 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
         pMtf=mrXOut.GetOutDev()->GetConnectMetaFile();
     if( pMtf != NULL )
     {
-        basegfx::B2DPolyPolygon aGeometry(mrObj.TakeXorPoly(sal_True));
-
         // #104686# Prune non-closed polygons from geometry
         basegfx::B2DPolyPolygon aPolyPoly;
         sal_uInt32 i;
