@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undofactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 14:23:53 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ class UndoFactory : public SdrUndoFactory
 public:
     virtual SdrUndoAction* CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect = false);
     virtual SdrUndoAction* CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect = false);
-    virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj );
+    virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
     virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
     virtual SdrUndoAction* CreateUndoGeoObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false );
