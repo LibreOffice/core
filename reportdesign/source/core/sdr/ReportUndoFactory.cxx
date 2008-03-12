@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportUndoFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,9 +131,9 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObje
     return m_pUndoFactory->CreateUndoObjectLayerChange( rObject, aOldLayer, aNewLayer );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj )
+SdrUndoAction* OReportUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
 {
-    return m_pUndoFactory->CreateUndoObjectSetText( rNewObj );
+    return m_pUndoFactory->CreateUndoObjectSetText( rNewObj, nText );
 }
 
 // layer
