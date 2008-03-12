@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:51:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace xmloff::token;
 
 
