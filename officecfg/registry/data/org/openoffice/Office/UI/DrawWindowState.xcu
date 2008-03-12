@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 16:55:47 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 08:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,6 +477,20 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Formatting</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Table</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
