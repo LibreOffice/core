@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterContainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:48:49 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 07:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,17 @@ sal_Bool SAL_CALL CFilterContainer::getNextFilter( FILTER_ENTRY_T& nextFilterEnt
     return bRet;
 }
 
+//-----------------------------------------------------------------------------------------
+void SAL_CALL CFilterContainer::setCurrentFilter( const ::rtl::OUString& aName )
+{
+    m_sCurrentFilter = aName;
+}
+
+//-----------------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL CFilterContainer::getCurrentFilter() const
+{
+    return m_sCurrentFilter;
+}
 
 //###################################################################
 
