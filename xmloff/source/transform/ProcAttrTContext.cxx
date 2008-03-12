@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcAttrTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:23:14 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@
 #include <xmloff/nmspmap.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
