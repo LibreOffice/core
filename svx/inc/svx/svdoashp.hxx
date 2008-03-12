@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:30:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,8 @@ public:
 
     // #i33136#
     static bool doConstructOrthogonal(const ::rtl::OUString& rName);
+
+    using SdrTextObj::NbcSetOutlinerParaObject;
 };
 
 #endif //_SVDOASHP_HXX
