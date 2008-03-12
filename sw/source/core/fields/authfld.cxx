@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:22:54 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using namespace rtl;
+using rtl::OUString;
 
 
 typedef SwAuthEntry* SwAuthEntryPtr;
