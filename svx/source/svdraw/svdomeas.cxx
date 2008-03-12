@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:09 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,8 +488,11 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
     if (rPol.eUsedTextVPos==SDRMEASURE_TEXTVAUTO) rPol.eUsedTextVPos=SDRMEASURE_ABOVE;
     FASTBOOL bBrkLine=rPol.eUsedTextVPos==SDRMEASURETEXT_BREAKEDLINE;
-    if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED) {
-        if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1) {
+    if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED)
+    {
+        OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
+        if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
+        {
             bBrkLine=TRUE; // Unterbrochene Linie, wenn nur 1 Absatz.
         }
     }
@@ -747,9 +750,12 @@ FASTBOOL SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara,
 
 void SdrMeasureObj::UndirtyText() const
 {
-    if (bTextDirty) {
+    if (bTextDirty)
+    {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        if (pOutlinerParaObject==NULL) {
+        OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
+        if(pOutlinerParaObject==NULL)
+        {
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD), ESelection(0,0));
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE), EE_FEATURE_FIELD),ESelection(0,1));
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_UNIT), EE_FEATURE_FIELD),ESelection(0,2));
@@ -761,10 +767,13 @@ void SdrMeasureObj::UndirtyText() const
             rOutliner.SetParaAttribs(0, GetObjectItemSet());
 
             // casting auf nonconst
-            ((SdrMeasureObj*)this)->pOutlinerParaObject=rOutliner.CreateParaObject();
-        } else {
+            const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( rOutliner.CreateParaObject() );
+        }
+        else
+        {
             rOutliner.SetText(*pOutlinerParaObject);
         }
+
         rOutliner.SetUpdateMode(TRUE);
         rOutliner.UpdateFields();
         Size aSiz(rOutliner.CalcTextSize());
@@ -1570,14 +1579,16 @@ const Size& SdrMeasureObj::GetTextSize() const
 
 OutlinerParaObject* SdrMeasureObj::GetOutlinerParaObject() const
 {
-    if (bTextDirty) UndirtyText();
-    return pOutlinerParaObject;
+    if(bTextDirty)
+        UndirtyText();
+    return SdrTextObj::GetOutlinerParaObject();
 }
 
 void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject(pTextObject);
-    if (pOutlinerParaObject==NULL) SetTextDirty(); // Text neu berechnen!
+    if(SdrTextObj::GetOutlinerParaObject())
+        SetTextDirty(); // Text neu berechnen!
 }
 
 void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText,
