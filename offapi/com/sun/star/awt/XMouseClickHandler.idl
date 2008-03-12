@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMouseClickHandler.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:47:32 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,27 @@ published interface XMouseClickHandler: ::com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been pressed on a window.
+
+        @return
+            When <FALSE/> is returned the other handlers are called and a
+            following handling of the event by the broadcaster takes place.
+            Otherwise, when <TRUE/> is returned, no other handler will be
+            called and the broadcaster will take no further actions
+            regarding the event.
      */
     boolean mousePressed( [in] com::sun::star::awt::MouseEvent e );
 
     //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been released on a window.
-     */
+
+        @return
+            When <FALSE/> is returned the other handlers are called and a
+            following handling of the event by the broadcaster takes place.
+            Otherwise, when <TRUE/> is returned, no other handler will be
+            called and the broadcaster will take no further actions
+            regarding the event.
+    */
     boolean mouseReleased( [in] com::sun::star::awt::MouseEvent e );
 
 };
