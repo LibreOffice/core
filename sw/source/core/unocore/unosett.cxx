@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:13:42 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@
 #include <numrule.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -2306,7 +2306,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
 /*-- 19.07.00 07:49:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
+uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
     throw(RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
@@ -2425,7 +2425,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXNumberingRules::addPropertyChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2433,7 +2433,7 @@ void SwXNumberingRules::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXNumberingRules::removePropertyChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2441,7 +2441,7 @@ void SwXNumberingRules::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXNumberingRules::addVetoableChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2449,7 +2449,7 @@ void SwXNumberingRules::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXNumberingRules::removeVetoableChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2698,7 +2698,7 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
 /*-- 25.10.00 10:15:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  ) throw(RuntimeException)
+uno::Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  ) throw(RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
     return aRef;
@@ -2819,7 +2819,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXTextColumns::addPropertyChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2827,7 +2827,7 @@ void SwXTextColumns::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXTextColumns::removePropertyChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2835,7 +2835,7 @@ void SwXTextColumns::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXTextColumns::addVetoableChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
@@ -2843,7 +2843,7 @@ void SwXTextColumns::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXTextColumns::removeVetoableChangeListener(
-    const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
+    const OUString& /*rPropertyName*/, const uno::Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
