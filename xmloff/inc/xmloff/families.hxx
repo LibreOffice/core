@@ -4,9 +4,9 @@
  *
  *  $RCSfile: families.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:26:43 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 10:22:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@
 #define XML_STYLE_FAMILY_TABLE_CELL             204
 #define XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME "table-cell"
 #define XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX   "ce"
+#define XML_STYLE_FAMILY_TABLE_TEMPLATE_ID      205
 
 // Impress/Draw
 // reserved: 300..399
