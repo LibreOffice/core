@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:47:30 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 09:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,11 +651,14 @@ BOOL SdrMarkView::ImpIsFrameHandles() const
     ULONG nMarkAnz=GetMarkedObjectCount();
     BOOL bFrmHdl=nMarkAnz>nFrameHandlesLimit || bForceFrameHandles;
     BOOL bStdDrag=eDragMode==SDRDRAG_MOVE;
-    if (nMarkAnz==1 && bStdDrag && bFrmHdl) {
+    if (nMarkAnz==1 && bStdDrag && bFrmHdl)
+    {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor) {
+        if (pObj->GetObjInventor()==SdrInventor)
+        {
             UINT16 nIdent=pObj->GetObjIdentifier();
-            if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE ) {
+            if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE || nIdent==OBJ_TABLE )
+            {
                 bFrmHdl=FALSE;
             }
         }
