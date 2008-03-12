@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:15:12 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 12:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,10 @@
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
 #endif
+
+namespace sd { namespace ui { namespace table {
+    extern SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
+} } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -528,8 +532,20 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             if( GetView() )
                 bConsumed = GetView()->getSmartTags().KeyInput(rKEvt);
 
-            if( !bConsumed &&  HasCurrentFunction())
-                bReturn = GetCurrentFunction()->KeyInput(rKEvt);
+
+            if( !bConsumed )
+            {
+                rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+                if( !xSelectionController.is() || !xSelectionController->onKeyInput( rKEvt, pWin ) )
+                {
+                    if(HasCurrentFunction())
+                        bReturn = GetCurrentFunction()->KeyInput(rKEvt);
+                }
+                else
+                {
+                    bReturn = TRUE;
+                }
+            }
         }
     }
 
@@ -595,8 +611,17 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
         if( GetView() )
             bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
 
-        if( !bConsumed && HasCurrentFunction() )
-            GetCurrentFunction()->MouseButtonDown(rMEvt);
+        if( !bConsumed )
+        {
+            rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+            if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
+            {
+                if (HasCurrentFunction())
+                {
+                    GetCurrentFunction()->MouseButtonDown(rMEvt);
+                }
+            }
+        }
     }
 }
 
@@ -632,9 +657,14 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseMove(rMEvt);
     }
-    else if(HasCurrentFunction())
+    else
     {
-            GetCurrentFunction()->MouseMove(rMEvt);
+        rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+        if( !xSelectionController.is() || !xSelectionController->onMouseMove( rMEvt, pWin ) )
+        {
+            if(HasCurrentFunction())
+                GetCurrentFunction()->MouseMove(rMEvt);
+        }
     }
 }
 
@@ -659,9 +689,14 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseButtonUp(rMEvt);
     }
-    else if( HasCurrentFunction())
+    else
     {
-            GetCurrentFunction()->MouseButtonUp(rMEvt);
+        rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+        if( !xSelectionController.is() || !xSelectionController->onMouseButtonUp( rMEvt, pWin ) )
+        {
+            if(HasCurrentFunction())
+                GetCurrentFunction()->MouseButtonUp(rMEvt);
+        }
     }
 
     if ( ! mpImpl->mpUpdateLockForMouse.expired())
@@ -1597,6 +1632,10 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
             case RID_DRAW_MEDIA_TOOLBOX:
                 pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
+                break;
+
+            case RID_DRAW_TABLE_TOOLBOX:
+                pShell = ::sd::ui::table::CreateTableObjectBar( mrViewShell, pView );
                 break;
 
             case RID_SVX_EXTRUSION_BAR:
