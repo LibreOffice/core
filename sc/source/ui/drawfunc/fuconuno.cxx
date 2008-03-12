@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:12:03 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 13:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@
 //#define _AEITEM_HXX
 #define _SFXRNGITEM_HXX
 //#define _SFXSLSTITM_HXX
-#define _SFXSTYLE_HXX //???
+//#define _SFXSTYLE_HXX
 
 
 
