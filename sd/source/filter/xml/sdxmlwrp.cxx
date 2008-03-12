@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:23:24 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -824,6 +824,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
+    mrDocShell.ClearUndoBuffer();
     return nRet == 0;
 }
 
@@ -903,6 +904,9 @@ sal_Bool SdXMLFilter::Export()
             { MAP_LEN( "StyleFamilies" ), 0,
                   &::getCppuType( (Sequence<sal_Int32>*)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "TargetStorage" ), 0, &embed::XStorage::static_type(),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -919,6 +923,9 @@ sal_Bool SdXMLFilter::Export()
         // Set base URI
         OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
         xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL( true ) ) );
+
+        OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        xInfoSet->setPropertyValue( sTargetStorage, Any( xStorage ) );
 
         if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
         {
