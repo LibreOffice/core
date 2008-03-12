@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:44:22 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,8 @@
 #include <svtools/optionsdlg.hxx>
 #endif
 
+#include <vcl/msgbox.hxx>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
@@ -136,7 +138,7 @@ using rtl::OUString;
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
 #define WININDEX_AUTOSAVE           ((USHORT)6)
-#define WININDEX_NOPRETTYPRINTING   ((USHORT)9)
+#define WININDEX_SAVEURL_RELFSYS    ((USHORT)9)
 
 // -------------------- --------------------------------------------------
 class FilterWarningDialog_Impl : public ModalDialog
@@ -174,7 +176,7 @@ void    FilterWarningDialog_Impl::SetFilterName(const String& rFilterUIName)
 class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
 {
     sal_Bool bWarning;
-    com::sun::star::uno::Sequence<rtl::OUString> aPropNames;
+    com::sun::star::uno::Sequence< OUString > aPropNames;
 
     public:
         SvxAlienFilterWarningConfig_Impl();
@@ -229,11 +231,12 @@ void SvxAlienFilterWarningConfig_Impl::Commit()
 
 struct SvxSaveTabPage_Impl
 {
-    Reference<XNameContainer>   xFact;
-    Sequence< ::rtl::OUString>   aFilterArr[APP_COUNT];
-    Sequence<sal_Bool>          aAlienArr[APP_COUNT];
-    Sequence<OUString>          aUIFilterArr[APP_COUNT];
-    rtl::OUString               aDefaultArr[APP_COUNT];
+    Reference< XNameContainer > xFact;
+    Sequence< OUString >        aFilterArr[APP_COUNT];
+    Sequence< sal_Bool >        aAlienArr[APP_COUNT];
+    Sequence< sal_Bool >        aODFArr[APP_COUNT];
+    Sequence< OUString >        aUIFilterArr[APP_COUNT];
+    OUString                    aDefaultArr[APP_COUNT];
     sal_Bool                    aDefaultReadonlyArr[APP_COUNT];
     sal_Bool                    bInitialized;
 
@@ -254,60 +257,71 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
+
     aLoadFL             ( this, SVX_RES( LB_LOAD ) ),
     aLoadUserSettingsCB ( this, SVX_RES( CB_LOAD_SETTINGS ) ),
     aLoadDocPrinterCB   ( this, SVX_RES( CB_LOAD_DOCPRINTER ) ),
-    aSaveBox            ( this, SVX_RES( GB_SAVE ) ),
-    aDocInfoBtn         ( this, SVX_RES( BTN_DOCINFO ) ),
+
+    aSaveFL             ( this, SVX_RES( GB_SAVE ) ),
+    aDocInfoCB          ( this, SVX_RES( BTN_DOCINFO ) ),
     aBackupFI           ( this, SVX_RES( FI_BACKUP ) ),
-    aBackupBtn          ( this, SVX_RES( BTN_BACKUP ) ),
-    aAutoSaveBtn        ( this, SVX_RES( BTN_AUTOSAVE ) ),
+    aBackupCB           ( this, SVX_RES( BTN_BACKUP ) ),
+    aAutoSaveCB         ( this, SVX_RES( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, SVX_RES( ED_AUTOSAVE ) ),
-    aMinuteText         ( this, SVX_RES( FT_MINUTE ) ),
-    aNoPrettyPrintingBtn( this, SVX_RES( BTN_NOPRETTYPRINTING ) ),
-    aWarnAlienFormatBtn ( this, SVX_RES( BTN_WARNALIENFORMAT ) ),
-    aRelBox             ( this, SVX_RES( GB_RELATIVE ) ),
-    aRelFsysBtn         ( this, SVX_RES( BTN_RELATIVE_FSYS ) ),
-    aRelInetBtn         ( this, SVX_RES( BTN_RELATIVE_INET ) ),
-    aFilterFL           ( this, SVX_RES( FL_FILTER ) ),
-    aApplicationFT      ( this, SVX_RES( FT_APP ) ),
-    aApplicationLB      ( this, SVX_RES( LB_APP ) ),
-    aFiltersFT          ( this, SVX_RES( FT_FILTER ) ),
-    aFiltersFI          ( this, SVX_RES( FI_FILTER ) ),
-    aFiltersLB          ( this, SVX_RES( LB_FILTER ) ),
-    aWarningFT          ( this, SVX_RES( FT_WARN ) ),
-    pImpl( new SvxSaveTabPage_Impl )
+    aMinuteFT           ( this, SVX_RES( FT_MINUTE ) ),
+    aRelativeFsysCB     ( this, SVX_RES( BTN_RELATIVE_FSYS ) ),
+    aRelativeInetCB     ( this, SVX_RES( BTN_RELATIVE_INET ) ),
+
+    aDefaultFormatFL    ( this, SVX_RES( FL_FILTER ) ),
+    aODFVersionFT       ( this, SVX_RES( FT_ODF_VERSION ) ),
+    aODFVersionLB       ( this, SVX_RES( LB_ODF_VERSION ) ),
+    aSizeOptimizationCB ( this, SVX_RES( BTN_NOPRETTYPRINTING ) ),
+    aWarnAlienFormatCB  ( this, SVX_RES( BTN_WARNALIENFORMAT ) ),
+    aDocTypeFT          ( this, SVX_RES( FT_APP ) ),
+    aDocTypeLB          ( this, SVX_RES( LB_APP ) ),
+    aSaveAsFT           ( this, SVX_RES( FT_FILTER ) ),
+    aSaveAsFI           ( this, SVX_RES( FI_FILTER ) ),
+    aSaveAsLB           ( this, SVX_RES( LB_FILTER ) ),
+    aODFWarningFI       ( this, SVX_RES( FI_ODF_WARNING ) ),
+    aODFWarningFT       ( this, SVX_RES( FT_WARN ) ),
+
+    pImpl               ( new SvxSaveTabPage_Impl )
+
 {
+    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    aODFWarningFI.SetImage(
+        Image( SVX_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
+
     FreeResource();
 
     Link aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
-    aAutoSaveBtn.SetClickHdl( aLink );
+    aAutoSaveCB.SetClickHdl( aLink );
     aAutoSaveEdit.SetMaxTextLen( 2 );
 
     SvtModuleOptions aModuleOpt;
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_MATH ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_MATH ));
     else
     {
         pImpl->aDefaultArr[APP_MATH] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH);
         pImpl->aDefaultReadonlyArr[APP_MATH] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_MATH);
     }
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_DRAW ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_DRAW ));
     else
     {
         pImpl->aDefaultArr[APP_DRAW] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW);
         pImpl->aDefaultReadonlyArr[APP_DRAW] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_DRAW);
     }
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_IMPRESS ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_IMPRESS ));
     else
     {
         pImpl->aDefaultArr[APP_IMPRESS] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS);
         pImpl->aDefaultReadonlyArr[APP_IMPRESS] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_IMPRESS);
     }
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_CALC ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_CALC ));
     else
     {
         pImpl->aDefaultArr[APP_CALC] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC);
@@ -315,9 +329,9 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     }
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER ));
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER_WEB ));
-        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER_GLOBAL ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER_WEB ));
+        aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER_GLOBAL ));
     }
     else
     {
@@ -329,9 +343,11 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
         pImpl->aDefaultReadonlyArr[APP_WRITER_GLOBAL] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_WRITERGLOBAL);
     }
 
-    Link aLk = LINK(this, SfxSaveTabPage, FilterHdl_Impl);
-    aApplicationLB.SetSelectHdl(aLk);
-    aFiltersLB.SetSelectHdl(aLk);
+    aLink = LINK( this, SfxSaveTabPage, ODFVersionHdl_Impl );
+    aODFVersionLB.SetSelectHdl( aLink );
+    aLink = LINK( this, SfxSaveTabPage, FilterHdl_Impl );
+    aDocTypeLB.SetSelectHdl( aLink );
+    aSaveAsLB.SetSelectHdl( aLink );
 
     DetectHiddenControls();
 }
@@ -371,15 +387,16 @@ OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
 // -----------------------------------------------------------------------
 bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
 {
-    const ::rtl::OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
-    sal_Bool bAlien = sal_False;
-    ::rtl::OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
-    ::rtl::OUString sUIName;
+    const OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
+    sal_Bool bAlien = sal_False, bODF = sal_False;
+    OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
+    OUString sUIName;
     for(int nFilter = 0; nFilter < pImpl->aFilterArr[nPos].getLength(); nFilter++)
     {
         if( pImpl->aDefaultArr[nPos] == pFilters[nFilter] )
         {
             bAlien = pImpl->aAlienArr[nPos][nFilter];
+            bODF = pImpl->aODFArr[nPos][nFilter];
             sUIName = pUIFilters[nFilter];;
             break;
         }
@@ -392,26 +409,26 @@ void SfxSaveTabPage::DetectHiddenControls()
 {
     long nDelta = 0;
     // the index of the first child window which perhaps have to move upwards
-    USHORT nWinIndex = WININDEX_NOPRETTYPRINTING;
+    USHORT nWinIndex = WININDEX_SAVEURL_RELFSYS;
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
     if ( aOptionsDlgOpt.IsOptionHidden( C2S("Backup"), CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "Backup"
         aBackupFI.Hide();
-        aBackupBtn.Hide();
+        aBackupCB.Hide();
         // the other controls have to move upwards the height of checkbox + space
-        nDelta = aAutoSaveBtn.GetPosPixel().Y() - aBackupBtn.GetPosPixel().Y();
+        nDelta = aAutoSaveCB.GetPosPixel().Y() - aBackupCB.GetPosPixel().Y();
     }
 
     if ( aOptionsDlgOpt.IsOptionHidden( C2S("AutoSave"), CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "AutoSave"
-        aAutoSaveBtn.Hide();
+        aAutoSaveCB.Hide();
         aAutoSaveEdit.Hide();
-        aMinuteText.Hide();
+        aMinuteFT.Hide();
         // the other controls have to move upwards the height of checkbox + space
-        nDelta += aNoPrettyPrintingBtn.GetPosPixel().Y() - aAutoSaveBtn.GetPosPixel().Y();
+        nDelta += aRelativeFsysCB.GetPosPixel().Y() - aAutoSaveCB.GetPosPixel().Y();
     }
     else if ( nDelta > 0 )
         // the "AutoSave" controls have to move upwards too
@@ -442,36 +459,42 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     if ( aLoadDocPrinterCB.IsChecked() != aLoadDocPrinterCB.GetSavedValue() )
         aSaveOpt.SetLoadDocumentPrinter( aLoadDocPrinterCB.IsChecked() );
 
-    if ( aDocInfoBtn.IsChecked() != aDocInfoBtn.GetSavedValue() )
+    if ( aODFVersionLB.GetSelectEntryPos() != aODFVersionLB.GetSavedValue() )
+    {
+        long nVersion = long( aODFVersionLB.GetEntryData( aODFVersionLB.GetSelectEntryPos() ) );
+        aSaveOpt.SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ) );
+    }
+
+    if ( aDocInfoCB.IsChecked() != aDocInfoCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
-                               aDocInfoBtn.IsChecked() ) );
+                               aDocInfoCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
-    if ( aBackupBtn.IsEnabled() && aBackupBtn.IsChecked() != aBackupBtn.GetSavedValue() )
+    if ( aBackupCB.IsEnabled() && aBackupCB.IsChecked() != aBackupCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
-                               aBackupBtn.IsChecked() ) );
+                               aBackupCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
-    if ( aNoPrettyPrintingBtn.IsChecked() != aNoPrettyPrintingBtn.GetSavedValue() )
+    if ( aSizeOptimizationCB.IsChecked() != aSizeOptimizationCB.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !aNoPrettyPrintingBtn.IsChecked() ) );
+        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !aSizeOptimizationCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
-    if ( aAutoSaveBtn.IsChecked() != aAutoSaveBtn.GetSavedValue() )
+    if ( aAutoSaveCB.IsChecked() != aAutoSaveCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
-                               aAutoSaveBtn.IsChecked() ) );
+                               aAutoSaveCB.IsChecked() ) );
         bModified |= TRUE;
     }
-    if ( aWarnAlienFormatBtn.IsChecked() != aWarnAlienFormatBtn.GetSavedValue() )
+    if ( aWarnAlienFormatCB.IsChecked() != aWarnAlienFormatCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
-                               aWarnAlienFormatBtn.IsChecked() ) );
+                               aWarnAlienFormatCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
@@ -482,17 +505,17 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
         bModified |= TRUE;
     }
     // relativ speichern
-    if ( aRelFsysBtn.IsChecked() != aRelFsysBtn.GetSavedValue() )
+    if ( aRelativeFsysCB.IsChecked() != aRelativeFsysCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
-                               aRelFsysBtn.IsChecked() ) );
+                               aRelativeFsysCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
-    if ( aRelInetBtn.IsChecked() != aRelInetBtn.GetSavedValue() )
+    if ( aRelativeInetCB.IsChecked() != aRelativeInetCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
-                               aRelInetBtn.IsChecked() ) );
+                               aRelativeInetCB.IsChecked() ) );
         bModified |= TRUE;
     }
 
@@ -537,6 +560,40 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
+sal_Bool isODFFormat( OUString sFilter )
+{
+    static const char* aODFFormats[] =
+    {
+        "writer8",
+        "writer8_template",
+        "writerglobal8",
+        "writerglobal8_writer",
+        "calc8",
+        "calc8_template",
+        "draw8",
+        "draw8_template",
+        "impress8",
+        "impress8_template",
+        "impress8_draw",
+        "chart8",
+        "math8",
+        NULL
+    };
+
+    sal_Bool bRet = sal_False;
+    int i = 0;
+    while ( aODFFormats[i] != NULL )
+    {
+        if ( sFilter.equalsAscii( aODFFormats[i++] ) )
+        {
+            bRet = sal_True;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
 void SfxSaveTabPage::Reset( const SfxItemSet& )
 {
     SvtSaveOptions aSaveOpt;
@@ -557,9 +614,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
             if(xQuery.is())
             {
-                for(USHORT n = 0; n < aApplicationLB.GetEntryCount(); n++)
+                for(USHORT n = 0; n < aDocTypeLB.GetEntryCount(); n++)
                 {
-                    long nData = (long) aApplicationLB.GetEntryData(n);
+                    long nData = (long) aDocTypeLB.GetEntryData(n);
                     OUString sCommand;
                     sCommand = C2U("matchByDocumentService=%1:iflags=");
                     sCommand += String::CreateFromInt32(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT);
@@ -582,8 +639,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     sTmp.SearchAndReplaceAscii("%1", sReplace);
                     sCommand = sTmp;
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-                    SequenceAsVector< ::rtl::OUString > lList;
+                    SequenceAsVector< OUString > lList;
                     SequenceAsVector< sal_Bool > lAlienList;
+                    SequenceAsVector< sal_Bool > lODFList;
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
@@ -593,14 +651,16 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                             sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Flags"),sal_Int32());
                             lList.push_back(sFilter);
                             lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
+                            lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }
                     pImpl->aFilterArr[nData] = lList.getAsConstList();
                     pImpl->aAlienArr[nData] = lAlienList.getAsConstList();
+                    pImpl->aODFArr[nData] = lODFList.getAsConstList();
                 }
             }
-            aApplicationLB.SelectEntryPos(0);
-            FilterHdl_Impl(&aApplicationLB);
+            aDocTypeLB.SelectEntryPos(0);
+            FilterHdl_Impl(&aDocTypeLB);
         }
         catch(Exception& )
         {
@@ -610,65 +670,70 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         pImpl->bInitialized = sal_True;
     }
 
-    aDocInfoBtn.Check(aSaveOpt.IsDocInfoSave());
-//    aDocInfoBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE));
+    aDocInfoCB.Check(aSaveOpt.IsDocInfoSave());
+//    aDocInfoCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE));
 
-    aBackupBtn.Check(aSaveOpt.IsBackup());
+    aBackupCB.Check(aSaveOpt.IsBackup());
     BOOL bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
-    aBackupBtn.Enable(!bBackupRO);
+    aBackupCB.Enable(!bBackupRO);
     aBackupFI.Show(bBackupRO);
 
-    aAutoSaveBtn.Check(aSaveOpt.IsAutoSave());
-    aWarnAlienFormatBtn.Check(aSaveOpt.IsWarnAlienFormat());
-    aWarnAlienFormatBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
-//    aAutoSaveBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
+    aAutoSaveCB.Check(aSaveOpt.IsAutoSave());
+    aWarnAlienFormatCB.Check(aSaveOpt.IsWarnAlienFormat());
+    aWarnAlienFormatCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
+//    aAutoSaveCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
     // the pretty printing
-    aNoPrettyPrintingBtn.Check( !aSaveOpt.IsPrettyPrinting());
-//    aNoPrettyPrintingBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
+    aSizeOptimizationCB.Check( !aSaveOpt.IsPrettyPrinting());
+//    aSizeOptimizationCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
 
 
     aAutoSaveEdit.SetValue( aSaveOpt.GetAutoSaveTime() );
 //    aAutoSaveEdit.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME));
 
     // relativ speichern
-    aRelFsysBtn.Check( aSaveOpt.IsSaveRelFSys() );
-//    aRelFsysBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS));
+    aRelativeFsysCB.Check( aSaveOpt.IsSaveRelFSys() );
+//    aRelativeFsysCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS));
 
-    aRelInetBtn.Check( aSaveOpt.IsSaveRelINet() );
-//    aRelInetBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELINET));
+    aRelativeInetCB.Check( aSaveOpt.IsSaveRelINet() );
+//    aRelativeInetCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELINET));
 
-    AutoClickHdl_Impl( &aAutoSaveBtn );
+    void* pDefaultVersion = (void*)long( aSaveOpt.GetODFDefaultVersion() );
+    aODFVersionLB.SelectEntryPos( aODFVersionLB.GetEntryPos( pDefaultVersion ) );
 
-    aDocInfoBtn.SaveValue();
-    aBackupBtn.SaveValue();
-    aWarnAlienFormatBtn.SaveValue();
-    aNoPrettyPrintingBtn.SaveValue();
-    aAutoSaveBtn.SaveValue();
+    AutoClickHdl_Impl( &aAutoSaveCB );
+    ODFVersionHdl_Impl( &aODFVersionLB );
+
+    aDocInfoCB.SaveValue();
+    aBackupCB.SaveValue();
+    aWarnAlienFormatCB.SaveValue();
+    aSizeOptimizationCB.SaveValue();
+    aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
 //  aAutoSavePromptBtn.SaveValue();
 
-    aRelFsysBtn.SaveValue();
-    aRelInetBtn.SaveValue();
+    aRelativeFsysCB.SaveValue();
+    aRelativeInetCB.SaveValue();
+    aODFVersionLB.SaveValue();
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 {
-    if ( pBox == &aAutoSaveBtn )
+    if ( pBox == &aAutoSaveCB )
     {
-        if ( aAutoSaveBtn.IsChecked() )
+        if ( aAutoSaveCB.IsChecked() )
         {
             aAutoSaveEdit.Enable();
-            aMinuteText.Enable();
+            aMinuteFT.Enable();
 //          aAutoSavePromptBtn.Enable();
             aAutoSaveEdit.GrabFocus();
         }
         else
         {
             aAutoSaveEdit.Disable();
-            aMinuteText.Disable();
+            aMinuteFT.Disable();
 //          aAutoSavePromptBtn.Disable();
         }
     }
@@ -680,13 +745,25 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
+    sal_Int32 nFlags;
     const PropertyValue* pProperties = rProperties.getConstArray();
     for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
     {
         if(!pProperties[nProp].Name.compareToAscii("UIName"))
         {
             pProperties[nProp].Value >>= sRet;
-            break;
+//!            break;
+        }
+        else if(!pProperties[nProp].Name.compareToAscii("Flags"))
+        {
+            if ( pProperties[nProp].Value >>= nFlags )
+            {
+                nFlags &= 0x100;
+            }
+        }
+        else if(!pProperties[nProp].Name.compareToAscii("Name"))
+        {
+            pProperties[nProp].Value >>= sRet;
         }
     }
     return sRet;
@@ -696,18 +773,18 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
-    if(&aApplicationLB == pBox)
+    if(&aDocTypeLB == pBox)
     {
-        USHORT nPos = pBox->GetSelectEntryPos();
-        if(nPos < APP_COUNT)
+        USHORT nAppPos = pBox->GetSelectEntryPos();
+        if ( nAppPos < APP_COUNT )
         {
-            aFiltersLB.Clear();
-            const ::rtl::OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
-            if(!pImpl->aUIFilterArr[nPos].getLength())
+            aSaveAsLB.Clear();
+            const OUString* pFilters = pImpl->aFilterArr[nAppPos].getConstArray();
+            if(!pImpl->aUIFilterArr[nAppPos].getLength())
             {
-                pImpl->aUIFilterArr[nPos].realloc(pImpl->aFilterArr[nPos].getLength());
-                OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
-                for(int nFilter = 0; nFilter < pImpl->aFilterArr[nPos].getLength(); nFilter++)
+                pImpl->aUIFilterArr[nAppPos].realloc(pImpl->aFilterArr[nAppPos].getLength());
+                OUString* pUIFilters = pImpl->aUIFilterArr[nAppPos].getArray();
+                for(int nFilter = 0; nFilter < pImpl->aFilterArr[nAppPos].getLength(); nFilter++)
                 {
                     Any aProps = pImpl->xFact->getByName(pFilters[nFilter]);
                     Sequence<PropertyValue> aProperties;
@@ -715,26 +792,28 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
                     pUIFilters[nFilter] = lcl_ExtracUIName(aProperties);
                 }
             }
-            const OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getConstArray();
+            const OUString* pUIFilters = pImpl->aUIFilterArr[nAppPos].getConstArray();
             OUString sSelect;
-            for(int i = 0; i < pImpl->aUIFilterArr[nPos].getLength(); i++)
+            for(int i = 0; i < pImpl->aUIFilterArr[nAppPos].getLength(); i++)
             {
-                aFiltersLB.InsertEntry(pUIFilters[i]);
-                if(pFilters[i] == pImpl->aDefaultArr[nPos])
+                USHORT nEntryPos = aSaveAsLB.InsertEntry(pUIFilters[i]);
+                if ( pImpl->aODFArr[nAppPos][i] )
+                    aSaveAsLB.SetEntryData( nEntryPos, (void*)pImpl );
+                if(pFilters[i] == pImpl->aDefaultArr[nAppPos])
                     sSelect = pUIFilters[i];
             }
             if(sSelect.getLength())
-                aFiltersLB.SelectEntry(sSelect);
-            aFiltersFI.Show(pImpl->aDefaultReadonlyArr[nPos]);
-            aFiltersFT.Enable(!pImpl->aDefaultReadonlyArr[nPos]);
-            aFiltersLB.Enable(!pImpl->aDefaultReadonlyArr[nPos]);
+                aSaveAsLB.SelectEntry(sSelect);
+            aSaveAsFI.Show(pImpl->aDefaultReadonlyArr[nAppPos]);
+            aSaveAsFT.Enable(!pImpl->aDefaultReadonlyArr[nAppPos]);
+            aSaveAsLB.Enable(!pImpl->aDefaultReadonlyArr[nAppPos]);
         }
     }
     else
     {
         OUString sSelect = pBox->GetSelectEntry();
-        USHORT nPos = aApplicationLB.GetSelectEntryPos();
-        const ::rtl::OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
+        USHORT nPos = aDocTypeLB.GetSelectEntryPos();
+        const OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
         OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
         for(int i = 0; i < pImpl->aUIFilterArr[nPos].getLength(); i++)
             if(pUIFilters[i] == sSelect)
@@ -745,6 +824,35 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 
         pImpl->aDefaultArr[nPos] = sSelect;
     }
+
+    ODFVersionHdl_Impl( &aSaveAsLB );
     return 0;
 };
+
+IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
+{
+    long nVersion = long( aODFVersionLB.GetEntryData( aODFVersionLB.GetSelectEntryPos() ) );
+    bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) == SvtSaveOptions::ODFVER_012;
+    if ( bShown )
+    {
+        bool bHasODFFormat = false;
+        USHORT i = 0, nCount = aSaveAsLB.GetEntryCount();
+        for ( ; i < nCount; ++ i )
+        {
+            if ( aSaveAsLB.GetEntryData(i) != NULL )
+            {
+                bHasODFFormat = true;
+                break;
+            }
+        }
+
+        bShown = !bHasODFFormat
+                || ( aSaveAsLB.GetEntryData( aSaveAsLB.GetSelectEntryPos() ) != NULL );
+    }
+
+    aODFWarningFI.Show( !bShown );
+    aODFWarningFT.Show( !bShown );
+
+    return 0;
+}
 
