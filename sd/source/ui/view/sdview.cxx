@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:41:59 $
+ *  last change: $Author: rt $ $Date: 2008-03-12 11:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,15 @@
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#endif
 
 #include "View.hxx"
+
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -87,6 +94,9 @@
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
+
+#include <svx/svdetc.hxx>
+#include <svx/editstat.hxx>
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
@@ -163,7 +173,7 @@
 #endif
 
 using namespace com::sun::star;
-
+using namespace com::sun::star::uno;
 namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -722,16 +732,71 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 |*
 \************************************************************************/
 
-sal_Bool View::BeginTextEdit(
-    SdrObject* pObj, SdrPageView* pPV, Window* pWin,
-    sal_Bool bIsNewObj, SdrOutliner* pGivenOutliner,
-    OutlinerView* pGivenOutlinerView,
-    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus)
+static void SetSpellOptions( SdDrawDocument* pDoc, ULONG& rCntrl )
+{
+    BOOL bHideSpell = pDoc->GetHideSpell();
+    BOOL bOnlineSpell = pDoc->GetOnlineSpell();
+
+    if( bHideSpell )
+        rCntrl |= EE_CNTRL_NOREDLINES;
+    else
+        rCntrl &= ~EE_CNTRL_NOREDLINES;
+
+    if( bOnlineSpell )
+        rCntrl |= EE_CNTRL_ONLINESPELLING;
+    else
+        rCntrl &= ~EE_CNTRL_ONLINESPELLING;
+}
+
+sal_Bool View::SdrBeginTextEdit(
+    SdrObject* pObj, SdrPageView* pPV, ::Window* pWin,
+    sal_Bool bIsNewObj,
+    SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
+    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus )
 {
     GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
+    if( pOutl==NULL && pObj )
+        pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pObj->GetModel() );
+
+    // make draw&impress specific initialisations
+    if( pOutl )
+    {
+        pOutl->SetMinDepth(0);
+        pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
+        pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+        ULONG nCntrl = pOutl->GetControlWord();
+        nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
+        nCntrl |= EE_CNTRL_URLSFXEXECUTE;
+        nCntrl |= EE_CNTRL_MARKFIELDS;
+        nCntrl |= EE_CNTRL_AUTOCORRECT;
+
+        nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
+        if ( mpDoc->IsSummationOfParagraphs() )
+            nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+
+        SetSpellOptions( mpDoc, nCntrl );
+
+        pOutl->SetControlWord(nCntrl);
+
+        Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+        if ( xSpellChecker.is() )
+            pOutl->SetSpeller( xSpellChecker );
+
+        Reference< linguistic2::XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+        if( xHyphenator.is() )
+            pOutl->SetHyphenator( xHyphenator );
+
+        pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+
+        // in einem Gliederungstext darf nicht auf die 0-te
+        // Ebene ausgerueckt werden
+        if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+            pOutl->SetMinDepth(1);
+    }
+
     sal_Bool bReturn = FmFormView::SdrBeginTextEdit(
-        pObj, pPV, pWin, bIsNewObj, pGivenOutliner,
+        pObj, pPV, pWin, bIsNewObj, pOutl,
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
@@ -740,7 +805,18 @@ sal_Bool View::BeginTextEdit(
         ::Outliner* pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
-            pOL->SetBackgroundColor( pObj->GetPage()->GetPageBackgroundColor(pPV) );
+        {
+            Color aBackground;
+            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
+            {
+                aBackground = ImpGetTextEditBackgroundColor();
+            }
+            else
+            {
+                aBackground = pObj->GetPage()->GetPageBackgroundColor(pPV);
+            }
+            pOL->SetBackgroundColor( aBackground  );
+        }
 
         pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
         pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
@@ -749,92 +825,76 @@ sal_Bool View::BeginTextEdit(
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Texteingabe beenden
-|*
-\************************************************************************/
-
-SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally)
+/** ends current text editing */
+SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
 {
-    FunctionReference xFunc;
-    return SdrEndTextEdit(bDontDeleteReally, xFunc );
-}
+    SdrObjectWeakRef xObj( GetTextEditObject() );
 
-SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc)
-{
-    SdrObject* pObj = GetTextEditObject();
+    BOOL bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 
-    SdrEndTextEditKind eKind;
+    SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
-    ViewShell* pViewShell= mpDocSh->GetViewShell();
-
-    if( !xFunc.is() )
+    if( bDefaultTextRestored )
     {
-        if( pViewShell && pViewShell->ISA(DrawViewShell) )
+        if( xObj.is() && !xObj->IsEmptyPresObj() )
         {
-            xFunc = static_cast< DrawViewShell* >(pViewShell)->GetCurrentFunction();
-
-            if ( !xFunc.is() || !xFunc->ISA(FuText) )
-                xFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
+            xObj->SetEmptyPresObj( TRUE );
+        }
+        else
+        {
+            eKind = SDRENDTEXTEDIT_UNCHANGED;
         }
     }
-
-    FuText* pFuText = dynamic_cast<FuText*>(xFunc.get());
-    if ( pFuText )
+    else if( xObj.is() && xObj->IsEmptyPresObj() )
     {
-        BOOL bDefaultTextRestored = pFuText->RestoreDefaultText();
-
-        eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
-
-        SdrTextObj* pTextObj = pFuText->GetTextObj();
-
-        if( pTextObj )
-        {
-            if( bDefaultTextRestored )
-            {
-                if( !pTextObj->IsEmptyPresObj() )
-                {
-                    pTextObj->SetEmptyPresObj( TRUE );
-                }
-                else
-                {
-                    eKind = SDRENDTEXTEDIT_UNCHANGED;
-                }
-            }
-            else if( pTextObj->IsEmptyPresObj() && (pTextObj->GetEditOutlinerParaObject() == 0) )
-            {
-                pTextObj->SetEmptyPresObj( FALSE );
-            }
-        }
-
-        if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
-            pFuText->ObjectChanged();
-
-        // Tell the text function that the text object is not
-        // edited anymore and must not be accessed.
-        pFuText->TextEditingHasEnded(pTextObj);
-    }
-    else
-    {
-        eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
+        SdrTextObj* pObj = dynamic_cast< SdrTextObj* >( xObj.get() );
+        if( pObj && pObj->HasText() )
+            pObj->SetEmptyPresObj( FALSE );
     }
 
-    if( eKind != SDRENDTEXTEDIT_CHANGED )
-        pObj = 0;
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
 
-    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)pObj );
-
-    if( pObj )
+    if( xObj.is() )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
         if( pPage )
-            pPage->onEndTextEdit( pObj );
+            pPage->onEndTextEdit( xObj.get() );
     }
 
     return(eKind);
 }
 
+// --------------------------------------------------------------------
+
+/** restores the default text if the given text object is currently in edit mode and
+    no text has been entered already. Is only usefull just before text edit ends. */
+bool View::RestoreDefaultText( SdrTextObj* pTextObj )
+{
+    bool bRestored = false;
+
+    if( pTextObj && (pTextObj == GetTextEditObject()) )
+    {
+        if( !pTextObj->HasText() )
+        {
+            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
+
+            if(pPage)
+            {
+                bRestored = pPage->RestoreDefaultText( pTextObj );
+                if( bRestored )
+                {
+                    SdrOutliner* pOutliner = GetTextEditOutliner();
+                    pTextObj->SetTextEditOutliner( pOutliner );
+                    OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                    if (pOutliner)
+                        pOutliner->SetText(*pParaObj);
+                }
+            }
+        }
+    }
+
+    return bRestored;
+}
 
 /*************************************************************************
 |*
