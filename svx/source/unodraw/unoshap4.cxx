@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:12:36 $
+ *  last change: $Author: rt $ $Date: 2008-03-13 09:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -606,8 +606,8 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
 
 void SvxOle2Shape::resetModifiedState()
 {
-    SfxObjectShell* pPersist = mpModel ? mpModel->GetPersist() : 0;
-    if( pPersist && !pPersist->IsEnableSetModified() )
+    ::comphelper::IEmbeddedHelper* pPersist = mpModel ? mpModel->GetPersist() : 0;
+    if( pPersist && !pPersist->isEnableSetModified() )
     {
         SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
         if( pOle && !pOle->IsEmpty() )
@@ -632,11 +632,11 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
         if( pOle2Obj->IsEmpty() )
         {
-            SfxObjectShell* pPersist = mpModel->GetPersist();
+            ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
             if( pPersist )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj =
-                        pPersist->GetEmbeddedObjectContainer().GetEmbeddedObject( pOle2Obj->GetPersistName() );
+                        pPersist->getEmbeddedObjectContainer().GetEmbeddedObject( pOle2Obj->GetPersistName() );
                 if ( xObj.is() )
                 {
                     aClassName = SvGlobalName( xObj->getClassID() );
