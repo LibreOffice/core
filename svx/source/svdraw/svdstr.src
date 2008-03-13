@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:56:37 $
+ *  last change: $Author: rt $ $Date: 2008-03-13 08:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2827,21 +2827,6 @@ String STR_ObjNameSingulTable
 String STR_ObjNamePluralTable
 {
     Text [ en-US ] = "Tables";
-};
-
-Bitmap SIP_SA_CROP_MARKERS
-{
-    File = "cropmarkers.bmp";
-};
-
-Bitmap SIP_SA_CROP_FINE_MARKERS
-{
-    File = "cropmarkers2.bmp";
-};
-
-Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
-{
-    File = "cropmarkersACC.bmp";
 };
 
 Bitmap SIP_SA_CROP_MARKERS
