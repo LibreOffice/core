@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:40:20 $
+#   last change: $Author: rt $ $Date: 2008-03-13 14:40:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ $(DIR_CREATE_FLAG) :
 .IF "$(USE_SHELL)" != "4nt"
     $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
 .ELSE
-    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s#\#/#)) | $(XARGS) $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
+    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s#\#/#)) | $(XARGS) mkdir.exe -p && echo "dirs created" > $@ && touch $@
 .ENDIF
     $(DELAY) 2
 
