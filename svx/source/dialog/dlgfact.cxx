@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:37:26 $
+ *  last change: $Author: rt $ $Date: 2008-03-13 08:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2136,7 +2136,7 @@ public:
         m_pDialog.reset( new SvxMacroAssignDlg( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
     }
 
-    virtual USHORT Execute()
+    virtual short Execute()
     {
         return m_pDialog->Execute();
     }
