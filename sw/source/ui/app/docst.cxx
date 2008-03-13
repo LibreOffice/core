@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:45:00 $
+ *  last change: $Author: rt $ $Date: 2008-03-13 10:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,7 +659,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         rSet.Put(SwBackgroundDestinationItem(SID_PARA_BACKGRND_DESTINATION, 0));
         // --> OD 2008-02-13 #newlistlevelattrs#
         // merge list level indent attributes into the item set if needed
-        aTmp.MergeIndentAttrsOfListStyle( rSet );
+        xTmp->MergeIndentAttrsOfListStyle( rSet );
         // <--
     }
 /*  else if( SFX_STYLE_FAMILY_FRAME == nFamily )
