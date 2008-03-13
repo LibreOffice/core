@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-06 04:36:46 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1719,7 +1719,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
                 {
                     // point array
-                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate), false);
+                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_STRUCTURETAGRIMITIVE2D :

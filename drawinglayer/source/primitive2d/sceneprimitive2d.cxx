@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:43 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,15 @@ namespace drawinglayer
         {
             // use unit range and transform to discrete coordinates
             rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+
+            {
+                // take a look at object transformation
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+                fRotate = 0;
+            }
+
             rDiscreteRange.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)

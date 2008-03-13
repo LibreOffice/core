@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:41 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ namespace drawinglayer
             bool bNormalsInvert,
             bool bDoubleSided,
             bool bShadow3D,
-            bool bTextureFilter)
+            bool bTextureFilter,
+            bool bReducedLineGeometry)
         :   maNormalsKind(aNormalsKind),
             maTextureProjectionX(aTextureProjectionX),
             maTextureProjectionY(aTextureProjectionY),
@@ -66,7 +67,8 @@ namespace drawinglayer
             mbNormalsInvert(bNormalsInvert),
             mbDoubleSided(bDoubleSided),
             mbShadow3D(bShadow3D),
-            mbTextureFilter(bTextureFilter)
+            mbTextureFilter(bTextureFilter),
+            mbReducedLineGeometry(bReducedLineGeometry)
         {
         }
 
@@ -81,7 +83,8 @@ namespace drawinglayer
                 && mbNormalsInvert == rCandidate.mbNormalsInvert
                 && mbDoubleSided == rCandidate.mbDoubleSided
                 && mbShadow3D == rCandidate.mbShadow3D
-                && mbTextureFilter == rCandidate.mbTextureFilter);
+                && mbTextureFilter == rCandidate.mbTextureFilter
+                && mbReducedLineGeometry == rCandidate.mbReducedLineGeometry);
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

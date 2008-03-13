@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ namespace drawinglayer
             unsigned                                            mbDoubleSided : 1;          // surfaces are double sided
             unsigned                                            mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
             unsigned                                            mbTextureFilter : 1;        // filter texture to make more smooth
+            unsigned                                            mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
 
         public:
             Sdr3DObjectAttribute(
@@ -114,7 +115,8 @@ namespace drawinglayer
                 bool bNormalsInvert,
                 bool bDoubleSided,
                 bool bShadow3D,
-                bool bTextureFilter);
+                bool bTextureFilter,
+                bool bReducedLineGeometry);
 
             // compare operator
             bool operator==(const Sdr3DObjectAttribute& rCandidate) const;
@@ -130,6 +132,7 @@ namespace drawinglayer
             bool getDoubleSided() const { return mbDoubleSided; }
             bool getShadow3D() const { return mbShadow3D; }
             bool getTextureFilter() const { return mbTextureFilter; }
+            bool getReducedLineGeometry() const { return mbReducedLineGeometry; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

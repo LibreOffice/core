@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:32:40 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ namespace drawinglayer
         void extractLinesFromSlice(
             basegfx::B3DPolyPolygon& rLine,
             const Slice3DVector& rSliceVector,
-            bool bClosed);
+            bool bClosed,
+            bool bReducedLineGeometry);
 
         void extractPlanesFromSlice(
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,

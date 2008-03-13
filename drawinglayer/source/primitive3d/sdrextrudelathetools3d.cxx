@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,7 +540,8 @@ namespace drawinglayer
         void extractLinesFromSlice(
             basegfx::B3DPolyPolygon& rLine,
             const Slice3DVector& rSliceVector,
-            bool bClosed)
+            bool bClosed,
+            bool bReducedLineGeometry)
         {
             const sal_uInt32 nNumSlices(rSliceVector.size());
 
@@ -553,25 +554,28 @@ namespace drawinglayer
                 }
 
                 // horizontal
-                const basegfx::B3DPolyPolygon& aFirstPolyPolygon(rSliceVector[0L].getB3DPolyPolygon());
-                const sal_uInt32 nPolygonCount(aFirstPolyPolygon.count());
-
-                for(sal_uInt32 b(0L); b < nPolygonCount; b++)
+                if(!bReducedLineGeometry)
                 {
-                    const basegfx::B3DPolygon& aFirstPolygon(aFirstPolyPolygon.getB3DPolygon(0L));
-                    const sal_uInt32 nPointCount(aFirstPolygon.count());
+                    const basegfx::B3DPolyPolygon& aFirstPolyPolygon(rSliceVector[0L].getB3DPolyPolygon());
+                    const sal_uInt32 nPolygonCount(aFirstPolyPolygon.count());
 
-                    for(sal_uInt32 c(0L); c < nPointCount; c++)
+                    for(sal_uInt32 b(0L); b < nPolygonCount; b++)
                     {
-                        basegfx::B3DPolygon aNew;
+                        const basegfx::B3DPolygon& aFirstPolygon(aFirstPolyPolygon.getB3DPolygon(0L));
+                        const sal_uInt32 nPointCount(aFirstPolygon.count());
 
-                        for(sal_uInt32 d(0L); d < nNumSlices; d++)
+                        for(sal_uInt32 c(0L); c < nPointCount; c++)
                         {
-                            aNew.append(rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).getB3DPoint(c));
-                        }
+                            basegfx::B3DPolygon aNew;
 
-                        aNew.setClosed(bClosed);
-                        rLine.append(aNew);
+                            for(sal_uInt32 d(0L); d < nNumSlices; d++)
+                            {
+                                aNew.append(rSliceVector[d].getB3DPolyPolygon().getB3DPolygon(b).getB3DPoint(c));
+                            }
+
+                            aNew.setClosed(bClosed);
+                            rLine.append(aNew);
+                        }
                     }
                 }
             }

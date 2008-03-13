@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclchartprocessor2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        void VclProcessor2D::RenderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate, bool bCalledFromPixelRenderer)
+        void VclProcessor2D::RenderChartPrimitive2D(const primitive2d::ChartPrimitive2D& rChartCandidate)
         {
             bool bChartRendered(false);
 
@@ -83,18 +83,7 @@ namespace drawinglayer
                                     (sal_Int32)aObjectRange.getMinX(), (sal_Int32)aObjectRange.getMinY(),
                                     (sal_Int32)aObjectRange.getMaxX(), (sal_Int32)aObjectRange.getMaxY());
 
-                            if(bCalledFromPixelRenderer)
-                            {
-                                   mpOutputDevice->Push(PUSH_MAPMODE);
-                                mpOutputDevice->SetMapMode(static_cast< VclPixelProcessor2D* >(this)->getOriginalMapMode());
-                            }
-
                             bChartRendered = pPrettyPainter->DoPaint(mpOutputDevice, aRectangle);
-
-                            if(bCalledFromPixelRenderer)
-                            {
-                                   mpOutputDevice->Pop();
-                            }
                         }
                     }
                 }

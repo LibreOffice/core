@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-03-13 08:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,8 +433,12 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
                 {
-                    // chart primitive
-                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate), true);
+                    // chart primitive in pixel renderer; restore original DrawMode during call
+                    // since the evtl. used ChartPrettyPainter will use the MapMode
+                       mpOutputDevice->Push(PUSH_MAPMODE);
+                    mpOutputDevice->SetMapMode(maOriginalMapMode);
+                    RenderChartPrimitive2D(static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate));
+                       mpOutputDevice->Pop();
                     break;
                 }
                 default :
