@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:15:55 $
+ *  last change: $Author: rt $ $Date: 2008-03-14 23:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,7 +486,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
 
                     case ODFDEFAULTVERSION :
                     {
-                        sal_Int16 nTmp;
+                        sal_Int16 nTmp = 0;
                         if ( pValues[nProp] >>= nTmp )
                             eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
                         else
