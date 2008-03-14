@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:05:12 $
+ *  last change: $Author: rt $ $Date: 2008-03-14 11:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
 // -----------------------------------------------------------------------------
 
 /** inserts a range into a vector */
-template< class Vec, class Iter > sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
+template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount )
     {
@@ -125,7 +125,9 @@ template< class Vec, class Iter > sal_Int32 insert_range( Vec& rVector, sal_Int3
             Iter aIter( rVector.begin() );
             while( nFind-- )
                 aIter++;
-            rVector.insert( aIter, nCount, 0 );
+
+            Entry aEmpty;
+            rVector.insert( aIter, nCount, aEmpty );
         }
     }
     return nIndex;
@@ -262,7 +264,7 @@ void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
 
     const sal_Int32 nCount = sal::static_int_cast< sal_Int32 >( aRows.size() );
 
-    nIndex = insert_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
+    nIndex = insert_range<RowVector,RowVector::iterator,TableRowRef>( maRows, nIndex, nCount );
 
     for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
         maRows[nIndex+nOffset] = aRows[nOffset];
@@ -295,7 +297,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
     // assert if there are not enough cells saved
     DBG_ASSERT( (aCols.size() * maRows.size()) == aCells.size(), "sdr::table::TableModel::UndoRemoveColumns(), invalid undo data!" );
 
-    nIndex = insert_range<ColumnVector,ColumnVector::iterator>( maColumns, nIndex, nCount );
+    nIndex = insert_range<ColumnVector,ColumnVector::iterator,TableColumnRef>( maColumns, nIndex, nCount );
     for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
         maColumns[nIndex+nOffset] = aCols[nOffset];
 
@@ -732,7 +734,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             SdrModel* pModel = mpTableObj->GetModel();
 
             TableModelNotifyGuard aGuard( this );
-            nIndex = insert_range<ColumnVector,ColumnVector::iterator>( maColumns, nIndex, nCount );
+            nIndex = insert_range<ColumnVector,ColumnVector::iterator,TableColumnRef>( maColumns, nIndex, nCount );
 
             sal_Int32 nRows = getRowCountImpl();
             while( nRows-- )
@@ -922,7 +924,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableModelNotifyGuard aGuard( this );
 
-            nIndex = insert_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
+            nIndex = insert_range<RowVector,RowVector::iterator,TableRowRef>( maRows, nIndex, nCount );
 
             RowVector aNewRows(nCount);
             const sal_Int32 nColCount = getColumnCountImpl();
