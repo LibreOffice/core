@@ -4,9 +4,9 @@
 #
 #   $RCSfile: mail.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-14 09:41:00 $
+#   last change: $Author: rt $ $Date: 2008-03-14 11:38:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@ sub send_mail
     my @message = ();
 
     my $recipient_string = join ',', @listener;
-    push(@message, "To: $recipient_string");
     push(@message, "Subject: $subject");
+    push(@message, "To: $recipient_string");
     push(@message, "\n");
     push(@message, "Located at $destdir");
 
