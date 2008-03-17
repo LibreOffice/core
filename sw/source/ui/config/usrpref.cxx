@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:52:04 $
+ *  last change: $Author: rt $ $Date: 2008-03-17 13:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Other/TabStop",                    //14
         "Window/IsVerticalRulerRight",      //15
         "ViewLayout/Columns",               //16
-        "ViewLayout/BookMode"               //17
+        "ViewLayout/BookMode",              //17
         "Other/IsSquaredPageMode"           //18
     };
     const int nCount = bWeb ? 14 : 19;
