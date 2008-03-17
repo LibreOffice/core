@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:12:19 $
+ *  last change: $Author: rt $ $Date: 2008-03-17 09:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1157,7 +1157,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const SfxItemPropertyMap* pProper
     }
     case OWN_ATTR_3D_VALUE_LINEONLY:
     {
-        sal_Bool bNew;
+        sal_Bool bNew = sal_False;
         if( rValue >>= bNew )
         {
             static_cast<E3dPolygonObj*>(mpObj.get())->SetLineOnly(bNew);
