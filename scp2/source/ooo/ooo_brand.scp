@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ooo_brand.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:32:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2007 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifndef MACOSX
+Directory gid_Dir_Brand_Root
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "${PRODUCTNAME} ${OOOBASEVERSION}";
+  #else
+    HostName = "${UNIXPRODUCTNAME}${OOOBASEVERSION}";
+  #endif
+    Styles = (OFFICEDIRECTORY);
+End
+#endif
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "ErrorReport";
+    Order = 8;
+    Key = "ErrorReportServer";
+  #if defined(BUILD_SPECIAL)
+    Value = "report.services.openoffice.org";
+  #else
+    Value = "";
+  #endif
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressBarColor
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "ProgressBarColor";
+    Value = "0,0,128";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressSize
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "ProgressSize";
+    Value = "-1,6";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressPosition
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "ProgressPosition";
+    Value = "-1,-1";
+End
+
+#if defined UNX && ! defined MACOSX
+
+File gid_Brand_File_Share_Xdg_Math
+	TXT_FILE_BODY;
+	Dir = gid_Brand_Dir_Share_Xdg;
+	Name = "math.desktop";
+	Styles = (PACKED,SCPZIP_REPLACE);
+End
+
+#endif
+
+File gid_Brand_File_ImagesCrystal_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_crystal.zip";
+    Styles = (PACKED);
+End
+
+File gid_Brand_File_ImagesHicontrast_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_hicontrast.zip";
+    Styles = (PACKED);
+End
+
+File gid_Brand_File_ImagesIndustrial_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_industrial.zip";
+    Styles = (PACKED);
+End
+
+File gid_Brand_File_ImagesTango_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_tango.zip";
+    Styles = (PACKED);
+End
+
+BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )
