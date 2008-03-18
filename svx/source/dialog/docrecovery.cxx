@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 18:18:44 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2024,7 +2024,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
 
 #if defined(WNT) || defined(OS2)
-            OUString    ustrValue = OUString::createFromAscii("${$SYSBINDIR/bootstrap.ini:UserInstallation}");
+            OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #else
             OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
