@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:54:31 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,17 +240,6 @@
 using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------------
-BOOL lcl_IsNumeric(const String& rStr)
-{
-    for(xub_StrLen i = 0; i < rStr.Len(); i++)
-    {
-        sal_Unicode c = rStr.GetChar(i);
-         if((c < '0') || (c > '9'))
-             return FALSE;
-    }
-    return TRUE;
-
-}
 
 SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 {
