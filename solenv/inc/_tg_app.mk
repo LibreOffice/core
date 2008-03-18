@@ -18,7 +18,9 @@ APP1LINKFLAGS+=$(LINKFLAGS)
 
 APP1RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP1RPATH)*=/ERROR:/Bad_APP1RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP1LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP1RPATH))
+.ENDIF
 
 .IF "$(APP1STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -79,9 +81,11 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1)` \
+    @echo -n $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_1.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -89,6 +93,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP1RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -216,7 +222,9 @@ APP2LINKFLAGS+=$(LINKFLAGS)
 
 APP2RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP2RPATH)*=/ERROR:/Bad_APP2RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP2LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP2RPATH))
+.ENDIF
 
 .IF "$(APP2STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -277,9 +285,11 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2)` \
+    @echo -n $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_2.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -287,6 +297,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP2RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -414,7 +426,9 @@ APP3LINKFLAGS+=$(LINKFLAGS)
 
 APP3RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP3RPATH)*=/ERROR:/Bad_APP3RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP3LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP3RPATH))
+.ENDIF
 
 .IF "$(APP3STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -475,9 +489,11 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3)` \
+    @echo -n $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_3.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -485,6 +501,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP3RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -612,7 +630,9 @@ APP4LINKFLAGS+=$(LINKFLAGS)
 
 APP4RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP4RPATH)*=/ERROR:/Bad_APP4RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP4LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP4RPATH))
+.ENDIF
 
 .IF "$(APP4STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -673,9 +693,11 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4)` \
+    @echo -n $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_4.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -683,6 +705,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP4RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -810,7 +834,9 @@ APP5LINKFLAGS+=$(LINKFLAGS)
 
 APP5RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP5RPATH)*=/ERROR:/Bad_APP5RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP5LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP5RPATH))
+.ENDIF
 
 .IF "$(APP5STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -871,9 +897,11 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5)` \
+    @echo -n $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_5.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -881,6 +909,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP5RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -1008,7 +1038,9 @@ APP6LINKFLAGS+=$(LINKFLAGS)
 
 APP6RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP6RPATH)*=/ERROR:/Bad_APP6RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP6LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP6RPATH))
+.ENDIF
 
 .IF "$(APP6STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1069,9 +1101,11 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6)` \
+    @echo -n $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_6.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1079,6 +1113,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP6RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -1206,7 +1242,9 @@ APP7LINKFLAGS+=$(LINKFLAGS)
 
 APP7RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP7RPATH)*=/ERROR:/Bad_APP7RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP7LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP7RPATH))
+.ENDIF
 
 .IF "$(APP7STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1267,9 +1305,11 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7)` \
+    @echo -n $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_7.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1277,6 +1317,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP7RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -1404,7 +1446,9 @@ APP8LINKFLAGS+=$(LINKFLAGS)
 
 APP8RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP8RPATH)*=/ERROR:/Bad_APP8RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP8LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP8RPATH))
+.ENDIF
 
 .IF "$(APP8STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1465,9 +1509,11 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8)` \
+    @echo -n $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_8.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1475,6 +1521,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP8RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -1602,7 +1650,9 @@ APP9LINKFLAGS+=$(LINKFLAGS)
 
 APP9RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP9RPATH)*=/ERROR:/Bad_APP9RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP9LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP9RPATH))
+.ENDIF
 
 .IF "$(APP9STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1663,9 +1713,11 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9)` \
+    @echo -n $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_9.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1673,6 +1725,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP9RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
@@ -1800,7 +1854,9 @@ APP10LINKFLAGS+=$(LINKFLAGS)
 
 APP10RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP10RPATH)*=/ERROR:/Bad_APP10RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP10LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP10RPATH))
+.ENDIF
 
 .IF "$(APP10STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1861,9 +1917,11 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10)` \
+    @echo -n $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_10.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1871,6 +1929,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP10RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
