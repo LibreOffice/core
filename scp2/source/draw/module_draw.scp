@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_draw.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:40:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@ Module gid_Module_Prg_Draw_Bin
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Exe_Sdraw,gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
-    gid_File_Registry_Spool_Oo_Common_Draw_Xcu,gid_File_Registry_Spool_Oo_Setup_Draw_Xcu, gid_File_Xdg_Draw,
+    Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
+    gid_File_Registry_Spool_Oo_Common_Draw_Xcu,gid_File_Registry_Spool_Oo_Setup_Draw_Xcu,
     gid_File_Oo_Office_Ui_Drawwindowstate_Xcs,gid_File_Oo_Office_Ui_Drawwindowstate_Xcu,
 	gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Draw_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Draw_Filters_Xcu, gid_File_Tmp_Userinstall_Draw_Inf);
@@ -63,3 +63,25 @@ End
 //     Default = YES;
 //     Files = (gid_File_Help_Sdraw_Zip);
 // End
+
+Module gid_Module_Brand_Prg_Draw
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Draw";
+    Description = "gid_Module_Brand_Prg_Draw";
+    ParentID = gid_Module_Prg_Draw_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Sdraw);
+End
+
+Module gid_Module_Langpack_Draw_Template
+    ParentID = gid_Module_Prg_Draw_Bin;
+    Name = "gid_Module_Langpack_Draw_Template";
+    Description = "gid_Module_Langpack_Draw_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Sdraw_Zip);
+End
+
+#include "alllangmodules_draw.inc"
