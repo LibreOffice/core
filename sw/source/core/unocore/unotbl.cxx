@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:35:48 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,8 +219,6 @@
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-//collectn.cxx
-BOOL lcl_IsNumeric(const String&);
 
 //-----------------------------------------------------------------------------
 // from unoobj.cxx
@@ -4531,113 +4529,6 @@ SwUnoCrsr * lcl_CreateCursor( SwFrmFmt &rTblFmt,
     return pUnoCrsr;
 }
 
-
-uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SwXCellRange::GetLabeledDataSequences(
-        SwChartDataProvider &rProvider,
-        BOOL bBuildColumnSeqs,      // if false build sequences of rows
-        BOOL bFirstCellIsLabel )
-    throw (uno::RuntimeException)
-{
-    sal_Int32 nRowCount = getRowCount();
-    sal_Int32 nColCount = getColumnCount();
-    //
-    if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = C2U("Table too complex");
-        throw aRuntime;
-    }
-
-    sal_Int32 nNumLabelCells = bFirstCellIsLabel ? 1 : 0;
-    sal_Int32 nNumRowLabelCells = bBuildColumnSeqs ? 0 : nNumLabelCells;
-    sal_Int32 nNumColLabelCells = bBuildColumnSeqs ? nNumLabelCells : 0;
-
-    sal_Int32 nSecondaryCount   = bBuildColumnSeqs ? nColCount : nRowCount;
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSecondarySeq( nSecondaryCount );
-    uno::Reference< chart2::data::XLabeledDataSequence > *pSecondaryArray = aSecondarySeq.getArray();
-    SwFrmFmt* pTblFmt = GetFrmFmt();
-    if (pTblFmt)
-    {
-        sal_Int32 nColOff   = 0;
-        sal_Int32 nRowOff   = 0;
-        sal_Int32 &rSecondaryOffset = bBuildColumnSeqs ? nColOff : nRowOff;
-        for(rSecondaryOffset = 0;  rSecondaryOffset < nSecondaryCount;  ++rSecondaryOffset)
-        {
-            SwTableBox * pLabelStartBox     = 0;
-            SwTableBox * pLabelEndBox       = 0;
-            SwTableBox * pValuesStartBox    = 0;
-            SwTableBox * pValuesEndBox      = 0;
-            SwTable* pTable = SwTable::FindTable( pTblFmt );
-            DBG_ASSERT( pTable, "table not found" )
-            if (!pTable)
-                throw uno::RuntimeException();
-            if (nNumLabelCells != 0)
-            {
-                String aLabelStartBoxName = lcl_GetCellName(
-                        aRgDesc.nLeft + nColOff,
-                        aRgDesc.nTop  + nRowOff );
-                pLabelStartBox = (SwTableBox*)pTable->GetTblBox( aLabelStartBoxName );
-                String aLabelEndBoxName = lcl_GetCellName(
-                        aRgDesc.nLeft + nColOff + Max((sal_Int32)0, nNumRowLabelCells - 1),
-                        aRgDesc.nTop  + nRowOff + Max((sal_Int32)0, nNumColLabelCells - 1) );
-                pLabelEndBox = (SwTableBox*)pTable->GetTblBox( aLabelEndBoxName );
-            }
-            if (nColCount > nNumColLabelCells  &&  nRowCount > nNumRowLabelCells)
-            {
-                String aValuesStartBoxName = lcl_GetCellName(
-                        aRgDesc.nLeft + nColOff + nNumRowLabelCells,
-                        aRgDesc.nTop  + nRowOff + nNumColLabelCells );
-                pValuesStartBox = (SwTableBox*)pTable->GetTblBox( aValuesStartBoxName );
-
-                String aValuesEndBoxName;
-                if (bBuildColumnSeqs)
-                {
-                    aValuesEndBoxName = lcl_GetCellName(
-                            aRgDesc.nLeft + nColOff,
-                            aRgDesc.nTop  + nRowCount - 1 );
-                }
-                else
-                {
-                    aValuesEndBoxName = lcl_GetCellName(
-                            aRgDesc.nLeft + nColCount - 1,
-                            aRgDesc.nTop  + nRowOff );
-                }
-                pValuesEndBox = (SwTableBox*)pTable->GetTblBox( aValuesEndBoxName );
-            }
-
-
-            uno::Reference< chart2::data::XLabeledDataSequence > xLDS;
-            uno::Reference< chart2::data::XDataSequence > xLabelSeq;
-            uno::Reference< chart2::data::XDataSequence > xValuesSeq;
-            if (pValuesStartBox && pValuesEndBox)
-            {
-                SwUnoCrsr *pTblCursor = lcl_CreateCursor( *pTblFmt,
-                                                pValuesStartBox, pValuesEndBox );
-                xValuesSeq = new SwChartDataSequence( rProvider, *pTblFmt, pTblCursor );
-            }
-            if (pLabelStartBox && pLabelEndBox)
-            {
-                SwUnoCrsr *pTblCursor = lcl_CreateCursor( *pTblFmt,
-                                                pLabelStartBox, pLabelEndBox );
-                xLabelSeq =  new SwChartDataSequence( rProvider, *pTblFmt, pTblCursor );
-            }
-            if (!xValuesSeq.is())
-                throw uno::RuntimeException();
-            else
-            {
-                xLDS = new SwChartLabeledDataSequence();
-                xLDS->setLabel( xLabelSeq );
-                xLDS->setValues( xValuesSeq );
-            }
-
-            pSecondaryArray[ rSecondaryOffset ] = xLDS;
-        }
-    }
-    else
-        throw uno::RuntimeException();
-
-    return aSecondarySeq;
-}
 
 /*-- 29.04.02 11:42:47---------------------------------------------------
 
