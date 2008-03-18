@@ -1,5 +1,5 @@
 [Bootstrap]
 UNO_JAVA_JFW_VENDOR_SETTINGS=${ORIGIN}/../share/misc/javavendors.xml
-UNO_JAVA_JFW_SHARED_DATA=file:///etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml
-UNO_JAVA_JFW_USER_DATA=${SYSUSERHOME}/.ure/javasettings_${_OS}_${_ARCH}.xml
+UNO_JAVA_JFW_SHARED_DATA=${URE_OVERRIDE_JAVA_JFW_SHARED_DATA} file:///etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml
+UNO_JAVA_JFW_USER_DATA=${URE_OVERRIDE_JAVA_JFW_USER_DATA} ${SYSUSERHOME}/.ure/javasettings_${_OS}_${_ARCH}.xml
 UNO_JAVA_JFW_CLASSPATH_URLS=${URE_MORE_JAVA_CLASSPATH_URLS}
