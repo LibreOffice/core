@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChooseUninstallationComponentsCtrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:36:50 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,17 +111,18 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
                         Informer.showInfoMessage(message, title);
                         repeatDialog = true;
                     } else {
+                        if ( data.isMultiLingual()) {
+                            data.setLanguageModulesChecked(false);
+                            ModuleCtrl.checkLanguageModulesUninstall(packageData, data);
 
-                        data.setLanguageModulesChecked(false);
-                        ModuleCtrl.checkLanguageModulesUninstall(packageData, data);
+                            if ( ! data.languageModulesChecked() ) {
 
-                        if ( ! data.languageModulesChecked() ) {
-
-                            String message = ResourceManager.getString("String_All_Languagecomponents_Selected_1") + "\n" +
-                                             ResourceManager.getString("String_All_Languagecomponents_Selected_2");
-                            String title = ResourceManager.getString("String_Change_Selection");
-                            Informer.showInfoMessage(message, title);
-                            repeatDialog = true;
+                                String message = ResourceManager.getString("String_All_Languagecomponents_Selected_1") + "\n" +
+                                                 ResourceManager.getString("String_All_Languagecomponents_Selected_2");
+                                String title = ResourceManager.getString("String_Change_Selection");
+                                Informer.showInfoMessage(message, title);
+                                repeatDialog = true;
+                            }
                         }
                     }
                 }
