@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:29:21 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,6 @@
 #define LB_WRITERDIRECTCURSOR       71
 #define FT_WRITERDIRECTCURSOR       72
 #define WN_WRITERDIRECTCURSOR       73
-#define LB_WRITERNOTESINDICATOR     74
-#define FT_WRITERNOTESINDICATOR     75
-#define WN_WRITERNOTESINDICATOR     76
 #define LB_WRITERSCRIPTINDICATOR    77
 #define FT_WRITERSCRIPTINDICATOR    78
 #define WN_WRITERSCRIPTINDICATOR    79
