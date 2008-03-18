@@ -9,3 +9,7 @@ xmloff.Impress.XMLContentImporter::com::sun::star::xml::sax::XDocumentHandler
 xmloff.Impress.XMLImporter::com::sun::star::xml::sax::XDocumentHandler
 xmloff.Impress.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
 xmloff.Impress.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
+
+### i86555 ###
+xmloff.Chart.XMLExporter::com::sun::star::document::XFilter
+xmloff.Chart.XMLContentExporter::com::sun::star::document::XFilter
