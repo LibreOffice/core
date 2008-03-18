@@ -1,20 +1,20 @@
-# -o sw.CharacterStyle
-# -o sw.ConditionalParagraphStyle
-# -o sw.PageStyle
-# -o sw.ParagraphStyle
-# -o sw.SwAccessibleDocumentPageView
-# -o sw.SwAccessibleDocumentView
-# -o sw.SwAccessibleEndnoteView
-# -o sw.SwAccessibleFooterView
-# -o sw.SwAccessibleFootnoteView
-# -o sw.SwAccessibleHeaderView
-# -o sw.SwAccessiblePageView
-# -o sw.SwAccessibleParagraphView
-# -o sw.SwAccessibleTableCellView
-# -o sw.SwAccessibleTableView
-# -o sw.SwAccessibleTextEmbeddedObject
-# -o sw.SwAccessibleTextFrameView
-# -o sw.SwAccessibleTextGraphicObject
+-o sw.CharacterStyle
+-o sw.ConditionalParagraphStyle
+-o sw.PageStyle
+-o sw.ParagraphStyle
+-o sw.SwAccessibleDocumentPageView
+#i86751 -o sw.SwAccessibleDocumentView
+-o sw.SwAccessibleEndnoteView
+-o sw.SwAccessibleFooterView
+-o sw.SwAccessibleFootnoteView
+-o sw.SwAccessibleHeaderView
+-o sw.SwAccessiblePageView
+-o sw.SwAccessibleParagraphView
+-o sw.SwAccessibleTableCellView
+#i85634 -o sw.SwAccessibleTableView
+-o sw.SwAccessibleTextEmbeddedObject
+-o sw.SwAccessibleTextFrameView
+-o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
 -o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
@@ -38,7 +38,7 @@
 -o sw.SwXFrames
 -o sw.SwXHeadFootText
 -o sw.SwXLineNumberingProperties
-#-o sw.SwXMailMerge
+#i85640 -o sw.SwXMailMerge
 -o sw.SwXModule
 -o sw.SwXNumberingRules
 -o sw.SwXParagraph
@@ -78,17 +78,17 @@
 -o sw.SwXTextTableCursor
 -o sw.SwXTextTableRow
 -o sw.SwXTextTables
--o sw.SwXTextView
+#i85580 -o sw.SwXTextView
 -o sw.SwXTextViewCursor
 -o sw.SwXViewSettings
 -o sw.XMLContentExporter
--o sw.XMLContentImporter
+#i23394 -o sw.XMLContentImporter
 -o sw.XMLExporter
 -o sw.XMLImporter
--o sw.XMLMetaExporter
+#i23394 -o sw.XMLMetaExporter
 -o sw.XMLMetaImporter
 -o sw.XMLSettingsExporter
 -o sw.XMLSettingsImporter
 -o sw.XMLStylesExporter
--o sw.XMLStylesImporter
+#i23394 -o sw.XMLStylesImporter
 -o sw.DocumentSettings
