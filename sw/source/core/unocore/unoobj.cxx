@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:31:12 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,8 +287,6 @@ using std::auto_ptr;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-//collectn.cxx
-BOOL lcl_IsNumeric(const String&);
 /****************************************************************************
     static methods
 ****************************************************************************/
