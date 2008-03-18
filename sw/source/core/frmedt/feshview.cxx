@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:51:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1274,8 +1274,27 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
         if(bRet && pObj)
         {
-            SdrPage* pPage = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0);
+            const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
+            if( pObj->GetLayer() == pIDDMA->GetHellId() )
+            {
+                const SwFrm *pPageFrm = GetLayout()->Lower();
+                while( pPageFrm && !pPageFrm->Frm().IsInside( rPt ) )
+                {
+                    if ( rPt.Y() < pPageFrm->Frm().Top() )
+                        pPageFrm = 0;
+                    else
+                        pPageFrm = pPageFrm->GetNext();
+                }
+                if( pPageFrm )
+                {
+                    SwRect aTmp( pPageFrm->Prt() );
+                    aTmp += pPageFrm->Frm().Pos();
+                    if( aTmp.IsInside( rPt ) )
+                        return sal_False;
+                }
+            }
 
+            const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
             // --> FME 2005-04-18 #i20965# Use GetOrdNum() instead of GetOrdNumDirect()
             // because ordnums might be wrong
             for(sal_uInt32 a(pObj->GetOrdNum() + 1); bRet && a < pPage->GetObjCount(); a++)
