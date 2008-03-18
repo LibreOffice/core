@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:49:20 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,8 +212,6 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
     ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionaryList >    GetDictionaryList();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
