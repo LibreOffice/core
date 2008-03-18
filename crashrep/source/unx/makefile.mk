@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:42:39 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:40:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ OBJFILES=\
 APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
+APP1RPATH=BRAND
 
 APP1STDLIBS=$(DYNAMIC) -lXext -lX11
 .IF "$(OS)" != "FREEBSD"
