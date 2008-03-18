@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:43:07 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ struct SpellState
     SpellState() :
         m_bInitialCall(true),
         m_bLockFocus(false),
+        m_bLostFocus(false),
         m_SpellStartPosition(SPELL_START_BODY),
         m_bBodySpelled(false),
         m_bOtherSpelled(false),
