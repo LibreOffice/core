@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:36:21 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -991,54 +991,5 @@ void SwAsciiOptions::WriteUserData( String& rStr )
     }
     rStr += ',';
 }
-/* -----------------------------02.03.00 17:33--------------------------------
 
- ---------------------------------------------------------------------------*/
-Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
-{
-    Color aColor = rCol;
-    switch ( nStyle )
-    {
-    case SW_SV_BRUSH_25:
-        {
-            ULONG   nRed    = aColor.GetRed();
-            ULONG   nGreen  = aColor.GetGreen();
-            ULONG   nBlue   = aColor.GetBlue();
-            nRed   += (ULONG)(rFillCol.GetRed())*2;
-            nGreen += (ULONG)(rFillCol.GetGreen())*2;
-            nBlue  += (ULONG)(rFillCol.GetBlue())*2;
-            aColor = Color( (BYTE)(nRed/3), (BYTE)(nGreen/3), (BYTE)(nBlue/3) );
-        }
-        break;
-
-    case SW_SV_BRUSH_50:
-        {
-            ULONG   nRed    = aColor.GetRed();
-            ULONG   nGreen  = aColor.GetGreen();
-            ULONG   nBlue   = aColor.GetBlue();
-            nRed   += (ULONG)(rFillCol.GetRed());
-            nGreen += (ULONG)(rFillCol.GetGreen());
-            nBlue  += (ULONG)(rFillCol.GetBlue());
-            aColor = Color( (BYTE)(nRed/2), (BYTE)(nGreen/2), (BYTE)(nBlue/2) );
-        }
-        break;
-
-    case SW_SV_BRUSH_75:
-        {
-            ULONG   nRed    = aColor.GetRed()*2;
-            ULONG   nGreen  = aColor.GetGreen()*2;
-            ULONG   nBlue   = aColor.GetBlue()*2;
-            nRed   += (ULONG)(rFillCol.GetRed());
-            nGreen += (ULONG)(rFillCol.GetGreen());
-            nBlue  += (ULONG)(rFillCol.GetBlue());
-            aColor = Color( (BYTE)(nRed/3), (BYTE)(nGreen/3), (BYTE)(nBlue/3) );
-        }
-        break;
-
-        case SW_SV_BRUSH_NULL:
-            aColor = Color( COL_TRANSPARENT );
-    }
-
-    return aColor;
-}
 
