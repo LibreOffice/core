@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-12 15:31:01 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:13:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,18 +43,20 @@ TARGET=so_stlport
 .INCLUDE :	settings.mk
 
 .IF "$(USE_SYSTEM_STL)"=="YES"
-$(INCCOM)$/stlport$/hash_map : systemstl/hash_map
-        @echo "You choose to build without stlport, so some headers will be used to bring the sgi extensions into the std namespace"
-        -$(MKDIR) $(INCCOM)$/stlport
-        $(COPY) systemstl/functional $(INCCOM)$/stlport
-        $(COPY) systemstl/hash_map $(INCCOM)$/stlport
-        $(COPY) systemstl/hash_set $(INCCOM)$/stlport
-        $(COPY) systemstl/numeric $(INCCOM)$/stlport
-        $(COPY) systemstl/slist $(INCCOM)$/stlport
-        $(COPY) systemstl/rope $(INCCOM)$/stlport
-        $(COPY) systemstl/vector $(INCCOM)$/stlport
-.ENDIF
 
+# If you choose to build without stlport, some headers will be used to bring the
+# sgi extensions into the std namespace:
+$(INCCOM)$/stlport$/functional \
+$(INCCOM)$/stlport$/hash_map \
+$(INCCOM)$/stlport$/hash_set \
+$(INCCOM)$/stlport$/numeric \
+$(INCCOM)$/stlport$/slist \
+$(INCCOM)$/stlport$/rope \
+$(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
+    $(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+.ELSE # "$(USE_SYSTEM_STL)"
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
@@ -256,3 +258,5 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# COMVER<=001300000000
 .ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
+
+.ENDIF # "$(USE_SYSTEM_STL)"
