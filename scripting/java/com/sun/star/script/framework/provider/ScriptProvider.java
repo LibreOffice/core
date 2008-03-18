@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptProvider.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:10:41 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ public abstract class ScriptProvider
                 new Type(XMacroExpander.class), serviceObj);
 
             XMLParserFactory.setOfficeDTDURL(me.expandMacros(
-                "${$SYSBINDIR/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
+                "${$BRAND_BASE_DIR/program/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
 
         }
         catch ( Exception e )
@@ -224,11 +224,11 @@ public abstract class ScriptProvider
                 {
                     if ( originalContextURL.startsWith( "share" ) )
                     {
-                        contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
+                        contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
                     }
                     else if ( originalContextURL.startsWith( "user" ) )
                     {
-                        contextUrl = "vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                     }
 
                     if ( originalContextURL.endsWith( "uno_packages") )
