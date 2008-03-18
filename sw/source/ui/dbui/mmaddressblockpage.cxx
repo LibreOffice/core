@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:04:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1614,21 +1614,6 @@ void AddressMultiLineEdit::SetText( const String& rStr )
             pTextEngine->ReplaceText( TextSelection( aPaM ), String::CreateFromAscii("\n \n "));
         }
     }
-}
-/*-- 25.06.2004 09:10:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void AddressMultiLineEdit::Modified()
-{
-    //restore the attributes
-    ExtTextView* pTextView = GetTextView();
-    const TextSelection& rSelection = pTextView->GetSelection();
-    ULONG nPara = rSelection.GetStart().GetPara();
-    USHORT nStartIndex = rSelection.GetStart().GetIndex();
-    USHORT nEndIndex = rSelection.GetEnd().GetIndex();
-    SetText( GetAddress() );
-    TextSelection aEntrySel(TextPaM(nPara, nStartIndex), TextPaM(nPara, nEndIndex));
-    pTextView->SetSelection(aEntrySel);
 }
 
 /*-- 25.06.2004 12:32:41---------------------------------------------------
