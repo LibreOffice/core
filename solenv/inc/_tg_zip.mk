@@ -105,9 +105,6 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
-    echo mmm{$(subst,$(ZIP1HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP1HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP1HELPVAR)_, $(@:db))} $(ZIP1DIR)) $(command_seperator) zip $(ZIP1FLAGS) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT) $(subst,LANGDIR_away$/, $(ZIP1LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP1TMP).$(ZIP1TARGET){$(subst,$(ZIP1HELPVAR),_ $(@:db))}$(ZIP1EXT)  $@ 
@@ -225,9 +222,6 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
-    echo mmm{$(subst,$(ZIP2HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP2HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP2HELPVAR)_, $(@:db))} $(ZIP2DIR)) $(command_seperator) zip $(ZIP2FLAGS) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT) $(subst,LANGDIR_away$/, $(ZIP2LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP2TMP).$(ZIP2TARGET){$(subst,$(ZIP2HELPVAR),_ $(@:db))}$(ZIP2EXT)  $@ 
@@ -345,9 +339,6 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
-    echo mmm{$(subst,$(ZIP3HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP3HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP3HELPVAR)_, $(@:db))} $(ZIP3DIR)) $(command_seperator) zip $(ZIP3FLAGS) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT) $(subst,LANGDIR_away$/, $(ZIP3LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP3TMP).$(ZIP3TARGET){$(subst,$(ZIP3HELPVAR),_ $(@:db))}$(ZIP3EXT)  $@ 
@@ -465,9 +456,6 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
-    echo mmm{$(subst,$(ZIP4HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP4HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP4HELPVAR)_, $(@:db))} $(ZIP4DIR)) $(command_seperator) zip $(ZIP4FLAGS) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT) $(subst,LANGDIR_away$/, $(ZIP4LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP4TMP).$(ZIP4TARGET){$(subst,$(ZIP4HELPVAR),_ $(@:db))}$(ZIP4EXT)  $@ 
@@ -585,9 +573,6 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
-    echo mmm{$(subst,$(ZIP5HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP5HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP5HELPVAR)_, $(@:db))} $(ZIP5DIR)) $(command_seperator) zip $(ZIP5FLAGS) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT) $(subst,LANGDIR_away$/, $(ZIP5LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP5TMP).$(ZIP5TARGET){$(subst,$(ZIP5HELPVAR),_ $(@:db))}$(ZIP5EXT)  $@ 
@@ -705,9 +690,6 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
-    echo mmm{$(subst,$(ZIP6HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP6HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP6HELPVAR)_, $(@:db))} $(ZIP6DIR)) $(command_seperator) zip $(ZIP6FLAGS) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT) $(subst,LANGDIR_away$/, $(ZIP6LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP6TMP).$(ZIP6TARGET){$(subst,$(ZIP6HELPVAR),_ $(@:db))}$(ZIP6EXT)  $@ 
@@ -825,9 +807,6 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
-    echo mmm{$(subst,$(ZIP7HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP7HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP7HELPVAR)_, $(@:db))} $(ZIP7DIR)) $(command_seperator) zip $(ZIP7FLAGS) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT) $(subst,LANGDIR_away$/, $(ZIP7LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP7TMP).$(ZIP7TARGET){$(subst,$(ZIP7HELPVAR),_ $(@:db))}$(ZIP7EXT)  $@ 
@@ -945,9 +924,6 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
-    echo mmm{$(subst,$(ZIP8HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP8HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP8HELPVAR)_, $(@:db))} $(ZIP8DIR)) $(command_seperator) zip $(ZIP8FLAGS) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT) $(subst,LANGDIR_away$/, $(ZIP8LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP8TMP).$(ZIP8TARGET){$(subst,$(ZIP8HELPVAR),_ $(@:db))}$(ZIP8EXT)  $@ 
@@ -1065,9 +1041,6 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
-    echo mmm{$(subst,$(ZIP9HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP9HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP9HELPVAR)_, $(@:db))} $(ZIP9DIR)) $(command_seperator) zip $(ZIP9FLAGS) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT) $(subst,LANGDIR_away$/, $(ZIP9LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP9TMP).$(ZIP9TARGET){$(subst,$(ZIP9HELPVAR),_ $(@:db))}$(ZIP9EXT)  $@ 
@@ -1185,9 +1158,6 @@ $(ZIP10TARGETN) : delzip $(ZIP10DEPS)
 #	@$(IFEXIST) $@ $(THEN) $(TOUCH) $@ $(FI)  # even if it's not used...
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
-    echo mmm{$(subst,$(ZIP10HELPVAR),_ $(@:db))}mmm
-    echo mmm$(ZIP10HELPVAR)mmm
-    -$(GNUCOPY) -p $@ $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)
     @@-$(GNUCOPY) -p $@ $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)
     -$(CDD) $(subst,LANGDIR,{$(subst,$(ZIP10HELPVAR)_, $(@:db))} $(ZIP10DIR)) $(command_seperator) zip $(ZIP10FLAGS) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT) $(subst,LANGDIR_away$/, $(ZIP10LIST:s/LANGDIR/LANGDIR_away/)) -x delzip  $(avoid_cvs_dir) $(CHECKZIPRESULT)
     $(COPY) $(ZIP10TMP).$(ZIP10TARGET){$(subst,$(ZIP10HELPVAR),_ $(@:db))}$(ZIP10EXT)  $@ 
