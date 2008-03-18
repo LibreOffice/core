@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: hjs $ $Date: 2008-03-07 15:46:11 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:48:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,6 @@ broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
 
 sdkbro: $(foreach,i,$(alllangiso) sdkbro_$i)
 
-ooowoure: $(foreach,i,$(alllangiso) ooowoure_$i)
-
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
@@ -208,8 +206,6 @@ $(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkbro_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) ooowoure_$i) : $(ADDDEPS)
-
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS)"!=""
@@ -218,7 +214,7 @@ $(MAKETARGETS) : $(ADDDEPS)
 
 .IF "$(OS)" == "MACOSX"
 DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store}
-$(foreach,i,$(alllangiso) {openoffice openofficedev openofficedevarchive openofficewithjre broffice brofficedev brofficewithjre ooowoure}_$i) : $(DMGDEPS)
+$(foreach,i,$(alllangiso) {openoffice openofficedev openofficedevarchive openofficewithjre broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
 .ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(PKGFORMAT)"!=""
@@ -278,7 +274,7 @@ sdkoo_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 sdkoo_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH)) -log
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH))
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
@@ -286,10 +282,14 @@ ure_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 ure_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
+.IF "$(OS)" == "MACOSX"
+    @echo 'for now, there is no standalone URE for Mac OS X'
+.ELSE
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
         -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
         -msitemplate $(MSIURETEMPLATEDIR) \
         -msilanguage $(COMMONMISC)$/win_ulffiles
+.ENDIF
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
@@ -339,14 +339,6 @@ sdkbro_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH))
 
-.IF "$(PKGFORMAT)"!=""
-$(foreach,i,$(alllangiso) ooowoure_$i) : $$@{$(PKGFORMAT:^".")}
-ooowoure_%{$(PKGFORMAT:^".")} :
-.ELSE			# "$(PKGFORMAT)"!=""
-ooowoure_% :
-.ENDIF			# "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_woURE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
-
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
     @echo cannot pack nothing...
@@ -355,9 +347,9 @@ openoffice:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i openofficedevarchive_$i ooolanguagepack_$i ooodevlanguagepack_$i sdkoo_$i ooowoure_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i openofficedevarchive_$i ooolanguagepack_$i ooodevlanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} ooodevlanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} ooowoure_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} ooodevlanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
