@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 16:03:10 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:44:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,11 @@ export SAL_ENABLE_FILE_LOCKING
 # working on your system.
 # SAL_NOOPENGL=true; export SAL_NOOPENGL
 
-sd_platform=`uname -s`
-
 # the following test is needed on Linux PPC with IBM j2sdk142
-if [ $sd_platform = "Linux" -a "`uname -m`" = "ppc" ] ; then
+if [ "`uname -s`" = "Linux" -a "`uname -m`" = "ppc" ] ; then
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
 fi
-
-# set -x
 
 # resolve installation directory
 sd_cwd="`pwd`"
@@ -67,105 +63,10 @@ if [ -h "$0" ] ; then
 else
     cd "`dirname "$0"`"
 fi
-
-sd_prog="`pwd`"
-
-cd ..
-sd_binary=`basename "$0"`".bin"
-sd_inst="`pwd`"
-
-# change back directory
+sd_prog=`pwd`
 cd "$sd_cwd"
 
-# check if all required patches are installed
-if [ -x "$sd_prog/sopatchlevel.sh" ]; then
-    "$sd_prog/sopatchlevel.sh"
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-fi
-
-# set search path for shared libraries
-add_moz_lib=
-for moz_lib_path in \
-    $MOZILLA_LIBRARY_PATH \
-    /usr/lib \
-    /usr/lib/mozilla \
-    /usr/lib/mozilla-firefox \
-    /usr/lib/mozilla-thunderbird \
-    /opt/mozilla/lib \
-    /opt/MozillaFirefox/lib \
-    /opt/MozillaThunderbird/lib; \
-do
-    if [ -f $moz_lib_path/libnss3.so ]; then
-    case "$moz_lib_path" in
-        /usr/lib|/usr/lib64) : ;;
-        *) add_moz_lib=":$moz_lib_path"
-    esac
-    break
-    fi
-done
-case $sd_platform in
-  AIX)
-    # this is a temporary hack until we can live with the default search paths
-    if [ $LIBPATH ]; then
-      SYSTEM_LIBPATH=$LIBPATH
-      export SYSTEM_LIBPATH
-      LIBPATH="$sd_prog$add_moz_lib":$LIBPATH
-    else
-      LIBPATH="$sd_prog$add_moz_lib"
-    fi
-    export LIBPATH
-    ;;
-
-  Darwin)
-    # this is a temporary hack until we can live with the default search paths
-    if [ "$DYLD_LIBRARY_PATH" ]; then
-      SYSTEM_DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
-      export SYSTEM_DYLD_LIBRARY_PATH
-      DYLD_LIBRARY_PATH="$sd_prog$add_moz_lib":$DYLD_LIBRARY_PATH
-    else
-      DYLD_LIBRARY_PATH="$sd_prog$add_moz_lib"
-    fi
-    export DYLD_LIBRARY_PATH
-    ;;
-
-  HP-UX)
-    # this is a temporary hack until we can live with the default search paths
-    if [ $SHLIB_PATH ]; then
-      SYSTEM_SHLIB_PATH=$SHLIB_PATH
-      export SYSTEM_SHLIB_PATH
-      SHLIB_PATH="$sd_prog$add_moz_lib":/usr/openwin/lib:$SHLIB_PATH
-    else
-      SHLIB_PATH="$sd_prog$add_moz_lib":/usr/openwin/lib
-    fi
-    export SHLIB_PATH
-    ;;
-
-  IRIX*)
-    # this is a temporary hack until we can live with the default search paths
-    if [ $LD_LIBRARYN32_PATH ]; then
-       SYSTEM_LD_LIBRARYN32_PATH=$LD_LIBRARYN32_PATH
-       export SYSTEM_LD_LIBRARYN32_PATH
-       LD_LIBRARYN32_PATH=:"$sd_prog$add_moz_lib":$LD_LIBRARYN32_PATH
-    else
-       LD_LIBRARYN32_PATH=:"$sd_prog$add_moz_lib"
-    fi
-    export LD_LIBRARYN32_PATH
-    ;;
-
-  *)
-    # this is a temporary hack until we can live with the default search paths
-    if [ $LD_LIBRARY_PATH ]; then
-      SYSTEM_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-      export SYSTEM_LD_LIBRARY_PATH
-      LD_LIBRARY_PATH="$sd_prog$add_moz_lib":$LD_LIBRARY_PATH
-    else
-      LD_LIBRARY_PATH="$sd_prog$add_moz_lib"
-    fi
-    export LD_LIBRARY_PATH
-    ;;
-esac
+sd_binary=`basename "$0"`.bin
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
@@ -177,35 +78,14 @@ do
 done
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
-unset java_ld_library_path
-if [ -x "$sd_prog/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS`
-elif [ -x "$sd_prog/../ure-link/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/../ure-link/javaldx" $BOOTSTRAPVARS`
+if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
+    my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
+        "-env:INIFILEPATH=$sd_prog/redirectrc"`
+    if [ -n "$my_path" ] ; then
+        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH
+    fi
 fi
-if [ "$java_ld_library_path" != "" ] ; then
-    case $sd_platform in
-        AIX)
-            LIBPATH=${java_ld_library_path}:${LIBPATH}
-            ;;
-        Darwin)
-            DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
-            ;;
-        HP-UX)
-            SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
-            ;;
-        IRIX*)
-            LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
-            ;;
-        *)
-            LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
-            ;;
-    esac
-fi
-
-# misc. environment variables
-OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
-export OPENOFFICE_MOZILLA_FIVE_HOME
 
 unset XENVIRONMENT
 
@@ -242,16 +122,12 @@ if [ -f /etc/adabasrc ]; then
 fi
 
 sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
-"${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
+"$sd_prog/../basis-link/program/pagein" -L"$sd_prog/../basis-link/program" \
+    ${sd_pagein_args}
 
-# set path so that other apps can be started from soffice just by name
-if [ "$PATH" ]; then
-  PATH="$sd_prog":$PATH
-else
-  PATH="$sd_prog"
-fi
+# Set PATH so that crash_report is found:
+PATH=$sd_prog${PATH+:$PATH}
 export PATH
-
 
 # execute soffice binary
 "$sd_prog/$sd_binary" "$@" &
