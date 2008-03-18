@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 13:20:08 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1677,7 +1677,6 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
     const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
-    UINT8                nTrans     = rBrushItem.GetColor().GetTransparency();
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
 
@@ -1702,18 +1701,12 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
         {
             case SID_BACKGROUND_COLOR:
             {
-                Color aColor;
-                if ( nTrans == 255 )
-                    aColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
-                else
-                    aColor = rBrushItem.GetColor();
-                rSet.Put( SvxColorItem( aColor, SID_BACKGROUND_COLOR ) );
+                rSet.Put( SvxColorItem( rBrushItem.GetColor(), SID_BACKGROUND_COLOR ) );
             }
             break;
             case SID_FRAME_LINECOLOR:
             {
-                rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(),
-                                        SID_FRAME_LINECOLOR ) );
+                rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
             }
             break;
             case SID_ATTR_BRUSH:
