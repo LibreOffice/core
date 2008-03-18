@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:03:19 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,6 @@ Color SwViewOption::aFontColor(COL_BLACK);
 Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
-Color SwViewOption::aNotesIndicatorColor(COL_YELLOW);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
@@ -209,9 +208,9 @@ USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
 {
-    if( pOut && bIsScript)
+    if( pOut && bIsScript )
     {
-        Color aOldLineColor( pOut->GetLineColor() );
+            Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
         // Wir ziehen ueberall zwei Pixel ab, damit es schick aussieht
         USHORT nPix = GetPixelTwips() * 2;
@@ -221,7 +220,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
         DrawRect( pOut, aRect, aScriptIndicatorColor.GetColor() );
-        pOut->SetLineColor( aOldLineColor );
+    pOut->SetLineColor( aOldLineColor );
     }
 }
 
@@ -615,7 +614,6 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     aPageBreakColor.SetColor(aValue.nColor);
 
-    aNotesIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERNOTESINDICATOR).nColor);
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
 /* -----------------------------23.04.2002 17:48------------------------------
