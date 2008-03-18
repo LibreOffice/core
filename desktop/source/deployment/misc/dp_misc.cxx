@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:27:39 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ struct UnoRc : public rtl::StaticWithInit<
     const boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
-                            "$ORIGIN/" SAL_CONFIGFILE("uno")) );
+                            "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")) );
         ::rtl::Bootstrap::expandMacros( unorc );
         ::boost::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );
@@ -395,7 +395,7 @@ OUString getExtensionDefaultUpdateURL()
 {
     ::rtl::OUString sUrl(
         RTL_CONSTASCII_USTRINGPARAM(
-        "${$SYSBINDIR/" SAL_CONFIGFILE("version")
+        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
         ":Version:ExtensionUpdateURL"));
     ::rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
