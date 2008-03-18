@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:07:19 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1631,6 +1631,43 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
 sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     rtl_uString const * string, sal_Int32 * indexUtf16,
     sal_Int32 incrementCodePoints);
+
+/** Converts a byte string to a Unicode string, signalling failure.
+
+    @param target
+    An out parameter receiving the converted string.  Must not be null itself,
+    and must contain either null or a pointer to a valid rtl_uString; the
+    contents are unspecified if conversion fails (rtl_convertStringToUString
+    returns false).
+
+    @param source
+    The byte string.  May only be null if length is zero.
+
+    @param length
+    The length of the byte string.  Must be non-negative.
+
+    @param encoding
+    The text encoding to convert from.  Must be an octet encoding (i.e.,
+    rtl_isOctetTextEncoding(encoding) must return true).
+
+    @param flags
+    A combination of RTL_TEXTTOUNICODE_FLAGS that detail how to do the
+    conversion (see rtl_convertTextToUnicode).  RTL_TEXTTOUNICODE_FLAGS_FLUSH
+    need not be included, it is implicitly assumed.  Typical uses are either
+    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+    RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+    RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR (fail if a byte or multi-byte sequence
+    cannot be converted from the source encoding) or
+    OSTRING_TO_OUSTRING_CVTFLAGS (make a best efforts conversion).
+
+    @return
+    True if the conversion succeeded, false otherwise.
+
+    @since UDK 3.2.9
+*/
+sal_Bool SAL_CALL rtl_convertStringToUString(
+    rtl_uString ** target, char const * source, sal_Int32 length,
+    rtl_TextEncoding encoding, sal_uInt32 flags) SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }
