@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-07 11:54:13 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@ Module gid_Module_Prg_Calc_Bin
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
+    Files = (gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
     gid_File_Lib_Solver,gid_File_Lib_Lpsolve,
     gid_File_Oo_Office_Ui_Calccommands_Xcs,gid_File_Oo_Office_Ui_Calccommands_Xcu,gid_File_Oo_Office_Ui_Calcwindowstate_Xcs,
-    gid_File_Registry_Spool_Oo_Common_Calc_Xcu,gid_File_Registry_Spool_Oo_Setup_Calc_Xcu, gid_File_Xdg_Calc, gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu,
+    gid_File_Registry_Spool_Oo_Common_Calc_Xcu,gid_File_Registry_Spool_Oo_Setup_Calc_Xcu, gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu,
     gid_File_Lib_Bf_Sc,gid_File_Oo_Office_Ui_Calcwindowstate_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu, gid_File_Tmp_Userinstall_Calc_Inf);
 End
 
@@ -72,3 +72,30 @@ Module gid_Module_Prg_Calc_Addins
     Default = YES;
     Files = (gid_File_Lib_Date,gid_File_Zip_Addin,gid_File_Lib_Rot,gid_File_Lib_Dfa,gid_File_Lib_Analysis);
 End
+
+Module gid_Module_Brand_Prg_Calc
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Calc";
+    Description = "gid_Module_Brand_Prg_Calc";
+    ParentID = gid_Module_Prg_Calc_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Scalc);
+End
+
+Module gid_Module_Langpack_Calc_Template
+    ParentID = gid_Module_Prg_Calc_Bin;
+    Name = "gid_Module_Langpack_Calc_Template";
+    Description = "gid_Module_Langpack_Calc_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Scalc_Zip,
+             gid_File_Res_Analysis,
+             gid_File_Res_Bf_Sc,
+             gid_File_Res_Date,
+             gid_File_Res_Sc,
+             gid_File_Res_Solver);
+End
+
+#include "alllangmodules_calc.inc"
