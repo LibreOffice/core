@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:21:22 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,9 +165,6 @@ class ColorConfigWindow_Impl : public Window
     CheckBox        aWrtIdxShadingBackCB;
     ColorListBox    aWrtIdxShadingBackLB;
     Window          aWrtIdxShadingBackWN;
-    FixedText       aWrtNotesIndicatorFT;
-    ColorListBox    aWrtNotesIndicatorLB;
-    Window          aWrtNotesIndicatorWN;
     FixedText       aWrtScriptIndicatorFT;
     ColorListBox    aWrtScriptIndicatorLB;
     Window          aWrtScriptIndicatorWN;
@@ -330,7 +327,6 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         case WRITERFIELDSHADINGS :
         case WRITERIDXSHADINGS :
         case WRITERDIRECTCURSOR :
-        case WRITERNOTESINDICATOR :
         case WRITERSCRIPTINDICATOR :
         case WRITERSECTIONBOUNDARIES :
         case WRITERPAGEBREAKS :
@@ -433,9 +429,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aWrtIdxShadingBackCB(this, ResId(  CB_WRITERIDXSHADINGS, *rResId.GetResMgr())),
         aWrtIdxShadingBackLB(this, ResId(  LB_WRITERIDXSHADINGS, *rResId.GetResMgr())),
         aWrtIdxShadingBackWN(this, ResId(  WN_WRITERIDXSHADINGS, *rResId.GetResMgr())),
-        aWrtNotesIndicatorFT(this, ResId(      FT_WRITERNOTESINDICATOR, *rResId.GetResMgr())),
-        aWrtNotesIndicatorLB(this, ResId(      LB_WRITERNOTESINDICATOR, *rResId.GetResMgr())),
-        aWrtNotesIndicatorWN(this, ResId(      WN_WRITERNOTESINDICATOR, *rResId.GetResMgr())),
         aWrtScriptIndicatorFT(this, ResId(      FT_WRITERSCRIPTINDICATOR, *rResId.GetResMgr())),
         aWrtScriptIndicatorLB(this, ResId(      LB_WRITERSCRIPTINDICATOR, *rResId.GetResMgr())),
         aWrtScriptIndicatorWN(this, ResId(      WN_WRITERSCRIPTINDICATOR, *rResId.GetResMgr())),
@@ -536,8 +529,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aCheckBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldCB             ;
     aCheckBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackCB       ;
     aFixedTexts[WRITERDIRECTCURSOR  ]=& aWrtDirectCrsrFT;
-    aFixedTexts[WRITERNOTESINDICATOR    ]=& aWrtNotesIndicatorFT;
-    aFixedTexts[WRITERSCRIPTINDICATOR   ]=& aWrtScriptIndicatorFT;
+     aFixedTexts[WRITERSCRIPTINDICATOR   ]=& aWrtScriptIndicatorFT;
     aCheckBoxes[WRITERSECTIONBOUNDARIES ]=& aWrtSectionBoundCB;
     aFixedTexts[HTMLSGML         ]=& aHTMLSGMLFT;
     aFixedTexts[HTMLCOMMENT      ]=& aHTMLCommentFT;
@@ -575,7 +567,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldLB             ;
     aColorBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackLB       ;
     aColorBoxes[WRITERDIRECTCURSOR  ] = &aWrtDirectCrsrLB           ;
-    aColorBoxes[WRITERNOTESINDICATOR     ] = &aWrtNotesIndicatorLB           ;
     aColorBoxes[WRITERSCRIPTINDICATOR    ] = &aWrtScriptIndicatorLB           ;
     aColorBoxes[WRITERSECTIONBOUNDARIES  ] = &aWrtSectionBoundLB           ;
     aColorBoxes[WRITERPAGEBREAKS] = &aWrtPageBreaksLB;
@@ -614,7 +605,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[WRITERFIELDSHADINGS ] = &aWrtFieldWN             ;
     aWindows[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackWN       ;
     aWindows[WRITERDIRECTCURSOR  ] = &aWrtDirectCrsrWN           ;
-    aWindows[WRITERNOTESINDICATOR     ] = &aWrtNotesIndicatorWN           ;
     aWindows[WRITERSCRIPTINDICATOR    ] = &aWrtScriptIndicatorWN           ;
     aWindows[WRITERSECTIONBOUNDARIES  ] = &aWrtSectionBoundWN           ;
     aWindows[WRITERPAGEBREAKS] = &aWrtPageBreaksWN;
