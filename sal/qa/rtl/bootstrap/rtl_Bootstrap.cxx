@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Bootstrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:37:58 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
 #endif
+
+#include <rtl/ustrbuf.hxx>
 
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
@@ -116,7 +118,7 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 inline ::rtl::OUString getModulePath( void )
 {
     ::rtl::OUString suDirPath;
-    ::osl::Module::getUrlFromAddress( ( void* ) &getModulePath, suDirPath );
+    ::osl::Module::getUrlFromAddress( ( oslGenericFunction ) &getModulePath, suDirPath );
 
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
@@ -416,7 +418,7 @@ namespace rtl_Bootstrap
      void getFrom_005_3()
             {
 #if (defined WNT) || (defined SOLARIS)
-        putenv("QADEV_BOOTSTRAP=sun&ms");
+        putenv(const_cast< char * >("QADEV_BOOTSTRAP=sun&ms"));
 #else
                 setenv("QADEV_BOOTSTRAP", "sun&ms", 0);
 #endif
@@ -772,6 +774,45 @@ namespace rtl_Bootstrap
                                        suMacro[3].getLength() > 0);
             }
 
+        void testRecursion() {
+            rtl::OUString t(RTL_CONSTASCII_USTRINGPARAM("$RECURSIVE"));
+            Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
+            CPPUNIT_ASSERT_MESSAGE(
+                "recursion detection",
+                t.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("***RECURSION DETECTED***")));
+        }
+
+        void testLink() {
+            rtl::OUString t(RTL_CONSTASCII_USTRINGPARAM("$LINKED"));
+            Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
+            CPPUNIT_ASSERT_MESSAGE(
+                "link file",
+                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("qadev17")));
+        }
+
+        void testSection() {
+            rtl::OUStringBuffer b;
+            b.appendAscii(RTL_CONSTASCII_STRINGPARAM("${"));
+            rtl::OUString p(t_getSourcePath(TESTSHL2_INI));
+            for (sal_Int32 i = 0; i < p.getLength(); ++i) {
+                if (p[i] != 'u') {
+                    b.append(static_cast< sal_Unicode >('\\'));
+                }
+                b.append(p[i]);
+            }
+            b.appendAscii(RTL_CONSTASCII_STRINGPARAM(":Other_Section:EXPAND}"));
+            rtl::OUString t(b.makeStringAndClear());
+            Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
+            CPPUNIT_ASSERT_MESSAGE(
+                "section expansion",
+                t.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("$FILE")));
+                // the correct answer would be "testshl2 file" instead, but
+                // expansion including a section currently erroneously does not
+                // recursively expand macros in the resulting replacement text
+        }
+
         CPPUNIT_TEST_SUITE(expandMacrosFrom);
         CPPUNIT_TEST(expandMacrosFrom_001);
         CPPUNIT_TEST(expandMacrosFrom_002);
@@ -779,6 +820,9 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(expandMacrosFrom_002_2);
 //?        CPPUNIT_TEST(expandMacrosFrom_002_3);
         CPPUNIT_TEST(expandMacrosFrom_003);
+        CPPUNIT_TEST(testRecursion);
+        CPPUNIT_TEST(testLink);
+        CPPUNIT_TEST(testSection);
         CPPUNIT_TEST_SUITE_END();
     }; // class expandMacrosFrom
 
@@ -893,6 +937,7 @@ static void create_rtlrc()
     sLines += "SOVALUE=src680_qadev\n";
     sLines += "RTLVALUE=qadev17\n";
     sLines += "TESTSHL_SOVALUE=rtlfile\n";
+    sLines += "RECURSIVE=${$ORIGIN/" SAL_CONFIGFILE("testshl2") ":RECURSIVE}\n";
     sLines += "[Other_Section]\n";
     sLines += "TESTSHL_SOVALUE=rtlfile_other\n";
 
@@ -925,11 +970,19 @@ static void create_testshl2rc()
     sLines += "ILLEGAL;SEMICOLON=test\n";
     sLines += "ILLEGAL:COLON=test\n";
     sLines += "  KEY_FOR_TRIM_TEST  =   value for trim test    \n";
+    sLines += "RECURSIVE=${$ORIGIN/" SAL_CONFIGFILE("rtl") ":RECURSIVE}\n";
+    sLines += "LINKED=${${.link:$ORIGIN/testshl2-link}:RTLVALUE}\n";
     sLines += "[Other_Section]\n";
     sLines += "FILE=testshl2 file other\n";
+    sLines += "EXPAND=$FILE\n";
     //? sLines += "TESTSHL_SOVALUE=testshl2_file_other\n";
 
     removeAndCreateFile(aFileURL, sLines);
+
+    removeAndCreateFile(
+        (getExecutableDirectory() +
+         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testshl2-link"))),
+        SAL_CONFIGFILE("rtl"));
 }
 
 // -----------------------------------------------------------------------------
