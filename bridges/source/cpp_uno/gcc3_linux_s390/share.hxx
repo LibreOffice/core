@@ -4,9 +4,9 @@
  *
  *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:24:36 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,17 @@
  *
  ************************************************************************/
 
+#include "uno/mapping.h"
+
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+  void dummy_can_throw_anything( char const * );
+
 
 // ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
@@ -92,3 +97,4 @@ void raiseException(
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
