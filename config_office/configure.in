@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-03-07 16:56:35 $
+dnl * Date: $Date: 2008-03-18 14:21:12 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.252 $ )
+AC_REVISION( $Revision: 1.253 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2149,6 +2149,8 @@ dnl ===================================================================
          DEFAULT_TO_STLPORT="no"
          ;;
      esac
+   elif test "$_os" = "Darwin"; then
+      DEFAULT_TO_STLPORT="no"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
@@ -3295,12 +3297,13 @@ dnl ===================================================================
 dnl Check for system libxslt
 dnl ===================================================================
 AC_MSG_CHECKING([which libxslt to use])
-if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
+       "$_os" = "Darwin" && \
    test "$with_system_libxslt" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_LIBXSLT=YES
 
-   PKG_CHECK_MODULES( LIBXSLT, libxslt )
+   PKG_CHECK_MODULES_MACHACK(LIBXSLT, xslt-config, libxslt)
 
    dnl Check for xsltproc
    AC_PATH_PROG(XSLTPROC, xsltproc, no)
@@ -3321,11 +3324,12 @@ dnl ===================================================================
 dnl Check for system libxml
 dnl ===================================================================
 AC_MSG_CHECKING([which libxml to use])
-if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
+if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
+            "$_os" = "Darwin" && \
 	test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
-    PKG_CHECK_MODULES( LIBXML, libxml-2.0 >= 2.0 )
+    PKG_CHECK_MODULES_MACHACK(LIBXML, xml2-config, libxml-2.0 >= 2.0)
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
 else
     AC_MSG_RESULT([internal])
