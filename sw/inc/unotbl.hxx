@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:08:56 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,12 +538,6 @@ public:
             ::com::sun::star::uno::Sequence< double > *pDblSeq,
             sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
 
-    // for SwChartDataSource
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence > >
-        GetLabeledDataSequences( SwChartDataProvider &rProvider,
-            BOOL bBuildColumnSeqs, BOOL bFirstCellIsLabel ) throw (::com::sun::star::uno::RuntimeException);
 };
 /* -----------------03.02.99 07:31-------------------
  *
