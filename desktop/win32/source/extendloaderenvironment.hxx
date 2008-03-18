@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendloaderenvironment.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:57:27 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,26 @@
 #include "sal/config.h"
 #endif
 
+#include <tchar.h>
+
+#define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
+#define MY_STRING(s) (s), MY_LENGTH(s)
+
 namespace desktop_win32 {
 
 // Set the PATH environment variable in the current (loader) process, so that a
 // following CreateProcess has the necessary environment:
-void extendLoaderEnvironment();
+//
+// @param binPath
+// Must point to an array of size at least MAX_PATH.  Is filled with the null
+// terminated full path to the "bin" file corresponding to the current
+// executable.
+//
+// @param iniDirectory
+// Must point to an array of size at least MAX_PATH.  Is filled with the null
+// terminated full directory path (ending in "\") to the "ini" file
+// corresponding to the current executable.
+void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory);
 
 }
 
