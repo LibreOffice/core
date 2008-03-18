@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.178 $
-# Date:        $Date: 2008-03-07 16:56:50 $
+# Version:     $Revision: 1.179 $
+# Date:        $Date: 2008-03-18 16:09:55 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -367,7 +367,7 @@ elsif ( $platform =~ m/freebsd/ )
    }
       $INPATH         = $OUTPATH.$PROEXT;
 } 
-elsif ( $platform =~ m/linux-gnu/ ) 
+elsif ( $platform =~ m/linux/ ) 
 {
 # General Linux settings:
       $CVER           = "C300";
@@ -1055,7 +1055,7 @@ if ($platform =~ m/solaris/)
                         $ps.$JRETHREADDIR.
                         $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB;
 }
-elsif ($platform =~ m/linux-gnu|netbsd|osf1|freebsd|aix/)
+elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
                         $ps.$JRELIBDIR.
@@ -1097,7 +1097,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux-gnu|netbsd|osf1|irix|freebsd|aix/)
+elsif ($platform =~ m/linux|netbsd|osf1|irix|freebsd|aix/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1163,7 +1163,7 @@ if ($platform =~ m/cygwin|os2/)
 }
      
 # The general environment path.
-if ($platform =~ m/linux-gnu|netbsd|odf1|irix|freebsd|aix|solaris/)
+if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
                         $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1348,7 +1348,7 @@ if ($platform =~ m/solaris/)
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux-gnu|netbasd|osf1|irix|aix|freebsd/)
+elsif ($platform =~ m/linux|netbasd|osf1|irix|aix|freebsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1391,7 +1391,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux-gnu|osf1|freebsd|netbsd|irix/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|irix/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
 if ($platform =~ m/linux|freebsd|netbsd/)
@@ -1409,7 +1409,7 @@ if ($platform =~ m/solaris/)
     $temp =~ s:$COMPATH:/bin\$:;
     $SOLARINC         .= $I.$temp.$ds."include";
 }
-if ($platform =~ m/linux-gnu/)
+if ($platform =~ m/linux/)
 {
 # This simply adds an include path, so even cases that break the FHS work
    $SOLARINC         .= $STLPORT_inc_stlport;
@@ -1425,7 +1425,7 @@ if ($platform =~ m/linux-gnu/)
    		if ($platform =~ m/solaris/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
    		}
-   		elsif  ($platform =~ m/linux-gnu|osf1/)
+   		elsif  ($platform =~ m/linux|osf1/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
    		}
    		elsif ($platform =~ m/freebsd/)
@@ -1446,7 +1446,7 @@ if ($platform =~ m/linux-gnu/)
    		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
 	}
     #The tail, if needed
-    if ($platform =~ m/linux-gnu|freebsd|netbsd/)
+    if ($platform =~ m/linux|freebsd|netbsd/)
     {  $SOLARINC  .= $I.$XINC;
     }
     elsif ($platform =~ m/osf1/)
