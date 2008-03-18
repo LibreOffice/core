@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.129 $
+#   $Revision: 1.130 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 10:17:41 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:08:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.129 $$"
+LIBSMKREV!:="$$Revision: 1.130 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -226,7 +226,13 @@ JPEG3RDLIB=-ljpeg
 .ELSE
 JPEG3RDLIB=-ljpeglib
 .ENDIF
+.IF "$(SYSTEM_NEON)" == "YES" || "$(GUI)$(COM)"=="WNTGCC"
 NEON3RDLIB=-lneon
+.ELIF "$(OS)" == "MACOSX"
+NEON3RDLIB=$(SOLARLIBDIR)$/libneon.a
+.ELSE
+NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
+.ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 BERKELEYLIB=-ldb42
 BERKELEYCPPLIB=-ldb_cxx42
@@ -336,6 +342,8 @@ ULINGULIB=-lulingu
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
+SOFFICELIB=-lsoffice
+UNOPKGLIB=-lunopkg
 
 .ELSE				# "$(GUI)"=="UNX"
 AWTLIB*=jawt.lib
@@ -494,5 +502,7 @@ ULINGULIB=$(LIBPRE) libulingu.lib
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
+SOFFICELIB=isoffice.lib
+UNOPKGLIB=iunopkg.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
