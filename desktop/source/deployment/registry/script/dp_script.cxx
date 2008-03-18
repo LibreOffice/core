@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_script.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:38 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,10 +189,10 @@ BackendImpl::BackendImpl(
     {
         OUString basic_path(
             m_eContext == CONTEXT_USER
-            ? OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
+            ? OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
                     SAL_CONFIGFILE("bootstrap")
                     ":UserInstallation}/user/basic")
-            : OUSTR("vnd.sun.star.expand:${$SYSBINDIR/"
+            : OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
                     SAL_CONFIGFILE("bootstrap")
                     ":BaseInstallation}/share/basic") );
         m_basic_script_libs.reset(
