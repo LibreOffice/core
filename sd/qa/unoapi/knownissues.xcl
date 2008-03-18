@@ -1,159 +1,20 @@
-### i22883 ###
-# sd.DrawController_OutlineView::com::sun::star::ui::XContextMenuInterception
-# sd.DrawController_PresentationView::com::sun::star::ui::XContextMenuInterception
-# sd.DrawController_DrawView::com::sun::star::ui::XContextMenuInterception
-# sd.DrawController_HandoutView::com::sun::star::ui::XContextMenuInterception
-# sd.DrawController_NotesView::com::sun::star::ui::XContextMenuInterception
-
-### i22890 ###
-# sd.DrawController_PresentationView::com::sun::star::view::XSelectionSupplier
-
-### i22896 ###
-# sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
-
-### sometimes fails ###
-# sd.SdXCustomPresentationAccess::com::sun::star::container::XNameReplace
-
-### i34456 ###
-# sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
-
-### i34994 ###
-# sd.SdXPresentation::com::sun::star::presentation::Presentation
-
-### i43872 ###
-# sd.SdDrawPage::com::sun::star::form::XFormsSupplier
-
-### i53605 ###
-# sd.DrawController_OutlineView::com::sun::star::awt::XUserInputInterception
-# sd.DrawController_PresentationView::com::sun::star::awt::XUserInputInterception
-# sd.DrawController_DrawView::com::sun::star::awt::XUserInputInterception
-# sd.DrawController_HandoutView::com::sun::star::awt::XUserInputInterception
-# sd.DrawController_NotesView::com::sun::star::awt::XUserInputInterception
-
-### i65255 ###
-# sd.DrawController_OutlineView::com::sun::star::drawing::DrawingDocumentDrawView
-# sd.DrawController_PresentationView::com::sun::star::drawing::DrawingDocumentDrawView
-# sd.DrawController_DrawView::com::sun::star::drawing::DrawingDocumentDrawView
-# sd.DrawController_HandoutView::com::sun::star::drawing::DrawingDocumentDrawView
-# sd.DrawController_NotesView::com::sun::star::drawing::DrawingDocumentDrawView
-
-### i65256 ###
-# sd.DrawController_PresentationView::com::sun::star::drawing::XDrawView
-# sd.DrawController_HandoutView::com::sun::star::drawing::XDrawView
-# sd.DrawController_NotesView::com::sun::star::drawing::XDrawView
-
-### i63664 ###
-# sd.DrawController_OutlineView::com::sun::star::view::XSelectionSupplier
-
-### i64552 ###
-# sd.SdXImpressDocument::com::sun::star::view::XPrintable
-
-
-
-
-### 110439 ###
-# sd.SdUnoOutlineView::com::sun::star::frame::XController
-
-### i22883 ###
-sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoOutlineView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoSlideView::com::sun::star::ui::XContextMenuInterception
-sd.DrawController_OutlineView::com::sun::star::ui::XContextMenuInterception
-sd.DrawController_PresentationView::com::sun::star::ui::XContextMenuInterception
-sd.DrawController_DrawView::com::sun::star::ui::XContextMenuInterception
-sd.DrawController_HandoutView::com::sun::star::ui::XContextMenuInterception
-sd.DrawController_NotesView::com::sun::star::ui::XContextMenuInterception
-
-### i22890 ###
-# sd.SdUnoOutlineView::com::sun::star::view::XSelectionSupplier
-# sd.SdUnoPresView::com::sun::star::view::XSelectionSupplier
-# sd.SdUnoDrawView::com::sun::star::view::XSelectionSupplier
-# sd.DrawController_PresentationView::com::sun::star::view::XSelectionSupplier
-
-### i22896 ###
-# sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
-
-### i34456 ###
-# sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
+### i84994 ###
+sd.SdXImpressDocument::com::sun::star::view::XPrintable
+# -> disabled in sd.sce
 
 ### i34994 ###
 sd.SdXPresentation::com::sun::star::presentation::Presentation
 
-### i35935 ###
-# sd.AccessibleSlideView::com::sun::star::accessibility::XAccessibleComponent
-# sd.AccessibleSlideView::com::sun::star::accessibility::XAccessibleSelection
-# sd.AccessibleSlideView::com::sun::star::accessibility::XAccessible
-# sd.AccessibleSlideView::com::sun::star::accessibility::XAccessibleEventBroadcaster
-# sd.AccessibleSlideView::com::sun::star::accessibility::XAccessibleContext
-
-### i43872 ###
-# sd.SdDrawPage::com::sun::star::form::XFormsSupplier
-
-### i52942 ###
-# sd.SdUnoDrawView::com::sun::star::drawing::DrawingDocumentDrawView
-
-### i53140 ###
-# sd.SdUnoSlideView::com::sun::star::view::XSelectionSupplier
-
 ### i53605 ###
-# sd.SdUnoDrawView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoOutlineView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoSlideView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoPresView::com::sun::star::awt::XUserInputInterception
 sd.DrawController_OutlineView::com::sun::star::awt::XUserInputInterception
 sd.DrawController_PresentationView::com::sun::star::awt::XUserInputInterception
 sd.DrawController_DrawView::com::sun::star::awt::XUserInputInterception
 sd.DrawController_HandoutView::com::sun::star::awt::XUserInputInterception
 sd.DrawController_NotesView::com::sun::star::awt::XUserInputInterception
 
-### i54352 ###
-# sd.SdUnoDrawView::com::sun::star::lang::XComponent
-# sd.SdUnoPresView::com::sun::star::lang::XComponent
-
-### i61872 ###
-# sd.SdUnoOutlineView::com::sun::star::presentation::OutlineView
-# sd.SdUnoOutlineView::com::sun::star::lang::XServiceInfo
-# sd.SdUnoOutlineView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoOutlineView::com::sun::star::beans::XPropertySet
-# sd.SdUnoOutlineView::com::sun::star::view::XSelectionSupplier
-# sd.SdUnoOutlineView::com::sun::star::frame::XDispatchProvider
-# sd.SdUnoOutlineView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoOutlineView::com::sun::star::awt::XWindow
-# sd.SdUnoOutlineView::com::sun::star::frame::XController
-# sd.SdUnoOutlineView::com::sun::star::lang::XComponent
-# sd.SdUnoSlideView::com::sun::star::lang::XServiceInfo
-# sd.SdUnoSlideView::com::sun::star::beans::XPropertySet
-# sd.SdUnoSlideView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoSlideView::com::sun::star::drawing::XDrawView
-# sd.SdUnoSlideView::com::sun::star::drawing::DrawingDocumentDrawView
-# sd.SdUnoSlideView::com::sun::star::frame::XDispatchProvider
-# sd.SdUnoSlideView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoSlideView::com::sun::star::awt::XWindow
-# sd.SdUnoSlideView::com::sun::star::frame::XController
-# sd.SdUnoSlideView::com::sun::star::view::XSelectionSupplier
-# sd.SdUnoSlideView::com::sun::star::lang::XComponent
-# sd.SdUnoPresView::com::sun::star::lang::XServiceInfo
-# sd.SdUnoPresView::com::sun::star::view::XSelectionSupplier
-# sd.SdUnoPresView::com::sun::star::beans::XPropertySet
-# sd.SdUnoPresView::com::sun::star::awt::XUserInputInterception
-# sd.SdUnoPresView::com::sun::star::drawing::XDrawView
-# sd.SdUnoPresView::com::sun::star::frame::XDispatchProvider
-# sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
-# sd.SdUnoPresView::com::sun::star::awt::XWindow
-# sd.SdUnoPresView::com::sun::star::frame::XController
-# sd.SdUnoPresView::com::sun::star::presentation::PreviewView
-# sd.SdUnoPresView::com::sun::star::lang::XComponent
-
-### i62304 ###
-# sd.SdUnoSlideView::com::sun::star::frame::XController
-
 ### i63664 ###
 sd.DrawController_OutlineView::com::sun::star::view::XSelectionSupplier
 sd.DrawController_PresentationView::com::sun::star::view::XSelectionSupplier
-
-### i64552 ###
-# sd.SdXImpressDocument::com::sun::star::view::XPrintable
 
 ### i65255 ###
 sd.DrawController_OutlineView::com::sun::star::drawing::DrawingDocumentDrawView
@@ -167,10 +28,9 @@ sd.DrawController_PresentationView::com::sun::star::drawing::XDrawView
 sd.DrawController_HandoutView::com::sun::star::drawing::XDrawView
 sd.DrawController_NotesView::com::sun::star::drawing::XDrawView
 
-### failures wirhout issue ###
-sd.SdLayer::com::sun::star::drawing::Layer
-sd.SdLayerManager::com::sun::star::drawing::XLayerManager
-sd.SdXCustomPresentationAccess::com::sun::star::container::XNameReplace
-# -o sd.AccessibleDrawDocumentView -> disabled in sc.sce
-# -o sd.SdXImpressDocument -> disabled in sc.sce
-sd.DrawController_DrawView::com::sun::star::ui::XContextMenuInterception
+### i84992 ###
+sd.DrawController_NotesView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_OutlineView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_HandoutView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_PresentationView::com::sun::star::ui::XContextMenuInterception
+
