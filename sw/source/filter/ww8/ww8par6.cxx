@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:37:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,7 +982,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     if (!pSep)
         return;
 
-    bool bVer67(mrReader.bVer67);
+    ww::WordVersion eVer = mrReader.GetFib().GetFIBVersion();
 
     // M.M. Create a linked section if the WkbPLCF
     // has an entry for one at this cp
@@ -1013,6 +1013,38 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     //BEGIN read section values
     wwSection aNewSection(*mrReader.pPaM->GetPoint());
 
+    static const USHORT aVer2Ids0[] =
+    {
+        /*sprmSBkc*/           117,
+        /*sprmSFTitlePage*/    118,
+        /*sprmSNfcPgn*/        122,
+        /*sprmSCcolumns*/      119,
+        /*sprmSDxaColumns*/    120,
+        /*sprmSLBetween*/      133
+    };
+
+    static const USHORT aVer67Ids0[] =
+    {
+        /*sprmSBkc*/           142,
+        /*sprmSFTitlePage*/    143,
+        /*sprmSNfcPgn*/        147,
+        /*sprmSCcolumns*/      144,
+        /*sprmSDxaColumns*/    145,
+        /*sprmSLBetween*/      158
+    };
+
+    static const USHORT aVer8Ids0[] =
+    {
+        /*sprmSBkc*/           0x3009,
+        /*sprmSFTitlePage*/    0x300A,
+        /*sprmSNfcPgn*/        0x300E,
+        /*sprmSCcolumns*/      0x500B,
+        /*sprmSDxaColumns*/    0x900C,
+        /*sprmSLBetween*/      0x3019
+    };
+
+    const USHORT* pIds = eVer <= ww::eWW2 ? aVer2Ids0 : eVer <= ww::eWW7 ? aVer67Ids0 : aVer8Ids0;
+
     if (!maSegments.empty())
     {
         // Type of break: break codes are:
@@ -1021,91 +1053,112 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         // 2 New page
         // 3 Even page
         // 4 Odd page
-        if (const BYTE* pSprmBkc = pSep->HasSprm(bVer67 ? 142 : 0x3009))
+        if (const BYTE* pSprmBkc = pSep->HasSprm(pIds[0]))
             aNewSection.maSep.bkc = *pSprmBkc;
     }
 
     // Has a table page
     aNewSection.maSep.fTitlePage =
-        (0 != ReadBSprm( pSep, bVer67 ? 143 : 0x300A, 0 ));
+        (0 != ReadBSprm( pSep, pIds[1], 0 ));
 
     // sprmSNfcPgn
-    aNewSection.maSep.nfcPgn = ReadBSprm( pSep, (bVer67 ? 147 : 0x300E), 0 );
+    aNewSection.maSep.nfcPgn = ReadBSprm( pSep, pIds[2], 0 );
     if (aNewSection.maSep.nfcPgn > 4)
         aNewSection.maSep.nfcPgn = 0;
 
-    aNewSection.maSep.fUnlocked = ReadBSprm(pSep, (bVer67 ? 139 : 0x3006), 0 );
+    aNewSection.maSep.fUnlocked = eVer <= ww::eWW2 ? ReadBSprm(pSep, (eVer <= ww::eWW7 ? 139 : 0x3006), 0 ) : 0;
 
     // sprmSFBiDi
-    if (!bVer67)
-        aNewSection.maSep.fBiDi = ReadBSprm(pSep, 0x3228, 0);
+    aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, 0x3228, 0) : 0;
 
-    aNewSection.maSep.ccolM1 = ReadSprm(pSep, (bVer67 ? 144 : 0x500B), 0 );
+    aNewSection.maSep.ccolM1 = ReadSprm(pSep, pIds[3], 0 );
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
-    aNewSection.maSep.dxaColumns =
-        ReadUSprm( pSep, (bVer67 ? 145 : 0x900C), 708 );
+    aNewSection.maSep.dxaColumns = ReadUSprm( pSep, pIds[4], 708 );
 
     // sprmSLBetween
-    aNewSection.maSep.fLBetween = ReadBSprm(pSep, (bVer67 ? 158 : 0x3019), 0 );
+    aNewSection.maSep.fLBetween = ReadBSprm(pSep, pIds[5], 0 );
 
-    // sprmSFEvenlySpaced
-    aNewSection.maSep.fEvenlySpaced =
-        ReadBSprm(pSep, (bVer67 ? 138 : 0x3005), 1) ? true : false;
-
-    if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
+    if (eVer >= ww::eWW6)
     {
-        aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
-        int nCols = aNewSection.maSep.ccolM1 + 1;
-        int nIdx = 0;
-        for (int i = 0; i < nCols; ++i)
+        // sprmSFEvenlySpaced
+        aNewSection.maSep.fEvenlySpaced =
+            ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false;
+
+        if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
-            //sprmSDxaColWidth
-            const BYTE* pSW =
-                pSep->HasSprm( (bVer67 ? 136 : 0xF203), BYTE( i ) );
-
-            ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
-            sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
-
-            aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
-
-            if (i < nCols-1)
+            aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
+            int nCols = aNewSection.maSep.ccolM1 + 1;
+            int nIdx = 0;
+            for (int i = 0; i < nCols; ++i)
             {
-                //sprmSDxaColSpacing
-                const BYTE* pSD =
-                    pSep->HasSprm( (bVer67 ? 137 : 0xF204), BYTE( i ) );
+                //sprmSDxaColWidth
+                const BYTE* pSW = pSep->HasSprm( (eVer <= ww::eWW7 ? 136 : 0xF203), BYTE( i ) );
 
-                ASSERT( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
-                if( pSD )
+                ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
+                sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
+
+                aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+
+                if (i < nCols-1)
                 {
-                    nWidth = SVBT16ToShort(pSD + 1);
-                    aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                    //sprmSDxaColSpacing
+                    const BYTE* pSD = pSep->HasSprm( (eVer <= ww::eWW7 ? 137 : 0xF204), BYTE( i ) );
+
+                    ASSERT( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
+                    if( pSD )
+                    {
+                        nWidth = SVBT16ToShort(pSD + 1);
+                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                    }
                 }
             }
         }
     }
 
-    static const USHORT aVer67Ids[] =
+    static const USHORT aVer2Ids1[] =
+    {
+        /*sprmSBOrientation*/   137,
+        /*sprmSXaPage*/         139,
+        /*sprmSYaPage*/         140,
+        /*sprmSDxaLeft*/        141,
+        /*sprmSDxaRight*/       142,
+        /*sprmSDzaGutter*/      145,
+        /*sprmSFPgnRestart*/    125,
+        /*sprmSPgnStart*/       136,
+        /*sprmSDmBinFirst*/     115,
+        /*sprmSDmBinOther*/     116
+    };
+
+    static const USHORT aVer67Ids1[] =
     {
         /*sprmSBOrientation*/   162,
         /*sprmSXaPage*/         164,
         /*sprmSYaPage*/         165,
         /*sprmSDxaLeft*/        166,
         /*sprmSDxaRight*/       167,
-        /*sprmSDzaGutter*/      170
+        /*sprmSDzaGutter*/      170,
+        /*sprmSFPgnRestart*/    150,
+        /*sprmSPgnStart*/       161,
+        /*sprmSDmBinFirst*/     140,
+        /*sprmSDmBinOther*/     141
     };
 
-    static const USHORT aVer8Ids[] =
+    static const USHORT aVer8Ids1[] =
     {
         /*sprmSBOrientation*/   0x301d,
         /*sprmSXaPage*/         0xB01F,
         /*sprmSYaPage*/         0xB020,
         /*sprmSDxaLeft*/        0xB021,
         /*sprmSDxaRight*/       0xB022,
-        /*sprmSDzaGutter*/      0xB025
+        /*sprmSDzaGutter*/      0xB025,
+        /*sprmSFPgnRestart*/    0x3011,
+        /*sprmSPgnStart*/       0x501C,
+           /*sprmSDmBinFirst*/     0x5007,
+        /*sprmSDmBinOther*/     0x5008
     };
 
-    const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
+    pIds = eVer <= ww::eWW2 ? aVer2Ids1 : eVer <= ww::eWW7 ? aVer67Ids1 : aVer8Ids1;
 
                                             // 1. Orientierung
     aNewSection.maSep.dmOrientPage = ReadBSprm(pSep, pIds[0], 0);
@@ -1134,51 +1187,74 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
 
     aNewSection.maSep.dzaGutter = ReadUSprm( pSep, pIds[5], 0);
 
-    aNewSection.maSep.fRTLGutter = static_cast< sal_uInt8 >(!bVer67 ? ReadUSprm( pSep, 0x322A, 0 ) : 0);
+    aNewSection.maSep.fRTLGutter = static_cast< sal_uInt8 >(eVer >= ww::eWW8 ? ReadUSprm( pSep, 0x322A, 0 ) : 0);
 
     // Page Number Restarts - sprmSFPgnRestart
-    aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, (bVer67 ? 150 : 0x3011), 0);
+    aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, pIds[6], 0);
 
-    aNewSection.maSep.pgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
+    aNewSection.maSep.pgnStart = ReadBSprm( pSep, pIds[7], 0 );
 
-    if (const BYTE* p = pSep->HasSprm( bVer67 ? 132 : 0x3001 ))
-        aNewSection.maSep.iHeadingPgn = *p;
+    if (eVer >= ww::eWW6)
+    {
+        if (const BYTE* p = pSep->HasSprm( (eVer <= ww::eWW7 ? 132 : 0x3001) ))
+            aNewSection.maSep.iHeadingPgn = *p;
 
-    if (const BYTE* p = pSep->HasSprm( bVer67 ? 131 : 0x3000 ))
-        aNewSection.maSep.cnsPgn = *p;
+        if (const BYTE* p = pSep->HasSprm( (eVer <= ww::eWW7 ? 131 : 0x3000) ))
+            aNewSection.maSep.cnsPgn = *p;
+    }
 
-    if(const BYTE* pSprmSDmBinFirst = pSep->HasSprm( bVer67 ? 140 : 0x5007 ))
+    if(const BYTE* pSprmSDmBinFirst = pSep->HasSprm( pIds[8] ))
         aNewSection.maSep.dmBinFirst = *pSprmSDmBinFirst;
 
-    if (const BYTE* pSprmSDmBinOther = pSep->HasSprm( bVer67 ? 141 : 0x5008))
+    if (const BYTE* pSprmSDmBinOther = pSep->HasSprm( pIds[9] ))
         aNewSection.maSep.dmBinOther = *pSprmSDmBinOther;
 
     static const USHORT nTop[] = { MM_250, 1440 };
     static const USHORT nBot[] = { MM_200, 1440 };
+
+    static const USHORT aVer2Ids2[] =
+    {
+        /*sprmSDyaTop*/         143,
+        /*sprmSDyaBottom*/      144,
+        /*sprmSDyaHdrTop*/      131,
+        /*sprmSDyaHdrBottom*/   132,
+        /*sprmSNLnnMod*/        129,
+        /*sprmSLnc*/            127,
+        /*sprmSDxaLnn*/         130,
+        /*sprmSLnnMin*/         135
+    };
 
     static const USHORT aVer67Ids2[] =
     {
         /*sprmSDyaTop*/         168,
         /*sprmSDyaBottom*/      169,
         /*sprmSDyaHdrTop*/      156,
-        /*sprmSDyaHdrBottom*/   157
+        /*sprmSDyaHdrBottom*/   157,
+        /*sprmSNLnnMod*/        154,
+        /*sprmSLnc*/            152,
+        /*sprmSDxaLnn*/         155,
+        /*sprmSLnnMin*/         160
     };
     static const USHORT aVer8Ids2[] =
     {
         /*sprmSDyaTop*/         0x9023,
         /*sprmSDyaBottom*/      0x9024,
         /*sprmSDyaHdrTop*/      0xB017,
-        /*sprmSDyaHdrBottom*/   0xB018
+        /*sprmSDyaHdrBottom*/   0xB018,
+        /*sprmSNLnnMod*/        0x5015,
+        /*sprmSLnc*/            0x3013,
+        /*sprmSDxaLnn*/         0x9016,
+        /*sprmSLnnMin*/         0x501B
     };
 
-    pIds = bVer67 ? aVer67Ids2 : aVer8Ids2;
+    pIds = eVer <= ww::eWW2 ? aVer2Ids2 : eVer <= ww::eWW7 ? aVer67Ids2 : aVer8Ids2;
 
     aNewSection.maSep.dyaTop = ReadSprm( pSep, pIds[0], nTop[nLIdx] );
     aNewSection.maSep.dyaBottom = ReadSprm( pSep, pIds[1], nBot[nLIdx] );
     aNewSection.maSep.dyaHdrTop = ReadUSprm( pSep, pIds[2], 720 );
     aNewSection.maSep.dyaHdrBottom = ReadUSprm( pSep, pIds[3], 720 );
 
-    if (!bVer67)
+    if (eVer >= ww::eWW8)
     {
         aNewSection.maSep.wTextFlow = ReadUSprm(pSep, 0x5033, 0);
         aNewSection.maSep.clm = ReadUSprm( pSep, 0x5032, 0 );
@@ -1193,24 +1269,24 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
 
         aNewSection.mnBorders =
-            ::lcl_ReadBorders(bVer67, aNewSection.brc, 0, 0, pSep);
+            ::lcl_ReadBorders(eVer <= ww::eWW7, aNewSection.brc, 0, 0, pSep);
     }
 
     // check if Line Numbering must be activated or resetted
-    if (const BYTE* pSprmSNLnnMod = pSep->HasSprm( bVer67 ? 154 : 0x5015 ))
+    if (const BYTE* pSprmSNLnnMod = pSep->HasSprm( pIds[4] ))
         aNewSection.maSep.nLnnMod = *pSprmSNLnnMod;
 
-    if (const BYTE* pSprmSLnc = pSep->HasSprm( bVer67 ? 152 : 0x3013 ))
+    if (const BYTE* pSprmSLnc = pSep->HasSprm( pIds[5] ))
         aNewSection.maSep.lnc = *pSprmSLnc;
 
-    if (const BYTE* pSprmSDxaLnn = pSep->HasSprm( bVer67 ? 155:0x9016 ))
+    if (const BYTE* pSprmSDxaLnn = pSep->HasSprm( pIds[6] ))
         aNewSection.maSep.dxaLnn = SVBT16ToShort( pSprmSDxaLnn );
 
-    if (const BYTE* pSprmSLnnMin = pSep->HasSprm( bVer67 ? 160:0x501B ))
+    if (const BYTE* pSprmSLnnMin = pSep->HasSprm( pIds[7] ))
         aNewSection.maSep.lnnMin = *pSprmSLnnMin;
 
-    if (bVer67)
-        aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, 153, 0);
+    if (eVer <= ww::eWW7)
+        aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, eVer <= ww::eWW2 ? 128 : 153, 0);
     else if (mrReader.pHdFt)
     {
         aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
@@ -1249,7 +1325,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     SetLeftRight(aNewSection);
     //END read section values
 
-    if (!bVer67)
+    if (eVer >= ww::eWW8)
         aNewSection.SetDirection();
 
     mrReader.HandleLineNumbering(aNewSection);
@@ -4057,8 +4133,10 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
+
     short nSpace = SVBT16ToShort( pData );
-    short nMulti = SVBT16ToShort( pData + 2 );
+    ww::WordVersion eVersion = pWwFib->GetFIBVersion();
+    short nMulti = (eVersion <= ww::eWW2) ? 1 : SVBT16ToShort( pData + 2 );
 
     SvxLineSpace eLnSpc;
     if( 0 > nSpace )
