@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_onlineupdate.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:24:56 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,3 +45,12 @@ Module gid_Module_Optional_Onlineupdate
     Dirs = (gid_Dir_Share_Registry_Modules_Oo_Office_Addons, gid_Dir_Share_Registry_Modules_Oo_Office_Jobs);
 End
 
+Module gid_Module_Langpack_Onlineupdate_Template
+    ParentID = gid_Module_Optional_Onlineupdate;
+    Name = "gid_Module_Langpack_Onlineupdate_Template";
+    Description = "gid_Module_Langpack_Onlineupdate_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Res_Upd);
+End
+
+#include "alllangmodules_onlineupdate.inc"
