@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 18:39:22 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:59:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ BEGIN
     $linuxlibrarypatchlevel = "1.1";
     @linuxlinks = ();
     @linkrpms = ();
-        $archiveformat = "";
+    $archiveformat = "";
 
     $strip = 1;
     $solarjava = 0;
@@ -226,7 +226,6 @@ BEGIN
     $jdsexcludefilename = "";
     $jds_language_controlled = 0;
     $correct_jds_language = 0;
-    $islanguagepackinunixmulti = 0;
     @installsetfiles = ();
     @binarytableonlyfiles = ();
     @allscpactions = ();
@@ -255,6 +254,27 @@ BEGIN
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
     $desktoplinkexists = 0;
+
+    $officeinstalldirectory = "";
+    $officeinstalldirectoryset = 0;
+    $basisinstalldirectory = "";
+    $basisinstalldirectoryset = 0;
+    $ureinstalldirectory = "";
+    $ureinstalldirectoryset = 0;
+    $rootbrandpackage = "";
+    $rootbrandpackageset = 0;
+    $officedirhostname = "";
+    $basisdirhostname = "";
+    $uredirhostname = "";
+    $sundirhostname = "";
+
+    %treestyles = ("UREDIRECTORY" => "INSTALLURE", "BASISDIRECTORY" => "INSTALLBASIS", "OFFICEDIRECTORY" => "INSTALLOFFICE");
+    %installlocations = ("INSTALLLOCATION" => "1", "BASISINSTALLLOCATION" => "1", "OFFICEINSTALLLOCATION" => "1", "UREINSTALLLOCATION" => "1");
+    %treelayername = ("UREDIRECTORY" => "URE", "BASISDIRECTORY" => "BASIS", "OFFICEDIRECTORY" => "BRAND");
+    %hostnametreestyles = ();
+    %treeconditions = ();
+    %usedtreeconditions = ();
+    %moduledestination = ();
 
     $unomaxservices = 25;
     $javamaxservices = 15;
@@ -309,12 +329,18 @@ BEGIN
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
     @requiredpackages = ();
-    %componentconditions = ();
+    %componentcondition = ();
+    %componentid = ();
+    %comparecomponentname = ();
+    %languageproperties = ();
     %allcabinets = ();
     %allcabinetassigns = ();
     %cabfilecounter = ();
     %lastsequence = ();
     %dontdeletecomponents = ();
+    %allcalculated_guids = ();
+    %calculated_component_guids = ();
+    %base_independent_components = ();
 
     @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
 
