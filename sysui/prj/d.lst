@@ -14,7 +14,6 @@ mkdir: %_DEST%\bin%_EXT%\desktop-integration\pkg
 ..\%__SRC%\bin\deb\*.tar.gz %_DEST%\bin%_EXT%\desktop-integration\deb\*.tar.gz
 ..\%__SRC%\bin\pkg\*.tar.gz %_DEST%\bin%_EXT%\desktop-integration\pkg\*.tar.gz
 
-..\%__SRC%\bin\viewdoc.sh %_DEST%\bin%_EXT%\viewdoc
 ..\%__SRC%\bin\gnome-set-default-application %_DEST%\bin%_EXT%\gnome-set-default-application
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
