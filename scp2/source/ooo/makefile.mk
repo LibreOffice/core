@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 09:55:31 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:30:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,6 @@ PARFILES=                          \
         directory_ooo.par          \
         datacarrier_ooo.par        \
         file_ooo.par               \
-        file_images_ooo.par        \
         file_extra_ooo.par         \
         file_font_ooo.par          \
         file_library_ooo.par       \
@@ -257,7 +256,13 @@ PARFILES=                          \
         module_java.par            \
         module_systemint.par       \
         profile_ooo.par            \
-        profileitem_ooo.par
+        profileitem_ooo.par        \
+        ure.par                    \
+        ure_into_ooo.par           \
+        ure_standalone.par         \
+        common_brand.par           \
+        common_brand_readme.par    \
+        ooo_brand.par
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
