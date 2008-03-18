@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:04:44 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:06:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,6 @@ TARGETTYPE=CUI
 LIBTARGET=no
 NO_DEFAULT_STL=TRUE
 INCPRE=$(MISC)
-
-# Windows /DELAYLOAD depends on objects delivered from sal, but is not needed
-# for this internal tool, anyway:
-DELAYLOADOBJ=
 
 # --- Settings -----------------------------------------------------
 
