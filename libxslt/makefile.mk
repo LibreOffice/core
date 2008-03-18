@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 14:56:44 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:43:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@ CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-stat
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+.EXPORT : PWD
+.ENDIF
 .ELSE
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
