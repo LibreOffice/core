@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,14 +560,9 @@ UpdateInformationProvider::UpdateInformationProvider(
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(2)
 {
     rtl::OUString aPath;
-    if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
+    if( rtl::Bootstrap::get( UNISTRING("BRAND_BASE_DIR"), aPath ) )
     {
-        sal_uInt32 lastIndex = aPath.lastIndexOf('/');
-        if ( lastIndex > 0 )
-        {
-            aPath = aPath.copy( 0, lastIndex+1 );
-            aPath += UNISTRING( SAL_CONFIGFILE( "version" ) );
-        }
+        aPath += UNISTRING( "/program/" SAL_CONFIGFILE( "version" ) );
 
         rtl::Bootstrap aVersionFile(aPath);
 
