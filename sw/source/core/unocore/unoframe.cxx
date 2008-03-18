@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:29:14 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -802,7 +802,7 @@ inline void lcl_FillMirror ( SfxItemSet &rToSet, const SfxItemSet &rFromSet, uno
 {
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
-        SwMirrorGrf aMirror ( static_cast < const SwMirrorGrf& > ( rFromSet.Get ( RES_FRM_SIZE ) ) );
+        SwMirrorGrf aMirror ( static_cast < const SwMirrorGrf& > ( rFromSet.Get ( RES_GRFATR_MIRRORGRF ) ) );
         if(pHEvenMirror)
             rRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
         if(pHOddMirror)
