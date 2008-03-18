@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:57:48 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
+#include <vector>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -442,6 +443,15 @@ bool lcl_tableOfRangeMatches(
              (rRange.indexOf( rTableName ) != -1 ));
 }
 
+template< typename T >
+::std::vector< T > lcl_SequenceToVector( const uno::Sequence< T > & rSequence )
+{
+    ::std::vector< T > aResult( rSequence.getLength());
+    ::std::copy( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
+                 aResult.begin());
+    return aResult;
+}
+
 } // anonymous namespace
 
 
@@ -455,7 +465,9 @@ SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLName ),
         mrImportHelper( rImpHelper ),
-        mrTable( aTable )
+        mrTable( aTable ),
+        mbHasRowPermutation( false ),
+        mbHasColumnPermutation( false )
 {
     mrTable.nColumnIndex = -1;
     mrTable.nMaxColumnIndex = -1;
@@ -523,6 +535,114 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
             mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
             break;   // we only need this attribute
         }
+    }
+}
+
+void SchXMLTableContext::EndElement()
+{
+    if( mbHasColumnPermutation )
+    {
+        OSL_ASSERT( !mbHasRowPermutation );
+        ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maColumnPermutation ));
+        OSL_ASSERT( !aPermutation.empty());
+        if( aPermutation.empty())
+            return;
+
+        // permute the values of all rows according to aPermutation
+        for( ::std::vector< ::std::vector< SchXMLCell > >::iterator aRowIt( mrTable.aData.begin());
+             aRowIt != mrTable.aData.end(); ++aRowIt )
+        {
+            bool bModified = false;
+            ::std::vector< SchXMLCell > aModifiedRow;
+            const size_t nPermSize = aPermutation.size();
+            OSL_ASSERT( static_cast< sal_Int32 >( nPermSize ) - 1 == *(::std::max_element( aPermutation.begin(), aPermutation.end())));
+            const size_t nRowSize = aRowIt->size();
+            const size_t nDestSize = ::std::min( nPermSize, nRowSize );
+            for( size_t nDestinationIndex = 0; nDestinationIndex < nDestSize; ++nDestinationIndex )
+            {
+                const size_t nSourceIndex = static_cast< size_t >( aPermutation[ nDestinationIndex ] );
+                if( nSourceIndex != nDestinationIndex &&
+                    nSourceIndex < nRowSize )
+                {
+                    // copy original on first real permutation
+                    if( !bModified )
+                    {
+                        OSL_ASSERT( aModifiedRow.empty());
+                        aModifiedRow.reserve( aRowIt->size());
+                        ::std::copy( aRowIt->begin(), aRowIt->end(), ::std::back_inserter( aModifiedRow ));
+                        OSL_ASSERT( !aModifiedRow.empty());
+                    }
+                    OSL_ASSERT( nDestinationIndex < aModifiedRow.size());
+                    aModifiedRow[ nDestinationIndex ] = (*aRowIt)[ nSourceIndex ];
+                    bModified = true;
+                }
+            }
+            // copy back
+            if( bModified )
+                ::std::copy( aModifiedRow.begin(), aModifiedRow.end(), aRowIt->begin());
+        }
+    }
+    else if( mbHasRowPermutation )
+    {
+        ::std::vector< sal_Int32 > aPermutation( lcl_SequenceToVector( maRowPermutation ));
+        OSL_ASSERT( !aPermutation.empty());
+        if( aPermutation.empty())
+            return;
+
+        bool bModified = false;
+        const size_t nPermSize = aPermutation.size();
+        OSL_ASSERT( static_cast< sal_Int32 >( nPermSize ) - 1 == *(::std::max_element( aPermutation.begin(), aPermutation.end())));
+        const size_t nTableRowCount = mrTable.aData.size();
+        const size_t nDestSize = ::std::min( nPermSize, nTableRowCount );
+        ::std::vector< ::std::vector< SchXMLCell > > aDestination;
+        for( size_t nDestinationIndex = 0; nDestinationIndex < nDestSize; ++nDestinationIndex )
+        {
+            const size_t nSourceIndex = static_cast< size_t >( aPermutation[ nDestinationIndex ] );
+            if( nSourceIndex != nDestinationIndex &&
+                nSourceIndex < nTableRowCount )
+            {
+                // copy original on first real permutation
+                if( !bModified )
+                {
+                    OSL_ASSERT( aDestination.empty());
+                    aDestination.reserve( mrTable.aData.size());
+                    ::std::copy( mrTable.aData.begin(), mrTable.aData.end(), ::std::back_inserter( aDestination ));
+                    OSL_ASSERT( !aDestination.empty());
+                }
+                OSL_ASSERT( nDestinationIndex < aDestination.size());
+                aDestination[ nDestinationIndex ] = mrTable.aData[ nSourceIndex ];
+                bModified = true;
+            }
+        }
+        if( bModified )
+        {
+            // copy back
+            ::std::copy( aDestination.begin(), aDestination.end(), mrTable.aData.begin());
+        }
+    }
+}
+
+void SchXMLTableContext::setRowPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
+{
+    maRowPermutation = rPermutation;
+    mbHasRowPermutation = ( rPermutation.getLength() > 0 );
+
+    if( mbHasRowPermutation && mbHasColumnPermutation )
+    {
+        mbHasColumnPermutation = false;
+        maColumnPermutation.realloc( 0 );
+    }
+}
+
+void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
+{
+    maColumnPermutation = rPermutation;
+    mbHasColumnPermutation = ( rPermutation.getLength() > 0 );
+
+    if( mbHasColumnPermutation && mbHasRowPermutation )
+    {
+        mbHasRowPermutation = false;
+        maRowPermutation.realloc( 0 );
     }
 }
 
