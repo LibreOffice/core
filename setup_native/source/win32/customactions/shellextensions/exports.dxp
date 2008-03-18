@@ -10,4 +10,4 @@ RegisterExtensions
 DeregisterExtensions
 RemoveExtensions
 CheckInstallDirectory
-
+SetAdminInstallProperty
