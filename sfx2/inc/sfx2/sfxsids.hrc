@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxsids.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:26:32 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,7 @@
 #define SID_GRAFIC_DIALOG                   (SID_SFX_START + 305)
 #define SID_PATH                            (SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
+#define SID_STANDARD_DIR                    (SID_SFX_START + 310)
 
 // browse-ids
 #define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)
