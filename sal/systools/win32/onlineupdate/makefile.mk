@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:52:20 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:21:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Targets ----------------------------------
-
-DELAYLOADOBJ=
 
 .IF "$(GUI)"=="WNT"
 
