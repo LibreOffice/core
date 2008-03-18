@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:11:49 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 23:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         for( INT32 i = 0L; i < nActions; i++ )
         {
             rIStm >> nType;
+            sal_Int32 nActBegin = rIStm.Tell();
             rIStm >> nActionSize;
 
             DBG_ASSERT( ( nType <= 33 ) || ( nType >= 1024 ), "Unknown GDIMetaAction while converting!" );
@@ -686,11 +687,15 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     INT32       nIndex, nLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
-                    rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
-                    UniString aStr( aByteStr, eActualCharSet );
-                    if ( nUnicodeCommentActionNumber == i )
-                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    rMtf.AddAction( new MetaTextAction( aPt, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
+                                        {
+                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        UniString aStr( aByteStr, eActualCharSet );
+                        if ( nUnicodeCommentActionNumber == i )
+                            ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                        rMtf.AddAction( new MetaTextAction( aPt, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                    }
+                            rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
@@ -701,53 +706,57 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     INT32       nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
-                    rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
-                    UniString aStr( aByteStr, eActualCharSet );
-
-                    if( nAryLen > 0L )
+                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        INT32 nStrLen( aStr.Len() );
+                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        UniString aStr( aByteStr, eActualCharSet );
 
-                        pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
-
-                        for( long j = 0L; j < nAryLen; j++ )
-                            rIStm >> nTmp, pDXAry[ j ] = nTmp;
-
-                        // #106172# Add last DX array elem, if missing
-                        if( nAryLen != nStrLen )
+                        if( nAryLen > 0L )
                         {
-                            if( nAryLen+1 == nStrLen )
+                            INT32 nStrLen( aStr.Len() );
+
+                            pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
+
+                            for( long j = 0L; j < nAryLen; j++ )
+                                rIStm >> nTmp, pDXAry[ j ] = nTmp;
+
+                            // #106172# Add last DX array elem, if missing
+                            if( nAryLen != nStrLen )
                             {
-                                sal_Int32* pTmpAry = new sal_Int32[nStrLen];
+                                if( nAryLen+1 == nStrLen )
+                                {
+                                    sal_Int32* pTmpAry = new sal_Int32[nStrLen];
 
-                                aFontVDev.GetTextArray( aStr, pTmpAry, (USHORT) nIndex, (USHORT) nLen );
+                                    aFontVDev.GetTextArray( aStr, pTmpAry, (USHORT) nIndex, (USHORT) nLen );
 
-                                // now, the difference between the
-                                // last and the second last DX array
-                                // is the advancement for the last
-                                // glyph. Thus, to complete our meta
-                                // action's DX array, just add that
-                                // difference to last elem and store
-                                // in very last.
-                                if( nStrLen > 1 )
-                                    pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
+                                    // now, the difference between the
+                                    // last and the second last DX array
+                                    // is the advancement for the last
+                                    // glyph. Thus, to complete our meta
+                                    // action's DX array, just add that
+                                    // difference to last elem and store
+                                    // in very last.
+                                    if( nStrLen > 1 )
+                                        pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
+                                    else
+                                        pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+
+                                    delete[] pTmpAry;
+                                }
+    #ifdef DBG_UTIL
                                 else
-                                    pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
-
-                                delete pTmpAry;
+                                    DBG_ERROR("More than one DX array element missing on SVM import");
+    #endif
                             }
-#ifdef DBG_UTIL
-                            else
-                                DBG_ERROR("More than one DX array element missing on SVM import");
-#endif
                         }
-                    }
-                    if ( nUnicodeCommentActionNumber == i )
-                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (USHORT) nIndex, (USHORT) nLen ) );
+                        if ( nUnicodeCommentActionNumber == i )
+                            ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (USHORT) nIndex, (USHORT) nLen ) );
 
-                    if( pDXAry )
-                        delete[] pDXAry;
+                        if( pDXAry )
+                            delete[] pDXAry;
+                    }
+                            rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
@@ -757,11 +766,15 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     INT32       nIndex, nLen, nWidth;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
-                    rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
-                    UniString aStr( aByteStr, eActualCharSet );
-                    if ( nUnicodeCommentActionNumber == i )
-                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
+                    {
+                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        UniString aStr( aByteStr, eActualCharSet );
+                        if ( nUnicodeCommentActionNumber == i )
+                            ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                    }
+                                        rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
@@ -1155,7 +1168,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm.SeekRel( nActionSize - 4L );
                 break;
             }
-        }
+                }
 
         // cleanup push-pop stack if neccessary
         for( void* pLineInfo = aLIStack.Pop(); pLineInfo; pLineInfo = aLIStack.Pop() )
