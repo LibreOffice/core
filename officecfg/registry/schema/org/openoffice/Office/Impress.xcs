@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:04:53 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@
 					is allowed. </desc>
 					<label>List of files containing transition effects</label>
 				</info>
-                <value oor:separator=";">vnd.sun.star.expand:$ORIGIN/../share/config/soffice.cfg/simpress/transitions.xml</value>
+                <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml</value>
 			</prop>
 			<prop oor:name="EffectFiles" oor:type="oor:string-list">
 				<!-- OldPath: -->
@@ -470,7 +470,7 @@
 					is allowed.</desc>
 					<label>List of files containing object effects</label>
 				</info>
-                <value oor:separator=";">vnd.sun.star.expand:$ORIGIN/../share/config/soffice.cfg/simpress/effects.xml</value>
+                <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/effects.xml</value>
 			</prop>
 			<prop oor:name="PreviewNewEffects" oor:type="xs:boolean">
 				<!-- OldPath: -->
