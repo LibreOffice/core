@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSInit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:59:29 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
 #endif
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 
 #ifndef _CONNECTIVITY_MAB_NS_INIT_HXX_
 #include <MNSInit.hxx>
@@ -146,12 +148,19 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
 #endif
     {
         nsCOMPtr<nsILocalFile> binDir;
-        // Note: if getenv() returns NULL, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
-        // The NS_NewNativeLocalFile() will accept NULL as its first parameter.
-        char * env = getenv("OPENOFFICE_MOZILLA_FIVE_HOME");
-        if (env)
+        // Note: if path3 construction fails, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
+        rtl::OUString path1(
+            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
+        rtl::Bootstrap::expandMacros(path1);
+        rtl::OString path2;
+        if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==
+             osl::FileBase::E_None) &&
+            path1.convertToString(
+                &path2, osl_getThreadTextEncoding(),
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                 RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
         {
-            nsDependentCString sPath(env);
+            nsDependentCString sPath(path2.getStr());
             rv = NS_NewNativeLocalFile(sPath, PR_TRUE, getter_AddRefs(binDir));
             if (NS_FAILED(rv))
                 return sal_False;
