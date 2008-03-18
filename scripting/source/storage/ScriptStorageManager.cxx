@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptStorageManager.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:32:15 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
         validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
 
         OUString base = OUString::createFromAscii(
-                            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
+                            SAL_CONFIGFILE( "${$BRAND_BASE_DIR/program/bootstrap" ) );
 
         setupAppStorage( xME,
                          base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ),
