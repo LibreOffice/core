@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:44:15 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,6 +657,22 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
     }
 }
 
+bool lcl_SpecialHandlingForDonutChartNeeded(
+    const ::rtl::OUString & rServiceName,
+    const SvXMLImport & rImport )
+{
+    bool bResult = false;
+    if( rServiceName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" )))
+    {
+        sal_Int32 nBuildId = 0;
+        sal_Int32 nUPD;
+        if( (!rImport.getBuildIds( nUPD, nBuildId )))
+            bResult= true;
+    }
+    return bResult;
+}
+
 } // anonymous namespace
 
 void SchXMLChartContext::ChangeDiagramAccordingToTemplate(
@@ -812,14 +828,8 @@ void SchXMLChartContext::EndElement()
     }
 
     //the OOo 2.0 implementation and older has a bug with donuts
-    bool bSpecialHandlingForDonutChart = false;
-    if( 0 == maChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" ) ) )
-    {
-        sal_Int32 nBuildId = 0;
-        sal_Int32 nUPD;
-        if( (!GetImport().getBuildIds( nUPD, nBuildId ) ) )
-            bSpecialHandlingForDonutChart = true;
-    }
+    bool bSpecialHandlingForDonutChart = lcl_SpecialHandlingForDonutChartNeeded(
+        maChartTypeServiceName, GetImport());
 
     // apply data
     if(!xNewDoc.is())
@@ -1096,7 +1106,32 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             break;
 
         case XML_TOK_CHART_TABLE:
-            pContext = new SchXMLTableContext( mrImportHelper, GetImport(), rLocalName, maTable );
+            {
+                SchXMLTableContext * pTableContext =
+                    new SchXMLTableContext( mrImportHelper, GetImport(), rLocalName, maTable );
+                // #i85913# take into account column- and row- mapping for
+                // charts with own data only for those which were not copied
+                // from a place where they got data from the container.  Note,
+                // that this requires the plot-area been read before the table
+                // (which is required in the ODF spec)
+                // Note: For stock charts and donut charts with special handling
+                // the mapping must not be applied!
+                if( !msChartAddress.getLength() && !mbIsStockChart &&
+                    !lcl_SpecialHandlingForDonutChartNeeded(
+                        maChartTypeServiceName, GetImport()))
+                {
+                    if( msColTrans.getLength() > 0 )
+                    {
+                        OSL_ASSERT( msRowTrans.getLength() == 0 );
+                        pTableContext->setColumnPermutation( GetNumberSequenceFromString( msColTrans, true ));
+                    }
+                    else if( msRowTrans.getLength() > 0 )
+                    {
+                        pTableContext->setRowPermutation( GetNumberSequenceFromString( msRowTrans, true ));
+                    }
+                }
+                pContext = pTableContext;
+            }
             break;
 
         default:
