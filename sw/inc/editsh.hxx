@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,13 +651,7 @@ public:
     //Liefert den Pointer auf die Daten des Chart, indem sich der Crsr
     //befindet.
     void SetChartName( const String &rName );
-    // returne den ChartNamen - vom Crsr oder vom uebergebenen OLE-Object
-    // returnt aEmptyStr wenn nicht gefunden wurde
-    const String& GetChartName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj
-            = ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() );
-    //Sucht die Tabelle und liefert ein mit den Daten der Tabelle gefuelltes
-    //pData. Wenn pData 0 ist wird eines angelegt.
-    void UpdateChartData( const String &rName );
+
     //Updaten der Inhalte aller Charts zu der Tabelle mit dem angegeben Namen
     void UpdateCharts( const String &rName );
 
