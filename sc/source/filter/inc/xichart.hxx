@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:31:10 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,6 +841,7 @@ typedef ScfRef< XclImpChSeries > XclImpChSeriesRef;
 class XclImpChType : protected XclImpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > XCoordSystemRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >        XChartTypeRef;
 
@@ -866,7 +867,7 @@ public:
     /** Creates a coordinate system according to the contained chart type. */
     XCoordSystemRef     CreateCoordSystem( bool b3dChart ) const;
     /** Creates and returns an object that represents the contained chart type. */
-    XChartTypeRef       CreateChartType() const;
+    XChartTypeRef       CreateChartType( XDiagramRef xDiagram ) const;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -964,6 +965,7 @@ typedef ScfRef< XclImpChDropBar > XclImpChDropBarRef;
 class XclImpChTypeGroup : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >             XCoordSystemRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >                    XChartTypeRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
@@ -1021,7 +1023,7 @@ public:
     /** Creates a coordinate system according to the contained chart type. */
     XCoordSystemRef     CreateCoordSystem() const;
     /** Creates and returns an object that represents the contained chart type. */
-    XChartTypeRef       CreateChartType( sal_Int32 nApiAxesSetIdx ) const;
+    XChartTypeRef       CreateChartType( XDiagramRef xDiagram, sal_Int32 nApiAxesSetIdx ) const;
     /** Creates a labeled data sequence object for axis categories. */
     XLabeledDataSeqRef  CreateCategSequence() const;
 
