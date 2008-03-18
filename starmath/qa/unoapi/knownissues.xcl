@@ -1,6 +1,3 @@
-### 111638 ###
-sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleText
-
 ### i23394 ###
 sm.XMLImporter::com::sun::star::xml::sax::XDocumentHandler
 sm.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
