@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LinuxHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:54:40 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,8 @@ import java.util.Vector;public class LinuxHelper {
     public String getLinuxDatabasePath(InstallData data) {
         String databasePath = null;
         String installDir = data.getInstallDir();
-        String databaseDir = SystemManager.getParentDirectory(installDir);
+        String databaseDir = installDir;
+        // String databaseDir = SystemManager.getParentDirectory(installDir);
         String linuxDatabaseName = ".RPM_OFFICE_DATABASE";
         File databaseFile = new File(databaseDir, linuxDatabaseName);
         databasePath = databaseFile.getPath();
@@ -454,8 +455,10 @@ import java.util.Vector;public class LinuxHelper {
         // The version and release that are also stored in file "packageNames" must not be
         // used for deinstallation because they are probably not up to date.
 
-        String destDirStr = data.getInstallDir();
-        File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+        // String destDirStr = data.getInstallDir();
+        File destDir = new File(data.getInstallDir(), data.getProductDir());
+        // File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+        File uninstallDir = new File(destDir, data.getUninstallDirName());
         String fileName = "packageNames";
         File packageNamesFile = new File(uninstallDir, fileName);
         Vector packageNames = new Vector();
@@ -477,8 +480,10 @@ import java.util.Vector;public class LinuxHelper {
     public void saveModulesLogFile(InstallData data) {
         if ( data.logModuleStates() ) {
             Vector logContent = LogManager.getModulesLogFile();
-            String destDirStr = data.getInstallDir();
-            File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+            File destDir = new File(data.getInstallDir(), data.getProductDir());
+            // String destDirStr = data.getInstallDir();
+            // File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+            File uninstallDir = new File(destDir, data.getUninstallDirName());
             File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
             SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);
         }
