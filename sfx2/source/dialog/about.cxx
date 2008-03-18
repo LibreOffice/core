@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 17:28:25 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:28:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <rtl/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
@@ -96,7 +96,10 @@ static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size
 
 static bool impl_loadBitmap( const rtl::OUString &rBmpFileName, Image &rLogo )
 {
-    INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+    rtl::OUString uri(
+        RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program" ) );
+    rtl::Bootstrap::expandMacros( uri );
+    INetURLObject aObj( uri );
     aObj.insertName( rBmpFileName );
     SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
     if ( !aStrm.GetError() )
