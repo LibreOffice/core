@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 14:07:36 $
+#   last change: $Author: vg $ $Date: 2008-03-18 15:55:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,7 @@ SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/swserv.obj \
         $(SLO)$/tblafmt.obj \
         $(SLO)$/visiturl.obj \
-        $(SLO)$/htmltbl.obj \
-        $(SLO)$/headerfooterhelper.obj
+        $(SLO)$/htmltbl.obj
 
 # --- Tagets -------------------------------------------------------
 
