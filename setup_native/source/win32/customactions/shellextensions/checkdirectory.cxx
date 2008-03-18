@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkdirectory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:34:24 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty, con
 
 extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
-    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
 
     // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
 
