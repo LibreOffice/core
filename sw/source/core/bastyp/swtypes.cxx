@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:28:12 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,12 +180,6 @@ uno::Reference< linguistic2::XHyphenator >  GetHyphenator()
 uno::Reference< linguistic2::XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
-}
-
-
-uno::Reference< linguistic2::XDictionaryList >  GetDictionaryList()
-{
-    return LinguMgr::GetDictionaryList();
 }
 
 
