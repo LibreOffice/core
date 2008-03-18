@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:04:50 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,8 +225,6 @@ public:
 
     void            SetText( const String& rStr );
     String          GetAddress();
-
-    void            Modified();
 
     void            InsertNewEntry( const String& rStr );
     void            InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex );
