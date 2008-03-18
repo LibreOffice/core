@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:15:00 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,6 @@ public:
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_Bool    DeleteBox( const SwTableBox &rBox );
 
-    ::com::sun::star::chart::ChartDataRowSource GetDataRowSource() const;
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
 };
