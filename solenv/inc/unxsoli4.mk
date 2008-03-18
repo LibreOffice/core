@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:24 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:11:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,8 @@ LINKFLAGSRUNPATH_URELIB=-R\''$$ORIGIN'\'
 LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
 LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OXT=
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
 LINKCFLAGS=-w -mt -z combreloc -norunpath
 
