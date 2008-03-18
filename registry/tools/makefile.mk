@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:03:09 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,6 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS := TRUE
-
-.IF "$(OS)" == "LINUX"
-LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ELIF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
