@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:21:54 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,12 +145,8 @@ const sal_Char* GetFILTER_WW8()
 {
     return FILTER_WW8;
 }
-const sal_Char* GetFILTER_TEXT()
-{
-    return FILTER_TEXT;
-}
-
 #endif
+
 SwIoDetect aReaderWriter[ MAXFILTER ] =
 {
 ///*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
