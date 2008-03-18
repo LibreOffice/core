@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:58:05 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:56:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,14 +77,14 @@ $(MISC)/{$(PRODUCTLIST)}/{pkginfo depend} : $$(@:f) ../productversion.mk makefil
 # --- space, postinstall & mailcap ---------------------------------
 
 # Copy the prototype file to $(MISC)
-$(MISC)/{$(PRODUCTLIST)}/{space postinstall mailcap} : $$(@:f) ../productversion.mk
+$(MISC)/{$(PRODUCTLIST)}/{space postinstall checkinstall mailcap} : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" -e "s_%SOURCE_$(MISC)/$(@:d:d:f)_g" > $@
 
 # --- checkinstall & copyright--------------------------------
 
 # Copy the checkinstall and copyright file to $(MISC) 
-$(MISC)/{$(PRODUCTLIST)}/{checkinstall copyright} : $$(@:f)
+$(MISC)/{$(PRODUCTLIST)}/{copyright} : $$(@:f)
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" > $@
 
