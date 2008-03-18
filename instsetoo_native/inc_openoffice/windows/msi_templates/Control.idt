@@ -192,6 +192,16 @@ InstallWelcome	TextLine2	Text	135	55	228	45	65539		OOO_CONTROL_127
 LanguageInfo1	Icon	Icon	15	15	24	24	5242881		CautionIco		
 LanguageInfo1	OK	PushButton	100	57	66	17	3		OOO_CONTROL_10		
 LanguageInfo1	Text	Text	48	15	194	30	3		OOO_CONTROL_317		
+LanguageSelection	Back	PushButton	164	243	66	17	3		OOO_CONTROL_122	CheckBox1	
+LanguageSelection	Banner	Bitmap	297	0	77	44	1		BannerBmp		
+LanguageSelection	BannerLine	Line	0	44	374	0	1				
+LanguageSelection	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
+LanguageSelection	Branding2	Text	3	228	88	13	65537		[ProductName]		
+LanguageSelection	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_131	Back	
+LanguageSelection	DlgDesc	Text	21	23	292	25	65539		OOO_CONTROL_267		
+LanguageSelection	DlgLine	Line	90	234	284	0	1				
+LanguageSelection	DlgTitle	Text	13	6	292	25	65539		OOO_CONTROL_268		
+LanguageSelection	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 LicenseAgreement	Agree	RadioButtonGroup	8	190	330	40	3	AgreeToLicense		Back	
 LicenseAgreement	Back	PushButton	164	243	66	17	3		OOO_CONTROL_128	Next	
 LicenseAgreement	Banner	Bitmap	297	0	77	44	1		BannerBmp		
