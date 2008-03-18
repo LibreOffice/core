@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:02:19 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5324,7 +5324,7 @@ sal_Bool OCX_Image::Read(SotStorageStream *pS)
 
         pS->Seek( imagePos );
 
-        sImageUrl =  C2U("vnd.sun.star.expand:${$SYSBINDIR/") + C2U( SAL_CONFIGFILE( "bootstrap" ) ) + C2U("::UserInstallation}/user/temp/") + sName;
+        sImageUrl =  C2U("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/") + C2U( SAL_CONFIGFILE( "bootstrap" ) ) + C2U("::UserInstallation}/user/temp/") + sName;
 
         sal_uInt8* pImage = new sal_uInt8[ nImageLen ];
         pS->Read(pImage, nImageLen);
