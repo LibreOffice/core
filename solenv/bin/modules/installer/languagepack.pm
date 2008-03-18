@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languagepack.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:57:26 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:59:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -198,21 +198,28 @@ sub create_tar_gz_file
 
 sub get_packagename_from_packagelist
 {
-    my ( $alldirs ) = @_;
+    my ( $alldirs, $allvariables, $languagestringref ) = @_;
 
-    my $packagename = "";
+    # my $packagename = "";
 
-    for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
-    {
-        if ( ${$alldirs}[$i] =~ /-fonts/ ) { next; }
-        if ( ${$alldirs}[$i] =~ /-help/ ) { next; }
-        if ( ${$alldirs}[$i] =~ /-res/ ) { next; }
+    # for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+    # {
+    #   if ( ${$alldirs}[$i] =~ /-fonts/ ) { next; }
+    #   if ( ${$alldirs}[$i] =~ /-help/ ) { next; }
+    #   if ( ${$alldirs}[$i] =~ /-res/ ) { next; }
+    #
+    #   $packagename = ${$alldirs}[$i];
+    #   last;
+    # }
 
-        $packagename = ${$alldirs}[$i];
-        last;
-    }
+    # if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find base package in directory $installdir!", "get_packagename_from_packagelist"); }
 
-    if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find base package in directory $installdir!", "get_packagename_from_packagelist"); }
+    my $localproductname = $allvariables->{'PRODUCTNAME'};
+    $localproductname = lc($localproductname);
+    $localproductname =~ s/ //g;
+    $localproductname =~ s/-/_/g;
+
+    my $packagename = $localproductname . "_" . $$languagestringref;
 
     return $packagename;
 }
@@ -225,7 +232,7 @@ sub get_packagename_from_packagelist
 
 sub determine_packagename
 {
-    my ( $installdir ) = @_;
+    my ( $installdir, $allvariables, $languagestringref ) = @_;
 
     my $packagename = "";
     my $allnames = "";
@@ -240,7 +247,7 @@ sub determine_packagename
         my $rpmsav = installer::converter::copy_array_from_references($rpmfiles);
         for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
 
-        $packagename = get_packagename_from_packagelist($rpmfiles);
+        $packagename = get_packagename_from_packagelist($rpmfiles, $allvariables, $languagestringref);
 
         my $packagestring = installer::converter::convert_array_to_space_separated_string($rpmfiles);
         $packagename = create_tar_gz_file($installdir, $packagename, $packagestring);   # only one file
@@ -262,7 +269,7 @@ sub determine_packagename
         my $alldirssav = installer::converter::copy_array_from_references($alldirs);
         for ( my $i = 0; $i <= $#{$alldirs}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$alldirs}[$i]); }
 
-        $packagename = get_packagename_from_packagelist($alldirs);
+        $packagename = get_packagename_from_packagelist($alldirs, $allvariables, $languagestringref);
         my $packagestring = installer::converter::convert_array_to_space_separated_string($alldirs);
         $packagename = create_tar_gz_file($installdir, $packagename, $packagestring);   # only a file (not a directory) can be included into the shell script
         for ( my $i = 0; $i <= $#{$alldirssav}; $i++ ) { installer::systemactions::remove_complete_directory(${$alldirssav}[$i], 1); }
@@ -448,7 +455,7 @@ sub remove_package
 
 sub build_installer_for_languagepack
 {
-    my ($installdir, $allvariableshashref, $includepatharrayref, $languagesarrayref) = @_;
+    my ($installdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref) = @_;
 
     installer::logger::print_message( "... creating shell script installer ...\n" );
 
@@ -483,7 +490,7 @@ sub build_installer_for_languagepack
     put_license_file_into_script($scriptfile, $licensefile);
 
     # add rpm or package file name into script template
-    my ( $packagename, $allnames) = determine_packagename($installdir);
+    my ( $packagename, $allnames) = determine_packagename($installdir, $allvariableshashref, $languagestringref);
     put_packagename_into_script($scriptfile, $packagename, $allnames);
 
     # add product name into script template
