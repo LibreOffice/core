@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:28:06 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:01:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ sub get_all_sourcepathes
 
 sub register_unocomponents
 {
-    my ($allvariableshashref, $unocomponents, $regcompfileref, $servicesfile) = @_;
+    my ($allvariableshashref, $unocomponents, $regcompfileref, $servicesfile, $nativeservicesurlprefix) = @_;
 
     installer::logger::include_header_into_logfile("Registering UNO components:");
 
@@ -149,7 +149,7 @@ sub register_unocomponents
         {
             my @regcompoutput = ();
 
-            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $allvariableshashref->{'NATIVESERVICESURLPREFIX'} . $installer::globals::quote . " 2\>\&1 |";
+            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $nativeservicesurlprefix . $installer::globals::quote . " 2\>\&1 |";
 
             open (REG, "$systemcall");
             while (<REG>) {push(@regcompoutput, $_); }
@@ -191,7 +191,7 @@ sub register_unocomponents
 
 sub register_javacomponents
 {
-    my ($allvariableshashref, $javacomponents, $regcompfileref, $servicesfile, $regcomprdb) = @_;
+    my ($allvariableshashref, $javacomponents, $regcompfileref, $servicesfile, $regcomprdb, $javaservicesurlprefix) = @_;
 
     installer::logger::include_header_into_logfile("Registering Java components:");
 
@@ -219,7 +219,7 @@ sub register_javacomponents
             {
                 my @regcompoutput = ();
 
-                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $allvariableshashref->{'JAVASERVICESURLPREFIX'} . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
+                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $javaservicesurlprefix . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -317,21 +317,18 @@ sub register_pythoncomponents
         if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
 
         my $typesrdbname = "types.rdb";
+
         # FIXME: Remove the unneeded
         # get_source_path_cygwin_safe() -> fix_cygwin_path()
         # when WRAPCMD is gone
-        my $typesrdbref =
-            get_source_path_cygwin_safe($typesrdbname, $includepatharrayref, 1);
+        my $typesrdbref = get_source_path_cygwin_safe($typesrdbname, $includepatharrayref, 1);
 
         if ( $$typesrdbref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $typesrdbname !", "register_pythoncomponents"); }
 
-
         my $pyunoservicesrdbname = "pyuno_services.rdb";
-        my $pyunoservicesrdbref =
-            get_source_path_cygwin_safe($pyunoservicesrdbname, $includepatharrayref, 1);
+        my $pyunoservicesrdbref = get_source_path_cygwin_safe($pyunoservicesrdbname, $includepatharrayref, 1);
 
         if ( $$pyunoservicesrdbref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $pyunoservicesrname !", "register_pythoncomponents"); }
-
 
         for ( my $i = 0; $i <= $#{$pythoncomponents}; $i++ )
         {
@@ -359,12 +356,12 @@ sub register_pythoncomponents
 
                 my @regcompoutput = ();
 
-
                 $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register"
                 . " -br " . fix_cygwin_path($$typesrdbref)
                 . " -br " . fix_cygwin_path($$pyunoservicesrdbref)
                 . " -r " . fix_cygwin_path($servicesfile)
                 . " -c vnd.openoffice.pymodule:" . $filestring . " -l com.sun.star.loader.Python 2\>\&1 |";
+
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
                 close (REG);
@@ -406,7 +403,7 @@ sub register_pythoncomponents
 
 sub register_all_components
 {
-    my ( $allvariableshashref, $servicesgid, $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
+    my ( $allvariableshashref, $servicesgid, $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref, $nativeservicesurlprefix, $javaservicesurlprefix ) = @_;
 
     my $registererrorflag = 0;
 
@@ -452,8 +449,8 @@ sub register_all_components
     $java_error_occured = 0;
     $python_error_occured = 0;
 
-    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents($allvariableshashref, \@unocomponents, $regcompfileref, $servicesfile); }
-    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents($allvariableshashref, \@unocomponents, $regcompfileref, $servicesfile, $nativeservicesurlprefix); }
+    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb, $javaservicesurlprefix); }
     if ( $#pythoncomponents > -1 ) { $python_error_occured = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
 
     if ( $uno_error_occured || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
@@ -861,6 +858,26 @@ sub filter_regmergefiles
 }
 
 ################################################################
+# Setting defaults for Creating services.rdb file by registering all uno components
+################################################################
+
+sub set_url_prefixes
+{
+    my ( $registryfile ) = @_;
+
+    my $nativeservicesurlprefix = "";
+    my $javaservicesurlprefix = "";
+
+    if ( $registryfile->{'NativeServicesURLPrefix'} ) { $nativeservicesurlprefix = $registryfile->{'NativeServicesURLPrefix'}; }
+    else { $nativeservicesurlprefix = "vnd.sun.star.expand:\$ORIGIN/"; }
+
+    if ( $registryfile->{'JavaServicesURLPrefix'} ) { $javaservicesurlprefix = $registryfile->{'JavaServicesURLPrefix'}; }
+    else { $javaservicesurlprefix = "vnd.sun.star.expand:\$UNO_JAVA_COMPONENT_PATH/"; }
+
+    return ($nativeservicesurlprefix, $javaservicesurlprefix);
+}
+
+################################################################
 # Creating services.rdb file by registering all uno components
 ################################################################
 
@@ -891,6 +908,8 @@ sub create_services_rdb
             my $servicesgid = $registryfile->{'gid'};  # unique
             my $uniquedirname = $servicesgid . "_servicesrdb";
             # my $uniquedirname = $servicesgid;
+
+            my ($nativeservicesurlprefix, $javaservicesurlprefix) = set_url_prefixes($registryfile);
 
             installer::logger::include_header_into_logfile("Creating $servicesname ($servicesgid):");
 
@@ -963,7 +982,7 @@ sub create_services_rdb
                 # and now iteration over all files
 
                 # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
-                my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
+                my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref, $nativeservicesurlprefix, $javaservicesurlprefix);
 
                 # Dependent from the success, the registration directory can be renamed.
 
@@ -1013,18 +1032,6 @@ sub create_services_rdb
     # Setting the global variable $installer::globals::services_rdb_created
 
     $installer::globals::services_rdb_created = 1;
-}
-
-sub set_defaults_in_allvariableshashref
-{
-    my $allvariableshashref = shift;
-
-    $allvariableshashref->{'NATIVESERVICESURLPREFIX'} =
-        "vnd.sun.star.expand:\$ORIGIN/"
-        unless exists $allvariableshashref->{'NATIVESERVICESURLPREFIX'};
-    $allvariableshashref->{'JAVASERVICESURLPREFIX'} =
-        "vnd.sun.star.expand:\$UNO_JAVA_COMPONENT_PATH/"
-        unless exists $allvariableshashref->{'JAVASERVICESURLPREFIX'};
 }
 
 1;
