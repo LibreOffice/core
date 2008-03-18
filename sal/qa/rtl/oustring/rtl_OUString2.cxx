@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:25:16 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,14 +546,14 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         void toFloat_selftest()
             {
                 t_print("Start selftest:\n");
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000002) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000001) == true);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.01f) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.001f) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0001f) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00001f) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000002f) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0000001f) == true);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00000001f) == true);
+                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000000001f) == true);
 
                 t_print("Selftest done.\n");
             }
@@ -1220,6 +1220,44 @@ void iterateCodePoints::testNotWellFormed() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
 }
 
+class convertFromString: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(createFromCodePoints);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void convertFromString::test() {
+    rtl::OUString t;
+    CPPUNIT_ASSERT(
+        !rtl_convertStringToUString(
+            &t.pData, RTL_CONSTASCII_STRINGPARAM("\x80"), RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
+    CPPUNIT_ASSERT(
+        !rtl_convertStringToUString(
+            &t.pData, RTL_CONSTASCII_STRINGPARAM("\xC0"), RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
+    CPPUNIT_ASSERT(
+        !rtl_convertStringToUString(
+            &t.pData, RTL_CONSTASCII_STRINGPARAM("\xFF"), RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
+    CPPUNIT_ASSERT(
+        rtl_convertStringToUString(
+            &t.pData, RTL_CONSTASCII_STRINGPARAM("abc"), RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
+    CPPUNIT_ASSERT(t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc")));
+}
+
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toInt, "rtl_OUString");
@@ -1237,6 +1275,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
     rtl_OUString::createFromCodePoints, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
     rtl_OUString::iterateCodePoints, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    rtl_OUString::convertFromString, "rtl_OUString");
 
 } // namespace rtl_OUString
 
