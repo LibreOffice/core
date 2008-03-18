@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:33:29 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:53:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ PRJNAME=desktop
 TARGET=guiloader
 LIBTARGET=NO
 TARGETTYPE=GUI
+UWINAPILIB=
 
 # --- Settings -----------------------------------------------------
 
@@ -49,30 +50,18 @@ TARGETTYPE=GUI
 APP1TARGET=guiloader
 APP1NOSAL=TRUE
 APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-.IF "$(COM)"=="GCC"
-APP1OBJS=$(OBJ)$/genericloader.obj
-.ELSE
-APP1OBJS=$(OBJ)$/genericloader.obj $(OBJ)$/extendloaderenvironment.obj
-.ENDIF
+APP1OBJS=\
+    $(OBJ)$/extendloaderenvironment.obj \
+    $(OBJ)$/genericloader.obj
 STDLIB1=$(SHLWAPILIB)
 
 APP2TARGET=so$/guiloader
 APP2NOSAL=TRUE
 APP2ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-.IF "$(COM)"=="GCC"
-APP2OBJS=$(OBJ)$/genericloader.obj
-.ELSE
-APP2OBJS=$(OBJ)$/genericloader.obj $(OBJ)$/extendloaderenvironment.obj
-.ENDIF
+APP2OBJS=\
+    $(OBJ)$/extendloaderenvironment.obj \
+    $(OBJ)$/genericloader.obj
 STDLIB2=$(SHLWAPILIB)
-
-# Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(CCNUMVER)" > "001399999999"
-APP1OBJS+=$(L)$/delayload.obj
-APP2OBJS+=$(L)$/delayload.obj
-.ENDIF
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
