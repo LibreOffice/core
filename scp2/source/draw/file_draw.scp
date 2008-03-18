@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:19:12 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,21 +63,10 @@ End
 
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sdraw);
     Styles = (PACKED, PATCH);
 End
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Xdg_Draw
-	TXT_FILE_BODY;
-	Dir = gid_Dir_Share_Xdg;
-	Name = "draw.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-
-#endif
 
 // new user interface configuration files
 /*
