@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_math.scp,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:41:00 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@ Module gid_Module_Prg_Math_Bin
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Html_W3c_Ipr,gid_File_Dtd_Math,gid_File_Exe_Smath,gid_File_Lib_Sm,gid_File_Lib_Smd,gid_File_Extra_Urlmore_Math,gid_File_Extra_Urlnew_Math,gid_File_Extra_Urltasks_Math,
+    Files = (gid_File_Html_W3c_Ipr,gid_File_Dtd_Math,gid_File_Lib_Sm,gid_File_Lib_Smd,gid_File_Extra_Urlmore_Math,gid_File_Extra_Urlnew_Math,gid_File_Extra_Urltasks_Math,
     gid_File_Oo_Office_Ui_Mathcommands_Xcs,gid_File_Oo_Office_Ui_Mathcommands_Xcu,gid_File_Oo_Office_Ui_Mathwindowstate_Xcs
     gid_File_Lib_Bf_Sm, gid_File_Registry_Spool_Oo_Common_Math_Xcu, gid_File_Registry_Spool_Oo_Setup_Math_Xcu,
-	gid_File_Oo_Office_Ui_Mathwindowstate_Xcu, gid_File_Share_Xdg_Math, gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu,
+	gid_File_Oo_Office_Ui_Mathwindowstate_Xcu, gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Math_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Math_Filters_Xcu, gid_File_Tmp_Userinstall_Math_Inf);
 End
 
@@ -64,3 +64,27 @@ End
 //     Default = YES;
 //     Files = (gid_File_Help_Smath_Zip);
 // End
+
+Module gid_Module_Brand_Prg_Math
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Math";
+    Description = "gid_Module_Brand_Prg_Math";
+    ParentID = gid_Module_Prg_Math_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Smath);
+End
+
+Module gid_Module_Langpack_Math_Template
+    ParentID = gid_Module_Prg_Math_Bin;
+    Name = "gid_Module_Langpack_Math_Template";
+    Description = "gid_Module_Langpack_Math_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Smath_Zip,
+             gid_File_Res_Sm,
+             gid_File_Res_Bf_Sm);
+End
+
+#include "alllangmodules_math.inc"
