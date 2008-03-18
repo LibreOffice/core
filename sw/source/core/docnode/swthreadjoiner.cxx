@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swthreadjoiner.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:32:03 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,6 @@ uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
     }
 
     return mpThreadJoiner;
-}
-
-bool SwThreadJoiner::ExistsThreadJoiner()
-{
-    return (mpThreadJoiner.is());
 }
 
 void SwThreadJoiner::ReleaseThreadJoiner()
