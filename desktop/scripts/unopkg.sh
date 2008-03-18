@@ -5,9 +5,9 @@
 #
 #   $RCSfile: unopkg.sh,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-15 10:40:00 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:45:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,52 +48,8 @@ if [ -h "$0" ] ; then
 else
     cd "`dirname "$0"`"
 fi
-
-sd_prog="`pwd`"
-
-cd ..
-sd_binary=`basename "$0"`".bin"
-sd_inst="`pwd`"
-
-# change back directory
+sd_prog=`pwd`
 cd "$sd_cwd"
-
-# check if all required patches are installed
-if [ -x "$sd_prog/sopatchlevel.sh" ]; then
-    "$sd_prog/sopatchlevel.sh"
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-fi
-
-# set search path for shared libraries
-sd_platform=`uname -s`
-case $sd_platform in
-  AIX)
-    LIBPATH=${sd_prog}${LIBPATH+:${LIBPATH}}
-    export LIBPATH
-    ;;
-
-  Darwin)
-    DYLD_LIBRARY_PATH=${sd_prog}${DYLD_LIBRARY_PATH+:${DYLD_LIBRARY_PATH}}
-    export DYLD_LIBRARY_PATH
-    ;;
-
-  HP-UX)
-    SHLIB_PATH=${sd_prog}:/usr/openwin/lib${SHLIB_PATH+:${SHLIB_PATH}}
-    export SHLIB_PATH
-    ;;
-
-  IRIX*)
-    LD_LIBRARYN32_PATH=${sd_prog}${LD_LIBRARYN32_PATH+:${LD_LIBRARYN32_PATH}}
-    export LD_LIBRARYN32_PATH
-    ;;
-
-  *)
-    LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
-    export LD_LIBRARY_PATH
-    ;;
-esac
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
@@ -105,43 +61,22 @@ do
 done
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
-unset java_ld_library_path
-if [ -x "$sd_prog/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS`
-elif [ -x "$sd_prog/../ure-link/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/../ure-link/javaldx" $BOOTSTRAPVARS`
+if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
+    my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
+        "-env:INIFILEPATH=$sd_prog/redirectrc"`
+    if [ -n "$my_path" ] ; then
+        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH
+    fi
 fi
-if [ "$java_ld_library_path" != "" ] ; then
-    case $sd_platform in
-        AIX)
-            LIBPATH=${java_ld_library_path}:${LIBPATH}
-            ;;
-        Darwin)
-            DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
-            ;;
-        HP-UX)
-            SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
-            ;;
-        IRIX*)
-            LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
-            ;;
-        *)
-            LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
-            ;;
-    esac
-fi
-
-# misc. environment variables
-OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
-export OPENOFFICE_MOZILLA_FIVE_HOME
 
 unset XENVIRONMENT
 
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 
-# set path so that other apps can be started just by name
-PATH="$sd_prog":$PATH
+# Set PATH so that crash_report is found:
+PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # assume gui mode if passed a single oxt file as argument
@@ -149,5 +84,5 @@ GUI=""
 [ $# -eq 1 -a "oxt" = "`echo $1 | cut -d . -f 2`" -a -n "$DISPLAY" ] && GUI="gui"
 
 # execute binary
-exec "$sd_prog/$sd_binary" $GUI "$@"
+exec "$sd_prog/unopkg.bin" $GUI "$@" "-env:INIFILEPATH=$sd_prog/redirectrc"
 
