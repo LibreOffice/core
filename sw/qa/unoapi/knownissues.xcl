@@ -1,47 +1,22 @@
-### 112785 ###
-sw.SwXParagraph::com::sun::star::style::CharacterProperties
-
-### 112786 ###
-sw.SwXTextPortion::com::sun::star::style::CharacterProperties
-
-### 114518 ###
+### i85576 ###
 sw.SwXCellRange::com::sun::star::text::CellRange
-
-### 114520 ###
-sw.SwXTextEmbeddedObject::com::sun::star::beans::XPropertySet
-sw.SwXTextFrame::com::sun::star::beans::XPropertySet
-sw.SwXTextGraphicObject::com::sun::star::beans::XPropertySet
-
-### 114958 ###
-sw.SwXCellRange::com::sun::star::text::CellRange
-
-### 82588 ###
-sw.SwXTextTable::com::sun::star::chart::XChartData
 
 ### i21166 ###
 sw.SwXCell::com::sun::star::text::CellProperties
 sw.SwXCell::com::sun::star::beans::XPropertySet
 
-### i21669 ###
-sw.SwXTableColumns::com::sun::star::container::XIndexAccess
+### i59143 ###
 sw.SwXTableColumns::com::sun::star::table::XTableColumns
 
-### i22896 ###
-sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
-
-### i23199 ###
+### i85580 ###
 sw.SwXTextView::com::sun::star::view::XSelectionSupplier
+#-> disabled in sw.scw
 
 ### i23394 ###
 sw.XMLContentImporter::com::sun::star::xml::sax::XDocumentHandler
 sw.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
 sw.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
-
-### i23396 ###
-sw.SwXTextCursor::com::sun::star::text::XSentenceCursor
-
-### i23415 ###
-sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
+# -> disables in sw.sce
 
 ### i23422 ###
 sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
@@ -49,16 +24,13 @@ sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
 ### i23623 ###
 sw.SwXStyleFamily::com::sun::star::container::XNameReplace
 
-### i25033 ###
-sw.SwXBodyText::com::sun::star::text::XSimpleText
-
-### i25406 ###
+### i85583 ###
 sw.PageStyle::com::sun::star::style::PageProperties
 
 ### i25408 ###
 sw.PageStyle::com::sun::star::style::XStyle
 
-### i25472 ###
+### i85584 ###
 sw.CharacterStyle::com::sun::star::style::CharacterPropertiesAsian
 
 ### i25473 ###
@@ -68,21 +40,8 @@ sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 ### i34456 ###
 sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
 
-### i35436 ###
-sw.SwAccessibleTextEmbeddedObject::com::sun::star::accessibility::XAccessibleImage
-sw.SwAccessibleTextEmbeddedObject::com::sun::star::accessibility::XAccessibleComponent
-sw.SwAccessibleTextEmbeddedObject::com::sun::star::accessibility::XAccessible
-sw.SwAccessibleTextEmbeddedObject::com::sun::star::accessibility::XAccessibleEventBroadcaster
-sw.SwAccessibleTextEmbeddedObject::com::sun::star::accessibility::XAccessibleContext
-
 ### i37272 ###
 sw.SwXDrawPage::com::sun::star::drawing::XShapeGrouper
-
-### i38199 ###
-sw.SwXAutoTextGroup::com::sun::star::container::XNamed
-
-### i38201 ###
-sw.SwXAutoTextGroup::com::sun::star::text::XAutoTextGroup
 
 ### i38584 ###
 sw.SwXParagraph::com::sun::star::beans::XPropertySet
@@ -91,77 +50,65 @@ sw.SwXTextRange::com::sun::star::beans::XPropertySet
 sw.SwXTextViewCursor::com::sun::star::beans::XPropertySet
 sw.SwXTextCursor::com::sun::star::beans::XPropertySet
 
-### i38586 ###
-sw.SwXParagraph::com::sun::star::style::ParagraphProperties
-
-### i39454 ###
+### i85585 ###
 sw.SwXTextSection::com::sun::star::text::TextSection
 
-### i41735 ###
-sw.SwXAutoTextEntry::com::sun::star::text::XSimpleText
-sw.SwXAutoTextEntry::com::sun::star::text::XAutoTextEntry
-sw.SwXAutoTextEntry::com::sun::star::text::XTextRange
-sw.SwXAutoTextEntry::com::sun::star::text::XText
-
-### i53376 ###
+### i85586 ###
 sw.SwAccessibleDocumentView::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### i58374 ###
 sw.DocumentSettings::com::sun::star::document::Settings
 
-### i59143 ###
-sw.SwXTableColumns::com::sun::star::table::XTableColumns
-
-### i62054 ###
-sw.SwXAutoTextGroup::com::sun::star::container::XNamed
-sw.SwXAutoTextGroup::com::sun::star::container::XNameAccess
-sw.SwXAutoTextGroup::com::sun::star::container::XIndexAccess
+### i85586 ###
 sw.SwXAutoTextGroup::com::sun::star::container::XElementAccess
-sw.SwXAutoTextGroup::com::sun::star::text::XAutoTextGroup
-
-### i65060 ###
-sw.PageStyle::com::sun::star::beans::XPropertySet
-
-### i68743 ###
-sw.SwXTextTable::com::sun::star::sheet::XCellRangeData
 
 ### i72029 ###
 sw.SwXChapterNumbering::com::sun::star::text::NumberingRules
 
-### i73982 ###
+### i38586 ###
+sw.SwXParagraph::com::sun::star::style::ParagraphProperties
 sw.SwXTextCursor::com::sun::star::style::ParagraphProperties
 sw.SwXTextPortion::com::sun::star::style::ParagraphProperties
 sw.SwXTextRange::com::sun::star::style::ParagraphProperties
 sw.SwXTextViewCursor::com::sun::star::style::ParagraphProperties
+sw.ConditionalParagraphStyle::com::sun::star::style::ParagraphProperties
+sw.ParagraphStyle::com::sun::star::style::ParagraphProperties
+sw.SwXCellRange::com::sun::star::style::ParagraphProperties
+sw.SwXTextDefaults::com::sun::star::style::ParagraphProperties
+sw.SwXTextTableCursor::com::sun::star::style::ParagraphProperties
 
-### i73991 ###
+### i85575 ###
+sw.SwXParagraph::com::sun::star::style::CharacterProperties
 sw.SwXTextCursor::com::sun::star::style::CharacterProperties
-sw.SwXTextRange::com::sun::star::style::CharacterProperties
-sw.SwXTextTableCursor::com::sun::star::style::CharacterProperties
-sw.SwXTextViewCursor::com::sun::star::style::CharacterProperties
-
-### i73992 ###
-sw.SwXTextCursor::com::sun::star::document::XDocumentInsertable
 
 ### i77882 ###
 sw.SwXTextCursor::com::sun::star::document::XDocumentInsertable
 
-### failures without issue ###
-sw.ConditionalParagraphStyle::com::sun::star::beans::XPropertySet
-sw.ConditionalParagraphStyle::com::sun::star::style::ParagraphProperties
-sw.DocumentSettings::com::sun::star::beans::XPropertySet
-sw.DocumentSettings::com::sun::star::text::PrintSettings
+### i85595 ###
 sw.ParagraphStyle::com::sun::star::beans::XMultiPropertySet
 sw.ParagraphStyle::com::sun::star::beans::XPropertySet
-sw.ParagraphStyle::com::sun::star::style::ParagraphProperties
-sw.SwAccessiblePageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
-sw.SwXCellRange::com::sun::star::style::ParagraphProperties
-sw.SwXPrintSettings::com::sun::star::text::PrintSettings
-sw.SwXTextDefaults::com::sun::star::style::ParagraphProperties
-sw.SwXTextDocument::com::sun::star::text::XPagePrintable 
-sw.SwXTextEmbeddedObject::com::sun::star::text::BaseFrameProperties
-sw.SwXTextTableCursor::com::sun::star::style::ParagraphProperties
+
+### i85596 ###
 sw.SwXFieldMaster::com::sun::star::text::TextFieldMaster
-sw.SwXTextDocument::com::sun::star::text::XPagePrintable
-sw.SwXTextTable::com::sun::star::table::XAutoFormattable
-sw.SwXTextViewCursor::com::sun::star::view::XScreenCursor
+
+### i85634 ###
+sw.SwAccessibleTableView
+# -> disabled in sw.sce
+
+### i85635 ###
+sw.DocumentSettings::com::sun::star::text::PrintPreviewSettings
+
+### i85638 ###
+sw.SwXTextDocument::com::sun::star::frame::XStorable
+
+### i85640 ###
+sw.SwXMailMerge
+#-> disabled in sw.sce 
+
+### i86656 ###
+sw.SwAccessibleDocumentView::com::sun::star::accessibility::XAccessibleComponent
+
+### i86751 ###
+sw.SwAccessibleDocumentPageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
+#-> disabled in sw.sce 
+
