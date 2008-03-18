@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:04:35 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:04:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1342,6 +1342,28 @@ sub get_guid_list
 }
 
 #################################################################
+# Calculating a GUID with a string using md5.
+#################################################################
+
+sub calculate_guid
+{
+    my ( $string ) = @_;
+
+    my $guid = "";
+
+    my $md5 = Digest::MD5->new;
+    $md5->add($string);
+    my $digest = $md5->hexdigest;
+    $digest = uc($digest);
+
+    # my $id = pack("A32", $digest);
+    my ($first, $second, $third, $fourth, $fifth) = unpack ('A8 A4 A4 A4 A12', $digest);
+    $guid = "$first-$second-$third-$fourth-$fifth";
+
+    return $guid;
+}
+
+#################################################################
 # Filling the component hash with the values of the
 # component file.
 #################################################################
@@ -1397,30 +1419,19 @@ sub create_new_component_file
 
 sub set_uuid_into_component_table
 {
-    my ($idtdirbase) = @_;
+    my ($idtdirbase, $allvariables) = @_;
 
     my $componenttablename  = $idtdirbase . $installer::globals::separator . "Componen.idt";
 
     my $componenttable = installer::files::read_file($componenttablename);
-
-#   my $number = $#{$componenttable} + 1;
-#
-#   my $guidref = get_guid_list($number);
-#
-#   for ( my $i = 0; $i <= $#{$componenttable}; $i++ )
-#   {
-#       my $uuid = ${$guidref}[$i];
-#       installer::remover::remove_leading_and_ending_whitespaces(\$uuid);
-#       ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
-#   }
 
     # For update and patch reasons (small update) the GUID of an existing component must not change!
     # The collection of component GUIDs is saved in the directory $installer::globals::idttemplatepath in the file "components.txt"
 
     my $infoline = "";
     my $counter = 0;
-    my $componentfile = installer::files::read_file($installer::globals::componentfilename);
-    my $componenthash = fill_component_hash($componentfile);
+    # my $componentfile = installer::files::read_file($installer::globals::componentfilename);
+    # my $componenthash = fill_component_hash($componentfile);
 
     for ( my $i = 3; $i <= $#{$componenttable}; $i++ )  # ignoring the first three lines
     {
@@ -1430,62 +1441,74 @@ sub set_uuid_into_component_table
 
         my $uuid = "";
 
-        if ( $componenthash->{$componentname} )
-        {
-            $uuid = $componenthash->{$componentname};
-        }
-        else
-        {
-            # This is an error or a warning?
-            # Creating a new guid for the component and saving this in the "components.txt"
-            # Setting global variable: created_new_component_guid
+    #   if ( $componenthash->{$componentname} )
+    #   {
+    #       $uuid = $componenthash->{$componentname};
+    #   }
+    #   else
+    #   {
 
-            # Creating new guid
+            if ( exists($installer::globals::calculated_component_guids{$componentname}))
+            {
+                $uuid = $installer::globals::calculated_component_guids{$componentname};
+            }
+            else
+            {
+                # Calculating new GUID with the help of the component name.
+                my $useooobaseversion = 1;
+                if ( exists($installer::globals::base_independent_components{$componentname})) { $useooobaseversion = 0; }
+                my $sourcestring = $componentname;
 
-            my $guidref = get_guid_list(1, 0);  # only one GUID shall be generated
-            my $newuuid = ${$guidref}[0];
-            $newuuid =~ s/\s*$//;           # removing ending spaces
-            # $infoline = "WARNING: Creating new GUID for component: $componentname, value: $newuuid \n";
-            # push( @installer::globals::logfileinfo, $infoline);
-            $counter++;
+                if ( $useooobaseversion )
+                {
+                    if ( ! exists($allvariables->{'OOOBASEVERSION'}) ) { installer::exiter::exit_program("ERROR: Could not find variable \"OOOBASEVERSION\" (required value for GUID creation)!", "set_uuid_into_component_table"); }
+                    $sourcestring = $sourcestring . "_" . $allvariables->{'OOOBASEVERSION'};
+                }
+                $uuid = calculate_guid($sourcestring);
+                $counter++;
 
-            # Setting new uuid
-            $componenthash->{$componentname} = $newuuid;
+                # checking, if there is a conflict with an already created guid
+                if ( exists($installer::globals::allcalculated_guids{$uuid}) ) { installer::exiter::exit_program("ERROR: \"$uuid\" was already created before!", "set_uuid_into_component_table"); }
+                $installer::globals::allcalculated_guids{$uuid} = 1;
+                $installer::globals::calculated_component_guids{$componentname} = $uuid;
 
-            # Setting flag
-            $installer::globals::created_new_component_guid = 1;    # this is very important!
+                # Setting new uuid
+                # $componenthash->{$componentname} = $uuid;
 
-            $uuid = $newuuid;
-        }
+                # Setting flag
+                # $installer::globals::created_new_component_guid = 1;  # this is very important!
+            }
+    #   }
 
         ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
     }
 
     installer::files::save_file($componenttablename, $componenttable);
 
-    if ( $installer::globals::created_new_component_guid )
-    {
-        # create new component file!
-        $componentfile = create_new_component_file($componenthash);
-        installer::worker::sort_array($componentfile);
+#   if ( $installer::globals::created_new_component_guid )
+#   {
+#       # create new component file!
+#       $componentfile = create_new_component_file($componenthash);
+#       installer::worker::sort_array($componentfile);
+#
+#       # To avoid conflict the components file cannot be saved at the same place
+#       # All important data have to be saved in the directory: $installer::globals::infodirectory
+#       my $localcomponentfilename = $installer::globals::componentfilename;
+#       installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localcomponentfilename);
+#       $localcomponentfilename = $installer::globals::infodirectory . $installer::globals::separator . $localcomponentfilename;
+#       installer::files::save_file($localcomponentfilename, $componentfile);
+#
+#       # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
+#
+#       $infoline = "COMPONENTCODES: Created $counter new GUIDs for components ! \n";
+#       push( @installer::globals::logfileinfo, $infoline);
+#   }
+#   else
+#   {
+#       $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
+#       push( @installer::globals::logfileinfo, $infoline);
+#   }
 
-        # To avoid conflict the components file cannot be saved at the same place
-        # All important data have to be saved in the directory: $installer::globals::infodirectory
-        my $localcomponentfilename = $installer::globals::componentfilename;
-        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localcomponentfilename);
-        $localcomponentfilename = $installer::globals::infodirectory . $installer::globals::separator . $localcomponentfilename;
-        installer::files::save_file($localcomponentfilename, $componentfile);
-
-        # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
-
-        $infoline = "WARNING COMPONENTCODES: Created $counter new GUIDs for components ! \n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
 }
 
 #################################################################
