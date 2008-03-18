@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:30:13 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,232 +35,6 @@
 
 #include "macros.inc"
 
-ProfileItem gid_Profileitem_Bootstrap_Baseinstall
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "BaseInstallation";
-    Value = "$ORIGIN/..";
-End
-
-ProfileItem gid_Profileitem_Bootstrap_Productkey
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "ProductKey";
-    Value = "<productkey>";
-End
-
-ProfileItem gid_Profileitem_Bootstrap_Errorreport_Port
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "ErrorReport";
-    Order = 7;
-    Key = "ErrorReportPort";
-    Value = "80";
-End
-
-ProfileItem gid_Profileitem_Bootstrap_Errorreport_Server
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "ErrorReport";
-    Order = 8;
-    Key = "ErrorReportServer";
-  #if defined(BUILD_SPECIAL)
-    Value = "report.services.openoffice.org";
-  #else
-    Value = "";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Bootstrap_Installmode
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "InstallMode";
-    Value = "<installmode>";
-End
-
-ProfileItem gid_Profileitem_Bootstrap_Userinstall
-    ProfileID = gid_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "UserInstallation";
-  #ifdef WNT
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
-  #elif defined MACOSX
-  #if defined QUARTZ 
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME-aqua/%USERDIRPRODUCTVERSION";
-  #else 
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
-  #endif
-  #else
-    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
-  #endif
-    StandaloneValue = "$ORIGIN/..";
-End
-
-// for the versionrc
-
-ProfileItem gid_Profileitem_Version_Buildid
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 4;
-    Key = "buildid";
-    Value = "<buildid>";
-End
-
-ProfileItem gid_Profileitem_Version_Productpatch
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 6;
-    Key = "ProductPatch";
-    Value = "<productupdate>";
-End
-
-ProfileItem gid_Profileitem_Version_Productsource
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 7;
-    Key = "ProductSource";
-    Value = "<sourceid>";
-End
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Version_Productcode
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 8;
-    Key = "ProductCode";
-    Value = "<productcode>";
-End
-
-#endif
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Version_Upgradecode
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 9;
-    Key = "UpgradeCode";
-    Value = "<upgradecode>";
-End
-
-#endif
-
-ProfileItem gid_Profileitem_Version_Productmajor
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 10;
-    Key = "ProductMajor";
-    Value = "<productmajor>";
-End
-
-ProfileItem gid_Profileitem_Version_Productminor
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 11;
-    Key = "ProductMinor";
-    Value = "<productminor>";
-End
-
-ProfileItem gid_Profileitem_Version_Productbuildid
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 12;
-    Key = "ProductBuildid";
-    Value = "<productbuildid>";
-End
-
-ProfileItem gid_Profileitem_Version_Alllanguages
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 13;
-    Key = "AllLanguages";
-    Value = "<alllanguages>";
-End
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Version_Msiproductversion
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 14;
-    Key = "MsiProductVersion";
-    Value = "<msiproductversion>";
-End
-
-#endif
-
-ProfileItem gid_Profileitem_Version_Updateurl
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 15;
-    Key = "UpdateURL";
-  #if defined(BUILD_SPECIAL)
-  #ifdef WNT
-    Value = "${UPDATEURL}";
-  #else  // defined WNT
-    Value = "${UPDATEURL}?pkgfmt=<pkgformat>";
-  #endif //defined WNT
-  #else
-    Value = "";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Version_Updateid
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 16;
-    Key = "UpdateID";
-    Value = "<updateid>";
-End
-
-ProfileItem gid_Profileitem_Version_Useragent
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 17;
-    Key = "UpdateUserAgent";
-    Value = "<useragent>";
-End
-
-ProfileItem gid_Profileitem_Version_Ooobaseversion
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 18;
-    Key = "OOOBaseVersion";
-    Value = "${OOOBASEVERSION}";
-End
-
-ProfileItem gid_Profileitem_Version_Extensionupdateurl
-    ProfileID = gid_Profile_Version_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Order = 18;
-    Key = "ExtensionUpdateURL";
-    Value = "http://updateext.services.openoffice.org/ProductUpdateService/check.Update";
-End
-
 // for the configmgr
 
 ProfileItem gid_Profileitem_Configmgr_Cfg_Servertype
@@ -279,11 +53,7 @@ ProfileItem gid_Profileitem_Configmgr_Bootstrap_Ini
     Section = "Bootstrap";
     Order = 2;
     Key = "BootstrapFile";
-  #ifdef UNX
-    Value = "$ORIGIN/bootstraprc";
-  #else
-    Value = "$ORIGIN/bootstrap.ini";
-  #endif
+    Value = "$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap);
 End
 
 ProfileItem gid_Profileitem_Configmgr_Version_Ini
@@ -292,11 +62,7 @@ ProfileItem gid_Profileitem_Configmgr_Version_Ini
     Section = "Bootstrap";
     Order = 2;
     Key = "VersionFile";
-  #ifdef UNX
-    Value = "$ORIGIN/versionrc";
-  #else
-    Value = "$ORIGIN/version.ini";
-  #endif
+    Value = "$BRAND_BASE_DIR/program/" PROFILENAME(version);
 End
 
 
@@ -320,7 +86,7 @@ ProfileItem gid_Profileitem_Configmgr_Baseinstallation
     Section = "Bootstrap";
     Order = 4;
     Key = "BaseInstallation";
-    Value = "${$BootstrapFile:BaseInstallation}";
+    Value = "${OOO_BASE_DIR}";
 End
 
 
@@ -610,79 +376,23 @@ End
 
 #endif
 
-ProfileItem gid_Profileitem_Soffice_Logo
-    ProfileID = gid_Profile_Soffice_Ini;
+ProfileItem gid_Profileitem_Setup_Productbuildid
+    ProfileID = gid_Profile_Setup_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 1;
-    Key = "Logo";
-    Value = "1";
+    Order = 8;
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
 End
 
-#ifdef MACOSX
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc
-    ProfileID = gid_Profile_Soffice_Ini;
+ProfileItem gid_Profileitem_Setup_Buildid
+    ProfileID = gid_Profile_Setup_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 5;
-    Key = "MacOSXIntegrationUserFile";
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/macosxrc.txt";
+    Order = 9;
+    Key = "buildid";
+    Value = "<buildid>";
 End
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc2
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "MacOSXIntegrationDefaultFile";
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
-End
-
-#endif 
-
-ProfileItem gid_Profileitem_Soffice_ProgressBarColor
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "ProgressBarColor";
-    Value = "0,0,128";
-End
-
-ProfileItem gid_Profileitem_Soffice_ProgressSize
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "ProgressSize";
-    Value = "-1,6";
-End
-
-ProfileItem gid_Profileitem_Soffice_ProgressPosition
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "ProgressPosition";
-    Value = "-1,-1";
-End
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Soffice_Hideeula
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 7;
-    Key = "HideEula";
-    Value = "[HIDEEULA]";
-    Inifiletablekey = "HideEula";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-
-#endif
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
@@ -690,11 +400,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     Section = "Bootstrap";
     Order = 1;
     Key = "UNO_SHARED_PACKAGES";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/share/uno_packages";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:BaseInstallation}/share/uno_packages";
-  #endif
+    Value = "$BRAND_BASE_DIR/share/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
@@ -712,11 +418,7 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     Section = "Bootstrap";
     Order = 3;
     Key = "UNO_USER_PACKAGES";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/uno_packages";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:UserInstallation}/user/uno_packages";
-  #endif
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
@@ -746,160 +448,96 @@ ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
     Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Types
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 7;
-    Key = "UNO_TYPES";
-#if defined( ENABLE_VBA ) && !defined( VBA_EXTENSION )
-    Value = "$ORIGIN/oovbaapi.rdb $ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
-#else
-    Value = "$ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
-#endif
-
+    Key = "UNO_SHARED_PACKAGES_CACHE";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_SHARED_PACKAGES_CACHE}";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Services
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_User_Packages_Cache
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 8;
-    Key = "UNO_SERVICES";
-    Value = "${$PKG_UserUnoFile:UNO_SERVICES} ${$PKG_SharedUnoFile:UNO_SERVICES} $ORIGIN/services.rdb";
+    Key = "UNO_USER_PACKAGES_CACHE";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Java_Component_Path
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 9;
-    Key = "UNO_JAVA_COMPONENT_PATH";
-    Value = "$ORIGIN/classes";
+    Key = "URE_MORE_TYPES";
+    Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES}";
 End
 
-ProfileItem gid_Profileitem_Uno_Ure_Internal_Lib_Dir
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 10;
-    Key = "URE_INTERNAL_LIB_DIR";
-    Value = "$ORIGIN";
+    Key = "URE_MORE_SERVICES";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
 End
 
-ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Dir
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 11;
-    Key = "URE_INTERNAL_JAVA_DIR";
-    Value = "$ORIGIN/classes";
+    Key = "URE_MORE_JAVA_TYPES";
+    Value = "$ORIGIN/classes/unoil.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
-ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Classpath
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 12;
-    Key = "URE_INTERNAL_JAVA_CLASSPATH";
-    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${PKG_UserUnoFile:UNO_JAVA_CLASSPATH} ${PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}";
+    Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
+    Value = "${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
-ProfileItem gid_Profileitem_Uno_Ure_Bin_Dir
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_User_Data
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 13;
-    Key = "URE_BIN_DIR";
-    Value = "$ORIGIN";
+    Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
+    Value = "${${BRAND_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
-ProfileItem gid_Profileitem_Uno_Ooo_Base_Dir
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Classpath_Urls
     ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
-    Order = 14;
-    Key = "OOO_BASE_DIR";
-    Value = "$ORIGIN/..";
-End
-
-
-ProfileItem gid_Profileitem_Jvmfwk_BaseInstallation
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "BaseInstallation";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:BaseInstallation}";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Jvmfwk_UserInstallation
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "UserInstallation";
-  #ifdef UNX
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}";
-  #else
-    Value = "${$ORIGIN/bootstrap.ini:UserInstallation}";
-  #endif
-End
-
-ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_User_Data
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "UNO_JAVA_JFW_USER_DATA";
-    Value = "$UserInstallation/user/config/javasettings_${_OS}_${_ARCH}.xml";
-End
-
-ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Shared_Data
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "UNO_JAVA_JFW_SHARED_DATA";
-    Value = "$BaseInstallation/share/config/javasettings_${_OS}_${_ARCH}.xml";
-End
-
-ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Vendor_Settings
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "UNO_JAVA_JFW_VENDOR_SETTINGS";
-    Value = "$BaseInstallation/share/config/javavendors.xml";
-End
-
-#if defined SYSTEM_BSH || defined SYSTEM_XML_APIS || \
-    defined SYSTEM_XERCES || defined SYSTEM_XALAN || defined SYSTEM_SERIALIZER
-ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
+    Key = "URE_MORE_JAVA_CLASSPATH_URLS";
     Value = "";
 #ifdef SYSTEM_BSH
     ValueList1 = BSH_JAR;
 #endif
+#ifdef SYSTEM_HSQLDB
+    ValueList2 = HSQLDB_JAR;
+#endif
 #ifdef SYSTEM_XML_APIS
-    ValueList2 = XML_APIS_JAR;
+    ValueList3 = XML_APIS_JAR;
 #endif
 #ifdef SYSTEM_XERCES
-    ValueList3 = XERCES_JAR;
+    ValueList4 = XERCES_JAR;
 #endif
 #ifdef SYSTEM_XALAN
-    ValueList4 = XALAN_JAR;
+    ValueList5 = XALAN_JAR;
 #endif
 #ifdef SYSTEM_SERIALIZER
-    ValueList5 = SERIALIZER_JAR;
+    ValueList6 = SERIALIZER_JAR;
 #endif
 End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Bin_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_BIN_DIR";
+#if defined WNT
+    Value = "${.link:$ORIGIN/../ure-link}/bin";
+#else
+    Value = "$ORIGIN/../ure-link/bin";
 #endif
+End
