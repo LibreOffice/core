@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:44:58 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1036,7 +1036,7 @@ sal_Bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, sal_Int16 nDialog, Window* _pPreferredParentWindow )
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, sal_Int16 nDialog, Window* _pPreferredParentWindow, const String& sStandardDir )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
@@ -1194,7 +1194,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                 break;
         }
 
-        Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 2 );
+
+
+        //Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 3 );
+        Sequence < Any > aInitArguments( mbSystemPicker ? 1 : 3 );
+
         // This is a hack. We currently know that the internal file picker implementation
         // supports the extended arguments as specified below.
         // TODO:
@@ -1216,6 +1220,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
+
+            ::rtl::OUString sStandardDirTemp = ::rtl::OUString( sStandardDir );
+
+            aInitArguments[2] <<= NamedValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ),
+                                    makeAny( sStandardDirTemp )
+                                );
         }
 
         try
@@ -2405,6 +2416,21 @@ FileDialogHelper::FileDialogHelper(
     const String& rFact,
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
+    SfxFilterFlags nDont,
+    const String& rStandardDir)
+{
+    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog, NULL , rStandardDir );
+    mxImp = mpImp;
+
+    // create the list of filters
+    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+}
+
+FileDialogHelper::FileDialogHelper(
+    sal_Int64 nFlags,
+    const String& rFact,
+    sal_Int16 nDialog,
+    SfxFilterFlags nMust,
     SfxFilterFlags nDont )
 {
     mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog );
@@ -2445,9 +2471,10 @@ FileDialogHelper::FileDialogHelper(
     const String& rFact,
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
-    SfxFilterFlags nDont )
+    SfxFilterFlags nDont,
+    const String& rStandardDir )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir );
     mxImp = mpImp;
 
     // create the list of filters
@@ -2470,9 +2497,10 @@ FileDialogHelper::FileDialogHelper(
     sal_Int64 nFlags,
     const ::rtl::OUString& aFilterUIName,
     const ::rtl::OUString& aExtName,
+    const ::rtl::OUString& rStandardDir,
     Window* _pPreferredParent )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir );
     mxImp = mpImp;
 
     // the wildcard here is expected in form "*.extension"
@@ -2823,10 +2851,11 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              String& rFilter,
                              SfxItemSet *& rpSet,
                              const String* pPath,
-                             sal_Int16 nDialog)
+                             sal_Int16 nDialog,
+                             const String& rStandardDir )
 {
     ErrCode nRet;
-    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0 );
+    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0, rStandardDir );
 
     String aPath;
     if ( pPath )
