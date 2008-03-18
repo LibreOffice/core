@@ -20,7 +20,11 @@ test1: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#1 on library $(TEST1LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST1LIB) $(TEST1OPT)
+.ELSE
         testshl2 $(TEST1LIB) $(TEST1OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -45,7 +49,11 @@ test2: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#2 on library $(TEST2LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST2LIB) $(TEST2OPT)
+.ELSE
         testshl2 $(TEST2LIB) $(TEST2OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -70,7 +78,11 @@ test3: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#3 on library $(TEST3LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST3LIB) $(TEST3OPT)
+.ELSE
         testshl2 $(TEST3LIB) $(TEST3OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -95,7 +107,11 @@ test4: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#4 on library $(TEST4LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST4LIB) $(TEST4OPT)
+.ELSE
         testshl2 $(TEST4LIB) $(TEST4OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -120,7 +136,11 @@ test5: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#5 on library $(TEST5LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST5LIB) $(TEST5OPT)
+.ELSE
         testshl2 $(TEST5LIB) $(TEST5OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -145,7 +165,11 @@ test6: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#6 on library $(TEST6LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST6LIB) $(TEST6OPT)
+.ELSE
         testshl2 $(TEST6LIB) $(TEST6OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -170,7 +194,11 @@ test7: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#7 on library $(TEST7LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST7LIB) $(TEST7OPT)
+.ELSE
         testshl2 $(TEST7LIB) $(TEST7OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -195,7 +223,11 @@ test8: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#8 on library $(TEST8LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST8LIB) $(TEST8OPT)
+.ELSE
         testshl2 $(TEST8LIB) $(TEST8OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -220,7 +252,11 @@ test9: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#9 on library $(TEST9LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST9LIB) $(TEST9OPT)
+.ELSE
         testshl2 $(TEST9LIB) $(TEST9OPT)
+.ENDIF
 .ENDIF
 
 # unroll begin
@@ -245,6 +281,10 @@ test10: ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#10 on library $(TEST10LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST10LIB) $(TEST10OPT)
+.ELSE
         testshl2 $(TEST10LIB) $(TEST10OPT)
+.ENDIF
 .ENDIF
 
