@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:33:57 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,6 @@ public:
 #define SW_SV_BRUSH_NULL        3
 #define SW_SV_BRUSH_SOLID       4
 #define SW_SV_BRUSH_INVALID     5
-
-Color   ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle);
 
 // Get size of fly (if 'automatic' in WW) and check if not too small
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
