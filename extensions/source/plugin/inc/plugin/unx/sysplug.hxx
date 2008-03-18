@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 12:58:48 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ public:
     virtual NPError NPP_GetValue( NPP instance, NPPVariable variable, void* value );
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value);
+
+    static bool getPluginappPath(rtl::OString * path);
 };
 
 #endif
