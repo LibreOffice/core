@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_dependencies.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 14:52:59 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@ static char const xmlNamespace[] =
 bool satisfiesMinimalVersion(::rtl::OUString const & version) {
     ::rtl::OUString v(
         RTL_CONSTASCII_USTRINGPARAM(
-            "${$SYSBINDIR/" SAL_CONFIGFILE("version")
-            ":Version:OOOBaseVersion"));
+            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
+            ":Version:OOOBaseVersion}"));
     ::rtl::Bootstrap::expandMacros(v);
     return ::dp_misc::compareVersions(version, v) != ::dp_misc::GREATER;
 };
