@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This is a template for the javavendors.xml. It shows how the file could
+look like.
+-->
+
+<javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://openoffice.org/2004/java/framework/1.0 file:/D:/cws-jl6/jvmfwk/source/javavendors.xsd" >
+
+ <updated>2004-01-30</updated>
+
+ <vendorInfos>
+  <vendor name="Sun Microsystems Inc.">
+    <minVersion>1.3.1</minVersion>
+    <maxVersion>1.5.0</maxVersion>
+    <excludeVersions>
+     <version>1.4.1</version>
+    </excludeVersions>
+  </vendor>
+  <vendor name="VendorX">
+  <minVersion>1.4.2</minVersion>
+  <excludeVersions>
+    <version>1.5.0</version>
+    <version>1.4.3</version>
+   </excludeVersions>
+  </vendor>
+ </vendorInfos>
+
+ <plugins>
+  <library vendor="Sun Microsystems Inc.">sunjavaplugin.dll</library>
+  <library vendor="VendorX">./pluginDir/vendorx.dll</library>
+ </plugins>
+</javaSelection>
