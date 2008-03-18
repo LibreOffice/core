@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:00 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,15 +79,10 @@ getBootstrapData(
     ::rtl::OUString & rInstallSetID)
 {
     rtl::OUString aPath, aPath2;
-    if( osl_getExecutableFile(&aPath.pData) != osl_Process_E_None )
+    if( !rtl::Bootstrap::get(UNISTRING("BRAND_BASE_DIR"), aPath) )
         return false;
 
-    sal_uInt32 lastIndex = aPath.lastIndexOf('/');
-    if ( lastIndex > 0 )
-    {
-        aPath = aPath.copy( 0, lastIndex+1 );
-        aPath += UNISTRING( SAL_CONFIGFILE( "version" ) );
-    }
+    aPath += UNISTRING( "/program/" SAL_CONFIGFILE( "version" ) );
 
     rtl::Bootstrap aVersionFile(aPath);
     aVersionFile.getFrom(UNISTRING("ProductBuildid"), rBuildID, rtl::OUString());
