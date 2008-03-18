@@ -21,6 +21,7 @@ RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	300
 SameProductFound	SAMEPRODUCTS	170
 setAllUsersProfile2K	VersionNT >= 500	512
 SetAllUsersProfileNT	VersionNT = 400	511
+SetUreInstallLocation	Not Installed	607
 SetupCompleteError		-3
 SetupCompleteSuccess		-1
 SetupInitialization		100
