@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 17:06:09 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:23:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,18 +48,10 @@ TARGET=macros
 COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 .EXPORT : COMPLETELANGISO_VAR
 
-# used here to force expanding before export
-CUSTOM_IMAGE_SETS!:=$(CUSTOM_IMAGE_SETS)
-.EXPORT : CUSTOM_IMAGE_SETS
-
-ALLTAR : $(INCCOM)$/langmacros.inc $(INCCOM)$/images.inc
+ALLTAR : $(INCCOM)$/langmacros.inc
 
 .PHONY $(INCCOM)$/langmacros.inc:
     @echo ------------------------------
     @echo Making: $@  
     @@-$(RENAME) $@ $@.tmp
     $(PERL) macro.pl -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/images.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w images.pl -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
