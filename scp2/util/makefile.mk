@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 12:47:26 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:41:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ SCP1FILES  = installation_ooo.par          \
              directory_ooo.par             \
              datacarrier_ooo.par           \
              file_ooo.par                  \
-             file_images_ooo.par           \
              file_extra_ooo.par            \
              file_font_ooo.par             \
              file_library_ooo.par          \
@@ -91,7 +90,12 @@ SCP1FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
-             shortcut_python.par
+             shortcut_python.par           \
+             ure_into_ooo.par              \
+             ure.par                       \
+             common_brand.par              \
+             common_brand_readme.par       \
+             ooo_brand.par
 
 .IF "$(SOLAR_JAVA)"!=""
 SCP1FILES +=                               \
@@ -196,7 +200,6 @@ SCP2FILES  = installation_ooo.par          \
              directory_ooo.par             \
              datacarrier_ooo.par           \
              file_ooo.par                  \
-             file_images_ooo.par           \
              file_extra_ooo.par            \
              file_font_ooo.par             \
              file_library_ooo.par          \
@@ -233,7 +236,13 @@ SCP2FILES  = installation_ooo.par          \
              module_python.par             \
              module_python_mailmerge.par   \
              file_python.par               \
-             profileitem_python.par
+             profileitem_python.par        \
+             shortcut_python.par           \
+             ure_into_ooo.par              \
+             ure.par                       \
+             common_brand.par              \
+             common_brand_readme.par       \
+             ooo_brand.par
 
 .IF "$(SOLAR_JAVA)"!=""
 SCP2FILES +=                               \
@@ -324,9 +333,12 @@ SCP2FILES += aqua_ooo.par
 # ------------------------------------------------------------------------
 # URE
 
-SCP3LINK_PRODUCT_TYPE = ure
+.IF "$(OS)" != "MACOSX"
+SCP3LINK_PRODUCT_TYPE = osl
 SCP3TARGET = ure
-SCP3FILES = ure.par
+SCP3FILES = ure_standalone.par  \
+            ure.par
+.ENDIF
 
 # ------------------------------------------------------------------------
 # SDK
@@ -334,13 +346,6 @@ SCP3FILES = ure.par
 SCP4LINK_PRODUCT_TYPE = sdk
 SCP4TARGET = sdkoo
 SCP4FILES = sdkoo.par
-
-# ------------------------------------------------------------------------
-# OOo w/o URE
-
-SCP5LINK_PRODUCT_TYPE = osl
-SCP5TARGET = ooo_wo_ure
-SCP5FILES = $(SCP1FILES) ooo_wo_ure.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
