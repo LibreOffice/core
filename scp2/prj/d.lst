@@ -1,13 +1,11 @@
 ..\%__SRC%\bin\osl\setup_osl.inf %_DEST%\bin%_EXT%\setup_osl.inf
 ..\%__SRC%\bin\osl\setup_osl.ins %_DEST%\bin%_EXT%\setup_osl.ins
-..\%__SRC%\bin\ure\ure.inf %_DEST%\bin%_EXT%\ure.inf
-..\%__SRC%\bin\ure\ure.ins %_DEST%\bin%_EXT%\ure.ins
+..\%__SRC%\bin\osl\ure.inf %_DEST%\bin%_EXT%\ure.inf
+..\%__SRC%\bin\osl\ure.ins %_DEST%\bin%_EXT%\ure.ins
 ..\%__SRC%\bin\sdk\sdkoo.inf %_DEST%\bin%_EXT%\sdkoo.inf
 ..\%__SRC%\bin\sdk\sdkoo.ins %_DEST%\bin%_EXT%\sdkoo.ins
 ..\%__SRC%\bin\osl\setup_osljre.inf %_DEST%\bin%_EXT%\setup_osljre.inf
 ..\%__SRC%\bin\osl\setup_osljre.ins %_DEST%\bin%_EXT%\setup_osljre.ins
-..\%__SRC%\bin\osl\ooo_wo_ure.inf %_DEST%\bin%_EXT%\ooo_wo_ure.inf
-..\%__SRC%\bin\osl\ooo_wo_ure.ins %_DEST%\bin%_EXT%\ooo_wo_ure.ins
 
 mkdir: %_DEST%\par%_EXT%
 
@@ -17,7 +15,6 @@ mkdir: %_DEST%\par%_EXT%\fam
 mkdir: %_DEST%\par%_EXT%\ada
 mkdir: %_DEST%\par%_EXT%\adm
 mkdir: %_DEST%\par%_EXT%\omc
-mkdir: %_DEST%\par%_EXT%\ure
 mkdir: %_DEST%\par%_EXT%\sdk
 
 ..\%__SRC%\par\osl\*.par %_DEST%\par%_EXT%\osl\*.par
@@ -26,7 +23,6 @@ mkdir: %_DEST%\par%_EXT%\sdk
 ..\%__SRC%\par\ada\*.par %_DEST%\par%_EXT%\ada\*.par
 ..\%__SRC%\par\adm\*.par %_DEST%\par%_EXT%\adm\*.par
 ..\%__SRC%\par\omc\*.par %_DEST%\par%_EXT%\omc\*.par
-..\%__SRC%\par\ure\*.par %_DEST%\par%_EXT%\ure\*.par
 ..\%__SRC%\par\sdk\*.par %_DEST%\par%_EXT%\sdk\*.par
 
 ..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
