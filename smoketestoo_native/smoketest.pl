@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 12:25:53 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:30:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.30 $ ';
+$id_str = ' $Revision: 1.31 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -499,6 +499,9 @@ sub doTest {
 
     if ($gui eq "UNX") {
         delete $ENV{LD_LIBRARY_PATH};
+    }
+    if ($ENV{OS} eq "MACOSX") {
+        delete $ENV{DYLD_LIBRARY_PATH};
     }
     if ((defined($ENV{OS})) && (defined($ENV{PROEXT})) && ($ENV{OS} eq "LINUX") && ($ENV{PROEXT} eq ".pro") && $is_do_statistics)  {
         print "collecting statistic...\n";
