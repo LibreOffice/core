@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readme.txt,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:42:54 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,22 +64,16 @@ Things to watch for:
 - If version y of extension e is to be installed and version x < y of
   extension e is already installed, then
    unopkg add e
-  and
-   pkgchk e
   will replace x with y.
 
 - If version y of extension e is to be installed and version x >= y of
   extension e is already installed, then
    unopkg add e
-  and
-   pkgchk e
   will fail with an error message.
 
 - If version y of extension e is to be installed and any version x of
   extension e is already installed, then
    unopkg add -f e
-  and
-   pkgchk -f e
   will replace x with y.
 
 - If version y of extension e is to be installed and any version x of
@@ -95,5 +89,5 @@ Things to watch for:
   user does not agree, version x is left installed afterwards.
 
 - Checking for already installed versions of an extension is only done within a
-  single layer (unopkg/pkgchk versus unopkg/pkgchk --shared; "My Packages"
-  versus "OpenOffice Packages" in unopkg gui/soffice), not across layers.
+  single layer (unopkg versus unopkg --shared; "My Packages" versus
+  "OpenOffice Packages" in unopkg gui/soffice), not across layers.
