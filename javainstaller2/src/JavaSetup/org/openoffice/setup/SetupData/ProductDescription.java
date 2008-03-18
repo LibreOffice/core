@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProductDescription.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:50 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,15 @@ public class ProductDescription {
                 if (value != null) {
                     installData.setDefaultDir(value);
                     installData.setInstallDir(value);
+                }
+            }
+
+            /* check for a default product directory */
+            section = data.getElement("productdir");
+            if (section != null) {
+                String value = section.getValue();
+                if (value != null) {
+                    installData.setProductDir(value);
                 }
             }
 
