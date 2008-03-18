@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-03-18 14:21:12 $
+dnl * Date: $Date: 2008-03-18 16:09:23 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.253 $ )
+AC_REVISION( $Revision: 1.254 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1300,20 +1300,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 fi 
 AC_SUBST(GCCVER)
 
-if test "$GCC" = "yes"; then
-   AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
-   save_CFLAGS=$CFLAGS
-   CFLAGS="$CFLAGS -fvisibility=hidden"
-   AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_VISIBILITY_FEATURE=TRUE ], [])
-   CFLAGS=$save_CFLAGS
-   if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
-      AC_MSG_RESULT([yes])
-   else
-      AC_MSG_RESULT([no])
-   fi
-fi
-AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
-
 dnl ===================================================================
 dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
 dnl ===================================================================
@@ -2254,6 +2240,22 @@ AC_SUBST(STLPORT_VER)
 AC_SUBST(USE_SYSTEM_STL)
 
 dnl ===================================================================
+dnl visibility feature
+dnl ===================================================================
+if test "$GCC" = "yes"; then
+   AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
+   save_CFLAGS=$CFLAGS
+   CFLAGS="$CFLAGS -fvisibility=hidden"
+   AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_VISIBILITY_FEATURE=TRUE ], [])
+   CFLAGS=$save_CFLAGS
+   if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
+      AC_MSG_RESULT([yes])
+   else
+      AC_MSG_RESULT([no])
+   fi
+fi
+
+dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 if test "$USE_SYSTEM_STL" = "YES"; then
@@ -2276,9 +2278,13 @@ using namespace __gnu_cxx;
       AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
       AC_MSG_RESULT([$stlvisok])
       if test "$stlvisok" = "no"; then
-         AC_MSG_ERROR([Your gcc STL headers are not visibility safe. Try with --with-stlport])
+         AC_MSG_WARN([Your gcc STL headers are not visibility safe. Disabling visibility])
+         echo "Your gcc STL headers are not visibility safe. Disabling visibility" >> warn
+         unset HAVE_GCC_VISIBILITY_FEATURE
       fi
+   fi
 
+   if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
       sharedlink_ldflags_save=$LDFLAGS
       LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden -fpic -shared"
 
@@ -2286,19 +2292,23 @@ using namespace __gnu_cxx;
       AC_TRY_LINK([#include <sstream>
 using namespace std;
 ],[istringstream strm( "test" ); return 0;],
-     gccvisok=yes, gccvisok=no)
-
-      LDFLAGS=$sharedlink_ldflags_save
-
+      $EGREP -q  unresolvable conftest.err;
+      if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi, 
+      gccvisok=no)
       AC_MSG_RESULT([$gccvisok])
       if test "$gccvisok" = "no"; then
-         AC_MSG_ERROR([Your gcc is not -fvisibility-inlines-hidden safe. Try with --with-stlport])
+         AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility])
+         echo "Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility" >> warn
+         unset HAVE_GCC_VISIBILITY_FEATURE
       fi
 
+      LDFLAGS=$sharedlink_ldflags_save
    fi
 
    AC_LANG_POP([C++])
 fi
+
+AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
 
 dnl ===================================================================
 dnl allocator
