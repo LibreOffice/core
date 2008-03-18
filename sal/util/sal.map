@@ -568,6 +568,11 @@ UDK_3.7 { # OOo 2.4
         osl_loadModuleRelative;
 } UDK_3.6;
 
+UDK_3.8 { # OOo 3.0
+    global:
+        rtl_convertStringToUString;
+} UDK_3.7;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;
