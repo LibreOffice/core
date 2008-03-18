@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:04:43 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2947,6 +2947,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if (!rView.GetDrawFuncPtr())
                                     rSh.ShowCrsr();
                             }
+                            else
+                                bOnlyText = KEY_MOD1 != rMEvt.GetModifier();
                         }
                         else if ( rSh.IsSelFrmMode() &&
                                   (aActHitType == SDRHIT_NONE ||
@@ -3385,7 +3387,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
-                if( !bOverURLGrf )
+                if( !bOverURLGrf && !bOnlyText )
                 {
                     const int nSelType = rSh.GetSelectionType();
                     if( nSelType == nsSelectionType::SEL_OLE ||
