@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 11:42:07 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ Module gid_Module_Prg_Wrt_Bin
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
     gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
-    gid_File_Lib_Hwpreader, gid_File_Exe_Swriter, gid_File_Xdg_Writer,
+    gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
     gid_File_Lib_Wpft,
@@ -92,3 +92,26 @@ End
 //    Minimal = YES;
 //    Files = (gid_File_Help_Swriter_Zip);
 // End
+
+Module gid_Module_Brand_Prg_Wrt
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Wrt";
+    Description = "gid_Module_Brand_Prg_Wrt";
+    ParentID = gid_Module_Prg_Wrt_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Swriter);
+End
+
+Module gid_Module_Langpack_Writer_Template
+    ParentID = gid_Module_Prg_Wrt_Bin;
+    Name = "gid_Module_Langpack_Writer_Template";
+    Description = "gid_Module_Langpack_Writer_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Swriter_Zip,
+             gid_File_Res_T602Filter);
+End
+
+#include "alllangmodules_writer.inc"
