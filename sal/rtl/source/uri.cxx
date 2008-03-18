@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:06:27 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,16 +449,26 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
     rtl::OUStringBuffer aBuffer(rBasePath.getLength() + rRelPath.getLength());
         // XXX  numeric overflow
 
-    // Segments "." and ".." within rBasePath are not conisdered special,
-    // RFC 2396 seems a bit unclear about this point:
-    sal_Unicode const * p = rBasePath.pEnd;
-    while (p[-1] != '/')
-        --p;
+    // Segments "." and ".." within rBasePath are not conisdered special (but
+    // are also not removed by ".." segments within rRelPath), RFC 2396 seems a
+    // bit unclear about this point:
+    sal_Int32 nFixed = 1;
+    sal_Unicode const * p = rBasePath.pBegin + 1;
+    for (sal_Unicode const * q = p; q != rBasePath.pEnd; ++q)
+        if (*q == '/')
+        {
+            if (q - p == 1 && p[0] == '.'
+                || q - p == 2 && p[0] == '.' && p[1] == '.')
+            {
+                nFixed = q + 1 - rBasePath.pBegin;
+            }
+            p = q + 1;
+        }
     aBuffer.append(rBasePath.pBegin, p - rBasePath.pBegin);
 
     p = rRelPath.pBegin;
     if (p != rRelPath.pEnd)
-        for (sal_Int32 nFixed = 1;;)
+        for (;;)
         {
             sal_Unicode const * q = p;
             sal_Unicode const * r;
