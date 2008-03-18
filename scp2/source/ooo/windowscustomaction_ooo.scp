@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:58:46 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,15 @@ WindowsCustomAction gid_Customaction_Register_Extensions
 	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_Set_Admininstall
+	Name = "SetAdminInstallProperty";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "SetAdminInstallProperty";
+	Inbinarytable = 1;
+	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
+End
+
 /*
 WindowsCustomAction gid_Customaction_Remove_Extensions
 	Name = "RemoveExtensions";
@@ -373,7 +382,7 @@ WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
 	Target = "GetUserInstallMode";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
+	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
 	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
 	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
 	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
@@ -394,7 +403,7 @@ WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
 	Target = "GetUserInstallMode";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
+	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
 	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
 	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
 	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
