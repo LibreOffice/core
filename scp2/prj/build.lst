@@ -24,7 +24,5 @@ cp    scp2\source\writer          nmake    -    all    cp_writer cp_langmacros c
 cp    scp2\source\base            nmake    -    all    cp_base cp_langmacros cp_langtemplates NULL
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\winexplorerext  nmake    -    all    cp_winexplorerext cp_langmacros cp_langtemplates NULL
-cp    scp2\source\ure             nmake    -    all    cp_ure cp_langmacros cp_langtemplates NULL
 cp    scp2\source\onlineupdate    nmake    -    all    cp_update cp_langmacros cp_langtemplates NULL
-cp    scp2\source\ooo_wo_ure      nmake    -    all    cp_ooo_wo_ure cp_langmacros cp_langtemplates NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_lingu cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_ure cp_sdkoo cp_update cp_ooo_wo_ure NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_lingu cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update NULL
