@@ -9292,6 +9292,8 @@ echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6
          DEFAULT_TO_STLPORT="no"
          ;;
      esac
+   elif test "$_os" = "Darwin"; then
+      DEFAULT_TO_STLPORT="no"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       echo "$as_me:$LINENO: result: stlport" >&5
@@ -13126,12 +13128,27 @@ fi
 
 echo "$as_me:$LINENO: checking which libxslt to use" >&5
 echo $ECHO_N "checking which libxslt to use... $ECHO_C" >&6
-if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
+       "$_os" = "Darwin" && \
    test "$with_system_libxslt" != "no"; then
    echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
    SYSTEM_LIBXSLT=YES
 
+   if test "$_os" = "Darwin"; then
+   echo "$as_me:$LINENO: checking LIBXSLT_CFLAGS" >&5
+echo $ECHO_N "checking LIBXSLT_CFLAGS... $ECHO_C" >&6
+   LIBXSLT_CFLAGS=`xslt-config --cflags`
+   echo "$as_me:$LINENO: result: $LIBXSLT_CFLAGS" >&5
+echo "${ECHO_T}$LIBXSLT_CFLAGS" >&6
+   echo "$as_me:$LINENO: checking LIBXSLT_LIBS" >&5
+echo $ECHO_N "checking LIBXSLT_LIBS... $ECHO_C" >&6
+   LIBXSLT_LIBS=`xslt-config --libs`
+   echo "$as_me:$LINENO: result: $LIBXSLT_LIBS" >&5
+echo "${ECHO_T}$LIBXSLT_LIBS" >&6
+
+
+ else
 
   succeeded=no
 
@@ -13186,23 +13203,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for libxslt " >&5
-echo $ECHO_N "checking for libxslt ... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for libxslt" >&5
+echo $ECHO_N "checking for libxslt... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "libxslt " ; then
+        if $PKG_CONFIG --exists "libxslt" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking LIBXSLT_CFLAGS" >&5
 echo $ECHO_N "checking LIBXSLT_CFLAGS... $ECHO_C" >&6
-            LIBXSLT_CFLAGS=`$PKG_CONFIG --cflags "libxslt "`
+            LIBXSLT_CFLAGS=`$PKG_CONFIG --cflags "libxslt"`
             echo "$as_me:$LINENO: result: $LIBXSLT_CFLAGS" >&5
 echo "${ECHO_T}$LIBXSLT_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking LIBXSLT_LIBS" >&5
 echo $ECHO_N "checking LIBXSLT_LIBS... $ECHO_C" >&6
-            LIBXSLT_LIBS=`$PKG_CONFIG --libs "libxslt "`
+            LIBXSLT_LIBS=`$PKG_CONFIG --libs "libxslt"`
             echo "$as_me:$LINENO: result: $LIBXSLT_LIBS" >&5
 echo "${ECHO_T}$LIBXSLT_LIBS" >&6
         else
@@ -13210,7 +13227,7 @@ echo "${ECHO_T}$LIBXSLT_LIBS" >&6
             LIBXSLT_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            LIBXSLT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libxslt "`
+            LIBXSLT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libxslt"`
             echo $LIBXSLT_PKG_ERRORS
         fi
 
@@ -13225,10 +13242,12 @@ echo "${ECHO_T}$LIBXSLT_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: Library requirements (libxslt ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements (libxslt ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+     { { echo "$as_me:$LINENO: error: Library requirements (libxslt) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (libxslt) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
+
+ fi
 
 
       # Extract the first word of "xsltproc", so it can be a program name with args.
@@ -13289,11 +13308,26 @@ fi
 
 echo "$as_me:$LINENO: checking which libxml to use" >&5
 echo $ECHO_N "checking which libxml to use... $ECHO_C" >&6
-if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
+if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
+            "$_os" = "Darwin" && \
 	test "$with_system_libxml" != "no"; then
     echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
     SYSTEM_LIBXML=YES
+    if test "$_os" = "Darwin"; then
+   echo "$as_me:$LINENO: checking LIBXML_CFLAGS" >&5
+echo $ECHO_N "checking LIBXML_CFLAGS... $ECHO_C" >&6
+   LIBXML_CFLAGS=`xml2-config --cflags`
+   echo "$as_me:$LINENO: result: $LIBXML_CFLAGS" >&5
+echo "${ECHO_T}$LIBXML_CFLAGS" >&6
+   echo "$as_me:$LINENO: checking LIBXML_LIBS" >&5
+echo $ECHO_N "checking LIBXML_LIBS... $ECHO_C" >&6
+   LIBXML_LIBS=`xml2-config --libs`
+   echo "$as_me:$LINENO: result: $LIBXML_LIBS" >&5
+echo "${ECHO_T}$LIBXML_LIBS" >&6
+
+
+ else
 
   succeeded=no
 
@@ -13348,23 +13382,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for libxml-2.0 >= 2.0 " >&5
-echo $ECHO_N "checking for libxml-2.0 >= 2.0 ... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for libxml-2.0 >= 2.0" >&5
+echo $ECHO_N "checking for libxml-2.0 >= 2.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "libxml-2.0 >= 2.0 " ; then
+        if $PKG_CONFIG --exists "libxml-2.0 >= 2.0" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking LIBXML_CFLAGS" >&5
 echo $ECHO_N "checking LIBXML_CFLAGS... $ECHO_C" >&6
-            LIBXML_CFLAGS=`$PKG_CONFIG --cflags "libxml-2.0 >= 2.0 "`
+            LIBXML_CFLAGS=`$PKG_CONFIG --cflags "libxml-2.0 >= 2.0"`
             echo "$as_me:$LINENO: result: $LIBXML_CFLAGS" >&5
 echo "${ECHO_T}$LIBXML_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking LIBXML_LIBS" >&5
 echo $ECHO_N "checking LIBXML_LIBS... $ECHO_C" >&6
-            LIBXML_LIBS=`$PKG_CONFIG --libs "libxml-2.0 >= 2.0 "`
+            LIBXML_LIBS=`$PKG_CONFIG --libs "libxml-2.0 >= 2.0"`
             echo "$as_me:$LINENO: result: $LIBXML_LIBS" >&5
 echo "${ECHO_T}$LIBXML_LIBS" >&6
         else
@@ -13372,7 +13406,7 @@ echo "${ECHO_T}$LIBXML_LIBS" >&6
             LIBXML_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            LIBXML_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libxml-2.0 >= 2.0 "`
+            LIBXML_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libxml-2.0 >= 2.0"`
             echo $LIBXML_PKG_ERRORS
         fi
 
@@ -13387,10 +13421,12 @@ echo "${ECHO_T}$LIBXML_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: Library requirements (libxml-2.0 >= 2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements (libxml-2.0 >= 2.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+     { { echo "$as_me:$LINENO: error: Library requirements (libxml-2.0 >= 2.0) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (libxml-2.0 >= 2.0) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
+
+ fi
 
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
 else
