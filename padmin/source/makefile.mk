@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:52:49 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:23:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,8 @@ APP1STDLIBS=	\
     $(CPPULIB)			\
     $(SALLIB)			\
     -lXext -lX11
+
+UNIXTEXT = $(MISC)$/spadmin.sh
 
 .ENDIF
 
