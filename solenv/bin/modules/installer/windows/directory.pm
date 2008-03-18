@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:04:51 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:03:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,40 @@
 
 package installer::windows::directory;
 
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::windows::idtglobal;
+
+##############################################################
+# Collecting all directory trees in global hash
+##############################################################
+
+sub collectdirectorytrees
+{
+    my ( $directoryref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
+    {
+        my $onedir = ${$directoryref}[$i];
+        my $styles = "";
+        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
+
+        if ( $styles ne "" )
+        {
+            foreach my $treestyle ( keys %installer::globals::treestyles )
+            {
+                if ( $styles =~ /\b$treestyle\b/ )
+                {
+                    my $hostname = $onedir->{'HostName'};
+                    # -> hostname is the key, the style the value!
+                    $installer::globals::hostnametreestyles{$hostname} = $treestyle;
+                }
+            }
+        }
+    }
+}
 
 ##############################################################
 # Overwriting global programfilesfolder, if required
@@ -62,6 +92,8 @@ sub create_unique_directorynames
 {
     my ($directoryref) = @_;
 
+    $installer::globals::officeinstalldirectoryset = 0;
+
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
         my $onedir = ${$directoryref}[$i];
@@ -71,6 +103,9 @@ sub create_unique_directorynames
         # get_path_from_fullqualifiedname(\$uniqueparentname);
         # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
+        $uniquename =~ s/^\s*//g;               # removing beginning white spaces
+        $uniquename =~ s/\s*$//g;               # removing ending white spaces
+        $uniquename =~ s/\s//g;                 # removing white spaces
         $uniquename =~ s/\_//g;                 # removing existing underlines
         $uniquename =~ s/\.//g;                 # removing dots in directoryname
         $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
@@ -98,6 +133,29 @@ sub create_unique_directorynames
         $onedir->{'uniquename'} = $uniquename;
         $onedir->{'uniqueparentname'} = $uniqueparentname;
 
+        # setting the office installation directory
+        if ( $styles =~ /\bOFFICEDIRECTORY\b/ )
+        {
+            if ( $installer::globals::officeinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag OFFICEDIRECTORY alread set: \"$installer::globals::officeinstalldirectory\".", "create_unique_directorynames"); }
+            $installer::globals::officeinstalldirectory = $uniquename;
+            $installer::globals::officeinstalldirectoryset = 1;
+        }
+
+        # setting the bais installation directory
+        if ( $styles =~ /\bBASISDIRECTORY\b/ )
+        {
+            if ( $installer::globals::basisinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag BASISDIRECTORY alread set: \"$installer::globals::basisinstalldirectory\".", "create_unique_directorynames"); }
+            $installer::globals::basisinstalldirectory = $uniquename;
+            $installer::globals::basisinstalldirectoryset = 1;
+        }
+
+        # setting the ure installation directory
+        if ( $styles =~ /\bUREDIRECTORY\b/ )
+        {
+            if ( $installer::globals::ureinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag UREDIRECTORY alread set: \"$installer::globals::ureinstalldirectory\".", "create_unique_directorynames"); }
+            $installer::globals::ureinstalldirectory = $uniquename;
+            $installer::globals::ureinstalldirectoryset = 1;
+        }
     }
 }
 
@@ -110,7 +168,7 @@ sub get_last_directory_name
 {
     my ($completepathref) = @_;
 
-    if ( $$completepathref =~ /^.*[\/\\](\S+?)\s*$/ )
+    if ( $$completepathref =~ /^.*[\/\\](.+?)\s*$/ )
     {
         $$completepathref = $1;
     }
@@ -131,6 +189,7 @@ sub create_defaultdir_directorynames
     {
         my $onedir = ${$directoryref}[$i];
         my $hostname = $onedir->{'HostName'};
+
         $hostname =~ s/\Q$installer::globals::separator\E\s*$//;
         get_last_directory_name(\$hostname);
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
@@ -266,7 +325,15 @@ sub add_root_directories
         }
         else
         {
-            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey$sourcediraddon\n";
+            if ( $allvariableshashref->{'PROGRAMFILESROOT'} )
+            {
+                $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t.\n";
+            }
+            else
+            {
+                $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey$sourcediraddon\n";
+            }
+
             push(@{$directorytableref}, $oneline);
         }
 
