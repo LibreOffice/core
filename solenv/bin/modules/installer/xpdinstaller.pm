@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:25 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:02:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -661,6 +661,21 @@ sub get_relocatable_value
     return $value;
 }
 
+###################################################
+# Checking if package is relocatable
+###################################################
+
+sub get_languagespecific_value
+{
+    my ( $islanguagemodule ) = @_;
+
+    my $value = "false";
+
+    if ( $islanguagemodule == 1 ) { $value = "true"; }
+
+    return $value;
+}
+
 #######################################################
 # Adding the values of the array
 #######################################################
@@ -797,6 +812,29 @@ sub set_defaultdir_tag
     return $tag;
 }
 
+###################################################
+# Setting product directory
+###################################################
+
+sub set_productdir_tag
+{
+    my ($allvariables, $indent) = @_;
+
+    my $productdir = "";
+    if ( $allvariables->{"UNIXPRODUCTNAME"} )
+    {
+        $productdir = $allvariables->{"UNIXPRODUCTNAME"};
+        if ( $allvariables->{"PRODUCTVERSION"} )
+        {
+            $productdir = $productdir . $allvariables->{"PRODUCTVERSION"};
+            if ( $allvariables->{"LCPRODUCTEXTENSION"} ) { $productdir = $productdir . $allvariables->{"LCPRODUCTEXTENSION"}; }
+        }
+    }
+    my $tag = $indent . "<productdir>" . $productdir . "</productdir>" . "\n";
+
+    return $tag;
+}
+
 #####################################################
 # Setting the package directory in installation set
 #####################################################
@@ -857,6 +895,19 @@ sub set_multilanguage_tag
 }
 
 ###################################################
+# Setting the language tag
+###################################################
+
+sub set_language_tag
+{
+    my ($languagestringref, $indent) = @_;
+
+    my $tag = $indent . "<languages>" . $$languagestringref . "</languages>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Collecting content for product xpd file
 ###################################################
 
@@ -874,7 +925,7 @@ sub set_multilanguage_tag
 
 sub get_setup_file_content
 {
-    my ($allvariables) = @_;
+    my ($allvariables, $languagestringref) = @_;
 
     my @xpdfile = ();
     my $noindent = "";
@@ -900,6 +951,9 @@ sub get_setup_file_content
     $tag = set_defaultdir_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
+    $tag = set_productdir_tag($allvariables, $singleindent);
+    push(@xpdfile, $tag);
+
     $tag = set_update_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
@@ -915,6 +969,9 @@ sub get_setup_file_content
     $tag = set_multilanguage_tag($singleindent);
     push(@xpdfile, $tag);
 
+    $tag = set_language_tag($languagestringref, $singleindent);
+    push(@xpdfile, $tag);
+
     $tag = get_end_tag("product", $noindent);
     push(@xpdfile, $tag);
 
@@ -927,7 +984,7 @@ sub get_setup_file_content
 
 sub get_file_content
 {
-    my ( $module, $packagename, $solslanguage, $linkpackage, $isemptyparent, $subdir ) = @_;
+    my ( $module, $packagename, $solslanguage, $linkpackage, $isemptyparent, $subdir, $islanguagemodule, $onelanguage ) = @_;
 
     my @xpdfile = ();
     my $value = "";
@@ -1024,6 +1081,14 @@ sub get_file_content
         $line = get_tag_line($doubleindent, "relocatable", $value);
         push(@xpdfile, $line);
 
+        $value = get_languagespecific_value($islanguagemodule);
+        $line = get_tag_line($doubleindent, "languagespecific", $value);
+        push(@xpdfile, $line);
+
+        $value = $onelanguage;
+        $line = get_tag_line($doubleindent, "language", $value);
+        push(@xpdfile, $line);
+
         $line = get_tag_line($doubleindent, "solarislanguage", $solslanguage);
         push(@xpdfile, $line);
 
@@ -1117,7 +1182,7 @@ sub create_emptyparents_xpd_file
     {
         my $packagename = "";
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "");
+        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "", 0, "");
 
         my $xpdfilename = get_xpd_filename($parentgid, 0);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1150,30 +1215,14 @@ sub create_xpd_file
 
     my $modulegid = $onepackage->{'module'};
 
-#   Important change, to get root module of language packs
-#   if ( $installer::globals::islanguagepackinunixmulti ) {
-#       my $currentlanguage = $$languagestringref;
-#       $currentlanguage =~ s/-/_/;
-#       my $savemodulegid = $modulegid;
-#       $modulegid = $modulegid . "_" . $currentlanguage;
-#
-#       if ( ! $installer::globals::createdxpddefaultlang )
-#       {
-#           my $defaultlang = $installer::globals::defaultlanguage;
-#           $defaultlang =~ s/-/_/;
-#           my $defaultlanggid = $savemodulegid . "_" . $defaultlang;
-#           create_emptyparents_xpd_file($defaultlanggid, $modulesarrayref, $xpddir);
-#           $installer::globals::createdxpddefaultlang = 1;
-#       }
-#
-#   }
-
-    my $onelanguage = $$languagestringref;
+    my $onelanguage = "";
     my $solslanguage = "";
-
-    if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::languagepack ))
+    my $islanguagemodule = 0;
+    if ( $onepackage->{'islanguagemodule'} ) { $islanguagemodule = $onepackage->{'islanguagemodule'}; }
+    if ( $islanguagemodule )
     {
-        $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onelanguage);
+        $onelanguage = $onepackage->{'language'};
+        if ( $installer::globals::issolarispkgbuild ) { $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onelanguage); }
     }
 
     installer::logger::include_header_into_logfile("Creating xpd file ($modulegid):");
@@ -1185,7 +1234,7 @@ sub create_xpd_file
         my $packagename = determine_new_packagename($installdir, $subdir);
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $solslanguage, $linkpackage, 0, "");
+        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $solslanguage, $linkpackage, 0, "", $islanguagemodule, $onelanguage);
 
         my $xpdfilename = get_xpd_filename($modulegid, $linkpackage);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1231,7 +1280,7 @@ sub create_xpd_file_for_childproject
     my $completepackage = $currentdir . $installer::globals::separator . $destdir . $installer::globals::separator . $packagename;
 
     # all content saved in scp is now available and can be used to create the xpd file
-    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, "", 0, 0, "");
+    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, "", 0, 0, "", 0, "");
 
     my $xpdfilename = get_xpd_filename($modulegid, 0);
     $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
@@ -1292,7 +1341,7 @@ sub create_xpd_file_for_systemintegration
         $childmodule->{'Description'} = $modulegid;
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir);
+        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir, 0, "");
 
         my $xpdfilename = get_xpd_filename($modulegid, 0);
         $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
@@ -1346,9 +1395,9 @@ sub copy_xpd_files_into_installset
 
 sub create_setup_xpd
 {
-    my ($allvariables) = @_;
+    my ($allvariables, $languagestringref) = @_;
 
-    my ( $xpdfile ) = get_setup_file_content($allvariables);
+    my ( $xpdfile ) = get_setup_file_content($allvariables, $languagestringref);
 
     my $xpdfilename = $installer::globals::productxpdfile;
     $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
@@ -1366,12 +1415,12 @@ sub create_setup_xpd
 
 sub create_xpd_installer
 {
-    my ( $installdir, $allvariables) = @_;
+    my ( $installdir, $allvariables, $languagestringref) = @_;
 
     installer::logger::include_header_into_logfile("Creating xpd installer:");
 
     # create setup.xpd file
-    create_setup_xpd($allvariables);
+    create_setup_xpd($allvariables, $languagestringref);
 
     # copy xpd files into installation set
     copy_xpd_files_into_installset($installdir);
