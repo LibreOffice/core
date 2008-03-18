@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:42:42 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1246,17 +1246,13 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
-    rtl::OUString aProgName;
-    ::vos::OStartupInfo aInfo;
-    aInfo.getExecutableFile( aProgName );
-    sal_Int32 lastIndex = aProgName.lastIndexOf('/');
-    if ( lastIndex >= 0 )
+    INetURLObject aProgObj(
+        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] );
+    if ( !aProgObj.HasError() &&
+         aProgObj.insertName(
+             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("program")) ) )
     {
-        ::rtl::OUString aTmpProgPath;
-        aTmp = aProgName.copy( 0, lastIndex );
-        INetURLObject aObj( aTmp );
-
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ]   = ConvertOSLtoUCBURL( aObj.GetMainURL(INetURLObject::NO_DECODE) );
+        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ]   = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROG ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
     }
