@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:50:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ _pRawDllMain()
 
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
 extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
-extern HMODULE __hCurrentModule;
 
 #endif
 
@@ -176,14 +175,12 @@ static void do_startup( void )
 #else
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
-    /* avoid warnings */
-    hinstDLL = hinstDLL;
-    lpvReserved = lpvReserved;
+    (void)hinstDLL; /* avoid warnings */
+    (void)lpvReserved; /* avoid warnings */
 
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
-            __hCurrentModule = hinstDLL;
             {
 #endif
                 OSVERSIONINFO aInfo;
