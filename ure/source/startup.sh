@@ -5,9 +5,9 @@
 #
 #   $RCSfile: startup.sh,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:12:00 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:13:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,17 @@
 #
 #*************************************************************************
 
+# Pass -env arguments on to javaldx; needs to be fixed:
+my_envargs=
+for my_arg in "$@" ; do
+  case ${my_arg} in
+    -env:*) my_envargs="${my_envargs} ${my_arg}" ;;
+  esac
+done
+
 # Extend the LD_LIBRARY_PATH for Java:
 epath=`dirname "$0"`
-jpath=`"${epath}/javaldx"`
+jpath=`"${epath}/javaldx" $my_envargs`
 if [ -n "${jpath}" ]; then
     LD_LIBRARY_PATH=${jpath}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
