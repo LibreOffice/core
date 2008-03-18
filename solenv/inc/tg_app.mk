@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:33:09 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:08:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,9 @@ APP$(TNR)LINKFLAGS+=$(LINKFLAGS)
 
 APP$(TNR)RPATH*=OOO
 LINKFLAGSRUNPATH_$(APP$(TNR)RPATH)*=/ERROR:/Bad_APP$(TNR)RPATH_value
+.IF "$(OS)" != "MACOSX"
 APP$(TNR)LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP$(TNR)RPATH))
+.ENDIF
 
 .IF "$(APP$(TNR)STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -116,9 +118,11 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-$(RM) $(MISC)$/$(@:b).strip
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
+    @echo -n $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -126,6 +130,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        app $(APP$(TNR)RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
     @macosx-create-bundle $@
