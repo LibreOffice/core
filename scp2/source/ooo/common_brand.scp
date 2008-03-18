@@ -1,0 +1,1111 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: common_brand.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:27:55 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2007 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+Module gid_Module_Root_Brand
+    ParentID = gid_Module_Root;
+    Name = "ooobrand";
+    Description = "OOo Brand";
+    Sortkey = "1030";
+    Default = YES;
+    Styles = (HIDDEN_ROOT, ROOT_BRAND_PACKAGE);
+    PackageInfo = "packinfo_brand.txt";
+    Dirs = (gid_Brand_Dir_Program,
+            gid_Brand_Dir_Share,
+            gid_Brand_Dir_Share_C05,
+            gid_Brand_Dir_Share_C05_Rgt,
+            gid_Brand_Dir_Share_C05_Faq,
+            gid_Brand_Dir_Share_Config,
+            gid_Brand_Dir_Share_Extension,
+            gid_Brand_Dir_Share_Extension_Install,
+            gid_Brand_Dir_Share_Uno_Packages,
+            gid_Brand_Dir_Share_Uno_Packages_Cache,
+            gid_Brand_Dir_Share_Registry,
+            gid_Brand_Dir_Share_Registry_Data,
+            gid_Brand_Dir_Share_Registry_Data_Org,
+            gid_Brand_Dir_Share_Registry_Data_Org_Openoffice,
+            gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office,
+            gid_Brand_Dir_Share_Registry_Modules,
+            gid_Brand_Dir_Share_Registry_Modules_Org,
+            gid_Brand_Dir_Share_Registry_Modules_Oo,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Inet,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Office,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer,
+            gid_Brand_Dir_Share_Xdg);
+    Files = (gid_Brand_File_BasisLink,
+             gid_Brand_File_Bin_Crashreport,
+             gid_Brand_File_Bin_Crashreport_Script,
+             gid_Brand_File_Bin_Crashreport_Com,
+             gid_Brand_File_Bin_Setofficelang_C01,
+             gid_Brand_File_Bin_Soffice,
+             gid_Brand_File_Bin_Soffice_Bin,
+             gid_Brand_File_Bin_Soffice_Bin_Manifest,
+             gid_Brand_File_Bin_Spadmin,
+             gid_Brand_File_Bin_Unopkgcom,
+             gid_Brand_File_Bin_Unopkgexe,
+             gid_Brand_File_Bin_Unopkg,
+             gid_Brand_File_Bmp_IntroAbout,
+             gid_Brand_File_C05_Zip_Faq,
+             gid_Brand_File_C05_Zip_Register,
+             gid_Brand_File_C05_Htm_Faq,
+             gid_Brand_File_C05_Htm_Rgt,
+             gid_Brand_File_C05_Pdf_Gettingstartedguide,
+             gid_Brand_File_C05_Exe_Suptool,
+             gid_Brand_File_Desktophelper_Txt,
+             gid_Brand_File_Html_Thirdpartylicensereadme,
+             gid_Brand_File_ImagesCrystal_Zip,
+             gid_Brand_File_ImagesHicontrast_Zip,
+             gid_Brand_File_ImagesIndustrial_Zip,
+             gid_Brand_File_ImagesTango_Zip,
+             gid_Brand_File_Images_Zip,
+             gid_Brand_File_Install_Me,
+             gid_Brand_File_Lib_Dbghelp,
+             gid_Brand_File_Lib_Msvcr80,
+             gid_Brand_File_Lib_Msvcp80,
+             gid_Brand_File_Lib_Msvcm80,
+             gid_Brand_File_Msvcm80crt_Manifest,
+             gid_Brand_File_Lib_Msvcr90,
+             gid_Brand_File_Lib_Msvcp90,
+             gid_Brand_File_Lib_Msvcm90,
+             gid_Brand_File_Msvcm90crt_Manifest,
+             gid_Brand_File_Lib_Subscrib_C05,
+             gid_Brand_File_Oo_Office_Common_Xcu,
+             gid_Brand_File_Oo_Office_Compatibility_Xcu,
+             gid_Brand_File_Oo_Office_Ui_Xcu,
+             gid_Brand_File_Oo_Setup_Xcu,
+             gid_Brand_File_Registry_Spool_Oo_Inet_defaultsearchengine_Xcu_C01,
+             gid_Brand_File_Registry_Spool_Oo_Office_Writer_directcursor_Xcu_C01,
+             gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
+             gid_Brand_File_Script_Setofficelang_C01,
+             gid_Brand_File_Script_Unopkg,
+             gid_Brand_File_Share_Xdg_Base,
+             gid_Brand_File_Share_Xdg_Calc,
+             gid_Brand_File_Share_Xdg_Draw,
+             gid_Brand_File_Share_Xdg_Extension,
+             gid_Brand_File_Share_Xdg_Impress,
+             gid_Brand_File_Share_Xdg_Math,
+             gid_Brand_File_Share_Xdg_Printeradmin,
+             gid_Brand_File_Share_Xdg_QStart,
+             gid_Brand_File_Share_Xdg_Writer);
+    Unixlinks = (gid_Brand_Unixlink_BasisLink,
+                 gid_Brand_Unixlink_Program,
+                 gid_Brand_Unixlink_Urelibs);
+End
+
+// Language specific brand module
+
+Module gid_Module_Langpack_Brand_Template
+    ParentID = gid_Module_Langpack_Root_Template;
+    Name = "gid_Module_Langpack_Brand_Template";
+    Description = "gid_Module_Langpack_Brand_Template";
+    Styles = (TEMPLATEMODULE);
+    Dirs = (gid_Brand_Dir_Help,
+            gid_Brand_Dir_Help_Isolanguage,
+            gid_Brand_Dir_License,
+            gid_Brand_Dir_Program,
+            gid_Brand_Dir_Resource,
+            gid_Brand_Dir_Readme,
+            gid_Brand_Dir_Share,
+            gid_Brand_Dir_Share_Readme);
+    Files = (gid_Brand_File_Res_Iso,
+             gid_Brand_File_Res_Ooo,
+             gid_Brand_File_Help_C05_Sdatabase_Zip,
+             gid_Brand_File_Help_C05_Scalc_Zip,
+             gid_Brand_File_Help_C05_Sdraw_Zip,
+             gid_Brand_File_Help_C05_Swriter_Zip,
+             gid_Brand_File_License_License,
+             gid_Brand_File_License_License_Html,
+             gid_Brand_File_Readme_Readme,
+             gid_Brand_File_Readme_Readme_Html,
+             gid_Brand_File_Txt_License,
+             gid_Brand_File_Txt_License_Html,
+             gid_Brand_File_Txt_Readme,
+             gid_Brand_File_Txt_Readme_Html);
+End
+
+// Directories
+
+Directory gid_Brand_Dir_Program
+#if defined MACOSX
+    ParentID = gid_Dir_Bundle_Contents;
+    DosName = "MacOS";
+#else
+    ParentID = gid_Dir_Brand_Root;
+    DosName = "program";
+#endif
+End
+
+Directory gid_Brand_Dir_Resource
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "resource";
+End
+
+Directory gid_Brand_Dir_Readme
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "readmes";
+End
+
+Directory gid_Brand_Dir_License
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "licenses";
+End
+
+Directory gid_Brand_Dir_Help
+#if defined MACOSX
+    ParentID = gid_Dir_Bundle_Contents;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "help";
+End
+
+Directory gid_Brand_Dir_Help_Isolanguage
+    ParentID = gid_Brand_Dir_Help;
+    DIR_ISOLANGUAGE_ALL_LANG;
+End
+
+Directory gid_Brand_Dir_Share
+#if defined MACOSX
+    ParentID = gid_Dir_Bundle_Contents;
+#else
+    ParentID = gid_Dir_Brand_Root;
+#endif
+    DosName = "share";
+End
+
+Directory gid_Brand_Dir_Share_Config
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "config";
+End
+
+Directory gid_Brand_Dir_Share_Readme
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "readme";
+End
+
+Directory gid_Brand_Dir_Share_Extension
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "extension";
+End
+
+Directory gid_Brand_Dir_Share_Extension_Install
+    ParentID = gid_Brand_Dir_Share_Extension;
+    DosName = "install";
+    Styles = (CREATE);
+End
+
+Directory gid_Brand_Dir_Share_Uno_Packages
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "uno_packages";
+    Styles = (CREATE);
+End
+
+Directory gid_Brand_Dir_Share_Uno_Packages_Cache
+    ParentID = gid_Brand_Dir_Share_Uno_Packages;
+    DosName = "cache";
+    Styles = (CREATE);
+End
+
+Directory gid_Brand_Dir_Share_Registry
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "registry";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Data
+    ParentID = gid_Brand_Dir_Share_Registry;
+    HostName = "data";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Data_Org
+    ParentID = gid_Brand_Dir_Share_Registry_Data;
+    HostName = "org";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Data_Org_Openoffice
+    ParentID = gid_Brand_Dir_Share_Registry_Data_Org;
+    HostName = "openoffice";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office
+    ParentID = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice;
+    HostName = "Office";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules
+    ParentID = gid_Brand_Dir_Share_Registry;
+    HostName = "modules";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Org
+    ParentID = gid_Brand_Dir_Share_Registry_Modules;
+    HostName = "org";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Org;
+    HostName = "openoffice";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Inet
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo;
+    HostName = "Inet";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo;
+    HostName = "Office";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Writer";
+End
+
+#if defined UNX && ! defined MACOSX
+Directory gid_Brand_Dir_Share_Xdg
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "xdg";
+End
+#endif
+
+// Link to basis
+
+#if defined WNT
+File gid_Brand_File_BasisLink
+   TXT_FILE_BODY;
+   Dir = gid_Dir_Brand_Root;
+   Name = "basis-link";
+   Styles = (PACKED, SCPZIP_REPLACE);
+End
+#elif defined MACOSX
+Directory gid_Brand_Dir_BasisLink
+    ParentID = gid_Dir_Bundle_Contents;
+    DosName = "basis-link";
+End
+#else
+Unixlink gid_Brand_Unixlink_BasisLink
+    BIN_FILE_BODY;
+    Styles = ();
+    Name = "basis-link";
+    Dir = gid_Dir_Brand_Root;
+    Target = "../openoffice.org/basis${OOOBASEVERSION}";
+End
+#endif
+
+// UnixLinks
+
+#if defined MACOSX
+Unixlink gid_Brand_Unixlink_Urelibs
+    Dir = gid_Brand_Dir_Program;
+    Name = "urelibs";
+    Target = "../basis-link/ure-link/lib";
+End
+#endif
+
+#if defined MACOSX
+Unixlink gid_Brand_Unixlink_Program
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "program";
+    Target = "MacOS";
+    Styles = ();
+End
+#endif
+
+// Files
+
+File gid_Brand_File_Html_Thirdpartylicensereadme
+    Name = "THIRDPARTYLICENSEREADME.html";
+#ifdef MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Styles = (WORKSTATION);
+    TXT_FILE_BODY;
+End
+
+#if !defined MACOSX
+File gid_Brand_File_Bin_Soffice
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(soffice);
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
+    Styles = (PACKED);
+  #endif
+End
+#endif
+
+#if defined(UNX) && !defined(QUARTZ)
+File gid_Brand_File_Bin_Spadmin
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "spadmin";
+    Styles = (PACKED);
+End
+#endif
+
+File gid_Brand_File_Bin_Soffice_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+#if defined WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+#else
+    Styles = (PACKED);
+#endif
+    Name = "soffice.bin";
+End
+
+// use this for high detail file open dialog >= 5.1 windows
+#ifdef WNT
+File gid_Brand_File_Bin_Soffice_Bin_Manifest
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "soffice.bin.manifest";
+End
+#endif
+
+#ifdef WNT
+File gid_Brand_File_Desktophelper_Txt
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "desktophelper.txt";
+	ComponentCondition = "CREATEDESKTOPLINK=1";
+End
+#endif
+
+#ifdef WNT
+File gid_Brand_File_Bin_Unopkgcom
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "unopkg.com";
+End
+#endif
+
+#ifdef WNT
+File gid_Brand_File_Bin_Unopkgexe
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "unopkg.exe";
+End
+#endif
+
+#if defined UNX && !defined MACOSX
+File gid_Brand_File_Script_Unopkg
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "unopkg";
+End
+#endif
+
+File gid_Brand_File_Bin_Unopkg
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "unopkg.bin";
+End
+
+File gid_Brand_File_Bmp_IntroAbout
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "intro.zip";
+    Styles = (ARCHIVE);
+End
+
+File gid_Brand_File_Images_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images.zip";
+    Styles = (PACKED);
+End
+
+File gid_Brand_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_Brand_File_Oo_Office_Compatibility_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
+End
+
+File gid_Brand_File_Oo_Office_Ui_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/UI.xcu";
+End
+
+File gid_Brand_File_Oo_Setup_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/Setup.xcu";
+End
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Base
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "base.desktop";
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Calc
+	TXT_FILE_BODY;
+	Dir = gid_Brand_Dir_Share_Xdg;
+	Name = "calc.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Draw
+	TXT_FILE_BODY;
+	Dir = gid_Brand_Dir_Share_Xdg;
+	Name = "draw.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Extension
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "extensionmgr.desktop";
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Impress
+	TXT_FILE_BODY;
+	Dir = gid_Brand_Dir_Share_Xdg;
+	Name = "impress.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Printeradmin
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "printeradmin.desktop";
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+#ifdef ENABLE_GTK
+File gid_Brand_File_Share_Xdg_QStart
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "qstart.desktop";
+End
+#endif
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Writer
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "writer.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined(WNT)
+#if defined(M1400)
+#if defined(PROF_EDITION)
+File gid_Brand_File_Lib_Msvcr80
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcr80.dll";
+#else
+    Name = "msvcr80d.dll";
+#endif
+End
+#endif
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1400)
+#if defined(PROF_EDITION)
+File gid_Brand_File_Lib_Msvcp80
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcp80.dll";
+#else
+    Name = "msvcp80d.dll";
+#endif
+End
+#endif
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1400)
+#if defined(PROF_EDITION)
+File gid_Brand_File_Lib_Msvcm80
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcm80.dll";
+#else
+    Name = "msvcm80d.dll";
+#endif
+End
+#endif
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1400)
+#if defined(PROF_EDITION)
+File gid_Brand_File_Msvcm80crt_Manifest
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "Microsoft.VC80.CRT.manifest";
+#else
+    Name = "Microsoft.VC80.DebugCRT.manifest";
+#endif
+End
+#endif
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_Brand_File_Lib_Msvcr90
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcr90.dll";
+#else
+    Name = "msvcr90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_Brand_File_Lib_Msvcp90
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcp90.dll";
+#else
+    Name = "msvcp90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_Brand_File_Lib_Msvcm90
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcm90.dll";
+#else
+    Name = "msvcm90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_Brand_File_Msvcm90crt_Manifest
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "Microsoft.VC90.CRT.manifest";
+#else
+    Name = "Microsoft.VC90.DebugCRT.manifest";
+#endif
+End
+#endif
+#endif
+
+// Profiles
+
+Profile gid_Brand_Profile_Bootstrap_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(bootstrap);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Brand_Profile_Soffice_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(soffice);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Brand_Profile_Version_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(version);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Brand_Profile_Fundamental_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(fundamental);
+    Dir = gid_Brand_Dir_Program;
+End
+
+#if !defined MACOSX
+Profile gid_Brand_Profile_Redirect_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(redirect);
+    Dir = gid_Brand_Dir_Program;
+End
+#endif
+
+// ProfileItems
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Baseinstall
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "BaseInstallation";
+    Value = "${OOO_BASE_DIR}";
+End
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Productkey
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "ProductKey";
+    Value = "<productkey>";
+End
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Port
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "ErrorReport";
+    Order = 7;
+    Key = "ErrorReportPort";
+    Value = "80";
+End
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Installmode
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "InstallMode";
+    Value = "<installmode>";
+End
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UserInstallation";
+  #ifdef WNT
+    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
+  #elif defined MACOSX
+  #if defined QUARTZ 
+    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME-aqua/%USERDIRPRODUCTVERSION";
+  #else 
+    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
+  #endif
+  #else
+    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
+  #endif
+    StandaloneValue = "$ORIGIN/..";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_UreBootstrap
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    Section = "Bootstrap";
+    Key = "URE_BOOTSTRAP";
+    Value = "${ORIGIN}/" PROFILENAME(fundamental);
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_Logo
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "Logo";
+    Value = "1";
+End
+
+#ifdef MACOSX
+ProfileItem gid_Brand_ProfileItem_Soffice_Macosxrc
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "MacOSXIntegrationUserFile";
+    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/macosxrc.txt";
+End
+#endif
+
+#ifdef MACOSX
+ProfileItem gid_Brand_ProfileItem_Soffice_Macosxrc2
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "MacOSXIntegrationDefaultFile";
+    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
+End
+#endif 
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "HideEula";
+    Value = "[HIDEEULA]";
+    Inifiletablekey = "HideEula";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+ProfileItem gid_Brand_Profileitem_Version_Buildid
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 4;
+    Key = "buildid";
+    Value = "<buildid>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Productpatch
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 6;
+    Key = "ProductPatch";
+    Value = "<productupdate>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Productsource
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 7;
+    Key = "ProductSource";
+    Value = "<sourceid>";
+End
+
+#ifdef WNT
+
+ProfileItem gid_Brand_Profileitem_Version_Productcode
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 8;
+    Key = "ProductCode";
+    Value = "<productcode>";
+End
+
+#endif
+
+#ifdef WNT
+
+ProfileItem gid_Brand_Profileitem_Version_Upgradecode
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 9;
+    Key = "UpgradeCode";
+    Value = "<upgradecode>";
+End
+
+#endif
+
+ProfileItem gid_Brand_Profileitem_Version_Productmajor
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 10;
+    Key = "ProductMajor";
+    Value = "<productmajor>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Productminor
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 11;
+    Key = "ProductMinor";
+    Value = "<productminor>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Productbuildid
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 12;
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Alllanguages
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 13;
+    Key = "AllLanguages";
+    Value = "<alllanguages>";
+End
+
+#ifdef WNT
+
+ProfileItem gid_Brand_Profileitem_Version_Msiproductversion
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 14;
+    Key = "MsiProductVersion";
+    Value = "<msiproductversion>";
+End
+
+#endif
+
+ProfileItem gid_Brand_Profileitem_Version_Updateurl
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 15;
+    Key = "UpdateURL";
+  #if defined(BUILD_SPECIAL)
+  #ifdef WNT
+    Value = "${UPDATEURL}";
+  #else  // defined WNT
+    Value = "${UPDATEURL}?pkgfmt=<pkgformat>";
+  #endif //defined WNT
+  #else
+    Value = "";
+  #endif
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Updateid
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 16;
+    Key = "UpdateID";
+    Value = "<updateid>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Useragent
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 17;
+    Key = "UpdateUserAgent";
+    Value = "<useragent>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 18;
+    Key = "OOOBaseVersion";
+    Value = "${OOOBASEVERSION}";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 18;
+    Key = "ExtensionUpdateURL";
+    Value = "http://updateext.services.openoffice.org/ProductUpdateService/check.Update";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BRAND_BASE_DIR";
+    Value = "${ORIGIN}/..";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Customdataurl
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "CustomDataUrl";
+    Value = "${BRAND_BASE_DIR}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ooo_Base_Dir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "OOO_BASE_DIR";
+#if defined WNT
+    Value = "${.link:${BRAND_BASE_DIR}/basis-link}";
+#else
+    Value = "${BRAND_BASE_DIR}/basis-link";
+#endif
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_SHARED_PACKAGES_CACHE";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_SHARED_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_USER_PACKAGES_CACHE";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_USER_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_TYPES";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_TYPES}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_SERVICES";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_JAVA_TYPES";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_TYPES}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_OVERRIDE_JAVA_JFW_SHARED_DATA}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_User_Data
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_OVERRIDE_JAVA_JFW_USER_DATA}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_JAVA_CLASSPATH_URLS";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_CLASSPATH_URLS}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_BIN_DIR";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_BIN_DIR}";
+End
+
+#if !defined MACOSX
+ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Redirect_Ini;
+    Section = "Bootstrap";
+    Key = "URE_BOOTSTRAP";
+    Value = "${ORIGIN}/" PROFILENAME(fundamental);
+End
+#endif
