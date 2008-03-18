@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:07:22 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _OSL_MODULE_HXX_
-#include <osl/module.hxx>
-#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -89,6 +86,7 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+#include <rtl/bootstrap.hxx>
 
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
@@ -247,20 +245,15 @@ void ResMgrContainer::init()
     std::list< OUString > aDirs;
     sal_Int32 nIndex = 0;
 
-    // 1. relative to current module (<installation>/program/resource)
-    OUString libraryFileUrl;
-    if( Module::getUrlFromAddress(
-            reinterpret_cast< oslGenericFunction >(ResMgrContainer::release),
-            libraryFileUrl) )
-        nIndex = libraryFileUrl.lastIndexOf( '/' );
-    DBG_ASSERT( nIndex > 0, "module resolution failed" );
-    if( nIndex > 0 )
-    {
-        OUStringBuffer aBuf( libraryFileUrl.getLength() + 16 );
-        aBuf.append( libraryFileUrl.getStr(), nIndex+1 ); // copy inclusive '/'
-        aBuf.appendAscii( "resource" );
-        aDirs.push_back( aBuf.makeStringAndClear() );
-    }
+    // 1. fixed locations
+    rtl::OUString uri(
+        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource"));
+    rtl::Bootstrap::expandMacros(uri);
+    aDirs.push_back(uri);
+    uri = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/resource"));
+    rtl::Bootstrap::expandMacros(uri);
+    aDirs.push_back(uri);
 
     // 2. in STAR_RESOURCEPATH
     const sal_Char* pEnv = getenv( "STAR_RESOURCEPATH" );
