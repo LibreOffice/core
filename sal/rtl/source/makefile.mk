@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:20:20 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:18:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@ SLOFILES=   \
             $(SLO)$/uri.obj			\
             $(SLO)$/bootstrap.obj  	\
             $(SLO)$/cmdargs.obj		\
-            $(SLO)$/macro.obj		\
             $(SLO)$/unload.obj		\
             $(SLO)$/logfile.obj     \
             $(SLO)$/tres.obj        \
@@ -127,19 +126,10 @@ OBJFILES=   \
             $(OBJ)$/uri.obj			\
             $(OBJ)$/bootstrap.obj  	\
             $(OBJ)$/cmdargs.obj		\
-            $(OBJ)$/macro.obj		\
             $(OBJ)$/unload.obj		\
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj
-
-.IF "$(OS)" == "WNT"
-#Link against delayload.obj from local output tree
-.IF "$(COM)"!="GCC"
-DELAYLOADOBJ:=$(OBJ)$/delayload.obj
-APP1DEPN=$(DELAYLOADOBJ)
-.ENDIF
-.ENDIF
 
 APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
