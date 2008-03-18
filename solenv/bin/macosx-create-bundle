@@ -3,9 +3,9 @@
 #
 #   $RCSfile: macosx-create-bundle,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2006-10-24 13:26:03 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:56:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,6 @@ while [ $# != 0 ]; do
 	elif printf "$filetype" | grep -q 'Mach-O dynamically linked shared library'; then
 		# Screen out lib\w+static libraries as they are not used directly
 		if ! printf "$inputfilename" | grep -q -x -E 'lib\w+static.*\.dylib'; then
-			# Set the install_name of the *.dylib file
-			install_name_tool -id "@executable_path/$inputfilename" $inputfile
 			# Create jnilib link
 			inputjnilibname="`basename $inputfilename .dylib`.jnilib"
 			if [ ! -L "$outputdir/$inputjnilibname" ]; then
