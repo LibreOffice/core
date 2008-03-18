@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:49:02 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_bridges.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
@@ -46,7 +47,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <bridges/cpp_uno/bridge.hxx>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
@@ -291,4 +292,4 @@ void fillUnoException( __cxa_exception * header, uno_Any * pExc, uno_Mapping * p
 }
 
 }
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
