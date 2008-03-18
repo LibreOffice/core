@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:21:06 $
+#   last change: $Author: vg $ $Date: 2008-03-18 16:05:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
 #
 #*************************************************************************
 
-# mk file for linux s390 using gcc 3.X
+# mk file for linux s390
 ASM=
 AFLAGS=
 
-SOLAR_JAVA*=TRUE
+SOLAR_JAVA*=
 JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
@@ -45,7 +45,12 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DS390 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -55,7 +60,7 @@ JAVA_RUNTIME=-ljava
 .ELSE
 JAVA_RUNTIME=-ljava_g
 .ENDIF
-.ENDIF 
+.ENDIF
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
@@ -65,55 +70,64 @@ ARCH_FLAGS*=
 CXX*=g++
 # name of C Compiler
 CC*=gcc
+.IF "$(SYSBASE)"!=""
+CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CXX+:=$(CFLAGS_SYSBASE)
+CC+:=$(CFLAGS_SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
+CFLAGS+=-Wreturn-type -fmessage-length=0 -c
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 
-CFLAGS+=-fsigned-char -fmessage-length=0 -c
+.ENDIF
 
+CFLAGS+=-fsigned-char -fno-omit-frame-pointer
 # flags for the C++ Compiler
 CFLAGSCC= -fsigned-char -pipe $(ARCH_FLAGS)
-
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
-
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX= -fsigned-char -pipe -fno-rtti $(ARCH_FLAGS)
-#CFLAGSCXX= -fsigned-char -pipe
+CFLAGSCXX= -fsigned-char -pipe $(ARCH_FLAGS)
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
+CFLAGSCXX+= -fno-use-cxa-atexit
 PICSWITCH:=-fPIC
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
-CFLAGSOBJGUIMT=$(PICSWITCH)
+CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
-CFLAGSOBJCUIMT=$(PICSWITCH)
+CFLAGSOBJCUIMT=
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
 CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
 CFLAGSSLOCUIMT=$(PICSWITCH)
-
 # Compiler flags for profiling
 CFLAGSPROF=
-
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-
 # Compiler flags for enabling optimizations
-#CFLAGSOPT=-O2 -fno-schedule-insns -fno-strict-aliasing -fno-schedule-insns2
-CFLAGSOPT=-O2 -fno-strict-aliasing
-
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=-O2 -fno-strict-aliasing             # optimizing for products
+CFLAGSOPT+=-Wuninitialized                             # not supported without optimization
+.ELSE  # "$(PRODUCT)"!=""
+CFLAGSOPT=                                                     # no optimizing for non products
+.ENDIF # "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
-# don't change - required to work around optimization bugs
 CFLAGSNOOPT=-O0
-
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-
-CFLAGSWARNCC=
-CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy
-# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
-CFLAGSWALLCC=-Wall -Wextra -Wendif-labels
-CFLAGSWALLCXX=$(CFLAGSWALLCC) -Wshadow -Wno-ctor-dtor-privacy
-CFLAGSWERRCC=-Werror
+# Enable all warnings
+CFLAGSWALL=-Wall
+# Set default warn level
+CFLAGSDFLTWARN=
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -121,13 +135,16 @@ DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
 LINK*=$(CXX)
+LINKC*=$(CC)
+
 # default linker flags
-LINKFLAGS=
+LINKFLAGSDEFS*=-Wl,-z,defs
+LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
 LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
 LINKFLAGSSHLCUI= -shared
@@ -137,14 +154,10 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-.IF "$(NO_BSYMBOLIC)"==""
-.IF "$(PRJNAME)" != "envtest"
-LINKFLAGSSHLGUI+=-Wl,-Bsymbolic
-LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
-.ENDIF
-.ENDIF				# "$(NO_BSYMBOLIC)"==""
-
-LINKVERSIONMAPFLAG=-Wl,--version-script
+# linker flags for optimization (symbol hashtable)
+# for now, applied to symbol scoped libraries, only
+LINKFLAGSOPTIMIZE*=-Wl,-O1
+LINKVERSIONMAPFLAG=$(LINKFLAGSOPTIMIZE) -Wl,--version-script
 
 SONAME_SWITCH=-Wl,-h
 
@@ -153,6 +166,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -165,13 +179,20 @@ STDLIBCUIMT=-ldl -lpthread -lm
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
 
+LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
+
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ELSE # "$(USE_STLP_DEBUG)" != ""
 .IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlport -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlport
 LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
 .ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 .ENDIF
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
