@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:04:59 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:58:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ sub get_string_from_headerfile
 
 sub put_directories_into_epmfile
 {
-    my ($directoriesarrayref, $epmfileref) = @_;
+    my ($directoriesarrayref, $epmfileref, $allvariables, $packagerootpath) = @_;
     my $group = "bin";
 
     if ( $installer::globals::islinuxbuild )
@@ -146,6 +146,9 @@ sub put_directories_into_epmfile
         if ((!($dir =~ /\bPREDEFINED_/ )) || ( $dir =~ /\bPREDEFINED_PROGDIR\b/ ))
         {
             my $hostname = $onedir->{'HostName'};
+
+            # not including simple directory "/opt"
+            if (( $allvariables->{'SETSTATICPATH'} ) && ( $hostname eq $packagerootpath )) { next; }
 
             my $line = "d 755 root $group $hostname -\n";
 
@@ -2765,7 +2768,7 @@ sub put_systemintegration_into_installset
 
 sub analyze_rootpath
 {
-    my ($rootpath, $staticpathref, $relocatablepathref) = @_;
+    my ($rootpath, $staticpathref, $relocatablepathref, $allvariables) = @_;
 
     $rootpath =~ s/\/\s*$//;    # removing ending slash
 
@@ -2789,6 +2792,9 @@ sub analyze_rootpath
     {
         $$staticpathref = "";   # will be ""
         $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/openofficeorg20/"
+        # setting the static path to the hostname of the directory with style OFFICEDIRECTORY
+        if ( $allvariables->{'SETSTATICPATH'} ) { $$staticpathref = $installer::globals::officedirhostname; }
+
     }
     else    # relocatablepath is defined in package list
     {
