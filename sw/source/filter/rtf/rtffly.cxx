@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:37:14 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,9 +402,9 @@ void SwRTFParser::SetFlysInDoc()
             }
             else
             {
-                // TabelleNodes beachten
-                pNd = pNd->FindTableNode();
-                if( pNd )   // am Anfang eine Tabelle, -> Bereich auf TabStart
+                // Take care for table nodes
+                pNd = pNd->GetNodes()[ pNd->GetIndex() - 2 ]->GetTableNode();
+                if( pNd ) // if the table starts imediately before aRg -> expand aRg
                     aRg.aStart = *pNd;
 
                 if( bMakeEmptySection )
@@ -412,7 +412,8 @@ void SwRTFParser::SetFlysInDoc()
                     pNd = &aRg.aEnd.GetNode();
                     ULONG nSectEnd = pNd->EndOfSectionIndex()+1;
 
-                    if (!pNd->IsTableNode() && 0 !=(pNd = pNd->FindTableNode()))
+                    if (!pNd->IsTableNode() && 0 !=(pNd = pNd->FindTableNode())
+                        && (pNd->GetIndex() >= aRg.aStart.GetNode().GetIndex()) )
                     {
                         const SwNode* pTblBxNd;
 
