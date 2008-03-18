@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:49:37 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,6 @@ class SwViewOption
     static Color    aFieldShadingsColor;
     static Color    aSectionBoundColor;
     static Color    aPageBreakColor;
-    static Color    aNotesIndicatorColor;
     static Color    aScriptIndicatorColor;
 
     static sal_Int32 nAppearanceFlags;  //
