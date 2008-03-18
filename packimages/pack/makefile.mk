@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 12:55:05 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:45:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ $(SORTED_LIST) : image-sort.lst
     +-$(MKDIR) $(RES)$/img
     +$(PERL) $(SOLARENV)$/bin$/image-sort.pl image-sort.lst $(SOLARXMLDIR) $@
 
-$(RES)$/img$/commandimagelist.ilst .PHONY :
+$(RES)$/img$/commandimagelist.ilst .PHONY : $(SORTED_LIST)
     @@-$(MKDIR) $(RES)$/img
 #+-$(RM) $@ $@.$(INPATH)
 .IF "$(use_shell)"!="4nt"
@@ -74,7 +74,7 @@ $(RES)$/img$/commandimagelist.ilst .PHONY :
 $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
     $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
 
-images_% : $(RES)$/img$/commandimagelist.ilst $(SORTED_LIST)
+images_% : $(RES)$/img$/commandimagelist.ilst
     $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) -c $(CUSTOM_PREFERRED_FALLBACK_1) -c $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
 
 $(COMMONBIN)$/%$/images.zip  .PHONY : $(RES)$/img$/commandimagelist.ilst
