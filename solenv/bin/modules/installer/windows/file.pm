@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 15:59:24 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,7 @@ sub get_file_component_name
 
     my $destination = $fileref->{'destination'};
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+    $destination =~ s/\s//g;
     $destination =~ s/\\/\_/g;
     $destination =~ s/\//\_/g;
     $destination =~ s/\_\s*$//g;    # removing ending underline
@@ -517,6 +518,45 @@ sub generate_registry_keypath
     return $keypath;
 }
 
+###################################################################
+# Collecting further conditions for the component table.
+# This is used by multilayer products, to enable installation
+# of separate layers.
+###################################################################
+
+sub get_tree_condition_for_component
+{
+    my ($onefile, $componentname) = @_;
+
+    if ( $onefile->{'destination'} )
+    {
+        my $dest = $onefile->{'destination'};
+
+        # Comparing the destination path with
+        # $installer::globals::hostnametreestyles{$hostname} = $treestyle;
+        # (-> hostname is the key, the style the value!)
+
+        foreach my $hostname ( keys %installer::globals::hostnametreestyles )
+        {
+            if (( $dest eq $hostname ) || ( $dest =~ /^\s*\Q$hostname\E\\/ ))
+            {
+                # the value is the style
+                my $style = $installer::globals::hostnametreestyles{$hostname};
+                # the condition is saved in %installer::globals::treestyles
+                my $condition = $installer::globals::treestyles{$style};
+                # Saving condition to be added in table Property
+                $installer::globals::usedtreeconditions{$condition} = 1;
+                $condition = $condition . "=1";
+                # saving this condition
+                $installer::globals::treeconditions{$componentname} = $condition;
+
+                # saving also at the file, for usage in fileinfo
+                $onefile->{'layer'} = $installer::globals::treelayername{$style};
+            }
+        }
+    }
+}
+
 ############################################
 # Creating the file File.idt dynamically
 ############################################
@@ -608,8 +648,75 @@ sub create_files_table
             }
         }
 
-        if ( $installer::globals::prepare_winpatch )
+        # Collecting also all tree conditions for multilayer products
+        get_tree_condition_for_component($onefile, $file{'Component_'});
+
+        # Collecting all component names, that have flag VERSION_INDEPENDENT_COMP_ID
+        # This should be all components with constant API, for example URE
+        if ( $styles =~ /\bVERSION_INDEPENDENT_COMP_ID\b/ )
         {
+            $installer::globals::base_independent_components{$onefile->{'componentname'}} = 1;
+        }
+
+        # Collecting all component ids, that are defined at files in scp project (should not be used anymore)
+        if ( $onefile->{'CompID'} )
+        {
+            if ( ! exists($installer::globals::componentid{$onefile->{'componentname'}}))
+            {
+                $installer::globals::componentid{$onefile->{'componentname'}} = $onefile->{'CompID'};
+            }
+            else
+            {
+                if ( $installer::globals::componentid{$onefile->{'componentname'}} ne $onefile->{'CompID'} )
+                {
+                    installer::exiter::exit_program("ERROR: There is already a ComponentID for component \"$onefile->{'componentname'}\" : \"$installer::globals::componentid{$onefile->{'componentname'}}\" . File \"$onefile->{'gid'}\" uses \"$onefile->{'CompID'}\" !", "create_files_table");
+                }
+            }
+
+            # Also checking vice versa. Is this ComponentID already used? If yes, is the componentname the same?
+
+            if ( ! exists($installer::globals::comparecomponentname{$onefile->{'CompID'}}))
+            {
+                $installer::globals::comparecomponentname{$onefile->{'CompID'}} = $onefile->{'componentname'};
+            }
+            else
+            {
+                if ( $installer::globals::comparecomponentname{$onefile->{'CompID'}} ne $onefile->{'componentname'} )
+                {
+                    installer::exiter::exit_program("ERROR: There is already a component for ComponentID \"$onefile->{'CompID'}\" : \"$installer::globals::comparecomponentname{$onefile->{'CompID'}}\" . File \"$onefile->{'gid'}\" has same component id but is included in component \"$onefile->{'componentname'}\" !", "create_files_table");
+                }
+            }
+        }
+
+        # Collecting all language specific conditions
+        # if ( $onefile->{'haslanguagemodule'} )
+        if ( $onefile->{'ismultilingual'} )
+        {
+            if ( $onefile->{'ComponentCondition'} ) { installer::exiter::exit_program("ERROR: Cannot set language condition. There is already another component condition for file $onefile->{'gid'}: \"$onefile->{'ComponentCondition'}\" !", "create_files_table"); }
+
+            if ( $onefile->{'specificlanguage'} eq "" ) { installer::exiter::exit_program("ERROR: There is no specific language for file at language module: $onefile->{'gid'} !", "create_files_table"); }
+            my $locallanguage = $onefile->{'specificlanguage'};
+            my $property = "IS" . $file{'Language'};
+            my $value = 1;
+            my $condition = $property . "=" . $value;
+
+            $onefile->{'ComponentCondition'} = $condition;
+
+            if ( exists($installer::globals::componentcondition{$file{'Component_'}}))
+            {
+                if ( $installer::globals::componentcondition{$file{'Component_'}} ne $condition ) { installer::exiter::exit_program("ERROR: There is already another component condition for file $onefile->{'gid'}: \"$installer::globals::componentcondition{$file{'Component_'}}\" and \"$condition\" !", "create_files_table"); }
+            }
+            else
+            {
+                $installer::globals::componentcondition{$file{'Component_'}} = $condition;
+            }
+
+            # collecting all properties for table Property
+            if ( ! exists($installer::globals::languageproperties{$property}) ) { $installer::globals::languageproperties{$property} = $value; }
+        }
+
+#       if ( $installer::globals::prepare_winpatch )
+#       {
             my $path = $onefile->{'sourcepath'};
             if ( $^O =~ /cygwin/i ) { $path = $onefile->{'cyg_sourcepath'}; }
 
@@ -626,7 +733,7 @@ sub create_files_table
                 $i[2] . "\t" .
                 $i[3] . "\n";
             push (@filehashtable, $oneline);
-        }
+#       }
 
         # Saving the sequence number in a hash with uniquefilename as key.
         # This is used for better performance in "save_packorder"
