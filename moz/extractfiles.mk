@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:53:19 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:35:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,34 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     cd $(RUNTIME_DIR)$/components && strip *$(DLLPOST)
 .ENDIF
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl OOO \
+        $(RUNTIME_DIR)$/*$(DLLPOST)
+# A crude hack to adapt all the install names in the components subdir:
+    $(foreach,file,$(shell ls $(RUNTIME_DIR)$/components$/*$(DLLPOST)) \
+        install_name_tool \
+        -change @executable_path/libldap50.dylib \
+            @loader_path/../libldap50.dylib \
+        -change @executable_path/libmozjs.dylib @loader_path/../libmozjs.dylib \
+        -change @executable_path/libmozz.dylib @loader_path/../libmozz.dylib \
+        -change @executable_path/libmsgbaseutil.dylib \
+            @loader_path/../libmsgbaseutil.dylib \
+        -change @executable_path/libnspr4.dylib @loader_path/../libnspr4.dylib \
+        -change @executable_path/libnss3.dylib @loader_path/../libnss3.dylib \
+        -change @executable_path/libplc4.dylib @loader_path/../libplc4.dylib \
+        -change @executable_path/libplds4.dylib @loader_path/../libplds4.dylib \
+        -change @executable_path/libprldap50.dylib \
+            @loader_path/../libprldap50.dylib \
+        -change @executable_path/libsmime3.dylib \
+            @loader_path/../libsmime3.dylib \
+        -change @executable_path/libsoftokn3.dylib \
+            @loader_path/../libsoftokn3.dylib \
+        -change @executable_path/libssl3.dylib @loader_path/../libssl3.dylib \
+        -change @executable_path/libxpcom.dylib @loader_path/../libxpcom.dylib \
+        -change @executable_path/libxpcom_compat.dylib \
+            @loader_path/../libxpcom_compat.dylib \
+        $(file) &&) true
+.ENDIF
 
 # zip runtime files to mozruntime.zip
     cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
@@ -271,11 +299,18 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
 .ENDIF
     $(TOUCH) $@
 
-$(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file))
+# On UNX the rules for so_moz_runtime_files copy files into the same directory
+# used here (LIB_DIR), and on MACOSX all those files together need to be
+# processed here, hence the dependency on so_moz_runtime_files:
+$(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)) $(MISC)$/build$/so_moz_runtime_files
     echo $(foreach,file,$(LIBLIST) $(MOZ_DIST_DIR)$/lib$/$(file))
     $(foreach,file,$(LIBLIST) $(COPY) $(MOZ_DIST_DIR)$/lib$/$(file) \
     $(LIB_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
+.IF "$(OS)"=="MACOSX"
+    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl OOO \
+        $(LIB_DIR)$/*$(DLLPOST)
+.ENDIF
 .IF "$(GUI)"=="UNX"
     chmod -R 775 $(LB)
 .ENDIF
