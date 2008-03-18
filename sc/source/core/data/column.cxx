@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:24:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,7 +351,7 @@ const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRo
 
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
     const ScPatternAttr* pPattern;
-    SCROW nAttrRow1, nAttrRow2;
+    SCROW nAttrRow1 = 0, nAttrRow2 = 0;
 
     while( (pPattern = aAttrIter.Next( nAttrRow1, nAttrRow2 )) != 0 )
     {
