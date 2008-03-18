@@ -17,6 +17,7 @@ FileTypeDialog	50	50	374	266	3	[ProductName] - Installation Wizard	CheckBox1	Nex
 InstallChangeFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Tail	OK	Cancel
 InstallWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
 LanguageInfo1	50	50	260	85	3	[ProductName]  - Installation Wizard	OK	OK	OK
+LanguageSelection	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
 LicenseAgreement	50	50	374	266	2	[ProductName] - Installation Wizard	Agree	Next	Cancel
 MaintenanceType	50	50	374	266	3	[ProductName] - Installation Wizard	RadioGroup	Next	Cancel
 MaintenanceWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
