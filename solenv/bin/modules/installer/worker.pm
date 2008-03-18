@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:59:51 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:02:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,8 +1050,8 @@ sub write_content_into_inf_file
                 if ( $registryitem->{'Value'} ) { $value = $registryitem->{'Value'}; }
                 if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"/\"\"/g; } # Quoting for INF is done by double ""
                 $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-                $value =~ s/\<progpath\>/\%INSTALLLOCATION\%/g;
-                # $value =~ s/\%INSTALLLOCATION\%\\/\%INSTALLLOCATION\%/g;      # removing "\" after "%INSTALLLOCATION%"
+                $value =~ s/\<progpath\>/\%OFFICEINSTALLLOCATION\%/g;
+                # $value =~ s/\%OFFICEINSTALLLOCATION\%\\/\%OFFICEINSTALLLOCATION\%/g;      # removing "\" after "%OFFICEINSTALLLOCATION%"
                 if ( $value ne "" ) { $value = "\"" . $value . "\""; }
 
                 my $oneline = $regroot . "," . $subkey . "," . $valueentryname . "," . $flag . "," . $value . "\n";
@@ -2888,7 +2888,6 @@ sub key_in_a_is_also_key_in_b
     {
         if ( ! exists($hashref_b->{$key}) )
         {
-            print "AAA: Not in B: $key\n";
             print "*****\n";
             foreach $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
             print "*****\n";
