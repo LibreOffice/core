@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:05 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,13 @@ public:
                                               SfxFilterFlags nDont );
 
                             FileDialogHelper( sal_Int64 nFlags,
+                                              const String& rFact,
+                                              sal_Int16 nDialog,
+                                              SfxFilterFlags nMust,
+                                              SfxFilterFlags nDont,
+                                              const String& rStandardDir);
+
+                            FileDialogHelper( sal_Int64 nFlags,
                                               const String& rFactory,
                                               SfxFilterFlags nMust = 0,
                                               SfxFilterFlags nDont = 0 );
@@ -228,7 +235,8 @@ public:
                                               const String& rFactory,
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
-                                              SfxFilterFlags nDont );
+                                              SfxFilterFlags nDont,
+                                              const String& rStandardDir );
 
                             FileDialogHelper( sal_Int64 nFlags );
 
@@ -240,6 +248,7 @@ public:
                                               sal_Int64 nFlags,
                                               const ::rtl::OUString& aFilterUIName,
                                               const ::rtl::OUString& aExtName,
+                                              const ::rtl::OUString& rStandardDir,
                                               Window* _pPreferredParent = NULL );
 
 
@@ -358,7 +367,8 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              String& rFilter,
                              SfxItemSet *& rpSet,
                              const String* pPath = NULL,
-                             sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG);
+                             sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
+                             const String& rStandardDir = String::CreateFromAscii( "" ));
 //#endif
 }
 
