@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:53:47 $
+#   last change: $Author: vg $ $Date: 2008-03-18 16:03:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SRC1FILES =  \
         wrap.src
 
 SLOFILES =  \
-        $(SLO)$/bbmgr.obj \
         $(SLO)$/colmgr.obj \
         $(SLO)$/column.obj \
         $(SLO)$/colex.obj \
@@ -75,7 +74,6 @@ EXCEPTIONSFILES =  \
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =	\
-        $(SLO)$/bbmgr.obj \
         $(SLO)$/colmgr.obj \
         $(SLO)$/colex.obj \
         $(SLO)$/frmmgr.obj
