@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:44:14 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@ enum ColorConfigEntry
     WRITERFIELDSHADINGS ,
     WRITERIDXSHADINGS         ,
     WRITERDIRECTCURSOR        ,
-    WRITERNOTESINDICATOR,
     WRITERSCRIPTINDICATOR,
     WRITERSECTIONBOUNDARIES,
     WRITERPAGEBREAKS,
