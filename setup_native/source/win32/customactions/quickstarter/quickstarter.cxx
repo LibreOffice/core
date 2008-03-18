@@ -15,13 +15,13 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle)
     DWORD sz = 0;
     LPTSTR dummy = TEXT("");
 
-    if (MsiGetProperty(handle, TEXT("INSTALLLOCATION"), dummy, &sz) == ERROR_MORE_DATA)
+    if (MsiGetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), dummy, &sz) == ERROR_MORE_DATA)
     {
         sz++; // space for the final '\0'
         DWORD nbytes = sz * sizeof(TCHAR);
         LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
         ZeroMemory(buff, nbytes);
-        MsiGetProperty(handle, TEXT("INSTALLLOCATION"), buff, &sz);
+        MsiGetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), buff, &sz);
         progpath = buff;
     }
     return progpath;

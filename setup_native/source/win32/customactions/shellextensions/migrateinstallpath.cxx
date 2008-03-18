@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migrateinstallpath.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:35:07 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,20 +99,20 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
-            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
+            MsiSetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_CURRENT_USER", MB_OK );
         }
         RegCloseKey( hKey );
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
-            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstDir.c_str());
+            MsiSetProperty(handle, TEXT("OFFICEINSTALLLOCATION"), sInstDir.c_str());
             // MessageBox( NULL, sInstDir.c_str(), "Found in HKEY_LOCAL_MACHINE", MB_OK );
         }
         RegCloseKey( hKey );
