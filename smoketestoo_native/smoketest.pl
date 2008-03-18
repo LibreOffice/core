@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:18:24 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:25:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 use File::Basename;
 use File::Path;
 use File::Copy;
-use File::Find;
 use Getopt::Long;
 
 ########################
@@ -266,7 +265,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.29 $ ';
+$id_str = ' $Revision: 1.30 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -365,6 +364,29 @@ sub findSubDir {
     return "";
 }
 
+sub findMultiple {
+    my ($base, $name) = @_;
+    my ($f, @s, @res);
+    opendir(DIR, $base) or die "cannot open dir $base";
+    while ($f = readdir(DIR)) {
+        push @res, "$base" if $f eq $name;
+        push @s, $f if
+            -d "$base$f" && ! -l "$base$f" && $f ne '.' && $f ne '..';
+    }
+    closedir(DIR);
+    foreach $f (@s) {
+        push @res, findMultiple("$base$f$PathSeparator", $name);
+    }
+    return @res;
+}
+
+sub findUnique {
+    my ($base, $name) = @_;
+    my @res = findMultiple($base, $name);
+    die "no unique $name in $base" unless @res == 1;
+    return $res[0];
+}
+
 sub prepare {
     if ($gui eq "UNX") {
         $ENV{ignore_patch_check}="t";
@@ -405,7 +427,7 @@ sub errorFromOpen {
 
 sub doTest {
     my ($Command);
-    my (@Params, $basedir);
+    my (@Params, $basedir, $basisdir, $branddir);
 
     # check installset (error 8)
 
@@ -419,17 +441,19 @@ sub doTest {
 
     $basedir = doInstall ("$INSTALLSET$INSTSETNAME$PathSeparator", $installpath);
     print "$basedir\n";
+    $basisdir = findUnique($basedir, 'ure-link');
+    $branddir = findUnique($basedir, 'basis-link');
     if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
-        $programpath = "$basedir". "MacOS$PathSeparator";
+        $programpath = "$branddir". "MacOS$PathSeparator";
     }
     else {
-        $programpath = "$basedir". "program$PathSeparator";
+        $programpath = "$branddir". "program$PathSeparator";
     }
     $userinstallpath_without = $installpath . $userinstalldir;
     $userinstallpath = $userinstallpath_without . $PathSeparator;
     $userpath = "$userinstallpath" . "user$PathSeparator";
     $basicpath = $userpath . "basic$PathSeparator";
-    $standardbasicpath = "$basedir" . "presets$PathSeparator" . "basic$PathSeparator";
+    $standardbasicpath = "$basisdir" . "presets$PathSeparator" . "basic$PathSeparator";
     $LOGPATH="$userinstallpath" . "user" . $PathSeparator . "temp";
 
     if ($gui eq "UNX") {
@@ -444,7 +468,7 @@ sub doTest {
 
     # patch config (error 3)
 
-    $Command = "$PERL config.pl \"$basedir \" \"$userinstallpath \" \"$DATA \"";
+    $Command = "$PERL config.pl \"$basisdir \" \"$userinstallpath \" \"$DATA \"";
     execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)
@@ -575,25 +599,7 @@ sub doInstall {
             $Command = "$COPY_FILE \"$installsetpath" . "setup.ini" . "\" \"$dest_installdir\"";
             execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
         }
-        if ($is_admin_installation) {
-            $basedir = findBasedir($dest_installdir);
-            if ($basedir eq "") {
-                print_error ($error_setup, $show_Message);
-            }
-        }
-        else {
-            @DirArray = ();
-            getSubDirsFullPath ($dest_installdir, \@DirArray);
-            if ($#DirArray == 0) {
-                $basedir = $DirArray[0] . $PathSeparator;
-            }
-            elsif ($#DirArray == -1) {
-                print_error ($error_setup, $show_Message);
-            }
-            else {
-                $basedir = $dest_installdir;
-             }
-        }
+        $basedir = $dest_installdir;
     }
     elsif ($gui eq "UNX") {
         $system = `uname -s`;
@@ -659,17 +665,7 @@ sub doInstall {
                     if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                         next;
                     }
-                    $olddir = "/opt";
-                    $newdir = $optdir;
-                    $Command = "rpm -qlp $installsetpath$file";
-                    $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
-                    if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
-                        $olddir = $$output_ref[0];
-                        $newdir = $dest_installdir . $$output_ref[0];
-                        $newdir =~ s/\/\//\//;
-                        createPath ($newdir, $error_setup);
-                    }
-                    $Command = "rpm --install --ignoresize --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
+                    $Command = "rpm --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt --dbpath $rpmdir $installsetpath$file";
                     execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
             }
@@ -777,22 +773,6 @@ sub doInstall {
          }
     }
     return ($basedir);
-}
-
-sub findBasedir {
-    my ($destdir) = @_;
-    my (@dirs);
-    local ($installeddir);
-    $installeddir = "";
-    push (@dirs, $destdir);
-    find (\&findWanted, @dirs);
-
-    sub findWanted {
-        if (-d and $_ eq "program") {
-               $installeddir=$File::Find::dir . $PathSeparator;
-        }
-    }
-    return $installeddir;
 }
 
 sub langsort {
