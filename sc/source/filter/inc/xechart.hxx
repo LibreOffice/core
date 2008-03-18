@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:30:29 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -716,13 +716,14 @@ typedef ScfRef< XclExpChSeries > XclExpChSeriesRef;
 class XclExpChType : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > XChartTypeRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >      XDiagramRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >    XChartTypeRef;
 
 public:
     explicit            XclExpChType( const XclExpChRoot& rRoot );
 
     /** Converts the passed chart type and the contained data series. */
-    void                Convert( XChartTypeRef xChartType,
+    void                Convert( XDiagramRef xDiagram, XChartTypeRef xChartType,
                             sal_Int32 nApiAxesSetIdx, bool bSwappedAxesSet, bool bHasXLabels );
     /** Sets stacking mode (standard or percent) for the series in this chart type group. */
     void                SetStacked( bool bPercent );
