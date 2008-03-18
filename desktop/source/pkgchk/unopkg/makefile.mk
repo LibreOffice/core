@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:29:48 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:49:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,63 +49,50 @@ PRJINC += ..$/..$/deployment ..$/..
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 .ENDIF
 
-
-SHARED_OBJS = \
-        $(OBJ)$/unopkg_misc.obj \
-        $(OBJ)$/unopkg_cmdenv.obj
-
-#################################################################
-
-MYAPP1OBJS = \
-        $(SHARED_OBJS) \
-        $(OBJ)$/unopkg_app.obj
-APP1NOSAL = TRUE        
-APP1OBJS = \
-        $(MYAPP1OBJS) \
-        $(OBJ)$/lockfile.obj
-
-
-APP1STDLIBS = \
-        $(SALLIB) \
-        $(CPPULIB) \
-        $(CPPUHELPERLIB) \
-        $(COMPHELPERLIB) \
-        $(UCBHELPERLIB) \
-        $(UNOTOOLSLIB) \
-        $(TOOLSLIB) \
-        $(VCLLIB) \
-        $(DEPLOYMENTMISCLIB)
-
 APP1TARGET = so$/unopkg
+APP1OBJS = $(OBJFILES)
+APP1STDLIBS = $(SALLIB) $(UNOPKGLIB)
+APP1DEPN = $(SHL1TARGETN)
+APP1NOSAL = TRUE
+APP1RPATH = BRAND
+.IF "$(OS)" == "WNT"
+APP1ICON = $(SOLARRESDIR)$/icons/so8-main-app.ico
+APP1LINKRES = $(MISC)$/$(TARGET)1.res
+.ENDIF
 
-.IF "$(GUI)" == "WNT"
-APP1ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-APP1LINKRES=$(MISC)$/$(TARGET)1.res
-.ENDIF # WNT
-#################################################################
-APP2NOSAL = TRUE     
-APP2OBJS = $(APP1OBJS)
-APP2STDLIBS = $(APP1STDLIBS)
 APP2TARGET = unopkg
-
-
-.IF "$(GUI)" == "WNT"
-APP2ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP2LINKRES=$(MISC)$/$(TARGET)2.res
-.ENDIF # WNT
-
-DEPOBJFILES = $(MYAPP1OBJS) \
-        $(OBJ)$/lockfile.obj
-
-
-.IF "$(debug)" != ""
-
-# disable MSVC inlining for debugging
-.IF "$(COM)" == "MSC"
-CFLAGS += -Ob0
+APP2OBJS = $(OBJFILES)
+APP2STDLIBS = $(SALLIB) $(UNOPKGLIB)
+APP2DEPN = $(SHL1TARGETN)
+APP2NOSAL = TRUE
+APP2RPATH = BRAND
+.IF "$(OS)" == "WNT"
+APP2ICON = $(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP2LINKRES = $(MISC)$/$(TARGET)2.res
 .ENDIF
 
-.ENDIF
+SHL1TARGET = unopkg
+SHL1OBJS = $(SLOFILES) $(SLO)$/lockfile.obj
+SHL1STDLIBS = \
+    $(SALLIB) \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(VCLLIB) \
+    $(DEPLOYMENTMISCLIB)
+SHL1VERSIONMAP = version.map
+SHL1IMPLIB = i$(SHL1TARGET)
+DEF1NAME = $(SHL1TARGET)
+
+SLOFILES = \
+    $(SLO)$/unopkg_app.obj \
+    $(SLO)$/unopkg_cmdenv.obj \
+    $(SLO)$/unopkg_misc.obj
+
+OBJFILES = $(OBJ)$/unopkg_main.obj
 
 .INCLUDE : target.mk
 
@@ -115,13 +102,3 @@ $(APP1TARGETN) : $(MISC)$/binso_created.flg
 
 $(MISC)$/binso_created.flg:
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
-
-.IF "$(GUI)" == "WNT"
-ALLTAR: $(BIN)$/unopkg.bin $(BIN)$/so$/unopkg.bin
-
-$(BIN)$/unopkg.bin: $(BIN)$/unopkg$(EXECPOST)
-    $(COPY) $< $@
-
-$(BIN)$/so$/unopkg.bin: $(BIN)$/so$/unopkg$(EXECPOST)
-    $(COPY) $< $@
-.ENDIF
