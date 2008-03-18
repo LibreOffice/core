@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 15:00:06 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:43:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,22 @@ icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
+.IF "$(OS)"=="MACOSX"
+.IF "$(EXTRA_CFLAGS)"!=""
+CPP:=gcc -E $(EXTRA_CFLAGS)
+CXX:=g++ $(EXTRA_CFLAGS)
+CC:=gcc $(EXTRA_CFLAGS)
+.EXPORT : CPP
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ENDIF # "$(OS)"=="MACOSX"
+
 # Disable executable stack
 .IF "$(OS)$(COM)"=="LINUXGCC"
 icu_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
-icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CFLAGS)
-icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CFLAGS)
+icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
