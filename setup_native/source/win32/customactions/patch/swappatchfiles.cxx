@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:28:02 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,7 +551,7 @@ static std::queue< std::_tstring > getProfileKeys( const std::_tstring& aFileNam
 
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
     std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
@@ -617,7 +617,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -625,7 +625,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -687,7 +687,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
 
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
     std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
     std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
 
@@ -731,8 +731,8 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 
     // 1. Reading Product Code from setup.ini of installed Office
 
-    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-    // MessageBox(NULL, sInstallPath.c_str(), "INSTALLLOCATION", MB_OK);
+    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
+    // MessageBox(NULL, sInstallPath.c_str(), "BASISINSTALLLOCATION", MB_OK);
     std::_tstring sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
 
     TCHAR szProductCode[32767];
@@ -867,7 +867,7 @@ extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
     // Online Update functionality is always available. Then the dialog
     // that offers the Online Update is superfluous.
 
-    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
     std::_tstring sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring sSearchFile = sProgramDir + TEXT("updchk.uno.dll");
 
