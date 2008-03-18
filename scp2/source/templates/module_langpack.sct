@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.sct,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:41:24 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,114 +41,4 @@ Module gid_Module_Langpack_Root_<LANGUAGE_>
     MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
     PackageInfo = "packinfo_office_lang.txt";
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY);
-End
-
-Module gid_Module_Langpack_Resource_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "100";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Resource_Template;
-    Name = "gid_Module_Langpack_Resource_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Resource_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Help_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "200";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Help_Template;
-    Name = "gid_Module_Langpack_Help_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Help_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Fonts_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "300";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Fonts_Template;
-    Name = "gid_Module_Langpack_Fonts_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Fonts_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Writer_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "400";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Writer_Template;
-    Name = "gid_Module_Langpack_Writer_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Writer_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Calc_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "450";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Calc_Template;
-    Name = "gid_Module_Langpack_Calc_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Calc_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Impress_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "500";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Impress_Template;
-    Name = "gid_Module_Langpack_Impress_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Impress_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Draw_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "600";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Draw_Template;
-    Name = "gid_Module_Langpack_Draw_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Draw_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Math_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "700";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Math_Template;
-    Name = "gid_Module_Langpack_Math_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Math_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Base_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "800";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Base_Template;
-    Name = "gid_Module_Langpack_Base_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Base_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
-Module gid_Module_Langpack_Onlineupdate_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "900";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Onlineupdate_Template;
-    Name = "gid_Module_Langpack_Onlineupdate_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Onlineupdate_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
 End
