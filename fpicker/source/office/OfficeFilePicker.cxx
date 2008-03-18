@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:44:06 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 #ifndef _UNOTOOLS_UCBHELPER_HXX
@@ -540,7 +543,16 @@ SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
     WinBits nExtraBits;
     WinBits nBits = getWinBits( nExtraBits );
 
-    return new SvtFileDialog( _pParent, nBits, nExtraBits );
+    SvtFileDialog* dialog = new SvtFileDialog( _pParent, nBits, nExtraBits );
+
+    // Set StandardDir if present
+    if ( m_aStandardDir.getLength() > 0)
+    {
+        String sStandardDir = String( m_aStandardDir );
+        dialog->SetStandardDir( sStandardDir );
+    }
+
+    return dialog;
 }
 
 //------------------------------------------------------------------------------------
@@ -1093,13 +1105,32 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 
     m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
 
-    if ( _rArguments.getLength() == 1 )
+    if ( _rArguments.getLength() >= 1 )
     {
         // compatibility: one argument, type sal_Int16 , specifies the service type
-        if ( _rArguments.getLength() )
+        _rArguments[0] >>= m_nServiceType;
+
+        // NOTE: _rArguments[1] not used here
+
+        for ( int i = 0; i < _rArguments.getLength(); i++)
         {
-            if ( _rArguments[0] >>= m_nServiceType )
-                return;
+            NamedValue namedValue;
+
+            if (_rArguments[i] >>= namedValue )
+            {
+                if ( namedValue.Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ) ) )
+                {
+                    ::rtl::OUString sStandardDir;
+
+                    namedValue.Value >>= sStandardDir;
+
+                    // Set the directory for the "back to the default dir" button
+                        if ( sStandardDir.getLength() > 0 )
+                    {
+                        m_aStandardDir = sStandardDir;
+                    }
+                }
+            }
         }
     }
 
