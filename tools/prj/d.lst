@@ -34,6 +34,7 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
+..\inc\tools\appendunixshellword.hxx %_DEST%\inc%_EXT%\tools\appendunixshellword.hxx
 ..\inc\tools\bigint.hxx %_DEST%\inc%_EXT%\tools\bigint.hxx
 ..\inc\tools\cachestr.hxx %_DEST%\inc%_EXT%\tools\cachestr.hxx
 ..\inc\tools\chapi.hxx %_DEST%\inc%_EXT%\tools\chapi.hxx
