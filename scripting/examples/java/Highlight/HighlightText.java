@@ -203,7 +203,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
             }
 
             String libURL = xme.expandMacros(
-                "${$SYSBINDIR/" + bootstrapName + "::BaseInstallation}" +
+                "${$BRAND_BASE_DIR/program/" + bootstrapName + "::BaseInstallation}" +
                 "/share/basic/ScriptBindingLibrary/" +
                 name.toLowerCase() + ".xlb/");
 
