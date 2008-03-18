@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:18:47 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,9 +291,6 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      // fuer SwPageDesc ...
-#endif
-#ifndef _LINETYPE_HXX
-#include <linetype.hxx>     // fuer SwPageDesc ...
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
