@@ -5,3 +5,4 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
+..\%__SRC%\misc\spadmin.sh %_DEST%\bin%_EXT%\spadmin
