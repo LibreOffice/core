@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:26:43 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,8 @@
 #include <algorithm>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/CameraGeometry.hpp>
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -89,7 +90,11 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::drawing::CameraGeometry;
 using ::com::sun::star::drawing::Direction3D;
+using ::com::sun::star::drawing::HomogenMatrix;
+using ::com::sun::star::drawing::HomogenMatrixLine;
+using ::com::sun::star::drawing::Position3D;
 
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::XDiagram;
@@ -1932,25 +1937,35 @@ Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) 
     return xCoordSystem;
 }
 
-Reference< XChartType > XclImpChType::CreateChartType() const
+Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDiagram ) const
 {
     OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
     Reference< XChartType > xChartType( ScfApiHelper::CreateInstance( aService ), UNO_QUERY );
 
     // additional properties
-    if( maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR )
+    switch( maTypeInfo.meTypeCateg )
     {
-        ScfPropertySet aTypeProp( xChartType );
-        Sequence< sal_Int32 > aInt32Seq( 2 );
-        aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = -maData.mnOverlap;
-        aTypeProp.SetProperty( EXC_CHPROP_OVERLAPSEQ, aInt32Seq );
-        aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = maData.mnGap;
-        aTypeProp.SetProperty( EXC_CHPROP_GAPWIDTHSEQ, aInt32Seq );
-    }
-    else if( maTypeInfo.meTypeId == EXC_CHTYPEID_DONUT )
-    {
-        ScfPropertySet aTypeProp( xChartType );
-        aTypeProp.SetBoolProperty( EXC_CHPROP_USERINGS, true );
+        case EXC_CHTYPECATEG_BAR:
+        {
+            ScfPropertySet aTypeProp( xChartType );
+            Sequence< sal_Int32 > aInt32Seq( 2 );
+            aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = -maData.mnOverlap;
+            aTypeProp.SetProperty( EXC_CHPROP_OVERLAPSEQ, aInt32Seq );
+            aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = maData.mnGap;
+            aTypeProp.SetProperty( EXC_CHPROP_GAPWIDTHSEQ, aInt32Seq );
+        }
+        break;
+        case EXC_CHTYPECATEG_PIE:
+        {
+            ScfPropertySet aTypeProp( xChartType );
+            aTypeProp.SetBoolProperty( EXC_CHPROP_USERINGS, maTypeInfo.meTypeId == EXC_CHTYPEID_DONUT );
+            // #i85166# starting angle of first pie slice
+            ScfPropertySet aDiaProp( xDiagram );
+            sal_Int32 nApiRot = (450 - (maData.mnRotation % 360)) % 360;
+            aDiaProp.SetProperty( EXC_CHPROP_STARTINGANGLE, nApiRot );
+        }
+        break;
+        default:;
     }
 
     return xChartType;
@@ -1980,6 +1995,22 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rT
     rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, Color( RGB_COLORDATA( 102, 102, 102 ) ) );
     rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, Direction3D( 0.2, 0.4, 1.0 ) );
     rPropSet.SetProperty( EXC_CHPROP_D3DSCENESHADEMODE, ::com::sun::star::drawing::ShadeMode_FLAT );
+
+    // change 3D view of pie charts to Excel's default view
+    if( rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE )
+    {
+        static const HomogenMatrix saMatrix(
+            HomogenMatrixLine( 1.0,  0.0,  0.0,  0.0 ),
+            HomogenMatrixLine( 0.0,  0.5,  1.5,  0.0 ),
+            HomogenMatrixLine( 0.0, -1.5,  0.5,  0.0 ),
+            HomogenMatrixLine( 0.0,  0.0,  0.0,  1.0 ) );
+        rPropSet.SetProperty( EXC_CHPROP_D3DTRANSFORMMATRIX, saMatrix );
+        static const CameraGeometry saCamera(
+            Position3D(   0.0,  0.0, 85000.0 ),
+            Direction3D(  0.0,  0.0,     1.0 ),
+            Direction3D(  0.0,  1.0,     0.0 ) );
+        rPropSet.SetProperty( EXC_CHPROP_D3DCAMERAGEOMETRY, saCamera );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2195,12 +2226,19 @@ Reference< XCoordinateSystem > XclImpChTypeGroup::CreateCoordSystem() const
     return maType.CreateCoordSystem( Is3dChart() );
 }
 
-Reference< XChartType > XclImpChTypeGroup::CreateChartType( sal_Int32 nApiAxesSetIdx ) const
+Reference< XChartType > XclImpChTypeGroup::CreateChartType( Reference< XDiagram > xDiagram, sal_Int32 nApiAxesSetIdx ) const
 {
     DBG_ASSERT( IsValidGroup(), "XclImpChTypeGroup::CreateChartType - type group without series" );
 
     // create the chart type object
-    Reference< XChartType > xChartType = maType.CreateChartType();
+    Reference< XChartType > xChartType = maType.CreateChartType( xDiagram );
+
+    // bar chart connector lines
+    if( HasConnectorLines() )
+    {
+        ScfPropertySet aDiaProp( xDiagram );
+        aDiaProp.SetBoolProperty( EXC_CHPROP_CONNECTBARS, true );
+    }
 
     /*  Stock chart needs special processing. Create one 'big' series with
         data sequences of different roles. */
@@ -2691,8 +2729,8 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             default:
                 DBG_ERRORFILE( "XclImpChAxis::CreateAxis - unknown axis type" );
         }
-        // pie/donut charts need hard reverse attribute at X axis (after mxLabelRange->Convert())
-        if( (GetAxisType() == EXC_CHAXIS_X) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE) )
+        // #i85167# pie/donut charts need hard reverse attribute at Y axis (after mxValueRange->Convert())
+        if( (GetAxisType() == EXC_CHAXIS_Y) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE) )
             aScaleData.Orientation = ::com::sun::star::chart2::AxisOrientation_REVERSE;
         // write back
         xAxis->setScaleData( aScaleData );
@@ -2839,6 +2877,9 @@ void XclImpChAxesSet::Finalize()
         XclImpChTypeGroupRef xTypeGroup = GetFirstTypeGroup();
         if( !mxXAxis && xTypeGroup.is() && xTypeGroup->GetTypeInfo().mbCategoryAxis )
             mxXAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_X ) );
+        // create dummy Y axis for pie/doughnut charts
+        if( !mxYAxis && xTypeGroup.is() && (xTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )
+            mxYAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_Y ) );
 
         // finalize axes
         if( mxXAxis.is() ) mxXAxis->Finalize();
@@ -2988,13 +3029,11 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
     if( xChartTypeCont.is() )
     {
         sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
-        bool bConnectBars = false;   // bar chart connector lines
         for( XclImpChTypeGroupMap::const_iterator aIt = maTypeGroups.begin(), aEnd = maTypeGroups.end(); aIt != aEnd; ++aIt )
         {
-            bConnectBars |= aIt->second->HasConnectorLines();
             try
             {
-                Reference< XChartType > xChartType = aIt->second->CreateChartType( nApiAxesSetIdx );
+                Reference< XChartType > xChartType = aIt->second->CreateChartType( xDiagram, nApiAxesSetIdx );
                 if( xChartType.is() )
                     xChartTypeCont->addChartType( xChartType );
             }
@@ -3003,10 +3042,6 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
                 DBG_ERRORFILE( "XclImpChAxesSet::CreateCoordSystem - cannot add chart type" );
             }
         }
-
-        // diagram properties
-        ScfPropertySet aDiaProp( xDiagram );
-        aDiaProp.SetBoolProperty( EXC_CHPROP_CONNECTBARS, bConnectBars );
     }
 
     return xCoordSystem;
