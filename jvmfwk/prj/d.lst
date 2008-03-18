@@ -1,5 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\jvmfwk
-mkdir: %_DEST%\bin%_EXT%\so
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
@@ -12,9 +11,8 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\class\JREProperties.class  %_DEST%\lib%_EXT%\JREProperties.class
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 ..\source\javasettingsunopkginstall.xml %_DEST%\bin%_EXT%\javasettingsunopkginstall.xml
-..\%__SRC%\bin\javavendors_so.xml %_DEST%\bin%_EXT%\so\javavendors.xml
-..\%__SRC%\bin\javavendors_ooo.xml %_DEST%\bin%_EXT%\javavendors.xml
-..\%__SRC%\bin\javavendors_ooo.xml %_DEST%\lib%_EXT%\javavendors.xml
+..\%__SRC%\bin\javavendors.xml %_DEST%\bin%_EXT%\javavendors.xml
+..\%__SRC%\bin\javavendors.xml %_DEST%\lib%_EXT%\javavendors.xml
 ..\%__SRC%\bin\jvmfwk3rc %_DEST%\lib%_EXT%\jvmfwk3rc
 ..\%__SRC%\bin\jvmfwk3.ini %_DEST%\bin%_EXT%\jvmfwk3.ini
 ..\%__SRC%\bin\sunjavapluginrc %_DEST%\lib%_EXT%\sunjavapluginrc
