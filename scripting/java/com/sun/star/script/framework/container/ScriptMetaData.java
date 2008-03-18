@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptMetaData.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:57:56 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,12 +157,12 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     // to be exposed at all
 
     private static final String SHARE =
-        "vnd.sun.star.expand:${$SYSBINDIR/" +
+        "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +
         PathUtils.BOOTSTRAP_NAME +
         "::BaseInstallation}/share";
 
     private static final String USER =
-        "vnd.sun.star.expand:${$SYSBINDIR/" +
+        "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +
         PathUtils.BOOTSTRAP_NAME +
         "::UserInstallation}/user";
 
