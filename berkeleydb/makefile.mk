@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:17:49 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:44:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@ OUT2BIN=$(BUILD_DIR)$/.libs$/libdb*42.dll
 
 OUT2INC= \
     $(BUILD_DIR)$/db.h
+.IF "$(GUI)$(COM)"=="WNTGCC"
+.EXPORT : PWD
+.ENDIF
 
 .ELSE
 # make use of stlport headerfiles
