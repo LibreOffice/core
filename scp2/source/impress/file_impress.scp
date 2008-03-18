@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:45:58 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,21 +75,10 @@ End
 
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = EXENAME(simpress);
     Styles = (PACKED, PATCH);
 End
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Xdg_Impress
-	TXT_FILE_BODY;
-	Dir = gid_Dir_Share_Xdg;
-	Name = "impress.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-
-#endif
 
 // new user interface configuration files
 /*
