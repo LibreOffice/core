@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:54:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <dirent.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
+#include <tools/appendunixshellword.hxx>
 
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
@@ -87,11 +88,20 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    ByteString aCommand( "pluginapp.bin \"" );
-    aCommand.Append( rPath );
-    aCommand.Append( '"' );
+    rtl::OString path;
+    if (!UnxPluginComm::getPluginappPath(&path)) {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "cannot construct path to pluginapp.bin\n" );
+#endif
+        return false;
+    }
+    rtl::OStringBuffer cmd;
+    tools::appendUnixShellWord(&cmd, path);
+    cmd.append(' ');
+    tools::appendUnixShellWord(&cmd, rPath);
+    rtl::OString aCommand(cmd.makeStringAndClear());
 
-    FILE* pResult = popen( aCommand.GetBuffer(), "r" );
+    FILE* pResult = popen( aCommand.getStr(), "r" );
     int nDescriptions = 0;
     if( pResult )
     {
@@ -160,12 +170,12 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
 #if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "result of \"%s\" contains no mimtype\n",
-                     aCommand.GetBuffer() );
+                     aCommand.getStr() );
 #endif
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "command \"%s\" failed\n", aCommand.GetBuffer() );
+        fprintf( stderr, "command \"%s\" failed\n", aCommand.getStr() );
 #endif
     return nDescriptions > 0;
 }
@@ -272,4 +282,3 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
     }
     return aDescriptions;
 }
-
