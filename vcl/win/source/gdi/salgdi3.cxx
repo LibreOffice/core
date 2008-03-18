@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:13:26 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:14:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2150,8 +2150,9 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             osl::DirectoryItem aDirItem;
             String aEmptyString;
 
-            ::rtl::OUString aBootStrap = aExecutableFile.copy( 0, aExecutableFile.lastIndexOf('/')+1 );
-            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+            ::rtl::OUString aBootStrap;
+            rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
+            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             ::rtl::OUString aUserPath;
             aBootstrap.getFrom( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
