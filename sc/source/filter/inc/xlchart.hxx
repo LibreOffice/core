@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:31:36 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,12 +85,14 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
 #define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )
 #define EXC_CHPROP_CURVESTYLE               CREATE_OUSTRING( "CurveStyle" )
+#define EXC_CHPROP_D3DCAMERAGEOMETRY        CREATE_OUSTRING( "D3DCameraGeometry" )
 #define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     CREATE_OUSTRING( "D3DSceneAmbientColor" )
 #define EXC_CHPROP_D3DSCENELIGHTON1         CREATE_OUSTRING( "D3DSceneLightOn1" )
 #define EXC_CHPROP_D3DSCENELIGHTCOLOR2      CREATE_OUSTRING( "D3DSceneLightColor2" )
 #define EXC_CHPROP_D3DSCENELIGHTDIR2        CREATE_OUSTRING( "D3DSceneLightDirection2" )
 #define EXC_CHPROP_D3DSCENELIGHTON2         CREATE_OUSTRING( "D3DSceneLightOn2" )
 #define EXC_CHPROP_D3DSCENESHADEMODE        CREATE_OUSTRING( "D3DSceneShadeMode" )
+#define EXC_CHPROP_D3DTRANSFORMMATRIX       CREATE_OUSTRING( "D3DTransformMatrix" )
 #define EXC_CHPROP_DISPLAYLABELS            CREATE_OUSTRING( "DisplayLabels" )
 #define EXC_CHPROP_ERRORBARSTYLE            CREATE_OUSTRING( "ErrorBarStyle" )
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
@@ -121,6 +123,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_SHOWNEGATIVEERROR        CREATE_OUSTRING( "ShowNegativeError" )
 #define EXC_CHPROP_SHOWPOSITIVEERROR        CREATE_OUSTRING( "ShowPositiveError" )
 #define EXC_CHPROP_STACKINGDIR              CREATE_OUSTRING( "StackingDirection" )
+#define EXC_CHPROP_STARTINGANGLE            CREATE_OUSTRING( "StartingAngle" )
 #define EXC_CHPROP_SWAPXANDYAXIS            CREATE_OUSTRING( "SwapXAndYAxis" )
 #define EXC_CHPROP_SYMBOL                   CREATE_OUSTRING( "Symbol" )
 #define EXC_CHPROP_TEXTBREAK                CREATE_OUSTRING( "TextBreak" )
