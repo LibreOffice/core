@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:11:00 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include <rtl/bootstrap.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -225,20 +226,19 @@ bool ImplImageTree::implInit()
 
             if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Any aAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "Config" ) ) );
+                rtl::OUString aPath(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "$BRAND_BASE_DIR/share/config" ) );
+                rtl::Bootstrap::expandMacros( aPath );
+                aZipURL = INetURLObject( aPath );
+                aZipURL.Append( aZipFileName );
 
-                if( ( aAny >>= aRet ) && aRet.getLength() )
+                if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 {
-                    aZipURL = INetURLObject( aRet );
-                    aZipURL.Append( aZipFileName );
-
-                    if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
-                    {
-                        if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
-                            aRet = implGetZipFileURL( false ); // Try without style
-                        else
-                            aRet = ::rtl::OUString();
-                    }
+                    if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
+                        aRet = implGetZipFileURL( false ); // Try without style
+                    else
+                        aRet = ::rtl::OUString();
                 }
             }
         }
