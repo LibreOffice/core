@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:02:46 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,8 +947,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pSystemDialogItem )
             nDialog = pSystemDialogItem->GetValue() ? SFX2_IMPL_DIALOG_SYSTEM : SFX2_IMPL_DIALOG_OOO;
 
+        String sStandardDir;
+
+        SFX_REQUEST_ARG( rReq, pStandardDirItem, SfxStringItem, SID_STANDARD_DIR, FALSE );
+        if ( pStandardDirItem )
+            sStandardDir = pStandardDirItem->GetValue();
+
         ULONG nErr = sfx2::FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath, nDialog );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath, nDialog, sStandardDir );
 
         if ( nErr == ERRCODE_ABORT )
         {
