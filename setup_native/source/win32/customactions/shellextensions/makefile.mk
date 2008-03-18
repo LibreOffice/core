@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 13:34:52 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:53:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ SLOFILES = \
     $(SLO)$/postuninstall.obj \
     $(SLO)$/migrateinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
+    $(SLO)$/setadmininstall.obj \
     $(SLO)$/registerextensions.obj
 
 
