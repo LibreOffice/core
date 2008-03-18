@@ -157,10 +157,10 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL1OBJS)"!=""
-    -echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL1LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -399,11 +399,15 @@ $(SHL1TARGETN) : \
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
+    @echo -n $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_1.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL1RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -604,10 +608,10 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL2OBJS)"!=""
-    -echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL2LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -846,11 +850,15 @@ $(SHL2TARGETN) : \
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
+    @echo -n $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_2.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL2RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -1051,10 +1059,10 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL3OBJS)"!=""
-    -echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL3LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -1293,11 +1301,15 @@ $(SHL3TARGETN) : \
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
+    @echo -n $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_3.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL3RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -1498,10 +1510,10 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL4OBJS)"!=""
-    -echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL4LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -1740,11 +1752,15 @@ $(SHL4TARGETN) : \
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
+    @echo -n $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_4.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL4RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -1945,10 +1961,10 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL5OBJS)"!=""
-    -echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL5LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -2187,11 +2203,15 @@ $(SHL5TARGETN) : \
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
+    @echo -n $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_5.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL5RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -2392,10 +2412,10 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL6OBJS)"!=""
-    -echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL6LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -2634,11 +2654,15 @@ $(SHL6TARGETN) : \
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
+    @echo -n $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_6.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL6RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -2839,10 +2863,10 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL7OBJS)"!=""
-    -echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL7LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -3081,11 +3105,15 @@ $(SHL7TARGETN) : \
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
+    @echo -n $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_7.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL7RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -3286,10 +3314,10 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL8OBJS)"!=""
-    -echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL8LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -3528,11 +3556,15 @@ $(SHL8TARGETN) : \
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
+    @echo -n $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_8.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL8RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -3733,10 +3765,10 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL9OBJS)"!=""
-    -echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL9LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -3975,11 +4007,15 @@ $(SHL9TARGETN) : \
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
+    @echo -n $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_9.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL9RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
@@ -4180,10 +4216,10 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL10OBJS)"!=""
-    -echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL10LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
@@ -4422,11 +4458,15 @@ $(SHL10TARGETN) : \
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
+    @echo -n $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
+        `cat $(MISC)$/$(TARGET).$(@:b)_10.cmd` \
+        >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+        shl $(SHL10RPATH) $@
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
