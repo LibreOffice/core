@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:01 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:10:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,8 @@ LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
 LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
 LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OXT=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
 
