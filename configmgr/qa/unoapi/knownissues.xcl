@@ -7,35 +7,32 @@ cfgmgr2.OSetElementGroupUpdateAccess::com::sun::star::container::XChild
 ### i38211 ###
 cfgmgr2.ConfigurationProvider::com::sun::star::lang::XComponent
 
-### failures wirhout issue ###
-sysmgr1.SystemIntegration::com::sun::star::configuration::backend::XBackend
+### i46185 ###
+cfgmgr2.OInnerTreeSetUpdateAccess::com::sun::star::container::XNameContainer
+cfgmgr2.OSetElementTreeSetUpdateAccess::com::sun::star::container::XNameContainer
+cfgmgr2.ORootElementTreeSetUpdateAccess::com::sun::star::container::XNameContainer
+# -> test is disbaled in cfgmgr2.sce
 
-### i83880 ###
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XNameReplace
+### i46913 ###
+cfgmgr2.BootstrapContext::com::sun::star::uno::XComponentContext
+# -> test is disbaled in cfgmgr2.sce
 
 ### i83881 ###
 cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XNameReplace
-cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
-cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::beans::XExactName
-cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XElementAccess
-cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::beans::XPropertySetInfo
 
-### i83882 ###
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::beans::XExactName
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XElementAccess
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::util::XChangesNotifier
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::beans::XPropertySetInfo
+### i65847 ###
+cfgmgr2.OInnerTreeSetUpdateAccess::com::sun::star::beans::XPropertyWithState
+# -> test is disbaled in cfgmgr2.sce
 
-### i46913 ###
-#-o cfgmgr2.BootstrapContext => disabled in cfgmgr2.sce
+### i68673 ###
+cfgmgr2.ORootElementTreeSetUpdateAccess::com::sun::star::beans::XPropertyWithState
+# -> test is disbaled in cfgmgr2.sce
 
-### i46185 ###
-#-o cfgmgr2.OInnerTreeSetUpdateAccess => disabled in cfgmgr2.sce
-#-o cfgmgr2.ORootElementTreeSetUpdateAccess => disabled in cfgmgr2.sce
-#-o cfgmgr2.OSetElementTreeSetUpdateAccess => disabled in cfgmgr2.sce
+### i79114 ###
+sysmgr1.SystemIntegration::com::sun::star::configuration::backend::XBackend
 
-### i84221
-#-o cfgmgr2.OSetElementValueSetUpdateAccess => disabled in cfgmgr2.sce
+### i83880 ###
+cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XNameReplace 
 
+### i84221 ### 
+cfgmgr2.OSetElementValueSetUpdateAccess
