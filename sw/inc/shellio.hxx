@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:22:09 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,7 +738,6 @@ extern const sal_Char __FAR_DATA FILTER_XMLV[]; // XML filter
 extern const sal_Char __FAR_DATA FILTER_XMLVW[];    // XML filter
 
 SW_DLLPUBLIC const sal_Char* GetFILTER_XML();
-SW_DLLPUBLIC const sal_Char* GetFILTER_TEXT();
 SW_DLLPUBLIC const sal_Char* GetFILTER_WW8();
 
 #endif
