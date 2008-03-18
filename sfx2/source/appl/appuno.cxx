@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:52:05 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,6 +277,7 @@ static const String sCopyStreamIfPossible = String::CreateFromAscii( "CopyStream
 static const String sNoAutoSave     = String::CreateFromAscii( "NoAutoSave" );
 static const String sFolderName     = String::CreateFromAscii( "FolderName"   );
 static const String sUseSystemDialog   = String::CreateFromAscii( "UseSystemDialog"   );
+static const String sStandardDir   = String::CreateFromAscii( "StandardDir"   );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -763,6 +764,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
                 }
+                else if ( aName == sStandardDir )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for FileName" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
+                }
                 else if ( aName == sFileName )
                 {
                     ::rtl::OUString sVal;
@@ -1048,6 +1057,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILE_DIALOG ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_STANDARD_DIR ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
@@ -1228,6 +1239,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_PATH )
                         continue;
                     if ( nId == SID_FILE_DIALOG )
+                        continue;
+                    if ( nId == SID_STANDARD_DIR )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
                         continue;
@@ -1520,6 +1533,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = sUseSystemDialog;
                 pValue[nActProp++].Value <<= (sal_Bool) ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_STANDARD_DIR, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sStandardDir;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
