@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.233 $
+ *  $Revision: 1.234 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:27:19 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,22 +117,6 @@ End
 
 #ifdef UNX
 
-#ifdef SOLAR_JAVA
-
-File gid_File_Bin_Javaldx
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = EXENAME(javaldx);
-End
-
-#endif
-
-#endif
-
-
-#ifdef UNX
-
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -140,26 +124,6 @@ File gid_File_Bin_Pagein
     Name = "pagein";
 End
 
-#endif
-
-File gid_File_Bin_Pkgchk
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-  #ifdef UNX
-    Name = "pkgchk.bin";
-  #else
-    Name = "pkgchk.exe";
-  #endif
-End
-
-#ifdef WNT
-File gid_File_Bin_MsiPkgchk
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = "msi-pkgchk.exe";
-End
 #endif
 
 #ifndef WITHOUT_MOZILLA
@@ -185,53 +149,6 @@ File gid_File_Exe_Nsplugin
   #endif
 End
 #endif
-#endif
-
-File gid_File_Bin_Uno
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-  #ifdef UNX
-    Name = "uno.bin";
-  #else
-    Name = "uno.exe";
-  #endif
-End
-
-File gid_File_Bin_Unopkg
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = "unopkg.bin";
-End
-
-#ifdef WNT
-
-File gid_File_Bin_Unopkgcom
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = "unopkg.com";
-End
-
-File gid_File_Bin_Unopkgexe
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = "unopkg.exe";
-End
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Script_Unopkg
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-    Name = "unopkg";
-End
-
 #endif
 
 File gid_File_Bin_Setofficelang
@@ -311,17 +228,6 @@ End
 
 #endif
 
-File gid_File_Bin_Soffice
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = EXENAME(soffice);
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME, PATCH);
-  #else
-    Styles = (PACKED, PATCH);
-  #endif
-End
-
 #ifndef WITHOUT_FONTOOO
 
 File gid_File_Exe_Msfontextract
@@ -331,27 +237,6 @@ File gid_File_Exe_Msfontextract
         Styles          = (PACKED);
 End
 
-#endif
-
-File gid_File_Bin_Soffice_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME, PATCH);
-  #else
-    Styles = (PACKED, PATCH);
-  #endif
-    Name = "soffice.bin";
-End
-
-// use this for high detail file open dialog >= 5.1 windows
-#ifdef WNT
-File gid_File_Soffice_Bin_Manifest
-    TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
-    Dir = gid_Dir_Program;
-    Name = "soffice.bin.manifest";
-End
 #endif
 
 #ifdef UNX
@@ -429,50 +314,6 @@ File gid_File_Bin_Spadmin_Bin
     Name = "spadmin.bin";
 End
 
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Share_Xdg_Printeradmin
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "printeradmin.desktop";
-End
-
-File gid_File_Share_Xdg_Extension
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "extensionmgr.desktop";
-End
-
-#ifdef ENABLE_GTK
-File gid_File_Share_Xdg_QStart
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "qstart.desktop";
-End
-#endif
-
-#endif
-
-File gid_File_Bmp_IntroAbout
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "intro.zip";
-    Styles = (ARCHIVE,PATCH);
-End
-
-#ifdef WNT
-File gid_File_Desktophelper_Txt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "desktophelper.txt";
-	ComponentCondition = "CREATEDESKTOPLINK=1";
-End
 #endif
 
 File gid_File_Dtd_Accelerator
@@ -664,24 +505,6 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-File gid_File_Html_Thirdpartylicensereadme
-    Name = "THIRDPARTYLICENSEREADME.html";
-#ifndef MACOSX
-    Dir = PREDEFINED_PROGDIR;
-#else
-    Dir = gid_Dir_License;
-#endif
-    Styles = (WORKSTATION);
-    TXT_FILE_BODY;
-End
-
-File gid_File_Images_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
-    Name = "images.zip";
-    Styles = (PACKED,PATCH);
-End
-
 #if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
 
 File gid_File_Jar_Accessbridge
@@ -707,29 +530,7 @@ STD_JAR_FILE_PATCH( gid_File_Jar_Classes, classes )
 #endif
 
 #ifdef SOLAR_JAVA
-
-File gid_File_Jar_Java_Uno
-    TXT_FILE_BODY;
-    Name = JARFILENAME(java_uno);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
-End
-
-#endif
-
-#ifdef SOLAR_JAVA
 STD_JAR_FILE( gid_File_Jar_Js, js )
-#endif
-
-#ifdef SOLAR_JAVA
-
-File gid_File_Jar_Jurt
-    TXT_FILE_BODY;
-    Name = JARFILENAME(jurt);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
-End
-
 #endif
 
 #ifdef SOLAR_JAVA
@@ -737,17 +538,6 @@ End
 File gid_File_Jar_Jut
     TXT_FILE_BODY;
     Name = JARFILENAME(jut);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
-End
-
-#endif
-
-#ifdef SOLAR_JAVA
-
-File gid_File_Jar_Unoloader
-    TXT_FILE_BODY;
-    Name = JARFILENAME(unoloader);
     Dir = gid_Dir_Classes;
     Styles = (PACKED,PATCH);
 End
@@ -779,7 +569,6 @@ UNO_JAR_FILE_PATCH( gid_File_Jar_Fax, fax )
 UNO_JAR_FILE_PATCH( gid_File_Jar_Agenda, agenda )
 UNO_JAR_FILE_PATCH( gid_File_Jar_Query, query )
 UNO_JAR_FILE_PATCH( gid_File_Jar_Web, web )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Juh, juh )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -796,17 +585,6 @@ File gid_File_Jar_Commonwizards
     Dir = gid_Dir_Classes;
     Styles = (PACKED,PATCH);
 End
-#endif
-
-#ifdef SOLAR_JAVA
-
-File gid_File_Jar_Ridl
-    TXT_FILE_BODY;
-    Name = JARFILENAME(ridl);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
-End
-
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1701,13 +1479,6 @@ File gid_File_Oo_Office_Recovery_Xcs
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
 End
 
-File gid_File_Oo_Office_Common_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Common.xcu";
-End
-
 File gid_File_Oo_Office_Paths_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE, PATCH);
@@ -1734,13 +1505,6 @@ File gid_File_Oo_Office_Compatibility_Xcs
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Compatibility.xcs";
-End
-
-File gid_File_Oo_Office_Compatibility_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Controller_Xcs
@@ -2123,13 +1887,6 @@ File gid_File_Oo_Office_Ui_Xcs
     Name = "/registry/schema/org/openoffice/Office/UI.xcs";
 End
 
-File gid_File_Oo_Office_Ui_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/UI.xcu";
-End
-
 File gid_File_Oo_Office_Views_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2223,16 +1980,9 @@ File gid_File_Oo_Setup_Xcs
     Name = "/registry/schema/org/openoffice/Setup.xcs";
 End
 
-File gid_File_Oo_Setup_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE,PATCH);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
-    Name = "/registry/data/org/openoffice/Setup.xcu";
-End
-
 File gid_File_Oo_Setup_Start_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE,PATCH);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-start.xcu";
 End
@@ -2385,14 +2135,14 @@ File gid_File_Oo_AD_Ldap_Attr_Map
     Name = "/registry/schema/oo-ad-ldap-attr.map";
 End
 
-File gid_File_Rdb_Types
+File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE, PATCH);
-    Name = "types.rdb";
+    Styles = (PACKED);
+    Name = "offapi.rdb";
 End
 
-#ifdef ENABLE_VBA
+#if defined ENABLE_VBA && !defined MACOSX // see sc/util/makefile.mk
 #ifndef VBA_EXTENSION
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
@@ -2544,17 +2294,6 @@ File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
 End
-
-#ifdef UNX
-
-File gid_File_Script_Viewdoc
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "viewdoc";
-    Styles = (PACKED);
-End
-
-#endif
 
 File gid_File_Scripts_Beanshell
     Dir = gid_Dir_Share_Scripts;
@@ -2823,54 +2562,6 @@ STD_SHELLNEW_FILE(gid_File_Shellnew_Odt_Soffice, soffice.odt)
 
 #endif
 
-File gid_File_Txt_License
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme;
-  #ifdef UNX
-    README_ALL_LANG(Name, LICENSE);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Txt_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_License_License
-    TXT_FILE_BODY;
-    Dir = gid_Dir_License;
-  #ifdef UNX
-    README_ALL_LANG(Name, LICENSE);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_License_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_License;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 #ifdef UNX
 
 File gid_File_Txt_Pagein_Calc
@@ -2925,54 +2616,6 @@ File gid_File_Txt_Pagein_Writer
 End
 
 #endif
-
-File gid_File_Txt_Readme
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme;
-  #ifdef UNX
-    README_ALL_LANG(Name, README);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Txt_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, README, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Readme_Readme
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Readme;
-  #ifdef UNX
-    README_ALL_LANG(Name, README);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Readme_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, README, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
 
 File gid_File_Xsl_Common_Measure_Conversion
     TXT_FILE_BODY;
@@ -3263,26 +2906,6 @@ File gid_File_Xsl_Import_Wordml_Wordml2ooo_Props
     Name = "/xslt/import/wordml/wordml2ooo_props.xsl";
 End
 
-
-#ifdef SOLAR_JAVA
-
-File gid_File_Xml_javavendors
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
-    Name = "javavendors.xml";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef SOLAR_JAVA
-File gid_File_JREProperties
-    TXT_FILE_BODY;
-    Name = "JREProperties.class";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
-
 #ifdef WNT
 File gid_File_Txt_Patchfiles
     TXT_FILE_BODY;
@@ -3306,6 +2929,8 @@ File gid_Starregistry_Services_Rdb
     Name = "services.rdb";
     Dir = gid_Dir_Program;
     Styles = (PACKED, STARREGISTRY, PATCH);
+    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
+    JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
 
 #if defined(UNX) && !defined(QUARTZ)
