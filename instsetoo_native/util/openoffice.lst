@@ -25,6 +25,8 @@ OpenOffice
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
@@ -43,13 +45,14 @@ OpenOffice
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
+			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
+			PROGRAMFILESROOT 1
 			XPDINSTALLER 0
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			LIBRARYVERSION 9.0.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
@@ -64,7 +67,7 @@ OpenOffice
 		script			setup_osl
 		downloadname	OOo_{productversion}_{os}_install_{languages}
 		langpackdownloadname	OOo_{productversion}_languagepack_{os}_install_{languages}
-		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
 		mailinfo ms-eham02-01,packager,packager
 	}
@@ -81,6 +84,8 @@ OpenOffice_wJRE
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
@@ -99,13 +104,14 @@ OpenOffice_wJRE
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
+			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
+			PROGRAMFILESROOT 1
 			XPDINSTALLER 1
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			LIBRARYVERSION 9.0.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
@@ -137,6 +143,8 @@ OpenOffice_Dev
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
@@ -154,13 +162,14 @@ OpenOffice_Dev
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
+			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
+			PROGRAMFILESROOT 1
 			XPDINSTALLER 1
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.0.0
 			PATCHCODEFILE ooo_patchcodes.txt
@@ -197,14 +206,14 @@ URE
             PACKAGEREVISION 1
             LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
+			PROGRAMFILESROOT 1
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             SERVICESPROJEKT 1
-            NATIVESERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/
-            JAVASERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_JAVA_DIR/
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
@@ -228,6 +237,7 @@ OpenOffice_SDK
             PRODUCTNAME OpenOffice.org
             PRODUCTVERSION 3.0
             POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
             PACKAGEVERSION 3.0.0
             PACKAGEREVISION {milestone}
             LICENSENAME LGPL
@@ -262,6 +272,8 @@ BrOffice
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
@@ -276,16 +288,17 @@ BrOffice
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
+			PROGRAMFILESROOT 1
 			XPDINSTALLER 0
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			LIBRARYVERSION 9.0.0
 			CODEFILENAME codes_broo.txt
 			PATCHCODEFILE ooo_patchcodes.txt
@@ -318,6 +331,8 @@ BrOffice_wJRE
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
@@ -332,16 +347,17 @@ BrOffice_wJRE
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
-			XPDINSTALLER 0
+			PROGRAMFILESROOT 1
+			XPDINSTALLER 1
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			LIBRARYVERSION 9.0.0
 			CODEFILENAME codes_broo.txt
 			PATCHCODEFILE ooo_patchcodes.txt
@@ -374,6 +390,8 @@ BrOffice_Dev
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
@@ -387,16 +405,17 @@ BrOffice_Dev
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
+			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
-			SUNDIR 0
+			PROGRAMFILESROOT 1
 			XPDINSTALLER 1
 			BETAUPGRADECODE 
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
+			USE_FILEVERSION 0
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.0.0
 			PATCHCODEFILE ooo_patchcodes.txt
@@ -430,6 +449,7 @@ BrOffice_SDK
             PRODUCTNAME BrOffice.org
             PRODUCTVERSION 3.0
             POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
             PACKAGEVERSION 3.0.0
             PACKAGEREVISION {milestone}
             LICENSENAME LGPL
@@ -445,60 +465,6 @@ BrOffice_SDK
         compression 5
         script sdkoo
         include {solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
-        fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
-        mailinfo ms-eham02-01,packager,packager
-    }
-}
-
-OpenOffice_woURE
-{
-    Settings
-    {
-        variables
-        {
-            PRODUCTNAME OpenOffice.org
-            PRODUCTVERSION 3.0
-            PRODUCTEXTENSION
-            LONG_PRODUCTEXTENSION
-            USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.0.0
-			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
-            UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
-            ADD_INCLUDE_FILES cliureversion.mk
-            EVAL
-            FILEFORMATNAME OpenOffice.org
-            FILEFORMATVERSION 1.0
-            WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.0.0
-            PACKAGEREVISION {milestone}
-            LICENSENAME LGPL
-            SERVICESPROJEKT 1
-            GLOBALFILEGID gid_File_Lib_Vcl
-            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-            OPENSOURCE 1
-            OOODOWNLOADNAME 1
-            SUNDIR 0
-            XPDINSTALLER 0
-            BETAUPGRADECODE 
-            CHANGETARGETDIR 1
-            USE_FILEVERSION 1
-            LIBRARYVERSION 9.0.0
-            PATCHCODEFILE ooo_patchcodes.txt
-            DOWNLOADBANNER  ooobanner.bmp
-            DOWNLOADBITMAP  ooobitmap.bmp
-            DOWNLOADSETUPICO    ooosetup.ico
-            NATIVESERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/
-            JAVASERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/
-            RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
-        }
-        active          1
-        compression     5
-        script          ooo_wo_ure
-        downloadname    OOo_woURE_{productversion}_{os}_install_{languages}
-        langpackdownloadname    OOo_woURE_{productversion}_languagepack_{os}_install_{languages}
-        include         .,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
         fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
         mailinfo ms-eham02-01,packager,packager
     }
