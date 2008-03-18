@@ -4,9 +4,9 @@
 #
 #   $RCSfile: profiles.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:16 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:00:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,9 @@ sub create_profiles
         my $profilegid = $oneprofile->{'gid'};
         my $profilename = $oneprofile->{'Name'};
 
+        my $localprofilesdir = $profilesdir . $installer::globals::separator . $profilegid; # uniqueness guaranteed by gid
+        if ( ! -d $localprofilesdir ) { installer::systemactions::create_directory($localprofilesdir); }
+
         my @onefile = ();
         my $profileempty = 1;
 
@@ -216,7 +219,7 @@ sub create_profiles
         }
 
         # Saving the profile as a file
-        $completeprofilename = $profilesdir . $installer::globals::separator . $profilename;
+        $completeprofilename = $localprofilesdir . $installer::globals::separator . $profilename;
 
         installer::files::save_file($completeprofilename, $onefileref);
 
