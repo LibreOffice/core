@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:25:15 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1664,7 +1664,7 @@ XclExpChType::XclExpChType( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChType::Convert( Reference< XChartType > xChartType,
+void XclExpChType::Convert( Reference< XDiagram > xDiagram, Reference< XChartType > xChartType,
         sal_Int32 nApiAxesSetIdx, bool bSwappedAxesSet, bool bHasXLabels )
 {
     if( xChartType.is() )
@@ -1696,6 +1696,11 @@ void XclExpChType::Convert( Reference< XChartType > xChartType,
                 bool bDonut = aTypeProp.GetBoolProperty( EXC_CHPROP_USERINGS );
                 maTypeInfo = GetChartTypeInfo( bDonut ? EXC_CHTYPEID_DONUT : EXC_CHTYPEID_PIE );
                 maData.mnPieHole = bDonut ? 50 : 0;
+                // #i85166# starting angle of first pie slice
+                ScfPropertySet aDiaProp( xDiagram );
+                sal_Int32 nApiRot;
+                if( aDiaProp.GetProperty( nApiRot, EXC_CHPROP_STARTINGANGLE ) )
+                    maData.mnRotation = static_cast< sal_uInt16 >( (450 - (nApiRot % 360)) % 360 );
             }
             break;
             case EXC_CHTYPECATEG_SCATTER:
@@ -1863,7 +1868,7 @@ void XclExpChTypeGroup::ConvertType(
         sal_Int32 nApiAxesSetIdx, bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels )
 {
     // chart type settings
-    maType.Convert( xChartType, nApiAxesSetIdx, bSwappedAxesSet, bHasXLabels );
+    maType.Convert( xDiagram, xChartType, nApiAxesSetIdx, bSwappedAxesSet, bHasXLabels );
 
     // spline - TODO: get from single series (#i66858#)
     ScfPropertySet aTypeProp( xChartType );
