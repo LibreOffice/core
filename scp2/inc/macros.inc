@@ -162,6 +162,14 @@
         Styles  = (PACKED); \
     End
 
+#define BRAND_RES_FILE(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        RESFILE_ALL_LANG(name); \
+        Dir     = gid_Brand_Dir_Resource; \
+        Styles  = (PACKED); \
+    End
+
 #define STD_RES_FILE_PATCH(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -384,23 +392,25 @@
     End
 
 #if defined WNT
-#define SCP2_URE_DL_DIR gid_Dir_Bin
-#define SCP2_URE_DL_NORMAL(n) STRING(CONCAT2(n, .dll))
-#define SCP2_URE_DL_BARE(n) STRING(CONCAT2(n, .dll))
-#define SCP2_URE_DL_VER(n, v) STRING(CONCAT3(n, v, .dll))
-#define SCP2_URE_DL_COMID_VER(n, v) STRING(CONCAT4(n, v, COMID, .dll))
-#define SCP2_URE_DL_UNO_VER(n, v) STRING(CONCAT3(n, v, .dll))
-#define SCP2_URE_DL_UNO_COMID_VER(n, v) STRING(CONCAT4(n, v, COMID, .dll))
-#define SCP2_URE_SHARE_DIR PREDEFINED_PROGDIR
+#define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
+#define SCP2_URE_DL_NORMAL(n) n ".dll"
+#define SCP2_URE_DL_BARE(n) n ".dll"
+#define SCP2_URE_DL_VER(n, v) n v ".dll"
+#define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
+#define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
+#define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
+#define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
 #else
-#define SCP2_URE_DL_DIR gid_Dir_Lib
-#define SCP2_URE_DL_NORMAL(n) STRING(CONCAT3(lib, n, UNXSUFFIX))
-#define SCP2_URE_DL_BARE(n) STRING(CONCAT2(n, UNXSUFFIX))
-#define SCP2_URE_DL_VER(n, v) STRING(CONCAT5(lib, n, UNXSUFFIX, ., v))
-#define SCP2_URE_DL_COMID_VER(n, v) STRING(CONCAT6(lib, n, COMID, UNXSUFFIX, ., v))
-#define SCP2_URE_DL_UNO_VER(n, v) STRING(CONCAT5(libuno_, n, UNXSUFFIX, ., v))
-#define SCP2_URE_DL_UNO_COMID_VER(n, v)	STRING(CONCAT6(libuno_, n, COMID, UNXSUFFIX, ., v))
-#define SCP2_URE_SHARE_DIR gid_Dir_Share
+#define SCP2_URE_DL_DIR gid_Dir_Ure_Lib
+#define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
+#define SCP2_URE_DL_BARE(n) n STRING(UNXSUFFIX)
+#define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_COMID_VER(n, v) \
+    "lib" n STRING(COMID) STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_UNO_VER(n, v) "libuno_" n STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_UNO_COMID_VER(n, v)	\
+    "libuno_" n STRING(COMID) STRING(UNXSUFFIX) "." v
+#define SCP2_URE_SHARE_DIR gid_Dir_Ure_Share
 #endif
 
 #include <langmacros.inc>
