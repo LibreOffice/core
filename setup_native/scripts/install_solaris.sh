@@ -1,8 +1,9 @@
 #!/bin/bash
 
+ADD="no"
 LINK="no"
 UPDATE="no"
-USAGE="Usage: $0 [-l] [-h] <pkg-source-dir> <office-installation-dir>"
+USAGE="Usage: $0 [-a] [-l] [-h] <pkg-source-dir> <office-installation-dir>"
 
 help()
 {
@@ -18,6 +19,7 @@ help()
   echo "    <office-installation-dir>: directory to where the office and the pkg database will get installed into"
   echo
   echo "Optional Parameter:"
+  echo "    -a :              add to an existing <office-installation-dir>"
   echo "    -l :              create a link \"soffice\" in $HOME"
   echo "    -h :              output this help"
 }
@@ -94,10 +96,11 @@ then
   exit 2
 fi
 
-while getopts "lh" VALUE
+while getopts "alh" VALUE
 do
   echo $VALUE
   case $VALUE in
+    a)      ADD="yes"; break;;
     h)      help; exit 0;;
     l)      LINK="yes"; break;;
     ?)      echo $USAGE; exit 2;;
@@ -195,11 +198,14 @@ then
     exit 2
   fi
 else
-  rmdir ${INSTALL_ROOT} 2>/dev/null
-  if [ -d ${INSTALL_ROOT} ]
+  if [ "$ADD" = "no" ]
   then
-    printf "\n$0: ${INSTALL_ROOT} exists and is not empty.\n"
-    exit 2
+    rmdir ${INSTALL_ROOT} 2>/dev/null
+    if [ -d ${INSTALL_ROOT} ]
+    then
+      printf "\n$0: ${INSTALL_ROOT} exists and is not empty.\n"
+      exit 2
+    fi
   fi
   mkdir -p ${INSTALL_ROOT}/var/sadm/install/admin
 fi
@@ -225,9 +231,10 @@ fi
 mkdir -p ${INSTALL_ROOT}/usr/lib
 cat > ${INSTALL_ROOT}/usr/lib/postrun << \EOF
 #!/bin/sh
+set -e
 
 # Override UserInstallation in bootstraprc for unopkg ..
-UserInstallation='$ORIGIN/../UserInstallation'
+UserInstallation='$BRAND_BASE_DIR/../UserInstallation'
 export UserInstallation
 
 if [ -x /usr/bin/mktemp ]
@@ -238,7 +245,7 @@ else
 fi
 
 sed -e 's|"/|"${PKG_INSTALL_ROOT}/|g' > $CMD
-/bin/sh $CMD
+/bin/sh -e $CMD
 rm -f $CMD
 EOF
 chmod +x ${INSTALL_ROOT}/usr/lib/postrun 2>/dev/null
@@ -266,14 +273,11 @@ tail +$linenum $0 > $GETUID_SO
 #
 if [ "$UPDATE" = "yes" ]
 then
-  OFFICE_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR 2>/dev/null`
-
-  # restore original "bootstraprc" and "soffice" prior to patching
-  if [ "${OFFICE_DIR}" != "" ]
-  then
-    mv -f ${OFFICE_DIR}/program/bootstraprc.orig ${OFFICE_DIR}/program/bootstraprc
-    mv -f ${OFFICE_DIR}/program/soffice.orig ${OFFICE_DIR}/program/soffice
-  fi
+  # restore original "bootstraprc" prior to patching
+  for i in ${PKG_LIST}; do
+    my_dir=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} "$i" BASEDIR`
+    find "$my_dir" -type f -name bootstraprc.orig -exec sh -ce 'mv "$0" `dirname "$0"`/bootstraprc' {} \;
+  done
 
   # copy INST_RELEASE file
   if [ ! -f ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE ]
@@ -298,17 +302,6 @@ else
   # Create BASEDIR directories to avoid manual user interaction
   for i in ${PKG_LIST}; do
     mkdir -m 0755 -p ${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR` 2>/dev/null
-  done
-
-  #
-  # Determine office installation directory
-  #
-
-  for i in ${PKG_LIST}; do
-    echo $i | grep core01 > /dev/null
-    if [ $? = 0 ]; then
-      OFFICE_DIR=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR`
-    fi
   done
 
   if [ ! "${INSTALL_ROOT:0:1}" = "/" ]; then
@@ -343,26 +336,15 @@ fi
 
 if [ "$LINK" = "yes" ]
 then
-  echo
-  echo "Creating link from $OFFICE_DIR/program/soffice to $HOME/soffice"
   rm -f $HOME/soffice 2>/dev/null
-  ln -s $OFFICE_DIR/program/soffice $HOME/soffice
+  find `cd "$INSTALL_ROOT" && pwd` -name soffice -type f -perm -u+x -exec /bin/sh -ce 'ln -sf "$0" "$HOME/soffice" && echo "Creating link from $0 to $HOME/soffice"' {} \;
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
-if [ "${OFFICE_DIR}" != "" ]; then
-  mv ${OFFICE_DIR}/program/bootstraprc ${OFFICE_DIR}/program/bootstraprc.orig
-  sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
-    ${OFFICE_DIR}/program/bootstraprc.orig > ${OFFICE_DIR}/program/bootstraprc
-fi
-
-# patch the LD_LIBRARY_PATH in the "soffice" script so that it finds a suitable libfreetype
-if [ "${OFFICE_DIR}" != "" ]; then
-  mv ${OFFICE_DIR}/program/soffice ${OFFICE_DIR}/program/soffice.orig
-  sed 's| LD_LIBRARY_PATH=\"\$sd_prog\"| LD_LIBRARY_PATH=/usr/sfw/lib:"$sd_prog":"$sd_prog/../../../usr/sfw/lib"|' \
-    ${OFFICE_DIR}/program/soffice.orig > ${OFFICE_DIR}/program/soffice
-  chmod a+x ${OFFICE_DIR}/program/soffice
-fi
+for i in ${PKG_LIST}; do
+  my_dir=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} "$i" BASEDIR`
+  find "$my_dir" -type f -name bootstraprc -exec sh -ce 'test ! -f "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$BRAND_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
+done
 
 # if an unpack directory exists, it can be removed now
 if [ ! -z "$UNPACKDIR" ]
