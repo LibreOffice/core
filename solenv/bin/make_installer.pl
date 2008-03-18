@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:00:25 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:57:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,6 @@ installer::ziplist::set_default_productversion_if_required($allvariableshashref)
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3a.log", $allvariableshashref); }
 
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
-installer::servicesfile::set_defaults_in_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
 ########################################################
@@ -374,6 +373,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 # Adding also all variables, that must be included into the $allvariableshashref.
 installer::setupscript::add_forced_properties($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
+
+installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript3.log" ,$setupscriptref); }
 
 installer::logger::log_hashref($allvariableshashref);
 
@@ -530,6 +532,9 @@ if (!($installer::globals::is_copy_only_project))
 
     installer::scriptitems::assigning_modules_to_items($modulesinproductarrayref, $unixlinksinproductarrayref, "Unixlinks");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks2.log", $unixlinksinproductarrayref); }
+
+    installer::scriptitems::assigning_modules_to_items($modulesinproductarrayref, $dirsinproductarrayref, "Dirs");
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2aa.log", $dirsinproductarrayref); }
 }
 
 if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1a: The language independent part\n"); }
@@ -666,6 +671,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     installer::scriptitems::checking_directories_with_corrupt_hostname($dirsinproductlanguageresolvedarrayref, $languagesarrayref);
 
+    installer::scriptitems::set_global_directory_hostnames($dirsinproductlanguageresolvedarrayref);
+
     #####################################
     # files part, language dependent
     #####################################
@@ -706,9 +713,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }
 
 
-    if (( ! $installer::globals::islanguagepackinunixmulti ) && ( ! $allvariableshashref->{'NO_README_IN_ROOTDIR'} ))
+    if ( ! $allvariableshashref->{'NO_README_IN_ROOTDIR'} )
     {
-        $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
+        $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $dirsinproductlanguageresolvedarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
     }
 
@@ -826,14 +833,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # It will be possible, that in the setup script only those directoies have to be defined,
     # that have a CREATE flag. All other directories are created, if they contain at least one file.
 
-    my $directoriesforepmarrayref = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+    my ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist1.log", $directoriesforepmarrayref); }
 
-    installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($directoriesforepmarrayref, $dirsinproductlanguageresolvedarrayref);
+    ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist2.log", $directoriesforepmarrayref); }
 
-    installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3.log", $directoriesforepmarrayref); }
+    # installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+    # if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3.log", $directoriesforepmarrayref); }
 
     #########################################################
     # language dependent scpactions part
@@ -1018,9 +1025,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
 
         # Collecting the directories again, to include only the language specific directories
-        $directoriesforepmarrayref = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+        ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3alangpack.log", $directoriesforepmarrayref); }
-        installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($directoriesforepmarrayref, $dirsinproductlanguageresolvedarrayref);
+        ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3blangpack.log", $directoriesforepmarrayref); }
         installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3clangpack.log", $directoriesforepmarrayref); }
@@ -1060,7 +1067,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16bpatch.log", $filesinproductlanguageresolvedarrayref); }
 
             # For Windows patches, the directories can now be collected again
-            $directoriesforepmarrayref = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+            ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist4_patch.log", $directoriesforepmarrayref); }
 
             installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
@@ -1123,6 +1130,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # printing packages content:
     installer::packagelist::log_packages_content($packages);
+    installer::packagelist::create_module_destination_hash($packages, $allvariableshashref);
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1b: The language dependent part\n"); }
 
@@ -1163,6 +1171,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         my $listfiledir = installer::systemactions::create_directories("listfile", $languagestringref);
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
+        # installer::packagelist::add_defaultpathes_into_filescollector($filesinproductlanguageresolvedarrayref);
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
         my $epmexecutable = "";
@@ -1277,7 +1286,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks3_" . $packagename . ".log", $unixlinksinpackage); }
             $linksinpackage = installer::packagelist::find_links_for_package($linksinpackage, $filesinpackage);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links3_" . $packagename . ".log", $linksinpackage); }
-            $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage, $onepackagename);
+            $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $onepackage);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs3_" . $packagename . ".log", $dirsinpackage); }
 
             ###############################################
@@ -1411,7 +1420,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 # adding directories, files and links into epm file
 
-                installer::epmfile::put_directories_into_epmfile($dirsinpackage, \@epmfile );
+                installer::epmfile::put_directories_into_epmfile($dirsinpackage, \@epmfile, $allvariableshashref, $packagerootpath);
                 installer::epmfile::put_files_into_epmfile($filesinpackage, \@epmfile );
                 installer::epmfile::put_links_into_epmfile($linksinpackage, \@epmfile );
                 installer::epmfile::put_unixlinks_into_epmfile($unixlinksinpackage, \@epmfile );
@@ -1427,7 +1436,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # relocatable path can be defined in package list
                 if ( $onepackage->{'relocatablepath'} ) { $relocatablepath = $onepackage->{'relocatablepath'}; }
                 # setting fix part and variable part of destination path
-                installer::epmfile::analyze_rootpath($packagerootpath, \$staticpath, \$relocatablepath);
+                installer::epmfile::analyze_rootpath($packagerootpath, \$staticpath, \$relocatablepath, $allvariableshashref);
 
                 # ... replacing the variable PRODUCTDIRECTORYNAME in the shellscriptfile by $staticpath
 
@@ -1518,11 +1527,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 if ( $installer::globals::isxpdplatform )
                 {
-                    if ( (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch )) || (( $installer::globals::islanguagepackinunixmulti ) && ( ! $installer::globals::patch )) )
+                    if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch ))
                     {
                         if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
                         {
-                            installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductlanguageresolvedarrayref, $installdir, $installer::globals::subdir, $linkpackage);
+                            # installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductlanguageresolvedarrayref, $installdir, $installer::globals::subdir, $linkpackage);
+                            installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductarrayref, $installdir, $installer::globals::subdir, $linkpackage);
                             $installer::globals::xpd_files_prepared = 1;
                         }
                     }
@@ -1555,7 +1565,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref, $modulesinproductarrayref); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
 
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::subdir, $allvariableshashref); }
@@ -1564,7 +1574,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Copying the xpd installer into the installation set
             if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ) && ( $installer::globals::xpd_files_prepared ))
             {
-                installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref);
+                installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref, $languagestringref);
                 $installer::globals::addjavainstaller = 0;  # only one java installer possible
             }
 
@@ -1590,7 +1600,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
 
             chdir($currentdir); # changing back into start directory
         }
@@ -1732,6 +1742,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::windows::file::assign_sequencenumbers_to_files($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17b.log", $filesinproductlanguageresolvedarrayref); }
 
+        # Collection all available directory trees
+        installer::windows::directory::collectdirectorytrees($directoriesforepmarrayref);
+
         $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
 
@@ -1813,6 +1826,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles, $allvariableshashref);
 
+            # For multilingual installation sets, the dialog for the language selection can now be prepared, with
+            # a checkbox for each available language. This has to happen before the following translation.
+            # The new controls have to be added into the Control.idt
+
+            my $controlidttablename = $languageidtdir . $installer::globals::separator . "Control.idt";
+            my $controlidttable = installer::files::read_file($controlidttablename);
+            installer::windows::idtglobal::add_language_checkboxes_to_database($controlidttable, $languagesarrayref);
+            installer::files::save_file($controlidttablename, $controlidttable);
+            $infoline = "Added checkboxes for language selection dialog into table $controlidttablename\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
             # Now all files are copied into a language specific directory
             # The template idt files can be translated
 
@@ -1873,6 +1897,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
             push(@installer::globals::logfileinfo, $infoline);
 
+            # include office directory in CustomAction table
+
+            installer::windows::idtglobal::add_officedir_to_database($languageidtdir, $allvariableshashref);
+
             # include a component into environment table if required
 
             installer::windows::component::set_component_in_environment_table($languageidtdir, $filesinproductlanguageresolvedarrayref);
@@ -1919,7 +1947,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 installer::logger::print_message( "... creating msi database (language $onelanguage) ... \n" );
 
-                installer::windows::msiglobal::set_uuid_into_component_table($languageidtdir);  # setting new GUID for the components using the tool uuidgen.exe
+                installer::windows::msiglobal::set_uuid_into_component_table($languageidtdir, $allvariableshashref);    # setting new GUID for the components using the tool uuidgen.exe
                 installer::windows::msiglobal::create_msi_database($languageidtdir ,$msifilename);
 
                 # validating the database   # ToDo
