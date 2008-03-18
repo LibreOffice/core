@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:27:13 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2725,29 +2725,6 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     }
 
     return bNowEmpty;
-}
-
-
-chart::ChartDataRowSource SwChartDataSequence::GetDataRowSource() const
-{
-    // default value if sequence is not long enough to properly get this value
-    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-
-    SwFrmFmt* pTblFmt = GetFrmFmt();
-    if(pTblFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pTblFmt );
-        if(!pTable->IsTblComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTblFmt, *pTblCrsr ) ))
-            {
-                if (aDesc.nTop == aDesc.nBottom && aDesc.nLeft != aDesc.nRight)
-                    eDataRowSource = chart::ChartDataRowSource_ROWS;
-            }
-        }
-    }
-    return eDataRowSource;
 }
 
 
