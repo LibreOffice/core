@@ -13,6 +13,7 @@ AdminNetworkLocation	Cancel	SpawnDialog	CancelSetup	1	0
 AdminNetworkLocation	InstallNow	EndDialog	Return	OutOfNoRbDiskSpace <> 1	3
 AdminNetworkLocation	InstallNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	2
 AdminNetworkLocation	InstallNow	SetTargetPath	TARGETDIR	1	1
+AdminNetworkLocation	InstallNow	DoAction	SetUreInstallLocation	1	1
 AdminWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
 CancelSetup	No	EndDialog	Return	1	0
@@ -43,6 +44,7 @@ DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
 DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
 DestinationFolder	Next	NewDialog	ReadyToInstall	1	0
+DestinationFolder	Next	DoAction	SetUreInstallLocation	1	1
 DiskSpaceRequirements	OK	EndDialog	Return	1	0
 FilesInUse	Exit	EndDialog	Exit	1	0
 FilesInUse	Ignore	EndDialog	Ignore	1	0
