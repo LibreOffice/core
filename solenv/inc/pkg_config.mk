@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pkg_config.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:44:26 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:08:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,14 @@
 .INCLUDE .IGNORE : pkgroot.mk
 
 .IF "$(PKGCONFIG_ROOT)"!=""
-PKGCONFIG=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+PKG_CONFIG=$(PKGCONFIG_ROOT)$/bin$/pkg-config
 PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
 .EXPORT : PKG_CONFIG_PATH
 PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)
 .ELSE           # "$(OS)"=="SOLARIS"
-PKGCONFIG=pkg-config
+PKG_CONFIG*=pkg-config
 .ENDIF          # "$(OS)"=="SOLARIS"
 
-PKGCONFIG_CFLAGS:=$(shell @$(PKGCONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
-PKGCONFIG_LIBS:=$(shell @$(PKGCONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
+PKGCONFIG_CFLAGS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
+PKGCONFIG_LIBS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
 CFLAGS+=$(PKGCONFIG_CFLAGS)
