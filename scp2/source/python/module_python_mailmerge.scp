@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_python_mailmerge.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:09:36 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,4 +43,19 @@ Module gid_Module_Optional_Pymailmerge
     Minimal = NO;
     Default = YES;
     Styles = ( );
+End
+
+File gid_File_Pymailmerge
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "mailmerge.py";
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Styles = (PACKED,UNO_COMPONENT);
+End
+
+File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
+    Name = "/registry/spool/org/openoffice/Office/Writer-javamail.xcu";
+    Styles = (PACKED,SCPZIP_REPLACE);
 End
