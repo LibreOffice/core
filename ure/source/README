@@ -4,9 +4,9 @@
 #
 #   $RCSfile: README,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:42:57 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:12:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -329,12 +329,14 @@ NOTE: If this file does not contain information about a JDK/JRE, the URE
 searches for a suitable JDK/JRE installation and stores the relevant information
 in the Documents and Settings\<User Name>\Application
 Data\URE\javasettings_${_OS}_${_ARCH}.xml file.  The URE on Windows does not
-support a system-wide deployment of the Java settings file.  That is, you cannot
-store the file in a Documents and Settings\All Users\Application Data\URE
-directory.
+by default support a system-wide deployment of the Java settings file.  That is,
+you cannot store the file in a Documents and Settings\All Users\Application
+Data\URE directory.
 
-You can also use the UNO_JAVA_JFW_JREHOME deployment variable to specify the
-location of a JDK/JRE installation.  For more information on this variable, see
+You can override these paths by setting the URE_OVERRIDE_JAVA_JFW_SHARED_DATA
+and URE_OVERRIDE_JAVA_JFW_USER_DATA deployment variables.  You can also use the
+UNO_JAVA_JFW_JREHOME deployment variable to specify the location of a JDK/JRE
+installation.  For more information on this variable, see
 http://udk.openoffice.org/common/man/spec/javavendorextension.sxw.
 
 The URE allows clients to extend the content of UNO_JAVA_JFW_CLASSPATH_URLS (see
