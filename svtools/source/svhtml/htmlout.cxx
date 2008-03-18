@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:20:27 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,55 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
                                              rtl_TextEncoding eDestEnc )
 {
     const sal_Char* pStr = 0;
+
+    // Note: We currently handle special cases for ISO-8859-2 here simply because
+    // the code was already submitted.  But we should also handle other code pages
+    // as well as the code becomes available.
+
+    if( eDestEnc == RTL_TEXTENCODING_ISO_8859_2 || eDestEnc == RTL_TEXTENCODING_MS_1250 )
+    {
+        // Don't handle the following characters for Easter European (ISO-8859-2).
+        switch ( c )
+        {
+        case 164: // curren
+        case 184: // ccedil
+        case 193: // Aacute
+        case 194: // Acirc
+        case 196: // Auml
+        case 199: // Ccedil
+        case 201: // Eacute
+        case 203: // Euml
+        case 205: // Iacute
+        case 206: // Icirc
+        case 211: // Oacute
+        case 212: // Ocirc
+        case 214: // Ouml
+        case 215: // times
+        case 218: // Uacute
+        case 220: // Uuml
+        case 221: // Yacute
+        case 225: // aacute
+        case 226: // acirc
+        case 228: // auml
+        case 233: // eacute
+        case 235: // euml
+        case 237: // iacute
+        case 238: // icirc
+        case 243: // oacute
+        case 244: // ocirc
+        case 246: // ouml
+        case 247: // divide
+        case 250: // uacute
+        case 252: // uuml
+        case 253: // yacute
+        case 352: // Scaron
+        case 353: // scaron
+            return pStr;
+        }
+    }
+
+    // TODO: handle more special cases for other code pages.
+
     switch( c )
     {
 //      case '\x0a':   return HTMLOutFuncs::Out_Tag( rStream, sHTML_linebreak );
@@ -402,7 +451,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
         // The new HTML4 entities above 255 are not used for UTF-8,
         // because Netscape 4 does support UTF-8 but does not support
         // these entities.
-        if( c < 256 || RTL_TEXTENCODING_UTF8 != rContext.m_eDestEnc )
+        if( c < 128 || RTL_TEXTENCODING_UTF8 != rContext.m_eDestEnc )
             pStr = lcl_svhtml_GetEntityForChar( c, rContext.m_eDestEnc );
         break;
     }
