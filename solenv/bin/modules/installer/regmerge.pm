@@ -4,9 +4,9 @@
 #
 #   $RCSfile: regmerge.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:38:06 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:00:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -224,8 +224,8 @@ sub merge_files
 
     # One call for every merge particle. This is only possible, if there are only a few merge particles.
 
-    my $prefix = $allvariableshashref->{'NATIVESERVICESURLPREFIX'};
-        # TODO: NATIVESERVICESURLPREFIX or JAVASERVICESURLPREFIX
+    my $prefix = $databasefile->{'NativeServicesURLPrefix'};
+    # TODO: "NativeServicesURLPrefix" or "JavaServicesURLPrefix"
 
     my $error_occured = 0;
 
