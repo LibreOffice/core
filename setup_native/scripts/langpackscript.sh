@@ -44,12 +44,12 @@ while [ x$agreed = x ]; do
     esac
 done
 
-echo
-echo "Searching for the PRODUCTNAMEPLACEHOLDER installation ..."
-
 case $platform in
 SunOS)
-  PACKAGENAME=`pkginfo -x | grep PRODUCTNAMEPLACEHOLDER-core01 | sed "s/ .*//"`
+  SEARCHPACKAGENAME="openofficeorg-core01"
+  echo
+  echo "Searching for the $SEARCHPACKAGENAME installation ..."
+  PACKAGENAME=`pkginfo -x | grep $SEARCHPACKAGENAME | sed "s/ .*//"`
   if [ "x$PACKAGENAME" != "x" ]
   then
     PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
@@ -58,13 +58,18 @@ SunOS)
   fi
   ;;
 Linux)
-  RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core01`
+  SEARCHPACKAGENAME="openoffice.org-core01"
+  FIXPATH="/openoffice.org"
+  echo
+  echo "Searching for the $SEARCHPACKAGENAME installation ..."
+  RPMNAME=`rpm -qa | grep $SEARCHPACKAGENAME`
   if [ "x$RPMNAME" != "x" ]
   then
     PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
   else
     PRODUCTINSTALLLOCATION=""
   fi
+  PRODUCTINSTALLLOCATION=`echo $PRODUCTINSTALLLOCATION | sed "s#${FIXPATH}##"`
   ;;
 *)
   echo "Unsupported platform"
