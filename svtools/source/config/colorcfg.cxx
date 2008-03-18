@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:04:05 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,6 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterNotesIndicator")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False },
@@ -569,8 +568,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0xc0c0c0, // WRITERFIELDSHADIN
         0xc0c0c0, // WRITERIDXSHADINGS
         0, // WRITERDIRECTCURSOR
-        COL_YELLOW, //WRITERNOTESINDICATOR
-        COL_GREEN,  //WRITERSCRIPTINDICATOR
+          COL_GREEN,  //WRITERSCRIPTINDICATOR
         0xc0c0c0, //WRITERSECTIONBOUNDARIES
         COL_BLUE, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
