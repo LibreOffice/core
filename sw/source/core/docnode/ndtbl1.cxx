@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:03 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1609,19 +1609,28 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
 
     const USHORT nNewRight = static_cast<USHORT>(aTabCols.GetRight());
 
+    SwFrmFmt *pFmt = pTblNd->GetTable().GetFrmFmt();
+    const sal_Int16 nOriHori = pFmt->GetHoriOrient().GetHoriOrient();
+
     //So, die richtige Arbeit koennen wir jetzt der SwTable ueberlassen.
     SetTabCols( aTabCols, FALSE, 0, (SwCellFrm*)pBoxFrm );
 
-    //Ggf. Ausrichtung der Tabelle Aendern.
+    // i54248: lijian/fme
+    // alignment might have been changed in SetTabCols, restore old value:
+    const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
+    SwFmtHoriOrient aHori( rHori );
+    if ( aHori.GetHoriOrient() != nOriHori )
+    {
+        aHori.SetHoriOrient( nOriHori );
+        pFmt->SetAttr( aHori );
+    }
+
     //Bei Automatischer Breite wird auf Linksbuendig umgeschaltet.
     //Bei Randattributen wird der Rechte Rand angepasst.
     if( !bBalance && nNewRight < nOldRight )
     {
-        SwFrmFmt *pFmt = pTblNd->GetTable().GetFrmFmt();
-        const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
-        if( rHori.GetHoriOrient() == text::HoriOrientation::FULL )
+        if( aHori.GetHoriOrient() == text::HoriOrientation::FULL )
         {
-            SwFmtHoriOrient aHori( rHori );
             aHori.SetHoriOrient( text::HoriOrientation::LEFT );
             pFmt->SetAttr( aHori );
         }
