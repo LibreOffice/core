@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:18:49 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4604,6 +4604,8 @@ void WW8RStyle::ImportOldFormatStyles()
         stcp++;
     }
 
+    USHORT nStyles=stcp;
+
     std::vector<pxoffset> aCHPXOffsets(stcp);
     sal_uInt16 cbChpx;
     rSt >> cbChpx;
@@ -4629,12 +4631,17 @@ void WW8RStyle::ImportOldFormatStyles()
                 aCHPXOffsets[stcp].mnSize);
             aConvertedChpx.push_back( ChpxToSprms(aChpx) );
 
-            nByteCount = nByteCount+ nRemainder;
+            nByteCount += nRemainder;
         }
         else
             aConvertedChpx.push_back( std::vector<BYTE>() );
 
         stcp++;
+        if (stcp == nStyles)
+    {
+            rSt.SeekRel(cbChpx-nByteCount);
+            nByteCount += cbChpx-nByteCount;
+    }
     }
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
@@ -4662,14 +4669,22 @@ void WW8RStyle::ImportOldFormatStyles()
             aPAPXOffsets[stcp].mnSize = nRemainder;
 
             rSt.SeekRel(nRemainder);
-            nByteCount = nByteCount + nRemainder;
+            nByteCount += nRemainder;
         }
 
         stcp++;
+
+        if (stcp == nStyles)
+    {
+            rSt.SeekRel(cbPapx-nByteCount);
+            nByteCount += cbPapx-nByteCount;
+    }
     }
 
     sal_uInt16 iMac;
     rSt >> iMac;
+
+    if (iMac > nStyles) iMac = nStyles;
 
     for (stcp = 0; stcp < iMac; ++stcp)
     {
@@ -4704,8 +4719,10 @@ void WW8RStyle::ImportOldFormatStyles()
         ImportSprms(aPAPXOffsets[stcp].mnOffset, aPAPXOffsets[stcp].mnSize,
             true);
 
-        ImportSprms(&(aConvertedChpx[stcp][0]), static_cast< short >(aConvertedChpx[stcp].size()),
-            false);
+        if (aConvertedChpx[stcp].size() > 0)
+            ImportSprms(&(aConvertedChpx[stcp][0]),
+                        static_cast< short >(aConvertedChpx[stcp].size()),
+                        false);
 
         PostStyle(rSI, bOldNoImp);
     }
