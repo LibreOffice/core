@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 10:28:40 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:51:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..
 PRJNAME=desktop
 TARGET=soffice
 TARGETTYPE=GUI
+LIBTARGET=NO
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
@@ -45,33 +46,9 @@ GEN_HID_OTHER=TRUE
 
 .INCLUDE :  settings.mk
 
-VERINFONAME=verinfo
+UWINAPILIB =
 
-TARGETOBJS=	\
-            $(OBJ)$/main.obj				\
-            $(OBJ)$/app.obj					\
-            $(OBJ)$/appfirststart.obj		\
-            $(OBJ)$/lockfile.obj			\
-            $(OBJ)$/lockfile2.obj			\
-            $(OBJ)$/intro.obj				\
-            $(OBJ)$/officeipcthread.obj		\
-            $(OBJ)$/appinit.obj				\
-            $(OBJ)$/cmdlineargs.obj			\
-            $(OBJ)$/oinstanceprovider.obj	\
-            $(OBJ)$/opluginframefactory.obj	\
-            $(OBJ)$/appsys.obj				\
-            $(OBJ)$/desktopresid.obj		\
-            $(OBJ)$/dispatchwatcher.obj		\
-            $(OBJ)$/configinit.obj			\
-            $(OBJ)$/checkinstall.obj		\
-            $(OBJ)$/cmdlinehelp.obj         \
-            $(OBJ)$/langselect.obj          \
-            $(OBJ)$/userinstall.obj         \
-            $(OBJ)$/desktopcontext.obj      \
-            $(SLO)$/pages.obj               \
-            $(SLO)$/wizard.obj              \
-            $(SLO)$/migration.obj           \
-            $(SLO)$/cfgfilter.obj
+VERINFONAME=verinfo
 
 # --- Resourcen ----------------------------------------------------
 
@@ -80,20 +57,6 @@ RCFILES=verinfo.rc
 .ENDIF
 .IF "$(GUI)" == "OS2"
 RCFILES=ooverinfo2.rc
-.ENDIF
-
-# --- Linking of static libs ---------------------------------------
-
-.IF "$(GUI)" == "WNT"
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=$(TARGETOBJS)
-LIB1OBJFILES += $(OBJ)$/copyright_ascii_sun.obj
-
-#LIB2TARGET=$(SLB)$/officeloader.lib
-#LIB2OBJFILES=$(OBJ)$/officeloader.obj
-
-
 .ENDIF
 
 # --- Linken der Applikation ---------------------------------------
@@ -122,25 +85,9 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
 .IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
-APP1STDLIBS=			\
-    $(VCLLIB)			\
-    $(SVLLIB)           \
-    $(SVTOOLLIB)        \
-    $(UNOTOOLSLIB)		\
-    $(TOOLSLIB)			\
-    $(I18NISOLANGLIB)   \
-    $(COMPHELPERLIB)	\
-    $(UCBHELPERLIB)		\
-    $(VOSLIB)			\
-    $(CPPUHELPERLIB)	\
-    $(CPPULIB)			\
-    $(TKLIB)            \
-    $(SALLIB)           \
-    $(SFXLIB)
-
-APP1OBJS=$(TARGETOBJS)
-APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
-
+APP1RPATH=BRAND
+APP1OBJS=$(OBJ)$/copyright_ascii_sun.obj $(OBJ)$/main.obj
+APP1STDLIBS = $(SALLIB) $(SOFFICELIB)
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
 APP1STDLIBS+= -lXext -lSM -lICE
@@ -167,25 +114,9 @@ APP1STACK=10000000
 
 APP5TARGET=soffice
 APP5NOSAL=TRUE
-APP5STDLIBS=			\
-    $(VCLLIB)			\
-    $(SVLLIB)			\
-    $(SVTOOLLIB)        \
-    $(UNOTOOLSLIB)      \
-    $(TOOLSLIB)			\
-    $(I18NISOLANGLIB)   \
-    $(COMPHELPERLIB)	\
-    $(UCBHELPERLIB)		\
-    $(VOSLIB)			\
-    $(CPPUHELPERLIB)	\
-    $(CPPULIB)			\
-    $(SALLIB)			\
-    $(TKLIB)            \
-    $(SFXLIB)
-
-APP5OBJS=$(TARGETOBJS)
-APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
-
+APP5RPATH=BRAND
+APP5OBJS=$(OBJ)$/copyright_ascii_ooo.obj $(OBJ)$/main.obj
+APP5STDLIBS = $(SALLIB) $(SOFFICELIB)
 .IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF # LINUX
@@ -217,14 +148,10 @@ APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
 APP6VERINFO=verinfo.rc
 APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
-.IF "$(COM)"=="GCC"
 APP6OBJS = \
-        $(OBJ)$/officeloader.obj
-.ELSE
-APP6OBJS = \
-        $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
-.ENDIF
-STDLIB6=$(ADVAPI32LIB) $(SHLWAPILIB)
+    $(OBJ)$/extendloaderenvironment.obj \
+    $(OBJ)$/officeloader.obj
+STDLIB6=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
 
 APP7TARGET=officeloader
 APP7RES=$(RES)$/ooloader.res
@@ -233,22 +160,10 @@ APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
 APP7VERINFO=ooverinfo.rc
 APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-.IF "$(COM)"=="GCC"
 APP7OBJS = \
-        $(OBJ)$/officeloader.obj
-.ELSE
-APP7OBJS = \
-        $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
-.ENDIF
-STDLIB7=$(ADVAPI32LIB) $(SHLWAPILIB)
-
-# Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(CCNUMVER)" > "001399999999"
-APP6OBJS+=$(L)$/delayload.obj
-APP7OBJS+=$(L)$/delayload.obj
-.ENDIF # "$(CCNUMVER)" > "001399999999"
-.ENDIF
+    $(OBJ)$/extendloaderenvironment.obj \
+    $(OBJ)$/officeloader.obj
+STDLIB7=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
 .ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
