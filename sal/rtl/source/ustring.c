@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:06:39 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,6 +590,10 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             IMPL_RTL_STRCODE* pBuffer;
             *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
             if (*ppThis == NULL) {
+                if (pInfo != NULL) {
+                    *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
+                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                }
                 return;
             }
             pBuffer = (*ppThis)->buffer;
@@ -609,6 +613,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
         else
         {
             rtl_uString*                pTemp;
+            rtl_uString*                pTemp2 = NULL;
             rtl_TextToUnicodeConverter  hConverter;
             sal_uInt32                  nInfo;
             sal_Size                    nSrcBytes;
@@ -629,6 +634,10 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
                     if (*ppThis == NULL)
                     {
+                        if (pInfo != NULL) {
+                            *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
+                                RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                        }
                         return;
                     }
                     pBuffer = (*ppThis)->buffer;
@@ -644,6 +653,9 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                         nLen--;
                     }
                     while ( nLen );
+                    if (pInfo != NULL) {
+                        *pInfo = 0;
+                    }
                     return;
                 }
             }
@@ -655,6 +667,10 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
 
             pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
             if (pTemp == NULL) {
+                if (pInfo != NULL) {
+                    *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
+                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                }
                 return;
             }
             nDestChars = rtl_convertTextToUnicode( hConverter, 0,
@@ -673,6 +689,10 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 nNewLen += 8;
                 pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
                 if (pTemp == NULL) {
+                    if (pInfo != NULL) {
+                        *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
+                            RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                    }
                     return;
                 }
                 nDestChars = rtl_convertTextToUnicode( hConverter, 0,
@@ -689,18 +709,13 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                much overhead, reallocate to the correct size */
             if ( nNewLen > nDestChars+8 )
             {
-                rtl_uString* pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestChars );
-                if (pTemp2 != NULL)
-                {
-                    rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
-                    rtl_freeMemory(pTemp);
-                    pTemp = pTemp2;
-                }
-                else
-                {
-                    rtl_freeMemory(pTemp);
-                    return;
-                }
+                pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestChars );
+            }
+            if (pTemp2 != NULL)
+            {
+                rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
+                rtl_freeMemory(pTemp);
+                pTemp = pTemp2;
             }
             else
             {
@@ -926,4 +941,13 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     OSL_ASSERT(n >= 0 && n <= string->length);
     *indexUtf16 = n;
     return cp;
+}
+
+sal_Bool rtl_convertStringToUString(
+    rtl_uString ** target, char const * source, sal_Int32 length,
+    rtl_TextEncoding encoding, sal_uInt32 flags) SAL_THROW_EXTERN_C()
+{
+    sal_uInt32 info;
+    rtl_string2UString_status(target, source, length, encoding, flags, &info);
+    return (sal_Bool) ((info & RTL_TEXTTOUNICODE_INFO_ERROR) == 0);
 }
