@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:52:15 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3405,7 +3405,8 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed, 12, nStartCp)
+            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
+              GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
             : 0;
 
     pSprms = new BYTE[nArrMax];     // maximum length
@@ -3452,8 +3453,8 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
     else
     {
-        long nPo =  SVBT32ToUInt32( (BYTE*)pData+2 );
-        if (nPo == -1L)
+        sal_uInt32 nPo =  SVBT32ToUInt32( (BYTE*)pData+2 );
+        if (nPo == 0xFFFFFFFF)
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
             p->pMemPos = 0;
@@ -3462,7 +3463,16 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
         else
         {
             pStrm->Seek( nPo );
-            *pStrm >> nSprmSiz; // read len
+
+            // read len
+            if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
+            {
+                BYTE nSiz(0);
+                *pStrm >> nSiz;
+                nSprmSiz = nSiz;
+            }
+            else
+                *pStrm >> nSprmSiz;
 
             if( nSprmSiz > nArrMax )
             {               // passt nicht
@@ -6084,15 +6094,15 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         return;
     }
 
-    bool bVer67 = (8 > rFib.nVersion);
-
     rSt.Seek( rFib.fcSttbfffn );
 
     // allocate Font Array
     BYTE* pA   = new BYTE[ rFib.lcbSttbfffn - 2 ];
     WW8_FFN* p = (WW8_FFN*)pA;
 
-    if( !bVer67 )
+    ww::WordVersion eVersion = rFib.GetFIBVersion();
+
+    if( eVersion >= ww::eWW8 )
     {
         // bVer8: read the count of strings in nMax
         rSt >> nMax;
@@ -6106,7 +6116,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     // read all font information
     rSt.Read( pA, rFib.lcbSttbfffn - 2 );
 
-    if( bVer67 )
+    if( eVersion < ww::eWW8 )
     {
         // try to figure out how many fonts are defined here
         nMax = 0;
@@ -6133,7 +6143,33 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         pFontA = new WW8_FFN[ nMax ];
         p = pFontA;
 
-        if( bVer67 )
+    if( eVersion <= ww::eWW2 )
+    {
+            WW8_FFN_BASE* pVer2 = (WW8_FFN_BASE*)pA;
+            for(USHORT i=0; i<nMax; ++i, ++p)
+            {
+                p->cbFfnM1   = pVer2->cbFfnM1;
+
+                p->prg       =  0;
+                p->fTrueType = 0;
+                p->ff        = 0;
+
+                p->wWeight   = ( *(((BYTE*)pVer2) + 1) );
+                p->chs   = ( *(((BYTE*)pVer2) + 2) );
+            /*
+                 #i8726# 7- seems to encode the name in the same encoding as
+                 the font, e.g load the doc in 97 and save to see the unicode
+                 ver of the asian fontnames in that example to confirm.
+                */
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs);
+                if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
+                    eEnc = RTL_TEXTENCODING_MS_1252;
+
+                p->sFontname = String ( (((const sal_Char*)pVer2) + 1 + 2), eEnc);
+                pVer2 = (WW8_FFN_BASE*)( ((BYTE*)pVer2) + pVer2->cbFfnM1 + 1 );
+            }
+    }
+        else if( eVersion < ww::eWW8 )
         {
             WW8_FFN_Ver6* pVer6 = (WW8_FFN_Ver6*)pA;
             BYTE c2;
