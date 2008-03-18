@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-09 14:19:06 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:25:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUTDIR2INC=include$/libxml 
 
 .IF "$(OS)"=="MACOSX"
+EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
 .ELIF "$(OS)"=="WNT"
