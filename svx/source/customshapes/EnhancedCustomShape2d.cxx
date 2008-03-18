@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:26:53 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 23:41:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2034,124 +2034,6 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 //      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
-    else if ( eSpType == mso_sptEllipse )
-    {
-        pRet = new SdrCircObj( OBJ_CIRC, aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
-        pRet->SetMergedItemSet( *this );
-    }
-/*
-    else if ( eSpType == mso_sptArc )
-    {   // the arc is something special, because sometimes the snaprect does not match
-        Rectangle aPolyBoundRect;
-        sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
-        if ( nNumElemVert )
-        {
-            XPolygon aXP( (sal_uInt16)nNumElemVert );
-            const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
-            for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
-                aXP[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_False, sal_False );
-            aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
-        }
-        else
-            aPolyBoundRect = aLogicRect;
-        sal_Int32   nEndAngle = NormAngle360( - GetAdjustValueAsInteger( 0 ) * 100 );
-        sal_Int32   nStartAngle = NormAngle360( - GetAdjustValueAsInteger( 1 ) * 100 );
-
-        if ( nStartAngle == nEndAngle )
-            return NULL;
-
-        if ( bFilled )      // ( filled ) ? we have to import an pie : we have to construct an arc
-        {
-            pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
-            pRet->NbcSetSnapRect( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pRet->SetModel( pCustomShapeObj->GetModel() );
-            pRet->SetMergedItemSet( *this );
-        }
-        else
-        {
-            Point aStart, aEnd, aCenter( aPolyBoundRect.Center() );
-            aStart.X() = (sal_Int32)( ( cos( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
-            aStart.Y() = - (sal_Int32)( ( sin( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
-            aEnd.X() = (sal_Int32)( ( cos( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
-            aEnd.Y() = - (sal_Int32)( ( sin( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
-            aStart.X() += aCenter.X();
-            aStart.Y() += aCenter.Y();
-            aEnd.X() += aCenter.X();
-            aEnd.Y() += aCenter.Y();
-
-            Polygon aPolygon( aPolyBoundRect, aStart, aEnd, POLY_PIE );
-            Rectangle aPolyPieRect( aPolygon.GetBoundRect() );
-
-            USHORT nPt = aPolygon.GetSize();
-
-            if ( nPt < 4 )
-                return NULL;
-
-            aPolygon[ 0 ] = aPolygon[ 1 ];                              // try to get the arc boundrect
-            aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
-            Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
-
-            double  fYScale, fXScale;
-            double  fYOfs, fXOfs;
-            int     nCond;
-
-            fYOfs = fXOfs = 0.0;
-            if ( aPolyPieRect.GetWidth() != aPolyArcRect.GetWidth() )
-            {
-                nCond = ( (sal_uInt32)( nStartAngle - 9000 ) > 18000 ) && ( (sal_uInt32)( nEndAngle - 9000 ) > 18000 ) ? 1 : 0;
-                nCond ^= bFlipH ? 1 : 0;
-                if ( nCond )
-                {
-                    fXScale = (double)aLogicRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                    fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
-                }
-            }
-            if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
-            {
-                nCond = ( ( nStartAngle > 18000 ) && ( nEndAngle > 18000 ) ) ? 1 : 0;
-                nCond ^= bFlipV ? 1 : 0;
-                if ( nCond )
-                {
-                    fYScale = (double)aLogicRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-                    fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
-                }
-            }
-            fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-            fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-
-            aPolyArcRect = Rectangle( Point( aLogicRect.Left() + (sal_Int32)fXOfs, aLogicRect.Top() + (sal_Int32)fYOfs ),
-                Size( (sal_Int32)( aLogicRect.GetWidth() * fXScale ), (sal_Int32)( aLogicRect.GetHeight() * fYScale ) ) );
-
-            SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
-            pObjCirc->SetSnapRect( aPolyArcRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pObjCirc->SetModel( pCustomShapeObj->GetModel() );
-            pObjCirc->SetMergedItemSet( *this );
-
-            int nSwap = bFlipH ? 1 : 0;
-            nSwap ^= bFlipV ? 1 : 0;
-            if ( nSwap )
-                SwapStartAndEndArrow( pObjCirc );
-
-            SdrRectObj* pRect = new SdrRectObj( aPolyArcRect );
-            pRect->SetSnapRect( aPolyArcRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pRect->SetModel( pCustomShapeObj->GetModel() );
-            pRect->SetMergedItemSet( *this );
-            pRect->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
-            pRect->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
-
-            pRet = new SdrObjGroup();
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pRet->SetModel( pCustomShapeObj->GetModel() );
-            ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pRect );
-            ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pObjCirc );
-        }
-    }
-*/
     if ( !pRet )
         pRet = CreatePathObj( bLineGeometryNeededOnly );
 
