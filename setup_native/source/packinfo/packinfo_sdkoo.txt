@@ -37,4 +37,5 @@ solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
 description = "OpenOffice.org %PRODUCTVERSION SDK"
 destpath = "/opt/openoffice.org%PRODUCTVERSION_sdk"
+relocatablepath = "/opt"
 End
