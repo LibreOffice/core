@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2008-02-20 08:14:07 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:58:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,33 @@ sub convert_stringlist_into_array_without_newline
     push(@newarray, "$last");
 
     return \@newarray;
+}
+
+#############################################################################
+# Converting a string list with separator $listseparator
+# into a hash with values 1.
+#############################################################################
+
+sub convert_stringlist_into_hash
+{
+    my ( $includestringref, $listseparator ) = @_;
+
+    my %newhash = ();
+    my $first;
+    my $last = ${$includestringref};
+
+    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
+    {
+        $first = $1;
+        $last = $2;
+        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
+        $newhash{$first} = 1;
+    }
+
+    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
+    $newhash{$last} = 1;
+
+    return \%newhash;
 }
 
 #############################################################################
