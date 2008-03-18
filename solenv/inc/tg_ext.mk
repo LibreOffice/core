@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 16:14:54 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:09:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,8 @@ unzip_quiet_switch:=
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
 T_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i)
 .ENDIF			# "$(ADDITIONAL_FILES)"!=""
+
+EXTRPATH*=OOO
 
 .IF "$(L10N_framework)"==""
 
@@ -262,6 +264,10 @@ $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .IF "$(OUT2LIB)"!=""
     $(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(LB)
+.IF "$(OS)"=="MACOSX"
+    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl \
+        $(EXTRPATH) $(shell ls $(foreach,j,$(OUT2LIB) $(LB)$/$(j:f)))
+.ENDIF
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
 .IF "$(OUT2INC_SUBDIR)"!=""
