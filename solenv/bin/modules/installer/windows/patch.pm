@@ -4,9 +4,9 @@
 #
 #   $RCSfile: patch.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-28 11:21:55 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:04:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ sub update_patch_tables
     my $patchcodesfilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $allvariables->{'PATCHCODEFILE'};
     my $patchcodefile = installer::files::read_file($patchcodesfilename);
 
+    my $number = 0;
+
     for ( my $i = 0; $i <= $#{$patchcodefile}; $i++ )
     {
         my $oneline = ${$patchcodefile}[$i];
@@ -106,38 +108,40 @@ sub update_patch_tables
         my $code = "";
         if ( $oneline =~ /^\s*(\S+)\s/ ) { $code = $1; }
 
-        my $number = $i + 1;
-        my $signature = "dir" . $number . "user";
-        my $rootvalue = "1";
-        my $registryname = "";
-        my $registryversion = "";
+        foreach my $name ( sort keys %installer::globals::installlocations )
+        {
+            $number++;
+            my $signature = "dir" . $number . "user";
+            my $rootvalue = "1";
+            my $registryname = "";
+            my $registryversion = "";
 
-        if ( $allvariables->{'SEARCHPRODUCTNAME'} ) { $registryname = $allvariables->{'SEARCHPRODUCTNAME'}; }
-        else { $registryname = $allvariables->{'PRODUCTNAME'}; }
+            if ( $allvariables->{'SEARCHPRODUCTNAME'} ) { $registryname = $allvariables->{'SEARCHPRODUCTNAME'}; }
+            else { $registryname = $allvariables->{'PRODUCTNAME'}; }
 
-        if ( $allvariables->{'SEARCHPRODUCTVERSION'} ) { $registryversion = $allvariables->{'SEARCHPRODUCTVERSION'}; }
-        else { $registryversion = $allvariables->{'PRODUCTVERSION'}; }
+            if ( $allvariables->{'SEARCHPRODUCTVERSION'} ) { $registryversion = $allvariables->{'SEARCHPRODUCTVERSION'}; }
+            else { $registryversion = $allvariables->{'PRODUCTVERSION'}; }
 
-        my $key = "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $registryname . "\\" . $registryversion . "\\" . $code;
+            my $key = "Software\\" . $allvariables->{'MANUFACTURER'} . "\\" . $registryname . "\\" . $registryversion . "\\" . $code;
 
-        my $name = "INSTALLLOCATION";
-        my $type = 2;
-        my $property = "INSTALLLOCATION";
+            my $type = 2;
+            my $property = $name;
 
-        $oneline = $signature . "\t" . $rootvalue . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
-        push(@{$reglocatfile}, $oneline);
+            $oneline = $signature . "\t" . $rootvalue . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
+            push(@{$reglocatfile}, $oneline);
 
-        $oneline = $property . "\t" . $signature . "\n";
-        push(@{$appsearchfile}, $oneline);
+            $oneline = $property . "\t" . $signature . "\n";
+            push(@{$appsearchfile}, $oneline);
 
-        $signature = "dir" . $number . "mach";
-        $rootvalue = "2";
+            $signature = "dir" . $number . "mach";
+            $rootvalue = "2";
 
-        $oneline = $signature . "\t" . $rootvalue . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
-        push(@{$reglocatfile}, $oneline);
+            $oneline = $signature . "\t" . $rootvalue . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
+            push(@{$reglocatfile}, $oneline);
 
-        $oneline = $property . "\t" . $signature . "\n";
-        push(@{$appsearchfile}, $oneline);
+            $oneline = $property . "\t" . $signature . "\n";
+            push(@{$appsearchfile}, $oneline);
+        }
     }
 
     # Saving the files
