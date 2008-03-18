@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:25:38 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:01:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,7 @@ sub get_all_items_from_script
                     $itemvalue = $2;
 
                     installer::remover::remove_leading_and_ending_quotationmarks(\$itemvalue);
+                    $itemvalue =~ s/\s*$//; # removing ending whitespaces. Could be introduced by empty variables.
 
                     $oneitemhash{$itemkey} = $itemvalue;
 
