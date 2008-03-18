@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:26:22 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
+#include <svx/borderline.hxx>
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -87,7 +88,6 @@
 #include "frmdlg.hxx"
 #include "colmgr.hxx"
 #include "prcntfld.hxx"
-#include "linetype.hxx"
 #include "paratr.hxx"
 #include "frmui.hrc"
 #include "poolfmt.hrc"
@@ -113,11 +113,11 @@ SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
  --------------------------------------------------------------------*/
 
 static const USHORT __FAR_DATA nLines[] = {
-    LIN_1,
-    LIN_2,
-    LIN_3,
-    LIN_4,
-    LIN_5
+    DEF_LINE_WIDTH_0,
+    DEF_LINE_WIDTH_1,
+    DEF_LINE_WIDTH_2,
+    DEF_LINE_WIDTH_3,
+    DEF_LINE_WIDTH_4
 };
 
 static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
