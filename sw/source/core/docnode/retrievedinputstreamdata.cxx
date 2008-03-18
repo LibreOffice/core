@@ -4,9 +4,9 @@
  *
  *  $RCSfile: retrievedinputstreamdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:31:32 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,18 +85,6 @@ SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::R
     }
 
     return nDataKey;
-}
-
-void SwRetrievedInputStreamDataManager::ReleaseData( const tDataKey nDataKey )
-{
-    osl::MutexGuard aGuard(maMutex);
-
-    std::map< tDataKey, tData >::iterator aIter = maInputStreamData.find( nDataKey );
-
-    if ( aIter != maInputStreamData.end() )
-    {
-        maInputStreamData.erase( aIter );
-    }
 }
 
 void SwRetrievedInputStreamDataManager::PushData(
