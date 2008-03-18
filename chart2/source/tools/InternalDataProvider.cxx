@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:43:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
@@ -1111,7 +1112,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
 }
 
 Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
-    const Reference< chart2::data::XDataSource >& xDataSource )
+    const Reference< chart2::data::XDataSource >& /* xDataSource */ )
     throw (uno::RuntimeException)
 {
     Sequence< beans::PropertyValue > aArguments( 4 );
@@ -1130,75 +1131,8 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     aArguments[3] = beans::PropertyValue(
         C2U("HasCategories"), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
 
-    //Sequence Mapping
-    {
-        bool bDifferentIndexes = false;
-
-        std::vector< sal_Int32 > aSequenceMappingVector;
-
-        uno::Reference< chart2::data::XDataSource > xCompareDataSource(
-            this->createDataSource( aArguments ) );
-        if( xDataSource.is() && xCompareDataSource.is() )
-        {
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aOldSequences(
-                xCompareDataSource->getDataSequences() );
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSequences(
-                xDataSource->getDataSequences());
-
-            sal_Int32 nNewOffset = 0;
-            for( sal_Int32 nNewIndex = 0; nNewIndex < aNewSequences.getLength(); nNewIndex++ )
-            {
-                sal_Int32 nOldOffset = 0;
-                uno::Reference< chart2::data::XLabeledDataSequence> xNew( aNewSequences[nNewIndex] );
-                for( sal_Int32 nOldIndex = 0; nOldIndex < aOldSequences.getLength(); nOldIndex++ )
-                {
-                    uno::Reference< chart2::data::XLabeledDataSequence> xOld( aOldSequences[nOldIndex] );
-
-                    if( xOld.is() && xNew.is() )
-                    {
-                        OUString aOldLabel;
-                        OUString aNewLabel;
-                        OUString aOldValues;
-                        OUString aNewValues;
-                        if( xOld.is() && xOld->getLabel().is() )
-                            aOldLabel = xOld->getLabel()->getSourceRangeRepresentation();
-                        if( xNew.is() && xNew->getLabel().is() )
-                            aNewLabel = xNew->getLabel()->getSourceRangeRepresentation();
-                        if( xOld.is() && xOld->getValues().is() )
-                            aOldValues = xOld->getValues()->getSourceRangeRepresentation();
-                        if( xNew.is() && xNew->getValues().is() )
-                            aNewValues = xNew->getValues()->getSourceRangeRepresentation();
-
-                        if( aOldValues.equals( lcl_aCategoriesRangeName ))
-                            ++nOldOffset;
-                        if( aNewValues.equals( lcl_aCategoriesRangeName ))
-                            ++nNewOffset;
-
-                        if( aOldLabel.equals(aNewLabel)
-                            && ( aOldValues.equals(aNewValues) ) )
-                        {
-                            sal_Int32 nAdaptedOldIndex = nOldIndex - nOldOffset;
-                            sal_Int32 nAdaptedNewIndex = nNewIndex - nNewOffset;
-                            if( nAdaptedOldIndex!=nAdaptedNewIndex )
-                                bDifferentIndexes = true;
-                            if( nAdaptedOldIndex>= 0)
-                                aSequenceMappingVector.push_back(nAdaptedOldIndex);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if( bDifferentIndexes && aSequenceMappingVector.size() )
-        {
-            aArguments.realloc(aArguments.getLength()+1);
-            aArguments[aArguments.getLength()-1] = beans::PropertyValue(
-                C2U("SequenceMapping"), -1
-                , uno::makeAny( ContainerHelper::ContainerToSequence(aSequenceMappingVector) )
-                , beans::PropertyState_DIRECT_VALUE );
-        }
-    }
+    // #i85913# Sequence Mapping is not needed for internal data, as it is
+    // applied to the data when the data source is created.
 
     return aArguments;
 }
