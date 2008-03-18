@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_testuri.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:20:09 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,11 +360,13 @@ void Test::test_Uri() {
             { "http://a/b/c/d;p?q", "g#s/./x", "http://a/b/c/g#s/./x" },
             { "http://a/b/c/d;p?q", "g#s/../x", "http://a/b/c/g#s/../x" },
             { "http://a/b/c/d;p?q", "http:g", "http:g" },
-
             { "http!://a/b/c/d;p?q", "g:h", "g:h" },
             { "http!://a/b/c/d;p?q", "g", 0 },
             { "http:b/c/d;p?q", "g:h", "g:h" },
-            { "http:b/c/d;p?q", "g", 0 } };
+            { "http:b/c/d;p?q", "g", 0 },
+            { "http://a/b/../", "../c", "http://a/b/../../c" },
+            { "http://a/b/..", "../c", "http://a/c" },
+            { "http://a/./b/", ".././.././../c", "http://a/./../../c" } };
     for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
     {
         rtl::OUString aAbs;
