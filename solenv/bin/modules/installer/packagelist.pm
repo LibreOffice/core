@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:57:52 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:00:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -356,83 +356,39 @@ sub find_links_for_package
 
 sub find_dirs_for_package
 {
-    my ($dirlist, $filelist, $linklist, $unixlinklist, $packagename) = @_;
+    my ($dirlist, $onepackage) = @_;
 
     my @newdirlist = ();
-
-    # iterating over all directories
 
     for ( my $i = 0; $i <= $#{$dirlist}; $i++ )
     {
         my $onedir = ${$dirlist}[$i];
+        my $modulesstring = $onedir->{'modules'};    # comma separated modules list
+        my $moduleslist = installer::converter::convert_stringlist_into_array(\$modulesstring, ",");
 
         my $includedir = 0;
 
-        my $hostname = "";
+        # iterating over all modules of this dir
 
-        if ( $onedir->{'HostName'} ) { $hostname = $onedir->{'HostName'}; }
-
-        if ( $hostname eq "" ) { next; }
-
-        # iterating over all files, looking for this hostname
-
-        for ( my $j = 0; $j <= $#{$filelist}; $j++ )
+        for ( my $j = 0; $j <= $#{$moduleslist}; $j++ )
         {
-            my $onefile = ${$filelist}[$j];
-            my $destination = $onefile->{'destination'};
+            if ( $includedir ) { last; }
+            my $dirmodule = ${$moduleslist}[$j];
+            installer::remover::remove_leading_and_ending_whitespaces(\$dirmodule);
 
-            if ( $destination =~ /^\s*\Q$hostname\E/ )  # the directory path is part of the file path!
+            # iterating over all modules of the package
+
+            my $packagemodules = $onepackage->{'allmodules'};
+
+            for ( my $k = 0; $k <= $#{$packagemodules}; $k++ )
             {
-                $includedir = 1;
-                last;
-            }
-        }
+                my $packagemodule = ${$packagemodules}[$k];
 
-        # also searching for links
-
-        if ( ! $includedir )    # also looking for links
-        {
-            for ( my $j = 0; $j <= $#{$linklist}; $j++ )
-            {
-                my $onelink = ${$linklist}[$j];
-                my $destination = $onelink->{'destination'};
-
-                if ( $destination =~ /^\s*\Q$hostname\E/ )  # the directory path is part of the file path!
+                if ( $dirmodule eq $packagemodule )
                 {
                     $includedir = 1;
                     last;
                 }
-            }
-        }
-
-        # also searching for unix links
-
-        if ( ! $includedir )    # also looking for links
-        {
-            for ( my $j = 0; $j <= $#{$unixlinklist}; $j++ )
-            {
-                my $onelink = ${$unixlinklist}[$j];
-                my $destination = $onelink->{'destination'};
-
-                if ( $destination =~ /^\s*\Q$hostname\E/ )  # the directory path is part of the file path!
-                {
-                    $includedir = 1;
-                    last;
-                }
-            }
-        }
-
-        # also investigating the flag CREATE (only added to $installer::globals::rootmodulegid)
-
-        if (( ! $includedir ) && ( $packagename eq $installer::globals::rootmodulegid ))
-        {
-            my $styles = "";
-
-            if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
-
-            if ( $styles =~ /\bCREATE\b/ )
-            {
-                $includedir = 1;
             }
         }
 
@@ -519,7 +475,7 @@ sub check_packagelist
 
 sub get_packinfo
 {
-    my ($gid, $filename, $packages, $onelanguage) = @_;
+    my ($gid, $filename, $packages, $onelanguage, $islanguagemodule) = @_;
 
     my $packagelist = installer::files::read_file($filename);
 
@@ -547,6 +503,14 @@ sub get_packinfo
                 }
 
                 $counter++;
+            }
+
+            $onepackage{'islanguagemodule'} = $islanguagemodule;
+            if ( $islanguagemodule )
+            {
+                $saveonelanguage = $onelanguage;
+                $saveonelanguage =~ s/_/-/g;
+                $onepackage{'language'} = $saveonelanguage;
             }
 
             push(@allpackages, \%onepackage);
@@ -617,11 +581,8 @@ sub collectpackages
             # Resetting language, if this is no language pack
 #           if ( ! $installer::globals::languagepack ) { $onelanguage = ""; }
 
-            # Ignoring packages, if they are marked to be ignored. Otherwise OOo 2.x update will break.
-            # Style OOOIGNORE has to be removed for OOo 3.x
             my $styles = "";
             if ( $onemodule->{'Styles'} ) { $styles = $onemodule->{'Styles'}; }
-            if (( $styles =~ /\bOOOIGNORE\b/ ) && ( $installer::globals::isopensourceproduct )) { next; }
 
             # checking modules with style LANGUAGEMODULE
             my $islanguagemodule = 0;
@@ -647,7 +608,7 @@ sub collectpackages
             my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            get_packinfo($modulegid, $$fileref, \@packages, $onelanguage);
+            get_packinfo($modulegid, $$fileref, \@packages, $onelanguage, $islanguagemodule);
         }
     }
 
@@ -703,6 +664,63 @@ sub log_packages_content
         $infoline = "\n";
         push(@installer::globals::logfileinfo, $infoline);
 
+    }
+}
+
+#####################################################################
+# Creating assignments from modules to destination pathes.
+# This is required for logging in fileinfo file. Otherwise
+# the complete destination file would not be known in file list.
+# Saved in %installer::globals::moduledestination
+#####################################################################
+
+sub create_module_destination_hash
+{
+    my ($packages, $allvariables) = @_;
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $onepackage = ${$packages}[$i];
+
+        my $defaultdestination = $onepackage->{'destpath'};
+        resolve_packagevariables(\$defaultdestination, $allvariables, 1);
+        if ( $^O =~ /darwin/i ) { $defaultdestination =~ s/\/opt\//\/Applications\//; }
+
+        foreach my $onemodule ( @{$onepackage->{'allmodules'}} )
+        {
+            $installer::globals::moduledestination{$onemodule} = $defaultdestination;
+        }
+    }
+}
+
+#####################################################################
+# Adding the default pathes into the files collector for Unixes.
+# This is necessary to know the complete destination path in
+# fileinfo log file.
+#####################################################################
+
+sub add_defaultpathes_into_filescollector
+{
+    my ($allfiles) = @_;
+
+    for ( my $i = 0; $i <= $#{$allfiles}; $i++ )
+    {
+        my $onefile = ${$allfiles}[$i];
+
+        if ( ! $onefile->{'destination'} ) { installer::exiter::exit_program("ERROR: No destination found at file $onefile->{'gid'}!", "add_defaultpathes_into_filescollector"); }
+        my $destination = $onefile->{'destination'};
+
+        if ( ! $onefile->{'modules'} ) { installer::exiter::exit_program("ERROR: No modules found at file $onefile->{'gid'}!", "add_defaultpathes_into_filescollector"); }
+        my $module = $onefile->{'modules'};
+        # If modules contains a list of modules, only taking the first one.
+        if ( $module =~ /^\s*(.*?)\,/ ) { $module = $1; }
+
+        if ( ! exists($installer::globals::moduledestination{$module}) ) { installer::exiter::exit_program("ERROR: No default destination path found for module $module!", "add_defaultpathes_into_filescollector"); }
+        my $defaultpath = $installer::globals::moduledestination{$module};
+        $defaultpath =~ s/\/\s*$//; # removing ending slashes
+        my $fulldestpath = $defaultpath . $installer::globals::separator . $destination;
+
+        $onefile->{'fulldestpath'} = $fulldestpath;
     }
 }
 
