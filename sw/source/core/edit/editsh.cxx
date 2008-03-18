@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:06 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,49 +569,6 @@ void SwEditShell::SetChartName( const String &rName )
     ASSERT( pONd, "ChartNode not found" );
     pONd->SetChartTblName( rName );
 }
-
-const String& SwEditShell::GetChartName( const uno::Reference < embed::XEmbeddedObject >& xObj )
-{
-    if( xObj.is() )
-    {
-        SwClientIter aIter( *(SwModify*)GetDoc()->GetDfltGrfFmtColl() );
-        SwClient *pCli;
-        if( 0 != (pCli = aIter.First( TYPE(SwCntntNode) )) )
-            do{
-                if( ((SwCntntNode*)pCli)->IsOLENode() &&
-                    xObj == ((SwOLENode*)pCli)->GetOLEObj().GetOleRef() )
-                {
-                    return ((SwOLENode*)pCli)->GetChartTblName();
-                }
-            } while ( 0 != (pCli = aIter.Next()) );
-    }
-    else
-    {
-        SwOLENode *pONd = GetCrsr()->GetNode()->GetOLENode();
-        if( pONd )
-            return pONd->GetChartTblName();
-    }
-
-    return aEmptyStr;
-}
-
-void SwEditShell::UpdateChartData( const String &rName )
-{
-    //Fuer das Update brauchen wir die SwTable. Also muessen wir ggf. die
-    //gewuenschte Table anspringen.
-    const SwTableNode *pTblNd = IsCrsrInTbl();
-    if( !pTblNd || rName != pTblNd->GetTable().GetFrmFmt()->GetName() )
-    {
-        Push();
-        GotoTable( rName );
-        pTblNd = IsCrsrInTbl();
-        Pop( FALSE );
-    }
-
-    if( pTblNd )
-        pTblNd->GetTable().UpdateCharts();
-}
-
 
 void SwEditShell::UpdateCharts( const String &rName )
 {
