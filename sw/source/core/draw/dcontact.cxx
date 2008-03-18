@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 13:53:48 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1490,13 +1490,14 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                                                ? *(pAnchoredDrawObj->GetLastObjRect())
                                                : *(pOldBoundRect);
                 // <--
+                // --> OD 2008-02-18 #i79400#
+                // always invalidate object rectangle inclusive spaces
+                pAnchoredDrawObj->InvalidateObjRectWithSpaces();
+                // <--
                 // --> OD 2005-01-28 #i41324# - notify background before
-                // adjusting position and change the last object rectangle.
+                // adjusting position
                 if ( bNotify )
                 {
-                    // --> OD 2006-08-16 #i68520#
-                    pAnchoredDrawObj->InvalidateObjRectWithSpaces();
-                    // <--
                     // --> OD 2004-07-20 #i31573# - correction: Only invalidate
                     // background of given drawing object.
                     lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
