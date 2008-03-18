@@ -276,6 +276,23 @@
       if test "`${PERL} -v | grep -c cygwin  2>/dev/null`" = 0; then
           _AS_PERL=1
 ***************
+*** 5215,5221 ****
+      CXXFLAGS="$CXXFLAGS -fpascal-strings -no-cpp-precomp -fno-common"
+      DLL_SUFFIX=".dylib"
+      DSO_LDOPTS=''
+!     STRIP="$STRIP -x -S"
+      case "${target_cpu}" in
+      powerpc*)
+          _PLATFORM_DEFAULT_TOOLKIT='mac'
+--- 5215,5221 ----
+      CXXFLAGS="$CXXFLAGS -fpascal-strings -no-cpp-precomp -fno-common"
+      DLL_SUFFIX=".dylib"
+      DSO_LDOPTS=''
+!     STRIP="$STRIP -X -S" # MACOSX 10.5 strip -x sometimes fails
+      case "${target_cpu}" in
+      powerpc*)
+          _PLATFORM_DEFAULT_TOOLKIT='mac'
+***************
 *** 5228,5234 ****
       ;;
   
@@ -405,6 +422,23 @@
       CPP="\$(CYGWIN_WRAPPER) $CPP"
 *** misc/mozilla/configure.in	Tue Oct 12 06:13:29 2004
 --- misc/build/mozilla/configure.in	Tue Jan 15 13:34:32 2008
+***************
+*** 993,999 ****
+      CXXFLAGS="$CXXFLAGS -fpascal-strings -no-cpp-precomp -fno-common"
+      DLL_SUFFIX=".dylib"
+      DSO_LDOPTS=''
+!     STRIP="$STRIP -x -S"
+      case "${target_cpu}" in
+      powerpc*)
+          _PLATFORM_DEFAULT_TOOLKIT='mac'
+--- 993,999 ----
+      CXXFLAGS="$CXXFLAGS -fpascal-strings -no-cpp-precomp -fno-common"
+      DLL_SUFFIX=".dylib"
+      DSO_LDOPTS=''
+!     STRIP="$STRIP -X -S" # MACOSX 10.5 strip -x sometimes fails
+      case "${target_cpu}" in
+      powerpc*)
+          _PLATFORM_DEFAULT_TOOLKIT='mac'
 ***************
 *** 1006,1012 ****
       ;;
@@ -8303,7 +8337,7 @@
   	endif
   endif
   	DSO_LDOPTS += -G -h $(notdir $@)
-+     DSO_LDOPTS += -R '\$$ORIGIN'
++     DSO_LDOPTS += -R '$$ORIGIN'
   endif
   
   # -KPIC generates position independent code for use in shared libraries.
@@ -9525,4 +9559,23 @@
 + #endif
           }
       }
+  
+*** misc/mozilla/nsprpub/pr/include/md/_pth.h
+--- misc/build/mozilla/nsprpub/pr/include/md/_pth.h
+***************
+*** 198,204 ****
+  /*
+   * These platforms don't have pthread_kill()
+   */
+! #if defined(DARWIN)
+  #define pthread_kill(thread, sig) ENOSYS
+  #endif
+  
+--- 198,204 ----
+  /*
+   * These platforms don't have pthread_kill()
+   */
+! #if defined(DARWIN) && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 1050
+  #define pthread_kill(thread, sig) ENOSYS
+  #endif
   
