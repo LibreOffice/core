@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:15:22 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ namespace /* private */
     // forward
     void _osl_warnFile(const char*, rtl_uString*);
     oslFileError SAL_CALL _osl_getFileURLFromSystemPath(rtl_uString* , rtl_uString**);
-    DWORD WINAPI IsValidFilePath(LPCTSTR, LPCTSTR*, DWORD);
+    DWORD WINAPI IsValidFilePath(rtl_uString*, LPCTSTR*, DWORD, rtl_uString**);
     HANDLE WINAPI OpenLogicalDrivesEnum(void);
     BOOL WINAPI EnumLogicalDrives(HANDLE, LPTSTR);
     BOOL WINAPI CloseLogicalDrivesEnum(HANDLE);
@@ -1262,8 +1262,9 @@ namespace /* private */
     }
 
     //#####################################################
-    DWORD WINAPI IsValidFilePath(LPCTSTR lpszPath, LPCTSTR *lppError, DWORD dwFlags)
+    DWORD WINAPI IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_uString **corrected)
     {
+        LPCTSTR lpszPath = reinterpret_cast< LPCTSTR >(path->buffer);
         LPCTSTR lpComponent;
         BOOL    fValid = TRUE;
         DWORD   dwPathType = PATHTYPE_ERROR;
@@ -1374,6 +1375,15 @@ namespace /* private */
         /* Now validate each component of the path */
         while ( fValid && lpComponent )
         {
+            // Correct path by merging consecutive slashes:
+            if (*lpComponent == '\\' && corrected != NULL) {
+                sal_Int32 i = lpComponent - lpszPath;
+                rtl_uString_newReplaceStrAt(corrected, path, i, 1, NULL);
+                    //TODO: handle out-of-memory
+                lpszPath = reinterpret_cast< LPCTSTR >((*corrected)->buffer);
+                lpComponent = lpszPath + i;
+            }
+
             fValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags );
 
             if ( fValid && lpComponent )
@@ -2178,14 +2188,14 @@ namespace /* private */
                 else
                     rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );
 
-                if ( IsValidFilePath( reinterpret_cast<LPCTSTR>(strTempPath->buffer), NULL, VALIDATEPATH_ALLOW_ELLIPSE ) )
+                if ( IsValidFilePath( strTempPath, NULL, VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
                     nError = osl_File_E_None;
             }
             else if ( bAllowRelative )  /* This maybe a relative file URL */
             {
                 rtl_uString_assign( &strTempPath, strDecodedURL );
 
-                if ( IsValidFilePath( reinterpret_cast<LPCTSTR>(strTempPath->buffer), NULL, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE ) )
+                if ( IsValidFilePath( strTempPath, NULL, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
                     nError = osl_File_E_None;
             }
         /*
@@ -2219,7 +2229,7 @@ namespace /* private */
         DWORD dwPathType = PATHTYPE_ERROR;
 
         if (strPath)
-            dwPathType = IsValidFilePath(reinterpret_cast<LPCTSTR>(strPath->buffer), NULL, VALIDATEPATH_ALLOW_RELATIVE);
+            dwPathType = IsValidFilePath(strPath, NULL, VALIDATEPATH_ALLOW_RELATIVE, NULL);
 
         if (dwPathType)
         {
@@ -3083,7 +3093,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
         }
         */
 
-        dwPathType = IsValidFilePath( reinterpret_cast<LPCTSTR>(strSysDirectoryPath->buffer), NULL, VALIDATEPATH_NORMAL );
+        dwPathType = IsValidFilePath( strSysDirectoryPath, NULL, VALIDATEPATH_NORMAL, NULL );
 
         if ( dwPathType & PATHTYPE_IS_SERVER )
         {
@@ -3187,7 +3197,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     }
     */
 
-    dwPathType = IsValidFilePath( reinterpret_cast<LPCTSTR>(strSysFilePath->buffer), NULL, VALIDATEPATH_NORMAL );
+    dwPathType = IsValidFilePath( strSysFilePath, NULL, VALIDATEPATH_NORMAL, NULL );
 
     if ( dwPathType & PATHTYPE_IS_VOLUME )
         type = PATHTYPE_VOLUME;
