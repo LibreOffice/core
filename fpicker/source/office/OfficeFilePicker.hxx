@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:14:24 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 17:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,8 @@ private:
     // #97148# --------------
     ::rtl::OUString     m_aOldDisplayDirectory;
     ::rtl::OUString     m_aOldHideDirectory;
+
+    ::rtl::OUString     m_aStandardDir;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
                         m_xListener;
