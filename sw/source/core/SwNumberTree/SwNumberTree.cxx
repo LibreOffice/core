@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:33:27 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1043,7 +1043,8 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
     tSwNumberTreeChildren::iterator aItResult =
         mChildren.find(const_cast<SwNumberTreeNode *>(pChild));
 
-    ASSERT(pChild == *aItResult, "something went wrong getting the iterator for a child");
+    ASSERT( aItResult != mChildren.end(),
+            "something went wrong getting the iterator for a child");
 
     return aItResult;
 }
@@ -1114,12 +1115,6 @@ bool SwNumberTreeNodeLessThan(const SwNumberTreeNode * pA,
     bResult = pA->LessThan(*pB);
 
   return bResult;
-}
-
-bool SwNumberTreeNodeGreaterEqual(const SwNumberTreeNode * pA,
-                                  const SwNumberTreeNode * pB)
-{
-    return ! SwNumberTreeNodeLessThan(pA, pB);
 }
 
 SwNumberTreeNode * SwNumberTreeNode::GetLastDescendant() const
