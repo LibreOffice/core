@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:31:10 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,14 +154,10 @@ namespace
 static rtl::OUString getBootstrapValue(const rtl::OUString& aFile, const rtl::OUString& aValue)
 {
     rtl::OUString aPath, aRet;
-    if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
+    if( rtl::Bootstrap::get(UNISTRING("BRAND_BASE_DIR"), aPath) )
     {
-        sal_uInt32 lastIndex = aPath.lastIndexOf('/');
-        if ( lastIndex > 0 )
-        {
-            aPath = aPath.copy( 0, lastIndex+1 );
-            aPath  += aFile;
-        }
+        aPath  += UNISTRING("/program/");
+        aPath  += aFile;
 
         rtl::Bootstrap aVersionFile(aPath);
         aVersionFile.getFrom(aValue, aRet, rtl::OUString());
