@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ure_standalone.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:35:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+Installation gid_Installation_Ure
+    ProductName = "${PRODUCTNAME}";
+    ProductVersion = "${PRODUCTVERSION}";
+#if defined WNT
+    DefaultDestPath = "<winprogpath>\%PRODUCTNAME";
+#else
+    DefaultDestPath = "/opt/%PRODUCTNAME";
+#endif
+End
+
+Directory gid_Dir_Ooo_Openofficeorg
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "OpenOffice.org";
+  #else
+    HostName = "openoffice.org";
+  #endif
+End
+
+Directory gid_Dir_Common_Ure
+    ParentID = gid_Dir_Ooo_Openofficeorg;
+  #ifdef WNT
+    HostName = "URE";
+  #else
+    HostName = "ure";
+  #endif
+End
+
+File gid_File_License_Ure
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Common_Ure;
+    Name = "LICENSE";
+    Styles = (PACKED);
+End
+
+File gid_File_ThirdpartylicensereadmeHtml_Ure
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Common_Ure;
+    Name = "THIRDPARTYLICENSEREADME.html";
+    Styles = (PACKED);
+End
+
+File gid_File_Readme_Ure
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Common_Ure;
+    Name = "README";
+    Styles = (PACKED);
+End
+
+// Module
+
+Module gid_Module_Root
+    Name = "ure";
+    Description = "ure";
+End
+
+// Windows Registry:
+
+RegistryItem gid_Regitem_Path_Ure
+    ModuleID = gid_Module_Root;
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "Software\OpenOffice.org\%PRODUCTNAME";
+    Name = "Path";
+    Value = "<progpath>";
+End
