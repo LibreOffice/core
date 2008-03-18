@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:04:09 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:07:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@ nodep=true
 # lots of warning. There is no point in cleaning this up, so we just
 # ignore warnings
 EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-
-# Windows /DELAYLOAD depends on objects delivered from sal, but is not needed
-# for this internal tool, anyway:
-DELAYLOADOBJ=
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
