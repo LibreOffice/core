@@ -61,8 +61,16 @@ struct ScaleData
      */
     any Origin;
 
-    /** Note: Is this a good place for the AXIS-orientation?  Two axes may use the same
-        scale, but point into two different directions (?)
+    /** Axis orientation (standard or reversed).
+
+        <p>If used at the Y axis in pie charts or doughnut charts, specifies
+        the rotation direction of the pie. The value
+        <const>AxisOrientation::MATHEMATICAL</const> rotates the pie
+        counterclockwise, the value <const>AxisOrientation::REVERSE</const>
+        rotates the pie clockwise.</p>
+
+        <p>Note: Is this a good place for the axis orientation? Two axes may
+        use the same scale, but point into two different directions.</p>
      */
     AxisOrientation     Orientation;
 
@@ -72,8 +80,10 @@ struct ScaleData
 
     data::XLabeledDataSequence Categories;
 
-    /** describes the type of the axis. E.g. it can be a real number axis or a category axis or something else.
-        AxisType is one value out of the constant group <type>AxisType</type>.
+    /** describes the type of the axis.
+
+        <p>It can be a real number axis or a category axis or something else.
+        AxisType is one value out of the constant group <type>AxisType</type>.</p>
     */
     long   AxisType;
 
