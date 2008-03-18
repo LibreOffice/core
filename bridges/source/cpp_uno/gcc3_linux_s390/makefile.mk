@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 11:57:04 $
+#   last change: $Author: vg $ $Date: 2008-03-18 16:06:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
 
+# In case someone enabled the non-standard -fomit-frame-pointer which does not
+# work with the .cxx sources in this directory:
+CFLAGSCXX += -fno-omit-frame-pointer
+
 CFLAGSNOOPT=-O0
 
 SLOFILES= \
@@ -66,10 +70,8 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=..$/..$/bridge_exports.map
 SHL1RPATH=URELIB
 
-SHL1OBJS= \
-    $(SLO)$/except.obj		\
-    $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj
+SHL1OBJS= $(SLOFILES)
+SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
 
 SHL1STDLIBS= \
     $(CPPULIB)			\
