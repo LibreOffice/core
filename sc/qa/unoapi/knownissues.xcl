@@ -95,18 +95,29 @@ sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable
 ### i84761 ###
 sc.ScRecentFunctionsObj::com::sun::star::sheet::XRecentFunctions
 
+### i85566 ###
+sc.ScStyleObj::com::sun::star::style::Style
+
+### i86793 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XFormulaQuery
+
 ### i84726 ###
-# sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable::getAccessibleRowDescription() -> disabled in sc.sce
+# sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable::getAccessibleRowDescription() 
+#-> disabled in sc.sce
 
 ### i84554 ###
-# sc.AccessibleEditableTextPara_PreviewNote -> disabled in sc.sce
+# sc.AccessibleEditableTextPara_PreviewNote 
+#-> disabled in sc.sce
 
 ### i84641 ###
-# sc.ScAccessibleCsvRuler -> disabled in sc.sce
+# sc.ScAccessibleCsvRuler 
+#-> disabled in sc.sce
 
 ### i84653 ###
-# sc.ScPageObj -> disabled in sc.sce
+# sc.ScPageObj 
+#-> disabled in sc.sce
 
 ### i84656 ###
-# sc.ScTabViewObj  -> disabled in sc.sce
+# sc.ScTabViewObj  
+#-> disabled in sc.sce
 
