@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scenwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:35:16 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,56 +216,65 @@ IMPL_LINK( ScScenarioListBox, AccelSelectHdl, Accelerator *, pSelAccel )
     return 0;
 }
 
-long __EXPORT ScScenarioListBox::Notify( NotifyEvent& rNEvt )
-{
-    ListBox::Notify( rNEvt );
-    long nHandled = 0;
+//---------------------------------------------------------------
 
-    if ( rNEvt.GetType() == EVENT_COMMAND && GetSelectEntryCount() )
+long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
+{
+    bool bHandled = false;
+
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        if( KEY_RETURN == aCode.GetCode() )
+        {
+            DoubleClick();
+            bHandled = true;
+        }
+    }
+    else if ( rNEvt.GetType() == EVENT_COMMAND && GetSelectEntryCount() )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
         {
-                    String* pProtect = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+2 );
-                    if(pProtect && pProtect->GetChar(0) == '0')
-                    {
-
-            ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
-            aPopup.Execute( this, pCEvt->GetMousePosPixel() );
-            if (aPopup.WasHit())
+            String* pProtect = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+2 );
+            if(pProtect && pProtect->GetChar(0) == '0')
             {
-                String aName = GetSelectEntry();
-                USHORT nId = aPopup.GetSelected();
-                if ( nId == RID_NAVIPI_SCENARIO_DELETE )
+                ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
+                aPopup.Execute( this, pCEvt->GetMousePosPixel() );
+                if (aPopup.WasHit())
                 {
-                    short nRes = QueryBox( NULL, WinBits( WB_YES_NO | WB_DEF_YES ),
-                                    ScGlobal::GetRscString(STR_QUERY_DELSCENARIO) ).Execute();
-                    if ( nRes == RET_YES )
+                    String aName = GetSelectEntry();
+                    USHORT nId = aPopup.GetSelected();
+                    if ( nId == RID_NAVIPI_SCENARIO_DELETE )
                     {
-                        SfxStringItem aStringItem( SID_DELETE_SCENARIO, aName );
+                        short nRes = QueryBox( NULL, WinBits( WB_YES_NO | WB_DEF_YES ),
+                                        ScGlobal::GetRscString(STR_QUERY_DELSCENARIO) ).Execute();
+                        if ( nRes == RET_YES )
+                        {
+                            SfxStringItem aStringItem( SID_DELETE_SCENARIO, aName );
+                            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                            if (pViewFrm)
+                                pViewFrm->GetDispatcher()->Execute( SID_DELETE_SCENARIO,
+                                                        SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                                                        &aStringItem, 0L, 0L );
+                        }
+                    }
+                    else if ( nId == RID_NAVIPI_SCENARIO_EDIT )
+                    {
+                        SfxStringItem aStringItem( SID_EDIT_SCENARIO, aName );
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
-                            pViewFrm->GetDispatcher()->Execute( SID_DELETE_SCENARIO,
+                            pViewFrm->GetDispatcher()->Execute( SID_EDIT_SCENARIO,
                                                     SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                                     &aStringItem, 0L, 0L );
                     }
                 }
-                else if ( nId == RID_NAVIPI_SCENARIO_EDIT )
-                {
-                    SfxStringItem aStringItem( SID_EDIT_SCENARIO, aName );
-                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                    if (pViewFrm)
-                        pViewFrm->GetDispatcher()->Execute( SID_EDIT_SCENARIO,
-                                                SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                                &aStringItem, 0L, 0L );
-                }
             }
-                    }
-            nHandled = 1;
+            bHandled = true;
         }
     }
 
-    return nHandled;
+    return bHandled ? 1 : ListBox::Notify( rNEvt );
 }
 
 
