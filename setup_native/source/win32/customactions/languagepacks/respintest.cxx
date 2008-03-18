@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:27:46 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,9 @@ namespace
 
 extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 {
-    string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    string sBasisInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
 
-    // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
+    // MessageBox(NULL, sBasisInstallPath.c_str(), "DEBUG", MB_OK);
 
     // unsetting all properties
 
@@ -109,7 +109,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     // 1. Searching for "ProductCode" in setup.ini
 
-    string sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
+    string sSetupiniPath = sBasisInstallPath + TEXT("program\\setup.ini");
 
     TCHAR szValue[32767];
 
@@ -126,87 +126,28 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
     {
         // No setup.ini or no "ProductCode" in setup.ini. This is an invalid directory.
         SetMsiProperty( handle, TEXT("INVALIDDIRECTORY"), TEXT("YES") );
-        // MessageBox(NULL, "INVALIDDIRECTORY set", "DEBUG", MB_OK);
+        // MessageBox(NULL, "INVALIDDIRECTORY set, no setup.ini or ProductCode in setup.ini.", "DEBUG", MB_OK);
         SetMsiErrorCode( MSI_ERROR_INVALIDDIRECTORY );
         return ERROR_SUCCESS;
     }
 
-    // 2. Searching for "version.ini" and "bootstrap.ini"
-
-    // version.ini is the new file, that shall be used. If there is no version.ini, it can be possible
-    // that this is an old src680-version, in which only bootstrap.ini exists. In this case, the data
-    // have to be read from bootstrap.ini.
-
-    string sBootstrapPath = sInstallPath + TEXT("program\\bootstrap.ini");
-    string sVersionPath = sInstallPath + TEXT("program\\version.ini");
-    string sInfofilePath = "";
-    string sectionname = "";
-
-    WIN32_FIND_DATA data;
-    HANDLE hdl = FindFirstFile(sVersionPath.c_str(), &data);
-
-    // string mystr = "Searching for " + sVersionPath;
-    // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
-
-    // if (hdl == INVALID_HANDLE_VALUE)
-    if ( ! IsValidHandle(hdl) )
-    {
-        // version.ini not found.
-        // Searching for bootstrap.ini
-
-        hdl = FindFirstFile(sBootstrapPath.c_str(), &data);
-
-        // mystr = "Searching for " + sBootstrapPath;
-        // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
-
-        // if (hdl == INVALID_HANDLE_VALUE)
-        if ( ! IsValidHandle(hdl) )
-        {
-            // Neither bootstrap.ini nor version.ini exist -> this is a wrong product
-            // MessageBox(NULL, "Neither bootstrap.ini nor version.ini exist -> ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
-            SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
-            // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
-            SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
-            return ERROR_SUCCESS;
-        }
-        else
-        {
-            // bootstrap.ini found, it can be used as InfoFile
-            sInfofilePath = sBootstrapPath;
-            sectionname = TEXT("Bootstrap");
-            // mystr = "bootstrap.ini found, section name: " + sectionname;
-            // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
-        }
-    }
-    else
-    {
-        // version.ini found, it can be used as InfoFile
-        sInfofilePath = sVersionPath;
-        sectionname = TEXT("Version");
-        // mystr = "version.ini found, section name: " + sectionname;
-        // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
-    }
-
-    // mystr = "Value of sInfofilePath: " + sInfofilePath;
-    // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
-
-    // 3. Comparing first three characters of "PRODUCTMAJOR" from property table and "buildid" from InfoFile
+    // 2. Comparing first three characters of "PRODUCTMAJOR" from property table and "buildid" from InfoFile
 
     szValue[0] = '\0';
 
     GetPrivateProfileString(
-        TEXT(sectionname.c_str()),
+        TEXT("Bootstrap"),
         TEXT("buildid"),
         TEXT("ISWRONGPRODUCT"),
         szValue,
         elementsof(szValue),
-        sInfofilePath.c_str()
+        sSetupiniPath.c_str()
         );
 
     if ( !_tcsicmp( szValue, TEXT("ISWRONGPRODUCT") ) )
     {
         SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
-        // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+        // MessageBox(NULL, "ISWRONGPRODUCT 1 set after searching buildid", "DEBUG", MB_OK);
         SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
         return ERROR_SUCCESS;
     }
@@ -219,12 +160,12 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
     if (_tcsnicmp(ProductMajor.c_str(), szValue, 3))
     {
         SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
-        // MessageBox(NULL, "ISWRONGPRODUCT 2 set", "DEBUG", MB_OK);
+        // MessageBox(NULL, "ISWRONGPRODUCT 2 set after searching PRODUCTMAJOR", "DEBUG", MB_OK);
         SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
         return ERROR_SUCCESS;
     }
 
-    // 4. Only for patch: Comparing "PRODUCTMINOR from property table and "ProductMinor" from InfoFile
+    // 3. Only for patch: Comparing "PRODUCTMINOR from property table and "ProductMinor" from InfoFile
 
     string isPatch = GetMsiProperty(handle, TEXT("ISPATCH"));
 
@@ -236,12 +177,12 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         szValue[0] = '\0';
 
         GetPrivateProfileString(
-            TEXT(sectionname.c_str()),
+            TEXT("Bootstrap"),
             TEXT("ProductBuildid"),
             TEXT("8918"),
             szValue,
             elementsof(szValue),
-            sInfofilePath.c_str()
+            sSetupiniPath.c_str()
             );
 
         int InstalledProductMinor = atoi(szValue);
@@ -255,7 +196,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         }
     }
 
-    // 5. Setting property ALLUSERS with value from "setup.ini"
+    // 4. Setting property ALLUSERS with value from "setup.ini"
 
     szValue[0] = '\0';
 
