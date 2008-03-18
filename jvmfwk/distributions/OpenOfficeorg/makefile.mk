@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:26:51 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:20:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,19 +45,19 @@ nojava:
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
-$(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
+$(BIN)$/javavendors.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors.xml
 .ELIF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
-    -$(COPY) javavendors_linux.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_linux.xml $(BIN)$/javavendors.xml
 .ELSE
-    -$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
+    -$(COPY) javavendors_unx.xml $(BIN)$/javavendors.xml
 .ENDIF
 .ELIF "$(GUI)"=="WNT"
-    -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors_ooo.xml	
+    -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors.xml	
 .ELIF "$(GUI)"=="OS2"
-    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors_ooo.xml	
+    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors.xml	
 .ELSE
     @echo Unsupported platform.
 .ENDIF
