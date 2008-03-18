@@ -4,9 +4,9 @@
  *
  *  $RCSfile: URIHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:29:29 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ namespace script = ::com::sun::star::script;
 
 static const char SHARE[] = "share";
 static const char SHARE_URI[] =
-    "vnd.sun.star.expand:${$SYSBINDIR/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
+    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
 
 static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
 static const char SHARE_UNO_PACKAGES_DIR[] =
@@ -62,7 +62,7 @@ static const char SHARE_UNO_PACKAGES_DIR[] =
 
 static const char USER[] = "user";
 static const char USER_URI[] =
-    "vnd.sun.star.expand:${$SYSBINDIR/" SAL_CONFIGFILE( "bootstrap") ":::UserInstallation}";
+    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") ":::UserInstallation}";
 
 static const char USER_UNO_PACKAGES[] = "user:uno_packages";
 static const char USER_UNO_PACKAGES_DIR[] =
