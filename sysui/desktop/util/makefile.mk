@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 14:14:36 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:56:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,18 +99,11 @@ APP1LIBS=
 APP1STDLIBS+=$(PKGCONFIG_LIBS)
 .ENDIF          # "$(ENABLE_GNOMEVFS)"!=""
 
-SCRIPTS= \
-    $(BIN)$/viewdoc.sh
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-ALLTAR: $(SCRIPTS) $(RPMTARFILES) $(DEBTARFILES)
-
-$(SCRIPTS) : $$(@:f)
-    @rm -f $@ 2>/dev/null
-    @cat $(@:f) | tr -d "\015" > $@
+ALLTAR: $(RPMTARFILES) $(DEBTARFILES)
 
 .IF "$(RPMTARFILES)" != ""
 
