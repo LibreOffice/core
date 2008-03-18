@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:58:13 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1913,15 +1913,24 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
             aMkPt = pShCrsr->GetMkPos();
         }
     }
-    const SwLayoutFrm *pStart = rTblCrsr.GetCntntNode()->GetFrm(
-                                            &aPtPt, 0, FALSE )->GetUpper(),
-                      *pEnd   = rTblCrsr.GetCntntNode(FALSE)->GetFrm(
-                                            &aMkPt, 0, FALSE )->GetUpper();
+
+    // --> FME 2008-01-14 #151012# Made code robust here:
+    const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
+    const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(FALSE);
+
+    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->GetFrm( &aPtPt, 0, FALSE ) : 0;
+    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->GetFrm( &aMkPt, 0, FALSE ) : 0;
+
+    const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
+    const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
+
+    ASSERT( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" )
+    // <--
 
     /* #109590# Only change table boxes if the frames are
         valid. Needed because otherwise the table cursor after moving
         table cells by dnd resulted in an empty tables cursor.  */
-    if (pStart->IsValid() && pEnd->IsValid())
+    if ( pStart && pEnd && pStart->IsValid() && pEnd->IsValid())
     {
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd );
