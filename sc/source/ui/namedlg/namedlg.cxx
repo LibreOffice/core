@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:34:30 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,9 @@ void __EXPORT ScNameDlg::UpdateNames()
 
     aEdName.SetUpdateMode( FALSE );
     //-----------------------------------------------------------
+    USHORT  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
+
     aEdAssign.SetText( EMPTY_STRING );
 
     if ( nRangeCount > 0 )
@@ -358,6 +360,7 @@ void __EXPORT ScNameDlg::UpdateNames()
     }
     //-----------------------------------------------------------
     aEdName.SetUpdateMode( TRUE );
+    aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
 }
 
@@ -415,7 +418,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
     BOOL    bAdded    = FALSE;
     String  aNewEntry = aEdName.GetText();
-
+    USHORT  nNamePos = aEdName.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
     aNewEntry.EraseTrailingChars( ' ' );
 
@@ -497,6 +500,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
         }
     }
 
+    aEdName.SetTopEntry(nNamePos);
     return bAdded;
 }
 
