@@ -28,7 +28,7 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -61,7 +61,7 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -99,7 +99,7 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -137,11 +137,16 @@ fi
 if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" add --shared \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$ORIGIN/../share/config/javasettingsunopkginstall.xml'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" add --shared \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'"
 ) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
+  if [ "$$?" != "0" ]; then
+    echo "\nERROR: Installation of UNO extension ${OXTFILENAME}"
+    echo " through $$PKG_INSTALL_ROOT/usr/lib/postrun failed."
+    exit 1
+  fi
 else
   # No postrun available, try running unopkg directly
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extension ${OXTFILENAME} failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
@@ -183,13 +188,13 @@ if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "cd \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program\""
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" remove --shared \"${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$ORIGIN/../share/config/javasettingsunopkginstall.xml'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" remove --shared \"${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'"
   echo "rm -rf \"$$INSTDIR\""
 ) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Removal of UNO extension ${OXTFILENAME} failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root uninstall requires SUNWpostrun package to be installed"
