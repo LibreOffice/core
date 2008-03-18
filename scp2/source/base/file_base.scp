@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 16:01:31 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 File gid_File_Exe_Sbase
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sbase);
     Styles = (PACKED, PATCH);
 End
@@ -76,17 +76,6 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptui, rptui )
 STD_RES_FILE_PATCH( gid_File_Res_Rptui, rptui)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptxml, rptxml )
-
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Share_Xdg_Base
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "base.desktop";
-End
 
 #endif
 
