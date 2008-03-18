@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: config.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:28:21 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:25:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ $setup_XML = "Setup.xcu";
 
 ### main ###
 
-$idStr = ' $Revision: 1.2 $ ';
+$idStr = ' $Revision: 1.3 $ ';
 $idStr =~ /Revision:\s+(\S+)\s+\$/
   ? ($cpflat2minor_rev = $1) : ($cpflat2minor_rev = "-");
 
@@ -120,7 +120,7 @@ copy ("$datapath$setup_XML", "$userinstalldir$User_Path$setup_XML");
 # quickstarter loeschen
 if ($gui ne "UNX") {
     print "kill $fullquickstart_path \n";
-    unlink( $fullquickstart_path );
+    unlink( $fullquickstart_path ) or die "cannot unlink $fullquickstart_path";
 }
 
 #delete joblist
