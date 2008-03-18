@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:23:34 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,10 +297,10 @@ OUString implReadBootstrapKey( const ::rtl::Bootstrap& _rIniFile, const OUString
 void SplashScreen::loadConfig()
 {
     // detect execute path
-    ::vos::OStartupInfo().getExecutableFile( _sExecutePath );
-    sal_uInt32 nLastIndex = _sExecutePath.lastIndexOf( '/' );
-    if ( nLastIndex > 0 )
-        _sExecutePath = _sExecutePath.copy( 0, nLastIndex + 1 );
+    ::rtl::Bootstrap::get(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ),
+        _sExecutePath );
+    _sExecutePath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" ) );
 
     // read keys from soffice.ini (sofficerc)
     OUString sIniFileName = _sExecutePath;
