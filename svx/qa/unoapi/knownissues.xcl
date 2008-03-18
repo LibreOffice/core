@@ -1,44 +1,40 @@
-### 100941 ###
+### i85263 ###
+svx.SvxShape::com::sun::star::drawing::TextProperties::TextWritingMode
+svx.SvxShapeConnector::com::sun::star::drawing::TextProperties::TextWritingMode
+# -> disbaled in svx.sce
+
+### i46736 ###
+svx.AccessibleImageBullet
+# -> disbaled in svx.sce
+
+### i85501 ### 
+svx.SvxGraphCtrlAccessibleContext
+# -> disbaled in svx.sce
+
+### i85539 ###
+svx.AccessiblePresentationShape
+# -> disbaled in svx.sce
+
+### i85476 ###
 svx.SvxUnoText::com::sun::star::text::XTextRangeMover
 
-### 101696 ###
+### i85478 ###
 svx.SvxUnoTextRange::com::sun::star::text::XTextRange
-
-### 112813 ###
-svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
 
 ### i35965 ###
 svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
-### 115136 ###
+### i85479 ###
 svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
-### 115136 ### i53708  ###
-svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
-
-### 97139 ###
+### i85481 ###
 svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
-
-### i23461 ###
-#svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
-
-### i42513 ###
-#svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
-
-### i38575 ###
-#svx.GraphicExporter::com::sun::star::document::XFilter
 
 ### i58108 ###
 svx.SvxUnoText::com::sun::star::text::XTextRangeCompare
 
 ### i38623 ###
 svx.SvxUnoTextCursor::com::sun::star::text::XTextRange
-
-### i58062 ###
-#svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleComponent
-
-### i57892 ###
-#svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleExtendedComponent
 
 ### i73993 ###
 svx.SvxUnoTextContent::com::sun::star::style::ParagraphProperties
@@ -52,18 +48,12 @@ svx.SvxShapeDimensioning::com::sun::star::style::ParagraphProperties
 svx.SvxShapePolyPolygon::com::sun::star::style::ParagraphProperties
 svx.SvxShapePolyPolygonBezier::com::sun::star::style::ParagraphProperties
 
-
-### failures wirhout issue ###
-#svx.SvxShape disabled in svx.sce
-#svx.SvxShapeConnector
-#svx.GraphicExporter
-#svx.AccessibleShape
-#svx.AccessiblePageShape
-#svx.SvxShapePolyPolygon
-#svx.SvxShapePolyPolygonBezier
+### i23461 ###
 svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
+
+### i85485 ###
 svx.SvxShapeDimensioning::com::sun::star::drawing::XShape
+
+### i58125 ###
 svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
-svx.SvxShapeCircle::com::sun::star::drawing::FillProperties
-svx.SvxShapePolyPolygon::com::sun::star::drawing::FillProperties
-svx.SvxShapePolyPolygonBezier::com::sun::star::drawing::FillProperties
+
