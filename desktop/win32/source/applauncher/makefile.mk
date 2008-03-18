@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:55:57 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:52:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ PRJNAME=desktop
 TARGET=applauncher
 LIBTARGET=NO
 TARGETTYPE=GUI
+UWINAPILIB=
 
 # --- Settings -----------------------------------------------------
 
@@ -67,7 +68,7 @@ APP1ICON=$(SOLARRESDIR)$/icons/so8-writer-app.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
-
+APP1STDLIBS = $(SHELL32LIB)
 
 APP2TARGET=so$/scalc
 APP2NOSAL=TRUE
@@ -76,6 +77,7 @@ APP2ICON=$(SOLARRESDIR)$/icons/so8-calc-app.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
+APP2STDLIBS = $(SHELL32LIB)
 
 APP3TARGET=so$/sdraw
 APP3NOSAL=TRUE
@@ -84,6 +86,7 @@ APP3ICON=$(SOLARRESDIR)$/icons/so8-draw-app.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
+APP3STDLIBS = $(SHELL32LIB)
 
 APP4TARGET=so$/simpress
 APP4NOSAL=TRUE
@@ -92,6 +95,7 @@ APP4ICON=$(SOLARRESDIR)$/icons/so8-impress-app.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
+APP4STDLIBS = $(SHELL32LIB)
 
 APP5TARGET=so$/sbase
 APP5NOSAL=TRUE
@@ -100,6 +104,7 @@ APP5ICON=$(SOLARRESDIR)$/icons/so8-base-app.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sbase.obj
+APP5STDLIBS = $(SHELL32LIB)
 
 APP6TARGET=so$/smath
 APP6NOSAL=TRUE
@@ -108,6 +113,7 @@ APP6ICON=$(SOLARRESDIR)$/icons/so8-math-app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
+APP6STDLIBS = $(SHELL32LIB)
 
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
