@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:15:42 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:12:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -261,8 +261,7 @@ LINKFLAGSWST=-DEBUG:mapped,partial -DEBUGTYPE:coff wst.lib -NODEFAULTLIB
 LINKFLAGSDEBUG=-DEBUG:full -DEBUGTYPE:cv
 LINKFLAGSOPT=
 
-DELAYLOADOBJ*=$(L)$/delayload.obj $(L)$/delayloadinit.obj
-UWINAPILIB*=uwinapi.lib -DELAYLOAD:uwinapi.dll
+UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrtd.lib
@@ -283,10 +282,10 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIMT=$(LIBCMT) $(DELAYLOADOBJ) delayimp.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
-STDLIBCUIMT=$(LIBCMT) $(DELAYLOADOBJ) delayimp.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
-STDSHLGUIMT=$(LIBCMT) $(DELAYLOADOBJ) delayimp.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
-STDSHLCUIMT=$(LIBCMT) $(DELAYLOADOBJ) delayimp.lib $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
+STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
+STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
+STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
+STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib psapi.lib
 
 .IF "$(USE_STLP_DEBUG)" != ""
 CFLAGS+=-MTd
