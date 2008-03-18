@@ -1,9 +1,10 @@
 #!/bin/bash
 
+ADD="no"
 LINK="no"
 UPDATE="ask"
 UNPACKDIR=""
-USAGE="Usage: $0 [-l,--link] [-U,--update] [-h,--help] <rpm-source-dir> <office-installation-dir>"
+USAGE="Usage: $0 [-a,--add] [-l,--link] [-U,--update] [-h,--help] <rpm-source-dir> <office-installation-dir>"
 
 help()
 {
@@ -19,6 +20,7 @@ help()
   echo "    <office-installation-dir>: directory to where the office will get installed into"
   echo
   echo "Optional Parameter:"
+  echo "    -a,--add:               add to an existing <office-installation-dir>"
   echo "    -l,--link:              create a link \"soffice\" in $HOME"
   echo "    -U,--update:            update without asking"
   echo "    -h,--help:              output this help"
@@ -70,7 +72,7 @@ then
   exit 2
 fi
 
-set -- `getopt -u -o 'lhU' -l 'link,help,update' -- $*`
+set -- `getopt -u -o 'alhU' -l 'add,link,help,update' -- $*`
 
 if [ $? != 0 ]
 then
@@ -81,6 +83,7 @@ fi
 for i in $*
 do
   case $i in
+    -a|--add)       ADD="yes"; shift;;
     -h|--help)      help; exit 0;;
     -l|--link)      LINK="yes"; shift;;
     -U|--update)    UPDATE="yes"; shift;;
@@ -160,7 +163,7 @@ p
         exit 2
       fi
     done
-  elif [ -d $RPM_DB_PATH ]
+  elif [ -d $RPM_DB_PATH -a "$ADD" = "no" ]
   then
     echo
     echo "The following packages are already installed in $INSTALLDIR"
@@ -201,7 +204,7 @@ then
 else
   rmdir ${INSTALLDIR} 2>/dev/null
 
-  if [ -d  ${INSTALLDIR} ]
+  if [ -d  ${INSTALLDIR} -a "$ADD" = "no" ]
   then
     printf "\n$0: ${INSTALLDIR} exists and is not empty.\n"
     exit 2
@@ -217,7 +220,9 @@ else
   fi
 
   # Creating RPM database and initializing
-  rpm --initdb --dbpath $RPM_DB_PATH
+  if [ "$ADD" = "no" ]; then
+    rpm --initdb --dbpath $RPM_DB_PATH
+  fi
 
   # Default install command
   RPMCMD="--install"
@@ -255,7 +260,7 @@ echo "Installing the RPMs"
 # inject a second slash to the last path segment to avoid rpm 3 concatination bug
 NEWPREFIX=`cd ${INSTALLDIR}; pwd | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
 RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${NEWPREFIX} \n" $RPMLIST | sort -u | tr -d "\012"`
-UserInstallation=\$ORIGIN/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
+UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
 # Create a link into the users home directory
@@ -263,9 +268,7 @@ UserInstallation=\$ORIGIN/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELO
 
 if [ "$LINK" = "yes" ]
 then
-  echo
-  echo "Creating link from ${INSTALLDIR}/program/soffice to $HOME/soffice"
-  ln -sf $INSTALLDIR/program/soffice $HOME/soffice
+  find `cd "$INSTALLDIR" && pwd` -name soffice -type f -perm /u+x -exec /bin/bash -ce 'ln -sf "$0" "$HOME/soffice" && echo "Creating link from $0 to $HOME/soffice"' {} \;
 fi
 
 if [ "$UPDATE" = "yes" -a ! -f $INSTALLDIR/program/bootstraprc ]
@@ -281,10 +284,7 @@ then
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
-if [ -f $INSTALLDIR/program/bootstraprc ]; then
-  mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
-  sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
-fi
+find "$INSTALLDIR" -type f -name bootstraprc -exec /bin/bash -ce 'test ! -e "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$BRAND_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
 
 # if an unpack directory exists, it can be removed now
 if [ ! -z "$UNPACKDIR" ]
