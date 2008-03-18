@@ -14,10 +14,6 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 ..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\systools\win32\*.h
 ..\inc\systools\win32\*.hxx %_DEST%\inc%_EXT%\systools\win32\*.hxx
 
-..\%__SRC%\obj\delayload.obj %_DEST%\lib%_EXT%\delayload.obj
-..\%__SRC%\obj\delayloadinit.obj %_DEST%\lib%_EXT%\delayloadinit.obj
-..\systools\win32\delayload\delayload.hxx %_DEST%\inc%_EXT%\sal\delayload.hxx
-
 ..\%__SRC%\lib\lib*.so* %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
@@ -26,9 +22,6 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 
 ..\%__SRC%\slb\sal.lib %_DEST%\lib%_EXT%\xsal.lib
 
-..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\guistdio.com
-..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\crashrep.com
-..\%__SRC%\bin\unopkgio.exe %_DEST%\bin%_EXT%\unopkg.com
 ..\%__SRC%\bin\kill.exe %_DEST%\bin%_EXT%\kill.exe
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
