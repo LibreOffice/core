@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2008-02-12 13:32:40 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:01:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,11 @@ sub register_extensions
 {
     my ($officedir) = @_;
 
-    my $programdir = $officedir . $installer::globals::separator . "program";
+    my $programdir = $officedir . $installer::globals::separator;
+    # if ( $installer::globals::sundirhostname ne "" ) { $programdir = $programdir . $installer::globals::sundirhostname . $installer::globals::separator; }
+    if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
+    $programdir = $programdir . "program";
+
     my $from = cwd();
     chdir($programdir);
 
