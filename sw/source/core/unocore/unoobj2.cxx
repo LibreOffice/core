@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:31:40 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,9 +295,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 using ::rtl::OUString;
-
-//collectn.cxx
-BOOL lcl_IsNumeric(const String&);
 
 // OD 2004-05-07 #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
