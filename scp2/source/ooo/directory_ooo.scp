@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:07:30 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,36 @@ Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
 End
 #endif
 
-Directory gid_Dir_Program
 #ifndef MACOSX
-    ParentID = PD_PROGDIR;
-    DosName = "program";
-#else
-    ParentID = gid_Dir_Bundle_Contents;
-    DosName = "MacOS";
+Directory gid_Dir_Ooo_Openofficeorg
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "OpenOffice.org";
+  #else
+    HostName = "openoffice.org";
+  #endif
+End
 #endif
+
+#ifndef MACOSX
+Directory gid_Dir_Ooo_Basis
+    ParentID = gid_Dir_Ooo_Openofficeorg;
+  #ifdef WNT
+    HostName = "Basis ${OOOBASEVERSION}";
+  #else
+    HostName = "basis${OOOBASEVERSION}";
+  #endif
+    Styles = (BASISDIRECTORY);
+End
+#endif
+
+Directory gid_Dir_Program
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
+#else
+    ParentID = gid_Dir_Ooo_Basis;
+#endif
+    DosName = "program";
 End
 
 #if defined MACOSX
@@ -101,16 +123,6 @@ Unixlink gid_Unixlink_Applications
     Dir = PD_PROGDIR;
     Name = "Applications";
     Target = "/Applications";
-End
-#endif
-
-#if defined MACOSX
-Unixlink gid_Unixlink_Program
-    BIN_FILE_BODY;
-    Styles = (PATCH);
-    Dir = gid_Dir_Bundle_Contents;
-    Name = "program";
-    Target = "MacOS";
 End
 #endif
 
@@ -170,10 +182,10 @@ End
 #endif
 
 Directory gid_Dir_User
-#ifndef MACOSX
-    ParentID = PD_PROGDIR;
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
 #else
-    ParentID = gid_Dir_Bundle_Contents;
+    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "presets";
 End
@@ -388,52 +400,18 @@ Directory gid_Dir_Plugin
     Styles = (WORKSTATION, CREATE);
 End
 
-Directory gid_Dir_Readme
-#ifndef MACOSX
-    ParentID = PD_PROGDIR;
-#else
-    ParentID = gid_Dir_Bundle_Contents;
-#endif
-    DosName = "readmes";
-End
-
-Directory gid_Dir_License
-#ifndef MACOSX
-    ParentID = PD_PROGDIR;
-#else
-    ParentID = gid_Dir_Bundle_Contents;
-#endif
-    DosName = "licenses";
-End
-
 Directory gid_Dir_Share
-#ifndef MACOSX
-    ParentID = PD_PROGDIR;
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
 #else
-    ParentID = gid_Dir_Bundle_Contents;
+    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "share";
-End
-
-Directory gid_Dir_Share_Extension
-    ParentID = gid_Dir_Share;
-    DosName = "extension";
-End
-
-Directory gid_Dir_Share_Extension_Install
-    ParentID = gid_Dir_Share_Extension;
-    DosName = "install";
-    Styles = (CREATE);
 End
 
 Directory gid_Dir_Share_Migration
     ParentID = gid_Dir_Share;
     DosName = "migration";
-End
-
-Directory gid_Dir_Share_Readme
-    ParentID = gid_Dir_Share;
-    DosName = "readme";
 End
 
 Directory gid_Dir_Share_Userinstall
@@ -1051,23 +1029,6 @@ Directory gid_Dir_Share_Scripts
     DosName = "Scripts";
 End
 
-Directory gid_Dir_Share_Uno_Packages
-    ParentID = gid_Dir_Share;
-    DosName = "uno_packages";
-    Styles = (CREATE);
-End
-
-Directory gid_Dir_Share_Uno_Packages_Cache
-    ParentID = gid_Dir_Share_Uno_Packages;
-    DosName = "cache";
-    Styles = (CREATE);
-End
-
-Directory gid_Dir_Share_Uno_Packages_Office
-    ParentID = gid_Dir_Share_Uno_Packages;
-    DosName = "Office";
-End
-
 Directory gid_Dir_Share_Dict
     ParentID = gid_Dir_Share;
     DosName = "dict";
@@ -1446,7 +1407,6 @@ End
 
 Directory gid_Dir_Samples_Language
     ParentID = gid_Dir_Samples;
-    Styles = (CREATE);
     DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
@@ -1511,10 +1471,10 @@ Directory gid_Dir_Share_Fingerprint
 End
 
 Directory gid_Dir_Help
-#ifndef MACOSX
-    ParentID = PD_PROGDIR;
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
 #else
-    ParentID = gid_Dir_Bundle_Contents;
+    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "help";
 End
@@ -1631,15 +1591,6 @@ End
 Directory gid_Dir_Share_Icons
     ParentID = gid_Dir_Share;
     DosName = "icons";
-End
-
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-Directory gid_Dir_Share_Xdg
-    ParentID = gid_Dir_Share;
-    DosName = "xdg";
 End
 
 #endif
