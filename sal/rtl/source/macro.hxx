@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:04:59 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,15 +86,6 @@ this is inserted for the case that the preprocessor ignores error
 #error "unknown ARCH -- insert your ARCH identifier above"
 this is inserted for the case that the preprocessor ignores error
 #endif
-
-
-/*
-  Expand macros via rtl_bootstrap_get.
-  see
-    http://udk.openoffice.org/common/man/spec/uno_default_bootstrapping.html
-  for details.
-*/
-::rtl::OUString SAL_CALL expandMacros(rtlBootstrapHandle handle, const ::rtl::OUString & argstr);
 
 #endif
 
