@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 16:01:43 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,8 @@ Module gid_Module_Prg_Base_Bin
     Sortkey = "100";
     Minimal = NO;
     Default = YES;
-    Files = (gid_File_Share_Xdg_Base
-        ,gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
-        ,gid_File_Exe_Sbase
+    Files = (
+        gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
@@ -77,3 +76,34 @@ End
 //     Default = YES;
 //     Files = (gid_File_Help_Sdatabase_Zip);
 // End
+
+Module gid_Module_Brand_Prg_Base
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Base";
+    Description = "gid_Module_Brand_Prg_Base";
+    ParentID = gid_Module_Prg_Base_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Sbase);
+End
+
+Module gid_Module_Langpack_Base_Template
+    ParentID = gid_Module_Prg_Base_Bin;
+    Name = "gid_Module_Langpack_Base_Template";
+    Description = "gid_Module_Langpack_Base_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Sdatabase_Zip,
+             gid_File_Res_Abp,
+             gid_File_Res_Adabasui,
+             gid_File_Res_Cnr,
+             gid_File_Res_Dbp,
+             gid_File_Res_Dbu,
+             gid_File_Res_Rpt,
+             gid_File_Res_Rptui,
+             gid_File_Res_Sdbcl,
+             gid_File_Res_Sdberr);
+End
+
+#include "alllangmodules_base.inc"
