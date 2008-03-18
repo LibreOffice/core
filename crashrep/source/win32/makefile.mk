@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:03:44 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:40:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ APP1OBJS=$(OBJFILES)
 APP1NOSAL=TRUE
                         
 APP1TARGET=$(TARGET)
+APP1RPATH=BRAND
 
 #SHL1STDLIBS=$(SALLIB)
 
