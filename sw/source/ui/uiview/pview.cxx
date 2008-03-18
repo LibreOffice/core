@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:06:36 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1143,20 +1143,25 @@ void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
     BOOL bCallBase = TRUE;
     switch( rCEvt.GetCommand() )
     {
-    case COMMAND_CONTEXTMENU:
-        mrView.GetViewFrame()->GetDispatcher()->ExecutePopup();
-        bCallBase = FALSE;
+        case COMMAND_CONTEXTMENU:
+            mrView.GetViewFrame()->GetDispatcher()->ExecutePopup();
+            bCallBase = FALSE;
         break;
 
-    case COMMAND_WHEEL:
-    case COMMAND_STARTAUTOSCROLL:
-    case COMMAND_AUTOSCROLL:
-        bCallBase = !mrView.HandleWheelCommands( rCEvt );
-        break;
-
-    default:
-        // OD 17.12.2002 #103492# - delete assertion
-        ;
+       case COMMAND_WHEEL:
+       case COMMAND_STARTAUTOSCROLL:
+       case COMMAND_AUTOSCROLL:
+       {
+           const CommandWheelData* pData = rCEvt.GetWheelData();
+           const CommandWheelData aDataNew(pData->GetDelta(),pData->GetNotchDelta(),COMMAND_WHEEL_PAGESCROLL,
+               pData->GetMode(),pData->GetModifier(),pData->IsHorz());
+           const CommandEvent aEvent( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),rCEvt.IsMouseEvent(),&aDataNew);
+           bCallBase = !mrView.HandleWheelCommands( aEvent );
+           break;
+       }
+       default:
+           // OD 17.12.2002 #103492# - delete assertion
+           ;
     }
 
     if( bCallBase )
