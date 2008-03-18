@@ -4,9 +4,9 @@
  *
  *  $RCSfile: retrievedinputstreamdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:34:06 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,8 +100,6 @@ class SwRetrievedInputStreamDataManager
         };
 
         tDataKey ReserveData( boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer );
-
-        void ReleaseData( const tDataKey nDataKey );
 
         void PushData( const tDataKey nDataKey,
                        com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
