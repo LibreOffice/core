@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-04 12:57:14 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:46:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,12 @@ ADDITIONAL_FILES+=Lib/plat-cygwin Python/fileblocks.c
 BUILD_DIR=
 MYCWD=$(shell @pwd)/$(INPATH)/misc/build
 
+# CLFLAGS get overwritten in Makefile.pre.in
 .IF "$(SYSBASE)"!=""
-python_CFLAGS+=-I$(SYSBASE)$/usr$/include
+CC+:=-I$(SYSBASE)$/usr$/include
 python_LDFLAGS+=-L$(SYSBASE)/usr/lib
 .IF "$(COMNAME)"=="sunpro5"
-python_CFLAGS+=$(C_RESTRICTIONFLAGS)
+CC+:=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
 
