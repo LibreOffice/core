@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:37:18 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
-	Value = "<progpath>";
+	Value = "[INSTALLLOCATION]";
 	Styles = (PATCH,LANGUAGEPACK);
 End
 
@@ -407,7 +407,61 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
-	Value = "<progpath>";
+	Value = "[INSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[OFFICEINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[OFFICEINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[BASISINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[BASISINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[UREINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[UREINSTALLLOCATION]";
 	Styles = (PATCH,LANGUAGEPACK);
 End
 
