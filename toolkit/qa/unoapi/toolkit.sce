@@ -1,77 +1,77 @@
-#-o toolkit.AccessibleButton
-#-o toolkit.AccessibleCheckBox
-#-o toolkit.AccessibleComboBox
-#-o toolkit.AccessibleDropDownComboBox
+#i86007 -o toolkit.AccessibleButton
+-o toolkit.AccessibleCheckBox
+#i86008 -o toolkit.AccessibleComboBox
+-o toolkit.AccessibleDropDownComboBox
 -o toolkit.AccessibleDropDownListBox
-#-o toolkit.AccessibleEdit
+#i86110 -o toolkit.AccessibleEdit
 -o toolkit.AccessibleFixedText
--o toolkit.AccessibleList
-#-o toolkit.AccessibleListBox
-#-o toolkit.AccessibleListItem
-#-o toolkit.AccessibleMenu
-#-o toolkit.AccessibleMenuBar
-#-o toolkit.AccessibleMenuItem
-#-o toolkit.AccessibleMenuSeparator
-#-o toolkit.AccessiblePopupMenu
-#-o toolkit.AccessibleRadioButton
+#i86110 -o toolkit.AccessibleList
+#i86110 -o toolkit.AccessibleListBox
+#i86110 -o toolkit.AccessibleListItem
+-o toolkit.AccessibleMenu
+-o toolkit.AccessibleMenuBar
+#i86009 -o toolkit.AccessibleMenuItem
+-o toolkit.AccessibleMenuSeparator
+#i52607 -o toolkit.AccessiblePopupMenu
+#i86107,i86110 -o toolkit.AccessibleRadioButton
 -o toolkit.AccessibleScrollBar
 -o toolkit.AccessibleStatusBar
-#-o toolkit.AccessibleStatusBarItem
-#-o toolkit.AccessibleTabControl
+-o toolkit.AccessibleStatusBarItem
+-o toolkit.AccessibleTabControl
 -o toolkit.AccessibleTabPage
-#-o toolkit.AccessibleToolBox
-#-o toolkit.AccessibleToolBoxItem
+#i86287 -o toolkit.AccessibleToolBox
+-o toolkit.AccessibleToolBoxItem
 -o toolkit.AccessibleWindow
 -o toolkit.MutableTreeDataModel
 -o toolkit.MutableTreeNode
 -o toolkit.TabController
 -o toolkit.TabControllerModel
-#-o toolkit.Toolkit
-#-o toolkit.UnoControlButton
+#i80788 -o toolkit.Toolkit
+-o toolkit.UnoControlButton
 -o toolkit.UnoControlButtonModel
-#-o toolkit.UnoControlCheckBox
+-o toolkit.UnoControlCheckBox
 -o toolkit.UnoControlCheckBoxModel
-#-o toolkit.UnoControlComboBox
-#-o toolkit.UnoControlComboBoxModel
+-o toolkit.UnoControlComboBox
+-o toolkit.UnoControlComboBoxModel
 -o toolkit.UnoControlContainer
-#-o toolkit.UnoControlContainerModel
-#-o toolkit.UnoControlCurrencyField
-#-o toolkit.UnoControlCurrencyFieldModel
-#-o toolkit.UnoControlDateField
-#-o toolkit.UnoControlDateFieldModel -> FREEZE in awt.XControlContainer
-#-o toolkit.UnoControlDialog
+-o toolkit.UnoControlContainerModel
+-o toolkit.UnoControlCurrencyField
+-o toolkit.UnoControlCurrencyFieldModel
+-o toolkit.UnoControlDateField
+-o toolkit.UnoControlDateFieldModel
+#i80788 -o toolkit.UnoControlDialog
 -o toolkit.UnoControlDialogModel
-# -o toolkit.UnoControlEdit
+-o toolkit.UnoControlEdit
 -o toolkit.UnoControlEditModel
-#-o toolkit.UnoControlFileControl
+#i86011 -o toolkit.UnoControlFileControl
 -o toolkit.UnoControlFileControlModel
 -o toolkit.UnoControlFixedLineModel
-#-o toolkit.UnoControlFixedText
-#-o toolkit.UnoControlFixedTextModel
-#-o toolkit.UnoControlFormattedField
-#-o toolkit.UnoControlFormattedFieldModel
-#-o toolkit.UnoControlGroupBox
+-o toolkit.UnoControlFixedText
+-o toolkit.UnoControlFixedTextModel
+#i86013 -o toolkit.UnoControlFormattedField
+-o toolkit.UnoControlFormattedFieldModel
+-o toolkit.UnoControlGroupBox
 -o toolkit.UnoControlGroupBoxModel
-#-o toolkit.UnoControlImageControl
+-o toolkit.UnoControlImageControl
 -o toolkit.UnoControlImageControlModel
-#-o toolkit.UnoControlListBox
+#i86019 -o toolkit.UnoControlListBox
 -o toolkit.UnoControlListBoxModel
-#-o toolkit.UnoControlNumericField
+-o toolkit.UnoControlNumericField
 -o toolkit.UnoControlNumericFieldModel
-#-o toolkit.UnoControlPatternField
+-o toolkit.UnoControlPatternField
 -o toolkit.UnoControlPatternFieldModel
 -o toolkit.UnoControlProgressBarModel
-#-o toolkit.UnoControlRadioButton
+-o toolkit.UnoControlRadioButton
 -o toolkit.UnoControlRadioButtonModel
 -o toolkit.UnoControlScrollBarModel
-#-o toolkit.UnoControlTimeField
+-o toolkit.UnoControlTimeField
 -o toolkit.UnoControlTimeFieldModel
-#-o toolkit.UnoScrollBarControl
-#-o toolkit.UnoSimpleAnimationControl
-#-o toolkit.UnoSimpleAnimationControlModel
-#-o toolkit.UnoSpinButtonControl
+-o toolkit.UnoScrollBarControl
+#i86020 -o toolkit.UnoSimpleAnimationControl
+#i86021 -o toolkit.UnoSimpleAnimationControlModel
+-o toolkit.UnoSpinButtonControl
 -o toolkit.UnoSpinButtonControlModel
-#-o toolkit.UnoThrobberControl
-#-o toolkit.UnoThrobberControlModel
--o toolkit.UnoTreeControl
+#i86022 -o toolkit.UnoThrobberControl
+#i86023 -o toolkit.UnoThrobberControlModel
+#i86298 -o toolkit.UnoTreeControl
 -o toolkit.UnoTreeModel
