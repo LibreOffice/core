@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InfoDir.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:01:44 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ public class InfoDir {
 
             // String jarFileName = jarFile.getName();
             File destDir = new File(data.getInstallRoot(), data.getInstallDir());
+            destDir = new File(destDir, data.getProductDir());
             File destFileFile = new File(destDir, fileName);
             destFile = destFileFile.getPath();
 
@@ -103,6 +104,7 @@ public class InfoDir {
     static private File createUninstallDir() {
         InstallData data = InstallData.getInstance();
         File baseDir = new File(data.getInstallRoot(), data.getInstallDir());
+        baseDir = new File(baseDir, data.getProductDir());
         File uninstallDir = new File(baseDir, data.getUninstallDirName());
         uninstallDir.mkdir();
         return uninstallDir;
