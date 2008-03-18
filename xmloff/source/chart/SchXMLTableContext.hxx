@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:58:43 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,11 @@ private:
     SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
+    bool mbHasRowPermutation;
+    bool mbHasColumnPermutation;
+    ::com::sun::star::uno::Sequence< sal_Int32 > maRowPermutation;
+    ::com::sun::star::uno::Sequence< sal_Int32 > maColumnPermutation;
+
 public:
     SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
@@ -84,6 +89,10 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+
+    void setRowPermutation( const ::com::sun::star::uno::Sequence< sal_Int32 > & rPermutation );
+    void setColumnPermutation( const ::com::sun::star::uno::Sequence< sal_Int32 > & rPermutation );
 };
 
 // ----------------------------------------
