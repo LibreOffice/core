@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:07:54 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:44:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,3 @@ UNIXTEXT= \
     $(MISC)$/unopkg.sh
 
 .INCLUDE :  target.mk
-
-ALLTAR: $(MISC)$/so$/soffice.sh
-
-$(MISC)$/so$/soffice.sh: soffice_lean.sh
-    @@-$(MKDIR) $(MISC)$/so
-    $(TYPE) soffice_lean.sh | tr -d "\015" > $@
-
