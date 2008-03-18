@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 14:10:57 $
+#   last change: $Author: vg $ $Date: 2008-03-18 12:23:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 SHL1VERSIONMAP=	exports.map
+SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
 COMPONENT_MERGED_XCU= \
