@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appfirststart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:47:14 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,13 +73,8 @@ OUString Desktop::GetLicensePath()
     if (aLicensePath.getLength() > 0)
         return aLicensePath;
 
-    OUString aBaseInstallPath;
-    ::utl::Bootstrap::PathStatus aBaseLocateResult =
-        ::utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
-    if (aBaseLocateResult != ::utl::Bootstrap::PATH_EXISTS)
-    {
-        // yuck! no license :/
-    }
+    OUString aBaseInstallPath(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    rtl::Bootstrap::expandMacros(aBaseInstallPath);
 
     // determine the filename of the license to show
     OUString  aLangString;
