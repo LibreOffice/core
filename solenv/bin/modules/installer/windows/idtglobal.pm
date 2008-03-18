@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:05:31 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:03:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,7 @@ sub make_eight_three_conform
         {
             # taking the first six letters
             $name = substr($name, 0, 6);    # name, offset, length
+            $name =~ s/\s*$//; # removing ending whitespaces
             $name = $name . "\~";
             $number = get_next_free_number($name, $shortnamesref);
 
@@ -196,6 +197,7 @@ sub make_eight_three_conform
             if ( $number > 9 )
             {
                 $name = substr($name, 0, 5);    # name, offset, length
+                $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
             }
@@ -218,6 +220,7 @@ sub make_eight_three_conform
         {
             # taking the first six letters
             $name = substr($name, 0, 6);    # name, offset, length
+            $name =~ s/\s*$//; # removing ending whitespaces
             $name = $name . "\~";
             $number = get_next_free_number($name, $shortnamesref);
 
@@ -226,6 +229,7 @@ sub make_eight_three_conform
             if ( $number > 9 )
             {
                 $name = substr($name, 0, 5);    # name, offset, length
+                $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
             }
@@ -288,6 +292,7 @@ sub make_eight_three_conform_with_hash
             if ( $namelength > 6 )
             {
                 $name = substr($name, 0, 6);    # name, offset, length
+                $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref, '.'.uc($extension));
 
@@ -296,6 +301,7 @@ sub make_eight_three_conform_with_hash
                 if ( ! $saved )
                 {
                     $name = substr($name, 0, 5);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
                     $name = $name . "\~";
                     ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref, '.'.uc($extension));
 
@@ -304,6 +310,7 @@ sub make_eight_three_conform_with_hash
                     if ( ! $saved )
                     {
                         $name = substr($name, 0, 4);    # name, offset, length
+                        $name =~ s/\s*$//; # removing ending whitespaces
                         $name = $name . "\~";
                         ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref, '.'.uc($extension));
 
@@ -332,6 +339,7 @@ sub make_eight_three_conform_with_hash
         {
             # taking the first six letters
             $name = substr($name, 0, 6);    # name, offset, length
+            $name =~ s/\s*$//; # removing ending whitespaces
             $name = $name . "\~";
             ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
 
@@ -340,6 +348,7 @@ sub make_eight_three_conform_with_hash
             if ( ! $saved )
             {
                 $name = substr($name, 0, 5);    # name, offset, length
+                $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
 
@@ -348,6 +357,7 @@ sub make_eight_three_conform_with_hash
                 if ( ! $saved )
                 {
                     $name = substr($name, 0, 4);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
                     $name = $name . "\~";
                     ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
 
@@ -971,6 +981,87 @@ sub make_string_licensetext
     return $rtf_licensetext;
 }
 
+##############################################################
+# Setting the path, where the soffice.exe is installed, into
+# the CustomAction table
+##############################################################
+
+sub add_officedir_to_database
+{
+    my ($basedir, $allvariables) = @_;
+
+    my $customactionfilename = $basedir . $installer::globals::separator . "CustomAc.idt";
+
+    my $customacfile = installer::files::read_file($customactionfilename);
+
+    my $found = 0;
+
+    # Updating the values
+
+    if ( $installer::globals::officeinstalldirectoryset )
+    {
+        $found = 0;
+
+        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
+        {
+            if ( ${$customacfile}[$i] =~ /\bOFFICEDIRECTORYGID\b/ )
+            {
+                ${$customacfile}[$i] =~ s/\bOFFICEDIRECTORYGID\b/$installer::globals::officeinstalldirectory/;
+                $found = 1;
+            }
+        }
+
+        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
+        {
+            installer::exiter::exit_program("ERROR: \"OFFICEDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
+        }
+    }
+
+    if ( $installer::globals::basisinstalldirectoryset )
+    {
+        $found = 0;
+
+        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
+        {
+            if ( ${$customacfile}[$i] =~ /\bBASISDIRECTORYGID\b/ )
+            {
+                ${$customacfile}[$i] =~ s/\bBASISDIRECTORYGID\b/$installer::globals::basisinstalldirectory/;
+                $found = 1;
+            }
+        }
+
+        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
+        {
+            installer::exiter::exit_program("ERROR: \"BASISDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
+        }
+    }
+
+    if ( $installer::globals::ureinstalldirectoryset )
+    {
+        $found = 0;
+
+        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
+        {
+            if ( ${$customacfile}[$i] =~ /\bUREDIRECTORYGID\b/ )
+            {
+                ${$customacfile}[$i] =~ s/\bUREDIRECTORYGID\b/$installer::globals::ureinstalldirectory/;
+                $found = 1;
+            }
+        }
+
+        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
+        {
+            installer::exiter::exit_program("ERROR: \"UREDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
+        }
+    }
+
+    # Saving the file
+
+    installer::files::save_file($customactionfilename ,$customacfile);
+    my $infoline = "Updated idt file: $customactionfilename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+}
 
 ##############################################################
 # Including the license text into the table control.idt
@@ -1047,13 +1138,13 @@ sub add_licensefile_to_database
 # multilingual installation sets.
 #
 # old:
-# LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   is1033      CheckBox2
+# LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   IS1033      CheckBox2
 # LanguageSelection Text1   Text    40  60  70  15  65539       OOO_CONTROL_LANG_1033
-# LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   is1031      Next
+# LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   IS1031      Next
 # LanguageSelection Text2   Text    40  90  70  15  65539       OOO_CONTROL_LANG_1031
 # new:
-# LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   is1033  Text    CheckBox2
-# LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   is1031  Text    Next
+# LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   IS1033  Text    CheckBox2
+# LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   IS1031  Text    Next
 ################################################################################################
 
 sub add_language_checkboxes_to_database
@@ -1070,11 +1161,11 @@ sub add_language_checkboxes_to_database
         my $onelanguage = ${$languagesarrayref}[$i];
         my $windowslanguage = installer::windows::language::get_windows_language($onelanguage);
 
-        my $is_english = 0;
-        if ( $windowslanguage eq "1033" ) { $is_english = 1; }
+        # my $is_english = 0;
+        # if ( $windowslanguage eq "1033" ) { $is_english = 1; }
 
         my $checkboxattribute = "3";
-        if ( $is_english ) { $checkboxattribute = "1"; }    # english is not deselectable
+        # if ( $is_english ) { $checkboxattribute = "1"; }  # english is not deselectable
 
         my $count = $i + 1;
         my $nextcount = $i + 2;
@@ -1090,7 +1181,8 @@ sub add_language_checkboxes_to_database
 
         my $yvalue = $offset + $i * $multiplier;
 
-        my $property = "IS" . $windowslanguage; # capitol letter "IS" !
+        my $property = "IS" . $windowslanguage;
+    #   if ( ! exists($installer::globals::languageproperties{$property}) ) { installer::exiter::exit_program("ERROR: Could not find property \"$property\" in the list of language properties!", "add_language_checkboxes_to_database"); }
 
         my $controlnext = "";
         if ( $last ) { $controlnext = "Next"; }
@@ -1467,7 +1559,7 @@ sub include_subdirname_into_directory_table
     if ( $onefile->{'Subdir'} ) { $subdir = $onefile->{'Subdir'}; }
     if ( $subdir eq "" ) { installer::exiter::exit_program("ERROR: No \"Subdir\" defined for $onefile->{'Name'}", "include_subdirname_into_directory_table"); }
 
-    # program INSTALLLOCATION program -> subjava INSTALLLOCATION progam:java
+    # program INSTALLLOCATION program -> subjava INSTALLLOCATION program:java
 
     my $uniquename = "";
     my $parent = "";
