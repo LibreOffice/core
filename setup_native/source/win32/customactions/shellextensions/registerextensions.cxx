@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerextensions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:52:12 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
             std::_tstring sCurrentDir = TEXT(".");
             std::_tstring sParentDir = TEXT("..");
 
-            // mystr = "Current short file: " + sFileName;
+            mystr = "Current short file: " + sFileName;
             // MessageBox(NULL, mystr.c_str(), "Current Content", MB_OK);
 
             if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
@@ -325,13 +325,19 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
 extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 {
-    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("OFFICEINSTALLLOCATION") );
     std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
     std::_tstring sShareInstallDir = sInstDir + TEXT("share\\extension\\install\\");
     std::_tstring sPattern = sShareInstallDir + TEXT("*.oxt");
     std::_tstring mystr;
 
     WIN32_FIND_DATA aFindFileData;
+
+    mystr = "unopkg file: " + sUnoPkgFile;
+    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+
+    mystr = "oxt file directory: " + sShareInstallDir;
+    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
     // Find unopkg.exe
 
@@ -355,10 +361,10 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
                 std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
                 std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared " + "\"" + sOxtFile + "\"";
                 std::_tstring sCommand = sCommandPart1
-                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml")
+                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
                     + TEXT(" -env:UserInstallation=") + sTempFolder;
                 mystr = "Command: " + sCommand;
-//                MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
                 DWORD exitCode = 0;
                 bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
@@ -368,21 +374,21 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
                 {
                     std::_tstring sCommand = sCommandPart1;
                     mystr = "Command: " + sCommand;
-//                    MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
                     fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
                 }
                 deleteTempFolder(sTempFolder);
 
-                if ( fSuccess )
-                {
-                    mystr = "Executed successfully!";
-                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                }
-                else
-                {
-                    mystr = "An error occured during execution!";
-                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                }
+                // if ( fSuccess )
+                // {
+                //     mystr = "Executed successfully!";
+                //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                // }
+                // else
+                // {
+                //     mystr = "An error occured during execution!";
+                //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                // }
 
                 fNextFile = FindNextFile( hFindOxt, &aFindFileData );
 
@@ -417,7 +423,7 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -425,7 +431,7 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -472,7 +478,7 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
                 std::_tstring sCommandPart1 = sUnoPkgFile + " remove --shared " + "\""
                     + sOxtFile + "\"";
                 std::_tstring sCommand = sCommandPart1
-                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml")
+                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
                     + TEXT(" -env:UserInstallation=") + sTempFolder;
 
                 mystr = "Command: " + sCommand;
@@ -535,7 +541,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -543,7 +549,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
