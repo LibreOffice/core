@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:28:40 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@ class SwNumberTreeNode;
 
 bool SwNumberTreeNodeLessThan (const SwNumberTreeNode * pA,
                                const SwNumberTreeNode * pB);
-
-bool SwNumberTreeNodeGreaterEqual (const SwNumberTreeNode * pA,
-                                   const SwNumberTreeNode * pB);
 
 struct compSwNumberTreeNodeLessThan
 {
