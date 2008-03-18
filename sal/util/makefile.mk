@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 14:31:29 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:21:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # disable check for PIC code as it would complain about 
 # hand coded assembler
 CHECKFORPIC=
-
-#Link against delayload.obj from local output tree
-DELAYLOADOBJ=$(OBJ)$/delayload.obj
 
 .IF "$(header)" == ""
 
@@ -177,12 +174,7 @@ SHL1OBJS= \
 .ENDIF # lincinc
 
 .IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
 SHL1DEPN=   $(UWINAPILIB)
-.ELSE
-SHL1DEPN=   $(UWINAPILIB) $(DELAYLOADOBJ)
-SHL1OBJS += $(DELAYLOADOBJ)
-.ENDIF
 .ELSE
 SHL1DEPN=
 .ENDIF
