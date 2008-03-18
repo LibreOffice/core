@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 17:12:59 $
+#   last change: $Author: vg $ $Date: 2008-03-18 14:25:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,9 @@ LIB8OBJFILES = \
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
 
-.IF "$(ENABLE_VBA)"=="YES"
+# SHL9RPATH=OXT and SHL9STDLIBS containing non-URE libs does not work reliably
+# anywhere, and would break the build on MACOSX:
+.IF "$(ENABLE_VBA)"=="YES" && "$(OS)" != "MACOSX"
 
 TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
@@ -263,6 +265,7 @@ SHL9IMPLIB=	i$(TARGET_VBA)
 SHL9VERSIONMAP=$(TARGET_VBA).map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
+SHL9RPATH=OXT
 
 SHL9STDLIBS= \
         $(CPPUHELPERLIB) \
@@ -298,7 +301,7 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk
 
-.IF "$(VBA_EXTENSION)"=="YES"
+.IF "$(VBA_EXTENSION)"=="YES" && "$(OS)" != "MACOSX" # see above
     COMP=build_extn
 .ENDIF
 
