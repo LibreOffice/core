@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:46:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 23:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,7 +653,7 @@ void EscherPropertyContainer::CreateFillProperties(
                                     aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ), sal_True ) )
                                     ? *((sal_Int16*)aAny.getValue() )
                                     : 0;
-            if ( ( nTransparency != 100 ) && nTransparency )
+            if (  nTransparency )
                 AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
         }
     }
