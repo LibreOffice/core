@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:22:37 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_desktop.hxx"
 #define UNICODE
 #define _UNICODE
+
+#include <cstddef>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -151,8 +153,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
+    TCHAR               szIniDirectory[MAX_PATH];
     TCHAR               szPerfTuneIniFile[MAX_PATH] = TEXT("");
     STARTUPINFO         aStartupInfo;
+
+    desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof(aStartupInfo);
@@ -163,14 +168,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     TCHAR               szModuleFileName[MAX_PATH];
 
     GetModuleFileName( NULL, szModuleFileName, MAX_PATH );
-    _TCHAR  *lpLastDot = _tcsrchr( szModuleFileName, '.' );
-    if ( lpLastDot && 0 == _tcsicmp( lpLastDot, _T(".EXE") ) )
-    {
-        size_t len = lpLastDot - szModuleFileName;
-        _tcsncpy( szTargetFileName, szModuleFileName, len );
-        _tcsncpy( szTargetFileName + len, _T(".BIN"), sizeof(szTargetFileName)/sizeof(szTargetFileName[0]) - len );
-    }
-
     _TCHAR  *lpLastSlash = _tcsrchr( szModuleFileName, '\\' );
     if ( lpLastSlash )
     {
@@ -179,18 +176,16 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), sizeof(szPerfTuneIniFile)/sizeof(szPerfTuneIniFile[0]) - len );
     }
 
-#ifndef __MINGW32__
-    desktop_win32::extendLoaderEnvironment();
-#endif
-
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
 
     DWORD   dwExitCode = (DWORD)-1;
 
-    // FALSE indicates first start
     BOOL    fSuccess = FALSE;
     LPTSTR  lpCommandLine = NULL;
+    int argc = 0;
+    LPTSTR * argv = NULL;
+    bool first = true;
 
     do
     {
@@ -308,43 +303,28 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
         }
 
-        if ( fSuccess && !lpCommandLine )
-        {
-            int     argc;
-            LPTSTR  *argv = GetCommandArgs( &argc );
-
-            if ( argc > 1 )
-            {
-                int n;
-                int nBufferChars = _tcslen( argv[0] ) + 2;
-
-                for ( n = 1; n < argc; n++ )
-                {
-                    if ( 0 == _tcsnicmp( argv[n], _T("-env:"), 5 ) )
-                        nBufferChars += _tcslen( argv[n] ) + 3;
-                }
-
-                if ( nBufferChars )
-                {
-                    lpCommandLine = new TCHAR[nBufferChars + 1];
-
-                    _tcscpy( lpCommandLine, _T("\"") );
-                    _tcscat( lpCommandLine, argv[0] );
-                    _tcscat( lpCommandLine, _T("\"") );
-
-                    for ( n = 1; n < argc; n++ )
-                    {
-                        if ( 0 == _tcsnicmp( argv[n], _T("-env:"), 5 ) )
-                        {
-                            _tcscat( lpCommandLine, _T(" ") );
-                            _tcscat( lpCommandLine, _T("\"") );
-                            _tcscat( lpCommandLine, argv[n] );
-                            _tcscat( lpCommandLine, _T("\"") );
-                        }
-                    }
-                }
+        if (first) {
+            argv = GetCommandArgs(&argc);
+            std::size_t n = _tcslen(argv[0]) + 2;
+            for (int i = 1; i < argc; ++i) {
+                n += _tcslen(argv[i]) + 3;
+            }
+            n += MY_LENGTH(" \"-env:INIFILEPATH=") + _tcslen(szIniDirectory)
+                + MY_LENGTH("soffice.ini\"");
+            lpCommandLine = new TCHAR[n + 1];
+        }
+        _tcscpy(lpCommandLine, _T("\""));
+        _tcscat(lpCommandLine, argv[0]);
+        for (int i = 1; i < argc; ++i) {
+            if (first || _tcsncmp(argv[i], MY_STRING(_T("-env:"))) == 0) {
+                _tcscat(lpCommandLine, _T("\" \""));
+                _tcscat(lpCommandLine, argv[i]);
             }
         }
+        _tcscat(lpCommandLine, _T("\" \"-env:INIFILEPATH="));
+        _tcscat(lpCommandLine, szIniDirectory);
+        _tcscat(lpCommandLine, _T("soffice.ini\""));
+        first = false;
 
         TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
         BOOL    bHeadlessMode( FALSE );
@@ -375,11 +355,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
         PROCESS_INFORMATION aProcessInfo;
 
-        fSuccess = FALSE;
         fSuccess = CreateProcess(
             szTargetFileName,
-            // When restarting office process only reuse bootstrap parameters
-            fSuccess ? lpCommandLine : GetCommandLine(),
+            lpCommandLine,
             NULL,
             NULL,
             TRUE,
@@ -413,14 +391,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
             CloseHandle( aProcessInfo.hProcess );
             CloseHandle( aProcessInfo.hThread );
-
-            if ( lpCommandLine )
-            {
-                delete lpCommandLine;
-                lpCommandLine = 0;
-            }
         }
     } while ( fSuccess && ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode );
+    delete[] lpCommandLine;
 
     return fSuccess ? dwExitCode : -1;
 }
