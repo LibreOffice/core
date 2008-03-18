@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:26:36 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,57 +137,6 @@
 // <--
 
 using namespace ::com::sun::star;
-
-/*
- * The writer can currently not handle multiple paragraph styles with outline numbering. Thus this method
- * tries to find "the" paragraph style used for outline numbering. In order to find "the" we try to eliminate
- * all paragraph styles with outline numbers which are not used. If one survives we found "the" paragraph.
- * If not - you guess - we have a problem and must wait for the solution of #i31372#!
- */
-void adjustOutlineLevel(SwDoc &rDoc)
-{
-    const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
-    int fmtsPerOutlineLevel[MAXLEVEL] = {};
-    for( sal_uInt16 i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
-    {
-        SwTxtFmtColl *pTxtFmtColl = rTbl[i];
-        if (pTxtFmtColl->GetOutlineLevel()!=NO_NUMBERING)
-        {
-            if (rDoc.IsUsed(*pTxtFmtColl))
-            {
-                ASSERT(pTxtFmtColl->GetOutlineLevel()<MAXLEVEL, "outline level too high!!!");
-                fmtsPerOutlineLevel[pTxtFmtColl->GetOutlineLevel()]++;
-                const SwNumRuleItem* pRule;
-                if (SFX_ITEM_SET == pTxtFmtColl->GetAttrSet().GetItemState(RES_PARATR_NUMRULE, TRUE, reinterpret_cast<const SfxPoolItem **>(&pRule)))
-                {
-                    if (SwNumRule* pNumRule = rDoc.FindNumRulePtr(pRule->GetValue()))
-                    {
-                        rDoc.SetOutlineNumRule(*pNumRule);
-                    }
-                }
-            }
-            else
-            {
-                pTxtFmtColl->SetOutlineLevel(NO_NUMBERING);
-            }
-        }
-    }
-    for(int i=0;i<MAXLEVEL;i++) {
-        if (fmtsPerOutlineLevel[i]>0) {
-            SwTxtFmtColl* heading=rDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1+i) );
-            if (!rDoc.IsUsed(*heading)) {
-                fmtsPerOutlineLevel[i]++; // just for the statistics
-            }
-            else
-            {
-                heading->SetOutlineLevel(NO_NUMBERING);
-            }
-        }
-        if (fmtsPerOutlineLevel[i]>1) {
-            ASSERT(TRUE, "more than one paragraph style uses outline numbering.");
-        }
-    };
-}
 
 //////////////////////////////////////////////////////////////////////////
 
