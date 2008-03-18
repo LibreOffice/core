@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:16:00 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 23:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,18 +299,26 @@ static const mso_CustomShape msoRightTriangle =
     NULL, 0     // handles
 };
 
+static const SvxMSDffVertPair mso_sptEllipseVert[] =
+{
+    { 10800, 10800 }, { 10800, 10800 },  { 0, 360 }
+};
+static const sal_uInt16 mso_sptEllipseSegm[] =
+{
+    0xa203, 0x6000, 0x8000
+};
 static const SvxMSDffTextRectangles mso_sptEllipseTextRect[] =
 {
-    { { 3200, 3200 }, { 18400, 18400 } }
+    { { 3163, 3163 }, { 18437, 18437 } }
 };
 static const SvxMSDffVertPair mso_sptEllipseGluePoints[] =
 {
-    { 10800, 0 }, { 3160, 3160 }, { 0, 10800 }, { 3160, 18440 }, { 10800, 21600 }, { 18440, 18440 }, { 21600, 10800 }, { 18440, 3160 }
+    { 10800, 0 }, { 3163, 3163 }, { 0, 10800 }, { 3163, 18437 }, { 10800, 21600 }, { 18437, 18437 }, { 21600, 10800 }, { 18437, 3163 }
 };
 static const mso_CustomShape msoEllipse =
 {
-    NULL, 0,
-    NULL, 0,
+    (SvxMSDffVertPair*)mso_sptEllipseVert, sizeof( mso_sptEllipseVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptEllipseSegm, sizeof( mso_sptEllipseSegm ) >> 1,
     NULL, 0,
     NULL,
     (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
@@ -2827,9 +2835,9 @@ static const mso_CustomShape msoActionButtonMovie =
 
 static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
 {
-    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 << 16 },
-    { 7305, 7515 }, { 1165, 1165 }, { 0, 360 << 16 },
-    { 14295, 7515 }, { 1165, 1165 }, { 0, 360 << 16 },
+    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
+    { 7305, 7515 }, { 1165, 1165 }, { 0, 360 },
+    { 14295, 7515 }, { 1165, 1165 }, { 0, 360 },
     { 4870, 1 MSO_I }, { 8680, 2 MSO_I }, { 12920, 2 MSO_I }, { 16730, 1 MSO_I }
 };
 static const sal_uInt16 mso_sptSmileyFaceSegm[] =
@@ -2874,8 +2882,8 @@ static const mso_CustomShape msoSmileyFace =
 
 static const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
 {
-    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 << 16 },
-    { 10800, 10800 }, { 1 MSO_I, 1 MSO_I }, { 0, 360 << 16 }
+    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
+    { 10800, 10800 }, { 1 MSO_I, 1 MSO_I }, { 0, 360 }
 };
 static const sal_uInt16 mso_sptDonutSegm[] =
 {
@@ -2906,7 +2914,7 @@ static const mso_CustomShape msoDonut =
 
 static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
 {
-    { 10800, 10800 },  { 10800, 10800 }, { 0, 360 << 16 },
+    { 10800, 10800 },  { 10800, 10800 }, { 0, 360 },
     { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I },
     { 9 MSO_I, 0xa MSO_I }, { 0xb MSO_I, 0xc MSO_I }, { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I },
     { 0xd MSO_I, 0xe MSO_I }, { 0xf MSO_I, 0x10 MSO_I }
@@ -3102,7 +3110,7 @@ static const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
     { 0x22 MSO_I, 0x23 MSO_I }, { 0x24 MSO_I, 0x25 MSO_I }, { 0x26 MSO_I, 0x27 MSO_I },
     { 0x28 MSO_I, 0x29 MSO_I }, { 0x2a MSO_I, 0x2b MSO_I }, { 0x2c MSO_I, 0x2d MSO_I },
     { 0x2e MSO_I, 0x2f MSO_I }, { 0x30 MSO_I, 0x31 MSO_I }, { 0x32 MSO_I, 0x33 MSO_I },
-    { 10800, 10800 }, { 0x36 MSO_I, 0x36 MSO_I },   { 0, 360 << 16 }
+    { 10800, 10800 }, { 0x36 MSO_I, 0x36 MSO_I },   { 0, 360 }
 };
 static const sal_uInt16 mso_sptSunSegm[] =
 {
@@ -4624,7 +4632,7 @@ static const mso_CustomShape msoFlowChartManualOperation =
 
 static const SvxMSDffVertPair mso_sptFlowChartConnectorVert[] =
 {
-    { 10800, 10800 }, { 10800, 10800 },  { 0, 360 << 16 },
+    { 10800, 10800 }, { 10800, 10800 },  { 0, 360 }
 };
 static const sal_uInt16 mso_sptFlowChartConnectorSegm[] =
 {
@@ -4731,7 +4739,7 @@ static const mso_CustomShape msoFlowChartPunchedTape =
 
 static const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
 {
-    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 << 16 },
+    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
 
     { 3100, 3100 },
     { 18500, 18500 },
@@ -4764,7 +4772,7 @@ static const mso_CustomShape msoFlowChartSummingJunction =
 
 static const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
 {
-    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 << 16 },
+    { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
 
     { 0, 10800 }, { 21600, 10800 },
 
@@ -5334,9 +5342,9 @@ static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
     { 2900, 17640 }, { 3090, 17600 }, { 3280, 17540 }, { 3460, 17450 },     // pccp
     { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 },     // pccp
 
-    { 0x11 MSO_I, 0x12 MSO_I }, { 1800, 1800 }, { 0, 360 << 16 },           // circ1
-    { 0x13 MSO_I, 0x14 MSO_I }, { 1200, 1200 }, { 0, 360 << 16 },           // circ2
-    { 0xd MSO_I, 0xe MSO_I }, { 700, 700 }, { 0, 360 << 16 }                // circ3
+    { 0x11 MSO_I, 0x12 MSO_I }, { 1800, 1800 }, { 0, 360 },                 // circ1
+    { 0x13 MSO_I, 0x14 MSO_I }, { 1200, 1200 }, { 0, 360 },                 // circ2
+    { 0xd MSO_I, 0xe MSO_I }, { 700, 700 }, { 0, 360 }                      // circ3
 };
 static const sal_uInt16 mso_sptCloudCalloutSegm[] =
 {
@@ -5852,8 +5860,8 @@ static const mso_CustomShape msoTextChevronInverted =
 
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 {
-    { 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180 << 16, 359 << 16 },
-    { 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180 << 16, 359 << 16 }
+    { 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
+    { 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
 };
 static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
 {
