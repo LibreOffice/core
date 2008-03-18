@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:45 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2792,44 +2792,4 @@ BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     return TRUE;
 }
 
-
-//Save- und RestoreChartData:
-//Zu der Tabelle werden alle Charts gesucht. Die Namentliche Addressierung der
-//Boxen in der Tabelle (etwa: <A1:C3>) wird ausgelesen. Die Addressen der
-//Boxen werden im Chart festgehalten. Im Restore wird versucht zu den Pointern
-//die Boxen wiederzufinden. Wenn dies gelingt, wird die neue Addressierung
-//wieder in das Chart geschrieben. Wenn sie nicht gefunden werden gibt es
-//einen FallBack auf die erste/letzte Box.
-
-const SwTableBox *lcl_FindFirstBox( const SwTable &rTable )
-{
-    const SwTableLines *pLines = &rTable.GetTabLines();
-    const SwTableBox *pBox;
-    do
-    {   pBox = (*pLines)[0]->GetTabBoxes()[0];
-        if ( pBox->GetSttNd() )
-            pLines = 0;
-        else
-            pLines = &pBox->GetTabLines();
-
-    } while ( pLines );
-    return pBox;
-}
-
-const SwTableBox *lcl_FindLastBox( const SwTable &rTable )
-{
-    const SwTableLines *pLines = &rTable.GetTabLines();
-    const SwTableBox *pBox;
-    do
-    {   const SwTableBoxes &rBoxes = (*pLines)[pLines->Count()-1]->GetTabBoxes();
-        pBox = rBoxes[rBoxes.Count()-1];
-        if ( pBox->GetSttNd() )
-            pLines = 0;
-        else
-            pLines = &pBox->GetTabLines();
-
-    } while ( pLines );
-
-    return pBox;
-}
 
