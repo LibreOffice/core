@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:48 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:06:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,18 @@ sub convert
         $oneline = $oneline . "\n";
 
         $oneline =~ s/\s*\=\s*/ \= /;   # nice, to have only one whitespace around equal signs
+
+        # Concatenate adjacent string literals:
+        while ($oneline =~
+               s/^((?:[^"]*
+                      \"(?:[^\\"]|\\.)*\"
+                      (?:[^"]*[^[:blank:]"][^"]*\"(?:[^\\"]|\\.)*\")*)*
+                   [^"]*
+                   \"(?:[^\\"]|\\.)*)
+                 \"[[:blank:]]*\"
+                 ((?:[^\\"]|\\.)*\")
+                /\1\2/x)
+        {}
 
         push(@parfile, $oneline);
 
