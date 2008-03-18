@@ -1,3 +1,38 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: module_lang_template.scp,v $
+ *
+ *  $Revision: 1.9 $
+ *
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:31:30 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 Module gid_Module_Langpack_Root_Template
     ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Root_Template";
@@ -22,15 +57,7 @@ Module gid_Module_Langpack_Root_Template
              gid_File_Registry_Spool_Oo_Common_Cjk_Xcu,
              gid_File_Registry_Spool_Oo_Common_Ctl_Xcu,
              gid_File_Registry_Spool_Oo_Common_Korean_Xcu,
-             gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu,
-             gid_File_License_License,
-             gid_File_License_License_Html,
-             gid_File_Readme_Readme,
-             gid_File_Readme_Readme_Html,
-             gid_File_Txt_License,
-             gid_File_Txt_License_Html,
-             gid_File_Txt_Readme,
-             gid_File_Txt_Readme_Html);
+             gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu);
 End
 
 Module gid_Module_Langpack_Resource_Template
@@ -59,7 +86,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Deployment,
              gid_File_Res_DeploymentGui,
              gid_File_Res_Ofa,
-             gid_File_Res_Ooo,
              gid_File_Res_Pcr,
              gid_File_Res_Pdffilter,
              gid_File_Res_Preload,
@@ -94,7 +120,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_AVMedia,
              gid_File_Res_XMLSecurity,
              gid_File_Res_Gallery,
-             gid_File_Res_Iso,
              gid_File_Res_Stt,
              gid_File_Res_Tfu,
              gid_File_Res_Eps,
@@ -122,75 +147,4 @@ Module gid_Module_Langpack_Fonts_Template
     Files = ();
 End
 
-Module gid_Module_Langpack_Writer_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Writer_Template";
-    Description = "gid_Module_Langpack_Writer_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Swriter_Zip,
-             gid_File_Res_T602Filter);
-End
-
-Module gid_Module_Langpack_Calc_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Calc_Template";
-    Description = "gid_Module_Langpack_Calc_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Scalc_Zip,
-             gid_File_Res_Analysis,
-             gid_File_Res_Bf_Sc,
-             gid_File_Res_Date,
-             gid_File_Res_Sc,
-             gid_File_Res_Solver);
-End
-
-Module gid_Module_Langpack_Impress_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Impress_Template";
-    Description = "gid_Module_Langpack_Impress_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Simpress_Zip);
-End
-
-Module gid_Module_Langpack_Draw_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Draw_Template";
-    Description = "gid_Module_Langpack_Draw_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Sdraw_Zip);
-End
-
-Module gid_Module_Langpack_Math_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Math_Template";
-    Description = "gid_Module_Langpack_Math_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Smath_Zip,
-             gid_File_Res_Sm,
-             gid_File_Res_Bf_Sm);
-End
-
-Module gid_Module_Langpack_Base_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Base_Template";
-    Description = "gid_Module_Langpack_Base_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Sdatabase_Zip,
-             gid_File_Res_Abp,
-             gid_File_Res_Cnr,
-             gid_File_Res_Dbp,
-             gid_File_Res_Dbu,
-             gid_File_Res_Adabasui,
-             gid_File_Res_Rpt,
-             gid_File_Res_Rptui,
-             gid_File_Res_Sdbcl,
-             gid_File_Res_Sdberr);
-End
-
-Module gid_Module_Langpack_Onlineupdate_Template
-    ParentID = gid_Module_Langpack_Root_Template;
-    Name = "gid_Module_Langpack_Onlineupdate_Template";
-    Description = "gid_Module_Langpack_Onlineupdate_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Upd);
-End
+#include "alllangmodules_root.inc"
