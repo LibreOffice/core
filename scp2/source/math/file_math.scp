@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:20:28 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,21 +100,10 @@ End
 
 File gid_File_Exe_Smath
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = EXENAME(smath);
     Styles = (PACKED, PATCH);
 End
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Share_Xdg_Math
-	TXT_FILE_BODY;
-	Dir = gid_Dir_Share_Xdg;
-	Name = "math.desktop";
-	Styles = (PACKED,SCPZIP_REPLACE);
-End
-
-#endif
 
 // new user interface configuration files
 /*
