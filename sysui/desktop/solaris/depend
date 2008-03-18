@@ -7,4 +7,4 @@ P SUNWcsl Core Solaris, (Shared Libs)
 P SUNWloc System Localization
 P SUNWdtdte Solaris Desktop Login Environment
 P SUNWdticn CDE icons
-P %pkgprefix-core01 Core module for %PRODUCTNAME
+P %pkgprefix-brand Brand module for %PRODUCTNAME
