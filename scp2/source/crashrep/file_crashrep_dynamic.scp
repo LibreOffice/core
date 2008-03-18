@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_crashrep_dynamic.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:39:20 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,14 @@
 
 #ifndef MACOSX
 
-File gid_File_Bin_Crashreport
+File gid_Brand_File_Bin_Crashreport
     BIN_FILE_BODY;
   #ifdef UNX
     Name = "crash_report.bin";
   #else
     Name = "crashrep.exe";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, PATCH);
 End
 
@@ -54,10 +54,10 @@ End
 
 #ifdef WNT
 
-File gid_File_Bin_Crashreport_Com
+File gid_Brand_File_Bin_Crashreport_Com
     BIN_FILE_BODY;
     Name = "crashrep.com";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
 
@@ -65,10 +65,10 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_Dbghelp
+File gid_Brand_File_Lib_Dbghelp
     TXT_FILE_BODY;
     Name = "dbghelp.dll";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
 
@@ -76,10 +76,10 @@ End
 
 #ifdef UNX
  
-File gid_File_Bin_Crashreport_Script
+File gid_Brand_File_Bin_Crashreport_Script
     BIN_FILE_BODY;
     Name = "crash_report";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
 
