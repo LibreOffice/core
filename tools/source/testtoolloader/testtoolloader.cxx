@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtoolloader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:22:50 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 
 #ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
 #endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -90,6 +87,7 @@ String GetCommandLineParam( sal_uInt32 nParam )
     }
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
 
 void InitTestToolLib()
 {
@@ -114,39 +112,20 @@ void InitTestToolLib()
 
 
     OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
-    OUString    aModulePath;
 
-    ::vos::OStartupInfo().getExecutableFile( aModulePath );
-    sal_uInt32  lastIndex = aModulePath.lastIndexOf('/');
-    if ( lastIndex > 0 )
-        aModulePath = aModulePath.copy( 0, lastIndex+1 );
-
-    aModulePath += OUString::createFromAscii( SVLIBRARY( "sts" ) );
-
-    // Shortcut for Performance: We expect that the test tool library is not installed
-    // (only for testing purpose). It should be located beside our executable.
-    // We don't want to pay for searching through LD_LIBRARY_PATH so we check for
-    // existence only in our executable path!!
-    osl::DirectoryItem  aItem;
-    osl::FileBase::RC   nResult = osl::DirectoryItem::get( aModulePath, aItem );
-
-    if ( nResult == osl::FileBase::E_None )
+    aTestToolModule = osl_loadModuleRelative(
+        &thisModule,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
+        SAL_LOADMODULE_DEFAULT );
+    if ( aTestToolModule )
     {
-        aTestToolModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
-        if ( aTestToolModule )
-        {
-            oslGenericFunction pInitFunc = osl_getFunctionSymbol(
-                aTestToolModule, aFuncName.pData );
-            if ( pInitFunc )
-                (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
-            else
-            {
-                   DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
-            }
-        }
+        oslGenericFunction pInitFunc = osl_getFunctionSymbol(
+            aTestToolModule, aFuncName.pData );
+        if ( pInitFunc )
+            (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
         else
         {
-               DBG_ERROR1( "Error loading library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
     else
