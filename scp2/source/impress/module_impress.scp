@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:40:47 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:26:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@ Module gid_Module_Prg_Impress_Bin
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
+    Files = (gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Registry_Spool_Oo_Common_Impress_Xcu,gid_File_Registry_Spool_Oo_Setup_Impress_Xcu,
     gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu,
 	gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
-	gid_File_Oo_Office_Ui_Effects_Xcs, gid_File_Oo_Office_Ui_Effects_Xcu, gid_File_Xdg_Impress, gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu,
+	gid_File_Oo_Office_Ui_Effects_Xcs, gid_File_Oo_Office_Ui_Effects_Xcu, gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu, gid_File_Tmp_Userinstall_Impress_Inf);
 End
 
@@ -64,3 +64,25 @@ End
 //     Default = YES;
 //     Files = (gid_File_Help_Simpress_Zip);
 // End
+
+Module gid_Module_Brand_Prg_Impress
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Impress";
+    Description = "gid_Module_Brand_Prg_Impress";
+    ParentID = gid_Module_Prg_Impress_Bin;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Simpress);
+End
+
+Module gid_Module_Langpack_Impress_Template
+    ParentID = gid_Module_Prg_Impress_Bin;
+    Name = "gid_Module_Langpack_Impress_Template";
+    Description = "gid_Module_Langpack_Impress_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Simpress_Zip);
+End
+
+#include "alllangmodules_impress.inc"
