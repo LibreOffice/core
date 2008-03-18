@@ -4,9 +4,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:26:17 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:05:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ sub get_shortcut_directory
 
     $directory = $onedir->{'uniquename'};
 
-    if ($directory eq "") { $directory = "INSTALLLOCATION"; }       # Shortcuts in the root directory
+    if ($directory eq "") { $directory = "OFFICEINSTALLLOCATION"; }     # Shortcuts in the root directory
 
     return $directory;
 }
@@ -351,7 +351,7 @@ sub get_folderitem_wkdir
 
         $directory = $onedir->{'uniquename'};
 
-        if ($directory eq "") { $directory = "INSTALLLOCATION"; }
+        if ($directory eq "") { $directory = "OFFICEINSTALLLOCATION"; }
     }
 
     return $directory;
