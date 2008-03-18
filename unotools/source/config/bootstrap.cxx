@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:10:58 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,10 @@ namespace utl
 
             // static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
             // s_pData = &s_theData;
-            s_pData = new Impl(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
+            rtl::OUString uri;
+            rtl::Bootstrap::get(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
+            s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME)));
         }
         return *s_pData;
     }
@@ -928,8 +931,11 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
 sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const
 {
     // try to open version.ini (versionrc)
-    rtl::Bootstrap aData( getExecutableDirectory() +
-                          OUString(RTL_CONSTASCII_USTRINGPARAM("/"SAL_CONFIGFILE("version"))) );
+    rtl::OUString uri;
+    rtl::Bootstrap::get(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
+    rtl::Bootstrap aData( uri +
+                          OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"SAL_CONFIGFILE("version"))) );
     if ( aData.getHandle() == NULL )
         // version.ini (versionrc) doesn't exist
         return sal_False;
