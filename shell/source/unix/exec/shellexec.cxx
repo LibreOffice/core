@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 15:04:25 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
+
+#include <com/sun/star/util/XMacroExpander.hpp>
 
 #ifndef _COM_SUN_STAR_URI_XEXTERNALURIREFERENCETRANSLATOR_HPP_
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
@@ -197,11 +199,34 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #ifdef MACOSX
         aBuffer.append("open");
 #else
-        OUString aProgramURL;
-        if ( osl_Process_E_None != osl_getExecutableFile(&aProgramURL.pData) )
+        // The url launchers are expected to be in the $OOO_BASE_DIR/program
+        // directory:
+        com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
+            exp;
+        if (!(m_xContext->getValueByName(
+                  rtl::OUString(
+                      RTL_CONSTASCII_USTRINGPARAM(
+                          "/singletons/com.sun.star.util.theMacroExpander")))
+              >>= exp)
+            || !exp.is())
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not determine executable path")),
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "component context fails to supply singleton"
+                        " com.sun.star.util.theMacroExpander of type"
+                        " com.sun.star.util.XMacroExpander")),
+                static_cast< XSystemShellExecute * >(this), ENOENT);
+        }
+        OUString aProgramURL;
+        try {
+            aProgramURL = exp->expandMacros(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/")));
+        } catch (com::sun::star::lang::IllegalArgumentException &)
+        {
+            throw SystemShellExecuteException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $OOO_BASE_DIR path")),
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -213,12 +238,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
-        // The url launchers are expected to be in the same directory as the main executable,
-        // so prefixing the launchers with the path of the executable including the last slash
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
-        nIndex = aTmp.lastIndexOf('/');
-        if (nIndex > 0)
-            escapeForShell(aBuffer, aTmp.copy(0, nIndex+1));
+        escapeForShell(aBuffer, aTmp);
 
         // Respect the desktop environment - if there is an executable named
         // <desktop-environement-is>-open-url, pass the url to this one instead
