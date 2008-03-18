@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:57:54 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,15 @@ rtl::OUString getParam(const char * name)
 #endif
     }
     return retVal;
+}
+
+rtl::OUString getParamFirstUrl(const char * name)
+{
+    // Some parameters can consist of multiple URLs (separated by space
+    // characters, although trim() harmlessly also removes other white-space),
+    // of which only the first is used:
+    sal_Int32 i = 0;
+    return getParam(name).trim().getToken(0, ' ', i);
 }
 
 }//blind namespace
@@ -362,12 +371,12 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 
 rtl::OUString BootParams::getUserData()
 {
-    return getParam(UNO_JAVA_JFW_USER_DATA);
+    return getParamFirstUrl(UNO_JAVA_JFW_USER_DATA);
 }
 
 rtl::OUString BootParams::getSharedData()
 {
-    return getParam(UNO_JAVA_JFW_SHARED_DATA);
+    return getParamFirstUrl(UNO_JAVA_JFW_SHARED_DATA);
 }
 
 rtl::OUString BootParams::getInstallData()
