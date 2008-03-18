@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sendreportunx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:38:04 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 12:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "docrecovery.hxx"
+#include "osl/file.hxx"
+#include "rtl/bootstrap.hxx"
+#include "rtl/strbuf.hxx"
+#include "tools/appendunixshellword.hxx"
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
@@ -244,7 +248,24 @@ namespace svx{
 #endif
             }
 
-            int ret = system( "crash_report -load -send -noui" );
+            int ret = -1;
+            rtl::OUString path1(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "$BRAND_BASE_DIR/program/crash_report"));
+            rtl::Bootstrap::expandMacros(path1);
+            rtl::OString path2;
+            if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==
+                 osl::FileBase::E_None) &&
+                path1.convertToString(
+                    &path2, osl_getThreadTextEncoding(),
+                    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                     RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+            {
+                rtl::OStringBuffer cmd;
+                tools::appendUnixShellWord(&cmd, path2);
+                cmd.append(RTL_CONSTASCII_STRINGPARAM(" -load -send -noui"));
+                ret = system(cmd.makeStringAndClear().getStr());
+            }
 
             if ( szBodyFile[0] );
                 unlink( szBodyFile );
