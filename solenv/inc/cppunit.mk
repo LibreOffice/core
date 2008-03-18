@@ -4,9 +4,9 @@
 #
 #   $RCSfile: cppunit.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-04 13:19:10 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:07:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,11 @@ test$(TNR): ALLTAR
         @echo ----------------------------------------------------------
         @echo - start unit test \#$(TNR) on library $(TEST$(TNR)LIB)
         @echo ----------------------------------------------------------
+.IF "$(OS)" == "LINUX" # full path needed by osl_getModuleURLFromAddress:
+        `which testshl2` $(TEST$(TNR)LIB) $(TEST$(TNR)OPT)
+.ELSE
         testshl2 $(TEST$(TNR)LIB) $(TEST$(TNR)OPT)
+.ENDIF
 .ENDIF
 
 # unroll end
