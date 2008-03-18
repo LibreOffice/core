@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:24:47 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,6 @@
 #endif
 
 #include <SwUndoPageDesc.hxx>
-#include <headerfooterhelper.hxx>
 
 #include <tgrditem.hxx>
 
@@ -453,10 +452,6 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         }
     }
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
-
-    // if header/footer nodes are in undo area, copy them into the document
-    // #i46909# no undo if header or footer changed
-    //    saveHeaderFooterNodes( *pDesc, GetNodes() );
 
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
