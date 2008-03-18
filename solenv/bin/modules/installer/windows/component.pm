@@ -4,9 +4,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:42 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:03:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,18 @@ use installer::windows::language;
 
 sub get_component_guid
 {
-    # At this time only a template
+    my ( $componentname ) = @_;
 
-    return "\{COMPONENTGUID\}";
+    # At this time only a template
+    my $returnvalue = "\{COMPONENTGUID\}";
+
+    # Returning a ComponentID, that is assigned in scp project
+    if ( exists($installer::globals::componentid{$componentname}) )
+    {
+        $returnvalue = "\{" . $installer::globals::componentid{$componentname} . "\}";
+    }
+
+    return $returnvalue;
 }
 
 ##############################################################
@@ -152,7 +161,18 @@ sub get_file_component_directory
 
 sub get_registry_component_directory
 {
-    return "INSTALLLOCATION";
+    my $componentdir = "";
+
+    if ( $installer::globals::officeinstalldirectoryset )
+    {
+        $componentdir = $installer::globals::officeinstalldirectory;
+    }
+    else
+    {
+        $componentdir = "INSTALLLOCATION";
+    }
+
+    return $componentdir;
 }
 
 ##############################################################
@@ -248,6 +268,19 @@ sub get_file_component_condition
         $condition = $installer::globals::componentcondition{$componentname};
     }
 
+    # there can be also tree conditions for multilayer products
+    if (exists($installer::globals::treeconditions{$componentname}))
+    {
+        if ( $condition eq "" )
+        {
+            $condition = $installer::globals::treeconditions{$componentname};
+        }
+        else
+        {
+            $condition = "($condition) And ($installer::globals::treeconditions{$componentname})";
+        }
+    }
+
     return $condition
 }
 
@@ -331,6 +364,9 @@ sub create_component_table
 
     installer::windows::idtglobal::write_idt_header(\@componenttable, "component");
 
+    # collect_layer_conditions();
+
+
     # File components
 
     for ( my $i = 0; $i <= $#{$allfilecomponentsref}; $i++ )
@@ -338,7 +374,7 @@ sub create_component_table
         my %onecomponent = ();
 
         $onecomponent{'name'} = ${$allfilecomponentsref}[$i];
-        $onecomponent{'guid'} = get_component_guid();
+        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'});
         $onecomponent{'directory'} = get_file_component_directory($onecomponent{'name'}, $filesref, $dirref);
         $onecomponent{'attributes'} = get_file_component_attributes($onecomponent{'name'}, $filesref);
         $onecomponent{'condition'} = get_file_component_condition($onecomponent{'name'}, $filesref);
@@ -357,7 +393,7 @@ sub create_component_table
         my %onecomponent = ();
 
         $onecomponent{'name'} = ${$allregistrycomponents}[$i];
-        $onecomponent{'guid'} = get_component_guid();
+        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'});
         $onecomponent{'directory'} = get_registry_component_directory();
         $onecomponent{'attributes'} = get_registry_component_attributes($onecomponent{'name'});
         $onecomponent{'condition'} = get_component_condition($onecomponent{'name'});
