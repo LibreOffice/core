@@ -30,9 +30,6 @@ SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1STDLIBS=$(AWTLIB)
 
 .IF "$(OS)" == "LINUX"
-.IF "$(CPUNAME)" == "S390"
-SHL1STDLIBS+=-lzip -lawt
-.ENDIF
 SHL1STDLIBS+=-lstdc++
 .ENDIF
 
