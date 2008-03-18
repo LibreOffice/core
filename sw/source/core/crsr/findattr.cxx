@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:43:42 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1010,7 +1010,6 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            Move( fnMoveForward, fnGoCntnt );
             bFound = TRUE;
             break;
         }
@@ -1028,7 +1027,7 @@ BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
 BOOL SwPaM::Find( const SfxItemSet& rSet, BOOL bNoColls, SwMoveFn fnMove,
-                    const SwPaM *pRegion, BOOL bInReadOnly )
+                    const SwPaM *pRegion, BOOL bInReadOnly, BOOL bMoveFirst )
 {
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -1050,9 +1049,10 @@ BOOL SwPaM::Find( const SfxItemSet& rSet, BOOL bNoColls, SwMoveFn fnMove,
 
     // Wenn am Anfang/Ende, aus dem Node moven
     // Wenn am Anfang/Ende, aus dem Node moven
-    if( bSrchForward
+    if( bMoveFirst &&
+        ( bSrchForward
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
-        : !pPam->GetPoint()->nContent.GetIndex() )
+        : !pPam->GetPoint()->nContent.GetIndex() ) )
     {
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, FALSE ))
         {
@@ -1107,7 +1107,6 @@ BOOL SwPaM::Find( const SfxItemSet& rSet, BOOL bNoColls, SwMoveFn fnMove,
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            Move( fnMoveForward, fnGoCntnt );
             bFound = TRUE;
             break;
         }
@@ -1153,6 +1152,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
     BOOL bReplaceTxt = pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !pSet->Count() );
     BOOL bReplaceAttr = pReplSet && pReplSet->Count();
+    BOOL bMoveFirst = !bReplaceAttr;
     if( bInReadOnly && (bReplaceAttr || bReplaceTxt ))
         bInReadOnly = FALSE;
 
@@ -1167,10 +1167,11 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             if( pSet->Count() )         // gibts ueberhaupt Attributierung?
             {
                 // zuerst die Attributierung
-                if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly ) )
+                if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly, bMoveFirst ) )
 //JP 17.11.95: was ist mit Attributen in leeren Absaetzen !!
 //                  || *pCrsr->GetMark() == *pCrsr->GetPoint() )    // kein Bereich ??
                     return FIND_NOT_FOUND;
+                bMoveFirst = TRUE;
 
                 if( !pSearchOpt )
                     break;      // ok, nur Attribute, also gefunden
