@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:59:42 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 15:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,14 +138,6 @@ void SetNoNum( BYTE * nLvl, BOOL nVal )
         *nLvl |= NO_NUMLEVEL;
     else
         *nLvl &= ~NO_NUMLEVEL;
-}
-
-void SetLevel(BYTE * nLvl, BYTE nNewLevel)
-{
-    if (IsNum(*nLvl))
-        *nLvl = nNewLevel;
-    else
-        *nLvl = nNewLevel | NO_NUMLEVEL;
 }
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
