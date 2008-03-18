@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.228 $
+#   $Revision: 1.229 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 15:14:58 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:08:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -941,9 +941,6 @@ RSCEXTINC=.
 RSCDEFS+= -DDEBUG
 .ENDIF
 
-# additional image sets
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango
-
 # settings for mozilla idl compiler
 XPIDL=xpidl
 XPIDL_LINK=xpt_link
@@ -1203,6 +1200,8 @@ RCLINKFLAGS+= $(ENVRCLINKFLAGS)
 LINKFLAGSRUNPATH_URELIB*=
 LINKFLAGSRUNPATH_UREBIN*=
 LINKFLAGSRUNPATH_OOO*=
+LINKFLAGSRUNPATH_BRAND*=
+LINKFLAGSRUNPATH_OXT*=
 
 # make sure both linker variables are set
 LINKC*=$(LINK)
