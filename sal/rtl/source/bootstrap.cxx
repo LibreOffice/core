@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:50:42 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#include <osl/profile.hxx>
 
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
@@ -61,6 +62,7 @@
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
+#include <rtl/ustrbuf.hxx>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -70,6 +72,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+#include <rtl/malformeduriexception.hxx>
+#include <rtl/uri.hxx>
 
 #ifndef INCLUDED_RTL_ALLOCATOR_HXX
 #include "rtl/allocator.hxx"
@@ -88,6 +92,8 @@ using osl::FileStatus;
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringToOString;
+
+struct Bootstrap_Impl;
 
 namespace {
 
@@ -113,6 +119,16 @@ private:
 
 struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
 {};
+
+struct ExpandRequestLink {
+    ExpandRequestLink const * next;
+    Bootstrap_Impl const * file;
+    rtl::OUString key;
+};
+
+rtl::OUString expandMacros(
+    Bootstrap_Impl const * file, rtl::OUString const & text,
+    ExpandRequestLink const * requestStack);
 
 }
 
@@ -237,8 +253,28 @@ static OUString & getIniFileName_Impl()
     {
         OUString fileName;
 
-        OUString sVarName(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME"));
-        if(!getFromCommandLineArgs(&fileName.pData, sVarName.pData))
+        if(getFromCommandLineArgs(
+               &fileName.pData,
+               OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")).pData))
+        {
+            // do nothing
+        }
+        else if(getFromCommandLineArgs(
+                    &fileName.pData,
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILEPATH")).pData))
+        {
+            OUString url;
+            if (osl::FileBase::getFileURLFromSystemPath(fileName, url) ==
+                osl::FileBase::E_None)
+            {
+                fileName = url;
+            }
+            else
+            {
+                fileName = OUString();
+            }
+        }
+        else
         {
             getExecutableFile_Impl (&(fileName.pData));
 
@@ -348,7 +384,7 @@ struct Bootstrap_Impl
     static void operator delete (void * p , std::size_t) SAL_THROW(())
         { rtl_freeMemory (p); }
 
-    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault, bool recursive ) const;
+    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault, bool recursive, ExpandRequestLink const * requestStack ) const;
 };
 
 //----------------------------------------------------------------------------
@@ -430,13 +466,14 @@ Bootstrap_Impl::~Bootstrap_Impl()
 
 sal_Bool Bootstrap_Impl::getValue(
     rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault,
-    bool recursive ) const
+    bool recursive, ExpandRequestLink const * requestStack ) const
 {
     // lookup this ini
     sal_Bool result = sal_True;
     bool further_macro_expansion = true;
 
     OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+    ExpandRequestLink link = { requestStack, this, name };
     if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_CPPU_ENV") ))
     {
 #define MSTR_(x) # x
@@ -505,7 +542,7 @@ sal_Bool Bootstrap_Impl::getValue(
                         EnsureNoFinalSlash(ppValue);
                         further_macro_expansion = false;
                     }
-                    else if (!recursive && _base_ini && (_base_ini->getValue(pName, ppValue, NULL, true)))
+                    else if (!recursive && _base_ini && (_base_ini->getValue(pName, ppValue, NULL, true, &link)))
                     {
                         further_macro_expansion = false;
                     }
@@ -526,7 +563,7 @@ sal_Bool Bootstrap_Impl::getValue(
                             FundamentalIniData & d = FundamentalIni::get();
                             if (d.ini != NULL && d.ini != this) {
                                 if (static_cast< Bootstrap_Impl * >(d.ini)->
-                                    getValue(pName, ppValue, NULL, true))
+                                    getValue(pName, ppValue, NULL, true, &link))
                                 {
                                     further_macro_expansion = false;
                                 } else {
@@ -559,8 +596,7 @@ sal_Bool Bootstrap_Impl::getValue(
         if (further_macro_expansion)
         {
             OUString val = expandMacros(
-                static_cast< rtlBootstrapHandle >( const_cast< Bootstrap_Impl * >( this ) ),
-                OUString::unacquired(ppValue) );
+                this, OUString::unacquired(ppValue), &link );
             rtl_uString_assign( ppValue, val.pData );
         }
     }
@@ -749,7 +785,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle (
         if (handle == 0)
             handle = get_static_bootstrap_handle();
         found = static_cast< Bootstrap_Impl * >( handle )->getValue(
-            pName, ppValue, pDefault, false );
+            pName, ppValue, pDefault, false, NULL );
     }
 
     return found;
@@ -841,8 +877,12 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtl_uString     ** macro
 ) SAL_THROW_EXTERN_C()
 {
-    OUString expanded( expandMacros( handle,
-                                     * reinterpret_cast< OUString const * >( macro ) ) );
+    if (handle == NULL) {
+        handle = get_static_bootstrap_handle();
+    }
+    OUString expanded( expandMacros( static_cast< Bootstrap_Impl * >( handle ),
+                                     * reinterpret_cast< OUString const * >( macro ),
+                                     NULL ) );
     rtl_uString_assign( macro, expanded.pData );
 }
 
@@ -852,9 +892,187 @@ void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_uString ** macro )
     SAL_THROW_EXTERN_C()
 {
-    OUString expanded( expandMacros( get_static_bootstrap_handle(),
-                                     * reinterpret_cast< OUString const * >( macro ) ) );
-    rtl_uString_assign( macro, expanded.pData );
+    rtl_bootstrap_expandMacros_from_handle(NULL, macro);
 }
 
 //----------------------------------------------------------------------------
+
+namespace {
+
+int hex(sal_Unicode c) {
+    return
+        c >= '0' && c <= '9' ? c - '0' :
+        c >= 'A' && c <= 'F' ? c - 'A' + 10 :
+        c >= 'a' && c <= 'f' ? c - 'a' + 10 : -1;
+}
+
+sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
+    OSL_ASSERT(
+        pos != NULL && *pos >= 0 && *pos < text.getLength() && escaped != NULL);
+    sal_Unicode c = text[(*pos)++];
+    if (c == '\\') {
+        int n1, n2, n3, n4;
+        if (*pos < text.getLength() - 4 && text[*pos] == 'u' &&
+            ((n1 = hex(text[*pos + 1])) >= 0) &&
+            ((n2 = hex(text[*pos + 2])) >= 0) &&
+            ((n3 = hex(text[*pos + 3])) >= 0) &&
+            ((n4 = hex(text[*pos + 4])) >= 0))
+        {
+            *pos += 5;
+            *escaped = true;
+            return static_cast< sal_Unicode >(
+                (n1 << 12) | (n2 << 8) | (n3 << 4) | n4);
+        } else if (*pos < text.getLength()) {
+            *escaped = true;
+            return text[(*pos)++];
+        }
+    }
+    *escaped = false;
+    return c;
+}
+
+rtl::OUString lookup(
+    Bootstrap_Impl const * file, rtl::OUString const & key,
+    ExpandRequestLink const * requestStack)
+{
+    OSL_ASSERT(file != NULL);
+    for (; requestStack != NULL; requestStack = requestStack->next) {
+        if (requestStack->file == file && requestStack->key == key) {
+            return rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("***RECURSION DETECTED***"));
+        }
+    }
+    rtl::OUString v;
+    file->getValue(key.pData, &v.pData, NULL, false, requestStack);
+    return v;
+}
+
+rtl::OUString expandMacros(
+    Bootstrap_Impl const * file, rtl::OUString const & text,
+    ExpandRequestLink const * requestStack)
+{
+    rtl::OUStringBuffer buf;
+    for (sal_Int32 i = 0; i < text.getLength();) {
+        bool escaped;
+        sal_Unicode c = read(text, &i, &escaped);
+        if (escaped || c != '$') {
+            buf.append(c);
+        } else {
+            if (i < text.getLength() && text[i] == '{') {
+                ++i;
+                sal_Int32 p = i;
+                sal_Int32 nesting = 0;
+                rtl::OUString seg[3];
+                int n = 0;
+                while (i < text.getLength()) {
+                    sal_Int32 j = i;
+                    c = read(text, &i, &escaped);
+                    if (!escaped) {
+                        switch (c) {
+                        case '{':
+                            ++nesting;
+                            break;
+                        case '}':
+                            if (nesting == 0) {
+                                seg[n++] = text.copy(p, j - p);
+                                goto done;
+                            } else {
+                                --nesting;
+                            }
+                            break;
+                        case ':':
+                            if (nesting == 0 && n < 2) {
+                                seg[n++] = text.copy(p, j - p);
+                                p = i;
+                            }
+                            break;
+                        }
+                    }
+                }
+            done:
+                for (int j = 0; j < n; ++j) {
+                    seg[j] = expandMacros(file, seg[j], requestStack);
+                }
+                if (n == 3 && seg[1].getLength() == 0) {
+                    // For backward compatibility, treat ${file::key} the same
+                    // as just ${file:key}:
+                    seg[1] = seg[2];
+                    n = 2;
+                }
+                if (n == 1) {
+                    buf.append(lookup(file, seg[0], requestStack));
+                } else if (n == 2) {
+                    if (seg[0].equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(".link")))
+                    {
+                        osl::File f(seg[1]);
+                        rtl::ByteSequence seq;
+                        rtl::OUString line;
+                        rtl::OUString url;
+                        // Silently ignore any errors (is that good?):
+                        if (f.open(OpenFlag_Read) == osl::FileBase::E_None &&
+                            f.readLine(seq) == osl::FileBase::E_None &&
+                            rtl_convertStringToUString(
+                                &line.pData,
+                                reinterpret_cast< char const * >(
+                                    seq.getConstArray()),
+                                seq.getLength(), RTL_TEXTENCODING_UTF8,
+                                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)) &&
+                            (osl::File::getFileURLFromSystemPath(line, url) ==
+                             osl::FileBase::E_None))
+                        {
+                            try {
+                                buf.append(
+                                    rtl::Uri::convertRelToAbs(seg[1], url));
+                            } catch (rtl::MalformedUriException &) {}
+                        }
+                    } else {
+                        rtl::Bootstrap b(seg[0]);
+                        Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
+                            b.getHandle());
+                        // Silently ignore bootstrap files that cannot be opened
+                        // (is that good?):
+                        if (f != NULL) {
+                            buf.append(lookup(f, seg[1], requestStack));
+                        }
+                    }
+                } else {
+                    // Going through osl::Profile, this code erroneously does
+                    // not recursively expand macros in the resulting
+                    // replacement text (and if it did, it would fail to detect
+                    // cycles that pass through here):
+                    buf.append(
+                        rtl::OStringToOUString(
+                            osl::Profile(seg[0]).readString(
+                                rtl::OUStringToOString(
+                                    seg[1], RTL_TEXTENCODING_UTF8),
+                                rtl::OUStringToOString(
+                                    seg[2], RTL_TEXTENCODING_UTF8),
+                                rtl::OString()),
+                            RTL_TEXTENCODING_UTF8));
+                }
+            } else {
+                rtl::OUStringBuffer kbuf;
+                for (; i < text.getLength();) {
+                    sal_Int32 j = i;
+                    c = read(text, &j, &escaped);
+                    if (!escaped &&
+                        (c == ' ' || c == '$' || c == '-' || c == '/' ||
+                         c == ';' || c == '\\'))
+                    {
+                        break;
+                    }
+                    kbuf.append(c);
+                    i = j;
+                }
+                buf.append(
+                    lookup(file, kbuf.makeStringAndClear(), requestStack));
+            }
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+}
