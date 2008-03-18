@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeinstallationdirectories.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:38:01 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 14:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ void OfficeInstallationDirectories::initDirs()
                 *m_pOfficeDir =
                     xExpander->expandMacros(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$SYSBINDIR/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
+                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
 
                 OSL_ENSURE( m_pOfficeDir->getLength() > 0,
                         "Unable to obtain office installation directory!" );
@@ -346,7 +346,7 @@ void OfficeInstallationDirectories::initDirs()
                 *m_pUserDir =
                     xExpander->expandMacros(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$SYSBINDIR/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
+                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
 
                 OSL_ENSURE( m_pUserDir->getLength() > 0,
                         "Unable to obtain office user data directory!" );
