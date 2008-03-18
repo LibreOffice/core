@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 16:55:51 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:11:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,12 @@ CFLAGSOPT=-O2 -fno-strict-aliasing
 CFLAGSNOOPT=-O0
 
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+# -Wshadow does not work for C++ as /usr/include/c++/4.0.0/ext/hashtable.h
+# l. 717 contains a declaration of __cur2 shadowing the declaration at l. 705,
+# in template code for which a #pragma gcc system_header would not work:
 # -Wextra doesn not work for gcc-3.3
 CFLAGSWARNCC=-Wall -Wendif-labels
-CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
@@ -193,8 +195,14 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
-LINKFLAGSRUNPATH*=-Wl
-LINKFLAGS=$(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH) 
+# Very long install_names are needed so that install_name_tool -change later on
+# does not complain that "larger updated load commands do not fit:"
+LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB$/$(@:f)'
+LINKFLAGSRUNPATH_UREBIN=
+LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO$/$(@:f)'
+LINKFLAGSRUNPATH_BRAND=
+LINKFLAGSRUNPATH_OXT=
+LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
 .IF "$(GUIBASE)" == "aqua"
@@ -210,9 +218,9 @@ LINKFLAGS+=$(EXTRA_LINKFLAGS)
 # Random link flags dealing with different cases of linking
 
 LINKFLAGSAPPGUI=-bind_at_load
-LINKFLAGSSHLGUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
+LINKFLAGSSHLGUI=-dynamiclib -single_module
 LINKFLAGSAPPCUI=-bind_at_load
-LINKFLAGSSHLCUI=-dynamiclib -single_module -install_name '@executable_path$/$(@:f)'
+LINKFLAGSSHLCUI=-dynamiclib -single_module
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 
