@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 18:39:43 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:04:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,6 @@ sub get_arpcomments_for_property_table
     if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
 
     $comment = $comment . " " . $buildidstring;
-
-    # $comment = $comment . " [INSTALLLOCATION]";
 
     return $comment;
 }
@@ -283,6 +281,15 @@ sub set_important_properties
 
     my $languagesline = "PRODUCTALLLANGUAGES" . "\t" . $$languagestringref . "\n";
     push(@{$propertyfile}, $languagesline);
+
+    # Adding also used tree conditions for multilayer products.
+    # These are saved in %installer::globals::usedtreeconditions
+    foreach my $treecondition (keys %installer::globals::usedtreeconditions)
+    {
+        my $onepropertyline = $treecondition . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
 }
 
 ####################################################################################
@@ -353,23 +360,18 @@ sub set_languages_in_property_table
     my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
     my $propertyfile = installer::files::read_file($properyfilename);
 
-    # Setting the new properties for each language ( is1033 = 1 )
-
-    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
+    # Setting the component properties saved in %installer::globals::languageproperties
+    foreach my $localproperty ( keys %installer::globals::languageproperties )
     {
-        my $language = ${$languagesarrayref}[$i];
-        my $windowslanguage = installer::windows::language::get_windows_language($language);
-        my $property = "IS" . $windowslanguage; # Capitol letter "IS" !
-        my $value = 1;
-
-        my $oneline = $property . "\t" . $value . "\n";
-        push(@{$propertyfile}, $oneline);
+        $onepropertyline =  $localproperty . "\t" . $installer::globals::languageproperties{$localproperty} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
     }
 
-    # Setting the info about multilingual installation in property ISMULTI
+    # Setting the info about multilingual installation in property "isMulti"
 
     my $propertyname = "isMulti";
     my $ismultivalue = 0;
+
     if ( $installer::globals::ismultilingual ) { $ismultivalue = 1; }
 
     my $onepropertyline =  $propertyname . "\t" . $ismultivalue . "\n";
