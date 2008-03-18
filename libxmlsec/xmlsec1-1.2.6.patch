@@ -754,8 +754,23 @@
       fi
   
 ***************
+*** 26004,26009 ****
+--- 26063,26074 ----
+      fi
+  fi
+  
++ case $host_os in
++ darwin*)
++   NSS_LIBS="$NSS_LIBS "`"$PERL" "$SOLARENV/bin/macosx-dylib-link-list.pl" $NSS_LIBS`
++   ;;
++ esac
++ 
+  if test "z$NSS_FOUND" = "zyes" ; then
+      XMLSEC_NO_NSS="0"
+      NSS_CFLAGS="$NSS_CFLAGS -DXMLSEC_CRYPTO_NSS=1"
+***************
 *** 26037,26042 ****
---- 26096,26204 ----
+--- 26102,26210 ----
   
   
   
@@ -874,7 +889,7 @@
   cat >confcache <<\_ACEOF
   # This file is a shell script that caches the results of configure
   # tests run on this system so they can be shared between configure
---- 26766,26772 ----
+--- 26772,26778 ----
   done
   
   
@@ -884,7 +899,7 @@
   # tests run on this system so they can be shared between configure
 ***************
 *** 27521,27526 ****
---- 27683,27690 ----
+--- 27689,27696 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -895,7 +910,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 29231,29236 ****
---- 29395,29402 ----
+--- 29401,29408 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -906,7 +921,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 30941,30946 ****
---- 31107,31114 ----
+--- 31113,31120 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -917,7 +932,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 32653,32658 ****
---- 32821,34544 ----
+--- 32827,34550 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
@@ -2644,7 +2659,7 @@
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 ***************
 *** 34368,34373 ****
---- 36254,36261 ----
+--- 36260,36267 ----
   s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
   s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
   s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
