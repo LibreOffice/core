@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:20:03 $
+#   last change: $Author: vg $ $Date: 2008-03-18 13:04:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ use installer::windows::idtglobal;
 
 sub get_registry_component_name
 {
-    my ($registryref) = @_;
+    my ($registryref, $allvariables) = @_;
 
     # In this function exists the rule to create components from registryitems
     # Rule:
@@ -71,6 +71,17 @@ sub get_registry_component_name
     $componentname =~ s/_javafilter_/_jf_/g;
 
     $componentname = $componentname . "_registry";  # identifying this component as registryitem component
+
+    # This componentname must be more specific
+    my $addon = "_";
+    if ( $allvariables->{'PRODUCTNAME'} ) { $addon = $addon . $allvariables->{'PRODUCTNAME'}; }
+    if ( $allvariables->{'PRODUCTVERSION'} ) { $addon = $addon . $allvariables->{'PRODUCTVERSION'}; }
+    $addon = lc($addon);
+    $addon =~ s/ //g;
+    $addon =~ s/-//g;
+    $addon =~ s/\.//g;
+
+    $componentname = $componentname . $addon;
 
     return $componentname;
 }
@@ -178,8 +189,8 @@ sub get_registry_value
     if ( $registry->{'Value'} ) { $value = $registry->{'Value'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
-    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
+    $value =~ s/\<progpath\>/\[OFFICEINSTALLLOCATION\]/;
+    $value =~ s/\[OFFICEINSTALLLOCATION\]\\/\[OFFICEINSTALLLOCATION\]/; # removing "\" after "[OFFICEINSTALLLOCATION]"
 
     if ( $value =~ /\%/ ) { $value = installer::worker::replace_variables_in_string($value, $allvariableshashref); }
 
@@ -192,12 +203,12 @@ sub get_registry_value
 
 sub get_registry_component
 {
-    my ($registry) = @_;
+    my ($registry, $allvariables) = @_;
 
     # All registry items belonging to one module can
     # be included into one component
 
-    my $componentname = get_registry_component_name($registry);
+    my $componentname = get_registry_component_name($registry, $allvariables);
 
     # saving componentname in the registryitem collector
 
@@ -277,7 +288,7 @@ sub create_registry_table
             $registry{'Key'} = get_registry_key($oneregistry, $allvariableshashref);
             $registry{'Name'} = get_registry_name($oneregistry, $allvariableshashref);
             $registry{'Value'} = get_registry_value($oneregistry, $allvariableshashref);
-            $registry{'Component_'} = get_registry_component($oneregistry);
+            $registry{'Component_'} = get_registry_component($oneregistry, $allvariableshashref);
 
             # Collecting all components
             if (!(installer::existence::exists_in_array($registry{'Component_'}, $allregistrycomponentsref)))
