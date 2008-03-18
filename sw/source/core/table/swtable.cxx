@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:58:58 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 16:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,27 +936,34 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             long nDiff = nLeftDiff + nRightDiff;
 
             //Box und alle uebergeordneten um den Differenzbetrag anpassen.
-            BOOL bUp = FALSE;
             while ( pBox )
             {
-                if ( !bUp || (bUp && !::BoxInArr( rParm.aBoxArr, pBox )) )
-                {
-                    SwFmtFrmSize aFmtFrmSize( pBox->GetFrmFmt()->GetFrmSize() );
-                    aFmtFrmSize.SetWidth( aFmtFrmSize.GetWidth() + nDiff );
-                    if ( aFmtFrmSize.GetWidth() < 0 )
-                        aFmtFrmSize.SetWidth( -aFmtFrmSize.GetWidth() );
-                    rParm.aShareFmts.SetSize( *pBox, aFmtFrmSize );
-                    bUp = TRUE;
-                }
+                SwFmtFrmSize aFmtFrmSize( pBox->GetFrmFmt()->GetFrmSize() );
+                aFmtFrmSize.SetWidth( aFmtFrmSize.GetWidth() + nDiff );
+                if ( aFmtFrmSize.GetWidth() < 0 )
+                    aFmtFrmSize.SetWidth( -aFmtFrmSize.GetWidth() );
+                rParm.aShareFmts.SetSize( *pBox, aFmtFrmSize );
 
-                //Wenn es links noch Boxen gibt, die LeftDiff nicht auf den Upper
-                if ( pBox != pBox->GetUpper()->GetTabBoxes()[0] )
-                    nDiff = nRightDiff;
-                //Wenn es rechts noch Boxen gibt, den RightDiff nicht auf den Upper
-                if ( pBox != pBox->GetUpper()->GetTabBoxes()
+                // The outer cells of the last row are responsible to adjust a surrounding cell.
+                // Last line check:
+                if ( pBox->GetUpper()->GetUpper() &&
+                     pBox->GetUpper() != pBox->GetUpper()->GetUpper()->GetTabLines()
+                        [pBox->GetUpper()->GetUpper()->GetTabLines().Count()-1])
+                {
+                   pBox = 0;
+                }
+                else
+                {
+                    // Middle cell check:
+                    if ( pBox != pBox->GetUpper()->GetTabBoxes()[0] )
+                        nDiff = nRightDiff;
+
+                    if ( pBox != pBox->GetUpper()->GetTabBoxes()
                                 [pBox->GetUpper()->GetTabBoxes().Count()-1] )
-                    nDiff -= nRightDiff;
-                pBox = nDiff ? pBox->GetUpper()->GetUpper() : 0;
+                        nDiff -= nRightDiff;
+
+                    pBox = nDiff ? pBox->GetUpper()->GetUpper() : 0;
+                }
             }
         }
     }
