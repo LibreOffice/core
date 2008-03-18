@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_jre_ooo.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 09:28:56 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,17 @@
 
 #include "macros.inc"
 
+#ifdef WNT
+Directory gid_Dir_Jre
+    ParentID = PREDEFINED_PROGDIR;
+    HostName = "JRE";
+End
+#endif
+
 File gid_File_Exe_Java
     BIN_FILE_BODY;
 	Styles = (DONT_PACK,JAVAFILE);
-	Dir = gid_Dir_Program;
+	Dir = gid_Dir_Jre;
 	Name = "${WINDOWSJAVAFILENAME}";
 	Javaversion = "${WINDOWSJAVAREGISTRYENTRY}";
 	Subdir = "java";
