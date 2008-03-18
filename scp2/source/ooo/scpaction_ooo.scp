@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scpaction_ooo.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 15:58:27 $
+ *  last change: $Author: vg $ $Date: 2008-03-18 13:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,20 @@ ScpAction scp_Copy_Xpd_Help_Html_Chooseinstallationtype_En_Us
     Styles = (XPD_ONLY);
     Subdir = "installdata/html";
 End
+
+// ScpAction scp_Copy_Xpd_Help_Html_Chooselanguage
+//    README_TXT_ALL_LANG(Copy, ChooseLanguage, html);
+//    README_TXT_ALL_LANG(Name, ChooseLanguage, html);
+//    Styles = (XPD_ONLY);
+//    Subdir = "installdata/html";
+// End
+
+// ScpAction scp_Copy_Xpd_Help_Html_Chooselanguage_En_Us
+//    Copy = "ChooseLanguage_en-US.html";
+//    Name = "ChooseLanguage.html";
+//    Styles = (XPD_ONLY);
+//    Subdir = "installdata/html";
+// End
 
 ScpAction scp_Copy_Xpd_Help_Html_Chooseuninstallationcomponents
     README_TXT_ALL_LANG(Copy, ChooseUninstallationComponents, html);
