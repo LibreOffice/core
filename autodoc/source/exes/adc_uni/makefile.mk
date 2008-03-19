@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 16:44:56 $
+#   last change: $Author: vg $ $Date: 2008-03-19 11:08:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ APP1OBJS=   $(OBJ)$/main.obj
 APP1STDLIBS= $(LIBSTLPORT) $(COSVLIB) $(UDMLIB)
 .ELSE
 .IF "$(OS)"=="MACOSX"
-APP1STDLIBS= $(LIBSTLPORT) -ludm -lcosv
+# See <http://porting.openoffice.org/servlets/ReadMsg?list=mac&msgNo=6911>:
+APP1STDLIBS= $(LIBSTLPORT) -Wl,-all_load -ludm -lcosv
 .ELSE
 APP1STDLIBS= -lcosv -ludm
 .ENDIF
