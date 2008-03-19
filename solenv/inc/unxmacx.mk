@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 13:11:14 $
+#   last change: $Author: vg $ $Date: 2008-03-19 14:39:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ LINKOUTPUT_FILTER=
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
-.IF "$(GUIBASE)"=="unx"
+.IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
 CDEFS+= -DX_LOCALE
 .ENDIF
 
