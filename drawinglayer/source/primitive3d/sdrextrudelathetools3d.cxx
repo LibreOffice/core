@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:22:01 $
+ *  last change: $Author: aw $ $Date: 2008-03-19 04:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,21 +541,25 @@ namespace drawinglayer
             basegfx::B3DPolyPolygon& rLine,
             const Slice3DVector& rSliceVector,
             bool bClosed,
-            bool bReducedLineGeometry)
+            bool bAddHorizontal,
+            bool bAddVertical)
         {
             const sal_uInt32 nNumSlices(rSliceVector.size());
 
             if(nNumSlices)
             {
                 // Slice3Ds self
-                for(sal_uInt32 a(0L); a < nNumSlices; a++)
-                {
-                    rLine.append(rSliceVector[a].getB3DPolyPolygon());
+                if(bAddVertical)
+                 {
+                    for(sal_uInt32 a(0L); a < nNumSlices; a++)
+                    {
+                        rLine.append(rSliceVector[a].getB3DPolyPolygon());
+                    }
                 }
 
                 // horizontal
-                if(!bReducedLineGeometry)
-                {
+                if(bAddHorizontal)
+                 {
                     const basegfx::B3DPolyPolygon& aFirstPolyPolygon(rSliceVector[0L].getB3DPolyPolygon());
                     const sal_uInt32 nPolygonCount(aFirstPolyPolygon.count());
 

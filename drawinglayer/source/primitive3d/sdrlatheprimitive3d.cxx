@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:22:02 $
+ *  last change: $Author: aw $ $Date: 2008-03-19 04:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,9 @@ namespace drawinglayer
                 if(getSdrLFSAttribute().getLine())
                 {
                     basegfx::B3DPolyPolygon aLine;
-                    extractLinesFromSlice(aLine, rSliceVector, bClosedRotation, getSdr3DObjectAttribute().getReducedLineGeometry());
+                    extractLinesFromSlice(aLine, rSliceVector, bClosedRotation,
+                        true,
+                        !getSdr3DObjectAttribute().getReducedLineGeometry());
                     const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, getTransform(), *getSdrLFSAttribute().getLine()));
                     appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
                 }
