@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendapplicationenvironment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:48:23 $
+ *  last change: $Author: vg $ $Date: 2008-03-19 12:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,10 @@
 
 #include "osl/process.h"
 #include "osl/thread.h"
-#include "rtl/string.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
+#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "tools/extendapplicationenvironment.hxx"
@@ -68,30 +69,35 @@ void extendApplicationEnvironment() {
 #endif
 
     // Make sure URE_BOOTSTRAP environment variable is set (failure is fatal):
-    if (getenv("URE_BOOTSTRAP") == NULL) {
-        rtl::OUString p;
-        if (osl_getExecutableFile(&p.pData) != osl_Process_E_None) {
+    rtl::OUString env(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP="));
+    rtl::OUString uri;
+    if (rtl::Bootstrap::get(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")), uri))
+    {
+        env += uri;
+    } else {
+        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
             abort();
         }
-        sal_Int32 i = p.lastIndexOf('/');
+        sal_Int32 i = uri.lastIndexOf('/');
         if (i >= 0) {
-            p = p.copy(0, i + 1);
+            uri = uri.copy(0, i + 1);
         }
-        rtl::OString s;
-        if (!p.convertToString(
-                &s, osl_getThreadTextEncoding(),
-                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-        {
-            abort();
-        }
-        rtl::OString env(RTL_CONSTASCII_STRINGPARAM("URE_BOOTSTRAP="));
-        env += s;
-        env += SAL_CONFIGFILE("fundamental");
-        rtl_string_acquire(env.pData); // argument to putenv must leak
-        if (putenv(const_cast< char * >(env.getStr())) != 0) {
-            abort();
-        }
+        env += uri;
+        env += rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("fundamental")));
+    }
+    rtl::OString s;
+    if (!env.convertToString(
+            &s, osl_getThreadTextEncoding(),
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+    {
+        abort();
+    }
+    rtl_string_acquire(s.pData); // argument to putenv must leak
+    if (putenv(const_cast< char * >(s.getStr())) != 0) {
+        abort();
     }
 }
 
