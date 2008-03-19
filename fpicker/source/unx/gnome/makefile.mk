@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:52:44 $
+#   last change: $Author: vg $ $Date: 2008-03-19 11:13:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
 
 # check gtk version
-GTK_TWO_FOUR:=$(shell @$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
+GTK_TWO_FOUR:=$(shell @$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
 .IF "$(GTK_TWO_FOUR)" != "ok"
 
 dummy:
