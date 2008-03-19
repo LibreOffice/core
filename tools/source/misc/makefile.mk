@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 09:48:31 $
+#   last change: $Author: vg $ $Date: 2008-03-19 12:10:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-SLOFILES = $(SLO)$/extendapplicationenvironment.obj
+SLOFILES = \
+    $(SLO)$/appendunixshellword.obj \
+    $(SLO)$/extendapplicationenvironment.obj
 
 .INCLUDE: target.mk
