@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: aw $ $Date: 2007-12-18 15:10:54 $
+#   last change: $Author: aw $ $Date: 2008-03-19 04:37:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ LIB1FILES=\
     $(SLB)$/animation.lib	\
     $(SLB)$/texture.lib
 
-SHL1TARGET= drawinglayer$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= drawinglayer$(DLLPOSTFIX)
 SHL1IMPLIB= idrawinglayer
 
 SHL1STDLIBS=\
