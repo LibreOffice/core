@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 14:50:51 $
+ *  last change: $Author: rt $ $Date: 2008-03-20 17:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1698,7 +1698,7 @@ void XclExpChType::Convert( Reference< XDiagram > xDiagram, Reference< XChartTyp
                 maData.mnPieHole = bDonut ? 50 : 0;
                 // #i85166# starting angle of first pie slice
                 ScfPropertySet aDiaProp( xDiagram );
-                sal_Int32 nApiRot;
+                sal_Int32 nApiRot = 0;
                 if( aDiaProp.GetProperty( nApiRot, EXC_CHPROP_STARTINGANGLE ) )
                     maData.mnRotation = static_cast< sal_uInt16 >( (450 - (nApiRot % 360)) % 360 );
             }
