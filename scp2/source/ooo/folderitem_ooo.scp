@@ -4,9 +4,9 @@
  *
  *  $RCSfile: folderitem_ooo.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:46:12 $
+ *  last change: $Author: rt $ $Date: 2008-03-20 09:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@ FolderItem gid_Folderitem_Soffice
     Name = "%PRODUCTNAME";
     ModuleID = gid_Module_Root;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Bin_Soffice;
-    IconFile = gid_File_Bin_Soffice;
+    FileID = gid_Brand_File_Bin_Soffice;
+    IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
     WkDir = gid_Dir_Program;
     Parameter = "";
@@ -52,10 +52,10 @@ FolderItem gid_Folderitem_Soffice_Desktop
     Name = "%PRODUCTNAME %PRODUCTVERSION";
     ModuleID = gid_Module_Root;
     FolderID = PREDEFINED_DESKTOP;
-    FileID = gid_File_Bin_Soffice;
-    IconFile = gid_File_Bin_Soffice;
+    FileID = gid_Brand_File_Bin_Soffice;
+    IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
-    ComponentIDFile = "gid_File_Desktophelper_Txt";
+    ComponentIDFile = "gid_Brand_File_Desktophelper_Txt";
     WkDir = gid_Dir_Program;
     Parameter = "";
 	Styles = (NOWEB,NON_ADVERTISED,USE_HELPER_FILENAME);
