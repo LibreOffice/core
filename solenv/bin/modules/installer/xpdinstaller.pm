@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 13:02:43 $
+#   last change: $Author: rt $ $Date: 2008-03-20 10:54:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -827,7 +827,7 @@ sub set_productdir_tag
         if ( $allvariables->{"PRODUCTVERSION"} )
         {
             $productdir = $productdir . $allvariables->{"PRODUCTVERSION"};
-            if ( $allvariables->{"LCPRODUCTEXTENSION"} ) { $productdir = $productdir . $allvariables->{"LCPRODUCTEXTENSION"}; }
+#           if ( $allvariables->{"LCPRODUCTEXTENSION"} ) { $productdir = $productdir . $allvariables->{"LCPRODUCTEXTENSION"}; }
         }
     }
     my $tag = $indent . "<productdir>" . $productdir . "</productdir>" . "\n";
