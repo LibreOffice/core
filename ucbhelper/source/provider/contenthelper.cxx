@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:13:59 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,23 +219,19 @@ ContentImplHelper::ContentImplHelper(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< ContentProviderImplHelper >& rxProvider,
             const uno::Reference<
-            com::sun::star::ucb::XContentIdentifier >& Identifier,
-            sal_Bool bRegisterAtProvider )
+            com::sun::star::ucb::XContentIdentifier >& Identifier )
 : m_pImpl( new ContentImplHelper_Impl ),
   m_xSMgr( rxSMgr ),
   m_xIdentifier( Identifier ),
   m_xProvider( rxProvider ),
   m_nCommandId( 0 )
 {
-    if ( bRegisterAtProvider )
-        m_xProvider->addContent( this );
 }
 
 //=========================================================================
 // virtual
 ContentImplHelper::~ContentImplHelper()
 {
-    m_xProvider->removeContent( this );
     delete m_pImpl;
 }
 
@@ -1034,7 +1030,7 @@ void ContentImplHelper::notifyContentEvent(
 void ContentImplHelper::inserted()
 {
     // Content is not yet registered at provider.
-    m_xProvider->addContent( this );
+    m_xProvider->registerNewContent( this );
 
     // If the parent content is currently not instanciated, there can be
     // no listeners interested in changes ;-)
@@ -1107,7 +1103,7 @@ sal_Bool ContentImplHelper::exchange(
     // Re-insert at provider.
     m_xProvider->removeContent( this );
     m_xIdentifier = rNewId;
-    m_xProvider->addContent( this );
+    m_xProvider->registerNewContent( this );
 
     aGuard.clear();
 
