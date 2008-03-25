@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:41:58 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -88,11 +92,18 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 #include <osl/file.hxx>
 
 #include "dictmgr.hxx"
 
 #include <stdio.h>
+
+#include <list>
+#include <set>
+
 using namespace utl;
 using namespace osl;
 using namespace rtl;
@@ -111,18 +122,6 @@ using namespace linguistic;
 #define CAPTYPE_MIXED   4
 
 ///////////////////////////////////////////////////////////////////////////
-
-BOOL operator == ( const Locale &rL1, const Locale &rL2 )
-{
-    return  rL1.Language ==  rL2.Language   &&
-            rL1.Country  ==  rL2.Country    &&
-            rL1.Variant  ==  rL2.Variant;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 Hyphenator::Hyphenator() :
@@ -172,152 +171,107 @@ PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         throw(RuntimeException)
 {
-
     MutexGuard  aGuard( GetLinguMutex() );
-    SvtPathOptions  aPathOpt;
+
+    // this routine should return the locales supported by the installed
+    // dictionaries.
 
     if (!numdict)
     {
+        SvtLinguConfig aLinguCfg;
 
-            // this routine should return the locales supported by the installed
-            // hyph dictionaries.  So here we need to parse both the user edited
-            // dictionary list and the shared dictionary list
-            // to see what dictionaries the admin/user has installed
-
-            int numusr;          // number of user dictionary entries
-            int numshr;          // number of shared dictionary entries
-            dictentry * spdict = NULL;  // shared dict entry pointer
-            dictentry * updict = NULL;  // user dict entry pointer
-        std::vector<dictentry*> postspdict;
-        std::vector<dictentry*> postupdict;
-
-            // invoke a dictionary manager to get the user dictionary list
-            OUString usrlst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
-            OUString ulst;
-        osl::FileBase::getSystemPathFromFileURL(usrlst,ulst);
-            OString uTmp(OU2ENC(ulst,osl_getThreadTextEncoding()));
-        DictMgr* udMgr = new DictMgr(uTmp.getStr(),"HYPH");
-            numusr = 0;
-            if (udMgr)
-                 numusr = udMgr->get_list(&updict);
-
-            // invoke a second  dictionary manager to get the shared dictionary list
-            OUString shrlst = aPathOpt.GetLinguisticPath() + A2OU("/ooo/dictionary.lst");
-            OUString slst;
-        osl::FileBase::getSystemPathFromFileURL(shrlst,slst);
-            OString sTmp(OU2ENC(slst,osl_getThreadTextEncoding()));
-        DictMgr* sdMgr = new DictMgr(sTmp.getStr(),"HYPH");
-            numshr = 0;
-            if (sdMgr)
-                 numshr = sdMgr->get_list(&spdict);
-
-            //Test for existence of the dictionaries
-            for (int i = 0; i < numusr; i++)
+        // get list of dictionaries-to-use
+        // (or better speaking: the list of dictionaries using the
+        // new configuration entries).
+        std::list< SvtLinguConfigDictionaryEntry > aDics;
+        uno::Sequence< rtl::OUString > aFormatList;
+        aLinguCfg.GetSupportedDictionaryFormatsFor( A2OU("Hyphenators"),
+                A2OU("org.openoffice.lingu.LibHnjHyphenator"), aFormatList );
+        sal_Int32 nLen = aFormatList.getLength();
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-                OUString str = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(updict[i].filename) +
-            A2OU(".dic");
-        osl::File aTest(str);
-        if (aTest.open(osl_File_OpenFlag_Read))
-            continue;
-        aTest.close();
-        postupdict.push_back(&updict[i]);
-            }
-
-            for (int i = 0; i < numshr; i++)
-        {
-                OUString str = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spdict[i].filename) +
-            A2OU(".dic");
-        osl::File aTest(str);
-        if (aTest.open(osl_File_OpenFlag_Read))
-            continue;
-        aTest.close();
-        postspdict.push_back(&spdict[i]);
-            }
-
-        numusr = postupdict.size();
-            numshr = postspdict.size();
-
-            // we really should merge these and remove duplicates but since
-            // users can name their dictionaries anything they want it would
-            // be impossible to know if a real duplication exists unless we
-            // add some unique key to each hyphenation dictionary
-            // we can worry about that when and if issuezilla's flood in
-            numdict = numusr + numshr;
-
-            if (numdict) {
-          aDicts = new HDInfo[numdict];
-              aSuppLocales.realloc(numdict);
-              Locale * pLocale = aSuppLocales.getArray();
-              int numlocs = 0;
-              int newloc;
-              int i,j;
-              int k = 0;
-
-              // first add the user dictionaries
-              // keeping track of unique locales only
-              for (i = 0; i < numusr; i++) {
-             Locale nLoc( A2OU(postupdict[i]->lang), A2OU(postupdict[i]->region), OUString() );
-
-                 newloc = 1;
-             for (j = 0; j < numlocs; j++) {
-                     if (nLoc == pLocale[j]) newloc = 0;
-                 }
-                 if (newloc) {
-                     pLocale[numlocs] = nLoc;
-                     numlocs++;
-                 }
-                 aDicts[k].aPtr = NULL;
-                 aDicts[k].aLoc = nLoc;
-                 aDicts[k].aEnc = 0;
-                 aDicts[k].aName = A2OU(postupdict[i]->filename);
-                 aDicts[k].apCC = new CharClass(nLoc);
-                 k++;
-              }
-
-              // now add the shared dictionaries
-              // keeping track of unique locales only
-              for (i = 0; i < numshr; i++) {
-             Locale nLoc( A2OU(postspdict[i]->lang), A2OU(postspdict[i]->region), OUString() );
-
-                 newloc = 1;
-             for (j = 0; j < numlocs; j++) {
-                     if (nLoc == pLocale[j]) newloc = 0;
-                 }
-                 if (newloc) {
-                     pLocale[numlocs] = nLoc;
-                     numlocs++;
-                 }
-                 aDicts[k].aPtr = NULL;
-                 aDicts[k].aLoc = nLoc;
-                 aDicts[k].aEnc = 0;
-                 aDicts[k].aName = A2OU(postspdict[i]->filename);
-                 aDicts[k].apCC = new CharClass(nLoc);
-                 k++;
-              }
-
-              // reallocate the size to just cover the unique locales
-              aSuppLocales.realloc(numlocs);
-
-            } else {
-             // no dictionary.lst files found so register no dics
-                 numdict = 0;
-                 aSuppLocales.realloc(0);
-                 aDicts = NULL;
-            }
-
-            /* de-allocation of memory is handled inside the DictMgr */
-            updict = NULL;
-            if (udMgr) {
-                  delete udMgr;
-                  udMgr = NULL;
-            }
-            spdict = NULL;
-            if (sdMgr) {
-                  delete sdMgr;
-                  sdMgr = NULL;
-            }
-
+            std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
+                    aLinguCfg.GetActiveDictionariesByFormat( aFormatList[i] ) );
+            aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
+
+        //!! for compatibility with old dictionaries (the ones not using extensions
+        //!! or new configuration entries, but still using the dictionary.lst file)
+        //!! Get the list of old style spell checking dictionaries to use...
+        std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
+                GetOldStyleDics( "HYPH" ) );
+
+        // to prefer dictionaries with configuration entries we will only
+        // use those old style dictionaries that add a language that
+        // is not yet supported by the list od new style dictionaries
+        MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
+
+        numdict = aDics.size();
+        if (numdict)
+        {
+            // get supported locales from the dictionaries-to-use...
+            sal_Int32 k = 0;
+            std::set< rtl::OUString, lt_rtl_OUString > aLocaleNamesSet;
+            std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            {
+                uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                sal_Int32 nLen2 = aLocaleNames.getLength();
+                for (k = 0;  k < nLen2;  ++k)
+                {
+                    aLocaleNamesSet.insert( aLocaleNames[k] );
+                }
+            }
+            // ... and add them to the resulting sequence
+            aSuppLocales.realloc( aLocaleNamesSet.size() );
+            std::set< rtl::OUString, lt_rtl_OUString >::const_iterator aItB;
+            k = 0;
+            for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
+            {
+                Locale aTmp( MsLangId::convertLanguageToLocale(
+                        MsLangId::convertIsoStringToLanguage( *aItB )));
+                aSuppLocales[k++] = aTmp;
+            }
+
+            // add dictionary information
+            aDicts = new HDInfo[numdict];
+/*
+            aTEncs  = new rtl_TextEncoding [numdict];
+            aTLocs  = new Locale [numdict];
+            aTNames = new OUString [numdict];
+            aCharSetInfo = new CharClass* [numdict];
+*/
+            k = 0;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            {
+                if (aDictIt->aLocaleNames.getLength() > 0 &&
+                    aDictIt->aLocations.getLength() > 0)
+                {
+                    aDicts[k].aPtr = NULL;
+                    aDicts[k].aEnc = 0;
+                    // currently HunSpell supports only one language per dictionary...
+                    aDicts[k].aLoc = MsLangId::convertLanguageToLocale(
+                                    MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[0] ));
+                    aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
+                    // also both files have to be in the same directory and the
+                    // file names must only differ in the extension (.aff/.dic).
+                    // Thus we use the first location only and strip the extension part.
+                    rtl::OUString aLocation = aDictIt->aLocations[0];
+                    sal_Int32 nPos = aLocation.lastIndexOf( '.' );
+                    aLocation = aLocation.copy( 0, nPos );
+                    aDicts[k].aName = aLocation;
+                }
+                ++k;
+            }
+        }
+        else
+        {
+            /* no dictionary found so register no dictionaries */
+            numdict = 0;
+            aDicts = NULL;
+            aSuppLocales.realloc(0);
+        }
+    }
 
     return aSuppLocales;
 }
@@ -355,8 +309,6 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                throw (com::sun::star::uno::RuntimeException,
                com::sun::star::lang::IllegalArgumentException)
 {
-    SvtPathOptions aPathOpt;
-
     int nHyphenationPos = -1;
         int nHyphenationPosAlt = -1;
         int nHyphenationPosAltHyph = -1;
@@ -389,24 +341,22 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
         if (!aDicts[k].aPtr) {
 
            OUString DictFN = aDicts[k].aName + A2OU(".dic");
-           OUString userdictpath;
            OUString dictpath;
 
-           osl::FileBase::getSystemPathFromFileURL(
-                            aPathOpt.GetUserDictionaryPath() + A2OU("/"),
-                            userdictpath);
+           osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
+           OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
-           osl::FileBase::getSystemPathFromFileURL(
-                            aPathOpt.GetLinguisticPath() + A2OU("/ooo/"),
-                            dictpath);
+#if defined(WNT)
+        // workaround for Windows specifc problem that the
+        // path length in calls to 'fopen' is limted to somewhat
+        // about 120+ characters which will usually be exceed when
+        // using dictionaries as extensions.
+        sTmp = Win_GetShortPathName( dictpath );
+#endif
 
-               OString uTmp(OU2ENC(userdictpath + DictFN,osl_getThreadTextEncoding()));
-               OString sTmp(OU2ENC(dictpath + DictFN,osl_getThreadTextEncoding()));
-
-           if ( ( dict = hnj_hyphen_load ( uTmp.getStr() ) ) == NULL )
-              if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+          if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
           {
-             fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding()),  OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding() ));
+             fprintf(stderr, "Couldn't find file %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
              return NULL;
           }
            aDicts[k].aPtr = dict;
@@ -598,9 +548,6 @@ Reference< XPossibleHyphens > SAL_CALL
               ::com::sun::star::uno::RuntimeException)
 
 {
-
-  SvtPathOptions aPathOpt;
-
   int wordlen;
   char *hyphens;
   char *lcword;
@@ -625,26 +572,25 @@ Reference< XPossibleHyphens > SAL_CALL
       if (!aDicts[k].aPtr) {
 
          OUString DictFN = aDicts[k].aName + A2OU(".dic");
-         OUString userdictpath;
          OUString dictpath;
-         osl::FileBase::getSystemPathFromFileURL(
-                          aPathOpt.GetUserDictionaryPath() + A2OU("/"),
-                          userdictpath);
 
-     osl::FileBase::getSystemPathFromFileURL(
-                          aPathOpt.GetLinguisticPath() + A2OU("/ooo/"),
-                          dictpath);
-         OString uTmp(OU2ENC(userdictpath + DictFN,osl_getThreadTextEncoding()));
-         OString sTmp(OU2ENC(dictpath + DictFN,osl_getThreadTextEncoding()));
+         osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
+         OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
+#if defined(WNT)
+        // workaround for Windows specifc problem that the
+        // path length in calls to 'fopen' is limted to somewhat
+        // about 120+ characters which will usually be exceed when
+        // using dictionaries as extensions.
+        sTmp = Win_GetShortPathName( dictpath );
+#endif
 
-     if ( ( dict = hnj_hyphen_load ( uTmp.getStr() ) ) == NULL )
         if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
         {
-           fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding()),  OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding() ));
+           fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
            return NULL;
         }
-     aDicts[k].aPtr = dict;
+        aDicts[k].aPtr = dict;
          aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
          if (aDicts[k].aEnc == RTL_TEXTENCODING_DONTKNOW) {
             if (strcmp("ISCII-DEVANAGARI", dict->cset) == 0) {
