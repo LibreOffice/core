@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Paths.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:49:05 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,12 +94,6 @@
             </node>
         </node>
 
-        <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
-            <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/wordbook/$(vlang)" oor:op="fuse" />
-            </node>
-        </node>
-
         <node oor:name="Favorite" oor:op="fuse" oor:mandatory="true">
             <prop oor:name="WritePath">
                      <value>$(userurl)/config/folders</value>
@@ -140,8 +134,21 @@
 
         <node oor:name="Linguistic" oor:op="fuse" oor:mandatory="true">
             <node oor:name="InternalPaths">
-                     <node oor:name="$(insturl)/share/dict" oor:op="fuse" />
+                <node oor:name="$(insturl)/share/dict" oor:op="fuse"/>
+                <node oor:name="$(insturl)/share/dict/ooo" oor:op="fuse"/>
             </node>
+            <prop oor:name="UserPaths">
+                <value>$(userurl)/wordbook</value>
+            </prop>
+        </node>
+
+        <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
+            <node oor:name="InternalPaths">
+                <node oor:name="$(insturl)/share/wordbook/$(vlang)" oor:op="fuse"/>
+            </node>
+            <prop oor:name="WritePath">
+                <value>$(userurl)/wordbook</value>
+            </prop>
         </node>
 
         <node oor:name="Module" oor:op="fuse" oor:mandatory="true">
@@ -209,12 +216,6 @@
             <prop oor:name="UserPaths" oor:finalized="true" />
             <prop oor:name="WritePath">
                      <value>$(userurl)/config</value>
-            </prop>
-        </node>
-
-        <node oor:name="UserDictionary" oor:op="fuse" oor:mandatory="true">
-            <prop oor:name="WritePath">
-                     <value>$(userurl)/wordbook</value>
             </prop>
         </node>
 
