@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odma_provider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:11:00 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,8 +227,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // @@@ Decision, which content implementation to instanciate may be
     //     made here ( in case you have different content classes ).
 
-    // Create a new content. Note that the content will insert itself
-    // into providers content list by calling addContent(...) from it's ctor.
+    // Create a new content.
 
     sCanonicURL = convertURL(sCanonicURL);
 
@@ -280,6 +279,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
         throw ucb::IllegalIdentifierException();
 
     xContent = new Content( m_xSMgr, this, xCanonicId ,aProp);
+    registerNewContent( xContent );
 
     if ( !xContent->getIdentifier().is() )
         throw ucb::IllegalIdentifierException();
