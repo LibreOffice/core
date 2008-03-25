@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:05:34 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ HierarchyContent::HierarchyContent(
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
-: ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_aProps( Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) )
             ? HierarchyEntryData::FOLDER
