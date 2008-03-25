@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdiclist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 10:48:23 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     // physically remove dictionary
     uno::Reference< XConversionDictionary > xDel = aConvDics.getArray()[nRplcIdx];
     String aName( xDel->getName() );
-    String aDicMainURL( GetConvDicMainURL( aName, SvtPathOptions().GetUserDictionaryPath() ) );
+    String aDicMainURL( GetConvDicMainURL( aName, GetDictionaryWriteablePath() ) );
     INetURLObject aObj( aDicMainURL );
     DBG_ASSERT( aObj.GetProtocol() == INET_PROT_FILE, "+HangulHanjaOptionsDialog::OkHdl(): non-file URLs cannot be deleted" );
     if( aObj.GetProtocol() == INET_PROT_FILE )
@@ -527,7 +527,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
     if (!pNameContainer)
     {
         pNameContainer = new ConvDicNameContainer( *this );
-        pNameContainer->AddConvDics( SvtPathOptions().GetUserDictionaryPath(),
+        pNameContainer->AddConvDics( GetDictionaryWriteablePath(),
                                      A2OU( CONV_DIC_EXT ) );
         xNameContainer = pNameContainer;
 
@@ -583,7 +583,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
         throw ElementExistException();
 
     uno::Reference< XConversionDictionary > xRes;
-    String aDicMainURL( GetConvDicMainURL( rName, SvtPathOptions().GetUserDictionaryPath() ) );
+    String aDicMainURL( GetConvDicMainURL( rName, GetDictionaryWriteablePath() ) );
     if (nLang == LANGUAGE_KOREAN &&
         nConvDicType == ConversionDictionaryType::HANGUL_HANJA)
     {
