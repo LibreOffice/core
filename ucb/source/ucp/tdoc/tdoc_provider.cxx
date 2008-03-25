@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:27 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ ContentProvider::queryContent(
     {
         // Create a new content.
         xContent = Content::create( m_xSMgr, this, xCanonicId );
+        registerNewContent( xContent );
     }
 
     return xContent;
