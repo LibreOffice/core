@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 10:14:26 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:13:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ HELPIDFILES=    ..$/inc$/helpid.hrc
 # svx
 SHL1TARGET= svx$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 SHL1LIBS= $(LIB1TARGET) $(LIB2TARGET) $(LIB3TARGET) $(LIB4TARGET)
 SHL1STDLIBS= \
