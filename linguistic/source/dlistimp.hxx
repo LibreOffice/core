@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlistimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:22:27 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ class DicList :
     void            launchEvent(INT16 nEvent, com::sun::star::uno::Sequence<
                             ::com::sun::star::linguistic2::XDictionary > xDic);
     void            searchForDictionaries( ActDicArray &rDicList,
-                                            const String &rDicDir );
+                                            const String &rDicDir, BOOL bIsWritePath );
     INT32           getDicPos(const com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary > &xDic);
 
