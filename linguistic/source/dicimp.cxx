@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-07 14:21:55 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,8 @@ DictionaryNeo::DictionaryNeo() :
 
 DictionaryNeo::DictionaryNeo(const OUString &rName,
                              INT16 nLang, DictionaryType eType,
-                             const OUString &rMainURL) :
+                             const OUString &rMainURL,
+                             BOOL bWriteable) :
     aDicEvtListeners( GetLinguMutex() ),
     aDicName        (rName),
     aMainURL        (rMainURL),
@@ -251,13 +252,11 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     nDicVersion  = -1;
     bNeedEntries = TRUE;
     bIsModified  = bIsActive = FALSE;
-    bIsReadonly = FALSE;
+    bIsReadonly = !bWriteable;
 
     if( rMainURL.getLength() > 0 )
     {
-        BOOL bExists = FALSE;
-        bIsReadonly = IsReadOnly( rMainURL, &bExists );
-
+        BOOL bExists = FileExists( rMainURL );
         if( !bExists )
         {
             // save new dictionaries with in 6.0 Format (uses UTF8)
@@ -266,9 +265,11 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
-            saveEntries( rMainURL );
+            DBG_ASSERT( !bIsReadonly,
+                    "DictionaryNeo: dictionaries should be writeable if they are to be saved" );
+            if (!bIsReadonly)
+                saveEntries( rMainURL );
             bNeedEntries = FALSE;
-            bIsReadonly = IsReadOnly( rMainURL );   // will be FALSE if saveEntries was succesfull
         }
     }
     else
