@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:53:00 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,10 +75,18 @@
 #define UPN_IS_AUTO_CLOSE_DIALOG            "IsAutoCloseDialog"
 #define UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST     "IsShowEntriesRecentlyUsedFirst"
 #define UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES  "IsAutoReplaceUniqueEntries"
-#define UPN_IS_DIRECTION_TO_SIMPLIFIED  "IsDirectionToSimplified"
-#define UPN_IS_USE_CHARACTER_VARIANTS  "IsUseCharacterVariants"
-#define UPN_IS_TRANSLATE_COMMON_TERMS  "IsTranslateCommonTerms"
-#define UPN_IS_REVERSE_MAPPING  "IsReverseMapping"
+#define UPN_IS_DIRECTION_TO_SIMPLIFIED      "IsDirectionToSimplified"
+#define UPN_IS_USE_CHARACTER_VARIANTS       "IsUseCharacterVariants"
+#define UPN_IS_TRANSLATE_COMMON_TERMS       "IsTranslateCommonTerms"
+#define UPN_IS_REVERSE_MAPPING              "IsReverseMapping"
+
+// new UNO propertynames to be used with 'dictionaries as extensions'
+#define UPN_DICTIONARIES                    "Dictionaries"
+#define UPN_SPELL_CHECKERS                  "SpellCheckers"
+#define UPN_HYPHENATORS                     "Hyphenators"
+#define UPN_THESAURI                        "Thesauri"
+#define UPN_CURRENT_ACTIVE_DICTIONARIES     "CurrentActiveDictionaries"
+#define UPN_LAST_ACTIVE_DICTIONARIES        "LastActiveDictionaries"
 
 // uno property handles
 #define UPH_IS_GERMAN_PRE_REFORM             0
