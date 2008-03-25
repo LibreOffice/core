@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:16:17 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,9 @@
 
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
+#endif
+#ifndef _LINGUISTIC_MISC_HHX_
+#include <linguistic/misc.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
@@ -772,7 +775,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
                 Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
                 if (xDicList.is())
                 {
-                    SvxSaveDictionaries( xDicList );
+                    linguistic::SaveDictionaries( xDicList );
                 }
             }
 
