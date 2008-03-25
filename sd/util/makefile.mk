@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 12:05:59 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:30:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ RESLIB1SRSFILES=\
 # --- StarDraw DLL
 
 SHL1TARGET= sd$(DLLPOSTFIX)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 SHL1IMPLIB= sdi
 
 # dynamic libraries
