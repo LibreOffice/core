@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.120 $
+#   $Revision: 1.121 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 13:09:26 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:22:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -236,9 +236,11 @@ SHL$(TNR)LINKRESO*=$(MISC)$/$(SHL$(TNR)TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL$(TNR)LIBS)"!=""
 $(MISC)$/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL$(TNR)LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls
@@ -247,10 +249,13 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL$(TNR)LIBS)"!=""
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
-$(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS)
+SHL$(TNR)LINKLISTPARAM=@$(SHL$(TNR)LINKLIST)
+$(SHL$(TNR)LINKLIST) : $(SHL$(TNR)LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL$(TNR)LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
 
@@ -385,7 +390,7 @@ $(SHL$(TNR)TARGETN) : \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ)							\
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ))   \
-        @$(MISC)$/$(SHL$(TNR)TARGET)_link.lst \
+        $(SHL$(TNR)LINKLISTPARAM) \
         @$(mktmp $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
