@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:49:14 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
@@ -60,6 +65,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -69,6 +77,8 @@
 #include "nthesdta.hxx"
 #include <dictmgr.hxx>
 
+#include <list>
+#include <set>
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
@@ -92,16 +102,6 @@ using namespace linguistic;
 
 
 ///////////////////////////////////////////////////////////////////////////
-
-BOOL operator == ( const Locale &rL1, const Locale &rL2 )
-{
-    return  rL1.Language ==  rL2.Language   &&
-            rL1.Country  ==  rL2.Country    &&
-            rL1.Variant  ==  rL2.Variant;
-}
-
-/////////////////////////////////////////////////////////////////////////
-
 
 Thesaurus::Thesaurus() :
     aEvtListeners   ( GetLinguMutex() )
@@ -168,147 +168,106 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-        dictentry * spthes = NULL;  // shared thesaurus list entry pointer
-        dictentry * upthes = NULL;  // shared thesaurus list entry pointer
-    std::vector<dictentry*> postspthes;
-    std::vector<dictentry*> postupthes;
-        SvtPathOptions aPathOpt;
-        int numusr;          // number of user dictionary entries
-        int numshr = 0;          // number of shared dictionary entries
+    // this routine should return the locales supported by the installed
+    // dictionaries.
 
-    if (!numthes) {
+    if (!numthes)
+    {
+        SvtLinguConfig aLinguCfg;
 
-            // invoke a dictionary manager to get the user dictionary list
-            OUString usrlst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
-            OUString ulst;
-        osl::FileBase::getSystemPathFromFileURL(usrlst,ulst);
-            OString uTmp(OU2ENC(ulst, osl_getThreadTextEncoding()));
-        DictMgr* udMgr = new DictMgr(uTmp.getStr(),"THES");
-            numusr = 0;
-            if (udMgr)
-                 numusr = udMgr->get_list(&upthes);
-
-            // invoke a dictionary manager to get the shared thesaurus list
-            OUString shrlst = aPathOpt.GetLinguisticPath() + A2OU("/ooo/dictionary.lst");
-            OUString slst;
-        osl::FileBase::getSystemPathFromFileURL(shrlst,slst);
-            OString sTmp(OU2ENC(slst, osl_getThreadTextEncoding()));
-        DictMgr* sdMgr = new DictMgr(sTmp.getStr(),"THES");
-            if (sdMgr)
-                 numshr = sdMgr->get_list(&spthes);
-
-            //Test for existence of the dictionaries
-            for (int i = 0; i < numusr; i++)
+        // get list of dictionaries-to-use
+        std::list< SvtLinguConfigDictionaryEntry > aDics;
+        uno::Sequence< rtl::OUString > aFormatList;
+        aLinguCfg.GetSupportedDictionaryFormatsFor( A2OU("Thesauri"),
+                A2OU("org.openoffice.lingu.new.Thesaurus"), aFormatList );
+        sal_Int32 nLen = aFormatList.getLength();
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-                OUString str = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(upthes[i].filename) +
-            A2OU(".idx");
-        osl::File aTest(str);
-        if (aTest.open(osl_File_OpenFlag_Read))
-            continue;
-        aTest.close();
-        postupthes.push_back(&upthes[i]);
-            }
-
-            for (int i = 0; i < numshr; i++)
-        {
-                OUString str = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spthes[i].filename) +
-            A2OU(".idx");
-        osl::File aTest(str);
-                OString aTmpidx(OU2ENC(str,osl_getThreadTextEncoding()));
-        if (aTest.open(osl_File_OpenFlag_Read))
-            continue;
-        aTest.close();
-        postspthes.push_back(&spthes[i]);
-            }
-
-        numusr = postupthes.size();
-            numshr = postspthes.size();
-
-
-            // we really should merge these and remove duplicates but since
-            // users can name their dictionaries anything they want it would
-            // be impossible to know if a real duplication exists unless we
-            // add some unique key to each dictionary
-            numthes = numshr + numusr;
-
-            if (numthes) {
-            aThes = new MyThes* [numthes];
-            aTEncs  = new rtl_TextEncoding [numthes];
-                aTLocs = new Locale [numthes];
-                aTNames = new OUString [numthes];
-                aCharSetInfo = new CharClass* [numthes];
-            aSuppLocales.realloc(numthes);
-                Locale * pLocale = aSuppLocales.getArray();
-                int numlocs = 0;
-                int newloc;
-                int i,j;
-                int k = 0;
-
-                //first add the user dictionaries
-                for (i = 0; i < numusr; i++) {
-                Locale nLoc( A2OU(postupthes[i]->lang), A2OU(postupthes[i]->region), OUString() );
-                    newloc = 1;
-                for (j = 0; j < numlocs; j++) {
-                        if (nLoc == pLocale[j]) newloc = 0;
-                    }
-                    if (newloc) {
-                        pLocale[numlocs] = nLoc;
-                        numlocs++;
-                    }
-                    aTLocs[k] = nLoc;
-                    aThes[k] = NULL;
-                    aTEncs[k] = 0;
-
-                    aTNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(postupthes[i]->filename);
-                     aCharSetInfo[k] = new CharClass(nLoc);
-                    k++;
-                }
-
-                // now add the shared thesauri
-                for (i = 0; i < numshr; i++) {
-                Locale nLoc( A2OU(postspthes[i]->lang), A2OU(postspthes[i]->region), OUString() );
-                    newloc = 1;
-                for (j = 0; j < numlocs; j++) {
-                        if (nLoc == pLocale[j]) newloc = 0;
-                    }
-                    if (newloc) {
-                        pLocale[numlocs] = nLoc;
-                        numlocs++;
-                    }
-                    aTLocs[k] = nLoc;
-                    aThes[k] = NULL;
-                    aTEncs[k] = 0;
-                    aTNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(postspthes[i]->filename);
-                    aCharSetInfo[k] = new CharClass(nLoc);
-                    k++;
-                }
-
-                aSuppLocales.realloc(numlocs);
-
-            } else {
-            // no dictionary.lst so don't register any
-            numthes = 0;
-            aThes = NULL;
-                aTEncs  = NULL;
-                aTLocs = NULL;
-                aTNames = NULL;
-            aSuppLocales.realloc(0);
-                aCharSetInfo = NULL;
-            }
-
-            /* de-allocation of memory is handled inside the DictMgr */
-            upthes = NULL;
-            if (udMgr) {
-                  delete udMgr;
-                  udMgr = NULL;
-            }
-            spthes = NULL;
-            if (sdMgr) {
-                  delete sdMgr;
-                  sdMgr = NULL;
-            }
-
+            std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
+                    aLinguCfg.GetActiveDictionariesByFormat( aFormatList[i] ) );
+            aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
+
+        //!! for compatibility with old dictionaries (the ones not using extensions
+        //!! or new configuration entries, but still using the dictionary.lst file)
+        //!! Get the list of old style spell checking dictionaries to use...
+        std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
+                GetOldStyleDics( "THES" ) );
+
+        // to prefer dictionaries with configuration entries we will only
+        // use those old style dictionaries that add a language that
+        // is not yet supported by the list od new style dictionaries
+        MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
+
+        numthes = aDics.size();
+        if (numthes)
+        {
+            // get supported locales from the dictionaries-to-use...
+            sal_Int32 k = 0;
+            std::set< rtl::OUString, lt_rtl_OUString > aLocaleNamesSet;
+            std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            {
+                uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                sal_Int32 nLen2 = aLocaleNames.getLength();
+                for (k = 0;  k < nLen2;  ++k)
+                {
+                    aLocaleNamesSet.insert( aLocaleNames[k] );
+                }
+            }
+            // ... and add them to the resulting sequence
+            aSuppLocales.realloc( aLocaleNamesSet.size() );
+            std::set< rtl::OUString, lt_rtl_OUString >::const_iterator aItB;
+            k = 0;
+            for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
+            {
+                Locale aTmp( MsLangId::convertLanguageToLocale(
+                        MsLangId::convertIsoStringToLanguage( *aItB )));
+                aSuppLocales[k++] = aTmp;
+            }
+
+            // add dictionary information
+            aThes   = new MyThes* [numthes];
+            aTEncs  = new rtl_TextEncoding [numthes];
+            aTLocs  = new Locale [numthes];
+            aTNames = new OUString [numthes];
+            aCharSetInfo = new CharClass* [numthes];
+
+            k = 0;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            {
+                if (aDictIt->aLocaleNames.getLength() > 0 &&
+                    aDictIt->aLocations.getLength() > 0)
+                {
+                    aThes[k]  = NULL;
+                    aTEncs[k]  = 0;
+                    // currently HunSpell supports only one language per dictionary...
+                    aTLocs[k]  = MsLangId::convertLanguageToLocale(
+                                    MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[0] ));
+                    aCharSetInfo[k] = new CharClass( aTLocs[k] );
+                    // also both files have to be in the same directory and the
+                    // file names must only differ in the extension (.aff/.dic).
+                    // Thus we use the first location only and strip the extension part.
+                    rtl::OUString aLocation = aDictIt->aLocations[0];
+                    sal_Int32 nPos = aLocation.lastIndexOf( '.' );
+                    aLocation = aLocation.copy( 0, nPos );
+                    aTNames[k] = aLocation;
+                }
+                ++k;
+            }
+        }
+        else
+        {
+            /* no dictionary found so register no dictionaries */
+            numthes = 0;
+            aThes  = NULL;
+            aTEncs  = NULL;
+            aTLocs  = NULL;
+            aTNames = NULL;
+            aCharSetInfo = NULL;
+            aSuppLocales.realloc(0);
+        }
+    }
 
     return aSuppLocales;
 }
@@ -385,6 +344,16 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                       osl::FileBase::getSystemPathFromFileURL(idxpath,nidx);
                       OString aTmpidx(OU2ENC(nidx,osl_getThreadTextEncoding()));
                       OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
+
+#if defined(WNT)
+                      // workaround for Windows specifc problem that the
+                      // path length in calls to 'fopen' is limted to somewhat
+                      // about 120+ characters which will usually be exceed when
+                      // using dictionaries as extensions.
+                      aTmpidx = Win_GetShortPathName( nidx );
+                      aTmpdat = Win_GetShortPathName( ndat );
+#endif
+
                       aThes[i] = new MyThes(aTmpidx.getStr(),aTmpdat.getStr());
                       if (aThes[i]) {
                         const char * enc_string = aThes[i]->get_th_encoding();
