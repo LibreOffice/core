@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:29:39 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
 #endif
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -414,6 +417,78 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     }
 
     return xEntry;
+}
+
+
+sal_Bool SaveDictionaries( const uno::Reference< XDictionaryList > &xDicList )
+{
+    if (!xDicList.is())
+        return sal_True;
+
+    sal_Bool bRet = sal_True;
+
+    Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
+    const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
+    INT32 nCount = aDics.getLength();
+    for (INT32 i = 0;  i < nCount;  i++)
+    {
+        try
+        {
+            uno::Reference< frame::XStorable >  xStor( pDic[i], UNO_QUERY );
+            if (xStor.is())
+            {
+                if (!xStor->isReadonly() && xStor->hasLocation())
+                    xStor->store();
+            }
+        }
+        catch(uno::Exception &)
+        {
+            bRet = sal_False;
+        }
+    }
+
+    return bRet;
+}
+
+
+sal_uInt8 AddEntryToDic(
+        uno::Reference< XDictionary >  &rxDic,
+        const OUString &rWord, sal_Bool bIsNeg,
+        const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
+        sal_Bool bStripDot )
+{
+    if (!rxDic.is())
+        return DIC_ERR_NOT_EXISTS;
+
+    OUString aTmp( rWord );
+    if (bStripDot)
+    {
+        sal_Int32 nLen = rWord.getLength();
+        if (nLen > 0  &&  '.' == rWord[ nLen - 1])
+        {
+            // remove trailing '.'
+            // (this is the official way to do this :-( )
+            aTmp = aTmp.copy( 0, nLen - 1 );
+        }
+    }
+    sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
+
+    sal_uInt8 nRes = DIC_ERR_NONE;
+    if (!bAddOk)
+    {
+        if (rxDic->isFull())
+            nRes = DIC_ERR_FULL;
+        else
+        {
+            uno::Reference< frame::XStorable >  xStor( rxDic, UNO_QUERY );
+            if (xStor.is() && xStor->isReadonly())
+                nRes = DIC_ERR_READONLY;
+            else
+                nRes = DIC_ERR_UNKNOWN;
+        }
+    }
+
+    return nRes;
 }
 
 
