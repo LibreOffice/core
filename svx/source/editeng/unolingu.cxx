@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:01:18 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <set>
 #include <vector>
 #include <slist>
+#include <memory>
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -58,11 +59,11 @@
 #include <svtools/pathoptions.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -378,11 +379,12 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                 // merge services list (previously configured to be listed first).
                 aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
 
+/*
                 // there is at most one Hyphenator per language allowed
                 // to be configured, thus we only use the first one found.
                 if (k == 2 && aCfgSvcs.getLength() > 1)
                     aCfgSvcs.realloc(1);
-
+*/
                 aCurSvcs[k][ aCfgLocaleStr ] = aCfgSvcs;
             }
 
@@ -462,7 +464,18 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         }
         DBG_ASSERT( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
         Any aAny;
-        aAny <<= nCurrentDataFilesChangedCheckValue;
+
+        // for the time being (developer builds until OOo 3.0)
+        // we should always check for everything available
+        // otherwise we may miss a new installed extension dicitonary
+        // just because e.g. the spellchecker is not asked what
+        // languages it does support currently...
+        // Since the check is on-demand occuring and executed once it should
+        // not be too troublesome.
+        // In OOo 3.0 we will not need the respective code anymore at all.
+//      aAny <<= nCurrentDataFilesChangedCheckValue;
+        aAny <<= (INT32) -1;    // keep the value set to 'need to check'
+
         aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
 
         //! Note 1: the new values are commited when the 'aCfg' object
@@ -521,25 +534,27 @@ INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
 {
     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue" );
 
-    // list of directories to scan for changed/new/deleted files
+    // get linguistic multi-path for directories to check...
+    const String        aLinguPath( SvtPathOptions().GetLinguisticPath() );
+    const xub_StrLen    nPathes ( aLinguPath.GetTokenCount(';') );
+    xub_StrLen          nIdx = 0;
+    std::vector< String >   aPathes;
+    for (xub_StrLen k = 0;  k < nPathes; ++k)
+    {
+        String aPath( aLinguPath.GetToken( 0, ';', nIdx ) );
+        aPathes.push_back( aPath );
+    }
+    // list of directories to scan for changed/new/deleted files should be
     // 0: regular SO dictionary path
     // 1: regular OOo dictionary path
     // 2: user-dictionary path (where OOo linguistic by bad choice places downloaded dictionaries
     //    when the permissions for the share tree are missing. E.g. in user installations.)
-    const USHORT nDirectories = 3;
-    String aDirectories[ 3 /*nDirectories*/ ];
-    aDirectories[0] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "x" ) );
-    aDirectories[1] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "ooo" ) );
-    //!! warning: see bUseFile below when changing this index !!
-    aDirectories[2] = linguistic::GetFileURL( SvtPathOptions::PATH_USERDICTIONARY, String::CreateFromAscii( "x" ) );
-    //
-    aDirectories[0].Erase( aDirectories[0].Len() - 2, 2 );  // erase /x from URL
-    aDirectories[2].Erase( aDirectories[2].Len() - 2, 2 );  // erase /x from URL
+    DBG_ASSERT( nPathes == 3, "Linguistic-Path configuration changed" );
 
     INT32 nHashVal = 0;
-    for (int i = 0;  i < nDirectories;  ++i )
+    for (int i = 0;  i < nPathes;  ++i )
     {
-        const String rURL = aDirectories[i];
+        const String rURL = aPathes[i];
 
         if( !utl::UCBContentHelper::IsFolder( rURL ) )
             continue;
@@ -1394,7 +1409,7 @@ uno::Reference< XDictionary1 > LinguMgr::GetStandard()
             xTmp =  xTmpDicList->createDictionary( aDicName,
                         SvxCreateLocale( LANGUAGE_NONE ),
                         DictionaryType_POSITIVE,
-                        SvxGetDictionaryURL( aDicName, sal_True ) );
+                        linguistic::GetWritableDictionaryURL( aDicName ) );
         }
         catch(com::sun::star::uno::Exception &)
         {
@@ -1531,64 +1546,6 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
 
 ///////////////////////////////////////////////////////////////////////////
 
-String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
-{
-    // build URL to use for new (persistent) dictionaries
-
-    SvtPathOptions aPathOpt;
-    String aDirName( bIsUserDic ?
-            aPathOpt.GetUserDictionaryPath() : aPathOpt.GetDictionaryPath() );
-
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( aDirName );
-    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-    aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
-    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-
-    return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-}
-
-sal_uInt8 SvxAddEntryToDic(
-        uno::Reference< XDictionary >  &rxDic,
-        const OUString &rWord, sal_Bool bIsNeg,
-        const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
-        sal_Bool bStripDot )
-{
-    if (!rxDic.is())
-        return DIC_ERR_NOT_EXISTS;
-
-    OUString aTmp( rWord );
-    if (bStripDot)
-    {
-        sal_Int32 nLen = rWord.getLength();
-        if (nLen > 0  &&  '.' == rWord[ nLen - 1])
-        {
-            // remove trailing '.'
-            // (this is the official way to do this :-( )
-            aTmp = aTmp.copy( 0, nLen - 1 );
-        }
-    }
-    sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
-
-    sal_uInt8 nRes = DIC_ERR_NONE;
-    if (!bAddOk)
-    {
-        if (rxDic->isFull())
-            nRes = DIC_ERR_FULL;
-        else
-        {
-            uno::Reference< XStorable >  xStor( rxDic, UNO_QUERY );
-            if (xStor.is() && xStor->isReadonly())
-                nRes = DIC_ERR_READONLY;
-            else
-                nRes = DIC_ERR_UNKNOWN;
-        }
-    }
-
-    return nRes;
-}
-
 short SvxDicError( Window *pParent, sal_Int16 nError )
 {
     short nRes = 0;
@@ -1606,36 +1563,6 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
         nRes = InfoBox( pParent, SVX_RESSTR( nRid ) ).Execute();
     }
     return nRes;
-}
-
-sal_Bool SvxSaveDictionaries( const uno::Reference< XDictionaryList >  &xDicList )
-{
-    if (!xDicList.is())
-        return sal_True;
-
-    sal_Bool bRet = sal_True;
-
-    Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
-    const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
-    INT32 nCount = aDics.getLength();
-    for (INT32 i = 0;  i < nCount;  i++)
-    {
-        try
-        {
-            uno::Reference< XStorable >  xStor( pDic[i], UNO_QUERY );
-            if (xStor.is())
-            {
-                if (!xStor->isReadonly() && xStor->hasLocation())
-                    xStor->store();
-            }
-        }
-        catch(com::sun::star::uno::Exception &)
-        {
-            bRet = sal_False;
-        }
-    }
-
-    return bRet;
 }
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
