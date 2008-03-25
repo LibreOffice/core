@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 13:31:06 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:59:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,11 +193,9 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Fwl,
 	gid_File_Lib_Go,
 	gid_File_Lib_Helplinker,
-	gid_File_Lib_Hyph,
 	gid_File_Lib_J,
 	gid_File_Lib_Lks,
 	gid_File_Lib_Lng,
-	gid_File_Lib_Lnth,
 	gid_File_Lib_Offacc,
 	gid_File_Lib_Oox,
 	gid_File_Lib_Bindet,
@@ -218,7 +216,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Sfx,
 	gid_File_Lib_Sot,
 	gid_File_Lib_Spa,
-	gid_File_Lib_Spell,
 	gid_File_Lib_Spl,
 	gid_File_Lib_Sts,
 	gid_File_Lib_Svl,
@@ -919,3 +916,20 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_LiberationSerif_Regular);
 End
 #endif
+
+Module gid_Module_Oo_Linguistic
+    PackageInfo = "packinfo_office.txt";
+    Name = "gid_Module_Oo_Linguistic";
+    Description = "gid_Module_Oo_Linguistic";
+    ParentID = gid_Module_Root;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Lib_Spell,
+        gid_File_Lib_Hunspell,
+        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Spellchecker_Xcu,
+        gid_File_Lib_Hyph,
+        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Hyphenator_Xcu,
+        gid_File_Lib_Lnth,
+        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Thesaurus_Xcu);
+End
+
