@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:05:35 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,13 +81,6 @@
 class LinguMgrExitLstnr;
 
 class Window;
-
-// SvxAddEntryToDic return values
-#define DIC_ERR_NONE        0
-#define DIC_ERR_FULL        1
-#define DIC_ERR_READONLY    2
-#define DIC_ERR_UNKNOWN     3
-#define DIC_ERR_NOT_EXISTS  4
 
 ///////////////////////////////////////////////////////////////////////////
 // SvxLinguConfigUpdate
@@ -268,23 +261,11 @@ SVX_DLLPUBLIC LanguageType                      SvxLocaleToLanguage(
         const ::com::sun::star::lang::Locale& rLocale );
 SVX_DLLPUBLIC ::com::sun::star::lang::Locale&   SvxLanguageToLocale(
         ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
-SVX_DLLPUBLIC ::com::sun::star::lang::Locale        SvxCreateLocale( LanguageType eLang );
-
-SVX_DLLPUBLIC String    SvxGetDictionaryURL(const String &rDicName,
-                            sal_Bool bIsUserDic = sal_True);
+SVX_DLLPUBLIC ::com::sun::star::lang::Locale    SvxCreateLocale( LanguageType eLang );
 
 
-SVX_DLLPUBLIC sal_uInt8    SvxAddEntryToDic(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >  &rxDic,
-    const ::rtl::OUString &rWord, sal_Bool bIsNeg,
-    const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
-    sal_Bool bStripDot = sal_True );
 SVX_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
 
-SVX_DLLPUBLIC sal_Bool  SvxSaveDictionaries(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >  &xDicList );
 
 #endif
 
