@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:30:42 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ public:
     { return (LibExport *) HashTable::Delete ((char *) Key); }
 };
 
-LibDump::LibDump( char *cFileName )
+LibDump::LibDump( char *cFileName, int bExportByName )
                 : cBName( NULL ),
                 cAPrefix( NULL ),
                 cLibName( NULL ),
@@ -86,6 +86,8 @@ LibDump::LibDump( char *cFileName )
 {
     fprintf( stderr, "LIB-NT File Dumper v4.00 (C) 2000 Sun Microsystems, Inc.\n\n" );
     fprintf( stderr, "%s ", cFileName );
+
+    bExportName = bExportByName;
 
     unsigned long nSlots =  0xfffff;
     pBaseTab = new ExportSet( nSlots );
@@ -100,7 +102,8 @@ LibDump::LibDump( char *cFileName )
     bDef = true;
     cAPrefix = new char[ 1 ];
     cAPrefix[ 0 ] = 0;
-    CheckDataBase();
+    if (!bExportName)
+        CheckDataBase();
 }
 
 bool LibDump::Dump()
@@ -294,9 +297,11 @@ bool LibDump::PrintSym(char *pName, bool bName )
             if ( bDef )
             {
                 if (!bBase)
-                {
+                    if (bExportName) {
+                        fprintf( stdout, "\t%s\n", pName );
+                    } else {
                         fprintf( stdout, "\t%s\t\t@%lu\n", pName, nDefStart );
-                }
+                    }
                 else
                 {
                      pData = pBaseTab->Find( pName );
@@ -460,6 +465,8 @@ private:
 
 bool LibDump::PrintDataBase()
 {
+    if (bExportName)
+        return true;
     FILE *pFp;
     pFp = fopen (cBName,"w+");
     if (!pFp)
@@ -490,8 +497,8 @@ bool LibDump::PrintDefFile()
         {
             if ( pData->bByName )
             {
-                fprintf(stdout,"\t%s\t\t@%d\n",
-                    pData->sExportName.GetBuffer(), pData->nOrdinal+nBegin);
+                fprintf(stdout,"\t%s\n",
+                    pData->sExportName.GetBuffer());
             }
             else
             {
@@ -515,8 +522,8 @@ bool LibDump::PrintDefFile()
                 if ( pData->bByName )
                 {
                     if ( strlen( pData->cExportName ))
-                        fprintf(stdout,"\t%s\t\t@%d\n",
-                            pData->cExportName, pData->nOrdinal+nBegin);
+                        fprintf(stdout,"\t%s\n",
+                            pData->cExportName);
                 }
                 else
                 {
@@ -741,7 +748,7 @@ main( int argc, char **argv )
         usage();
     }
 
-    LibDump *pDump = new LibDump( pLibName );
+    LibDump *pDump = new LibDump( pLibName, bExportByName );
     pDump->SetBeginExport(nBegin);
     if ( bFilter != 0 )
         pDump->SetFilter( pFilterName );
