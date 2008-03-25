@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:55:43 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
+#include "cppuhelper/weakref.hxx"
 
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
@@ -104,7 +105,7 @@ struct hashString
 typedef std::hash_map
 <
     rtl::OUString,
-    ::ucbhelper::ContentImplHelper*,
+    uno::WeakReference< ucb::XContent >,
     hashString,
     equalString
 >
@@ -220,34 +221,40 @@ sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
 //
 //=========================================================================
 
-void ContentProviderImplHelper::addContent( ContentImplHelper* pContent )
+void ContentProviderImplHelper::cleanupRegisteredContents()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    const rtl::OUString aURL(
-        pContent->getIdentifier()->getContentIdentifier() );
-    ucbhelper_impl::Contents::const_iterator it
-        = m_pImpl->m_aContents.find( aURL );
-    if ( it == m_pImpl->m_aContents.end() )
-        m_pImpl->m_aContents[ aURL ] = pContent;
+    ucbhelper_impl::Contents::iterator it
+        = m_pImpl->m_aContents.begin();
+    while( it != m_pImpl->m_aContents.end() )
+    {
+        uno::Reference< ucb::XContent > xContent( (*it).second );
+        if ( !xContent.is() )
+        {
+            ucbhelper_impl::Contents::iterator tmp = it;
+            ++it;
+            m_pImpl->m_aContents.erase( tmp );
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 //=========================================================================
+
 void ContentProviderImplHelper::removeContent( ContentImplHelper* pContent )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+    cleanupRegisteredContents();
+
     const rtl::OUString aURL(
         pContent->getIdentifier()->getContentIdentifier() );
-    removeContent( aURL );
-}
 
-//=========================================================================
-void ContentProviderImplHelper::removeContent( const rtl::OUString& rURL )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    ucbhelper_impl::Contents::iterator it = m_pImpl->m_aContents.find( rURL );
+    ucbhelper_impl::Contents::iterator it = m_pImpl->m_aContents.find( aURL );
 
     if ( it != m_pImpl->m_aContents.end() )
         m_pImpl->m_aContents.erase( it );
@@ -268,24 +275,31 @@ ContentProviderImplHelper::queryExistingContent( const rtl::OUString& rURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+    cleanupRegisteredContents();
+
     // Check, if a content with given id already exists...
 
     ucbhelper_impl::Contents::const_iterator it
         = m_pImpl->m_aContents.find( rURL );
     if ( it != m_pImpl->m_aContents.end() )
     {
-        // Already there. Return it.
-        return rtl::Reference< ContentImplHelper >( (*it).second );
+        uno::Reference< ucb::XContent > xContent( (*it).second );
+        if ( xContent.is() )
+        {
+            return rtl::Reference< ContentImplHelper >(
+                static_cast< ContentImplHelper * >( xContent.get() ) );
+        }
     }
-
     return rtl::Reference< ContentImplHelper >();
 }
 
 //=========================================================================
 void ContentProviderImplHelper::queryExistingContents(
-                                            ContentRefList& rContents )
+        ContentRefList& rContents )
 {
     osl::MutexGuard aGuard( m_aMutex );
+
+    cleanupRegisteredContents();
 
     ucbhelper_impl::Contents::const_iterator it
         = m_pImpl->m_aContents.begin();
@@ -294,8 +308,33 @@ void ContentProviderImplHelper::queryExistingContents(
 
     while ( it != end )
     {
-        rContents.push_back( ContentImplHelperRef( (*it).second ) );
+        uno::Reference< ucb::XContent > xContent( (*it).second );
+        if ( xContent.is() )
+        {
+            rContents.push_back(
+                rtl::Reference< ContentImplHelper >(
+                    static_cast< ContentImplHelper * >( xContent.get() ) ) );
+        }
         ++it;
+    }
+}
+
+//=========================================================================
+void ContentProviderImplHelper::registerNewContent(
+    const uno::Reference< ucb::XContent > & xContent )
+{
+    if ( xContent.is() )
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+
+        cleanupRegisteredContents();
+
+        const rtl::OUString aURL(
+            xContent->getIdentifier()->getContentIdentifier() );
+        ucbhelper_impl::Contents::const_iterator it
+            = m_pImpl->m_aContents.find( aURL );
+        if ( it == m_pImpl->m_aContents.end() )
+            m_pImpl->m_aContents[ aURL ] = xContent;
     }
 }
 
