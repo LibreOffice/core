@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:01:06 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
                             case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
                             case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
-                            case SvtPathOptions::PATH_USERDICTIONARY: aValue = aPathCfg.GetUserDictionaryPath(); break;
                             case SvtPathOptions::PATH_WORK:         aValue = aPathCfg.GetWorkPath(); break;
                         }
                         aValues.InsertValue( nProp, aValue );
@@ -1003,7 +1002,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
                     case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
                     case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_USERDICTIONARY:aPathOptions.SetUserDictionaryPath( sValue );break;
                     case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
                     default: DBG_ERRORFILE("SfxApplication::SetOptions_Impl()\nInvalid path number found for set directories!");
                 }
