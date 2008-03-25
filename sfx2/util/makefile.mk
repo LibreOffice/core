@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:42:43 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:28:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ LIB2FILES=  $(LB)$/isfx.lib
 
 SHL1TARGET= sfx$(DLLPOSTFIX)
 SHL1IMPLIB= isfx
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 SHL1STDLIBS+=\
         $(FWELIB) \
