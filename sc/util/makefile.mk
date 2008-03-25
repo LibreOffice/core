@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 14:25:01 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:31:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ RESLIB1SRSFILES=\
 # --- StarClac DLL
 
 SHL1TARGET= sc$(DLLPOSTFIX)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 SHL1IMPLIB= sci
 
 # dynamic libraries
