@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:06:58 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,10 +171,9 @@ HierarchyContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content. Note that the content will insert itself
-    // into m_pContents by calling addContent(...) from it's ctor.
-
+    // Create a new content.
     xContent = HierarchyContent::create( m_xSMgr, this, xCanonicId );
+    registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
         throw ucb::IllegalIdentifierException();
