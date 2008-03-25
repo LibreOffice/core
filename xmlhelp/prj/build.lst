@@ -1,7 +1,6 @@
 xh	xmlhelp	:	ucbhelper LIBXSLT:libxslt jut unoil BERKELEYDB:berkeleydb svtools NULL
 xh	xmlhelp									usr1	-	all	xh_mkout NULL
 xh	xmlhelp\inc								nmake	-	all	xh_inc NULL
-xh	xmlhelp\source\helpprovider				nmake	-	all	xh_helpprovider xh_inc NULL
 xh	xmlhelp\source\treeview					nmake	-	all	xh_treeview xh_inc NULL
 xh	xmlhelp\source\com\sun\star\help		nmake	-	all	xh_help xh_inc NULL
 xh	xmlhelp\source\cxxhelp\util				nmake	-	all	xh_cutil xh_inc NULL
