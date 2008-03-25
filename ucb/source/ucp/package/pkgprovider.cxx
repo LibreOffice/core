@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:14:03 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,10 +252,10 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content. Note that the content will insert itself
-    // into providers content list by calling addContent(...) from it's ctor.
+    // Create a new content.
 
     xContent = Content::create( m_xSMgr, this, Identifier ); // not xId!!!
+    registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
         throw ucb::IllegalIdentifierException();
