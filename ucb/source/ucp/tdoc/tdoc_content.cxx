@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:15:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ Content::Content(
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
-: ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_aProps( lcl_getContentType( Info.Type ), rtl::OUString() ), // no Title (yet)
   m_eState( TRANSIENT ),
   m_pProvider( pProvider )
