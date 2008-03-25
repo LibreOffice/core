@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: obo $ $Date: 2008-03-25 14:32:30 $
+#   last change: $Author: obo $ $Date: 2008-03-25 16:22:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 
 # dynamic libraries
 SHL1STDLIBS+= \
+    $(LNGLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
