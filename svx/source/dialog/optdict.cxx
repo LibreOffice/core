@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:25:48 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 
 #define _SVX_OPTDICT_CXX
 
+#ifndef _LINGUISTIC_MISC_HHX_
+#include <linguistic/misc.hxx>
+#endif
 #include <svx/dialogs.hrc>
 #include "optdict.hrc"
 
@@ -202,7 +205,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
         if (xDicList.is())
         {
             lang::Locale aLocale( SvxCreateLocale(nLang) );
-            String aURL( SvxGetDictionaryURL(sDict) );
+            String aURL( linguistic::GetWritableDictionaryURL( sDict ) );
             xNewDic = Reference< XDictionary1 > (
                     xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
         }
@@ -217,13 +220,6 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
             this, RID_SVXERRCTX, &DIALOG_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
-
-/* chaos raus
-           // delete object pointed to by util::URL
-        //! works only if it is in our own dictionary path
-        CntAnchorRef xAnchor = new CntAnchor( NULL, SvxGetDictionaryURL(sDict) );
-        xAnchor->Put( SfxBoolItem(WID_DELETE, sal_True) );
-*/
 
         EndDialog( RET_CANCEL );
     }
@@ -670,7 +666,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 // and thus a warning message should be triggered...
 
                 Reference<XDictionary> aXDictionary(xDic, UNO_QUERY);
-                nAddRes = SvxAddEntryToDic( aXDictionary,
+                nAddRes = linguistic::AddEntryToDic( aXDictionary,
                             aNewWord, bIsNegEntry,
                             aRplcText, xDic->getLanguage(), sal_False );
              }
