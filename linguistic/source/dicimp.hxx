@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dicimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:22:01 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,8 @@ public:
     DictionaryNeo();
     DictionaryNeo(const ::rtl::OUString &rName, INT16 nLang,
                     ::com::sun::star::linguistic2::DictionaryType eType,
-                      const ::rtl::OUString &rMainURL);
+                    const ::rtl::OUString &rMainURL,
+                    BOOL bWriteable );
     virtual ~DictionaryNeo();
 
     // XNamed
