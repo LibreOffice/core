@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:31:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,20 @@ namespace linguistic
 // ascii to OUString conversion
 #define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
+/// Flags to be used with the multi-path related functions
+/// @see GetDictionaryPaths, GetLinguisticPaths
+#define PATH_FLAG_INTERNAL  0x01
+#define PATH_FLAG_USER      0x02
+#define PATH_FLAG_WRITABLE  0x04
+#define PATH_FLAG_ALL       (PATH_FLAG_INTERNAL | PATH_FLAG_USER | PATH_FLAG_WRITABLE)
+
+
+// AddEntryToDic return values
+#define DIC_ERR_NONE        0
+#define DIC_ERR_FULL        1
+#define DIC_ERR_READONLY    2
+#define DIC_ERR_UNKNOWN     3
+#define DIC_ERR_NOT_EXISTS  4
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -173,11 +187,28 @@ BOOL    IsReadOnly( const String &rURL, BOOL *pbExist = 0 );
 // checks if a file with the given URL exists
 BOOL    FileExists( const String &rURL );
 
+#ifdef TL_OUTDATED
 // returns complete file URL for given filename that is to be searched in
 // the specified path
 String  GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName );
 
 String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim = TRUE );
+#endif
+
+///////////////////////////////////////////////////////////////////////////
+
+::rtl::OUString     GetDictionaryWriteablePath();
+::com::sun::star::uno::Sequence< ::rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
+::com::sun::star::uno::Sequence< ::rtl::OUString > GetLinguisticPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
+
+/// @returns an URL for a new and writable dictionary rDicName.
+///     The URL will point to the path given by 'GetDictionaryWriteablePath'
+String  GetWritableDictionaryURL( const String &rDicName );
+
+// looks for the specified file in the list of paths.
+// In case of multiple occurences only the first found is returned.
+String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rPaths );
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -236,10 +267,17 @@ BOOL IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rPrope
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionaryEntry >
         SearchDicList(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryList >& rDicList,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList >& rDicList,
             const ::rtl::OUString& rWord, INT16 nLanguage,
             BOOL bSearchPosDics, BOOL bSearchSpellEntry );
+
+sal_uInt8 AddEntryToDic(
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,
+    const ::rtl::OUString &rWord, sal_Bool bIsNeg,
+    const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
+    sal_Bool bStripDot = sal_True );
+
+sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
 
 ///////////////////////////////////////////////////////////////////////////
 //
