@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_provider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:59:46 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,10 +165,10 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // @@@ Decision, which content implementation to instanciate may be
     //     made here ( in case you have different content classes ).
 
-    // Create a new content. Note that the content will insert itself
-    // into providers content list by calling addContent(...) from it's ctor.
+    // Create a new content.
 
     xContent = new Content( m_xSMgr, this, xCanonicId );
+    registerNewContent( xContent );
 
     if ( !xContent->getIdentifier().is() )
         throw ucb::IllegalIdentifierException();
