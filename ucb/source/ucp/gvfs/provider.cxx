@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:11:34 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::gvfs::Content(m_xSMgr, this, Identifier );
+        registerNewContent( xContent );
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {
