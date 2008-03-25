@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: kz $ $Date: 2008-03-05 17:12:22 $
+#  last change: $Author: obo $ $Date: 2008-03-25 13:55:50 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,7 @@ SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)
 SHL1IMPLIB=i$(SHL1TARGET)
-#SHL1USE_EXPORTS=name
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 SHL1OBJS=$(SLOFILES) 
 
