@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.234 $
+ *  $Revision: 1.235 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 13:29:21 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3086,3 +3086,26 @@ File gid_File_Registry_Spool_Oo_Office_Jobs_Stclient_Xcu
 End
 #endif
 #endif
+
+File gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Spellchecker_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic;
+    Name = "/registry/data/org/openoffice/Office/Linguistic-lingucomponent-spellchecker.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Hyphenator_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic;
+    Name = "/registry/data/org/openoffice/Office/Linguistic-lingucomponent-hyphenator.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Thesaurus_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic;
+    Name = "/registry/data/org/openoffice/Office/Linguistic-lingucomponent-thesaurus.xcu";
+End
+
+
