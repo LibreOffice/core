@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 13:00:47 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:32:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ SWLIBFILES       = \
         $(SLB)$/ui2.lib
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 SHL1IMPLIB= _$(TARGET)
 SHL1LIBS= $(SLB)$/swall.lib $(SWLIBFILES)
 
