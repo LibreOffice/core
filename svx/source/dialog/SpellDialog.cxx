@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:44:57 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
+#endif
+#ifndef _LINGUISTIC_MISC_HHX_
+#include <linguistic/misc.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -306,7 +309,7 @@ SpellDialog::~SpellDialog()
     Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
-        SvxSaveDictionaries( xDicList );
+        linguistic::SaveDictionaries( xDicList );
     }
 
     delete aAddToDictMB.GetPopupMenu();
@@ -575,7 +578,7 @@ IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
     String  aOldWord( aSentenceED.GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
     Reference<XDictionary> aXDictionary( SvxGetChangeAllList(), UNO_QUERY );
-    sal_uInt8 nAdded = SvxAddEntryToDic( aXDictionary,
+    sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
             aOldWord , sal_True,
             aString, eLang );
 
@@ -604,7 +607,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, EMPTYARG )
     //in case the error has been changed manually it has to be restored
     aSentenceED.RestoreCurrentError();
     String sErrorText(aSentenceED.GetErrorText());
-    sal_uInt8 nAdded = SvxAddEntryToDic( aXDictionary,
+    sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
         sErrorText, sal_False,
         ::rtl::OUString(), LANGUAGE_NONE );
     if(nAdded == DIC_ERR_NONE)
@@ -852,7 +855,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
     {
         String sTmpTxt( sNewWord );
         sal_Bool bNegEntry = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-        nAddRes = SvxAddEntryToDic( xDic, sTmpTxt, bNegEntry,
+        nAddRes = linguistic::AddEntryToDic( xDic, sTmpTxt, bNegEntry,
                 OUString(), LANGUAGE_NONE );
 
         if(nAddRes == DIC_ERR_NONE)
