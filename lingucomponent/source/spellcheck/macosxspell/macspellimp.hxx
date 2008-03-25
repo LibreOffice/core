@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macspellimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:05:34 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #include <tools/table.hxx>
 #endif
 
+#include <lingutil.hxx>
 #include <linguistic/misc.hxx>
 #include "sprophelp.hxx"
 
@@ -75,17 +76,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
-
-
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
-
-#define OU2A(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
-
-#define OU2UTF8(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_UTF8).getStr()
-
-#define OU2ISO_1(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ISO_8859_1).getStr()
-
-#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()
 
 
 ///////////////////////////////////////////////////////////////////////////
