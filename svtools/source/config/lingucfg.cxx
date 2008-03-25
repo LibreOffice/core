@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:13:50 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,34 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include "com/sun/star/util/XMacroExpander.hpp"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include "com/sun/star/beans/XPropertySet.hpp"
+#endif
+
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
@@ -58,14 +86,16 @@
 #include <linguprops.hxx>
 #endif
 
+#include <comphelper/processfactory.hxx>
+
 #include <itemholder1.hxx>
 
 using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
+using namespace com::sun::star;
 
 #define A2OU(x)        ::rtl::OUString::createFromAscii( x )
+#define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
+#define FILE_PROTOCOL       "file:///"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -80,9 +110,9 @@ static osl::Mutex &  GetOwnMutex()
 ///////////////////////////////////////////////////////////////////////////
 
 
-static Locale lcl_CreateLocale( LanguageType eLang )
+static lang::Locale lcl_CreateLocale( LanguageType eLang )
 {
-    Locale aLocale;
+    lang::Locale aLocale;
     if ( eLang != LANGUAGE_NONE )
         MsLangId::convertLanguageToLocale( eLang, aLocale );
 
@@ -90,7 +120,7 @@ static Locale lcl_CreateLocale( LanguageType eLang )
 }
 
 
-static INT16 lcl_LocaleToLanguage( const Locale& rLocale )
+static INT16 lcl_LocaleToLanguage( const lang::Locale& rLocale )
 {
     //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
@@ -101,11 +131,11 @@ static INT16 lcl_LocaleToLanguage( const Locale& rLocale )
 }
 
 
-static BOOL lcl_SetLocale( INT16 &rLanguage, const Any &rVal )
+static BOOL lcl_SetLocale( INT16 &rLanguage, const uno::Any &rVal )
 {
     BOOL bSucc = FALSE;
 
-    Locale  aNew;
+    lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
         INT16 nNew = lcl_LocaleToLanguage( aNew );
@@ -138,7 +168,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( INT16 nLanguage )
 }
 
 
-static void lcl_CfgAnyToLanguage( const Any &rVal, INT16& rLanguage )
+static void lcl_CfgAnyToLanguage( const uno::Any &rVal, INT16& rLanguage )
 {
     OUString aTmp;
     if ((rVal >>= aTmp)  &&  0 != aTmp.getLength())
@@ -208,9 +238,9 @@ class SvtLinguConfigItem : public utl::ConfigItem
     SvtLinguConfigItem & operator = ( const SvtLinguConfigItem & );
 
     static BOOL GetHdlByName( INT32 &rnHdl, const OUString &rPropertyName, sal_Bool bFullPropName = sal_False );
-    static const Sequence< OUString > & GetPropertyNames();
-    BOOL                LoadOptions( const Sequence< OUString > &rProperyNames );
-    BOOL                SaveOptions( const Sequence< OUString > &rProperyNames );
+    static const uno::Sequence< OUString > & GetPropertyNames();
+    BOOL                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
+    BOOL                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
 
 public:
     SvtLinguConfigItem();
@@ -264,7 +294,7 @@ SvtLinguConfigItem::~SvtLinguConfigItem()
 }
 
 
-void SvtLinguConfigItem::Notify( const Sequence< OUString > &rPropertyNames )
+void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
     LoadOptions( rPropertyNames );
 }
@@ -325,9 +355,9 @@ static struct NamesToHdl
 };
 
 
-const Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
+const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
 {
-    static Sequence< OUString > aNames;
+    static uno::Sequence< OUString > aNames;
     static sal_Bool bInitialized = sal_False;
 
     if (!bInitialized)
@@ -386,20 +416,20 @@ BOOL SvtLinguConfigItem::GetHdlByName(
 }
 
 
-Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
+uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
     INT32 nHdl;
-    return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : Any();
+    return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
 }
 
 
-Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
+uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    Any aRes;
+    uno::Any aRes;
 
     const INT16 *pnVal = 0;
     const BOOL  *pbVal = 0;
@@ -437,20 +467,20 @@ Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
         }
         case UPH_DEFAULT_LOCALE :
         {
-            Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage ) );
-            aRes.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage ) );
+            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
-            Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CJK ) );
-            aRes.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CJK ) );
+            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
-            Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CTL ) );
-            aRes.setValue( &aLocale, ::getCppuType((Locale*)0 ));
+            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CTL ) );
+            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_IS_IGNORE_POST_POSITIONAL_WORD :       pbVal = &rOpt.bIsIgnorePostPositionalWord; break;
@@ -479,7 +509,7 @@ Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
 }
 
 
-BOOL SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const Any &rValue )
+BOOL SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
@@ -491,7 +521,7 @@ BOOL SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const Any &
 }
 
 
-BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const Any &rValue )
+BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
@@ -636,7 +666,7 @@ BOOL SvtLinguConfigItem::SetOptions( const SvtLinguOptions &rOptions )
 }
 
 
-BOOL SvtLinguConfigItem::LoadOptions( const Sequence< OUString > &rProperyNames )
+BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
@@ -645,18 +675,18 @@ BOOL SvtLinguConfigItem::LoadOptions( const Sequence< OUString > &rProperyNames 
     const OUString *pProperyNames = rProperyNames.getConstArray();
     INT32 nProps = rProperyNames.getLength();
 
-    const Sequence< Any > aValues = GetProperties( rProperyNames );
-    const Sequence< sal_Bool > aROStates = GetReadOnlyStates( rProperyNames );
+    const uno::Sequence< uno::Any > aValues = GetProperties( rProperyNames );
+    const uno::Sequence< sal_Bool > aROStates = GetReadOnlyStates( rProperyNames );
 
     if (nProps  &&  aValues.getLength() == nProps &&  aROStates.getLength() == nProps)
     {
         SvtLinguOptions &rOpt = aOpt;
 
-        const Any *pValue = aValues.getConstArray();
+        const uno::Any *pValue = aValues.getConstArray();
         const sal_Bool *pROStates = aROStates.getConstArray();
         for (INT32 i = 0;  i < nProps;  ++i)
         {
-            const Any &rVal = pValue[i];
+            const uno::Any &rVal = pValue[i];
             INT32 nPropertyHandle;
             GetHdlByName( nPropertyHandle, pProperyNames[i], sal_True );
             switch ( nPropertyHandle )
@@ -754,7 +784,7 @@ BOOL SvtLinguConfigItem::LoadOptions( const Sequence< OUString > &rProperyNames 
 }
 
 
-BOOL SvtLinguConfigItem::SaveOptions( const Sequence< OUString > &rProperyNames )
+BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     if (!IsModified())
         return TRUE;
@@ -762,45 +792,45 @@ BOOL SvtLinguConfigItem::SaveOptions( const Sequence< OUString > &rProperyNames 
     osl::MutexGuard aGuard( GetOwnMutex() );
 
     BOOL bRet = FALSE;
-    const Type &rBOOL     = ::getBooleanCppuType();
-    const Type &rINT16    = ::getCppuType( (INT16 *) NULL );
-    const Type &rINT32    = ::getCppuType( (INT32 *) NULL );
+    const uno::Type &rBOOL     = ::getBooleanCppuType();
+    const uno::Type &rINT16    = ::getCppuType( (INT16 *) NULL );
+    const uno::Type &rINT32    = ::getCppuType( (INT32 *) NULL );
 
     INT32 nProps = rProperyNames.getLength();
-    Sequence< Any > aValues( nProps );
-    Any *pValue = aValues.getArray();
+    uno::Sequence< uno::Any > aValues( nProps );
+    uno::Any *pValue = aValues.getArray();
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
         const SvtLinguOptions &rOpt = aOpt;
 
         OUString aTmp( lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage ) );
-        *pValue++ = makeAny( aTmp );                                    //   0
-        *pValue++ = makeAny( rOpt.aActiveDics );                        //   1
+        *pValue++ = uno::makeAny( aTmp );                               //   0
+        *pValue++ = uno::makeAny( rOpt.aActiveDics );                   //   1
         pValue++->setValue( &rOpt.bIsUseDictionaryList, rBOOL );        //   2
         pValue++->setValue( &rOpt.bIsIgnoreControlCharacters, rBOOL );  //   3
         pValue++->setValue( &rOpt.bIsGermanPreReform, rBOOL );          //   4
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CJK );
-        *pValue++ = makeAny( aTmp );                                    //   5
+        *pValue++ = uno::makeAny( aTmp );                               //   5
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CTL );
-        *pValue++ = makeAny( aTmp );                                    //   6
+        *pValue++ = uno::makeAny( aTmp );                               //   6
 
         pValue++->setValue( &rOpt.bIsSpellUpperCase, rBOOL );          //   7
         pValue++->setValue( &rOpt.bIsSpellWithDigits, rBOOL );         //   8
         pValue++->setValue( &rOpt.bIsSpellCapitalization, rBOOL );     //   9
         pValue++->setValue( &rOpt.bIsSpellAuto, rBOOL );               //  10
-        pValue++->setValue( &rOpt.bIsSpellSpecial, rBOOL );                //  11
+        pValue++->setValue( &rOpt.bIsSpellSpecial, rBOOL );            //  11
         pValue++->setValue( &rOpt.bIsSpellInAllLanguages, rBOOL );     //  12
         pValue++->setValue( &rOpt.bIsSpellHideMarkings, rBOOL );       //  13
-        pValue++->setValue( &rOpt.bIsSpellReverse, rBOOL );                //  14
+        pValue++->setValue( &rOpt.bIsSpellReverse, rBOOL );            //  14
 
         pValue++->setValue( &rOpt.nHyphMinLeading, rINT16 );           //  15
         pValue++->setValue( &rOpt.nHyphMinTrailing, rINT16 );          //  16
-        pValue++->setValue( &rOpt.nHyphMinWordLength, rINT16 );            //  17
+        pValue++->setValue( &rOpt.nHyphMinWordLength, rINT16 );        //  17
         pValue++->setValue( &rOpt.bIsHyphSpecial, rBOOL );             //  18
-        pValue++->setValue( &rOpt.bIsHyphAuto, rBOOL );                    //  19
+        pValue++->setValue( &rOpt.bIsHyphAuto, rBOOL );                //  19
 
-        *pValue++ = makeAny( rOpt.aActiveConvDics );                    //   20
+        *pValue++ = uno::makeAny( rOpt.aActiveConvDics );               //   20
 
         pValue++->setValue( &rOpt.bIsIgnorePostPositionalWord, rBOOL ); //  21
         pValue++->setValue( &rOpt.bIsAutoCloseDialog, rBOOL );          //  22
@@ -885,6 +915,13 @@ BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = 0;
 static sal_Int32           nCfgItemRefCount = 0;
 
+static const rtl::OUString aG_SupportedDictionaryFormats( A2OU("SupportedDictionaryFormats") );
+static const rtl::OUString aG_Dictionaries( A2OU("Dictionaries") );
+static const rtl::OUString aG_Locations( A2OU("Locations") );
+static const rtl::OUString aG_Format( A2OU("Format") );
+static const rtl::OUString aG_Locales( A2OU("Locales") );
+static const rtl::OUString aG_DisabledDictionaries( A2OU("DisabledDictionaries") );
+static const rtl::OUString aG_LastActiveDictionaries( A2OU("LastActiveDictionaries") );
 
 SvtLinguConfig::SvtLinguConfig()
 {
@@ -924,44 +961,44 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
 }
 
 
-Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode )
+uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode )
 {
     return GetConfigItem().GetNodeNames( rNode );
 }
 
 
-Sequence< Any > SvtLinguConfig::GetProperties( const Sequence< OUString > &rNames )
+uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames )
 {
     return GetConfigItem().GetProperties(rNames);
 }
 
 
 sal_Bool SvtLinguConfig::ReplaceSetProperties(
-        const OUString &rNode, Sequence< PropertyValue > rValues )
+        const OUString &rNode, uno::Sequence< beans::PropertyValue > rValues )
 {
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }
 
 
-Any SvtLinguConfig::GetProperty( const OUString &rPropertyName ) const
+uno::Any SvtLinguConfig::GetProperty( const OUString &rPropertyName ) const
 {
     return GetConfigItem().GetProperty( rPropertyName );
 }
 
 
-Any SvtLinguConfig::GetProperty( INT32 nPropertyHandle ) const
+uno::Any SvtLinguConfig::GetProperty( INT32 nPropertyHandle ) const
 {
     return GetConfigItem().GetProperty( nPropertyHandle );
 }
 
 
-BOOL SvtLinguConfig::SetProperty( const OUString &rPropertyName, const Any &rValue )
+BOOL SvtLinguConfig::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( rPropertyName, rValue );
 }
 
 
-BOOL SvtLinguConfig::SetProperty( INT32 nPropertyHandle, const Any &rValue )
+BOOL SvtLinguConfig::SetProperty( INT32 nPropertyHandle, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( nPropertyHandle, rValue );
 }
@@ -984,12 +1021,355 @@ BOOL SvtLinguConfig::IsReadOnly( const rtl::OUString &rPropertyName ) const
     return GetConfigItem().IsReadOnly( rPropertyName );
 }
 
-
 BOOL SvtLinguConfig::IsReadOnly( INT32 nPropertyHandle ) const
 {
     return GetConfigItem().IsReadOnly( nPropertyHandle );
 }
 
+uno::Reference< util::XChangesBatch > SvtLinguConfig::GetUpdateAccess() const
+{
+    if (!m_xUpdateAccess.is())
+    {
+        try
+        {
+            // get configuration provider
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
+            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
+            if (xMgr.is())
+            {
+                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
+                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                        uno::UNO_QUERY_THROW ) ;
+            }
+
+            // get configuration update access
+            beans::PropertyValue aValue;
+            aValue.Name  = A2OU( "nodepath" );
+            aValue.Value = uno::makeAny( A2OU("org.openoffice.Office.Linguistic/ServiceManager") );
+            uno::Sequence< uno::Any > aProps(1);
+            aProps[0] <<= aValue;
+            m_xUpdateAccess = uno::Reference< util::XChangesBatch >(
+                    xConfigurationProvider->createInstanceWithArguments(
+                        A2OU( "com.sun.star.configuration.ConfigurationUpdateAccess" ), aProps ),
+                        uno::UNO_QUERY_THROW );
+        }
+        catch (uno::Exception &)
+        {
+        }
+    }
+
+    return m_xUpdateAccess;
+}
+
+BOOL SvtLinguConfig::GetElementNamesFor(
+     const rtl::OUString &rNodeName,
+     uno::Sequence< rtl::OUString > &rElementNames ) const
+{
+    bool bSuccess = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
+        rElementNames = xNA->getElementNames();
+        bSuccess = true;
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return bSuccess;
+}
+
+static uno::Reference< container::XNameAccess > GetOrCreateSetEntry_Impl(
+    const uno::Reference< container::XNameAccess > &rxSetNameAccess,
+    const rtl::OUString &rEntryName )
+{
+    uno::Reference< container::XNameAccess > xResult;
+    try
+    {
+        if (!rxSetNameAccess->hasByName( rEntryName ))
+        {
+            uno::Reference< lang::XSingleServiceFactory > xFactory( rxSetNameAccess, uno::UNO_QUERY_THROW);
+            uno::Reference< uno::XInterface > xNewEntry( xFactory->createInstance() );
+            uno::Reference< container::XNameContainer > xNC( rxSetNameAccess, uno::UNO_QUERY_THROW );
+            xNC->insertByName( rEntryName, makeAny( xNewEntry ) );
+        }
+        xResult.set( rxSetNameAccess->getByName( rEntryName ), uno::UNO_QUERY_THROW );
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return xResult;
+}
+
+BOOL SvtLinguConfig::GetSupportedDictionaryFormatsFor(
+    const rtl::OUString &rSetName,
+    const rtl::OUString &rSetEntry,
+    uno::Sequence< rtl::OUString > &rFormatList ) const
+{
+    if (rSetName.getLength() == 0 || rSetEntry.getLength() == 0)
+        return sal_False;
+    bool bSuccess = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
+        if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
+            bSuccess = true;
+        DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return bSuccess;
+}
+
+void SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(
+    const rtl::OUString &rSetName,
+    const rtl::OUString &rSetEntry,
+    const uno::Sequence< rtl::OUString > &rFormatList  ) const
+{
+    if (rSetName.getLength() == 0 || rSetEntry.getLength() == 0)
+        return;
+    try
+    {
+        DBG_ASSERT( rFormatList.getLength(), "applying empty format list. Really??" );
+
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
+        xNA = GetOrCreateSetEntry_Impl( xNA, rSetEntry );
+
+        uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
+        xNR->replaceByName( aG_SupportedDictionaryFormats, uno::makeAny( rFormatList ) );
+
+        xUpdateAccess->commitChanges();
+    }
+    catch (uno::Exception &)
+    {
+    }
+}
+
+
+static uno::WeakReference< util::XMacroExpander > aG_xMacroExpander;
+
+static uno::Reference< util::XMacroExpander > GetMacroExpander()
+{
+    uno::Reference< util::XMacroExpander > xMacroExpander( aG_xMacroExpander );
+    if ( !xMacroExpander.is() )
+    {
+        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+        if ( !xMacroExpander.is() )
+        {
+            uno::Reference< uno::XComponentContext > xContext;
+            uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            if ( xContext.is() )
+            {
+                aG_xMacroExpander =  uno::Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                        uno::UNO_QUERY );
+                xMacroExpander = aG_xMacroExpander;
+            }
+        }
+    }
+
+    return xMacroExpander;
+}
+
+
+BOOL SvtLinguConfig::GetDictionaryEntry(
+    const rtl::OUString &rNodeName,
+    SvtLinguConfigDictionaryEntry &rDicEntry ) const
+{
+    if (rNodeName.getLength() == 0)
+        return sal_False;
+    bool bSuccess = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
+
+        // read group data...
+        uno::Sequence< rtl::OUString >  aLocations;
+        rtl::OUString                   aFormatName;
+        uno::Sequence< rtl::OUString >  aLocaleNames;
+        bSuccess =  (xNA->getByName( aG_Locations ) >>= aLocations)  &&
+                    (xNA->getByName( aG_Format )    >>= aFormatName) &&
+                    (xNA->getByName( aG_Locales )   >>= aLocaleNames);
+        DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
+        DBG_ASSERT( aFormatName.getLength(), "Dictionary format name not set" );
+        DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
+
+        // if sucessful continue
+        if (bSuccess)
+        {
+            // get file URL's for the locations
+            uno::Reference< util::XMacroExpander > xMacroExpander( GetMacroExpander() );
+            for (sal_Int32 i = 0;  i < aLocations.getLength();  ++i)
+            {
+                rtl::OUString aURL( aLocations[i] );
+                if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
+                    xMacroExpander.is() )
+                {
+                    // cut protocol
+                    OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+                    // decode uric class chars
+                    aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                    // expand macro string
+                    aURL = xMacroExpander->expandMacros( aMacro );
+
+                    bool bIsFileUrl = aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( FILE_PROTOCOL )) == 0;
+                    if (!bIsFileUrl)
+                    {
+                        bSuccess = false;
+                        DBG_ASSERT( bIsFileUrl, "not a file URL");
+                    }
+
+                    aLocations[i] = aURL;
+                }
+                else
+                {
+                    bSuccess = false;
+                    DBG_ERROR( "failed to get file URL" );
+                }
+            }
+
+            // if everything was fine return the result
+            if (bSuccess)
+            {
+                rDicEntry.aLocations    = aLocations;
+                rDicEntry.aFormatName   = aFormatName;
+                rDicEntry.aLocaleNames  = aLocaleNames;
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return bSuccess;
+}
+
+void SvtLinguConfig::SetOrCreateDictionaryEntry(
+    const rtl::OUString &rNodeName,
+    const SvtLinguConfigDictionaryEntry &rDicEntry ) const
+{
+    if (rNodeName.getLength() == 0)
+        return;
+    try
+    {
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
+        xNA = GetOrCreateSetEntry_Impl( xNA, rNodeName );
+
+        DBG_ASSERT( rDicEntry.aLocations.getLength(), "Applying empty dictionary locations. Really correct??" );
+        DBG_ASSERT( rDicEntry.aFormatName.getLength(), "Applying empty dictionary format name. Really correct??" );
+        DBG_ASSERT( rDicEntry.aLocaleNames.getLength(), "Applying empty list of locales for the dictionary. Really correct??" );
+
+        uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
+        xNR->replaceByName( aG_Locations, uno::makeAny( rDicEntry.aLocations ) );
+        xNR->replaceByName( aG_Format,    uno::makeAny( rDicEntry.aFormatName ) );
+        xNR->replaceByName( aG_Locales,   uno::makeAny( rDicEntry.aLocaleNames ) );
+
+        xUpdateAccess->commitChanges();
+    }
+    catch (uno::Exception &)
+    {
+    }
+}
+
+uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
+{
+    uno::Sequence< rtl::OUString > aResult;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return aResult;
+}
+
+void SvtLinguConfig::SetDisabledDictionaries(
+    const uno::Sequence< rtl::OUString > &rDictionaries ) const
+{
+    try
+    {
+        uno::Reference< util::XChangesBatch > xUpdateAccess( GetUpdateAccess() );
+        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
+        if (xNA->hasByName( aG_DisabledDictionaries ))
+        {
+            uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
+            xNR->replaceByName( aG_DisabledDictionaries, makeAny( rDictionaries ) );
+        }
+        else
+        {
+            uno::Reference< container::XNameContainer > xNC( xNA, uno::UNO_QUERY_THROW );
+            xNC->insertByName( aG_DisabledDictionaries, makeAny( rDictionaries ) );
+        }
+
+        xUpdateAccess->commitChanges();
+    }
+    catch (uno::Exception &)
+    {
+    }
+}
+
+std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionariesByFormat(
+    const rtl::OUString &rFormatName )
+{
+    std::vector< SvtLinguConfigDictionaryEntry > aRes;
+    if (rFormatName.getLength() == 0)
+        return aRes;
+
+    try
+    {
+        uno::Sequence< rtl::OUString > aElementNames;
+        GetElementNamesFor( aG_Dictionaries, aElementNames );
+        sal_Int32 nLen = aElementNames.getLength();
+        const rtl::OUString *pElementNames = aElementNames.getConstArray();
+
+        SvtLinguConfigDictionaryEntry aDicEntry;
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        {
+            // does dictionary match the format we are looking for?
+            if (GetDictionaryEntry( pElementNames[i], aDicEntry ) &&
+                aDicEntry.aFormatName == rFormatName)
+            {
+                // check if it is active or not
+                bool bDicIsActive = true;
+                const uno::Sequence< rtl::OUString > aDisabledDics( GetDisabledDictionaries() );
+                for (sal_Int32 k = 0;  bDicIsActive && k < aDisabledDics.getLength();  ++k)
+                {
+                    if (aDisabledDics[k] == pElementNames[i])
+                        bDicIsActive = false;
+                }
+
+                if (bDicIsActive)
+                {
+                    DBG_ASSERT( aDicEntry.aFormatName.getLength(),
+                            "FormatName not set" );
+                    DBG_ASSERT( aDicEntry.aLocations.getLength(),
+                            "Locations not set" );
+                    DBG_ASSERT( aDicEntry.aLocaleNames.getLength(),
+                            "Locales not set" );
+                    aRes.push_back( aDicEntry );
+                }
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+    }
+
+    return aRes;
+}
 
 //////////////////////////////////////////////////////////////////////
 
