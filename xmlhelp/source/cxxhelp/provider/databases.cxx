@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:31:07 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,17 +48,11 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
-#endif
-#ifndef _URLPARAMETER_HXX_
-#include <provider/urlparameter.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -86,6 +80,9 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 
 #include <xmlhelp/compilehelp.hxx>
+
+#include "databases.hxx"
+#include "urlparameter.hxx"
 
 using namespace chelp;
 using namespace berkeleydbproxy;
