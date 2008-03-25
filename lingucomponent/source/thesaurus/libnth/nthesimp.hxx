@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:58:06 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 
 #include <unotools/charclass.hxx>
 
+#include <lingutil.hxx>
 #include <linguistic/misc.hxx>
 #include "ntprophelp.hxx"
 
@@ -86,16 +87,6 @@ namespace com { namespace sun { namespace star { namespace beans {
         class XPropertySet;
 }}}}
 
-
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
-
-#define OU2A(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
-
-#define OU2UTF8(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_UTF8).getStr()
-
-#define OU2ISO_1(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ISO_8859_1).getStr()
-
-#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding).getStr()
 
 
 ///////////////////////////////////////////////////////////////////////////
