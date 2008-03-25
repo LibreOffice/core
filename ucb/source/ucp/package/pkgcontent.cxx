@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:12:46 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ Content::Content(
         const uno::Reference< container::XHierarchicalNameAccess > & Package,
         const PackageUri& rUri,
         const ucb::ContentInfo& Info )
-: ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_aUri( rUri ),
   m_aProps( Info.Type ),
   m_eState( TRANSIENT ),
