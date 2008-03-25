@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 13:53:39 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,7 @@ Content::Content(
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
             sal_Bool isCollection )
   throw ( ucb::ContentCreationException )
-: ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+: ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( sal_True ),
