@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:15:56 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,6 @@ class SvtPathOptions_Impl
         const String&   GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
         const String&   GetTemplatePath() { return GetPath( SvtPathOptions::PATH_TEMPLATE ); }
         const String&   GetUserConfigPath() { return GetPath( SvtPathOptions::PATH_USERCONFIG ); }
-        const String&   GetUserDictionaryPath() { return GetPath( SvtPathOptions::PATH_USERDICTIONARY ); }
         const String&   GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
         const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
         const String&   GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
@@ -242,7 +241,6 @@ class SvtPathOptions_Impl
         void            SetTempPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMP, rPath ); }
         void            SetTemplatePath( const String& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
         void            SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
-        void            SetUserDictionaryPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERDICTIONARY, rPath ); }
         void            SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
 
         rtl::OUString   SubstVar( const rtl::OUString& rVar );
@@ -295,7 +293,6 @@ static PropertyStruct aPropNames[] =
     { "Temp",           SvtPathOptions::PATH_TEMP           },
     { "Template",       SvtPathOptions::PATH_TEMPLATE       },
     { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
-    { "UserDictionary", SvtPathOptions::PATH_USERDICTIONARY },
     { "Work",           SvtPathOptions::PATH_WORK           },
     { "UIConfig",       SvtPathOptions::PATH_UICONFIG       },
     { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    }
@@ -791,13 +788,6 @@ const String& SvtPathOptions::GetUIConfigPath() const
 
 // -----------------------------------------------------------------------
 
-const String& SvtPathOptions::GetUserDictionaryPath() const
-{
-    return pImp->GetUserDictionaryPath();
-}
-
-// -----------------------------------------------------------------------
-
 const String& SvtPathOptions::GetWorkPath() const
 {
     return pImp->GetWorkPath();
@@ -952,13 +942,6 @@ void SvtPathOptions::SetUserConfigPath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
-void SvtPathOptions::SetUserDictionaryPath( const String& rPath )
-{
-    pImp->SetUserDictionaryPath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
 void SvtPathOptions::SetWorkPath( const String& rPath )
 {
     pImp->SetWorkPath( rPath );
@@ -995,19 +978,17 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
     switch ( ePath )
     {
         case PATH_USERCONFIG:
-        case PATH_USERDICTIONARY:
         {
             // path is a URL
-            sal_Bool bCfg = ( PATH_USERCONFIG == ePath );
             bRet = sal_True;
-            INetURLObject aObj( bCfg ? GetUserConfigPath() : GetUserDictionaryPath() );
+            INetURLObject aObj( GetUserConfigPath() );
             xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
             for ( i = 0; i < nCount; ++i )
                 aObj.insertName( aIniFile.GetToken( i, '/' ) );
 
             if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                aObj.SetSmartURL( bCfg ? GetConfigPath() : GetDictionaryPath() );
+                aObj.SetSmartURL( GetConfigPath() );
                 aObj.insertName( aIniFile );
                 bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             }
@@ -1046,7 +1027,6 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();    break;
-                case PATH_USERDICTIONARY:/*-Wall???*/           break;
                 case PATH_USERCONFIG:/*-Wall???*/           break;
                 case PATH_COUNT: /*-Wall???*/ break;
             }
