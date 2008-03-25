@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 18:33:36 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:14:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ DEFLIB2NAME=$(TARGET2)
 DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt \
             $(SLB)$/$(TARGET2).lib
 # SHL2VERSIONMAP=$(TARGET2).map
-SHL2USE_EXPORTS=ordinal
+SHL2USE_EXPORTS=name
 
 ALL: \
     $(LIB2TARGET)	\
