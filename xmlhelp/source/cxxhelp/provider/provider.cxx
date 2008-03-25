@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:00:56 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,18 +52,6 @@
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
-#ifndef _PROVIDER_HXX
-#include <provider/provider.hxx>
-#endif
-#ifndef _CONTENT_HXX
-#include <provider/content.hxx>
-#endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
 #endif
@@ -87,6 +75,11 @@
 #endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+#include "databases.hxx"
+#include "provider.hxx"
+#include "content.hxx"
+#include "databases.hxx"
 
 using namespace com::sun::star;
 using namespace chelp;
@@ -253,6 +246,9 @@ ContentProvider::queryContent(
 
     xContent = new Content( m_xSMgr, this, xCanonicId, m_pDatabases );
 
+    // register new content
+    registerNewContent( xContent );
+
     // Further checks
 
     if ( !xContent->getIdentifier().is() )
@@ -271,9 +267,6 @@ ContentProvider::dispose()
         m_xContainer.clear();
     }
 }
-
-
-#include <provider/debughelper.hxx>
 
 void SAL_CALL
 ContentProvider::elementReplaced(const container::ContainerEvent& Event)
