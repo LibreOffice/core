@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:01:10 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define WORKAROUND_98119
 
 #ifdef WORKAROUND_98119
-#include <provider/bufferedinputstream.hxx>
+#include "bufferedinputstream.hxx"
 #endif
 
 #include <string.h>
@@ -71,12 +71,7 @@
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #include "db.hxx"
 #endif
-#ifndef _URLPARAMETER_HXX_
-#include <provider/urlparameter.hxx>
-#endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
+
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
@@ -111,6 +106,8 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 
+#include "urlparameter.hxx"
+#include "databases.hxx"
 
 namespace chelp {
 
