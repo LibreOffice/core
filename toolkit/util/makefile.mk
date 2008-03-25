@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-06 11:55:35 $
+#   last change: $Author: obo $ $Date: 2008-03-25 13:56:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/helper.lib
 SHL1TARGET= tk$(DLLPOSTFIX)
 SHL1IMPLIB= itk
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 SHL1STDLIBS=\
         $(VOSLIB)           \
