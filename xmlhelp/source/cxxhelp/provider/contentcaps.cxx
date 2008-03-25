@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentcaps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:28:38 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _CONTENT_HXX
-#include <provider/content.hxx>
-#endif
+
+#include "content.hxx"
 
 using namespace com::sun;
 using namespace com::sun::star;
