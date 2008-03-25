@@ -321,6 +321,20 @@ destpath = "/opt"
 End
 
 Start
+module = "gid_Module_Oo_Linguistic"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-ooolinguistic"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-core01"
+packagename = "%UNIXPRODUCTNAME-ooolinguistic"
+freebsdrequires = "%UNIXPRODUCTNAME-core01"
+requires = "%UNIXPRODUCTNAME-core01"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Linguistic module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
 module = "gid_Module_Root_Files_2"
 script = "shellscripts_module.txt"
 solarispackagename = "openofficeorg-core02"
