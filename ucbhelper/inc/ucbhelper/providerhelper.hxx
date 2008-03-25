@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerhelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:50:14 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,13 +111,13 @@ protected:
             ::com::sun::star::lang::XMultiServiceFactory >  m_xSMgr;
 
 private:
-    UCBHELPER_DLLPRIVATE void addContent      ( ContentImplHelper* pContent );
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
-    UCBHELPER_DLLPRIVATE void removeContent( const ::rtl::OUString& rURL );
 
     UCBHELPER_DLLPRIVATE ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XPropertySetRegistry >
     getAdditionalPropertySetRegistry();
+
+    UCBHELPER_DLLPRIVATE void cleanupRegisteredContents();
 
 protected:
     /**
@@ -144,6 +144,24 @@ protected:
       */
     rtl::Reference< ContentImplHelper >
     queryExistingContent( const ::rtl::OUString& rURL );
+
+    /**
+      * This method registers a newly created content instance with the
+      * content provider. It should be called directly after creating a new
+      * content instance. The provider can reuse a registered instance upon
+      * subsedent requests for content instances with an idententifier
+      * of a registered instance.
+      * Note that the provider does not hold a hard reference on the
+      * registered instance. If last external reference is gone, the provider
+      * will remove the instance from its inventory of known instances.
+      * Nothing will happen in case an already registered instance shall
+      * be registered more than once.
+      *
+      * @param  the content instance that is to be registered.
+     */
+    void registerNewContent(
+        const com::sun::star::uno::Reference<
+            ::com::sun::star::ucb::XContent > & xContent );
 
 public:
 
