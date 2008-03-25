@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:17:27 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
-#ifndef _RESULTSET_HXX
-#include <provider/resultset.hxx>
-#endif
-#ifndef _RESULTSETFACTORY_HXX
-#include <provider/resultsetfactory.hxx>
-#endif
+
+#include "resultset.hxx"
+#include "resultsetfactory.hxx"
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
