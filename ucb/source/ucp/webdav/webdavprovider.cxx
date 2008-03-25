@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:22:00 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,13 +207,13 @@ ContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content. Note that the content will insert itself
-    // into providers content list by calling addContent(...) from it's ctor.
+    // Create a new content.
 
     try
     {
         xContent = new ::webdav_ucp::Content(
                         m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
+        registerNewContent( xContent );
     }
     catch ( ucb::ContentCreationException const & )
     {
