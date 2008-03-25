@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetforroot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:28:09 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #endif
-#ifndef _RESULTSETFORROOT_HXX
-#include <provider/resultsetforroot.hxx>
-#endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
+
+#include "resultsetforroot.hxx"
+#include "databases.hxx"
 
 using namespace chelp;
 using namespace com::sun::star;
