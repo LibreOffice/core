@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: obo $ $Date: 2008-03-25 14:13:02 $
+#   last change: $Author: obo $ $Date: 2008-03-25 16:43:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,7 @@ SHL2STDLIBS= \
             $(SFX2LIB) \
             $(GOODIESLIB) \
             $(BASEGFXLIB) \
+            $(LNGLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
