@@ -199,9 +199,11 @@ SHL1LINKRESO*=$(MISC)$/$(SHL1TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL1LIBS)"!=""
 $(MISC)$/$(SHL1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL1LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL1TARGETN:b)_linkinc.ls
@@ -210,10 +212,13 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL1LIBS)"!=""
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
-$(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS)
+SHL1LINKLISTPARAM=@$(SHL1LINKLIST)
+$(SHL1LINKLIST) : $(SHL1LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL1LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
 
@@ -348,7 +353,7 @@ $(SHL1TARGETN) : \
         $(USE_1IMPLIB) \
         $(STDOBJ)							\
         $(SHL1OBJS) $(SHL1VERSIONOBJ))   \
-        @$(MISC)$/$(SHL1TARGET)_link.lst \
+        $(SHL1LINKLISTPARAM) \
         @$(mktmp $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
@@ -650,9 +655,11 @@ SHL2LINKRESO*=$(MISC)$/$(SHL2TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL2LIBS)"!=""
 $(MISC)$/$(SHL2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL2LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL2TARGETN:b)_linkinc.ls
@@ -661,10 +668,13 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL2LIBS)"!=""
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
-$(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS)
+SHL2LINKLISTPARAM=@$(SHL2LINKLIST)
+$(SHL2LINKLIST) : $(SHL2LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL2LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
 
@@ -799,7 +809,7 @@ $(SHL2TARGETN) : \
         $(USE_2IMPLIB) \
         $(STDOBJ)							\
         $(SHL2OBJS) $(SHL2VERSIONOBJ))   \
-        @$(MISC)$/$(SHL2TARGET)_link.lst \
+        $(SHL2LINKLISTPARAM) \
         @$(mktmp $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
@@ -1101,9 +1111,11 @@ SHL3LINKRESO*=$(MISC)$/$(SHL3TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL3LIBS)"!=""
 $(MISC)$/$(SHL3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL3LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL3TARGETN:b)_linkinc.ls
@@ -1112,10 +1124,13 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL3LIBS)"!=""
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
-$(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS)
+SHL3LINKLISTPARAM=@$(SHL3LINKLIST)
+$(SHL3LINKLIST) : $(SHL3LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL3LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
 
@@ -1250,7 +1265,7 @@ $(SHL3TARGETN) : \
         $(USE_3IMPLIB) \
         $(STDOBJ)							\
         $(SHL3OBJS) $(SHL3VERSIONOBJ))   \
-        @$(MISC)$/$(SHL3TARGET)_link.lst \
+        $(SHL3LINKLISTPARAM) \
         @$(mktmp $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
@@ -1552,9 +1567,11 @@ SHL4LINKRESO*=$(MISC)$/$(SHL4TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL4LIBS)"!=""
 $(MISC)$/$(SHL4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL4LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL4TARGETN:b)_linkinc.ls
@@ -1563,10 +1580,13 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL4LIBS)"!=""
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
-$(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS)
+SHL4LINKLISTPARAM=@$(SHL4LINKLIST)
+$(SHL4LINKLIST) : $(SHL4LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL4LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
 
@@ -1701,7 +1721,7 @@ $(SHL4TARGETN) : \
         $(USE_4IMPLIB) \
         $(STDOBJ)							\
         $(SHL4OBJS) $(SHL4VERSIONOBJ))   \
-        @$(MISC)$/$(SHL4TARGET)_link.lst \
+        $(SHL4LINKLISTPARAM) \
         @$(mktmp $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
@@ -2003,9 +2023,11 @@ SHL5LINKRESO*=$(MISC)$/$(SHL5TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL5LIBS)"!=""
 $(MISC)$/$(SHL5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL5LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL5TARGETN:b)_linkinc.ls
@@ -2014,10 +2036,13 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL5LIBS)"!=""
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
-$(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS)
+SHL5LINKLISTPARAM=@$(SHL5LINKLIST)
+$(SHL5LINKLIST) : $(SHL5LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL5LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
 
@@ -2152,7 +2177,7 @@ $(SHL5TARGETN) : \
         $(USE_5IMPLIB) \
         $(STDOBJ)							\
         $(SHL5OBJS) $(SHL5VERSIONOBJ))   \
-        @$(MISC)$/$(SHL5TARGET)_link.lst \
+        $(SHL5LINKLISTPARAM) \
         @$(mktmp $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
@@ -2454,9 +2479,11 @@ SHL6LINKRESO*=$(MISC)$/$(SHL6TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL6LIBS)"!=""
 $(MISC)$/$(SHL6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL6LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL6TARGETN:b)_linkinc.ls
@@ -2465,10 +2492,13 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL6LIBS)"!=""
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
-$(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS)
+SHL6LINKLISTPARAM=@$(SHL6LINKLIST)
+$(SHL6LINKLIST) : $(SHL6LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL6LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
 
@@ -2603,7 +2633,7 @@ $(SHL6TARGETN) : \
         $(USE_6IMPLIB) \
         $(STDOBJ)							\
         $(SHL6OBJS) $(SHL6VERSIONOBJ))   \
-        @$(MISC)$/$(SHL6TARGET)_link.lst \
+        $(SHL6LINKLISTPARAM) \
         @$(mktmp $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
@@ -2905,9 +2935,11 @@ SHL7LINKRESO*=$(MISC)$/$(SHL7TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL7LIBS)"!=""
 $(MISC)$/$(SHL7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL7LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL7TARGETN:b)_linkinc.ls
@@ -2916,10 +2948,13 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL7LIBS)"!=""
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
-$(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS)
+SHL7LINKLISTPARAM=@$(SHL7LINKLIST)
+$(SHL7LINKLIST) : $(SHL7LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL7LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
 
@@ -3054,7 +3089,7 @@ $(SHL7TARGETN) : \
         $(USE_7IMPLIB) \
         $(STDOBJ)							\
         $(SHL7OBJS) $(SHL7VERSIONOBJ))   \
-        @$(MISC)$/$(SHL7TARGET)_link.lst \
+        $(SHL7LINKLISTPARAM) \
         @$(mktmp $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
@@ -3356,9 +3391,11 @@ SHL8LINKRESO*=$(MISC)$/$(SHL8TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL8LIBS)"!=""
 $(MISC)$/$(SHL8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL8LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL8TARGETN:b)_linkinc.ls
@@ -3367,10 +3404,13 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL8LIBS)"!=""
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
-$(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS)
+SHL8LINKLISTPARAM=@$(SHL8LINKLIST)
+$(SHL8LINKLIST) : $(SHL8LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL8LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
 
@@ -3505,7 +3545,7 @@ $(SHL8TARGETN) : \
         $(USE_8IMPLIB) \
         $(STDOBJ)							\
         $(SHL8OBJS) $(SHL8VERSIONOBJ))   \
-        @$(MISC)$/$(SHL8TARGET)_link.lst \
+        $(SHL8LINKLISTPARAM) \
         @$(mktmp $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
@@ -3807,9 +3847,11 @@ SHL9LINKRESO*=$(MISC)$/$(SHL9TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL9LIBS)"!=""
 $(MISC)$/$(SHL9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL9LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL9TARGETN:b)_linkinc.ls
@@ -3818,10 +3860,13 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL9LIBS)"!=""
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
-$(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS)
+SHL9LINKLISTPARAM=@$(SHL9LINKLIST)
+$(SHL9LINKLIST) : $(SHL9LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL9LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
 
@@ -3956,7 +4001,7 @@ $(SHL9TARGETN) : \
         $(USE_9IMPLIB) \
         $(STDOBJ)							\
         $(SHL9OBJS) $(SHL9VERSIONOBJ))   \
-        @$(MISC)$/$(SHL9TARGET)_link.lst \
+        $(SHL9LINKLISTPARAM) \
         @$(mktmp $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
@@ -4258,9 +4303,11 @@ SHL10LINKRESO*=$(MISC)$/$(SHL10TARGET)_res.o
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL10LIBS)"!=""
 $(MISC)$/$(SHL10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL10LIBS)"!=""
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL10TARGETN:b)_linkinc.ls
@@ -4269,10 +4316,13 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(SHL10LIBS)"!=""
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
-$(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS)
+SHL10LINKLISTPARAM=@$(SHL10LINKLIST)
+$(SHL10LINKLIST) : $(SHL10LIBS)
     @@-$(RM) $@
-    $(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    $(SED) -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          # "$(SHL10LIBS)"!=""
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
 
@@ -4407,7 +4457,7 @@ $(SHL10TARGETN) : \
         $(USE_10IMPLIB) \
         $(STDOBJ)							\
         $(SHL10OBJS) $(SHL10VERSIONOBJ))   \
-        @$(MISC)$/$(SHL10TARGET)_link.lst \
+        $(SHL10LINKLISTPARAM) \
         @$(mktmp $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
