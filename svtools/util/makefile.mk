@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 17:04:33 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:19:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ RESLIB3SRSFILES= \
 
 SHL1TARGET= svt$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
@@ -190,7 +190,7 @@ DEF1DES 	=SvTools
 
 SHL2TARGET= svl$(DLLPOSTFIX)
 SHL2IMPLIB= _isvl
-SHL2USE_EXPORTS=ordinal
+SHL2USE_EXPORTS=name
 #Do not link with VCL or any other library that links with VCL
 SHL2STDLIBS= \
         $(UNOTOOLSLIB)		\
