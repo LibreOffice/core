@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:11:18 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,6 @@ static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
     { SvtPathOptions::PATH_TEMP,          &SvtDefaultOptions_Impl::m_aTempPath },
     { SvtPathOptions::PATH_TEMPLATE,        &SvtDefaultOptions_Impl::m_aTemplatePath },
     { SvtPathOptions::PATH_USERCONFIG,  &SvtDefaultOptions_Impl::m_aUserConfigPath },
-    { SvtPathOptions::PATH_USERDICTIONARY,&SvtDefaultOptions_Impl::m_aUserDictionaryPath },
     { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath }
 };
 
@@ -202,7 +201,6 @@ Sequence< OUString > GetDefaultPropertyNames()
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
         "UserConfig",       // PATH_USERCONFIG
-        "UserDictionary",   // PATH_USERDICTIONARY
         "Work"              // PATH_WORK
     };
 
