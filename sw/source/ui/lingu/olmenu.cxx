@@ -5,9 +5,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:52:22 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
+#endif
+#ifndef _LINGUISTIC_MISC_HHX_
+#include <linguistic/misc.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -685,7 +688,7 @@ void SwSpellPopup::Execute( USHORT nId )
                     case MN_IGNORE :
                     {
                         uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
-                        SvxAddEntryToDic(
+                        linguistic::AddEntryToDic(
                                 xDictionary,
                                 xSpellAlt->getWord(), sal_False,
                                 aEmptyStr, LANGUAGE_NONE );
@@ -733,7 +736,7 @@ void SwSpellPopup::Execute( USHORT nId )
                                         "dictionary index out of range" );
                             uno::Reference< linguistic2::XDictionary > xDic =
                                 aDics.getConstArray()[nDicIdx];
-                            INT16 nAddRes = SvxAddEntryToDic( xDic,
+                            INT16 nAddRes = linguistic::AddEntryToDic( xDic,
                                 aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
                             // save modified user-dictionary if it is persistent
                             uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
