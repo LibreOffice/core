@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:30:40 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,10 @@ static Handle2CfgNameMapping_Impl __READONLY_DATA Hdl2CfgMap_Impl[] =
     { SvtPathOptions::PATH_TEMP,        "Temp" },
     { SvtPathOptions::PATH_TEMPLATE,    "Template" },
     { SvtPathOptions::PATH_WORK,        "Work" },
+#if OSL_DEBUG_LEVEL > 1
+    { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
+    { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
+#endif
     { USHRT_MAX, NULL }
 };
 
@@ -248,11 +252,21 @@ long SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 
 BOOL IsMultiPath_Impl( const USHORT nIndex )
 {
+#if OSL_DEBUG_LEVEL > 1
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
              SvtPathOptions::PATH_AUTOTEXT == nIndex ||
              SvtPathOptions::PATH_BASIC == nIndex ||
              SvtPathOptions::PATH_GALLERY == nIndex ||
              SvtPathOptions::PATH_TEMPLATE == nIndex );
+#else
+    return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
+             SvtPathOptions::PATH_AUTOTEXT == nIndex ||
+             SvtPathOptions::PATH_BASIC == nIndex ||
+             SvtPathOptions::PATH_GALLERY == nIndex ||
+             SvtPathOptions::PATH_TEMPLATE == nIndex ||
+             SvtPathOptions::PATH_LINGUISTIC == nIndex ||
+             SvtPathOptions::PATH_DICTIONARY == nIndex  );
+#endif
 }
 
 // class SvxPathTabPage --------------------------------------------------
@@ -379,6 +393,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             case SvtPathOptions::PATH_GRAPHIC:
             case SvtPathOptions::PATH_TEMP:
             case SvtPathOptions::PATH_TEMPLATE:
+#if OSL_DEBUG_LEVEL > 1
+            case SvtPathOptions::PATH_LINGUISTIC:
+            case SvtPathOptions::PATH_DICTIONARY:
+#endif
             case SvtPathOptions::PATH_WORK:
             {
                 String aStr( SVX_RES( RID_SVXSTR_PATH_NAME_START + i ) );
