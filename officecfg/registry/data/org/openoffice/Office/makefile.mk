@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:41:14 $
+#   last change: $Author: obo $ $Date: 2008-03-25 16:18:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ XCUFILES= \
     Impress.xcu	\
     Jobs.xcu \
     Labels.xcu \
+    Linguistic.xcu \
     Logging.xcu \
     Math.xcu \
     ProtocolHandler.xcu \
