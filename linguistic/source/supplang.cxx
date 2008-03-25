@@ -4,9 +4,9 @@
  *
  *  $RCSfile: supplang.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:29:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,9 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -104,42 +106,6 @@ using namespace linguistic;
 
 namespace linguistic
 {
-
-///////////////////////////////////////////////////////////////////////////
-
-BOOL FileExists( const String &rMainURL )
-{
-    BOOL bExists = FALSE;
-    if (rMainURL.Len())
-    {
-        try
-        {
-            ::ucbhelper::Content aContent( rMainURL,
-                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-            bExists = aContent.isDocument();
-        }
-        catch(Exception &)
-        {
-        }
-    }
-    return bExists;
-}
-
-String GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName )
-{
-    String aURL;
-    if (rFileName.Len())
-    {
-        INetURLObject aURLObj;
-        aURLObj.SetSmartProtocol( INET_PROT_FILE );
-        aURLObj.SetSmartURL( GetModulePath(ePath) );
-        DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-        aURLObj.Append( rFileName );
-        DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-        aURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    }
-    return aURL;
-}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -227,59 +193,6 @@ const Sequence< INT16 > SuppLanguages::GetLanguages() const
 
 ///////////////////////////////////////////////////////////////////////////
 
-String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim  )
-{
-    String aRes;
-
-    SvtPathOptions  aPathOpt;
-    switch (ePath)
-    {
-        case SvtPathOptions::PATH_MODULE :
-            aRes = aPathOpt.GetModulePath();
-            break;
-        case SvtPathOptions::PATH_LINGUISTIC :
-        {
-            String aTmp( aPathOpt.GetLinguisticPath() );
-            LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-        case SvtPathOptions::PATH_USERDICTIONARY :
-        {
-            String aTmp( aPathOpt.GetUserDictionaryPath() );
-            LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-        default:
-            DBG_ERROR( "unexpected argument (path)" );
-    }
-    if (bAddAccessDelim && aRes.Len())
-    {
-#ifdef WNT
-        aRes += '\\';
-#else
-        aRes += '/';
-#endif
-    }
-
-    return aRes;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-OUString StripTrailingChars( OUString &rTxt, sal_Unicode cChar )
-{
-    sal_Int32 nTrailing = 0;
-    sal_Int32 nTxtLen = rTxt.getLength();
-    sal_Int32 nIdx = nTxtLen - 1;
-    while (nIdx >= 0 && rTxt[ nIdx-- ] == cChar)
-        ++nTrailing;
-
-    OUString aRes( rTxt.copy( nTxtLen - nTrailing ) );
-    rTxt = rTxt.copy( 0, nTxtLen - nTrailing );
-    return aRes;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
 }   // namespace linguistic
+
 
