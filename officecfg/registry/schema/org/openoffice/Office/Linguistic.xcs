@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:15:44 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,50 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xml:lang="en-US"> 
+    <info>
 		<author>TL</author>
 		<desc >Contains linguistic (spell checking, hyphenation, thesaurus) related configurations.</desc>
 	</info>
+
+    <templates>
+        <group oor:name="Dictionary">
+            <info>
+                <desc>Specifies the settings for a single dictionary to be used by a spell checker, hyphenator or thesaurus.</desc>
+            </info>
+            <prop oor:name="Locations" oor:type="oor:string-list">
+                <info>
+                    <desc>Specifies the location(s) where the files that represent the dictionary are found. Each entry in the list must be from type URL.</desc>
+                    <label>Dictionary location</label>
+                </info>
+            </prop>
+            <prop oor:name="Format" oor:type="xs:string">
+                <info>
+                    <desc>Specifies the format the dictionary is written in.</desc>
+                    <label>Dictionary format</label>
+                </info>
+            </prop>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <info>
+                    <desc>Bind a dictionary to it's supported list of locales.</desc>
+                    <label>Dictionary locales</label>
+                </info>
+            </prop>
+        </group>
+        
+        <group oor:name="DictionaryUsingService">
+            <info>
+                <desc>A list of all services making use of dictionaries.</desc>
+            </info>
+            <prop oor:name="SupportedDictionaryFormats" oor:type="oor:string-list">
+                <info>
+                    <desc>The list of all dictionry formats the service can handle.</desc>
+                    <label>Supported dictionary formats</label>
+                </info>
+            </prop>
+        </group>
+    </templates>
+
 	<component>
 		<group oor:name="General">
 			<info>
@@ -398,6 +438,38 @@
 			<info>
 				<desc>Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 			</info>
+
+            <set oor:name="Dictionaries" oor:node-type="Dictionary">
+                <info>
+                    <desc>Contains all dictionaries to be used for spell checking, hyphenation or thesaurus.</desc>
+                    <label>Dictionaries</label>
+                </info>
+            </set>
+            <set oor:name="SpellCheckers" oor:node-type="DictionaryUsingService">
+                <info>
+                    <desc>Contains all spell checker.</desc>
+                    <label>Spell Checker</label>
+                </info>
+            </set>
+            <set oor:name="Hyphenators" oor:node-type="DictionaryUsingService">
+                <info>
+                    <desc>Contains all hyphenators.</desc>
+                    <label>Hyphenators</label>
+                </info>
+            </set>
+            <set oor:name="Thesauri" oor:node-type="DictionaryUsingService">
+                <info>
+                    <desc>Contains all thesauri.</desc>
+                    <label>Thesauri</label>
+                </info>
+            </set>
+            <prop oor:name="DisabledDictionaries" oor:type="oor:string-list">
+                <info>
+                    <desc>The list of dictionaries that are currently not in use.</desc>
+                    <label>Disabled Dictionaries</label>
+                </info>
+            </prop>
+
             <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int">
                 <info>
                     <author>TL</author>
