@@ -48,26 +48,10 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 DEF1FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK1:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB1NAME)"!=""
 
-DEF1UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE1:=$(shell @echo %_disk)
-#BUILD_DRIVE1:=O
-
-.IF "$(BUILD_DRIVE1)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat &&
-RMHACK1:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE1)"=="O"
-.ENDIF			# "$(BUILD_DRIVE1)"=="O"
-
-.ENDIF			# "$(DEFLIB1NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF1CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF1CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF1TARGETN) : \
@@ -76,19 +60,6 @@ $(DEF1TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF1TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB1NAME)"!=""
-.IF "$(BUILD_DRIVE1)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE1)"=="O"
-.ENDIF				# "$(DEFLIB1NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -101,50 +72,22 @@ $(DEF1TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL1TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL1TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL1TARGET).exp
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"==""
-    @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
-    @$(EXPORT1_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
-.IF "$(DEF1CEXP)"!=""
-    @$(EXPORT1_PROTECT) $(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
+    @-$(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
+    $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
 .ELSE			# "$(SHL1USE_EXPORTS)"==""
-    @$(EXPORT1_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL1TARGET).direct
-.IF "$(SHL1USE_EXPORTS)"!="name"
-.IF "$(DEF1CEXP)"!=""
-    @$(EXPORT1_PROTECT) $(LDUMP2) -D -A $(DEF1CEXP) -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT1_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL1USE_EXPORTS)"!="name"
-.IF "$(DEF1CEXP)"!=""
-    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -A $(DEF1CEXP) -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL1TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE1)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF1UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF1UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE1)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .IF "$(DEF1EXPORT1)"!=""
     @echo $(DEF1EXPORT1)										>>$@.tmpfile
@@ -280,26 +223,10 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 DEF2FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK2:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB2NAME)"!=""
 
-DEF2UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE2:=$(shell @echo %_disk)
-#BUILD_DRIVE2:=O
-
-.IF "$(BUILD_DRIVE2)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat &&
-RMHACK2:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE2)"=="O"
-.ENDIF			# "$(BUILD_DRIVE2)"=="O"
-
-.ENDIF			# "$(DEFLIB2NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF2CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF2CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF2TARGETN) : \
@@ -308,19 +235,6 @@ $(DEF2TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF2TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB2NAME)"!=""
-.IF "$(BUILD_DRIVE2)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE2)"=="O"
-.ENDIF				# "$(DEFLIB2NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -333,50 +247,22 @@ $(DEF2TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL2TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL2TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL2TARGET).exp
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"==""
-    @-$(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
-    @$(EXPORT2_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
-.IF "$(DEF2CEXP)"!=""
-    @$(EXPORT2_PROTECT) $(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
+    @-$(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
+    $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
 .ELSE			# "$(SHL2USE_EXPORTS)"==""
-    @$(EXPORT2_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL2TARGET).direct
-.IF "$(SHL2USE_EXPORTS)"!="name"
-.IF "$(DEF2CEXP)"!=""
-    @$(EXPORT2_PROTECT) $(LDUMP2) -D -A $(DEF2CEXP) -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT2_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL2USE_EXPORTS)"!="name"
-.IF "$(DEF2CEXP)"!=""
-    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -A $(DEF2CEXP) -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL2TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE2)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF2UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF2UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE2)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .IF "$(DEF2EXPORT1)"!=""
     @echo $(DEF2EXPORT1)										>>$@.tmpfile
@@ -512,26 +398,10 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 DEF3FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK3:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB3NAME)"!=""
 
-DEF3UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE3:=$(shell @echo %_disk)
-#BUILD_DRIVE3:=O
-
-.IF "$(BUILD_DRIVE3)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat &&
-RMHACK3:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE3)"=="O"
-.ENDIF			# "$(BUILD_DRIVE3)"=="O"
-
-.ENDIF			# "$(DEFLIB3NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF3CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF3CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF3TARGETN) : \
@@ -540,19 +410,6 @@ $(DEF3TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF3TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB3NAME)"!=""
-.IF "$(BUILD_DRIVE3)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE3)"=="O"
-.ENDIF				# "$(DEFLIB3NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -565,50 +422,22 @@ $(DEF3TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL3TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL3TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL3TARGET).exp
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"==""
-    @-$(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
-    @$(EXPORT3_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
-.IF "$(DEF3CEXP)"!=""
-    @$(EXPORT3_PROTECT) $(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT3_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
+    @-$(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
+    $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
 .ELSE			# "$(SHL3USE_EXPORTS)"==""
-    @$(EXPORT3_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL3TARGET).direct
-.IF "$(SHL3USE_EXPORTS)"!="name"
-.IF "$(DEF3CEXP)"!=""
-    @$(EXPORT3_PROTECT) $(LDUMP2) -D -A $(DEF3CEXP) -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT3_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL3USE_EXPORTS)"!="name"
-.IF "$(DEF3CEXP)"!=""
-    @$(EXPORT3_PROTECT) $(LDUMP2) -N -D -A $(DEF3CEXP) -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT3_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL3TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE3)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF3UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF3UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE3)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .IF "$(DEF3EXPORT1)"!=""
     @echo $(DEF3EXPORT1)										>>$@.tmpfile
@@ -744,26 +573,10 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 DEF4FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK4:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB4NAME)"!=""
 
-DEF4UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE4:=$(shell @echo %_disk)
-#BUILD_DRIVE4:=O
-
-.IF "$(BUILD_DRIVE4)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat &&
-RMHACK4:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE4)"=="O"
-.ENDIF			# "$(BUILD_DRIVE4)"=="O"
-
-.ENDIF			# "$(DEFLIB4NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF4CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF4CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF4TARGETN) : \
@@ -772,19 +585,6 @@ $(DEF4TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF4TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB4NAME)"!=""
-.IF "$(BUILD_DRIVE4)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE4)"=="O"
-.ENDIF				# "$(DEFLIB4NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -797,50 +597,22 @@ $(DEF4TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL4TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL4TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL4TARGET).exp
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"==""
-    @-$(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
-    @$(EXPORT4_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
-.IF "$(DEF4CEXP)"!=""
-    @$(EXPORT4_PROTECT) $(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT4_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
+    @-$(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
+    $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
 .ELSE			# "$(SHL4USE_EXPORTS)"==""
-    @$(EXPORT4_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL4TARGET).direct
-.IF "$(SHL4USE_EXPORTS)"!="name"
-.IF "$(DEF4CEXP)"!=""
-    @$(EXPORT4_PROTECT) $(LDUMP2) -D -A $(DEF4CEXP) -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT4_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL4USE_EXPORTS)"!="name"
-.IF "$(DEF4CEXP)"!=""
-    @$(EXPORT4_PROTECT) $(LDUMP2) -N -D -A $(DEF4CEXP) -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT4_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL4TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE4)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF4UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF4UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE4)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .IF "$(DEF4EXPORT1)"!=""
     @echo $(DEF4EXPORT1)										>>$@.tmpfile
@@ -976,26 +748,10 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 DEF5FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK5:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB5NAME)"!=""
 
-DEF5UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE5:=$(shell @echo %_disk)
-#BUILD_DRIVE5:=O
-
-.IF "$(BUILD_DRIVE5)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat &&
-RMHACK5:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE5)"=="O"
-.ENDIF			# "$(BUILD_DRIVE5)"=="O"
-
-.ENDIF			# "$(DEFLIB5NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF5CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF5CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF5TARGETN) : \
@@ -1004,19 +760,6 @@ $(DEF5TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF5TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB5NAME)"!=""
-.IF "$(BUILD_DRIVE5)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE5)"=="O"
-.ENDIF				# "$(DEFLIB5NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1029,50 +772,22 @@ $(DEF5TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL5TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL5TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL5TARGET).exp
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"==""
-    @-$(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
-    @$(EXPORT5_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
-.IF "$(DEF5CEXP)"!=""
-    @$(EXPORT5_PROTECT) $(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT5_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
+    @-$(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
+    $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
 .ELSE			# "$(SHL5USE_EXPORTS)"==""
-    @$(EXPORT5_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL5TARGET).direct
-.IF "$(SHL5USE_EXPORTS)"!="name"
-.IF "$(DEF5CEXP)"!=""
-    @$(EXPORT5_PROTECT) $(LDUMP2) -D -A $(DEF5CEXP) -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT5_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL5USE_EXPORTS)"!="name"
-.IF "$(DEF5CEXP)"!=""
-    @$(EXPORT5_PROTECT) $(LDUMP2) -N -D -A $(DEF5CEXP) -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT5_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL5TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE5)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF5UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF5UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE5)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .IF "$(DEF5EXPORT1)"!=""
     @echo $(DEF5EXPORT1)										>>$@.tmpfile
@@ -1208,26 +923,10 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 DEF6FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK6:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB6NAME)"!=""
 
-DEF6UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE6:=$(shell @echo %_disk)
-#BUILD_DRIVE6:=O
-
-.IF "$(BUILD_DRIVE6)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat &&
-RMHACK6:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE6)"=="O"
-.ENDIF			# "$(BUILD_DRIVE6)"=="O"
-
-.ENDIF			# "$(DEFLIB6NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF6CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF6CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF6TARGETN) : \
@@ -1236,19 +935,6 @@ $(DEF6TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF6TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB6NAME)"!=""
-.IF "$(BUILD_DRIVE6)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE6)"=="O"
-.ENDIF				# "$(DEFLIB6NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1261,50 +947,22 @@ $(DEF6TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL6TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL6TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL6TARGET).exp
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"==""
-    @-$(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
-    @$(EXPORT6_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
-.IF "$(DEF6CEXP)"!=""
-    @$(EXPORT6_PROTECT) $(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT6_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
+    @-$(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
+    $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
 .ELSE			# "$(SHL6USE_EXPORTS)"==""
-    @$(EXPORT6_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL6TARGET).direct
-.IF "$(SHL6USE_EXPORTS)"!="name"
-.IF "$(DEF6CEXP)"!=""
-    @$(EXPORT6_PROTECT) $(LDUMP2) -D -A $(DEF6CEXP) -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT6_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL6USE_EXPORTS)"!="name"
-.IF "$(DEF6CEXP)"!=""
-    @$(EXPORT6_PROTECT) $(LDUMP2) -N -D -A $(DEF6CEXP) -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT6_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL6TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE6)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF6UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF6UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE6)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .IF "$(DEF6EXPORT1)"!=""
     @echo $(DEF6EXPORT1)										>>$@.tmpfile
@@ -1440,26 +1098,10 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 DEF7FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK7:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB7NAME)"!=""
 
-DEF7UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE7:=$(shell @echo %_disk)
-#BUILD_DRIVE7:=O
-
-.IF "$(BUILD_DRIVE7)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat &&
-RMHACK7:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE7)"=="O"
-.ENDIF			# "$(BUILD_DRIVE7)"=="O"
-
-.ENDIF			# "$(DEFLIB7NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF7CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF7CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF7TARGETN) : \
@@ -1468,19 +1110,6 @@ $(DEF7TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF7TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB7NAME)"!=""
-.IF "$(BUILD_DRIVE7)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE7)"=="O"
-.ENDIF				# "$(DEFLIB7NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1493,50 +1122,22 @@ $(DEF7TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL7TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL7TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL7TARGET).exp
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"==""
-    @-$(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
-    @$(EXPORT7_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
-.IF "$(DEF7CEXP)"!=""
-    @$(EXPORT7_PROTECT) $(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT7_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
+    @-$(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
+    $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
 .ELSE			# "$(SHL7USE_EXPORTS)"==""
-    @$(EXPORT7_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL7TARGET).direct
-.IF "$(SHL7USE_EXPORTS)"!="name"
-.IF "$(DEF7CEXP)"!=""
-    @$(EXPORT7_PROTECT) $(LDUMP2) -D -A $(DEF7CEXP) -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT7_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL7USE_EXPORTS)"!="name"
-.IF "$(DEF7CEXP)"!=""
-    @$(EXPORT7_PROTECT) $(LDUMP2) -N -D -A $(DEF7CEXP) -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT7_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL7TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE7)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF7UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF7UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE7)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .IF "$(DEF7EXPORT1)"!=""
     @echo $(DEF7EXPORT1)										>>$@.tmpfile
@@ -1672,26 +1273,10 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 DEF8FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK8:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB8NAME)"!=""
 
-DEF8UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE8:=$(shell @echo %_disk)
-#BUILD_DRIVE8:=O
-
-.IF "$(BUILD_DRIVE8)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat &&
-RMHACK8:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE8)"=="O"
-.ENDIF			# "$(BUILD_DRIVE8)"=="O"
-
-.ENDIF			# "$(DEFLIB8NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF8CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF8CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF8TARGETN) : \
@@ -1700,19 +1285,6 @@ $(DEF8TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF8TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB8NAME)"!=""
-.IF "$(BUILD_DRIVE8)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE8)"=="O"
-.ENDIF				# "$(DEFLIB8NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1725,50 +1297,22 @@ $(DEF8TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL8TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL8TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL8TARGET).exp
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"==""
-    @-$(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
-    @$(EXPORT8_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
-.IF "$(DEF8CEXP)"!=""
-    @$(EXPORT8_PROTECT) $(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT8_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
+    @-$(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
+    $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
 .ELSE			# "$(SHL8USE_EXPORTS)"==""
-    @$(EXPORT8_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL8TARGET).direct
-.IF "$(SHL8USE_EXPORTS)"!="name"
-.IF "$(DEF8CEXP)"!=""
-    @$(EXPORT8_PROTECT) $(LDUMP2) -D -A $(DEF8CEXP) -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT8_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL8USE_EXPORTS)"!="name"
-.IF "$(DEF8CEXP)"!=""
-    @$(EXPORT8_PROTECT) $(LDUMP2) -N -D -A $(DEF8CEXP) -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT8_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL8TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE8)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF8UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF8UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE8)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .IF "$(DEF8EXPORT1)"!=""
     @echo $(DEF8EXPORT1)										>>$@.tmpfile
@@ -1904,26 +1448,10 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 DEF9FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK9:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB9NAME)"!=""
 
-DEF9UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE9:=$(shell @echo %_disk)
-#BUILD_DRIVE9:=O
-
-.IF "$(BUILD_DRIVE9)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat &&
-RMHACK9:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE9)"=="O"
-.ENDIF			# "$(BUILD_DRIVE9)"=="O"
-
-.ENDIF			# "$(DEFLIB9NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF9CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF9CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF9TARGETN) : \
@@ -1932,19 +1460,6 @@ $(DEF9TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF9TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB9NAME)"!=""
-.IF "$(BUILD_DRIVE9)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE9)"=="O"
-.ENDIF				# "$(DEFLIB9NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -1957,50 +1472,22 @@ $(DEF9TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL9TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL9TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL9TARGET).exp
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"==""
-    @-$(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
-    @$(EXPORT9_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
-.IF "$(DEF9CEXP)"!=""
-    @$(EXPORT9_PROTECT) $(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT9_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
+    @-$(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
+    $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
 .ELSE			# "$(SHL9USE_EXPORTS)"==""
-    @$(EXPORT9_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL9TARGET).direct
-.IF "$(SHL9USE_EXPORTS)"!="name"
-.IF "$(DEF9CEXP)"!=""
-    @$(EXPORT9_PROTECT) $(LDUMP2) -D -A $(DEF9CEXP) -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT9_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL9USE_EXPORTS)"!="name"
-.IF "$(DEF9CEXP)"!=""
-    @$(EXPORT9_PROTECT) $(LDUMP2) -N -D -A $(DEF9CEXP) -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT9_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL9TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE9)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF9UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF9UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE9)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .IF "$(DEF9EXPORT1)"!=""
     @echo $(DEF9EXPORT1)										>>$@.tmpfile
@@ -2136,26 +1623,10 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 DEF10FILTER=$(SOLARENV)$/inc$/dummy.flt
 
 RMHACK10:=$(RM)
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB10NAME)"!=""
 
-DEF10UNIQE:=$(mktmp $(GUI))
-
-# %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE10:=$(shell @echo %_disk)
-#BUILD_DRIVE10:=O
-
-.IF "$(BUILD_DRIVE10)"=="O"
-# in case of RE build, protect against failed lock
-EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat &&
-RMHACK10:=$(RM:s/+//)
-.ELSE			# "$(BUILD_DRIVE10)"=="O"
-.ENDIF			# "$(BUILD_DRIVE10)"=="O"
-
-.ENDIF			# "$(DEFLIB10NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
+.IF "$(DEF10CEXP)"!=""
+EXPORT_ALL_SWITCH=-A $(DEF10CEXP)
+.ENDIF
 
 .IF "$(link_always)"==""
 $(DEF10TARGETN) : \
@@ -2164,19 +1635,6 @@ $(DEF10TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF10TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(DEFLIB10NAME)"!=""
-.IF "$(BUILD_DRIVE10)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(BUILD_DRIVE10)"=="O"
-.ENDIF				# "$(DEFLIB10NAME)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
-#	-attrib -r defs$/$(OUTPATH)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -2189,50 +1647,22 @@ $(DEF10TARGETN) .PHONY :
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL10TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL10TARGET).exp --export-all-symbols \
          `$(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+    @-$(RM) $(MISC)$/$(SHL10TARGET).exp
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"==""
-    @-$(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
-    @$(EXPORT10_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
-.IF "$(DEF10CEXP)"!=""
-    @$(EXPORT10_PROTECT) $(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
-.ELSE
-    @$(EXPORT10_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
-.ENDIF
-    $(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
+    @-$(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
+    $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
 .ELSE			# "$(SHL10USE_EXPORTS)"==""
-    @$(EXPORT10_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL10TARGET).direct
-.IF "$(SHL10USE_EXPORTS)"!="name"
-.IF "$(DEF10CEXP)"!=""
-    @$(EXPORT10_PROTECT) $(LDUMP2) -D -A $(DEF10CEXP) -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT10_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
-.ENDIF
-.ELSE			# "$(SHL10USE_EXPORTS)"!="name"
-.IF "$(DEF10CEXP)"!=""
-    @$(EXPORT10_PROTECT) $(LDUMP2) -N -D -A $(DEF10CEXP) -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
-.ELSE
-    @$(EXPORT10_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
-.ENDIF
-.ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL10TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
 .ENDIF
-# now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(MWS_BUILD)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_DRIVE10)"=="O"
-#
-# don't forget to have the right DEFSTAG set!
-#
-    $(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) commit
-    $(4nt_force_shell)$(TMP)$/$(DEF10UNIQE:b).bat && $(RM:s/+//) $(TMP)$/$(DEF10UNIQE:b).bat
-.ENDIF			# "$(BUILD_DRIVE10)"=="O"
-.ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .IF "$(DEF10EXPORT1)"!=""
     @echo $(DEF10EXPORT1)										>>$@.tmpfile
