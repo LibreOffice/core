@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:29:06 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,8 @@
 #ifndef _UCBHELPER_RESULTSETMETADATA_HXX
 #include <ucbhelper/resultsetmetadata.hxx>
 #endif
-#ifndef _RESULTSETBASE_HXX
-#include <provider/resultsetbase.hxx>
-#endif
+
+#include "resultsetbase.hxx"
 
 using namespace chelp;
 using namespace com::sun::star;
