@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:24:12 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1573,6 +1573,8 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
 static Sequence< OUString > GetLangSvc( const Any &rVal )
 {
     Sequence< OUString > aRes;
+    if (!rVal.hasValue())
+        return aRes;
 
     // allowing for a sequence here as well (even though it should only
     // be a string) makes coding easier in other places since one needs
