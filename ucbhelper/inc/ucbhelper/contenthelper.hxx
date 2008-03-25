@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contenthelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:48:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,8 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the property meta data.
       */
-    UCBHELPER_DLLPRIVATE virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
+    UCBHELPER_DLLPRIVATE
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
     getProperties( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
@@ -180,7 +181,8 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the command meta data.
       */
-    UCBHELPER_DLLPRIVATE virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
+    UCBHELPER_DLLPRIVATE
+    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
@@ -312,7 +314,8 @@ protected:
       * @return the implementation of the service
       *         com.sun.star.ucb.PersistentPropertySet.
       */
-    com::sun::star::uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+    com::sun::star::uno::Reference<
+        com::sun::star::ucb::XPersistentPropertySet >
     getAdditionalPropertySet( sal_Bool bCreate );
 
     /**
@@ -365,20 +368,13 @@ public:
       * @param rxSMgr is a Service Manager.
       * @param rxProvider is the provider for the content.
       * @param Identifier is the content identifier for the content.
-      * @param bRegisterAtProvider can be used to create a content that
-      *        will not autmatically register itself at its provider. This
-      *        can be usefull if creating a content object from inside a
-      *        XContentCreator::createNewContent method. That new content
-      *        would register at its provider after it has successfully
-      *        processed its "insert" command".
       */
     ContentImplHelper(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< ContentProviderImplHelper >& rxProvider,
             const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier,
-            sal_Bool bRegisterAtProvider = sal_True );
+                com::sun::star::ucb::XContentIdentifier >& Identifier );
 
     /**
       * Destructor.
