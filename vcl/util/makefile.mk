@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 16:47:02 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:16:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ SHL1STDLIBS+=\
             $(ICUUCLIB)			\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
 SHL1STDLIBS+=$(BASEBMPLIB)
