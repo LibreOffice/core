@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:26:48 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,12 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
+#include <com/sun/star/util/XChangesBatch.hpp>
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -65,6 +71,8 @@
 #ifndef INCLUDED_SVTOOLS_OPTIONS_HXX
 #include <svtools/options.hxx>
 #endif
+
+#include <vector>
 
 class SvtLinguConfigItem;
 
@@ -164,6 +172,18 @@ struct SVL_DLLPUBLIC SvtLinguOptions
 
 //////////////////////////////////////////////////////////////////////
 
+struct SVL_DLLPUBLIC SvtLinguConfigDictionaryEntry
+{
+    // the URL's pointing to the location of the files the dictionary consists of
+    com::sun::star::uno::Sequence< rtl::OUString >  aLocations;
+    // the name of the dictionary format implement
+    rtl::OUString                                   aFormatName;
+    // the list of languages (ISO names) the dictionary can be used for
+    com::sun::star::uno::Sequence< rtl::OUString >  aLocaleNames;
+};
+
+//////////////////////////////////////////////////////////////////////
+
 class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
 {
 
@@ -175,6 +195,14 @@ class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
     SVL_DLLPRIVATE SvtLinguConfigItem &   GetConfigItem();
 
     SvtLinguConfigItem &   GetConfigItem() const    { return const_cast< SvtLinguConfig * >( this )->GetConfigItem(); }
+
+    // configuration update access for the 'Linguistic/ServiceManager' node
+    mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xUpdateAccess;
+
+    com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetUpdateAccess() const;
+
+    com::sun::star::uno::Sequence< rtl::OUString > GetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName ) const;
+    void SetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName, const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
 
 public:
     SvtLinguConfig();
@@ -210,6 +238,24 @@ public:
 
     BOOL    IsReadOnly( const rtl::OUString &rPropertyName ) const;
     BOOL    IsReadOnly( INT32 nPropertyHandle ) const;
+
+    //!
+    //! the following functions work on the 'ServiceManager' sub node of the
+    //! linguistic configuration only
+    //!
+    BOOL GetElementNamesFor( const rtl::OUString &rNodeName, com::sun::star::uno::Sequence< rtl::OUString > &rElementNames ) const;
+    //
+    BOOL GetSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, com::sun::star::uno::Sequence< rtl::OUString > &rFormatList ) const;
+    void SetOrCreateSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, const com::sun::star::uno::Sequence< rtl::OUString > &rFormatList  ) const;
+    //
+    BOOL GetDictionaryEntry( const rtl::OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
+    void SetOrCreateDictionaryEntry( const rtl::OUString &rNodeName, const SvtLinguConfigDictionaryEntry &rDicEntry ) const;
+    //
+    com::sun::star::uno::Sequence< rtl::OUString > GetDisabledDictionaries() const;
+    void SetDisabledDictionaries( const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
+    //
+    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
+
 };
 
 //////////////////////////////////////////////////////////////////////
