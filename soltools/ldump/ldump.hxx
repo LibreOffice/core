@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:30:54 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 14:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ class LibDump
     bool            bBase;              // Existenz der DatenBasis;
     bool            bAll;               // Alle Fkts exportieren
     bool            bDef;               // DefFile schreiben ( bei -E )
+    int             bExportName;        // 0 - export by ordinal; 1 - export by name
 
     bool            CheckDataBase();
     bool            CheckLibrary(char * cName);
@@ -70,7 +71,7 @@ class LibDump
     bool            ReadFilter(char *);
     bool            PrintSym(char *, bool bName = true );
 public:
-                    LibDump( char *cFileName );
+                    LibDump( char *cFileName, int bExportByName );
                     ~LibDump();
     bool            Dump();
     bool            SetFilter(char *cFilterName);
