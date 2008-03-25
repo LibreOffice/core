@@ -56,9 +56,11 @@ APP1PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP1LIBS)"!=""
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP1LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
@@ -260,9 +262,11 @@ APP2PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP2LIBS)"!=""
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP2LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
@@ -464,9 +468,11 @@ APP3PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP3LIBS)"!=""
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP3LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
@@ -668,9 +674,11 @@ APP4PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP4LIBS)"!=""
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP4LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
@@ -872,9 +880,11 @@ APP5PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP5LIBS)"!=""
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP5LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
@@ -1076,9 +1086,11 @@ APP6PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP6LIBS)"!=""
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP6LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
@@ -1280,9 +1292,11 @@ APP7PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP7LIBS)"!=""
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP7LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
@@ -1484,9 +1498,11 @@ APP8PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP8LIBS)"!=""
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP8LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
@@ -1688,9 +1704,11 @@ APP9PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP9LIBS)"!=""
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP9LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
@@ -1892,9 +1910,11 @@ APP10PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
+.IF "$(APP10LIBS)"!=""
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF          #"$(APP10LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls
