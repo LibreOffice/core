@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:28:24 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 15:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,30 +90,14 @@
 #ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 #include <ucbhelper/cancelcommandexecution.hxx>
 #endif
-#ifndef _CONTENT_HXX
-#include <provider/content.hxx>
-#endif
-#ifndef _PROVIDER_HXX
-#include <provider/provider.hxx>
-#endif
-#ifndef _RESULTSET_HXX
-#include <provider/resultset.hxx>
-#endif
-#ifndef _DATABASES_HXX_
-#include <provider/databases.hxx>
-#endif
-#ifndef _RESULTSETFACTORY_HXX
-#include <provider/resultsetfactory.hxx>
-#endif
-#ifndef _RESULTSETBASE_HXX
-#include <provider/resultsetbase.hxx>
-#endif
-#ifndef _RESULTSETFORROOT_HXX
-#include <provider/resultsetforroot.hxx>
-#endif
-#ifndef _RESULTSETFORQUERY_HXX
-#include <provider/resultsetforquery.hxx>
-#endif
+#include "content.hxx"
+#include "provider.hxx"
+#include "resultset.hxx"
+#include "databases.hxx"
+#include "resultsetfactory.hxx"
+#include "resultsetbase.hxx"
+#include "resultsetforroot.hxx"
+#include "resultsetforquery.hxx"
 
 using namespace com::sun::star;
 using namespace chelp;
