@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:08:08 $
+#   last change: $Author: obo $ $Date: 2008-03-25 16:50:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ PRJNAME	= lingucomponent
 TARGET	= ulingu
 LIBTARGET=NO
 
+ENABLE_EXCEPTIONS=TRUE
+
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -49,7 +51,8 @@ LIBTARGET=NO
 .ENDIF
 
 SLOFILES=	\
-        $(SLO)$/dictmgr.obj
+        $(SLO)$/dictmgr.obj \
+        $(SLO)$/lingutil.obj
 
 
 LIB1TARGET= $(SLB)$/lib$(TARGET).lib
