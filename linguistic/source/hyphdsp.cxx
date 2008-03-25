@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:22:40 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -688,7 +688,6 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
     INT16 nLanguage = LocaleToLanguage( rLocale );
 
     INT32 nLen = rSvcImplNames.getLength();
-    DBG_ASSERT( nLen <= 1, "unexpected size of sequence" );
 
     if (0 == nLen)
         // remove entry
@@ -697,6 +696,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
     {
         // modify/add entry
         LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
+        // only one hypenator can be in use for a language...
         const OUString &rSvcImplName = rSvcImplNames.getConstArray()[0];
         if (pEntry)
         {
