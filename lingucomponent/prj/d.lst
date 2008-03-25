@@ -37,3 +37,12 @@
 ..\%__SRC%\lib\libguesslang*.so %_DEST%\lib%_EXT%\libguesslang*.so
 
 ..\%__SRC%\lib\libMacOSXSpell*.dylib %_DEST%\lib%_EXT%\libMacOSXSpell*.dylib
+
+
+mkdir: %_DEST%\xml%_EXT%\registry
+mkdir: %_DEST%\xml%_EXT%\registry\data
+mkdir: %_DEST%\xml%_EXT%\registry\data\org
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
+..\config\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\*.xcu
+
