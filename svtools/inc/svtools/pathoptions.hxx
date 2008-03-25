@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:59:17 $
+ *  last change: $Author: obo $ $Date: 2008-03-25 16:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@ public:
         PATH_TEMP,
         PATH_TEMPLATE,
         PATH_USERCONFIG,
-        PATH_USERDICTIONARY,
         PATH_WORK,
         PATH_UICONFIG,
         PATH_FINGERPRINT,
@@ -115,7 +114,6 @@ public:
     const String&   GetTempPath() const;
     const String&   GetTemplatePath() const;
     const String&   GetUserConfigPath() const;
-    const String&   GetUserDictionaryPath() const;
     const String&   GetWorkPath() const;
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
@@ -145,7 +143,6 @@ public:
     void            SetTempPath( const String& rPath );
     void            SetTemplatePath( const String& rPath );
     void            SetUserConfigPath( const String& rPath );
-    void            SetUserDictionaryPath( const String& rPath );
     void            SetWorkPath( const String& rPath );
     void            SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath );
 
