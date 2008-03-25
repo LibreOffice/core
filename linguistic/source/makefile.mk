@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-26 09:50:23 $
+#   last change: $Author: obo $ $Date: 2008-03-25 16:28:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ SLOFILES = \
         $(SLO)$/lngreg.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
+        $(SLO)$/misc2.obj\
         $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
