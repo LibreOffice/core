@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 18:15:50 $
+#   last change: $Author: obo $ $Date: 2008-03-25 14:17:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ SHL1STDLIBS+= \
 .ENDIF
 
 SHL1IMPLIB=i$(TARGET)
-SHL1USE_EXPORTS=ordinal
+SHL1USE_EXPORTS=name
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
