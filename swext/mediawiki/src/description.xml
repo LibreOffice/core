@@ -3,7 +3,7 @@
     <version value="0.9.4"/>
     <identifier value="com.sun.sun-mediawiki"/>
     <display-name>
-        <name lang="en-US">MediaWiki Extension</name>
+        <name lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</name>
     </display-name>
     <registration>
         <simple-license accept-by="user" default-license-id="lic-en-US">

@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-28 11:35:40 $
+ *  last change: $Author: mav $ $Date: 2008-03-26 16:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,15 +100,29 @@
         </jar>
     </target>
 
-    <target name="uno-package" depends="jar, init">
-        <delete file="${dist}/${name}.${ext}"/>
-        <zip  destfile="${dist}/${name}.${ext}">
+    <target name="tmpdir" depends="jar, init">
+        <copy todir="${out}/misc/${target}/package_tmp" overwrite="true">
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}" includes="**/*.xhp" casesensitive="yes"/>
+            <filterset>
+                <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
+            </filterset>
+        </copy>
+        <copy todir="${out}/misc/${target}/package_tmp/help" overwrite="true">
+            <fileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes"/>
+            <filterset>
+                <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <target name="uno-package" depends="tmpdir, jar, init">
+        <delete file="${dist}/${name}.${ext}"/>
+        <zip  destfile="${dist}/${name}.${ext}">
+            <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
             <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
             <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <file file="${commons-codec-jar}"/>
@@ -121,13 +135,33 @@
         </zip>
     </target>
 
-    <target depends="init, jar, uno-package" description="Build everything." name="all">
+    <target name="development-package" depends="jar, init">
+        <delete file="${dist}/${name}_develop.zip"/>
+        <zip  destfile="${dist}/${name}_develop.zip">
+            <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
+            <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
+        </zip>
+    </target>
+
+    <target depends="init, jar, uno-package, development-package" description="Build everything." name="all">
         <echo message="${name} built."/>
     </target>
 
     <target depends="init" description="Clean all build products." name="clean">
-        <delete dir="${classes}"/>
-        <delete dir="${dist}"/>
+        <delete dir="${classes}/com/sun/star/wiki"/>
+        <delete dir="${out}/misc/${target}"/>
+        <delete dir="${dist}/${target}.jar"/>
+        <delete dir="${dist}/${target}.${ext}"/>
+        <delete dir="${dist}/${target}_develop.zip"/>
     </target>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
