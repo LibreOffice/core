@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:07:54 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,6 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 OUString aText;
                 *pValues >>= aText;
                 pDocSh->SetText(aText);
-                pDocSh->SetVisArea( Rectangle( Point(0, 0), pDocSh->GetSize() ) );
             }
             break;
             case HANDLE_FONT_NAME_VARIABLES                :
@@ -705,6 +704,10 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
     }
 
     pDocSh->SetFormat( aFormat );
+
+    // #i67283# since about all of the above changes are likely to change
+    // the formula size we have to recalculate the vis-area now
+    pDocSh->SetVisArea( Rectangle( Point(0, 0), pDocSh->GetSize() ) );
 }
 
 void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
