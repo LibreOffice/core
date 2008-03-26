@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:56:17 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:06:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,10 +228,17 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 while (i < nLen  &&  aMeanings.getLength() == 0)
                 {
                     // create specific service via it's implementation name
-                    Reference< XThesaurus > xThes(
-                            xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ),
-                            UNO_QUERY );
+                    Reference< XThesaurus > xThes;
+                    try
+                    {
+                        xThes = Reference< XThesaurus >(
+                                xMgr->createInstanceWithArguments(
+                                pImplNames[i], aArgs ), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstanceWithArguments failed" );
+                    }
                     pRef[i] = xThes;
 
                     if (xThes.is()  &&  xThes->hasLocale( rLocale ))
