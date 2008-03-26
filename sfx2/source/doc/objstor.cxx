@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:55:28 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 10:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1288,7 +1288,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         bStoreToSameLocation = sal_True;
 
-        if ( bCopyTo )
+        if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
             // export to the same location is vorbidden
             SetError( ERRCODE_IO_CANTWRITE );
