@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:27:21 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:05:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,10 +393,17 @@ Reference< XHyphenatedWord > SAL_CALL
                     //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
-                    Reference< XHyphenator > xHyph(
-                            xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplName, aArgs ),
-                            UNO_QUERY );
+                    Reference< XHyphenator > xHyph;
+                    try
+                    {
+                        xHyph = Reference< XHyphenator >(
+                                xMgr->createInstanceWithArguments(
+                                pEntry->aSvcImplName, aArgs ), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstanceWithArguments failed" );
+                    }
                     rHyph = xHyph;
 
                     Reference< XLinguServiceEventBroadcaster >
@@ -520,10 +527,17 @@ Reference< XHyphenatedWord > SAL_CALL
                     //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
-                    Reference< XHyphenator > xHyph(
-                            xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplName, aArgs ),
-                            UNO_QUERY );
+                    Reference< XHyphenator > xHyph;
+                    try
+                    {
+                        xHyph = Reference< XHyphenator >(
+                                xMgr->createInstanceWithArguments(
+                                pEntry->aSvcImplName, aArgs ), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstanceWithArguments failed" );
+                    }
                     rHyph = xHyph;
 
                     Reference< XLinguServiceEventBroadcaster >
@@ -642,10 +656,17 @@ Reference< XPossibleHyphens > SAL_CALL
                     //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
-                    Reference< XHyphenator > xHyph(
-                            xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplName, aArgs ),
-                            UNO_QUERY );
+                    Reference< XHyphenator > xHyph;
+                    try
+                    {
+                        xHyph = Reference< XHyphenator >(
+                                xMgr->createInstanceWithArguments(
+                                pEntry->aSvcImplName, aArgs ), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createWithArguments failed" );
+                    }
                     rHyph = xHyph;
 
                     Reference< XLinguServiceEventBroadcaster >
