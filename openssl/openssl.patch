@@ -1,152 +1,116 @@
-*** misc/openssl-0.9.8g/ms/do_ms.bat	Tue May 17 02:07:13 2005
---- misc/build/openssl-0.9.8g/ms/do_ms.bat	Fri Nov 30 16:18:49 2007
-***************
-*** 1,9 ****
-! 
-! perl util\mkfiles.pl >MINFO
-! perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
-! perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
-! perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
-! perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
-! 
-! perl util\mkdef.pl 32 libeay > ms\libeay32.def
-! perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
---- 1,8 ----
-! %1 util\mkfiles.pl >MINFO
-! %1 util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
-! %1 util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
-! %1 util\mk1mf.pl no-asm VC-CE >ms\ce.mak
-! %1 util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
-! 
-! %1 util\mkdef.pl 32 libeay > ms\libeay32.def
-! %1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
-*** misc/openssl-0.9.8g/util/mk1mf.pl	Thu Nov 30 14:04:43 2006
---- misc/build/openssl-0.9.8g/util/mk1mf.pl	Fri Nov 30 16:19:19 2007
-***************
-*** 115,121 ****
-  $inc_def="outinc";
-  $tmp_def="tmp";
-  
-! $perl="perl" unless defined $perl;
-  $mkdir="-mkdir" unless defined $mkdir;
-  
-  ($ssl,$crypto)=("ssl","crypto");
---- 115,121 ----
-  $inc_def="outinc";
-  $tmp_def="tmp";
-  
-! $perl="$ENV{PERL}" unless defined $perl;
-  $mkdir="-mkdir" unless defined $mkdir;
-  
-  ($ssl,$crypto)=("ssl","crypto");
-***************
-*** 566,572 ****
-  printf OUT <<EOF;
-  #ifdef $platform_cpp_symbol
-    /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
-!   #define CFLAGS "$cc $cflags"
-    #define PLATFORM "$platform"
-  EOF
-  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
---- 566,572 ----
-  printf OUT <<EOF;
-  #ifdef $platform_cpp_symbol
-    /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
-!   #define CFLAGS "$cflags"
-    #define PLATFORM "$platform"
-  EOF
-  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
-*** misc/openssl-0.9.8g/util/pl/VC-32.pl	Sun Jan 15 14:46:20 2006
---- misc/build/openssl-0.9.8g/util/pl/VC-32.pl	Fri Nov 30 16:18:49 2007
-***************
-*** 14,20 ****
-  $zlib_lib="zlib1.lib";
-  
-  # C compiler stuff
-! $cc='cl';
-  if ($FLAVOR =~ /WIN64/)
-      {
-      # Note that we currently don't have /WX on Win64! There is a lot of
---- 14,20 ----
-  $zlib_lib="zlib1.lib";
-  
-  # C compiler stuff
-! $cc=$ENV{'CC'};
-  if ($FLAVOR =~ /WIN64/)
-      {
-      # Note that we currently don't have /WX on Win64! There is a lot of
-***************
-*** 83,101 ****
-      }
-  
-      $cc='$(CC)';
-!     $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
-      $base_cflags.=" $wcecdefs";
-!     $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
-!     $dbg_clfags=' /MC /Od -DDEBUG -D_DEBUG';
-      $lflags="/nologo /opt:ref $wcelflag";
-      }
-  else	# Win32
-      {
-!     $base_cflags=' /W3 /WX /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-      $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
-      $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
-!     $opt_cflags=' /MD /Ox /O2 /Ob2';
-!     $dbg_cflags=' /MDd /Od -DDEBUG -D_DEBUG';
-      $lflags="/nologo /subsystem:console /opt:ref";
-      }
-  $mlflags='';
---- 83,101 ----
-      }
-  
-      $cc='$(CC)';
-!     $base_cflags=' -W3 -WX -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
-      $base_cflags.=" $wcecdefs";
-!     $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
-!     $dbg_clfags=' -MC -Od -DDEBUG -D_DEBUG';
-      $lflags="/nologo /opt:ref $wcelflag";
-      }
-  else	# Win32
-      {
-!     $base_cflags=' -W3 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-      $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
-      $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
-!     $opt_cflags=' -MD -Ox -O2 -Ob2';
-!     $dbg_cflags=' -MDd -Od -DDEBUG -D_DEBUG';
-      $lflags="/nologo /subsystem:console /opt:ref";
-      }
-  $mlflags='';
-***************
-*** 116,122 ****
-  	}
-  
-  $obj='.obj';
-! $ofile="/Fo";
-  
-  # EXE linking stuff
-  $link="link";
---- 116,122 ----
-  	}
-  
-  $obj='.obj';
-! $ofile="-Fo.\\";
-  
-  # EXE linking stuff
-  $link="link";
-***************
-*** 234,240 ****
-  	$tmp_def='tmp32dll_$(TARGETCPU)';
-  	}
-  
-! $cflags.=" /Fd$out_def";
-  
-  sub do_lib_rule
-  	{
---- 234,240 ----
-  	$tmp_def='tmp32dll_$(TARGETCPU)';
-  	}
-  
-! $cflags.=" -Fd$out_def";
-  
-  sub do_lib_rule
-  	{
+--- misc/openssl-0.9.8g/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
++++ misc/build/openssl-0.9.8g/crypto/x509v3/v3_pci.c	2008-03-20 13:30:16.000000000 +0100
+@@ -2,7 +2,7 @@
+ /* Contributed to the OpenSSL Project 2004
+  * by Richard Levitte (richard@levitte.org)
+  */
+-/* Copyright (c) 2004 Kungliga Tekniska Högskolan
++/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
+  * (Royal Institute of Technology, Stockholm, Sweden).
+  * All rights reserved.
+  *
+--- misc/openssl-0.9.8g/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
++++ misc/build/openssl-0.9.8g/crypto/x509v3/v3_pcia.c	2008-03-20 13:30:47.000000000 +0100
+@@ -2,7 +2,7 @@
+ /* Contributed to the OpenSSL Project 2004
+  * by Richard Levitte (richard@levitte.org)
+  */
+-/* Copyright (c) 2004 Kungliga Tekniska Högskolan
++/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
+  * (Royal Institute of Technology, Stockholm, Sweden).
+  * All rights reserved.
+  *
+--- misc/openssl-0.9.8g/ms/do_ms.bat	2005-05-17 02:07:13.000000000 +0200
++++ misc/build/openssl-0.9.8g/ms/do_ms.bat	2008-03-20 13:27:06.000000000 +0100
+@@ -1,9 +1,8 @@
++%1 util\mkfiles.pl >MINFO
++%1 util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
++%1 util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
++%1 util\mk1mf.pl no-asm VC-CE >ms\ce.mak
++%1 util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
+ 
+-perl util\mkfiles.pl >MINFO
+-perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
+-perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
+-perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
+-perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
+-
+-perl util\mkdef.pl 32 libeay > ms\libeay32.def
+-perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
++%1 util\mkdef.pl 32 libeay > ms\libeay32.def
++%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
+--- misc/openssl-0.9.8g/util/mk1mf.pl	2007-08-13 00:31:14.000000000 +0200
++++ misc/build/openssl-0.9.8g/util/mk1mf.pl	2008-03-20 13:27:06.000000000 +0100
+@@ -115,7 +115,7 @@
+ $inc_def="outinc";
+ $tmp_def="tmp";
+ 
+-$perl="perl" unless defined $perl;
++$perl="$ENV{PERL}" unless defined $perl;
+ $mkdir="-mkdir" unless defined $mkdir;
+ 
+ ($ssl,$crypto)=("ssl","crypto");
+@@ -570,7 +570,7 @@
+ printf OUT <<EOF;
+ #ifdef $platform_cpp_symbol
+   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
+-  #define CFLAGS "$cc $cflags"
++  #define CFLAGS "$cflags"
+   #define PLATFORM "$platform"
+ EOF
+ printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
+--- misc/openssl-0.9.8g/util/pl/VC-32.pl	2007-07-19 19:39:07.000000000 +0200
++++ misc/build/openssl-0.9.8g/util/pl/VC-32.pl	2008-03-20 13:27:06.000000000 +0100
+@@ -14,7 +14,7 @@
+ $zlib_lib="zlib1.lib";
+ 
+ # C compiler stuff
+-$cc='cl';
++$cc=$ENV{'CC'};
+ if ($FLAVOR =~ /WIN64/)
+     {
+     # Note that we currently don't have /WX on Win64! There is a lot of
+@@ -83,19 +83,19 @@
+     }
+ 
+     $cc='$(CC)';
+-    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
++    $base_cflags=' -W3 -WX -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
+     $base_cflags.=" $wcecdefs";
+-    $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
+-    $dbg_clfags=' /MC /Od -DDEBUG -D_DEBUG';
++    $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
++    $dbg_clfags=' -MC -Od -DDEBUG -D_DEBUG';
+     $lflags="/nologo /opt:ref $wcelflag";
+     }
+ else	# Win32
+     {
+-    $base_cflags=' /W3 /WX /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
++    $base_cflags=' -W3 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
+     $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
+     $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
+-    $opt_cflags=' /MD /Ox /O2 /Ob2';
+-    $dbg_cflags=' /MDd /Od -DDEBUG -D_DEBUG';
++    $opt_cflags=' -MD -Ox -O2 -Ob2';
++    $dbg_cflags=' -MDd -Od -DDEBUG -D_DEBUG';
+     $lflags="/nologo /subsystem:console /opt:ref";
+     }
+ $mlflags='';
+@@ -116,7 +116,7 @@
+ 	}
+ 
+ $obj='.obj';
+-$ofile="/Fo";
++$ofile="-Fo.\\";
+ 
+ # EXE linking stuff
+ $link="link";
+@@ -240,7 +240,7 @@
+ 	$tmp_def='tmp32dll_$(TARGETCPU)';
+ 	}
+ 
+-$cflags.=" /Fd$out_def";
++$cflags.=" -Fd$out_def";
+ 
+ sub do_lib_rule
+ 	{
