@@ -5,9 +5,9 @@
  *
  *  $RCSfile: guesslang.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 10:54:35 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@ namespace css = ::com::sun::star;
 
 //==================================================================================================
 
+#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
 
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
@@ -86,13 +88,13 @@ namespace css = ::com::sun::star;
 static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
 {
     Sequence<OUString> names(1);
-    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    names[0] = A2OU( SERVICENAME );
     return names;
 }
 
 static OUString getImplementationName_LangGuess_Impl()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return A2OU( IMPLNAME );
 }
 
 static osl::Mutex &  GetLangGuessMutex()
@@ -211,8 +213,8 @@ Sequence< com::sun::star::lang::Locale > SAL_CALL LangGuess_Impl::guessLanguages
     for(int i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
 
-        current_aRes.Language   = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].getLanguage().c_str()));
-        current_aRes.Country    = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].getCountry().c_str()));
+        current_aRes.Language   = A2OU( gs[i].getLanguage().c_str() );
+        current_aRes.Country    = A2OU( gs[i].getCountry().c_str() );
 
         pRes[i] = current_aRes;
     }
@@ -275,8 +277,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetLanguage().c_str()));
-        current_aRes.Country    = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetCountry().c_str()));
+        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -297,8 +299,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetLanguage().c_str()));
-        current_aRes.Country    = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetCountry().c_str()));
+        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -319,8 +321,8 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 
     for(size_t i = 0; i < gs.size() ; i++ ){
         com::sun::star::lang::Locale current_aRes;
-        current_aRes.Language   = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetLanguage().c_str()));
-        current_aRes.Country    = OUString(RTL_CONSTASCII_USTRINGPARAM(gs[i].GetCountry().c_str()));
+        current_aRes.Language   = A2OU( gs[i].GetLanguage().c_str() );
+        current_aRes.Country    = A2OU( gs[i].GetCountry().c_str() );
         pRes[i] = current_aRes;
     }
 
@@ -380,7 +382,7 @@ OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return A2OU( IMPLNAME );
 }
 
 //*************************************************************************
@@ -407,7 +409,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( A2OU( SERVICENAME ) );
     return Sequence< OUString >( &aName, 1 );
 }
 
