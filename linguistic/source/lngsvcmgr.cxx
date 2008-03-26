@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:28:25 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,19 @@ static Sequence< Locale > GetAvailLocales(
         const OUString *pImplNames = rSvcImplNames.getConstArray();
         INT32 i;
 
-        for ( i = 0;  i < nNames;  ++i)
+        for (i = 0;  i < nNames;  ++i)
         {
-            Reference< XSupportedLocales > xSuppLoc(
-                    xFac->createInstanceWithArguments( pImplNames[i], aArgs ),
-                    UNO_QUERY );
+            Reference< XSupportedLocales > xSuppLoc;
+            try
+            {
+                xSuppLoc = Reference< XSupportedLocales >(
+                        xFac->createInstanceWithArguments( pImplNames[i], aArgs ), UNO_QUERY );
+            }
+            catch (uno::Exception &)
+            {
+                DBG_ERROR( "createInstanceWithArguments failed" );
+            }
+
             if (xSuppLoc.is())
             {
                 Sequence< Locale > aLoc( xSuppLoc->getLocales() );
@@ -876,11 +884,20 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     Any aCurrent = xEnum->nextElement();
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ))
+                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
+                        !xFactory.is())
                         continue;
 
-                    Reference< XSpellChecker > xSvc( xFactory->createInstance(),
-                                                     UNO_QUERY );
+                    Reference< XSpellChecker > xSvc;
+                    try
+                    {
+                        xSvc = Reference< XSpellChecker >( xFactory->createInstance(), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstance failed" );
+                    }
+
                     if (xSvc.is())
                     {
                         OUString            aImplName;
@@ -929,11 +946,20 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     Any aCurrent = xEnum->nextElement();
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ))
+                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
+                        !xFactory.is())
                         continue;
 
-                    Reference< XHyphenator > xSvc( xFactory->createInstance(),
-                                                   UNO_QUERY );
+                    Reference< XHyphenator > xSvc;
+                    try
+                    {
+                        xSvc = Reference< XHyphenator >( xFactory->createInstance(), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstance failed" );
+                    }
+
                     if (xSvc.is())
                     {
                         OUString            aImplName;
@@ -982,11 +1008,20 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     Any aCurrent = xEnum->nextElement();
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ))
+                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
+                        !xFactory.is())
                         continue;
 
-                    Reference< XThesaurus > xSvc( xFactory->createInstance(),
-                                                  UNO_QUERY );
+                    Reference< XThesaurus > xSvc;
+                    try
+                    {
+                        xSvc = Reference< XThesaurus >( xFactory->createInstance(), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstance failed" );
+                    }
+
                     if (xSvc.is())
                     {
                         OUString            aImplName;
