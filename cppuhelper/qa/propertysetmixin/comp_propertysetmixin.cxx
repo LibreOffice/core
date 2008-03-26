@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $rcsfile: test_uriproc.cxx,v $
+ *  $RCSfile: comp_propertysetmixin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:38:31 $
+ *  last change: $Author: rt $ $Date: 2008-03-26 11:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
