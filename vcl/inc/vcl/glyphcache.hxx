@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:55:02 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,10 @@ public:
     virtual const ::rtl::OString*   GetFontFileName() const { return NULL; }
     virtual int                 GetFontFaceNumber() const   { return 0; }
     virtual bool                TestFont() const            { return true; }
+    virtual void*               GetFtFace() const { return 0; }
+    virtual int                 GetLoadFlags() const { return 0; }
+    virtual bool                NeedsArtificialBold() const { return false; }
+    virtual bool                NeedsArtificialItalic() const { return false; }
 
     const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
 
