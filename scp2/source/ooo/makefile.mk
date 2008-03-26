@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-19 10:25:09 $
+#   last change: $Author: obo $ $Date: 2008-03-26 12:40:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -221,12 +221,6 @@ SCPDEFS+=-DENABLE_VBA
 
 .IF "$(DISABLE_ATL)"!=""
 SCPDEFS+=-DDISABLE_ATL
-.ENDIF
-
-# ADO can't be build with Windows Vista SDK and 2005 Express Edition
-# due to missing header, 2005 Professional Edition contains these header
-.IF "$(PROF_EDITION)"=="" && "$(WINDOWS_VISTA_PSDK)"!=""
-SCPDEFS+=-DDISABLE_ADO
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
