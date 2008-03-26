@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:57:36 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:04:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,12 +1050,11 @@ sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceN
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( 5 );
+    Sequence< OUString > aSeq( 4 );
     aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
-    aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.Settings") );
-    aSeq[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DocumentSettings") );
-    aSeq[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintSettings") );
-    aSeq[4] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintPreviewSettings") );
+    aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DocumentSettings") );
+    aSeq[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintSettings") );
+    aSeq[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintPreviewSettings") );
     return aSeq;
 }
 
