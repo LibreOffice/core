@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:44:25 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3143,12 +3143,12 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
 
             SmNode *pScriptNode = aReverseStack.Pop();
 
-            if ((pScriptNode->GetToken().eType != TIDENT) ||
-                (pScriptNode->GetToken().aText.Len()))
+            if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
+                (pScriptNode->GetToken().aText.Len())))
                 aSubNodes.Put(RSUB+1,pScriptNode);
             pScriptNode = aReverseStack.Pop();
-            if ((pScriptNode->GetToken().eType != TIDENT) ||
-                (pScriptNode->GetToken().aText.Len()))
+            if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
+                (pScriptNode->GetToken().aText.Len())))
                 aSubNodes.Put(RSUP+1,pScriptNode);
 
             pNode->SetSubNodes(aSubNodes);
