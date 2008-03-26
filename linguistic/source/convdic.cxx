@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:28:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,15 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     aParserInput.aInputStream = xIn;
 
     // get parser
-    uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance(
+    uno::Reference< xml::sax::XParser > xParser;
+    try
+    {
+        xParser = uno::Reference< xml::sax::XParser >( xServiceFactory->createInstance(
             A2OU( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
+    }
+    catch (uno::Exception &)
+    {
+    }
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if (!xParser.is())
         return;
@@ -350,9 +357,15 @@ void ConvDic::Save()
     uno::Reference< io::XActiveDataSource > xSaxWriter;
     if (xServiceFactory.is())
     {
-        xSaxWriter = uno::Reference< io::XActiveDataSource >(
-                xServiceFactory->createInstance(
-                OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
+        try
+        {
+            xSaxWriter = uno::Reference< io::XActiveDataSource >(
+                    xServiceFactory->createInstance(
+                    OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
+        }
+        catch (uno::Exception &)
+        {
+        }
     }
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 
