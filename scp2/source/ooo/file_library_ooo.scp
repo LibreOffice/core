@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.282 $
+ *  $Revision: 1.283 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 13:29:04 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 12:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ End
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Adabas, adabas)
 #endif
 
-#if defined(WNT) && !defined(DISABLE_ADO)
+#if defined(WNT)
 
 File gid_File_Lib_Ado_2
     TXT_FILE_BODY;
