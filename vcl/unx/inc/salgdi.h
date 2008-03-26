@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:55:17 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ class   SalFontCacheItem;
 #include "vcl/salgtype.hxx"
 #include "tools/fract.hxx"
 #include "vcl/dllapi.h"
+#include <deque>
 #include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,6 +67,19 @@ class   ServerFontLayout;
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+class CairoFontsCache
+{
+private:
+    static int mnRefCount;
+    typedef std::deque< std::pair<void *, void*> > LRUFonts;
+    static LRUFonts maLRUFonts;
+public:
+    CairoFontsCache();
+    static void  CacheFont(void *pFont, void *pId);
+    static void* FindCachedFont(void *pId);
+    ~CairoFontsCache();
+};
+
 class VCL_DLLPUBLIC X11SalGraphics : public SalGraphics
 {
     friend class            X11FontLayout;
@@ -79,6 +93,7 @@ protected:
     Drawable        hDrawable_;     // use
     int             m_nScreen;
     void*           pRenderFormat_;
+    CairoFontsCache m_aCairoFontsCache;
 
     XLIB_Region     pPaintRegion_;
     XLIB_Region     pClipRegion_;
@@ -186,6 +201,7 @@ protected:
     void                    DrawServerSimpleFontString( const ServerFontLayout& );
     void                    DrawServerAAFontString( const ServerFontLayout& );
     bool                    DrawServerAAForcedString( const ServerFontLayout& );
+    void                    DrawCairoAAFontString( const ServerFontLayout& );
 
     void freeResources();
 public:
