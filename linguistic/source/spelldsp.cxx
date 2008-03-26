@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 10:57:53 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,10 +493,17 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                 while (i < nLen  &&  (!bTmpResValid  ||  FALSE == bTmpRes))
                 {
                     // create specific service via it's implementation name
-                    Reference< XSpellChecker > xSpell(
-                            xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ),
-                            UNO_QUERY );
+                    Reference< XSpellChecker > xSpell;
+                    try
+                    {
+                        xSpell = Reference< XSpellChecker >(
+                                xMgr->createInstanceWithArguments(
+                                pImplNames[i], aArgs ),  UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstanceWithArguments failed" );
+                    }
                     Reference< XSpellChecker1 > xSpell1( xSpell, UNO_QUERY );
                     pRef [i] = xSpell;
                     pRef1[i] = xSpell1;
@@ -748,10 +755,17 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
                 {
                     // create specific service via it's implementation name
-                    Reference< XSpellChecker > xSpell(
-                            xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ),
-                            UNO_QUERY );
+                    Reference< XSpellChecker > xSpell;
+                    try
+                    {
+                        xSpell = Reference< XSpellChecker >(
+                                xMgr->createInstanceWithArguments(
+                                pImplNames[i], aArgs ), UNO_QUERY );
+                    }
+                    catch (uno::Exception &)
+                    {
+                        DBG_ERROR( "createInstanceWithArguments failed" );
+                    }
                     Reference< XSpellChecker1 > xSpell1( xSpell, UNO_QUERY );
                     pRef [i] = xSpell;
                     pRef1[i] = xSpell1;
