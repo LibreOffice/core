@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 15:58:58 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1641,7 +1641,9 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
         while (aIt != rSet.end())
         {
-            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+//            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
+            uno::Reference< util::XModifiable > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
             {
                 // mark the sequence as 'dirty' and notify listeners
@@ -1674,7 +1676,9 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
             sal_Bool bNowEmpty = sal_False;
 
             // check if weak reference is still valid...
-            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
+//            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
+            uno::Reference< chart2::data::XDataSequence > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
             {
                 // then delete that table box (check if implementation cursor needs to be adjusted)
@@ -1716,7 +1720,9 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aEndIt( rSet.end() );
         while (aIt != aEndIt)
         {
-            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+//            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
+            uno::Reference< lang::XComponent > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
             {
                 xRef->dispose();
@@ -1793,7 +1799,9 @@ void SwChartDataProvider::AddRowCols(
             Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
             while (aIt != rSet.end())
             {
-                uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+//               uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
+                uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
+                uno::Reference< chart2::data::XTextualDataSequence > xRef( xTemp, uno::UNO_QUERY );
                 if (xRef.is())
                 {
                     const sal_Int32 nLen = xRef->getTextualData().getLength();
