@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:09:30 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 08:26:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,10 @@ public:
     virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
+    virtual void*               GetFtFace() const;
+    virtual int                 GetLoadFlags() const { return mnLoadFlags; }
+    virtual bool                NeedsArtificialBold() const { return mbArtBold; }
+    virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
