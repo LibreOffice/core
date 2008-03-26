@@ -518,6 +518,16 @@ FreetypeManager::FreetypeManager()
 
 // -----------------------------------------------------------------------
 
+void* FreetypeServerFont::GetFtFace() const
+{
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
+
+    return maFaceFT;
+}
+
+// -----------------------------------------------------------------------
+
 FreetypeManager::~FreetypeManager()
 {
 // This crashes on Solaris 10
