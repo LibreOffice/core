@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:44:54 $
+#   last change: $Author: obo $ $Date: 2008-03-26 12:37:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
-.IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
-DISABLE_ADO=TRUE
-.ENDIF
-.IF "$(DISABLE_ADO)"==""
 # --- Files -------------------------------------
         
 EXCEPTIONSFILES= \
@@ -116,11 +112,9 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-.ENDIF # "$(DISABLE_ADO)"==""
-
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
 
-.ENDIF
+.ENDIF # "$(GUI)"=="WNT"
 
