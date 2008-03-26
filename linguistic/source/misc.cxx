@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:29:30 $
+ *  last change: $Author: obo $ $Date: 2008-03-26 09:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -702,7 +702,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         else
         {
             //! should at least work with the German words
-            //! Bä-c-k-er and Sc-hif-fah-rt
+            //! Bï¿½-c-k-er and Sc-hif-fah-rt
 
             OUString aLeft, aRight;
             INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
@@ -880,7 +880,14 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
         uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
         if (xMgr.is())
         {
-            xRef = xMgr->createInstance( A2OU( pServiceName ) );
+            try
+            {
+                xRef = xMgr->createInstance( A2OU( pServiceName ) );
+            }
+            catch (uno::Exception &)
+            {
+                DBG_ERROR( "createInstance failed" );
+            }
         }
     }
 
@@ -911,13 +918,19 @@ AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
-    uno::Reference< XMultiServiceFactory >
-        xMgr = getProcessServiceFactory();
+    uno::Reference< XMultiServiceFactory > xMgr = getProcessServiceFactory();
 
     if (xMgr.is())
     {
-        xDesktop = uno::Reference< frame::XDesktop >(
-                xMgr->createInstance( A2OU( SN_DESKTOP ) ), UNO_QUERY );
+        try
+        {
+            xDesktop = uno::Reference< frame::XDesktop >(
+                    xMgr->createInstance( A2OU( SN_DESKTOP ) ), UNO_QUERY );
+        }
+        catch (uno::Exception &)
+        {
+            DBG_ERROR( "createInstance failed" );
+        }
     }
 }
 
