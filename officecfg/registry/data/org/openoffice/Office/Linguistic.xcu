@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Linguistic.xcu,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-03-27 12:43:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data oor:name="Linguistic" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+  <node oor:name="General">
+    <prop oor:name="UILocale" oor:type="xs:string" install:module="ForceDefaultLanguage">
+      <value>${PRODUCTLANGUAGE}</value>
+    </prop>
+  </node>
+</oor:component-data>
