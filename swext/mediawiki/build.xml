@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2008-03-27 11:11:08 $
+ *  last change: $Author: mav $ $Date: 2008-03-27 12:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,9 +134,10 @@
             <file file="${commons-httpclient-jar}"/>
             <file file="${commons-lang-jar}"/>
             <file file="${commons-logging-jar}"/>
-            <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
 
@@ -152,8 +153,9 @@
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
             <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
-            <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
 
