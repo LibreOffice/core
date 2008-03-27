@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericloader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 13:53:29 $
+ *  last change: $Author: obo $ $Date: 2008-03-27 10:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ static int GenericMain()
     LPTSTR cl1 = GetCommandLine();
     LPTSTR cl2 = new TCHAR[
         _tcslen(cl1) + MY_LENGTH(_T(" \"-env:INIFILEPATH=")) +
-        _tcslen(szIniDirectory) + MY_LENGTH(_T("redirect.ini\""))];
+        _tcslen(szIniDirectory) + MY_LENGTH(_T("redirect.ini\"")) + 1];
     _tcscpy(cl2, cl1);
     _tcscat(cl2, _T(" \"-env:INIFILEPATH="));
     _tcscat(cl2, szIniDirectory);
