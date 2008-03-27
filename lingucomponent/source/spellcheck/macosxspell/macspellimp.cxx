@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macspellimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:13:29 $
+ *  last change: $Author: obo $ $Date: 2008-03-27 09:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,15 +117,6 @@ const sal_Char *dbg_dump(rtl_uString *pStr)
 }
 
 #endif
-///////////////////////////////////////////////////////////////////////////
-
-static BOOL operator == ( const Locale &rL1, const Locale &rL2 )
-{
-    return  rL1.Language ==  rL2.Language   &&
-            rL1.Country  ==  rL2.Country    &&
-            rL1.Variant  ==  rL2.Variant;
-}
-
 ///////////////////////////////////////////////////////////////////////////
 
 MacSpellChecker::MacSpellChecker() :
