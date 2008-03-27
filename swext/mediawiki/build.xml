@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2008-03-27 10:23:31 $
+ *  last change: $Author: mav $ $Date: 2008-03-27 11:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
         </condition>
 
         <!-- locations used throughout the build -->
-        <property name="name" value="${target}"/>
+        <property name="name" value="wiki-publisher"/>
         <property name="dist" value="${out}/bin"/>
         <property name="classes" value="${out}/class"/>
         <property name="classes.test" value="${out}/class-test"/>
@@ -91,7 +91,7 @@
     </target>
 
     <target name="jar" depends="compile, init">
-        <jar basedir="${classes}" compress="true" jarfile="${dist}/${name}.jar">
+        <jar basedir="${classes}" compress="true" jarfile="${dist}/${target}.jar">
             <manifest>
         <!-- FIXME: Set Class-Path correctly for the system case !-->
                 <attribute name="Class-Path" value="commons-codec-1.3.jar commons-lang-2.3.jar commons-httpclient-3.1.jar commons-logging-1.1.1.jar"/>
@@ -101,7 +101,7 @@
     </target>
 
     <target name="tmpdir" depends="jar, init">
-        <copy todir="${out}/misc/${target}/package_tmp" overwrite="true">
+        <copy todir="${out}/misc/${target}/package_tmp">
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
@@ -110,13 +110,15 @@
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
                 <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
+                <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
         </copy>
-        <copy todir="${out}/misc/${target}/package_tmp/help" overwrite="true">
+        <copy todir="${out}/misc/${target}/package_tmp/help">
             <fileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes"/>
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
                 <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
+                <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
             <mapper type="regexp" from="^(.*)/com.sun.sun-mediawiki/(.*)" to="\1/com.sun.wiki-publisher/\2"/>
         </copy>
@@ -126,22 +128,22 @@
         <delete file="${dist}/${name}.${ext}"/>
         <zip  destfile="${dist}/${name}.${ext}">
             <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
-            <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
+            <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
             <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <file file="${commons-codec-jar}"/>
             <file file="${commons-httpclient-jar}"/>
             <file file="${commons-lang-jar}"/>
             <file file="${commons-logging-jar}"/>
-            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
 
     <target name="development-package" depends="jar, init">
-        <delete file="${dist}/${name}_develop.zip"/>
-        <zip  destfile="${dist}/${name}_develop.zip">
-            <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
+        <delete file="${dist}/${target}_develop.zip"/>
+        <zip  destfile="${dist}/${target}_develop.zip">
+            <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
             <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
@@ -163,7 +165,7 @@
         <delete dir="${classes}/com/sun/star/wiki"/>
         <delete dir="${out}/misc/${target}"/>
         <delete dir="${dist}/${target}.jar"/>
-        <delete dir="${dist}/${target}.${ext}"/>
+        <delete dir="${dist}/${name}.${ext}"/>
         <delete dir="${dist}/${target}_develop.zip"/>
     </target>
 
