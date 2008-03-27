@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2008-03-26 16:30:07 $
+ *  last change: $Author: mav $ $Date: 2008-03-27 10:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,13 +109,16 @@
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
+                <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
             </filterset>
         </copy>
         <copy todir="${out}/misc/${target}/package_tmp/help" overwrite="true">
             <fileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes"/>
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
+                <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
             </filterset>
+            <mapper type="regexp" from="^(.*)/com.sun.sun-mediawiki/(.*)" to="\1/com.sun.wiki-publisher/\2"/>
         </copy>
     </target>
 
