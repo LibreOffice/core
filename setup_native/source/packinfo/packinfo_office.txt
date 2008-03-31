@@ -322,16 +322,16 @@ End
 
 Start
 module = "gid_Module_Oo_Linguistic"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-ooolinguistic"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-core01"
-packagename = "%UNIXPRODUCTNAME-ooolinguistic"
-freebsdrequires = "%UNIXPRODUCTNAME-core01"
-requires = "%UNIXPRODUCTNAME-core01"
-copyright = "1999-2007 by %PRODUCTNAME"
+solarispackagename = "openofficeorg-ooolinguistic"
+solarisrequires = "openofficeorg-core01"
+packagename = "openoffice.org-ooolinguistic"
+freebsdrequires = "openoffice.org-core01"
+requires = "openoffice.org-core01"
+copyright = "1999-2007 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
-vendor = "%PRODUCTNAME"
-description = "Linguistic module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+vendor = "OpenOffice.org"
+description = "Linguistic module for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
 End
 
 Start
