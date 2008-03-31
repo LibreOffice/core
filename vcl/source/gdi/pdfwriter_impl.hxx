@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:11:06 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU
@@ -53,17 +53,14 @@
 #include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 
+#include <vcl/sallayout.hxx>
 #include "pdffontcache.hxx"
-
 
 #include <vector>
 #include <map>
 #include <hash_map>
 #include <list>
 
-class SalLayout;
-class ImplLayoutArgs;
-class ImplFontData;
 class ImplFontSelectData;
 class ImplFontMetricData;
 struct FontSubsetInfo;
@@ -284,10 +281,10 @@ public:
     // font subsets
     struct GlyphEmit
     {
-        sal_uInt8       m_nSubsetGlyphID;
-        sal_Unicode     m_aUnicode;
+        sal_Ucs     m_aUnicode;
+        sal_uInt8   m_nSubsetGlyphID;
     };
-    typedef std::map< long, GlyphEmit > FontEmitMapping;
+    typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
     struct FontEmit
     {
         sal_Int32           m_nFontID;
@@ -308,25 +305,25 @@ public:
         FontEmitList        m_aSubsets;
         FontMapping         m_aMapping;
     };
-    typedef std::map< ImplFontData*, FontSubset > FontSubsetData;
+    typedef std::map< const ImplFontData*, FontSubset > FontSubsetData;
 
     struct EmbedCode
     {
-        sal_Unicode         m_aUnicode;
+        sal_Ucs             m_aUnicode;
         rtl::OString        m_aName;
     };
     struct EmbedEncoding
     {
-        sal_Int32                               m_nFontID;
-        std::vector< EmbedCode >                m_aEncVector;
-        std::map< sal_Unicode, sal_Int8 >       m_aCMap;
+        sal_Int32                       m_nFontID;
+        std::vector< EmbedCode >        m_aEncVector;
+        std::map< sal_Ucs, sal_Int8 >   m_aCMap;
     };
     struct EmbedFont
     {
         sal_Int32                       m_nNormalFontID;
         std::list< EmbedEncoding >      m_aExtendedEncodings;
     };
-    typedef std::map< ImplFontData*, EmbedFont > FontEmbedData;
+    typedef std::map< const ImplFontData*, EmbedFont > FontEmbedData;
 
     struct PDFDest
     {
@@ -862,7 +859,7 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_Int32* pGlyphs, sal_Int32* pGlpyhWidths, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -903,13 +900,13 @@ i12626
     /* writes all gradient patterns */
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitBuiltinFont( ImplFontData* pFont, sal_Int32 nObject = -1 );
+    sal_Int32 emitBuiltinFont( const ImplFontData*, sal_Int32 nObject = -1 );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( ImplFontData* pFont, EmbedFont& rEmbed );
+    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const ImplFontData*, EmbedFont& );
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nStream );
+    sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
@@ -1058,7 +1055,7 @@ public:
     ImplDevFontList* filterDevFontList( ImplDevFontList* pFontList );
     /*  for OutputDevice: get layout for builtin fonts
      */
-    bool isBuiltinFont( ImplFontData* pFont ) const;
+    bool isBuiltinFont( const ImplFontData* ) const;
     SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectData* pFont );
     void getFontMetric( ImplFontSelectData* pFont, ImplFontMetricData* pMetric ) const;
 
