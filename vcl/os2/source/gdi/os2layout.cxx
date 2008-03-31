@@ -4,9 +4,9 @@
  *
  *  $RCSfile: os2layout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,8 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
-                        long* pGlyphAdvances, int* pCharIndexes ) const;
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                        sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
@@ -521,8 +521,8 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-int Os2SalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& nStart,
-    long* pGlyphAdvances, int* pCharIndexes ) const
+int Os2SalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int& nStart,
+    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
     // return zero if no more glyph found
     if( nStart >= mnGlyphCount )
