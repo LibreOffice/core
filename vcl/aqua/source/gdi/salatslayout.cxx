@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salatslayout.cxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: kz $ $Date: 2008-03-05 16:58:33 $
+*  last change: $Author: kz $ $Date: 2008-03-31 13:22:42 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
-                        long* pGlyphAdvances, int* pCharIndexes ) const;
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                        sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    GetTextWidth() const;
     virtual long    FillDXArray( long* pDXArray ) const;
@@ -62,7 +62,8 @@ public:
     virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    // for glyph+font+script fallback
+    const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+
     virtual void    InitFont();
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
@@ -78,12 +79,6 @@ private:
     float           mfFontScale;
 
 private:
-    mutable Fixed       mnCachedWidth;      // cached value of resulting typographical width
-    mutable int         mnGlyphCount;       // Glyph count
-    mutable Fixed       mnNotdefWidth;
-    Fixed               mnBaseAdv;          // x-offset relative to Layout origin
-
-private:
     bool    InitGIA() const;
     bool    GetIdealX() const;
     bool    GetDeltaY() const;
@@ -92,17 +87,39 @@ private:
     int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
     Fixed   Vcl2Fixed( int ) const;         // convert VCL units to ATSU-Fixed units
 
-    mutable ATSGlyphRef*        mpGlyphIds;         // Glyphs IDs
-    mutable Fixed*              mpCharWidths;       // map rel char pos to charwidth
-    mutable int*                mpChars2Glyphs;     // map rel char pos to abs glyph pos
-    mutable int*                mpGlyphs2Chars;     // map abs glyph pos to abs char pos
-    mutable bool*               mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
-    mutable Fixed*              mpGlyphAdvances;    // Contains glyph complete width for each glyph in current layout
-    mutable Fixed*              mpGlyphOrigAdvs;    // Saves mpGlyphAdvances
-    mutable Fixed*              mpDeltaY;           // Delta Y from baseline
-    mutable sal_Unicode*        mpOutGlyphs;
+    // cached details about the resulting layout
+    // mutable members since these details are all lazy initialized
+    mutable int         mnGlyphCount;           // glyph count
+    mutable Fixed       mnCachedWidth;          // cached value of resulting typographical width
 
-    enum { MARKED_OUTGLYPH=0xFFFE, DROPPED_OUTGLYPH=0xFFFF};
+    mutable ATSGlyphRef*    mpGlyphIds;         // ATSU glyph ids
+    mutable Fixed*          mpCharWidths;       // map relative charpos to charwidth
+    mutable int*            mpChars2Glyphs;     // map relative charpos to absolute glyphpos
+    mutable int*            mpGlyphs2Chars;     // map absolute glyphpos to absolute charpos
+    mutable bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true if RTL
+    mutable Fixed*          mpGlyphAdvances;    // contains glyph widths for the justified layout
+    mutable Fixed*          mpGlyphOrigAdvs;    // contains glyph widths for the unjustified layout
+    mutable Fixed*          mpDeltaY;           // vertical offset from the baseline
+
+    // storing details about fonts used in glyph-fallback for this layout
+    mutable class FallbackInfo* mpFallbackInfo;
+
+    // x-offset relative to layout origin
+    // currently always zero since we use native glyph fallback
+    static const Fixed mnBaseAdv = 0;
+};
+
+class FallbackInfo
+{
+public:
+        FallbackInfo() : mnMaxLevel(0) {}
+    int AddFallback( ATSUFontID );
+    const ImplFontData* GetFallbackFontData( int nLevel ) const;
+
+private:
+    const ImplMacFontData* maFontData[ MAX_FALLBACK ];
+    ATSUFontID             maATSUFontId[ MAX_FALLBACK ];
+    int                    mnMaxLevel;
 };
 
 // =======================================================================
@@ -112,10 +129,8 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     maATSULayout( NULL ),
     mnCharCount( 0 ),
     mfFontScale( fFontScale ),
-    mnCachedWidth( 0 ),
     mnGlyphCount( -1 ),
-    mnNotdefWidth( 0 ),
-    mnBaseAdv( 0 ),
+    mnCachedWidth( 0 ),
     mpGlyphIds( NULL ),
     mpCharWidths( NULL ),
     mpChars2Glyphs( NULL ),
@@ -124,7 +139,7 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mpGlyphAdvances( NULL ),
     mpGlyphOrigAdvs( NULL ),
     mpDeltaY( NULL ),
-    mpOutGlyphs( NULL )
+    mpFallbackInfo( NULL )
 {}
 
 // -----------------------------------------------------------------------
@@ -135,19 +150,19 @@ ATSLayout::~ATSLayout()
         ATSUDirectReleaseLayoutDataArrayPtr( NULL,
             kATSUDirectDataBaselineDeltaFixedArray, (void**)&mpDeltaY );
 
-    if ( maATSULayout )
+    if( maATSULayout )
         ATSUDisposeTextLayout( maATSULayout );
 
-    if(mpGlyphRTLFlags)
-        delete[] mpGlyphRTLFlags;
+    delete[] mpGlyphRTLFlags;
     delete[] mpGlyphs2Chars;
     delete[] mpChars2Glyphs;
     if( mpCharWidths != mpGlyphAdvances )
         delete[] mpCharWidths;
+    delete[] mpGlyphIds;
     delete[] mpGlyphOrigAdvs;
     delete[] mpGlyphAdvances;
-    delete[] mpOutGlyphs;
-    delete[] mpGlyphIds;
+
+    delete mpFallbackInfo;
 }
 
 // -----------------------------------------------------------------------
@@ -404,8 +419,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
  *
  * @return : number of glyph details that were provided
 **/
-int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStart,
-    long* pGlyphAdvances, int* pCharIndexes ) const
+int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
+    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
     if( nStart < 0 )                // first glyph requested?
         nStart = 0;
@@ -433,24 +448,50 @@ int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStar
         nYOffset = mpDeltaY[ nStart ];
 
     // calculate absolute position in pixel units
-    const Point aRelativePos( Fix2Long(static_cast<long>(nXOffset*mfFontScale)), Fix2Long(static_cast<long>(nYOffset*mfFontScale)) );
+    const Point aRelativePos( Fix2Long(static_cast<Fixed>(nXOffset*mfFontScale)), Fix2Long(static_cast<Fixed>(nYOffset*mfFontScale)) );
     rPos = GetDrawPosition( aRelativePos );
 
-    // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
+    // update return values
     int nCount = 0;
     while( nCount < nLen )
     {
         ++nCount;
-        *(pGlyphIDs++) = mpGlyphIds[nStart];
+        sal_GlyphId nGlyphId = mpGlyphIds[nStart];
+
+           // check if glyph fallback is needed for this glyph
+        // TODO: use ATSUDirectGetLayoutDataArrayPtrFromTextLayout(kATSUDirectDataStyleIndex) API instead?
+    const int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart + mnMinCharPos;
+        ATSUFontID nFallbackFontID = kATSUInvalidFontID;
+        UniCharArrayOffset nChangedOffset = 0;
+        UniCharCount nChangedLength = 0;
+        OSStatus eStatus = ATSUMatchFontsToText( maATSULayout, nCharPos, kATSUToTextEnd,
+                      &nFallbackFontID, &nChangedOffset, &nChangedLength );
+        if( (eStatus == kATSUFontsMatched) && ((int)nChangedOffset == nCharPos) )
+        {
+            // fallback is needed
+            if( !mpFallbackInfo )
+                mpFallbackInfo = new FallbackInfo;
+            // register fallback font
+            const int nLevel = mpFallbackInfo->AddFallback( nFallbackFontID );
+               // update sal_GlyphId with fallback level
+            nGlyphId |= (nLevel << GF_FONTSHIFT);
+        }
+
+        // update resulting glyphid array
+        *(pGlyphIDs++) = nGlyphId;
+
+        // update returned glyph advance array
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = Fixed2Vcl( mpGlyphAdvances[nStart] );
+
+        // update returned index-into-string array
         if( pCharIndexes )
         {
             int nCharPos;
-            if( mpGlyphs2Chars[nStart] )
-                nCharPos = nStart + mnMinCharPos;
-            else
+            if( mpGlyphs2Chars )
                 nCharPos = mpGlyphs2Chars[nStart];
+            else
+                nCharPos = nStart + mnMinCharPos;
             *(pCharIndexes++) = nCharPos;
         }
 
@@ -547,7 +588,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
     if( !pDXArray )
         return GetTextWidth();
 
-    // initialize detailed metrics from the layouted glyphs
+    // initialize details about the resulting layout
     InitGIA();
 
     // distribute the widths among the string elements
@@ -691,6 +732,15 @@ bool ATSLayout::InitGIA() const
     if( mnCharCount <=  0 )
         return false;
 
+    // initialize character details
+    mpCharWidths    = new Fixed[ mnCharCount ];
+    mpChars2Glyphs  = new int[ mnCharCount ];
+    for( int n = 0; n < mnCharCount; ++n )
+    {
+        mpCharWidths[ n ] = 0;
+        mpChars2Glyphs[ n ] = -1;
+    }
+
     // get details about the glyph layout
     ItemCount iLayoutDataCount;
     const ATSLayoutRecord* pALR;
@@ -706,15 +756,6 @@ bool ATSLayout::InitGIA() const
     mpGlyphIds      = new ATSGlyphRef[ iLayoutDataCount ];
     mpGlyphAdvances = new Fixed[ iLayoutDataCount ];
     mpGlyphs2Chars  = new int[ iLayoutDataCount ];
-
-    // initialize character details
-    mpCharWidths    = new Fixed[ mnCharCount ];
-    mpChars2Glyphs  = new int[ mnCharCount ];
-    for( int n = 0; n < mnCharCount; ++n )
-    {
-        mpCharWidths[ n ] = 0;
-        mpChars2Glyphs[ n ] = -1;
-    }
 
     // measure details of the glyph layout
     Fixed nLeftPos = 0;
@@ -732,6 +773,7 @@ bool ATSLayout::InitGIA() const
             mpGlyphAdvances[ mnGlyphCount-1 ] = rALR.realPos - nLeftPos;
 
         // ignore marker or deleted glyphs
+        enum { MARKED_OUTGLYPH=0xFFFE, DROPPED_OUTGLYPH=0xFFFF};
         if( rALR.glyphID >= MARKED_OUTGLYPH )
             continue;
 
@@ -768,6 +810,8 @@ bool ATSLayout::InitGIA() const
     return true;
 }
 
+// -----------------------------------------------------------------------
+
 bool ATSLayout::GetIdealX() const
 {
     // compute the ideal advance widths only once
@@ -793,13 +837,15 @@ bool ATSLayout::GetIdealX() const
     return true;
 }
 
+// -----------------------------------------------------------------------
+
 bool ATSLayout::GetDeltaY() const
 {
     // don't bother to get the same delta-y-array more than once
     if( mpDeltaY != NULL )
         return true;
 
-#if 0
+#if 1
     // get and keep the y-deltas in the mpDeltaY member variable
     // => release it in the destructor
     ItemCount nDeltaCount = 0;
@@ -1011,126 +1057,55 @@ bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const
 
 // -----------------------------------------------------------------------
 
-void ATSLayout::InitFont()
+// glyph fallback is supported directly by Aqua
+// so MultiSalLayout-only methods can be dummy implementated
+void ATSLayout::InitFont() {}
+void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
+void ATSLayout::DropGlyph( int /*nStart*/ ) {}
+void ATSLayout::Simplify( bool /*bIsBase*/ ) {}
+
+// get the ImplFontData for a glyph fallback font
+// for a glyphid that was returned by ATSLayout::GetNextGlyphs()
+const ImplFontData* ATSLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
 {
-    // TODO to allow glyph fallback
+    // check if any fallback fonts were needed
+    if( !mpFallbackInfo )
+        return NULL;
+    // check if the current glyph needs a fallback font
+    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+    if( !nFallbackLevel )
+        return NULL;
+    return mpFallbackInfo->GetFallbackFontData( nFallbackLevel );
+}
+
+// =======================================================================
+
+int FallbackInfo::AddFallback( ATSUFontID nFontId )
+{
+    // check if the fallback font is already known
+    for( int nLevel = 0; nLevel < mnMaxLevel; ++nLevel )
+        if( maATSUFontId[ nLevel ] == nFontId )
+            return (nLevel + 1);
+
+    // append new fallback font if possible
+    if( mnMaxLevel >= MAX_FALLBACK-1 )
+        return 0;
+    // keep ATSU font id of fallback font
+    maATSUFontId[ mnMaxLevel ] = nFontId;
+    // find and cache the corresponding ImplFontData pointer
+    const SystemFontList* pSFL = GetSalData()->mpFontList;
+    const ImplMacFontData* pFontData = pSFL->GetFontDataFromId( nFontId );
+    maFontData[ mnMaxLevel ] = pFontData;
+    // increase fallback level by one
+    return (++mnMaxLevel);
 }
 
 // -----------------------------------------------------------------------
 
-void ATSLayout::MoveGlyph( int nStart, long nNewXPos )
+const ImplFontData* FallbackInfo::GetFallbackFontData( int nFallbackLevel ) const
 {
-    if( nStart > mnGlyphCount )
-        return;
-
-    // calculate the current x-position of the requested glyph
-    // TODO: cache absolute positions
-    Fixed nXPos = mnBaseAdv;
-    for( int i = 0; i < nStart; ++i )
-        nXPos += mpGlyphAdvances[i];
-
-    // calculate the difference to the current glyph position
-    Fixed nDelta = nNewXPos - nXPos;
-
-    // adjust the width of the layout if it was already cached
-    if( mnCachedWidth )
-        mnCachedWidth += nDelta;
-
-    // depending on whether the requested glyph is leftmost in the layout
-    // adjust either the layout's or the requested glyph's relative position
-    if( nStart > 0 )
-        mpGlyphAdvances[ nStart-1 ] += nDelta;
-    else
-        mnBaseAdv += nDelta;
-}
-
-// -----------------------------------------------------------------------
-
-void ATSLayout::DropGlyph( int nStart )
-{
-    mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
-}
-
-// -----------------------------------------------------------------------
-
-void ATSLayout::Simplify( bool bIsBase )
-{
-    // return early if no glyph has been dropped
-    int i = mnGlyphCount;
-    while( (--i >= 0) && (mpOutGlyphs[ i ] != DROPPED_OUTGLYPH) );
-    if( i < 0 )
-        return;
-
-    // convert the layout to a sparse layout if it is not already
-    if( !mpGlyphs2Chars )
-    {
-        mpGlyphs2Chars = new int[ mnGlyphCount ];
-        mpCharWidths = new Fixed[ mnCharCount ];
-        // assertion: mnGlyphCount == mnCharCount
-        for( int k = 0; k < mnGlyphCount; ++k )
-        {
-            mpGlyphs2Chars[ k ] = mnMinCharPos + k;
-            mpCharWidths[ k ] = mpGlyphAdvances[ k ];
-        }
-    }
-
-    // remove dropped glyphs that are rightmost in the layout
-    for( i = mnGlyphCount; --i >= 0; )
-    {
-        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
-            break;
-        if( mnCachedWidth )
-            mnCachedWidth -= mpGlyphAdvances[ i ];
-        int nRelCharPos = mpGlyphs2Chars[ i ] - mnMinCharPos;
-        if( nRelCharPos >= 0 )
-            mpCharWidths[ nRelCharPos ] = 0;
-    }
-    mnGlyphCount = i + 1;
-
-    // keep original glyph widths around
-    if( !mpGlyphOrigAdvs )
-    {
-        mpGlyphOrigAdvs = new Fixed[ mnGlyphCount ];
-        for( int k = 0; k < mnGlyphCount; ++k )
-            mpGlyphOrigAdvs[ k ] = mpGlyphAdvances[ k ];
-    }
-
-    // remove dropped glyphs inside the layout
-    int nNewGC = 0;
-    for( i = 0; i < mnGlyphCount; ++i )
-    {
-        if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
-        {
-            // adjust relative position to last valid glyph
-            int nDroppedWidth = mpGlyphAdvances[ i ];
-            mpGlyphAdvances[ i ] = 0;
-            if( nNewGC > 0 )
-                mpGlyphAdvances[ nNewGC-1 ] += nDroppedWidth;
-            else
-                mnBaseAdv += nDroppedWidth;
-
-            // zero the virtual char width for the char that has a fallback
-            int nRelCharPos = mpGlyphs2Chars[ i ] - mnMinCharPos;
-            if( nRelCharPos >= 0 )
-                mpCharWidths[ nRelCharPos ] = 0;
-        }
-        else
-        {
-            if( nNewGC != i )
-            {
-                // rearrange the glyph array to get rid of the dropped glyph
-                mpOutGlyphs[ nNewGC ]     = mpOutGlyphs[ i ];
-                mpGlyphAdvances[ nNewGC ] = mpGlyphAdvances[ i ];
-                mpGlyphOrigAdvs[ nNewGC ] = mpGlyphOrigAdvs[ i ];
-                mpGlyphs2Chars[ nNewGC ]  = mpGlyphs2Chars[ i ];
-            }
-            ++nNewGC;
-        }
-    }
-
-    mnGlyphCount = nNewGC;
-    if( mnGlyphCount <= 0 )
-        mnCachedWidth = mnBaseAdv = 0;
+    const ImplMacFontData* pFallbackFont = maFontData[ nFallbackLevel-1 ];
+    return pFallbackFont;
 }
 
 // =======================================================================
