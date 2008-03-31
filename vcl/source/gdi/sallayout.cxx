@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:05 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,7 +842,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     ::basegfx::B2DPolyPolygon aGlyphOutline;
     for( int nStart = 0;;)
     {
-        sal_Int32 nLGlyph;
+        sal_GlyphId nLGlyph;
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
@@ -879,7 +879,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        sal_Int32 nLGlyph;
+        sal_GlyphId nLGlyph;
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
@@ -898,7 +898,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
 
 // -----------------------------------------------------------------------
 
-bool SalLayout::IsSpacingGlyph( long nGlyph ) const
+bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
 {
     bool bRet = false;
     if( nGlyph & GF_ISCHAR )
@@ -914,13 +914,23 @@ bool SalLayout::IsSpacingGlyph( long nGlyph ) const
     return bRet;
 }
 
+// -----------------------------------------------------------------------
+
+const ImplFontData* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
+{
+#if 0
+    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT
+    assert( nFallbackLevel == 0 );
+#endif
+    return NULL;
+}
+
 // =======================================================================
 
 GenericSalLayout::GenericSalLayout()
 :   mpGlyphItems(0),
     mnGlyphCount(0),
     mnGlyphCapacity(0)
-
 {}
 
 // -----------------------------------------------------------------------
@@ -1400,7 +1410,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
 
 // -----------------------------------------------------------------------
 
-int GenericSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphs, Point& rPos,
+int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
 {
     const GlyphItem* pG = mpGlyphItems + nStart;
@@ -1511,7 +1521,7 @@ void GenericSalLayout::DropGlyph( int nStart )
 
 void GenericSalLayout::Simplify( bool bIsBase )
 {
-    long nDropMarker = bIsBase ? GF_DROPPED : 0;
+    const sal_GlyphId nDropMarker = bIsBase ? GF_DROPPED : 0;
 
     // remove dropped glyphs inplace
     GlyphItem* pGDst = mpGlyphItems;
@@ -1586,7 +1596,7 @@ MultiSalLayout::~MultiSalLayout()
 // -----------------------------------------------------------------------
 
 bool MultiSalLayout::AddFallback( SalLayout& rFallback,
-    ImplLayoutRuns& rFallbackRuns, ImplFontData* pFallbackFont )
+    ImplLayoutRuns& rFallbackRuns, const ImplFontData* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
         return false;
@@ -1689,7 +1699,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ];
 
-    sal_Int32 nDummy;
+    sal_GlyphId nDummy;
     Point aPos;
     int nLevel = 0, n;
     for( n = 0; n < mnLevel; ++n )
@@ -1892,6 +1902,14 @@ void MultiSalLayout::InitFont() const
 
 // -----------------------------------------------------------------------
 
+const ImplFontData* MultiSalLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
+{
+    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+    return mpFallbackFonts[ nFallbackLevel ];
+}
+
+// -----------------------------------------------------------------------
+
 void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 {
     for( int i = mnLevel; --i >= 0; )
@@ -2021,7 +2039,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 
 // -----------------------------------------------------------------------
 
-int MultiSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPos,
+int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
     int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
 {
     // for multi-level fallback only single glyphs should be used
