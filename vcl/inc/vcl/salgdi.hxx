@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:48:11 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,16 @@ namespace basegfx { class B2DPolyPolygon; }
 #define SAL_SETFONT_BADFONT                 ((USHORT)0x1000)
 
 #define SAL_COPYAREA_WINDOWINVALIDATE       ((USHORT)0x0001)
+
+// -------------------
+// - common typedefs -
+// -------------------
+
+typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
+typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
+typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
+typedef std::map< sal_Ucs, rtl::OString > Ucs2OStrMap;
+typedef std::vector< sal_Int32 > Int32Vector;
 
 // ---------------
 // - SalGraphics -
@@ -242,7 +252,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
-                                              ImplFontData* pFont,
+                                              const ImplFontData* pFont,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -257,7 +267,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded ) = 0;
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded ) = 0;
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -268,8 +278,8 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( ImplFontData* pFont,
-                                          const sal_Unicode* pUnicodes,
+    virtual const void* GetEmbedFontData( const ImplFontData* pFont,
+                                          const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen ) = 0;
@@ -280,10 +290,10 @@ public:
     // in case of an embeddable font also fill the mapping
     // between unicode and glyph id
     // leave widths vector and mapping untouched in case of failure
-    virtual void            GetGlyphWidths( ImplFontData* pFont,
+    virtual void            GetGlyphWidths( const ImplFontData* pFont,
                                             bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc ) = 0;
+                                            Int32Vector& rWidths,
+                                            Ucs2UIntMap& rUnicodeEnc ) = 0;
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& ) = 0;
     virtual BOOL                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& ) = 0;
