@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:58:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual sal_IntPtr      GetFontId() const;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
-    void                    UpdateFromHDC( HDC );
+    void                    UpdateFromHDC( HDC ) const;
 
     bool                    HasChar( sal_uInt32 cChar ) const;
 
@@ -96,9 +96,9 @@ public:
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
-    ImplFontCharMap*        GetImplFontCharMap();
-    std::map< sal_Unicode,sal_Int32>* GetEncodingVector() const { return mpEncodingVector; }
-    void SetEncodingVector( std::map< sal_Unicode,sal_Int32>* pNewVec )
+    ImplFontCharMap*        GetImplFontCharMap() const;
+    const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
+    void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
         if( mpEncodingVector )
             delete mpEncodingVector;
@@ -106,11 +106,13 @@ public:
     }
 private:
     sal_IntPtr              mnId;
-    bool                    mbDisableGlyphApi;
-    bool                    mbHasKoreanRange;
-    bool                    mbHasCJKSupport;
 
-    ImplFontCharMap*        mpUnicodeMap;
+    // some members that are initalized lazily when the font gets selected into a HDC
+    mutable bool                    mbDisableGlyphApi;
+    mutable bool                    mbHasKoreanRange;
+    mutable bool                    mbHasCJKSupport;
+    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable const Ucs2SIntMap*      mpEncodingVector;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -119,20 +121,19 @@ private:
     WIN_BYTE                mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-    std::map< sal_Unicode,sal_Int32>* mpEncodingVector;
 private:
-    void                    ReadCmapTable( HDC );
-    void                    ReadOs2Table( HDC );
+    void                    ReadCmapTable( HDC ) const;
+    void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<int> IntHashSet;
-    mutable IntHashSet      maGsubTable;
+    typedef std::hash_set<sal_UCS4> UcsHashSet;
+    mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
     bool                    HasGSUBstitutions( HDC ) const;
-    bool                    IsGSUBstituted( sal_Unicode ) const;
+    bool                    IsGSUBstituted( sal_UCS4 ) const;
 #endif // GNG_VERT_HACK
 };
 
@@ -146,7 +147,7 @@ public:
     HDC                     mhDC;               // HDC
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
-    ImplWinFontData*        mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
+    const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     float                   mfFontScale;        // allows metrics emulation of huge font sizes
     HPEN                    mhPen;              // Pen
@@ -312,7 +313,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
-                                              ImplFontData* pFont,
+                                              const ImplFontData*,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -327,7 +328,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -336,17 +337,17 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( ImplFontData* pFont,
-                                          const sal_Unicode* pUnicodes,
+    virtual const void* GetEmbedFontData( const ImplFontData*,
+                                          const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
-    virtual void            GetGlyphWidths( ImplFontData* pFont,
+    virtual void            GetGlyphWidths( const ImplFontData*,
                                             bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
+                                            Int32Vector& rWidths,
+                                            Ucs2UIntMap& rUnicodeEnc );
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
