@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:26 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,10 @@
 #include <vector>
 #include <set>
 
-#include "salatsuifontutils.hxx"
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "vcl/svapp.hxx"
+#include "salatsuifontutils.hxx"
 
 // we have to get the font attributes from the name table
 // since neither head's macStyle nor OS/2's panose are easily available
@@ -352,7 +352,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
 
 SystemFontList::SystemFontList()
 {
@@ -373,15 +373,15 @@ SystemFontList::SystemFontList()
     BOOST_ASSERT(nATSUICompatibleFontsAvailable == nFontItemsCount && "Strange I would expect them to be equal");
 
     // prepare use of the available fonts
-    mFontContainer.reserve( nFontItemsCount );
     AtsFontIDVector::const_iterator it = aFontIDVector.begin();
     for(; it != aFontIDVector.end(); ++it )
     {
+    const ATSUFontID nFontID = *it;
         ImplDevFontAttributes aDevFontAttr;
-        if( !GetDevFontAttributes( *it, aDevFontAttr ) )
+        if( !GetDevFontAttributes( nFontID, aDevFontAttr ) )
             continue;
-        ImplMacFontData* pFontData = new ImplMacFontData(  aDevFontAttr, *it );
-        mFontContainer.push_back(pFontData);
+        ImplMacFontData* pFontData = new ImplMacFontData(  aDevFontAttr, nFontID );
+        maFontContainer[ nFontID ] = pFontData;
     }
 
     InitGlyphFallbacks();
@@ -391,9 +391,10 @@ SystemFontList::SystemFontList()
 
 SystemFontList::~SystemFontList()
 {
-    ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
-    for(; it != mFontContainer.end(); ++it )
-        delete *it;
+    MacFontContainer::const_iterator it = maFontContainer.begin();
+    for(; it != maFontContainer.end(); ++it )
+        delete (*it).second;
+    maFontContainer.clear();
 
     ATSUDisposeFontFallbacks( maFontFallbacks );
 }
@@ -402,9 +403,9 @@ SystemFontList::~SystemFontList()
 
 void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 {
-    ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
-    for(; it != mFontContainer.end(); ++it )
-        rFontList.Add( (*it)->Clone() );
+    MacFontContainer::const_iterator it = maFontContainer.begin();
+    for(; it != maFontContainer.end(); ++it )
+        rFontList.Add( (*it).second->Clone() );
 }
 
 // -----------------------------------------------------------------------
@@ -447,18 +448,23 @@ void SystemFontList::InitGlyphFallbacks()
     // sort fonts for "glyph fallback"
     typedef std::multiset<const ImplMacFontData*,GfbCompare> FallbackSet;
     FallbackSet aFallbackSet;
-    ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
-    for(; it != mFontContainer.end(); ++it )
-        aFallbackSet.insert( *it );
+    MacFontContainer::const_iterator it = maFontContainer.begin();
+    for(; it != maFontContainer.end(); ++it )
+    {
+    const ImplMacFontData* pIFD = (*it).second;
+    // TODO: subsettable/embeddable glyph fallback only for PDF export?
+        if( pIFD->IsSubsettable() || pIFD->IsEmbeddable() )
+        aFallbackSet.insert( pIFD );
+    }
 
     // tell ATSU about font preferences for "glyph fallback"
     typedef std::vector<ATSUFontID> AtsFontIDVector;
     AtsFontIDVector aFallbackVector;
-    aFallbackVector.reserve( mFontContainer.size() );
+    aFallbackVector.reserve( maFontContainer.size() );
     FallbackSet::const_iterator itFData = aFallbackSet.begin();
     for(; itFData != aFallbackSet.end(); ++itFData )
     {
-        const ImplMacFontData* pFontData = *itFData;
+        const ImplMacFontData* pFontData = (*itFData);
         ATSUFontID nFontID = (ATSUFontID)pFontData->GetFontId();
         aFallbackVector.push_back( nFontID );
     }
@@ -466,6 +472,16 @@ void SystemFontList::InitGlyphFallbacks()
     ATSUCreateFontFallbacks( &maFontFallbacks );
     ATSUSetObjFontFallbacks( maFontFallbacks,
         aFallbackVector.size(), &aFallbackVector[0], kATSUSequentialFallbacksPreferred );
+}
+
+// -----------------------------------------------------------------------
+
+ImplMacFontData* SystemFontList::GetFontDataFromId( ATSUFontID nFontId ) const
+{
+    MacFontContainer::const_iterator it = maFontContainer.find( nFontId );
+    if( it == maFontContainer.end() )
+    return NULL;
+    return (*it).second;
 }
 
 // -----------------------------------------------------------------------
