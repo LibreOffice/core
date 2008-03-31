@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1584,7 +1584,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     }
 
     // store the requested device font entry
-    ImplMacFontData* pMacFont = static_cast<ImplMacFontData*>( pReqFont->mpFontData );
+    const ImplMacFontData* pMacFont = static_cast<const ImplMacFontData*>( pReqFont->mpFontData );
     mpMacFontData = pMacFont;
 
     // convert pixel units (as seen by upper layers) to typographic point units
@@ -1770,30 +1770,34 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     if( (eStatus != noErr) || (nHmtxLen <= 0) )
         return false;
 
+    ByteCount nPrepLen=0, nCvtLen=0, nFpgmLen=0;
+    if( 1 ) // TODO: reduce PDF size by making hint subsetting optional
+    {
+        eStatus = ATSFontGetTable( rFont, GetTag("prep"), 0, 0, NULL, &nPrepLen);
+        eStatus = ATSFontGetTable( rFont, GetTag("cvt "), 0, 0, NULL, &nCvtLen);
+        eStatus = ATSFontGetTable( rFont, GetTag("fpgm"), 0, 0, NULL, &nFpgmLen);
+    }
+
     // prepare a byte buffer for a fake font
-    const int nTableCount = 8;
+    int nTableCount = 8;
+    nTableCount += (nPrepLen>0) + (nCvtLen>0) + (nFpgmLen>0);
     const ByteCount nFdirLen = 12 + 16*nTableCount;
-    ByteCount nTotalLen = nFdirLen + nHeadLen + nMaxpLen
-        + nNameLen + nCmapLen + nLocaLen + nGlyfLen;
+    ByteCount nTotalLen = nFdirLen;
+    nTotalLen += nHeadLen + nMaxpLen + nNameLen + nCmapLen + nLocaLen + nGlyfLen;
     nTotalLen += nHheaLen + nHmtxLen;
+    nTotalLen += nPrepLen + nCvtLen + nFpgmLen;
     rBuffer.resize( nTotalLen );
 
     // fake a SFNT font directory header
-    if( nTableCount == 6 )
+    if( nTableCount < 16 )
     {
-        rBuffer[ 1] =  1;   // Win-TTF style scaler
-        rBuffer[ 5] =  6;   // six essential tables for subsetting
-        rBuffer[ 7] = 32;   // searchRange = ((int)log2(6))*16
-        rBuffer[ 9] =  2;   // entrySelector = log2(6)
-        rBuffer[11] = 64;   // rangeShift = (6*16) - searchRange
-    }
-    else if( nTableCount == 8 )
-    {
-        rBuffer[ 1] =  1;   // Win-TTF style scaler
-        rBuffer[ 5] =  8;   // eight essential tables for a complete font
-        rBuffer[ 7] = 48;   // searchRange = ((int)log2(8))*16
-        rBuffer[ 9] =  3;   // entrySelector = log2(8)
-        rBuffer[11] = 80;   // rangeShift = (8*16) - searchRange
+        int nLog2 = 0;
+        while( (nTableCount >> nLog2) > 1 ) ++nLog2;
+        rBuffer[ 1] = 1;                        // Win-TTF style scaler
+        rBuffer[ 5] = nTableCount;              // table count
+        rBuffer[ 7] = nLog2*16;                 // searchRange
+        rBuffer[ 9] = nLog2;                    // entrySelector
+        rBuffer[11] = (nTableCount-nLog2)*16;   // rangeShift
     }
 
     // get font table raw data and update the fake directory entries
@@ -1802,6 +1806,16 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, nCmapLen, (void*)&rBuffer[nOfs], &nCmapLen);
     FakeDirEntry( GetTag("cmap"), nOfs, nCmapLen, &rBuffer[0], pFakeEntry );
     nOfs += nCmapLen;
+    if( nCvtLen ) {
+        eStatus = ATSFontGetTable( rFont, GetTag("cvt "), 0, nCvtLen, (void*)&rBuffer[nOfs], &nCvtLen);
+        FakeDirEntry( GetTag("cvt "), nOfs, nCvtLen, &rBuffer[0], pFakeEntry );
+        nOfs += nCvtLen;
+    }
+    if( nFpgmLen ) {
+        eStatus = ATSFontGetTable( rFont, GetTag("fpgm"), 0, nFpgmLen, (void*)&rBuffer[nOfs], &nFpgmLen);
+        FakeDirEntry( GetTag("fpgm"), nOfs, nFpgmLen, &rBuffer[0], pFakeEntry );
+        nOfs += nFpgmLen;
+    }
     eStatus = ATSFontGetTable( rFont, GetTag("glyf"), 0, nGlyfLen, (void*)&rBuffer[nOfs], &nGlyfLen);
     FakeDirEntry( GetTag("glyf"), nOfs, nGlyfLen, &rBuffer[0], pFakeEntry );
     nOfs += nGlyfLen;
@@ -1823,6 +1837,11 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     eStatus = ATSFontGetTable( rFont, GetTag("name"), 0, nNameLen, (void*)&rBuffer[nOfs], &nNameLen);
     FakeDirEntry( GetTag("name"), nOfs, nNameLen, &rBuffer[0], pFakeEntry );
     nOfs += nNameLen;
+    if( nPrepLen ) {
+        eStatus = ATSFontGetTable( rFont, GetTag("prep"), 0, nPrepLen, (void*)&rBuffer[nOfs], &nPrepLen);
+        FakeDirEntry( GetTag("prep"), nOfs, nPrepLen, &rBuffer[0], pFakeEntry );
+        nOfs += nPrepLen;
+    }
 
     DBG_ASSERT( (nOfs==nTotalLen), "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalLen)");
 
@@ -1830,7 +1849,7 @@ static bool GetRawFontData( const ImplFontData* pFontData,
 }
 
 BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
-    ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
+    const ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     ByteVector aBuffer;
@@ -1941,13 +1960,8 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
 // -----------------------------------------------------------------------
 
-// TODO: move the typedefs into the headers
-typedef std::map< sal_Unicode, sal_Int32 >      Uni2SIntMap;
-typedef std::map< sal_Unicode, sal_uInt32 >     Uni2UIntMap;
-typedef std::map< sal_Unicode, rtl::OString >   Uni2OStrMap;
-
-void AquaSalGraphics::GetGlyphWidths( ImplFontData* pFontData, bool bVertical,
-    std::vector< sal_Int32 >& rGlyphWidths, Uni2UIntMap& rUnicodeEnc )
+void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVertical,
+    Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
     rGlyphWidths.clear();
     rUnicodeEnc.clear();
@@ -1995,10 +2009,10 @@ void AquaSalGraphics::GetGlyphWidths( ImplFontData* pFontData, bool bVertical,
             {
                 if( nChar > 0xFFFF ) // TODO: allow UTF-32 chars
                     break;
-                sal_uInt16 nChar16 = static_cast<sal_uInt16>(nChar);
-                sal_uInt16 nGlyph = ::MapChar( pSftFont, nChar16, bVertical );
+                sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
+                sal_uInt32 nGlyph = ::MapChar( pSftFont, nUcsChar, bVertical );
                 if( nGlyph > 0 )
-                    rUnicodeEnc[ nChar16 ] = nGlyph;
+                    rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
         }
 
@@ -2026,16 +2040,16 @@ void AquaSalGraphics::GetGlyphWidths( ImplFontData* pFontData, bool bVertical,
 
 // -----------------------------------------------------------------------
 
-const Uni2SIntMap* AquaSalGraphics::GetFontEncodingVector(
-    ImplFontData* pFontData, const Uni2OStrMap** ppNonEncoded )
+const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
+    const ImplFontData* pFontData, const Ucs2OStrMap** ppNonEncoded )
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-const void* AquaSalGraphics::GetEmbedFontData( ImplFontData* pFontData,
-                              const sal_Unicode* pUnicodes,
+const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
+                              const sal_Ucs* pUnicodes,
                               sal_Int32* pWidths,
                               FontSubsetInfo& rInfo,
                               long* pDataLen )
