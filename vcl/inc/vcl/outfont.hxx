@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:04:16 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,9 +187,10 @@ friend class ImplDevFontListData;
 class ImplFontSelectData : public ImplFontAttributes
 {
 public:
-                        ImplFontSelectData( const Font&, const String& rSearchName, const Size&, float fExactHeight );
-                        ImplFontSelectData( ImplFontData&, const Size&, float fExactHeight,
-                            int nOrientation, bool bVertical );
+                        ImplFontSelectData( const Font&, const String& rSearchName,
+                            const Size&, float fExactHeight );
+                        ImplFontSelectData( const ImplFontData&, const Size&,
+                            float fExactHeight, int nOrientation, bool bVertical );
 
 public: // TODO: change to private
     String              maTargetName;       // name of the font name token that is chosen
@@ -202,7 +203,7 @@ public: // TODO: change to private
     bool                mbVertical;         // vertical mode of requested font
     bool                mbNonAntialiased;   // true if antialiasing is disabled
 
-    ImplFontData*       mpFontData;         // a matching ImplFontData object
+    const ImplFontData* mpFontData;         // a matching ImplFontData object
     ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
 };
 
