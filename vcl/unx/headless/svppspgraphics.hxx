@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svppspgraphics.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:54:04 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,13 +90,13 @@ public:
                                     sal_Int32* pWidths,
                                     int nGlyphs,
                                     FontSubsetInfo& rInfo );
-    static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
+    static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
     static void DoFreeEmbedFontData( const void* pData, long nLen );
-    static const std::map< sal_Unicode, sal_Int32 >* DoGetFontEncodingVector( psp::fontID aFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded );
+    static const Ucs2SIntMap* DoGetFontEncodingVector( psp::fontID aFont, const Ucs2OStrMap** pNonEncoded );
     static void DoGetGlyphWidths( psp::fontID aFont,
                                   bool bVertical,
-                                  std::vector< sal_Int32 >& rWidths,
-                                  std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
+                                  Int32Vector& rWidths,
+                                  Ucs2UIntMap& rUnicodeEnc );
     static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
     static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
     static FontWidth    ToFontWidth (psp::width::type eWidth);
@@ -133,24 +133,24 @@ public:
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
-                                              ImplFontData* pFont,
+                                              const ImplFontData*,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo
                                               );
-    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
-    virtual const void* GetEmbedFontData( ImplFontData* pFont,
-                                          const sal_Unicode* pUnicodes,
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
+    virtual const void* GetEmbedFontData( const ImplFontData*,
+                                          const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
-    virtual void            GetGlyphWidths( ImplFontData* pFont,
+    virtual void            GetGlyphWidths( const ImplFontData*,
                                             bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
+                                            Int32Vector& rWidths,
+                                            Ucs2UIntMap& rUnicodeEnc );
     virtual BOOL            GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
