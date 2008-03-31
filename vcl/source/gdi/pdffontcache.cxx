@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffontcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:12:37 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@
 
 using namespace vcl;
 
-PDFFontCache::FontIdentifier::FontIdentifier( ImplFontData* pFont, bool bVertical ) :
+PDFFontCache::FontIdentifier::FontIdentifier( const ImplFontData* pFont, bool bVertical ) :
     m_nFontId( pFont->GetFontId() ),
     m_nMagic( pFont->GetFontMagic() ),
     m_bVertical( bVertical )
 {
 }
 
-PDFFontCache::FontData& PDFFontCache::getFont( ImplFontData* pFont, bool bVertical )
+PDFFontCache::FontData& PDFFontCache::getFont( const ImplFontData* pFont, bool bVertical )
 {
     FontIdentifier aId( pFont, bVertical );
     FontToIndexMap::iterator it = m_aFontToIndex.find( aId );
@@ -60,7 +60,7 @@ PDFFontCache::FontData& PDFFontCache::getFont( ImplFontData* pFont, bool bVertic
     return m_aFonts.back();
 }
 
-sal_Int32 PDFFontCache::getGlyphWidth( ImplFontData* pFont, sal_uInt32 nGlyph, bool bVertical, SalGraphics* pGraphics )
+sal_Int32 PDFFontCache::getGlyphWidth( const ImplFontData* pFont, sal_GlyphId nGlyph, bool bVertical, SalGraphics* pGraphics )
 {
     sal_Int32 nWidth = 0;
     FontData& rFontData( getFont( pFont, bVertical ) );
@@ -70,12 +70,11 @@ sal_Int32 PDFFontCache::getGlyphWidth( ImplFontData* pFont, sal_uInt32 nGlyph, b
     }
     if( ! rFontData.m_nWidths.empty() )
     {
-        sal_uInt32 nIndex = nGlyph;
+        sal_GlyphId nIndex = nGlyph;
         if( (nGlyph & GF_ISCHAR) != 0 )
         {
-            const sal_Unicode cCode = sal::static_int_cast<sal_Unicode>(nGlyph & GF_IDXMASK); // TODO: UCS4 support
-            std::map<sal_Unicode,sal_uInt32>::const_iterator it =
-                rFontData.m_aGlyphIdToIndex.find( cCode );
+            const sal_Ucs cCode = static_cast<sal_Ucs>(nGlyph & GF_IDXMASK);
+            Ucs2UIntMap::const_iterator it = rFontData.m_aGlyphIdToIndex.find( cCode );
 
             // allow symbol aliasing U+00xx -> U+F0xx if there is no direct match
             if( it == rFontData.m_aGlyphIdToIndex.end()
