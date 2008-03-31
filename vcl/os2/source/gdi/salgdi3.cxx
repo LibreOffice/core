@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:50:36 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,7 @@ bool ImplOs2FontData::HasGSUBstitutions( HPS hPS ) const
 
 // -----------------------------------------------------------------------
 
-bool ImplOs2FontData::IsGSUBstituted( sal_Unicode cChar ) const
+bool ImplOs2FontData::IsGSUBstituted( sal_Ucs cChar ) const
 {
     return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
@@ -1507,7 +1507,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
 }
 
 BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
-    ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
+    const ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // create matching ImplFontSelectData
@@ -1626,8 +1626,8 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
 //--------------------------------------------------------------------------
 
-const void* Os2SalGraphics::GetEmbedFontData( ImplFontData* pFont,
-    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
+const void* Os2SalGraphics::GetEmbedFontData( const ImplFontData* pFont,
+    const sal_Ucs* pUnicodes, sal_Int32* pCharWidths,
     FontSubsetInfo& rInfo, long* pDataLen )
 {
     // create matching ImplFontSelectData
@@ -1664,7 +1664,7 @@ const void* Os2SalGraphics::GetEmbedFontData( ImplFontData* pFont,
     for( int i = 0; i < 256; ++i )
     {
         LONG nCharWidth = 0;
-        const sal_Unicode cChar = pUnicodes[i];
+        const sal_Ucs cChar = pUnicodes[i];
         if( !Ft2QueryStringWidthW( mhPS, (LPWSTR)&cChar, 1, &nCharWidth ) )
             *pDataLen = 0;
         pCharWidths[i] = nCharWidth;
@@ -1686,15 +1686,14 @@ void Os2SalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
     delete[] reinterpret_cast<char*>(const_cast<void*>(pData));
 }
 
-const std::map< sal_Unicode, sal_Int32 >* Os2SalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+const Ucs2SIntMap* Os2SalGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // TODO: even for builtin fonts we get here... why?
     if( !pFont->IsEmbeddable() )
         return NULL;
 
     // fill the encoding vector
-    typedef std::map< sal_Unicode,sal_Int32> Code2Int;
-    Code2Int& rMap = *new Code2Int;
+    Ucs2SIntMap& rMap = *new Ucs2SIntMap;
 #if 0
     // TODO: get correct encoding vector
     ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>(pFont);
@@ -1714,10 +1713,10 @@ const std::map< sal_Unicode, sal_Int32 >* Os2SalGraphics::GetFontEncodingVector(
 
 //--------------------------------------------------------------------------
 
-void Os2SalGraphics::GetGlyphWidths( ImplFontData* pFont,
+void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                      bool bVertical,
-                                     std::vector< sal_Int32 >& rWidths,
-                                     std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+                                     Int32Vector& rWidths,
+                                     Ucs2UInt& rUnicodeEnc )
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
