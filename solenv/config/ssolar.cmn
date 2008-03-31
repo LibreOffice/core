@@ -113,6 +113,7 @@ common
         L10N_framework
         LFS_CFLAGS
 		LOCALINI
+		MACOSX_DEPLOYMENT_TARGET
 		MK_UNROLL
 		MKDIR
 		MKOUT
