@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svptext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:28:49 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 BOOL SvpSalGraphics::CreateFontSubset(
     const rtl::OUString& rToFile,
-    ImplFontData* pFont,
+    const ImplFontData* pFont,
     sal_Int32* pGlyphIDs,
     sal_uInt8* pEncoding,
     sal_Int32* pWidths,
@@ -374,10 +374,7 @@ BOOL SvpSalGraphics::CreateFontSubset(
 
 // ---------------------------------------------------------------------------
 
-const std::map< sal_Unicode, sal_Int32 >* SvpSalGraphics::GetFontEncodingVector(
-    ImplFontData* pFont,
-    const std::map< sal_Unicode, rtl::OString >** pNonEncoded
-    )
+const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -391,8 +388,8 @@ const std::map< sal_Unicode, sal_Int32 >* SvpSalGraphics::GetFontEncodingVector(
 // ---------------------------------------------------------------------------
 
 const void* SvpSalGraphics::GetEmbedFontData(
-    ImplFontData* pFont,
-    const sal_Unicode* pUnicodes,
+    const ImplFontData* pFont,
+    const sal_Ucs* pUnicodes,
     sal_Int32* pWidths,
     FontSubsetInfo& rInfo,
     long* pDataLen
@@ -414,10 +411,10 @@ void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
     PspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-void SvpSalGraphics::GetGlyphWidths( ImplFontData* pFont,
+void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                    bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+                                   Int32Vector& rWidths,
+                                   Ucs2UIntMap& rUnicodeEnc )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -483,7 +480,7 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 {
     // iterate over all glyphs in the layout
     Point aPos;
-    sal_Int32 nGlyphIndex;
+    sal_GlyphId nGlyphIndex;
     SvpGlyphPeer& rGlyphPeer = SvpGlyphCache::GetInstance().GetPeer();
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ); )
     {
