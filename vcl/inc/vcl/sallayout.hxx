@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:53 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,8 @@ VCL_DLLPUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 // - SalLayout -
 // -------------
 
+typedef sal_uInt32 sal_GlyphId;
+
 // Glyph Flags
 #define GF_NONE     0x00000000
 #define GF_FLAGMASK 0xFF800000
@@ -205,6 +207,8 @@ public:
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }
 
+    virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+
     // methods using string indexing
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const = 0;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const = 0;
@@ -212,12 +216,12 @@ public:
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
 
     // methods using glyph indexing
-    virtual int     GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPos, int&,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
                         sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    virtual bool    IsSpacingGlyph( long nGlyphIndex ) const;
+    virtual bool    IsSpacingGlyph( sal_GlyphId ) const;
 
     // reference counting
     void            Reference() const;
@@ -269,7 +273,7 @@ public:
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
-    virtual int     GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPos,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                         int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
@@ -277,13 +281,12 @@ public:
     // used only by OutputDevice::ImplLayout, TODO: make friend
                     MultiSalLayout( SalLayout& rBaseLayout );   // transfer ownership
     virtual bool    AddFallback( SalLayout& rFallback,          // transfer ownership
-                         ImplLayoutRuns& rRuns, ImplFontData* pFallbackFont );
+                         ImplLayoutRuns&, const ImplFontData* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    InitFont() const;
 
-    ImplFontData*    GetFallbackFontData( int nFallbackLevel ) const
-    { return mpFallbackFonts[ nFallbackLevel ]; }
+    virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
 
     void SetInComplete(bool bInComplete = true);
 
@@ -302,7 +305,7 @@ private:
 
 private:
     SalLayout*      mpLayouts[ MAX_FALLBACK ];
-    ImplFontData*   mpFallbackFonts[ MAX_FALLBACK ];
+    const ImplFontData* mpFallbackFonts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
     bool            mbInComplete;
@@ -318,13 +321,13 @@ struct GlyphItem
     int     mnCharPos;      // index in string
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
-    long    mnGlyphIndex;
+    sal_GlyphId mnGlyphIndex;
     Point   maLinearPos;    // absolute position of non rotated string
 
 public:
             GlyphItem() {}
 
-            GlyphItem( int nCharPos, long nGlyphIndex, const Point& rLinearPos,
+            GlyphItem( int nCharPos, sal_GlyphId nGlyphIndex, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
@@ -363,7 +366,7 @@ public:
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
 
     // used by display layers
-    virtual int     GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPos, int&,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
                         sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL ) const;
 
 protected:
