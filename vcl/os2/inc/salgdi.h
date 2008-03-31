@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:49:20 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -320,8 +320,8 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( ImplFontData* pFont,
-                                          const sal_Unicode* pUnicodes,
+    virtual const void* GetEmbedFontData( const ImplFontData*,
+                                          const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
@@ -330,8 +330,8 @@ public:
 
     virtual void            GetGlyphWidths( ImplFontData* pFont,
                                             bool bVertical,
-                                            std::vector< sal_Int32 >& rWidths,
-                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
+                                            Int32Vector& rWidths,
+                                            Ucs2UIntMap& rUnicodeEnc );
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
