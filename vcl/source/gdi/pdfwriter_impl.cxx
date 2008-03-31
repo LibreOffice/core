@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:10:39 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 using namespace vcl;
 using namespace rtl;
 
-#if OSL_DEBUG_LEVEL < 2
+#if (OSL_DEBUG_LEVEL < 2)
 #define COMPRESS_PAGES
 #else
 #define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams
@@ -1977,7 +1977,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
     return pFiltered;
 }
 
-bool PDFWriterImpl::isBuiltinFont( ImplFontData* pFont ) const
+bool PDFWriterImpl::isBuiltinFont( const ImplFontData* pFont ) const
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     return (pFD != NULL);
@@ -2772,7 +2772,7 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont, sal_Int32 nFontObject )
+sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 nFontObject )
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     if( !pFD )
@@ -2796,7 +2796,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont, sal_Int32 nFontOb
     return nFontObject;
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont, EmbedFont& rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFontData* pFont, EmbedFont& rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
     if( isBuiltinFont( pFont ) )
@@ -2810,15 +2810,15 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
     sal_Int32 nFontDescriptor = 0;
 
     // prepare font encoding
-    const std::map< sal_Unicode, sal_Int32 >* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
+    const Ucs2SIntMap* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
     sal_Int32 nToUnicodeStream = 0;
     sal_uInt8 nEncoding[256];
-    sal_Unicode nEncodedCodes[256];
+    sal_Ucs nEncodedCodes[256];
     if( pEncoding )
     {
         memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
         memset( nEncoding, 0, sizeof(nEncoding) );
-        for( std::map< sal_Unicode, sal_Int32 >::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
+        for( Ucs2SIntMap::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
         {
             if( it->second != -1 )
             {
@@ -3401,7 +3401,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
     appendName( rPSName, rBuffer );
 }
 
-sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs )
+sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs )
 {
     int nMapped = 0, n = 0;
     for( n = 0; n < nGlyphs; n++ )
@@ -3500,7 +3500,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
@@ -3606,7 +3606,7 @@ bool PDFWriterImpl::emitFonts()
             sal_Int32 pGlyphIDs[ 256 ];
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
-            sal_Unicode pUnicodes[ 256 ];
+            sal_Ucs   pUnicodes[ 256 ];
             int nGlyphs = 1;
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
@@ -6248,20 +6248,20 @@ std::set< PDFWriter::ErrorCode > PDFWriterImpl::getErrors()
 
 
 void PDFWriterImpl::registerGlyphs( int nGlyphs,
-                                    sal_Int32* pGlyphs,
+                                    sal_GlyphId* pGlyphs,
                                     sal_Int32* pGlyphWidths,
-                                    sal_Unicode* pUnicodes,
+                                    sal_Ucs* pUnicodes,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
-                                    ImplFontData* pFallbackFonts[] )
+                                    const ImplFontData* pFallbackFonts[] )
 {
-    ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    const ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
     for( int i = 0; i < nGlyphs; i++ )
     {
         if( ! pGlyphs[i] )
             continue;
 
-        ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
+        const ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         if( isBuiltinFont( pCurrentFont ) )
         {
@@ -6345,23 +6345,23 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             }
             EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
 
-            const std::map< sal_Unicode, sal_Int32 >* pEncoding = NULL;
-            const std::map< sal_Unicode, rtl::OString >* pNonEncoded = NULL;
+            const Ucs2SIntMap* pEncoding = NULL;
+            const Ucs2OStrMap* pNonEncoded = NULL;
             getReferenceDevice()->ImplGetGraphics();
             pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
 
-            std::map< sal_Unicode, sal_Int32 >::const_iterator enc_it;
-            std::map< sal_Unicode, rtl::OString >::const_iterator nonenc_it;
+            Ucs2SIntMap::const_iterator enc_it;
+            Ucs2OStrMap::const_iterator nonenc_it;
 
             sal_Int32 nCurFontID = nFontID;
-            sal_Unicode cChar = pUnicodes[i];
+            sal_Ucs cChar = pUnicodes[i];
             if( pEncoding )
             {
                 enc_it = pEncoding->find( cChar );
                 if( enc_it != pEncoding->end() && enc_it->second > 0 )
                 {
                     DBG_ASSERT( (enc_it->second & 0xffffff00) == 0, "Invalid character code" );
-                    cChar = (sal_Unicode)enc_it->second;
+                    cChar = (sal_Ucs)enc_it->second;
                 }
                 else if( (enc_it == pEncoding->end() || enc_it->second == -1) &&
                          pNonEncoded &&
@@ -6374,7 +6374,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                         if( nec_it->m_aCMap.find( cChar ) != nec_it->m_aCMap.end() )
                         {
                             nCurFontID = nec_it->m_nFontID;
-                            cChar = (sal_Unicode)nec_it->m_aCMap[ cChar ];
+                            cChar = (sal_Ucs)nec_it->m_aCMap[ cChar ];
                             break;
                         }
                     }
@@ -6391,7 +6391,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                         rEncoding.m_aEncVector.back().m_aName = nonenc_it->second;
                         rEncoding.m_aCMap[ cChar ] = (sal_Int8)(rEncoding.m_aEncVector.size()-1);
                         nCurFontID = rEncoding.m_nFontID;
-                        cChar = (sal_Unicode)rEncoding.m_aCMap[ cChar ];
+                        cChar = (sal_Ucs)rEncoding.m_aCMap[ cChar ];
                     }
                 }
                 else
@@ -6406,9 +6406,9 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                         cChar -= 0xf000;
                     else
                     {
-                        String aString( cChar);
+                        String aString(cChar);
                         ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                        cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                        cChar = ((sal_Ucs)aChar.GetChar( 0 )) & 0x00ff;
                     }
                 }
             }
@@ -6681,14 +6681,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 
     const int nMaxGlyphs = 256;
 
-    sal_Int32 pGlyphs[nMaxGlyphs];
+    sal_GlyphId pGlyphs[nMaxGlyphs];
     sal_Int32 pGlyphWidths[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
-    sal_Unicode pUnicodes[nMaxGlyphs];
+    sal_Ucs   pUnicodes[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     sal_Int32 nAdvanceWidths[nMaxGlyphs];
-    ImplFontData* pFallbackFonts[nMaxGlyphs];
+    const ImplFontData* pFallbackFonts[nMaxGlyphs];
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -6819,13 +6819,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     {
         for( int i = 0; i < nGlyphs; i++ )
         {
-            if( pGlyphs[i] & GF_FONTMASK )
-                pFallbackFonts[i] = ((MultiSalLayout&)rLayout).GetFallbackFontData((pGlyphs[i] & GF_FONTMASK) >> GF_FONTSHIFT);
-            else
-                pFallbackFonts[i] = NULL;
+            pFallbackFonts[i] = rLayout.GetFallbackFontData( pGlyphs[i] );
 
             if( (pGlyphs[i] & GF_ISCHAR) )
-                pUnicodes[i] = sal::static_int_cast<sal_Unicode>(pGlyphs[i] & GF_IDXMASK);
+                pUnicodes[i] = static_cast<sal_Ucs>(pGlyphs[i] & GF_IDXMASK);
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 pUnicodes[i] = rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) );
@@ -6836,7 +6833,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 // glyphid (i.e. FreeType's synthetic glyphid for a Type1 font)
                 // back to unicode and then to embeddable font's encoding
                 if( getReferenceDevice()->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL )
-                    pUnicodes[i] = sal::static_int_cast<sal_Unicode>(GetMirroredChar(pUnicodes[i]));
+                    pUnicodes[i] = static_cast<sal_Ucs>(GetMirroredChar(pUnicodes[i]));
             }
             else
                 pUnicodes[i] = 0;
@@ -6844,6 +6841,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             // in multiple glyphs. The current SalLayout
             // implementations set -1 then to indicate that no direct
             // mapping is possible
+
+        // convert from sal_GlyphId to fontspecific glyphid
+        pGlyphs[i] &= GF_IDXMASK | GF_ISCHAR;
         }
         registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, pUnicodes, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
         for( int i = 0; i < nGlyphs; i++)
@@ -6897,7 +6897,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             sal_Int32 nWidth = 0, nAdvance=0;
             for( int nStart = 0;;)
             {
-                sal_Int32 nGlyphIndex;
+                sal_GlyphId nGlyphIndex;
                 if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                     break;
 
@@ -6996,7 +6996,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         for( int nStart = 0;;)
         {
             Point aPos;
-            sal_Int32 nGlyphIndex, nAdvance;
+            sal_GlyphId nGlyphIndex;
+            sal_Int32 nAdvance;
             if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
