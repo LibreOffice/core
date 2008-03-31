@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-26 08:28:08 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,7 +656,7 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     // handle the request for a native X11-font
     if( ImplX11FontData::CheckFontData( *pEntry->mpFontData ) )
     {
-        ImplX11FontData* pRequestedFont = static_cast<ImplX11FontData*>( pEntry->mpFontData );
+        const ImplX11FontData* pRequestedFont = static_cast<const ImplX11FontData*>( pEntry->mpFontData );
         const ExtendedXlfd& rX11Font = pRequestedFont->GetExtendedXlfd();
 
         Size aReqSize( pEntry->mnWidth, pEntry->mnHeight );
@@ -952,28 +952,18 @@ void* CairoFontsCache::FindCachedFont(void *pId)
 
 void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 {
-    static const int MAXGLYPHS = 160;
-    sal_Int32 aGlyphAry[ MAXGLYPHS ];
-    sal_Int32 aWidthAry[ MAXGLYPHS ];
     std::vector<cairo_glyph_t> cairo_glyphs;
-    int nMaxGlyphs = rLayout.GetOrientation() ? 1 : MAXGLYPHS;
+    cairo_glyphs.reserve( 256 );
 
     Point aPos;
-    int nStart = 0;
-    int nGlyphCount;
-    while ((nGlyphCount = rLayout.GetNextGlyphs(nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry)))
+    sal_GlyphId aGlyphId;
+    for( int nStart = 0; rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
-        long nXPos = aPos.X();
-        long nYPos = aPos.Y();
-        for (int i = 0; i < nGlyphCount; ++i)
-        {
-            cairo_glyph_t aGlyph;
-            aGlyph.index = aGlyphAry[i];
-            aGlyph.x = nXPos;
-            aGlyph.y = nYPos;
-            cairo_glyphs.push_back(aGlyph);
-            nXPos += aWidthAry[i];
-        }
+        cairo_glyph_t aGlyph;
+        aGlyph.index = aGlyphId;
+        aGlyph.x = aPos.X();
+        aGlyph.y = aPos.Y();
+        cairo_glyphs.push_back(aGlyph);
     }
 
     if (cairo_glyphs.empty())
@@ -1130,7 +1120,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     Point aPos;
     static const int MAXGLYPHS = 160;
-    sal_Int32 aGlyphAry[ MAXGLYPHS ];
+    sal_GlyphId aGlyphAry[ MAXGLYPHS ];
     int nMaxGlyphs = rLayout.GetOrientation() ? 1 : MAXGLYPHS;
     for( int nStart = 0;;)
     {
@@ -1168,7 +1158,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     int nYmax = 0;
     int nStart = 0;
     Point aPos;
-    sal_Int32 nGlyph;
+    sal_GlyphId nGlyph;
     for( bool bFirst=true; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
         const RawBitmap* const pRawBitmap = rGlyphPeer.GetRawBitmap( rFont, nGlyph );
@@ -1400,7 +1390,7 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
     XCopyGC( pDisplay, nGC, (1<<GCLastBit)-(1+GCFillStyle+GCLineWidth), tmpGC );
 
     Point aPos;
-    sal_Int32 nGlyph;
+    sal_GlyphId nGlyph;
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
         // #i51924# avoid 32->16bit coordinate truncation problem in X11
@@ -1761,7 +1751,7 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 BOOL X11SalGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
-                                   ImplFontData* pFont,
+                                   const ImplFontData* pFont,
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -1784,7 +1774,7 @@ BOOL X11SalGraphics::CreateFontSubset(
 
 //--------------------------------------------------------------------------
 
-const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* X11SalGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
 #ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
@@ -1810,7 +1800,7 @@ void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 
 //--------------------------------------------------------------------------
 
-const std::map< sal_Unicode, sal_Int32 >* X11SalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
 #ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
@@ -1827,10 +1817,10 @@ const std::map< sal_Unicode, sal_Int32 >* X11SalGraphics::GetFontEncodingVector(
 
 //--------------------------------------------------------------------------
 
-void X11SalGraphics::GetGlyphWidths( ImplFontData* pFont,
+void X11SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                    bool bVertical,
-                                   std::vector< sal_Int32 >& rWidths,
-                                   std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+                                   Int32Vector& rWidths,
+                                   Ucs2UIntMap& rUnicodeEnc )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
