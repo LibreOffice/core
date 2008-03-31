@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 15:56:23 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,7 +685,7 @@ void PspServerFontLayout::InitFont() const
 static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
     const int nMaxGlyphs = 200;
-    sal_Int32   aGlyphAry[ nMaxGlyphs ];
+    sal_GlyphId aGlyphAry[ nMaxGlyphs ];
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
@@ -960,7 +960,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 
 BOOL PspGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
-                                   ImplFontData* pFont,
+                                   const ImplFontData* pFont,
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -979,7 +979,7 @@ BOOL PspGraphics::CreateFontSubset(
 
 //--------------------------------------------------------------------------
 
-const void* PspGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* PspGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -999,7 +999,7 @@ void PspGraphics::FreeEmbedFontData( const void* pData, long nLen )
 
 //--------------------------------------------------------------------------
 
-const std::map< sal_Unicode, sal_Int32 >* PspGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+const Ucs2SIntMap* PspGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -1012,10 +1012,10 @@ const std::map< sal_Unicode, sal_Int32 >* PspGraphics::GetFontEncodingVector( Im
 
 //--------------------------------------------------------------------------
 
-void PspGraphics::GetGlyphWidths( ImplFontData* pFont,
+void PspGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                   bool bVertical,
-                                  std::vector< sal_Int32 >& rWidths,
-                                  std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+                                  Int32Vector& rWidths,
+                                  Ucs2UIntMap& rUnicodeEnc )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -1073,7 +1073,7 @@ bool PspGraphics::DoCreateFontSubset( const rtl::OUString& rToFile,
     return true;
 }
 
-const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
 
@@ -1097,7 +1097,7 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Unicode* pU
     rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
 
     psp::CharacterMetric aMetrics[256];
-    sal_Unicode aUnicodes[256];
+    sal_Ucs aUnicodes[256];
     if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
     {
         for( int i = 0; i < 256; i++ )
@@ -1137,7 +1137,7 @@ void PspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
         munmap( (char*)pData, nLen );
 }
 
-const std::map< sal_Unicode, sal_Int32 >* PspGraphics::DoGetFontEncodingVector( fontID aFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+const Ucs2SIntMap* PspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
 
@@ -1154,8 +1154,8 @@ const std::map< sal_Unicode, sal_Int32 >* PspGraphics::DoGetFontEncodingVector( 
 
 void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
                                     bool bVertical,
-                                    std::vector< sal_Int32 >& rWidths,
-                                    std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+                                    Int32Vector& rWidths,
+                                    Ucs2UIntMap& rUnicodeEnc )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.getGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
