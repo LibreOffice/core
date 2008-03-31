@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.237 $
+ *  $Revision: 1.238 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:09:15 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2799,7 +2799,7 @@ ImplFontSelectData::ImplFontSelectData( const Font& rFont,
 
 // -----------------------------------------------------------------------
 
-ImplFontSelectData::ImplFontSelectData( ImplFontData& rFontData,
+ImplFontSelectData::ImplFontSelectData( const ImplFontData& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
 :   ImplFontAttributes( rFontData ),
     mnWidth( rSize.Width() ),
@@ -2818,7 +2818,7 @@ ImplFontSelectData::ImplFontSelectData( ImplFontData& rFontData,
 
 // =======================================================================
 
-size_t ImplFontCache::IFSD_Hash::operator()(const ImplFontSelectData& rFSD ) const
+size_t ImplFontCache::IFSD_Hash::operator()( const ImplFontSelectData& rFSD ) const
 {
     // TODO: does it pay off to improve this hash function?
     static FontNameHash aFontNameHash;
@@ -4596,7 +4596,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
         sal_Int32 nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
         {
-            sal_Int32 nGlyphIndex;
+            sal_GlyphId nGlyphIndex;
             if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
@@ -4910,7 +4910,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        sal_Int32 nGlyphIndex;
+        sal_GlyphId nGlyphIndex;
         if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart ) )
             break;
 
