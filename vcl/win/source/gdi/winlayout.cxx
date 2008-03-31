@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:29 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
 class WinLayout : public SalLayout
 {
 public:
-                        WinLayout( HDC, ImplWinFontData&, ImplWinFontEntry& );
+                        WinLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
     float               GetFontScale() const    { return mfFontScale; }
@@ -155,7 +155,7 @@ protected:
     int                 mnBaseAdv;          // x-offset relative to Layout origin
     float               mfFontScale;        // allows metrics emulation of huge font sizes
 
-    ImplWinFontData&    mrWinFontData;
+    const ImplWinFontData& mrWinFontData;
     ImplWinFontEntry&   mrWinFontEntry;
 };
 
@@ -164,15 +164,15 @@ protected:
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC, BYTE nCharSet, ImplWinFontData&, ImplWinFontEntry& );
+                    SimpleWinLayout( HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry& );
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
-                        long* pGlyphAdvances, int* pCharIndexes ) const;
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                        sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
@@ -206,7 +206,7 @@ private:
 
 // =======================================================================
 
-WinLayout::WinLayout( HDC hDC, ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
+WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 :   mhDC( hDC ),
     mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
@@ -262,7 +262,7 @@ HFONT WinLayout::DisableFontScaling() const
 // =======================================================================
 
 SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
-    ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
+    const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
@@ -576,7 +576,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& nStart,
+int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
 {
     // return zero if no more glyph found
@@ -603,7 +603,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
             {
 #ifdef GNG_VERT_HACK
-                sal_Unicode cChar = (sal_Unicode)(nGlyphIndex & GF_IDXMASK);
+                sal_UCS4 cChar = (sal_UCS4)(nGlyphIndex & GF_IDXMASK);
                 if( mrWinFontData.HasGSUBstitutions( mhDC )
                 &&  mrWinFontData.IsGSUBstituted( cChar ) )
                     nGlyphIndex |= GF_ROTL | GF_GSUB;
@@ -1068,13 +1068,13 @@ public:
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout( HDC, ImplWinFontData&, ImplWinFontEntry& );
+                    UniscribeLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
-    virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
-                        long* pGlyphAdvances, int* pCharPosAry ) const;
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+                        sal_Int32* pGlyphAdvances, int* pCharPosAry ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
@@ -1223,7 +1223,7 @@ static bool InitUSP()
 // -----------------------------------------------------------------------
 
 UniscribeLayout::UniscribeLayout( HDC hDC,
-    ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
+    const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
     mnItemCount(0),
     mpScriptItems( NULL ),
@@ -1738,8 +1738,8 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 
 // -----------------------------------------------------------------------
 
-int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nStart, long* pGlyphAdvances, int* pCharPosAry ) const
+int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
+    int& nStart, sal_Int32* pGlyphAdvances, int* pCharPosAry ) const
 {
     if( nStart > mnGlyphCount )        // nStart>MAX means no more glyphs
         return 0;
@@ -2421,7 +2421,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
     WinLayout* pWinLayout = NULL;
 
-    ImplWinFontData& rFontFace      = *mpWinFontData[ nFallbackLevel ];
+    const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
 #if defined( USE_UNISCRIBE )
