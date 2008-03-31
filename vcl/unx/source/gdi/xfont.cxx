@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:10:40 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -785,7 +785,7 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
     nMaxGlyphs = 1;
 
     Point aPos;
-    sal_Int32 aGlyphAry[ MAXGLYPHS ];
+    sal_GlyphId aGlyphAry[ MAXGLYPHS ];
     sal_Unicode pStr[ MAXGLYPHS ];
     for( int nStart=0;;)
     {
