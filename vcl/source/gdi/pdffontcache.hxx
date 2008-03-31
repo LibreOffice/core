@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffontcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:05:41 $
+ *  last change: $Author: kz $ $Date: 2008-03-31 13:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,8 @@
 
 #include <sal/types.h>
 
-#include <vector>
-#include <map>
-
-class ImplFontData;
-class SalGraphics;
+#include <vcl/sallayout.hxx>
+#include <vcl/salgdi.hxx>
 
 namespace vcl
 {
@@ -54,7 +51,7 @@ namespace vcl
             int             m_nMagic;
             bool            m_bVertical;
 
-            FontIdentifier( ImplFontData*, bool bVertical );
+            FontIdentifier( const ImplFontData*, bool bVertical );
             FontIdentifier() : m_nFontId(0), m_nMagic(0), m_bVertical( false ) {}
 
             bool operator==( const FontIdentifier& rRight ) const
@@ -72,20 +69,20 @@ namespace vcl
         };
         struct FontData
         {
-            std::vector< sal_Int32 >                m_nWidths;
-            std::map< sal_Unicode, sal_uInt32 >     m_aGlyphIdToIndex;
+            Int32Vector  m_nWidths;
+            Ucs2UIntMap  m_aGlyphIdToIndex;
         };
         typedef std::map< FontIdentifier, sal_uInt32 > FontToIndexMap;
 
         std::vector< FontData >     m_aFonts;
         FontToIndexMap              m_aFontToIndex;
 
-        FontData& getFont( ImplFontData*, bool bVertical );
+        FontData& getFont( const ImplFontData*, bool bVertical );
         public:
         PDFFontCache() {}
         ~PDFFontCache() {}
 
-        sal_Int32 getGlyphWidth( ImplFontData* pFont, sal_uInt32 nGlyphId, bool bVertical, SalGraphics* pGraphics );
+        sal_Int32 getGlyphWidth( const ImplFontData*, sal_GlyphId, bool bVertical, SalGraphics* );
     };
 }
 
