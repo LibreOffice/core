@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2008-03-27 12:18:14 $
+ *  last change: $Author: mav $ $Date: 2008-04-01 09:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,20 @@
         </javac>
     </target>
 
+    <target name="xcucheck" depends="init">
+        <condition property="no.merge.present">
+            <not>
+                <available file="${out}/misc/${target}/merge/org/openoffice/Office/Custom/WikiExtension.xcu" type="file"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="xcumerge" depends="xcucheck, init" if="no.merge.present">
+        <copy todir="${out}/misc/${target}/merge">
+            <fileset dir="${out}/misc/${target}/registry/data" includes="**/*.xcu" casesensitive="yes"/>
+        </copy>
+    </target>
+
     <target name="jar" depends="compile, init">
         <jar basedir="${classes}" compress="true" jarfile="${dist}/${target}.jar">
             <manifest>
@@ -100,7 +114,7 @@
         </jar>
     </target>
 
-    <target name="tmpdir" depends="jar, init">
+    <target name="tmpdir" depends="xcumerge, jar, init">
         <copy todir="${out}/misc/${target}/package_tmp">
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
@@ -124,7 +138,7 @@
         </copy>
     </target>
 
-    <target name="uno-package" depends="tmpdir, jar, init">
+    <target name="uno-package" depends="tmpdir, xcumerge, jar, init">
         <delete file="${dist}/${name}.${ext}"/>
         <zip  destfile="${dist}/${name}.${ext}">
             <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
