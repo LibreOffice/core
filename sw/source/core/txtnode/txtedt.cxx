@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:26:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,21 +804,30 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
                        static_cast<xub_StrLen>(aBndry.endPos - aBndry.startPos) );
 }
 
-SwScanner::SwScanner( const SwTxtNode& rNd,
+SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageType* pLang,
+                      const ModelToViewHelper::ConversionMap* pConvMap,
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
-    : rNode( rNd ), nLen( 0 ), nWordType( nType ), bClip( bClp )
+    : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    ASSERT( rNd.GetTxt().Len(), "SwScanner: EmptyString" );
+    ASSERT( rText.Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
-    aCurrLang = rNd.GetLang( nBegin );
+    if ( pLanguage )
+    {
+        aCurrLang = *pLanguage;
+    }
+    else
+    {
+        ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
+        const xub_StrLen nModelBeginPos = (xub_StrLen)aModelBeginPos.mnPos;
+        aCurrLang = rNd.GetLang( nModelBeginPos );
+    }
 }
 
 BOOL SwScanner::NextWord()
 {
     nBegin = nBegin + nLen;
-    const XubString& rText = rNode.GetTxt();
     Boundary aBound;
 
     CharClass& rCC = GetAppCharClass();
@@ -831,11 +840,21 @@ BOOL SwScanner::NextWord()
         {
             if ( !lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
             {
-                const USHORT nNextScript =
-                        pBreakIt->xBreak->getScriptType( rText, nBegin );
-                aCurrLang = rNode.GetLang( nBegin, nNextScript );
-                rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
-                if ( rCC.isLetterNumeric( rText.GetChar( nBegin ) ) )
+                if ( !pLanguage )
+                {
+                    const USHORT nNextScriptType = pBreakIt->xBreak->getScriptType( rText, nBegin );
+                    ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
+                    const xub_StrLen nBeginModelPos = (xub_StrLen)aModelBeginPos.mnPos;
+                    aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
+                }
+
+                if ( nWordType != i18n::WordType::WORD_COUNT )
+                {
+                    rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
+                    if ( rCC.isLetterNumeric( rText.GetChar( nBegin ) ) )
+                        break;
+                }
+                else
                     break;
             }
             ++nBegin;
@@ -983,7 +1002,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
         // In case 2. we pass the wrong list to the scanned, because only
         // the words in the wrong list have to be checked
-        SwScanner aScanner( *this,
+        SwScanner aScanner( *this, aText, 0, 0,
                             WordType::DICTIONARY_WORD,
                             nBegin, nEnd );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord() )
@@ -1282,7 +1301,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
-        SwScanner aScanner( *pNode, WordType::DICTIONARY_WORD,
+        SwScanner aScanner( *pNode, pNode->aText, 0, 0, WordType::DICTIONARY_WORD,
                             nBegin, nEnd);
 
         while( aScanner.NextWord() )
@@ -1517,7 +1536,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( nBegin < nEnd )
     {
         USHORT nCnt = 200;
-        SwScanner aScanner( *pNode, WordType::DICTIONARY_WORD,
+        SwScanner aScanner( *pNode, pNode->aText, 0, 0, WordType::DICTIONARY_WORD,
                             nBegin, nEnd );
         while( aScanner.NextWord() )
         {
@@ -1787,33 +1806,73 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
             }
             else
             {
-                String& rWordStr = (String&)GetTxt();
-                String aOldStr( rWordStr );
+                String aOldStr( aText );
+                String& rCastStr = (String&)aText;
 
                 // fills the deleted redlines and hidden ranges with cChar:
                 const xub_Unicode cChar(' ');
                 const USHORT nNumOfMaskedChars =
-                        lcl_MaskRedlinesAndHiddenText( *this, rWordStr, nStt, nEnd, cChar, false );
+                        lcl_MaskRedlinesAndHiddenText( *this, rCastStr, nStt, nEnd, cChar, false );
 
+                // expand fields
+                rtl::OUString aExpandText;
+                const ModelToViewHelper::ConversionMap* pConversionMap =
+                        BuildConversionMap( aExpandText );
 
-                if( rWordStr.Len() && pBreakIt->xBreak.is() )
+                const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
+                const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
+
+                const bool bCount = aExpandText.getLength();
+
+                // count words in 'regular' text:
+                if( bCount && pBreakIt->xBreak.is() )
                 {
-                    SwScanner aScanner( *this,
+                    SwScanner aScanner( *this, aExpandText, 0, pConversionMap,
                                         i18n::WordType::WORD_COUNT,
-                                        nStt, nEnd );
+                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
+
+                    const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
 
                     while ( aScanner.NextWord() )
                     {
                         if ( aScanner.GetLen() > 1 ||
-                             CH_TXTATR_BREAKWORD != rWordStr.GetChar( aScanner.GetBegin() ) )
+                             CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ) )
                             ++nTmpWords;
                     }
                 }
 
-                ASSERT( rWordStr.Len() >= nNumOfMaskedChars,
+                ASSERT( aExpandText.getLength() >= nNumOfMaskedChars,
                         "More characters hidden that characters in string!" )
-                nTmpChars = nEnd - nStt - nNumOfMaskedChars;
-                rWordStr = aOldStr;
+                nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
+
+                // count words in numbering string:
+                if ( nStt == 0 && bCount )
+                {
+                    // add numbering label
+                    rtl::OUString aNumString = GetNumString();
+                    if ( aNumString.getLength() )
+                    {
+                        LanguageType aLanguage = GetLang( 0 );
+
+                        SwScanner aScanner( *this, aNumString, &aLanguage, 0,
+                                            i18n::WordType::WORD_COUNT,
+                                            0, (xub_StrLen)aNumString.getLength() );
+
+                        while ( aScanner.NextWord() )
+                            ++nTmpWords;
+
+                        nTmpChars += aNumString.getLength();
+                    }
+                    else if ( HasBullet() )
+                    {
+                        ++nTmpWords;
+                        ++nTmpChars;
+                    }
+                }
+
+                delete pConversionMap;
+
+                rCastStr = aOldStr;
 
                 // If the whole paragraph has been calculated, update cached
                 // values:
