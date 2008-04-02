@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\external\expat
+mkdir: %_DEST%\lib%_EXT%\x64
 ..\%__SRC%\misc\build\expat\xmlparse\xmlparse.h %_DEST%\inc%_EXT%\external\expat\xmlparse.h
 ..\%__SRC%\slb\expat_xmltok.lib %_DEST%\lib%_EXT%\expat_xmltok.lib
 ..\%__SRC%\slb\expat_xmlparse.lib %_DEST%\lib%_EXT%\expat_xmlparse.lib
@@ -8,4 +9,6 @@ mkdir: %_DEST%\inc%_EXT%\external\expat
 ..\%__SRC%\lib\libascii_expat_xmlparse.a %_DEST%\lib%_EXT%\libascii_expat_xmlparse.a
 ..\%__SRC%\misc\_ooo_st_expat_xmltok.pdb %_DEST%\lib%_EXT%\_ooo_st_expat_xmltok.pdb
 ..\%__SRC%\misc\_ooo_st_expat_xmlparse.pdb %_DEST%\lib%_EXT%\_ooo_st_expat_xmlparse.pdb
+..\%__SRC%\slb\x64\expat_xmltok.lib %_DEST%\lib%_EXT%\x64\expat_xmltok.lib
+..\%__SRC%\slb\x64\expat_xmlparse.lib %_DEST%\lib%_EXT%\x64\expat_xmlparse.lib
 
