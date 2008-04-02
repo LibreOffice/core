@@ -4,7 +4,7 @@ cv	canvas\inc										 nmake	-	all	cv_inc NULL
 cv	canvas\source\tools								 nmake	-	all cv_tools cv_inc NULL
 cv	canvas\source\vcl								 nmake	-	all	cv_vcl cv_tools cv_inc NULL
 cv	canvas\source\simplecanvas						 nmake	-	all	cv_simplecanvas cv_tools cv_inc NULL
-cv	canvas\source\cairo								 nmake	-	u	cv_cairo cv_tools cv_inc NULL
+cv	canvas\source\cairo								 nmake	-	all	cv_cairo cv_tools cv_inc NULL
 cv	canvas\source\directx							 nmake	-	w	cv_directx cv_tools cv_inc NULL
 cv	canvas\source\null								 nmake	-	all	cv_null cv_tools cv_inc NULL
 cv	canvas\source\java								 nmake	-	all cv_java cv_inc NULL
