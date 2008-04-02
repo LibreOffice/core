@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Controller.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:33:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 16:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,39 @@ public class Controller {
         }
 
         return createdDirectory;
+    }
+
+    static public boolean reducedRootWritePrivileges() {
+        Vector vec = new Vector();
+        File dir = new File("/usr");
+        vec.add(dir);
+        dir = new File("/etc");
+        vec.add(dir);
+
+        boolean restrictedWritePrivilges = false;
+
+        // Check for zones. If "zonename" is successful and the name is not "global",
+        // this is a "sparse zone".
+        // Alternative: Simply always check, if root has write access in selected directories.
+
+        for (int i = 0; i < vec.size(); i++) {
+            File directory = (File)vec.get(i);
+            if ( directory.exists() ) {
+                // do we have write privileges inside the directory
+                String tempDirName = "temptestdir";
+                File tempDir = new File(directory, tempDirName);
+
+                if ( SystemManager.createDirectory(tempDir) ) {
+                    SystemManager.removeDirectory(tempDir);
+                } else {
+                    restrictedWritePrivilges = true;
+                    System.err.println("Restricted Root privileges. No write access in " + directory.getPath());
+                    break;
+                }
+            }
+        }
+
+        return restrictedWritePrivilges;
     }
 
     static public void checkForNewerVersion(InstallData installData) {
