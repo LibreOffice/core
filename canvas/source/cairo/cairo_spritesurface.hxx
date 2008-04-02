@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritesurface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:43:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,7 @@
 #ifndef _VCLCANVAS_SPRITESURFACE_HXX
 #define _VCLCANVAS_SPRITESURFACE_HXX
 
-#ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
-#endif
-
 #include "cairo_sprite.hxx"
 
 class Point;
