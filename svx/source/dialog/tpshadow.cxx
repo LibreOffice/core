@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:50:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:54:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include "cuitabarea.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
+#include <cuitabline.hxx>
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
 #include <svx/xlineit0.hxx>
@@ -252,7 +253,19 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 *pnColorTableState & CT_MODIFIED )
             {
                 if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                {
+                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
+                    if( pArea )
+                    {
+                        pColorTab = pArea->GetNewColorTable();
+                    }
+                    else
+                    {
+                        SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
+                        if( pLine )
+                            pColorTab = pLine->GetNewColorTable();
+                    }
+                }
 
                 // aLbShadowColor
                 nPos = aLbShadowColor.GetSelectEntryPos();
