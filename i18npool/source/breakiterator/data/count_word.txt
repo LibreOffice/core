@@ -22,21 +22,16 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
                                    [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
 
 
+$dash = \u002d;
+
 $ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:] 
+                           [:P:] [:S:] [:LineBreak = Numeric:]
+                           - $dash
                            - $Katakana
                            - [:Script = Thai:]
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
                            
-$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]  [:name = HEBREW PUNCTUATION GERSHAYIM:]
-              [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:]];  
-              
-$MidNumLet = [:name = FULL STOP:];
-
-$MidNum    = [[:LineBreak = Infix_Numeric:] - $MidNumLet];
-$Numeric   = [:LineBreak = Numeric:];
-
-
 #
 #  Character Class Definitions.
 #    The names are those from TR29.
@@ -70,20 +65,12 @@ $Format    = [[:Cf:]];
 #  "Extended"  definitions.  Grapheme Cluster + Format Chars, treated like the base char.
 #
 $ALetterEx    = $ALetter   $Extend*; 
-$NumericEx    = $Numeric   $Extend*;
-$MidNumEx     = $MidNum    $Extend*;
-$MidNumLetEx  = $MidNumLet $Extend*;
-$MidLetterEx  = $MidLetter $Extend*;
 $KatakanaEx   = $Katakana  $Extend*;
 $FormatEx     = $Format    $Extend*;
-
-$word_pad=[[:P:][:S:][:Z:][:C:]];
 
 #
 #  Numbers.  Rules 8, 11, 12 form the TR.
 #
-$NumberSequence = $NumericEx ($FormatEx* ($MidNumEx | $MidNumLetEx)? $FormatEx* $NumericEx)*;
-$NumberSequence $word_pad* {100};
 
 #
 #  Words.  Alpha-numerics.  Rule 5, 6, 7, 9, 10
@@ -91,8 +78,11 @@ $NumberSequence $word_pad* {100};
 #     - may include both letters and numbers.
 #     - may include  MideLetter, MidNumber punctuation.
 #
-$LetterSequence = $ALetterEx ($FormatEx* ($MidLetterEx | $MidNumLetEx)? $FormatEx* $ALetterEx)*;     # rules #6, #7
-($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* $word_pad* {200};
+$LetterSequence = $ALetterEx ($FormatEx* $ALetterEx)*;     # rules #6, #7
+$LetterSequence {200};
+
+$ALetterEx* $dash+ {200};
+$ALetterEx* ($dash $LetterSequence)+ $dash* {200};
 
 #
 #  Do not break between Katakana.   Rule #13.
@@ -105,14 +95,14 @@ $KatakanaEx ($FormatEx* $KatakanaEx)* {300};
 #                           Separated from the "Everything Else" rule, below, only so that they
 #                           can be tagged with a return value.   TODO:  is this what we want?
 #
-# [:IDEOGRAPHIC:] $Extend* $word_pad* {400};
+# [:IDEOGRAPHIC:] $Extend* {400};
 
 #
 #  Everything Else, with no tag.
 #                   Non-Control chars combine with $Extend (combining) chars.
 #                   Controls are do not.
 #
-[^$Control [:Ideographic:]] $Extend* $word_pad*;
+[^$Control [:Ideographic:]] $Extend*;
 $CR $LF;
 
 #
@@ -126,7 +116,7 @@ $CR $LF;
 #    reaches something that can only be the start (and probably only) char in a "word".
 #    A space or punctuation meets the test.
 #
-$NonStarters = [$Numeric $ALetter $Katakana $MidLetter $MidNum $MidNumLet $Extend $Format];
+$NonStarters = [$ALetter $Katakana $Extend $Format];
 
 #!.*;
 ! ($NonStarters* | \n \r) .;
