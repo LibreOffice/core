@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:29:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,11 +331,13 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
 
         if(!bTextEdit )
         {
-            rSet.DisableItem(SID_BULLET);
             rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
             rSet.DisableItem(FN_INSERT_HARDHYPHEN);
             rSet.DisableItem(FN_INSERT_HARD_SPACE);
         }
+
+        if( !bTextEdit && (dynamic_cast<OutlineViewShell*>( pViewShell ) == 0) )
+            rSet.DisableItem(SID_BULLET);
 
         if(!bTextEdit || !bCtlEnabled )
         {
