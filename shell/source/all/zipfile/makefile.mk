@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:45:39 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:43:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=$(SLO)$/zipfile.obj\
     $(SLO)$/zipexcptn.obj
-    
+
+SLOFILES_X64=$(SLO_X64)$/zipfile.obj\
+    $(SLO_X64)$/zipexcptn.obj
+
 # --- Targets ------------------------------------------------------
 
+.INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+.INCLUDE :	tg_wntx64.mk
+
