@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 16:16:56 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:50:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/aquaprintview.obj     \
             $(SLO)$/salbmp.obj            \
             $(SLO)$/salogl.obj
+
+.IF "$(ENABLE_CAIRO)" == "TRUE"
+CDEFS+= -DCAIRO
+.ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
 
