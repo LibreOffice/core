@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:39:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #endif
 
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/request.hxx>
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -129,7 +130,7 @@ FunctionReference FuPresentationLayout::Create( ViewShell* pViewSh, ::sd::Window
     return xFunc;
 }
 
-void FuPresentationLayout::DoExecute( SfxRequest& )
+void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 {
     // damit nicht Objekte, die gerade editiert werden oder selektiert
     // sind , verschwinden
@@ -175,6 +176,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& )
     // Dialog aufrufen
     BOOL   bLoad = FALSE;           // tauchen neue Masterpages auf?
     String aFile;
+
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
 
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
@@ -182,31 +184,49 @@ void FuPresentationLayout::DoExecute( SfxRequest& )
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, bCheckMasters ) );
     aSet.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aOldLayoutName));
 
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    AbstractSdPresLayoutDlg* pDlg = pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, mpViewShell, NULL, aSet ) : 0;
 
-    USHORT nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
 
-    switch (nResult)
+    const SfxItemSet *pArgs = rReq.GetArgs ();
+
+    if (pArgs)
     {
-        case RET_OK:
-        {
-            pDlg->GetAttr(aSet);
-            if (aSet.GetItemState(ATTR_PRESLAYOUT_LOAD) == SFX_ITEM_SET)
-                bLoad = ((SfxBoolItem&)aSet.Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
-            if( aSet.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SFX_ITEM_SET )
-                bMasterPage = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
-            if( aSet.GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SFX_ITEM_SET )
-                bCheckMasters = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
-            if (aSet.GetItemState(ATTR_PRESLAYOUT_NAME) == SFX_ITEM_SET)
-                aFile = ((SfxStringItem&)aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
-        }
-        break;
-
-        default:
-            bError = TRUE;
+        if (pArgs->GetItemState(ATTR_PRESLAYOUT_LOAD) == SFX_ITEM_SET)
+            bLoad = ((SfxBoolItem&)pArgs->Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
+        if( pArgs->GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SFX_ITEM_SET )
+            bMasterPage = ( (SfxBoolItem&) pArgs->Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+        if( pArgs->GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SFX_ITEM_SET )
+            bCheckMasters = ( (SfxBoolItem&) pArgs->Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
+        if (pArgs->GetItemState(ATTR_PRESLAYOUT_NAME) == SFX_ITEM_SET)
+            aFile = ((SfxStringItem&)pArgs->Get(ATTR_PRESLAYOUT_NAME)).GetValue();
     }
-    delete pDlg;
+    else
+    {
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        AbstractSdPresLayoutDlg* pDlg = pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, mpViewShell, NULL, aSet ) : 0;
+
+        USHORT nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
+
+        switch (nResult)
+        {
+            case RET_OK:
+            {
+                pDlg->GetAttr(aSet);
+                if (aSet.GetItemState(ATTR_PRESLAYOUT_LOAD) == SFX_ITEM_SET)
+                    bLoad = ((SfxBoolItem&)aSet.Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
+                if( aSet.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SFX_ITEM_SET )
+                    bMasterPage = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+                if( aSet.GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SFX_ITEM_SET )
+                    bCheckMasters = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
+                if (aSet.GetItemState(ATTR_PRESLAYOUT_NAME) == SFX_ITEM_SET)
+                    aFile = ((SfxStringItem&)aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+            }
+            break;
+
+            default:
+                bError = TRUE;
+        }
+        delete pDlg;
+    }
 
     if (!bError)
     {
