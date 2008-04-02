@@ -59,7 +59,7 @@ APP1PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 .IF "$(APP1LIBS)"!=""
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP1LIBS)"!="" 
 .ENDIF
 
@@ -265,7 +265,7 @@ APP2PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 .IF "$(APP2LIBS)"!=""
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP2LIBS)"!="" 
 .ENDIF
 
@@ -471,7 +471,7 @@ APP3PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 .IF "$(APP3LIBS)"!=""
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP3LIBS)"!="" 
 .ENDIF
 
@@ -677,7 +677,7 @@ APP4PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 .IF "$(APP4LIBS)"!=""
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP4LIBS)"!="" 
 .ENDIF
 
@@ -883,7 +883,7 @@ APP5PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 .IF "$(APP5LIBS)"!=""
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP5LIBS)"!="" 
 .ENDIF
 
@@ -1089,7 +1089,7 @@ APP6PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 .IF "$(APP6LIBS)"!=""
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP6LIBS)"!="" 
 .ENDIF
 
@@ -1295,7 +1295,7 @@ APP7PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 .IF "$(APP7LIBS)"!=""
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP7LIBS)"!="" 
 .ENDIF
 
@@ -1501,7 +1501,7 @@ APP8PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 .IF "$(APP8LIBS)"!=""
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP8LIBS)"!="" 
 .ENDIF
 
@@ -1707,7 +1707,7 @@ APP9PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 .IF "$(APP9LIBS)"!=""
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP9LIBS)"!="" 
 .ENDIF
 
@@ -1913,7 +1913,7 @@ APP10PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 .IF "$(APP10LIBS)"!=""
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP10LIBS)"!="" 
 .ENDIF
 
