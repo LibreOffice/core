@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iso8601_converter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:46:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,10 +162,15 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     std::wostringstream oss;
 
+#if defined(_MSC_VER) && defined(_M_X64)
+    oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
+           std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
+           std::setw(2) << std::setfill(wchar_t('0')) << seconds;
+#else
     oss << std::setw(2) << std::setfill('0') << hours   << L":" <<
            std::setw(2) << std::setfill('0') << minutes << L":" <<
            std::setw(2) << std::setfill('0') << seconds;
-
+#endif
     return oss.str();
 }
 
