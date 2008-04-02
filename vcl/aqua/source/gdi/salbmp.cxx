@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:59:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:50:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -862,6 +862,41 @@ bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
     if ( mxGraphicContext )
     {
         bRet = true;
+
+#ifdef CAIRO
+        if ((CGBitmapContextGetBitmapInfo(mxGraphicContext) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host) {
+            /**
+             * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
+             */
+            OSL_TRACE("AquaSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
+
+            CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
+
+            // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
+            CGContextRef mxGraphicContextNew = CGBitmapContextCreate( CGBitmapContextGetData(mxGraphicContext),
+                                                                      CGBitmapContextGetWidth(mxGraphicContext),
+                                                                      CGBitmapContextGetHeight(mxGraphicContext),
+                                                                      CGBitmapContextGetBitsPerComponent(mxGraphicContext),
+                                                                      CGBitmapContextGetBytesPerRow(mxGraphicContext),
+                                                                      CGBitmapContextGetColorSpace(mxGraphicContext),
+                                                                      CGBitmapContextGetBitmapInfo(mxGraphicContext) | kCGBitmapByteOrder32Host);
+            CFRelease(mxGraphicContext);
+
+            // Needs to be flipped
+            CGContextSaveGState( mxGraphicContextNew );
+            CGContextTranslateCTM (mxGraphicContextNew, 0, CGBitmapContextGetHeight(mxGraphicContextNew));
+            CGContextScaleCTM (mxGraphicContextNew, 1.0, -1.0);
+
+            CGContextDrawImage(mxGraphicContextNew, CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
+
+            // Flip back
+            CGContextRestoreGState( mxGraphicContextNew );
+
+            CGImageRelease( xImage );
+            mxGraphicContext = mxGraphicContextNew;
+        }
+#endif
+
         rData.rImageContext = (void *) mxGraphicContext;
         rData.mnWidth = (int) CGBitmapContextGetWidth(mxGraphicContext);
         rData.mnHeight = (int) CGBitmapContextGetHeight(mxGraphicContext);
