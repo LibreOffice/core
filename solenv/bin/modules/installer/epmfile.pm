@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 12:58:55 $
+#   last change: $Author: kz $ $Date: 2008-04-02 15:59:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2141,6 +2141,12 @@ sub create_packages_without_epm
         my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
         if ($$compressorref ne "")
         {
+            # Saving original pkginfo, to set time stamp later
+            my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
+            my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
+            $systemcall = "cp -p $pkginfoorig $pkginfotmp";
+             make_systemcall($systemcall);
+
             $faspac = $$compressorref;
             $infoline = "Found compressor: $faspac\n";
             push( @installer::globals::logfileinfo, $infoline);
@@ -2150,6 +2156,12 @@ sub create_packages_without_epm
 
              $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
              make_systemcall($systemcall);
+
+             # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
+             # updated the size and checksum, but not the time stamp.
+             $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+             make_systemcall($systemcall);
+            if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
 
             installer::logger::include_timestamp_into_logfile("End of $faspac");
         }
