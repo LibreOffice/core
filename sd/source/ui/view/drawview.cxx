@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:56:08 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, pSheet, &aTempSet);
                         mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                        pSheet->GetItemSet().Put(aTempSet);
+                        pSheet->GetItemSet().Put(aTempSet,false);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         bOk = TRUE;
                     }
