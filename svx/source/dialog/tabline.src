@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:44:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,6 +748,12 @@ TabDialog RID_SVXDLG_LINE
             };
             PageItem
             {
+                Identifier = RID_SVXPAGE_SHADOW ;
+                PageResID = RID_SVXPAGE_SHADOW ;
+                Text [ en-US ] = "Shadow" ;
+            };
+            PageItem
+            {
                 Identifier = RID_SVXPAGE_LINE_DEF ;
                 Text [ en-US ] = "Line Styles" ;
                 PageResID = RID_SVXPAGE_LINE_DEF ;
@@ -758,6 +764,14 @@ TabDialog RID_SVXDLG_LINE
                 Text [ en-US ] = "Arrow Styles" ;
                 PageResID = RID_SVXPAGE_LINEEND_DEF ;
             };
+/*
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_COLOR ;
+                Text [ en-US ] = "Colors" ;
+                PageResID = RID_SVXPAGE_COLOR ;
+            };
+*/
         };
     };
 };
