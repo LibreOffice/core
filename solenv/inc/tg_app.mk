@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: obo $ $Date: 2008-03-25 14:21:34 $
+#   last change: $Author: vg $ $Date: 2008-04-02 14:22:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP$(TNR)PRODUCTNAME)\"
 .IF "$(APP$(TNR)LIBS)"!=""
 $(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP$(TNR)LIBS)"!="" 
 .ENDIF
 
