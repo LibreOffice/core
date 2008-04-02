@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:34:48 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@
 #include "NotesChildWindow.hxx"
 #endif
 
+#include "tmplctrl.hxx"
 
 /*************************************************************************
 |*
@@ -299,6 +300,7 @@ void SdDLL::RegisterControllers()
     svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
+    SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
     SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
     SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
