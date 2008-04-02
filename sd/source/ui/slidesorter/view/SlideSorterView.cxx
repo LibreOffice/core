@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:28:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 #ifndef _SDRPAGEWINDOW_HXX
 #include <svx/sdrpagewindow.hxx>
 #endif
+#include <svtools/itempool.hxx>
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -111,10 +112,12 @@ SlideSorterView::SlideSorterView (
     maPageNumberAreaModelSize(0,0),
     maModelBorder()
 {
+    maPageModel.GetItemPool().FreezeIdRanges();
+
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
 
-    ModelHasChanged();
+    LocalModelHasChanged();
 }
 
 
@@ -231,21 +234,31 @@ void SlideSorterView::ModelHasChanged (void)
 {
     if (mbModelChangedWhileModifyEnabled)
     {
-        mbModelChangedWhileModifyEnabled = false;
-
-        // First call our base class.
-        View::ModelHasChanged ();
-
-        // Then re-set the page as current page that contains the page objects.
-        ShowSdrPage(mpPage);
-
-        // Initialize everything that depends on a page view, now that we have
-        // one.
-        GetSdrPageView()->SetApplicationBackgroundColor(
-            Application::GetSettings().GetStyleSettings().GetWindowColor());
-
-        UpdatePageBorders();
+        controller::SlideSorterController::ModelChangeLock alock( GetController() );
+        GetController().HandleModelChange();
+        LocalModelHasChanged();
     }
+}
+
+
+
+
+void SlideSorterView::LocalModelHasChanged(void)
+{
+    mbModelChangedWhileModifyEnabled = false;
+
+    // First call our base class.
+    View::ModelHasChanged ();
+
+    // Then re-set the page as current page that contains the page objects.
+    ShowSdrPage(mpPage);
+
+    // Initialize everything that depends on a page view, now that we have
+    // one.
+    GetSdrPageView()->SetApplicationBackgroundColor(
+        Application::GetSettings().GetStyleSettings().GetWindowColor());
+
+    UpdatePageBorders();
 }
 
 
