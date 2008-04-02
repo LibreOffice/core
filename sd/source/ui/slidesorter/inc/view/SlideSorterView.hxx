@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:36:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,8 @@ public:
     view::Layouter& GetLayouter (void);
 
     virtual void ModelHasChanged (void);
+
+    void LocalModelHasChanged(void);
 
     /** This method is typically called before a model change takes place.
         All references to model data are released.  PostModelChange() has to
