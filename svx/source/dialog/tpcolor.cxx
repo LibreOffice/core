@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:34:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:53:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #include "dlgname.hrc"
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialmgr.hxx>
+#include <cuitabline.hxx>
 
 #define DLGWIN GetParentDialog( this )
 
@@ -814,7 +815,19 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                 if( pColTab )
                 {
                     // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pColorTab != ( (SvxAreaTabDialog*) DLGWIN )->GetColorTable() )
+                    const XColorTable *pTempTable = 0;
+                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
+                    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
+                    if( pArea )
+                    {
+                        pTempTable = pArea->GetColorTable();
+                    }
+                    else if( pLine )
+                    {
+                            pTempTable = pLine->GetColorTable();
+                    }
+
+                    if( pColorTab != pTempTable )
                     {
                         if( bDeleteColorTable )
                             delete pColorTab;
@@ -823,7 +836,14 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                     }
 
                     pColorTab = pColTab;
-                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewColorTable( pColorTab );
+                    if( pArea )
+                    {
+                        pArea->SetNewColorTable( pColorTab );
+                    }
+                    else if( pLine )
+                    {
+                        pLine->SetNewColorTable( pColorTab );
+                    }
 
                     aLbColor.Clear();
                     aValSetColorTable.Clear();
