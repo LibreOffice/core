@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:32:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,9 @@ namespace cairocanvas
             // wouldn't save much render time, and b) will clutter
             // scrolled sprite content outside this area)
         cairo_save( pCairo );
-        cairo_rectangle( pCairo, rArea.getMinX(), rArea.getMinY(), rArea.getWidth(), rArea.getHeight() );
+        cairo_rectangle( pCairo, rArea.getMinX(), rArea.getMinY(),
+                         sal::static_int_cast<sal_Int32>(rArea.getWidth()),
+                         sal::static_int_cast<sal_Int32>(rArea.getHeight()) );
         cairo_clip( pCairo );
 
             // repaint affected sprite directly to output device (at
@@ -350,8 +352,9 @@ namespace cairocanvas
                       aDestPos.getX() - aSourceUpperLeftPos.getX(),
                       aDestPos.getY() - aSourceUpperLeftPos.getY() );
         cairo_rectangle( pBufferCairo,
-                 aDestPos.getX(), aDestPos.getY(),
-                 aDestRect.getRange().getX(), aDestRect.getRange().getY() );
+                         aDestPos.getX(), aDestPos.getY(),
+                         sal::static_int_cast<sal_Int32>(aDestRect.getWidth()),
+                         sal::static_int_cast<sal_Int32>(aDestRect.getHeight()) );
         cairo_clip( pBufferCairo );
         cairo_set_operator( pBufferCairo, CAIRO_OPERATOR_SOURCE );
         cairo_paint( pBufferCairo );
