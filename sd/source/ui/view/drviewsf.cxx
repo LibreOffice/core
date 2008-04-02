@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:58:00 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
         if (pOLV)
         {
+            bool bField = false;
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -172,8 +173,17 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                         aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
                         aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
                         aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                        bField = true;
                     }
                 }
+            }
+            if (!bField)
+            {
+                // use selected text as name for urls
+                String sReturn = pOLV->GetSelected();
+                sReturn.Erase(255);
+                sReturn.EraseTrailingChars();
+                aHLinkItem.SetName(sReturn);
             }
         }
         else
