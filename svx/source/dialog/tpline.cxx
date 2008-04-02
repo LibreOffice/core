@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:52:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,10 @@ SvxLineTabPage::SvxLineTabPage
     aXColor             ( String(), COL_LIGHTRED ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    nPageType           ( 0 )//CHINA001 pPageType           ( NULL ),
+     pnLineEndListState( 0 ),
+    pnDashListState( 0 ),
+    pnColorTableState( 0 ),
+   nPageType           ( 0 )//CHINA001 pPageType           ( NULL ),
 {
     FreeResource();
 
@@ -507,6 +510,28 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 ChangePreviewHdl_Impl( this );
             }
         }
+
+            // ColorTable
+            if( *pnColorTableState )
+            {
+                if( *pnColorTableState & CT_CHANGED )
+                    pColorTab = ( (SvxLineTabDialog*) DLGWIN )->
+                                            GetNewColorTable();
+                // aLbColor
+                sal_uInt16 nColorPos = aLbColor.GetSelectEntryPos();
+                aLbColor.Clear();
+                aLbColor.Fill( pColorTab );
+                nCount = aLbColor.GetEntryCount();
+                if( nCount == 0 )
+                    ; // This case should never occur
+                else if( nCount <= nColorPos )
+                    aLbColor.SelectEntryPos( 0 );
+                else
+                    aLbColor.SelectEntryPos( nColorPos );
+
+                ChangePreviewHdl_Impl( this );
+            }
+
         nPageType = 0;//CHINA001 *pPageType = 0;
     }
     // Seite existiert im Ctor noch nicht, deswegen hier!
@@ -1420,6 +1445,16 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
         aFtTransparent.Enable();
         aMtrTransparent.Enable();
     }
+
+    const bool bHasLineStart = aLbStartStyle.GetSelectEntryPos() != 0;
+    const bool bHasLineEnd = aLbEndStyle.GetSelectEntryPos() != 0;
+
+    aFtLineEndsWidth.Enable( bHasLineStart || bHasLineEnd );
+    aMtrStartWidth.Enable( bHasLineStart );
+    aTsbCenterStart.Enable( bHasLineStart );
+    aMtrEndWidth.Enable( bHasLineEnd );
+    aTsbCenterEnd.Enable( bHasLineEnd );
+
     return( 0L );
 }
 
