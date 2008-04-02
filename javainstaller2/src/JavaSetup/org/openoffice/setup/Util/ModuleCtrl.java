@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModuleCtrl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:38:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 16:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,6 +411,18 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setShowInUserInstallFlags(child);
+        }
+    }
+
+    static public void setIgnoreNonRelocatablePackages(PackageDescription packageData) {
+        if ( ! packageData.isRelocatable() ) {
+            packageData.setSelectionState(PackageDescription.IGNORE);
+            System.err.println("Ignoring package " + packageData.getName() + " " + packageData.getPackageName());
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setIgnoreNonRelocatablePackages(child);
         }
     }
 
