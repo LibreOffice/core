@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:33:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -201,23 +203,14 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::text;
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 using ::com::sun::star::view::XSelectionSupplier;
 using ::com::sun::star::view::XSelectionChangeListener;
 using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertyChangeListener;
-using ::com::sun::star::drawing::XDrawView;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::drawing::XShapes;
-using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
@@ -420,6 +413,12 @@ void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
 
     if( nStateChange == STATE_CHANGE_VISIBLE )
         updateMotionPathTags();
+}
+
+void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
+{
+    if( mpCustomAnimationList )
+        mpCustomAnimationList->KeyInput( rKEvt );
 }
 
 void CustomAnimationPane::addListener()
@@ -1362,6 +1361,36 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, CustomAnimationEff
     return bEffectChanged;
 }
 
+static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
+{
+    try
+    {
+        const OUString sShapeType( xShape->getShapeType() );
+
+        if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TitleTextShape") ) ||
+            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OutlinerShape") ) ||
+            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.SubtitleShape") ) ||
+            sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape") ) )
+        {
+            const OUString sFillStyle( RTL_CONSTASCII_USTRINGPARAM("FillStyle" ) );
+            const OUString sLineStyle( RTL_CONSTASCII_USTRINGPARAM("LineStyle" ) );
+            Reference< XPropertySet > xSet( xShape, UNO_QUERY_THROW );
+
+            FillStyle eFillStyle;
+            xSet->getPropertyValue( sFillStyle ) >>= eFillStyle;
+
+            ::com::sun::star::drawing::LineStyle eLineStyle;
+            xSet->getPropertyValue( sLineStyle ) >>= eLineStyle;
+
+            return eFillStyle != FillStyle_NONE || eLineStyle != ::com::sun::star::drawing::LineStyle_NONE;
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+    }
+    return sal_True;
+}
 
 STLPropertySet* CustomAnimationPane::createSelectionSet()
 {
@@ -1413,6 +1442,8 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandlePresetId, makeAny( pEffect->getPresetId() ) );
 
         addValue( pSet, nHandleHasText, makeAny( (sal_Bool)pEffect->hasText() ) );
+
+        addValue( pSet, nHandleHasVisibleShape, Any( hasVisibleShape( pEffect->getTargetShape() ) ) );
 
         Any aSoundSource;
         if( pEffect->getAudio().is() )
@@ -1926,6 +1957,9 @@ void CustomAnimationPane::onChange( bool bCreate )
 
     // first create vector of targets for dialog preview
     std::vector< Any > aTargets;
+    OUString sPresetId;
+    double fDuration = 2.0f;
+
     if( bCreate )
     {
         // gather shapes from the selection
@@ -1992,15 +2026,22 @@ void CustomAnimationPane::onChange( bool bCreate )
         {
             if( !bHasText || !(*aIter)->hasText() )
                 bHasText = false;
+
+            if( sPresetId.getLength() == 0 )
+            {
+                sPresetId = (*aIter)->getPresetId();
+                fDuration = (*aIter)->getDuration();
+            }
+
             aTargets.push_back( (*aIter++)->getTarget() );
         }
     }
 
-    CustomAnimationCreateDialog* pDlg = new CustomAnimationCreateDialog( this, this, aTargets, bHasText );
+    CustomAnimationCreateDialog* pDlg = new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration );
     if( pDlg->Execute() )
     {
         addUndo();
-        double fDuration = pDlg->getSelectedDuration();
+        fDuration = pDlg->getSelectedDuration();
         CustomAnimationPresetPtr pDescriptor = pDlg->getSelectedPreset();
         if( pDescriptor.get() )
         {
