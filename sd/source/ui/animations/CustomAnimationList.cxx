@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:11:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,14 +569,14 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
     const int nKeyCode = rKEvt.GetKeyCode().GetCode();
     switch( nKeyCode )
     {
-        case KEY_DELETE:    mpController->onContextMenu( CM_REMOVE );   break;
-        case KEY_INSERT:    mpController->onContextMenu( CM_CREATE ); break;
+        case KEY_DELETE:    mpController->onContextMenu( CM_REMOVE ); return;
+        case KEY_INSERT:    mpController->onContextMenu( CM_CREATE ); return;
         case KEY_SPACE:
             {
                 const Point aPos;
                 const CommandEvent aCEvt( aPos, COMMAND_CONTEXTMENU );
                 Command( aCEvt );
-                break;
+                return;
             }
 
     }
