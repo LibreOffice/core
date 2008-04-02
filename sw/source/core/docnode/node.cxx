@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:38:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1274,6 +1274,9 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
     if( bNumRuleSet )
     {
+        if (pTxtNd)
+            pTxtNd->SetWordCountDirty( true );
+
         // bNumRuleSet = true => pTxtNd != 0
         if( sNumRule.Len() )
         {
