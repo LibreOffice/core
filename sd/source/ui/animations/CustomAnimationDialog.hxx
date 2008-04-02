@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:51:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ const sal_Int32 nHandleSoundVolumne = 29;
 const sal_Int32 nHandleSoundEndAfterSlide = 30;
 
 const sal_Int32 nHandleCommand = 31;
+
+const sal_Int32 nHandleHasVisibleShape = 32;
 
 const sal_Int32 nPropertyTypeNone = 0;
 const sal_Int32 nPropertyTypeDirection = 1;
