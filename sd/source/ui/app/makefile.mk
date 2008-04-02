@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 15:50:36 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:45:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,13 @@ SLOFILES =	\
         $(SLO)$/optsitem.obj	\
         $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
-        $(SLO)$/sdxfer.obj
+        $(SLO)$/sdxfer.obj		\
+        $(SLO)$/tmplctrl.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdxfer.obj		\
-        $(SLO)$/sdmod1.obj
+        $(SLO)$/sdmod1.obj		\
+        $(SLO)$/tmplctrl.obj
 
 .IF "$(GUI)" == "WNT"
 
