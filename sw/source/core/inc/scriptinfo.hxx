@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:58:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,14 @@
 #include <i18npool/lang.h>
 #endif
 #include <list>
+#include <modeltoviewhelper.hxx>
 
 #include <errhdl.hxx>
 
 class SwTxtNode;
 class Point;
 class MultiSelection;
+class String;
 typedef std::list< xub_StrLen > PositionList;
 
 #define SPACING_PRECISION_FACTOR 100
@@ -66,6 +68,9 @@ class SwScanner
 {
     XubString aWord;
     const SwTxtNode& rNode;
+    const String& rText;
+    const LanguageType* pLanguage;
+    const ModelToViewHelper::ConversionMap* pConversionMap;
     xub_StrLen nStartPos;
     xub_StrLen nEndPos;
     xub_StrLen nBegin;
@@ -75,7 +80,9 @@ class SwScanner
     BOOL bClip;
 
 public:
-    SwScanner( const SwTxtNode& rNd, USHORT nWordType,
+    SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageType* pLang,
+               const ModelToViewHelper::ConversionMap* pConvMap,
+               USHORT nWordType,
                xub_StrLen nStart, xub_StrLen nEnde, BOOL bClip = FALSE );
 
 
