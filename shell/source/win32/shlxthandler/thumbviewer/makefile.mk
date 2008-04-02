@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:05:08 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:44:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,24 @@ ENABLE_EXCEPTIONS=TRUE
 
 CFLAGS+=-DWIN32_LEAN_AND_MEAN -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 #CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
-CDEFS+=-D_WIN32_IE=0x501 
+CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=$(SLO)$/$(TARGET).obj
-    
+
+.IF "$(BUILD_X64)"!=""
+# ----------------- x64 ------------------------
+CFLAGS_X64+=-DWIN32_LEAN_AND_MEAN -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
+CDEFS_X64+=-D_WIN32_IE=0x501
+
+SLOFILES_X64=$(SLO_X64)$/$(TARGET).obj
+.ENDIF # "$(BUILD_X64)"!=""
+
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk 
+.INCLUDE :	set_wntx64.mk
+.INCLUDE :	target.mk
+.INCLUDE :	tg_wntx64.mk
+
