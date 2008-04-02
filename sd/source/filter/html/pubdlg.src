@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:58:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 153, 10 );
-        Text [ en-US ] = "Existing Design";
+        Text [ en-US ] = "Existing design";
     };
 
     ListBox PAGE1_DESIGNS
