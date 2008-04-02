@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:44:30 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,7 @@
 #include "tabline.hrc"
 #include "dlgname.hrc"
 
-
-
-
-
+#include "cuitabarea.hxx"
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
 #include <svx/dialmgr.hxx>
@@ -100,6 +97,7 @@ SvxLineTabDialog::SvxLineTabDialog
     pObj            ( pSdrObj ),
     rOutAttrs       ( *pAttr ),
     pColorTab       ( pModel->GetColorTable() ),
+    mpNewColorTab   ( pModel->GetColorTable() ),
     pDashList       ( pModel->GetDashList() ),
     pNewDashList    ( pModel->GetDashList() ),
     pLineEndList    ( pModel->GetLineEndList() ),
@@ -107,19 +105,46 @@ SvxLineTabDialog::SvxLineTabDialog
     bObjSelected    ( bHasObj ),
     nLineEndListState( CT_NONE ),
     nDashListState( CT_NONE ),
+    mnColorTableState( CT_NONE ),
     nPageType( 0 ), // wird hier in erster Linie benutzt, um mit FillItemSet
                    // die richtigen Attribute zu erhalten ( noch Fragen? )
     nDlgType( 0 ),
     nPosDashLb( 0 ),
-    nPosLineEndLb( 0 )
+    nPosLineEndLb( 0 ),
+    mnPos( 0 ),
+    mbAreaTP( sal_False ),
+    mbDeleteColorTable( TRUE )
 {
     FreeResource();
 
+    bool bLineOnly = false;
+    if( pObj && pObj->GetObjInventor() == SdrInventor )
+    {
+        switch( pObj->GetObjIdentifier() )
+        {
+        case OBJ_LINE:
+        case OBJ_PLIN:
+        case OBJ_PATHLINE:
+        case OBJ_FREELINE:
+        case OBJ_MEASURE:
+        case OBJ_EDGE:
+            bLineOnly = true;
+
+        default:
+            break;
+        }
+
+    }
+
     AddTabPage( RID_SVXPAGE_LINE, SvxLineTabPage::Create, 0);
+    if( bLineOnly )
+        AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0 );
+    else
+        RemoveTabPage( RID_SVXPAGE_SHADOW );
+
     AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
-
-
+//  AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
 
     SetCurPageId( RID_SVXPAGE_LINE );
 
@@ -138,6 +163,14 @@ SvxLineTabDialog::~SvxLineTabDialog()
 
 void SvxLineTabDialog::SavePalettes()
 {
+    if( mpNewColorTab != pDrawModel->GetColorTable() )
+    {
+        if(mbDeleteColorTable)
+            delete pDrawModel->GetColorTable();
+        pDrawModel->SetColorTable( mpNewColorTab );
+        SfxObjectShell::Current()->PutItem( SvxColorTableItem( mpNewColorTab, SID_COLOR_TABLE ) );
+        pColorTab = pDrawModel->GetColorTable();
+    }
     if( pNewDashList != pDrawModel->GetDashList() )
     {
         delete pDrawModel->GetDashList();
@@ -173,6 +206,15 @@ void SvxLineTabDialog::SavePalettes()
 
         // ToolBoxControls werden benachrichtigt:
         SfxObjectShell::Current()->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
+    }
+
+    if( mnColorTableState & CT_MODIFIED )
+    {
+        pColorTab->SetPath( aPath );
+        pColorTab->Save();
+
+        // ToolBoxControls werden benachrichtigt:
+        SfxObjectShell::Current()->PutItem( SvxColorTableItem( pColorTab, SID_COLOR_TABLE ) );
     }
 }
 
@@ -217,6 +259,7 @@ void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
             ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
             ( (SvxLineTabPage&) rPage ).Construct();
+            ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorTableState );
             // ActivatePage() wird das erste mal nicht gerufen
             ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
         break;
@@ -241,6 +284,29 @@ void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxLineEndDefTabPage&) rPage ).SetObjSelected( bObjSelected );
             ( (SvxLineEndDefTabPage&) rPage ).Construct();
         break;
+
+        case RID_SVXPAGE_SHADOW:
+        {
+            ( (SvxShadowTabPage&) rPage ).SetColorTable( pColorTab );
+            ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
+            ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
+            ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
+            ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorTableState );
+            ( (SvxShadowTabPage&) rPage ).Construct();
+        }
+        break;
+/*
+        case RID_SVXPAGE_COLOR:
+            ( (SvxColorTabPage&) rPage ).SetColorTable( pColorTab );
+            ( (SvxColorTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxColorTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxColorTabPage&) rPage ).SetPos( &mnPos );
+            ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
+            ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorTableState );
+            ( (SvxColorTabPage&) rPage ).SetDeleteColorTable( mbDeleteColorTable );
+            ( (SvxColorTabPage&) rPage ).Construct();
+        break;
+*/
     }
 }
 
