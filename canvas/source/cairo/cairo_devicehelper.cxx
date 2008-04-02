@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:01:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
+#include "cairo_cairo.hxx"
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -54,10 +56,17 @@
 
 #include <tools/stream.hxx>
 
-#include "cairo_helper.hxx"
+namespace cairo
+{
+#  include <cairo.h>
+}  // namespace cairo
+
+#include <vcl/sysdata.hxx>
+
 #include "cairo_spritecanvas.hxx"
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
+
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
@@ -161,7 +170,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              ,
+        const uno::Reference< rendering::XGraphicDevice >&              /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         // disposed?
@@ -174,7 +183,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      ,
+        const uno::Reference< rendering::XGraphicDevice >&                      /*rDevice*/,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         // disposed?
@@ -187,7 +196,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -202,14 +211,14 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -224,7 +233,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
         const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
@@ -309,11 +318,15 @@ namespace cairocanvas
 
         if( mpWindowSurface )
         {
+#if defined (UNX) && !defined (QUARTZ)
+            // X11 only
             mpWindowSurface->Resize( rSize.getX() + mpOutputWindow->GetOutOffXPixel(), rSize.getY() + mpOutputWindow->GetOutOffYPixel() );
-        } else
+#endif
+        } else {
             mpWindowSurface = new Surface( mpSysData,
                                            mpOutputWindow->GetOutOffXPixel(), mpOutputWindow->GetOutOffYPixel(),
                                            rSize.getX(), rSize.getY() );
+        }
 
         if( mpBufferSurface && maSize != rSize )
         {
@@ -372,13 +385,22 @@ namespace cairocanvas
 
     Surface* DeviceHelper::getSurface( BitmapSystemData& rData, const Size& rSize )
     {
+#ifdef CAIRO_HAS_WIN32_SURFACE
+        if (rData.pDIB != NULL) {
+            OSL_ENSURE(false, "DeviceHelper::getSurface(): cannot provide Surface!");
+            // Using cairo will not work anyway, as most (?) DIBs that come here
+            // will be upside-down and different order of colour channels
+            // compared to what cairo expects.
+           return NULL;
+        }
+#endif
         OSL_TRACE( "requested size: %d x %d available size: %d x %d", rSize.Width (), rSize.Height (), rData.mnWidth, rData.mnHeight );
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
             return new Surface ( mpSysData, &rData, rSize.Width(), rSize.Height() );
-        else
+        else {
             return NULL;
+        }
     }
-
 
   /** DeviceHelper::flush  Flush the platform native window
    *
@@ -387,6 +409,10 @@ namespace cairocanvas
    **/
     void DeviceHelper::flush()
     {
-        cairoHelperFlush( mpSysData );
+#ifdef UNX
+        // Only used by Xlib and the current Mac OS X Quartz implementation
+        mpWindowSurface->flush(mpSysData);
+#endif
     }
-}
+
+} // namespace cairocanvas
