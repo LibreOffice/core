@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:37:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ private:
     const SfxItemSet&   rOutAttrs;
 
     XColorTable*        pColorTab;
+    XColorTable*        mpNewColorTab;
     XDashList*          pDashList;
     XDashList*          pNewDashList;
     XLineEndList*       pLineEndList;
@@ -60,10 +61,15 @@ private:
 
     ChangeType          nLineEndListState;
     ChangeType          nDashListState;
+    ChangeType          mnColorTableState;
+
     USHORT              nPageType;
     USHORT              nDlgType;
     USHORT              nPosDashLb;
     USHORT              nPosLineEndLb;
+    USHORT              mnPos;
+    BOOL                mbAreaTP;
+    BOOL                mbDeleteColorTable;
 
     virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
@@ -89,6 +95,10 @@ public:
                             { pNewLineEndList = pInLst; }
     XLineEndList*       GetNewLineEndList() const { return pNewLineEndList; }
     const XLineEndList* GetLineEndList() const { return pLineEndList; }
+
+    void                SetNewColorTable( XColorTable* pColTab ) { mpNewColorTab = pColTab; }
+    XColorTable*        GetNewColorTable() const { return mpNewColorTab; }
+    const XColorTable*  GetColorTable() const { return pColorTab; }
 };
 
 /*************************************************************************
@@ -171,6 +181,7 @@ private:
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
+    ChangeType*         pnColorTableState;
     UINT16             nPageType; //add CHINA001
     UINT16             nDlgType; //add CHINA001
     USHORT*             pPosDashLb;
@@ -238,6 +249,8 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
+
     virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
