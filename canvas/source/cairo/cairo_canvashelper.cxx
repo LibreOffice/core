@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:31:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,14 +166,14 @@ namespace cairocanvas
         if( viewState.Clip.is() ) {
         OSL_TRACE ("view clip\n");
 
-        aViewMatrix.x0 = round( aViewMatrix.x0 );
-        aViewMatrix.y0 = round( aViewMatrix.y0 );
+        aViewMatrix.x0 = basegfx::fround( aViewMatrix.x0 );
+        aViewMatrix.y0 = basegfx::fround( aViewMatrix.y0 );
         cairo_set_matrix( mpCairo, &aViewMatrix );
         doPolyPolygonPath( viewState.Clip, Clip );
     }
 
-    aCombinedMatrix.x0 = round( aCombinedMatrix.x0 );
-    aCombinedMatrix.y0 = round( aCombinedMatrix.y0 );
+    aCombinedMatrix.x0 = basegfx::fround( aCombinedMatrix.x0 );
+    aCombinedMatrix.y0 = basegfx::fround( aCombinedMatrix.y0 );
     cairo_set_matrix( mpCairo, &aCombinedMatrix );
 
         if( renderState.Clip.is() ) {
@@ -266,10 +266,10 @@ namespace cairocanvas
         }
     }
 
-    void CanvasHelper::drawPoint( const rendering::XCanvas*     ,
-                                  const geometry::RealPoint2D&  ,
-                                  const rendering::ViewState&   ,
-                                  const rendering::RenderState&  )
+    void CanvasHelper::drawPoint( const rendering::XCanvas*     /*pCanvas*/,
+                                  const geometry::RealPoint2D&  /*aPoint*/,
+                                  const rendering::ViewState&   /*viewState*/,
+                                  const rendering::RenderState& /*renderState*/ )
     {
     }
 
@@ -294,7 +294,7 @@ namespace cairocanvas
     }
     }
 
-    void CanvasHelper::drawBezier( const rendering::XCanvas*            ,
+    void CanvasHelper::drawBezier( const rendering::XCanvas*            /*pCanvas*/,
                                    const geometry::RealBezierSegment2D& aBezierSegment,
                                    const geometry::RealPoint2D&         aEndPoint,
                                    const rendering::ViewState&          viewState,
@@ -487,13 +487,13 @@ namespace cairocanvas
                             aColor = pBitmapReadAcc->GetPaletteColor( *pReadScan++ );
 
 #ifdef OSL_BIGENDIAN
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetRed() ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetGreen() ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetBlue() ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetGreen() ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetBlue() ) )/255);
 #else
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetBlue() ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetGreen() ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( aColor.GetRed() ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetBlue() ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetGreen() ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255);
                             nOff++;
 #endif
                         }
@@ -510,18 +510,18 @@ namespace cairocanvas
                                 nAlpha = data[ nOff ];
                             else
                                 nAlpha = data[ nOff ] = 255;
-                            data[ nOff + 3 ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff + 2 ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff + 1 ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff + 3 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff + 2 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff + 1 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
                             nOff += 4;
 #else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
                             nOff++;
 #endif
                         }
@@ -538,17 +538,17 @@ namespace cairocanvas
                                 nAlpha = data[ nOff++ ];
                             else
                                 nAlpha = data[ nOff++ ] = 255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
 #else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255);
                             pReadScan += 3;
                             nOff++;
 #endif
@@ -566,18 +566,18 @@ namespace cairocanvas
                                 nAlpha = data[ nOff++ ];
                             else
                                 nAlpha = data[ nOff++ ] = pReadScan[ 3 ];
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255);
                             pReadScan += 4;
 #else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = pReadScan[ 3 ];
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
                             pReadScan++;
                             nOff++;
 #endif
@@ -595,18 +595,18 @@ namespace cairocanvas
                                 nAlpha = data[ nOff ++ ];
                             else
                                 nAlpha = data[ nOff ++ ] = 255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255);
                             pReadScan++;
 #else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
-                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255);
                             pReadScan += 4;
                             nOff++;
 #endif
@@ -629,17 +629,17 @@ namespace cairocanvas
                                 nAlpha = data[ nOff++ ];
                             else
                                 nAlpha = data[ nOff++ ] = 255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetRed() )/255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetGreen() )/255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetBlue() )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetRed() )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetGreen() )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetBlue() )/255);
 #else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetBlue() )/255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetGreen() )/255;
-                            data[ nOff++ ] = ( nAlpha*aColor.GetRed() )/255;
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetBlue() )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetGreen() )/255);
+                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetRed() )/255);
                             nOff ++;
 #endif
                         }
@@ -757,8 +757,8 @@ namespace cairocanvas
         if( pTextures ) {
         const ::com::sun::star::rendering::Texture& aTexture ( (*pTextures)[0] );
         if( aTexture.Bitmap.is() ) {
-            unsigned char* data;
-            bool bHasAlpha;
+            unsigned char* data = NULL;
+            bool bHasAlpha = 0;
             Surface* pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
 
             if( pSurface ) {
@@ -797,8 +797,8 @@ namespace cairocanvas
              if( aTexture.RepeatModeX == rendering::TexturingMode::REPEAT &&
                 aTexture.RepeatModeY == rendering::TexturingMode::REPEAT )
                 cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_REPEAT );
-            aScaledTextureMatrix.x0 = round( aScaledTextureMatrix.x0 );
-            aScaledTextureMatrix.y0 = round( aScaledTextureMatrix.y0 );
+            aScaledTextureMatrix.x0 = basegfx::fround( aScaledTextureMatrix.x0 );
+            aScaledTextureMatrix.y0 = basegfx::fround( aScaledTextureMatrix.y0 );
             cairo_pattern_set_matrix( pPattern, &aScaledTextureMatrix );
 
             cairo_set_source( pCairo, pPattern );
@@ -855,7 +855,7 @@ namespace cairocanvas
         }
         } else
         cairo_fill( pCairo );
-        OSL_TRACE("fill\n");
+        OSL_TRACE("fill");
     break;
     case Stroke:
         cairo_stroke( pCairo );
@@ -925,8 +925,8 @@ namespace cairocanvas
         cairo_matrix_transform_point( &aOrigMatrix, &nX, &nY );
 
         if( ! bIsBezier ) {
-            nX = round( nX );
-            nY = round( nY );
+            nX = basegfx::fround( nX );
+            nY = basegfx::fround( nY );
         }
 
         if( aOperation == Stroke ) {
@@ -935,7 +935,7 @@ namespace cairocanvas
         }
 
         cairo_move_to( pCairo, nX, nY );
-        OSL_TRACE( "move to %f,%f\n", nX, nY );
+        OSL_TRACE( "move to %f,%f", nX, nY );
 
         if( bIsBezier ) {
             aA = aPolygon.getNextControlPoint( 0 );
@@ -950,8 +950,8 @@ namespace cairocanvas
             cairo_matrix_transform_point( &aOrigMatrix, &nX, &nY );
 
             if( ! bIsBezier ) {
-            nX = round( nX );
-            nY = round( nY );
+            nX = basegfx::fround( nX );
+            nY = basegfx::fround( nY );
             }
 
             if( aOperation == Stroke ) {
@@ -979,7 +979,7 @@ namespace cairocanvas
             aB = aPolygon.getPrevControlPoint( ( j + 1 ) % nPointCount );
             } else {
             cairo_line_to( pCairo, nX, nY );
-            OSL_TRACE( "line to %f,%f\n", nX, nY );
+            OSL_TRACE( "line to %f,%f", nX, nY );
             }
             bOpToDo = true;
         }
@@ -1023,7 +1023,7 @@ namespace cairocanvas
     doPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice );
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -1052,7 +1052,7 @@ namespace cairocanvas
     return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
                                                                                    const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                                                                    const rendering::ViewState&                          viewState,
                                                                                    const rendering::RenderState&                        renderState,
@@ -1122,7 +1122,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
                                                                                            const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
                                                                                            const rendering::ViewState&                          /*viewState*/,
                                                                                            const rendering::RenderState&                        /*renderState*/,
@@ -1133,7 +1133,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           /*pCanvas*/,
                                                                                                 const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
                                                                                                 const rendering::ViewState&                         /*viewState*/,
                                                                                                 const rendering::RenderState&                       /*renderState*/,
@@ -1145,7 +1145,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            ,
+    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
                                                                                    const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
                                                                                    const rendering::ViewState&                          /*viewState*/,
                                                                                    const rendering::RenderState&                        /*renderState*/,
@@ -1155,7 +1155,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -1182,7 +1182,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const rendering::ViewState&                        viewState,
                                                                                          const rendering::RenderState&                      renderState,
@@ -1200,7 +1200,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             /*pCanvas*/,
                                                                                               const uno::Reference< rendering::XPolyPolygon2D >&    /*xPolyPolygon*/,
                                                                                               const rendering::ViewState&                           /*viewState*/,
                                                                                               const rendering::RenderState&                         /*renderState*/,
@@ -1239,13 +1239,13 @@ namespace cairocanvas
                 ! ::rtl::math::approxEqual( aMatrix.yy, 1 ) &&
                 ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
                 ::rtl::math::approxEqual( aMatrix.y0, 0 ) &&
-                round( rSize.Width * aMatrix.xx ) > 8 &&
-                round( rSize.Height* aMatrix.yy ) > 8 )
+                basegfx::fround( rSize.Width * aMatrix.xx ) > 8 &&
+                basegfx::fround( rSize.Height* aMatrix.yy ) > 8 )
                 {
                     double dWidth, dHeight;
 
-                    dWidth = round( rSize.Width * aMatrix.xx );
-                    dHeight = round( rSize.Height* aMatrix.yy );
+                    dWidth = basegfx::fround( rSize.Width * aMatrix.xx );
+                    dHeight = basegfx::fround( rSize.Height* aMatrix.yy );
                                         aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
                                         aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
 
@@ -1317,7 +1317,7 @@ namespace cairocanvas
         return rv; // uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                             const rendering::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
@@ -1328,8 +1328,8 @@ namespace cairocanvas
         #endif
 
     uno::Reference< rendering::XCachedPrimitive > rv;
-    unsigned char* data;
-    bool bHasAlpha;
+    unsigned char* data = NULL;
+    bool bHasAlpha = 0;
     Surface* pSurface = surfaceFromXBitmap( xBitmap, mpDevice, data, bHasAlpha );
     geometry::IntegerSize2D aSize = xBitmap->getSize();
 
@@ -1350,11 +1350,13 @@ namespace cairocanvas
     return rv;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      /*pCanvas*/,
                                                                                      const uno::Reference< rendering::XBitmap >&    /*xBitmap*/,
                                                                                      const rendering::ViewState&                    /*viewState*/,
                                                                                      const rendering::RenderState&                  /*renderState*/ )
     {
+        // TODO(F3): Implement modulated bitmap!
+
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
@@ -1364,7 +1366,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
 
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
+    void CanvasHelper::copyRect( const rendering::XCanvas*                          /*pCanvas*/,
                                  const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,
                                  const geometry::RealRectangle2D&                   /*sourceRect*/,
                                  const rendering::ViewState&                        /*sourceViewState*/,
@@ -1414,10 +1416,10 @@ namespace cairocanvas
             const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
             uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
             sal_Int8* pData = aRes.getArray();
-            ::cairo::cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( (unsigned char *) pData,
+            cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( (unsigned char *) pData,
                                                                                             CAIRO_FORMAT_ARGB32,
                                                                                             nWidth, nHeight, 4*nWidth );
-            ::cairo::cairo_t* pCairo = cairo_create( pImageSurface );
+            cairo_t* pCairo = cairo_create( pImageSurface );
             cairo_set_source_surface( pCairo, mpSurface->mpSurface, -rect.X1, -rect.Y1);
             cairo_paint( pCairo );
             cairo_destroy( pCairo );
