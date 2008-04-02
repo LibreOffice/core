@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:01:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,16 @@ namespace cairocanvas
         // At index 1, we expect a system window handle here,
         // containing a pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
+        // NOTE: type is derived from vcl/source/window/window.cxx (XCanvas setup)
+#ifdef QUARTZ
+        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
+                         aArguments[1].getValueTypeClass() == uno::TypeClass_UNSIGNED_HYPER,
+                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+#else
         CHECK_AND_THROW( aArguments.getLength() >= 4 &&
                          aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
                          "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+#endif
 
         awt::Rectangle aRect;
         aArguments[2] >>= aRect;
@@ -100,9 +107,11 @@ namespace cairocanvas
         CHECK_AND_THROW( pOutputWindow != NULL,
                          "SpriteCanvas::SpriteCanvas: invalid Window pointer" );
 
+#if defined(CAIRO_HAS_XLIB_SURFACE) && !defined (QUARTZ)
         bool bHasXRender = HasXRender( cairocanvas::GetSysData(pOutputWindow) );
         CHECK_AND_THROW( bHasXRender == true,
                          "SpriteCanvas::SpriteCanvas: No RENDER extension" );
+#endif
 
         Size aPixelSize( pOutputWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
@@ -170,11 +179,6 @@ namespace cairocanvas
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
             mbSurfaceDirty );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::updateScreen( bUpdateAll );
     }
 
     ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
