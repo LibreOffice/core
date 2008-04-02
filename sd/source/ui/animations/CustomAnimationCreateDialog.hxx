@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:08:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ class CustomAnimationCreateDialog : public TabDialog
 {
     friend class CustomAnimationCreateTabPage;
 public:
-    CustomAnimationCreateDialog( ::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText );
+    CustomAnimationCreateDialog( ::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const ::rtl::OUString& rsPresetId, double fDuration );
     ~CustomAnimationCreateDialog();
 
     PathKind getCreatePathKind() const;
