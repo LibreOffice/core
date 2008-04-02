@@ -55,5 +55,17 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 
+mkdir: %_DEST%\inc%_EXT%\cairo
+..\%__SRC%\inc\cairo\* %_DEST%\inc%_EXT%\cairo\*
+
+..\%__SRC%\lib\libcairo.dll.* %_DEST%\lib%_EXT%\libcairo.dll.*
+..\%__SRC%\lib\cairo.lib %_DEST%\lib%_EXT%\cairo.lib
+..\%__SRC%\lib\libcairo*.dll %_DEST%\bin%_EXT%\libcairo*.dll
+
+..\%__SRC%\lib\libcairo.a %_DEST%\lib%_EXT%\libcairo.a
+..\%__SRC%\lib\libcairo.la %_DEST%\lib%_EXT%\libcairo.la
+..\%__SRC%\lib\libpixman-1.a %_DEST%\lib%_EXT%\libpixman-1.a
+..\%__SRC%\lib\libpixman-1.la %_DEST%\lib%_EXT%\libpixman-1.la
+
 linklib: libgcc_s.*.*
 
