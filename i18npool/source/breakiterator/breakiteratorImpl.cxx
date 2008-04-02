@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:37:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,9 +103,9 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
             break;
             case WordType::WORD_COUNT:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) || ! u_isalnum(ch))) nPos=pos;
+                    while (nPos < len && u_isUWhiteSpace(Text.iterateCodePoints(&pos, 1))) nPos=pos;
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || ! u_isalnum(ch))) nPos=pos;
+                    while (nPos > 0 && u_isUWhiteSpace(Text.iterateCodePoints(&pos, -1))) nPos=pos;
             break;
         }
         return nPos;
