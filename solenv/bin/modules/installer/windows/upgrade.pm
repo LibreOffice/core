@@ -4,9 +4,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:56:50 $
+#   last change: $Author: kz $ $Date: 2008-04-02 12:21:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,16 @@ sub create_upgrade_table
             $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
             push(@upgradetable, $newline);
         }
+    }
+
+    # No upgrade for Beta versions!
+
+    if (( $allvariableshashref->{'PRODUCTEXTENSION'} eq "Beta" ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ))
+    {
+        @upgradetable = ();
+        installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
+        my $infoline = "Beta product -> empty Upgrade table\n";
+        push(@installer::globals::logfileinfo, $infoline);
     }
 
     # Saving the file
