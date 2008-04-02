@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:17:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,7 +1012,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode,
+            SwScanner aScanner( rNode, rNode.aText, 0, 0,
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
