@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.205 $
+#   $Revision: 1.206 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 16:32:52 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:41:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1219,6 +1219,16 @@ ALLTAR: \
         $(LOCALIZE_ME_DEST)\
         $(EXTUPDATEINFO_DEST) \
         last_target
+
+.IF "$(BUILD_X64)"!=""
+ALLTAR : \
+        $(NOLIBOBJTARGET_X64) \
+        $(NOLIBSLOTARGET_X64) \
+        $(OBJTARGET_X64)	$(SLOTARGET_X64) \
+        $(LIB1TARGET_X64)	$(LIB2TARGET_X64)	\
+        $(DEF1TARGETN_X64)	$(DEF2TARGETN_X64)	\
+        $(SHL1TARGETN_X64) 	$(SHL2TARGETN_X64)
+.ENDIF # "$(BUILD_X64)"!=""
 
 ALLTAR : "$(SOLARINCDIR)$/$(UPD)minor.mk"
 
