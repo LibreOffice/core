@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:21:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1331,6 +1331,10 @@ USHORT SdDrawDocument::CreatePage (
     pStandardPage->setTransitionDirection( pPreviousStandardPage->getTransitionDirection() );
     pStandardPage->setTransitionFadeColor( pPreviousStandardPage->getTransitionFadeColor() );
     pStandardPage->setTransitionDuration( pPreviousStandardPage->getTransitionDuration() );
+
+    // apply previous animation timing
+    pStandardPage->SetPresChange( pPreviousStandardPage->GetPresChange() );
+    pStandardPage->SetTime( pPreviousStandardPage->GetTime() );
 
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
