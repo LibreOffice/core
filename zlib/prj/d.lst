@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\external\zlib
+mkdir: %_DEST%\lib%_EXT%\x64
 
 ..\%__SRC%\inc\patched\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
 ..\%__SRC%\inc\unzip.h %_DEST%\inc%_EXT%\external\zlib\unzip.h
@@ -7,4 +8,5 @@ mkdir: %_DEST%\inc%_EXT%\external\zlib
 ..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a
 ..\%__SRC%\slb\zlib.lib %_DEST%\lib%_EXT%\zlib.lib
 ..\%__SRC%\slb\zlib.lin %_DEST%\lib%_EXT%\zlib.lin
-
+..\%__SRC%\slb\x64\zlib.lib %_DEST%\lib%_EXT%\x64\zlib.lib
+..\%__SRC%\slb\x64\zlib.lin %_DEST%\lib%_EXT%\x64\zlib.lin
