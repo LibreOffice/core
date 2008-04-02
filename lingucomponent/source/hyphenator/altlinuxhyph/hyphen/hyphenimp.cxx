@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:48:36 $
+ *  last change: $Author: obo $ $Date: 2008-04-02 09:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,7 +587,7 @@ Reference< XPossibleHyphens > SAL_CALL
 
         if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
         {
-           fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
+           fprintf(stderr, "Couldn't find file %s and %s\n", sTmp.getStr(), OU2ENC(dictpath, osl_getThreadTextEncoding()) );
            return NULL;
         }
         aDicts[k].aPtr = dict;
