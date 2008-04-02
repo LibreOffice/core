@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:33:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,8 @@ public:
 
     bool getIsPreview() const;
     void setIsPreview( bool bIsPreview );
+
+    bool select( const OUString& rsPresetId );
 
 private:
     DECL_LINK( implSelectHdl, Control* );
@@ -545,13 +547,33 @@ void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
     mpCBXPReview->Check( bIsPreview ? TRUE : FALSE );
 }
 
+bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
+{
+    USHORT nPos = mpLBEffects->GetEntryCount();
+    while( nPos-- )
+    {
+        void* pEntryData = mpLBEffects->GetEntryData( nPos );
+        if( pEntryData )
+        {
+            CustomAnimationPresetPtr& pPtr = *static_cast< CustomAnimationPresetPtr* >(pEntryData);
+            if( pPtr.get() && pPtr->getPresetId() == rsPresetId )
+            {
+                mpLBEffects->SelectEntryPos( nPos );
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 // --------------------------------------------------------------------
 
-CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText  )
-:   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) ),
-    mpPane( pPane ),
-    mrTargets( rTargets ),
-    mfDuration( 2.0f )
+CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const ::rtl::OUString& rsPresetId, double fDuration  )
+:   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) )
+,   mpPane( pPane )
+,   mrTargets( rTargets )
+,   mfDuration( fDuration )
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );
     mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
@@ -584,6 +606,19 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpTabControl->SetDeactivatePageHdl( LINK( this, CustomAnimationCreateDialog, implDeactivatePagekHdl ) );
 
     setPosition();
+
+    // select current preset if available
+    if( rsPresetId.getLength() != 0 )
+    {
+        for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
+        {
+            if( mpTabPages[i]->select( rsPresetId ) )
+            {
+                mpTabControl->SetCurPageId( RID_TP_CUSTOMANIMATION_ENTRANCE + i );
+                break;
+            }
+        }
+    }
 }
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
