@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:39:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,6 +485,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Jpg->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
+    pPage3_Quality->Enable(FALSE);
 
     pPage3_Resolution_1->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
     pPage3_Resolution_2->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
@@ -529,6 +530,8 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     SetDefaults();
 
     SetHelpId(aPageHelpIds[0]);
+
+    aNextPageButton.GrabFocus();
 }
 
 // =====================================================================
@@ -1529,6 +1532,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage3_Png->Check(pDesign->m_eFormat == FORMAT_PNG);
     pPage3_Gif->Check(pDesign->m_eFormat == FORMAT_GIF);
     pPage3_Jpg->Check(pDesign->m_eFormat == FORMAT_JPG);
+    pPage3_Quality->Enable(pDesign->m_eFormat == FORMAT_JPG);
 
     pPage3_Quality->SetText(pDesign->m_aCompression);
     pPage3_Resolution_1->Check(pDesign->m_nResolution == PUB_LOWRES_WIDTH);
