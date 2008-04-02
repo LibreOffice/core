@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 13:00:04 $
+#   last change: $Author: kz $ $Date: 2008-04-02 15:59:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -541,6 +541,12 @@ sub get_packinfo
                    ( $onekey eq "requires" )) { $locallang =~ s/_/-/g; } # avoiding illegal package abbreviation
                 $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/;
             }
+
+            # Saving the language for the package
+            my $lang = $onelanguage;
+            $lang =~ s/_/-/g;
+            $onepackage->{'specificlanguage'} = $lang;
+
             push(@{$packages}, $onepackage);
             $foundgid = 1;
             last;
