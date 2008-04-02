@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_repainttarget.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:37:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:43:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,7 @@
 #ifndef _CAIROCANVAS_REPAINTTARGET_HXX
 #define _CAIROCANVAS_REPAINTTARGET_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-
 #include "cairo_cairo.hxx"
 
 using namespace ::cairo;
