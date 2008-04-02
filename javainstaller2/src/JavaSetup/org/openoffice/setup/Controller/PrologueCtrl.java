@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrologueCtrl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 16:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ public class PrologueCtrl extends PanelController {
                     Controller.checkPackagePathExistence(installData);
                     Controller.checkPackageFormat(installData);
 
-                    if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                    if (( installData.getOSType().equalsIgnoreCase("SunOS") ) && ( installData.isMultiLingual() )) {
                         Controller.collectSystemLanguages(installData);
                     }
 
@@ -100,6 +100,18 @@ public class PrologueCtrl extends PanelController {
 
                         if ( installData.logModuleStates() ) {
                             Dumper.logModuleStates(packageData, "after setHiddenLanguageModuleDefaultSettings");
+                        }
+                    }
+
+                    if (( installData.isRootInstallation() ) && ( installData.getOSType().equalsIgnoreCase("SunOS") )) {
+                        // Check, if root has write access in /usr and /etc .
+                        // In sparse zones with imported directories this is not always the case.
+                        if ( Controller.reducedRootWritePrivileges() ) {
+                            ModuleCtrl.setIgnoreNonRelocatablePackages(packageData);
+                        }
+
+                        if ( installData.logModuleStates() ) {
+                            Dumper.logModuleStates(packageData, "after setIgnoreNonRelocatablePackages");
                         }
                     }
 
