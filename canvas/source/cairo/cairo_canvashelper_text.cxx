@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper_text.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:20:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,6 @@
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <vcl/virdev.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 
@@ -62,7 +60,7 @@ namespace cairocanvas
         LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
     };
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    /*pCanvas*/,
                                                                        const rendering::FontRequest&                fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
                                                                        const geometry::Matrix2D&                    fontMatrix )
@@ -70,24 +68,12 @@ namespace cairocanvas
         return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpDevice ) );
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       /*pCanvas*/,
                                                                             const rendering::FontInfo&                      /*aFilter*/,
                                                                             const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
         // TODO
         return uno::Sequence< rendering::FontInfo >();
-    }
-
-    static VirtualDevice*
-    createVirtualDevice( Surface* pSurface )
-    {
-        SystemGraphicsData aSystemGraphicsData;
-
-        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
-        aSystemGraphicsData.hDrawable = pSurface->getPixmap();
-        aSystemGraphicsData.pRenderFormat = pSurface->getRenderFormat();
-
-        return new VirtualDevice( &aSystemGraphicsData, pSurface->getDepth() );
     }
 
     static bool
@@ -133,7 +119,7 @@ namespace cairocanvas
             io_rVCLFont.SetHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
         }
 
-        io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) ) );
+        io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*F_PI)*(1800.0/F_PI)) ) );
 
         // TODO(F2): Missing functionality in VCL: shearing
         o_rPoint.X() = ::basegfx::fround(aTranslate.getX());
@@ -311,7 +297,7 @@ namespace cairocanvas
         return true;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         /*pCanvas*/,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,
                                                                           const rendering::ViewState&                       viewState,
@@ -327,10 +313,17 @@ namespace cairocanvas
                          "CanvasHelper::drawText(): font is NULL");
 
         if( !mpVirtualDevice )
-            mpVirtualDevice = createVirtualDevice( mpSurface );
+            mpVirtualDevice = mpSurface->createVirtualDevice();
 
         if( mpVirtualDevice )
         {
+#if defined CAIRO_HAS_WIN32_SURFACE
+            // FIXME: Some kind of work-araound...
+            cairo_t *cr = cairo_create (mpSurface->mpSurface);
+            cairo_rectangle (cr, 0, 0, 0, 0);
+            cairo_fill (cr);
+            cairo_destroy (cr);
+#endif
             ::Point aOutpos;
             if( !setupTextOutput( *mpVirtualDevice, mpDevice, aOutpos, viewState, renderState, xFont ) )
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
@@ -367,7 +360,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
                                                                                 const uno::Reference< rendering::XTextLayout >& xLayoutedText,
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
@@ -380,10 +373,17 @@ namespace cairocanvas
         if( pTextLayout )
         {
             if( !mpVirtualDevice )
-                mpVirtualDevice = createVirtualDevice( mpSurface );
+                mpVirtualDevice = mpSurface->createVirtualDevice();
 
             if( mpVirtualDevice )
             {
+#if defined CAIRO_HAS_WIN32_SURFACE
+                // FIXME: Some kind of work-araound...
+                cairo_t *cr = cairo_create (mpSurface->mpSurface);
+                cairo_rectangle (cr, 0, 0, 0, 0);
+                cairo_fill (cr);
+                cairo_destroy (cr);
+#endif
                 // TODO(T3): Race condition. We're taking the font
                 // from xLayoutedText, and then calling draw() at it,
                 // without exclusive access. Move setupTextOutput(),
