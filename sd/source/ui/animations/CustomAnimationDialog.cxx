@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:25:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2356,6 +2356,8 @@ private:
     CheckBox    maCBXReverse;
 
     const STLPropertySet* mpSet;
+
+    bool mbHasVisibleShapes;
 };
 
 CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const ResId& rResId, const STLPropertySet* pSet)
@@ -2366,7 +2368,8 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     maMFGroupAuto( this, SdResId( MF_GROUP_AUTO ) ),
     maCBXAnimateForm( this, SdResId( CBX_ANIMATE_FORM ) ),
     maCBXReverse( this, SdResId( CBX_REVERSE ) ),
-    mpSet( pSet )
+    mpSet( pSet ),
+    mbHasVisibleShapes(true)
 {
     FreeResource();
 
@@ -2378,6 +2381,9 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
         if( pSet->getPropertyValue( nHandleTextGrouping ) >>= nTextGrouping )
             maLBGroupText.SelectEntryPos( (USHORT)(nTextGrouping + 1) );
     }
+
+    if( pSet->getPropertyState( nHandleHasVisibleShape ) != STLPropertyState_AMBIGUOUS )
+        pSet->getPropertyValue( nHandleHasVisibleShape ) >>= mbHasVisibleShapes;
 
     if( pSet->getPropertyState( nHandleTextGroupingAuto ) != STLPropertyState_AMBIGUOUS )
     {
@@ -2491,6 +2497,16 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     maCBXGroupAuto.Enable( nPos > 1 );
     maMFGroupAuto.Enable( nPos > 1 );
     maCBXReverse.Enable( nPos > 0 );
+
+    if( !mbHasVisibleShapes && nPos > 0 )
+    {
+        maCBXAnimateForm.Check(FALSE);
+        maCBXAnimateForm.Enable(FALSE);
+    }
+    else
+    {
+        maCBXAnimateForm.Enable(TRUE);
+    }
 }
 
 IMPL_LINK( CustomAnimationTextAnimTabPage, implSelectHdl, Control*, EMPTYARG )
@@ -2597,6 +2613,7 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleTrigger, aEmpty );
 
     pSet->setPropertyDefaultValue( nHandleHasText, makeAny( sal_False ) );
+    pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( sal_False ) );
     pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( (sal_Int32)-1 ) );
     pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( sal_True ) );
     pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( (double)-1.0 ) );
