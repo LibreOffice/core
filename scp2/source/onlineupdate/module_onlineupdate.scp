@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_onlineupdate.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 13:27:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 16:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ Module gid_Module_Optional_Onlineupdate
     Sortkey = "800";
     ParentID = gid_Module_Optional;
     Default = YES;
+    Styles = (DONTSHOWINUSERINSTALL);
     Files = (gid_File_Lib_Updchk, gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu, gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu, gid_File_Bin_UnpackUpdate);
     Dirs = (gid_Dir_Share_Registry_Modules_Oo_Office_Addons, gid_Dir_Share_Registry_Modules_Oo_Office_Jobs);
 End
