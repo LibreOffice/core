@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:16:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,24 +96,21 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     if( pDlg )
     {
         USHORT nRet = pDlg->Execute();
-        if( nRet != RET_CANCEL )
+        if( pDlg->IsModified() )
         {
-            if( pDlg->IsModified() )
-            {
-                mpDoc->SetChanged( TRUE );
-                sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
-                rSettings.mbCustomShow = pDlg->IsCustomShow();
-            }
-
-            if( nRet == RET_YES )
-            {
-                mpViewShell->SetStartShowWithDialog();
-
-                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-            }
+            mpDoc->SetChanged( TRUE );
+            sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
+            rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
         delete pDlg;
+
+        if( nRet == RET_YES )
+        {
+            mpViewShell->SetStartShowWithDialog();
+
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        }
     }
 }
 
