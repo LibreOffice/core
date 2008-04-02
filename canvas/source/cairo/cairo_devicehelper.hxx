@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:01:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,8 @@ namespace cairocanvas
 
     ::cairo::Surface* getBufferSurface();
     ::cairo::Surface* getWindowSurface();
-    ::cairo::Surface* getSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = ::cairo::CAIRO_CONTENT_COLOR_ALPHA );
-    ::cairo::Surface* getSurface( ::cairo::Content aContent = ::cairo::CAIRO_CONTENT_COLOR_ALPHA );
+    ::cairo::Surface* getSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+    ::cairo::Surface* getSurface( ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
     ::cairo::Surface* getSurface( BitmapSystemData& rData, const Size& rSize );
     const ::basegfx::B2ISize& getSizePixel();
     void flush();
