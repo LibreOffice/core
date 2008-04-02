@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:35:57 $
+#   last change: $Author: kz $ $Date: 2008-04-02 09:45:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=canvas
 TARGET=cairocanvas
+TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
@@ -52,7 +53,6 @@ DLLPRE =
 
 # --- Common ----------------------------------------------------------
 
-.IF "$(GUI)"=="UNX"
 
 .IF "$(SYSTEM_CAIRO)" == "YES"
 CFLAGS+=$(CAIRO_CFLAGS)
@@ -72,7 +72,6 @@ SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
             $(SLO)$/cairo_canvashelper.obj \
             $(SLO)$/cairo_canvashelper_text.obj \
             $(SLO)$/cairo_devicehelper.obj \
-            $(SLO)$/cairo_helper.obj \
             $(SLO)$/cairo_spritecanvas.obj \
             $(SLO)$/cairo_spritecanvashelper.obj \
             $(SLO)$/cairo_spritehelper.obj \
@@ -82,11 +81,41 @@ SHL1TARGET=$(TARGET).uno
 
 SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(TOOLSLIB)
 
+.IF "$(GUI)"=="UNX" 
+
 .IF "$(SYSTEM_CAIRO)" == "YES"
-SHL1STDLIBS+= $(CAIRO_LIBS) -lX11 -lXrender
+SHL1STDLIBS+= $(CAIRO_LIBS)
 .ELSE
-SHL1STDLIBS+= -lcairo -lX11 -lXrender
+SHL1STDLIBS+= -lcairo -lpixman-1
 .ENDIF
+
+.IF "$(GUIBASE)"=="aqua"
+# native Mac OS X (Quartz)
+SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+.ELSE
+# Xlib
+SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj \
+           $(SLO)$/cairo_xlib_helper.obj
+SHL1STDLIBS+= -lX11 -lXrender
+.ENDIF
+
+.ELSE    # "$(GUI)"=="UNX" 
+
+.IF "$(GUI)"=="WNT"
+SLOFILES+= $(SLO)$/cairo_win32_cairo.obj
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS+= -lcairo -lgdi32 -lmsimg32
+.ELSE
+#We build cairo and pixman as separate (static) libs as I couldn't be
+#bothered to dig into the obscure makefile.mk stuff enough to combine
+#them into one as is normally done.
+SHL1STDLIBS+= cairo.lib pixman.lib gdi32.lib 
+.ENDIF
+.ENDIF
+
+.ENDIF   # "$(GUI)"=="UNX" 
 
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
@@ -97,7 +126,6 @@ SHL1VERSIONMAP=exports.map
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-.ENDIF
 
 # ==========================================================================
 
