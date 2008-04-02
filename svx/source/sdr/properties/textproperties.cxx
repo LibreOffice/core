@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:47:30 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,6 +414,15 @@ namespace sdr
         void TextProperties::ForceDefaultAttributes()
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+
+            if( rObj.GetObjInventor() == SdrInventor )
+            {
+                const sal_uInt16 nSdrObjKind = rObj.GetObjIdentifier();
+
+                if( nSdrObjKind == OBJ_TITLETEXT || nSdrObjKind == OBJ_OUTLINETEXT )
+                    return; // no defaults for presentation objects
+            }
+
             bool bTextFrame(rObj.IsTextFrame());
 
             // force ItemSet
