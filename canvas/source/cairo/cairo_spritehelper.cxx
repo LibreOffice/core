@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:32:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,8 +138,8 @@ namespace cairocanvas
                         aTransform.get( 0, 0 ), aTransform.get( 1, 0 ), aTransform.get( 0, 1 ),
                         aTransform.get( 1, 1 ), aTransform.get( 0, 2 ), aTransform.get( 1, 2 ) );
 
-             aMatrix.x0 = round( aMatrix.x0 );
-             aMatrix.y0 = round( aMatrix.y0 );
+             aMatrix.x0 = basegfx::fround( aMatrix.x0 );
+             aMatrix.y0 = basegfx::fround( aMatrix.y0 );
 
             cairo_matrix_init( &aInverseMatrix, aMatrix.xx, aMatrix.yx, aMatrix.xy, aMatrix.yy, aMatrix.x0, aMatrix.y0 );
             cairo_matrix_invert( &aInverseMatrix );
@@ -148,8 +148,8 @@ namespace cairocanvas
              cairo_set_matrix( pCairo, &aMatrix );
          }
 
-         fX = round( fX );
-         fY = round( fY );
+         fX = basegfx::fround( fX );
+         fY = basegfx::fround( fY );
 
         cairo_matrix_t aOrigMatrix;
         cairo_get_matrix( pCairo, &aOrigMatrix );
