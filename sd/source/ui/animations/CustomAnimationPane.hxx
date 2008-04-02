@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:11:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-02 09:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ public:
     // Control
     virtual void Resize();
     virtual void StateChanged( StateChangedType nStateChange );
+    virtual void KeyInput( const KeyEvent& rKEvt );
 
     // ICustomAnimationListController
     virtual void onSelect();
