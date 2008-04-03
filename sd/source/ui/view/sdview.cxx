@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:59:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -754,7 +754,8 @@ sal_Bool View::SdrBeginTextEdit(
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus )
 {
-    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
+        sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
     if( pOutl==NULL && pObj )
         pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pObj->GetModel() );
@@ -852,7 +853,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
             pObj->SetEmptyPresObj( FALSE );
     }
 
-    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
 
     if( xObj.is() )
     {
