@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:03:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@
 #ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #endif
+
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -339,6 +341,7 @@ using namespace ::com::sun::star;
     Beschreibung:   Globals
  --------------------------------------------------------------------*/
 
+static bool bInputLanguageSwitched = false;
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
 //Normalerweise wird im MouseButtonUp eine Selektion aufgehoben wenn die
@@ -1031,6 +1034,7 @@ void SwEditWin::FlushInBuffer()
             {
                 case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
                 case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                case  i18n::ScriptType::LATIN:     nWhich = RES_CHRATR_LANGUAGE; break;
                 default: bLang = sal_False;
             }
             if(bLang)
@@ -1039,7 +1043,38 @@ void SwEditWin::FlushInBuffer()
                 rSh.GetCurAttr(aLangSet);
                 if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, TRUE))
                 {
-                    bLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage() != eBufferLanguage;
+                    LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
+                    if ( eLang == eBufferLanguage )
+                        // current language attribute equal to language reported from system
+                        bLang = sal_False;
+                    else if ( !bInputLanguageSwitched && RES_CHRATR_LANGUAGE == nWhich && (eLang&LANGUAGE_MASK_PRIMARY) == LANGUAGE_ENGLISH )
+                    {
+                        // special case: switching between two "LATIN" languages
+                        // In case the current keyboard setting might be suitable for both languages we can't safely assume that the user
+                        // wants to use the language reported from the system, except if we knew that it was explicitly switched.
+                        // The language reported by the system could be just the system default language that the user is not even aware of,
+                        // because no language selection tool is installed at all. In this case the OOo language should get preference as
+                        // it might have been selected by the user explicitly.
+                        // Usually this case should happen only if the OOo language is set to "english" as english texts usually can
+                        // be written with any latin keyboard and so user might not be used to the language switching tool bar. For non-latin keyboards
+                        // overwriting the "english" attribute is still valid. We do this for kyrillic and greek ATM.
+                        // In future versions of OOo this should be replaced by a configuration switch that allows to give the preference to
+                        // the OOo setting or the system setting explicitly
+                        sal_Int16 nScript = GetAppCharClass().getScript( aInBuffer, 0 );
+                        i18n::UnicodeScript eType = (i18n::UnicodeScript) nScript;
+                        switch ( eType )
+                        {
+                            case i18n::UnicodeScript_kGreek:
+                            case i18n::UnicodeScript_kCyrillic:
+                                // in case other UnicodeScripts require special keyboards they can be added here
+                                break;
+                            default:
+                                // by default we assume that the keyboard of the selected UnicodeScript is not sufficiently
+                                // different to exclude the chance that the user wants to write an english text with it
+                                bLang = sal_False;
+                                break;
+                        }
+                    }
                 }
                 if(bLang)
                 {
@@ -5066,6 +5101,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_INPUTLANGUAGECHANGE :
             //#i42732# update state of fontname if input language changes
+            bInputLanguageSwitched = true;
             SetUseInputLanguage( sal_True );
         break;
 
