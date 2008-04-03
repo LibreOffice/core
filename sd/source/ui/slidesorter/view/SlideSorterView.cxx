@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:48:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,28 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "view/SlideSorterView.hxx"
 
 #include "ViewShellBase.hxx"
+#include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "ViewShell.hxx"
+#include "SlsViewCacheContext.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
+#include "view/SlsHighlightObject.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
+#include "controller/SlsProperties.hxx"
 #include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumeration.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "cache/SlsPageCacheManager.hxx"
+#include "cache/SlsCacheContext.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
@@ -67,12 +71,8 @@
 #include <svx/xoutx.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
@@ -88,29 +88,30 @@ using namespace ::sd::slidesorter::model;
 
 namespace sd { namespace slidesorter { namespace view {
 
+TYPEINIT1(SlideSorterView, ::sd::View);
 
 
-SlideSorterView::SlideSorterView (
-    SlideSorterViewShell& rViewShell,
-    model::SlideSorterModel& rModel)
+SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-        rModel.GetDocument(),
+        rSlideSorter.GetModel().GetDocument(),
         NULL,
-        &rViewShell),
-    mrModel (rModel),
+        rSlideSorter.GetViewShell()),
+    mrSlideSorter(rSlideSorter),
+    mrModel(rSlideSorter.GetModel()),
     maPageModel(),
     mpPage(new SdrPage(maPageModel)),
     mpLayouter (new Layouter ()),
     mbPageObjectVisibilitiesValid (false),
     mpPreviewCache(),
-    mpViewOverlay (new ViewOverlay(rViewShell)),
+    mpViewOverlay (new ViewOverlay(rSlideSorter)),
     mnFirstVisiblePageIndex(0),
     mnLastVisiblePageIndex(-1),
     mbModelChangedWhileModifyEnabled(true),
     maPreviewSize(0,0),
     mbPreciousFlagUpdatePending(true),
     maPageNumberAreaModelSize(0,0),
-    maModelBorder()
+    maModelBorder(),
+    meOrientation(VERTICAL)
 {
     maPageModel.GetItemPool().FreezeIdRanges();
 
@@ -130,8 +131,8 @@ SlideSorterView::~SlideSorterView (void)
     // the previews are kept for a later re-use than this invalidation is
     // not wanted.
     ::boost::shared_ptr<cache::PageCache> pEmptyCache;
-    model::SlideSorterModel::Enumeration aPageEnumeration (
-        mrModel.GetAllPagesEnumeration());
+    model::PageEnumeration aPageEnumeration (
+        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
     while (aPageEnumeration.HasMoreElements())
     {
         view::PageObjectViewObjectContact* pContact
@@ -143,14 +144,6 @@ SlideSorterView::~SlideSorterView (void)
 
     // Remove all page objects from the page.
     mpPage->Clear();
-}
-
-
-
-
-controller::SlideSorterController& SlideSorterView::GetController (void)
-{
-    return static_cast<SlideSorterViewShell*>(mpViewSh)->GetSlideSorterController();
 }
 
 
@@ -255,8 +248,8 @@ void SlideSorterView::LocalModelHasChanged(void)
 
     // Initialize everything that depends on a page view, now that we have
     // one.
-    GetSdrPageView()->SetApplicationBackgroundColor(
-        Application::GetSettings().GetStyleSettings().GetWindowColor());
+    //      SetApplicationDocumentColor(
+    //          Application::GetSettings().GetStyleSettings().GetWindowColor());
 
     UpdatePageBorders();
 }
@@ -272,8 +265,8 @@ void SlideSorterView::PreModelChange (void)
 
     // Tell the page descriptors of the model that the page objects do not
     // exist anymore.
-    model::SlideSorterModel::Enumeration aPageEnumeration (
-        mrModel.GetAllPagesEnumeration());
+    model::PageEnumeration aPageEnumeration (
+        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
     while (aPageEnumeration.HasMoreElements())
         aPageEnumeration.GetNextElement()->ReleasePageObject();
 
@@ -290,13 +283,13 @@ void SlideSorterView::PostModelChange (void)
     // create new ones.
     ::osl::MutexGuard aGuard (mrModel.GetMutex());
 
-    model::SlideSorterModel::Enumeration aPageEnumeration (
-        mrModel.GetAllPagesEnumeration());
+    model::PageEnumeration aPageEnumeration (
+        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
     while (aPageEnumeration.HasMoreElements())
     {
         SdrPageObj* pPageObject = aPageEnumeration.GetNextElement()->GetPageObject();
-        mpPage->InsertObject (pPageObject);
-        pPageObject->SetModel (&maPageModel);
+        if (pPageObject != NULL)
+            AddSdrObject(*pPageObject);
     }
 
     // The new page objects have to be scaled and positioned.
@@ -331,7 +324,9 @@ void SlideSorterView::HandleDrawModeChange (void)
     GetPreviewCache()->InvalidateCache(true);
     mrModel.SetPageObjectFactory(
         ::std::auto_ptr<controller::PageObjectFactory>(
-            new controller::PageObjectFactory(GetPreviewCache())));
+            new controller::PageObjectFactory(
+                GetPreviewCache(),
+                mrSlideSorter.GetController().GetProperties())));
 
     RequestRepaint();
 }
@@ -345,10 +340,24 @@ void SlideSorterView::Resize (void)
     if (mrModel.GetPageCount()>0 && pWindow != NULL)
     {
         UpdatePageBorders();
-        if (mpLayouter->Rearrange (
-            pWindow->GetSizePixel(),
-            mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
-            pWindow))
+        bool bRearrangeSuccess (false);
+        if (meOrientation == HORIZONTAL)
+        {
+            bRearrangeSuccess = mpLayouter->RearrangeHorizontal (
+                pWindow->GetSizePixel(),
+                mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+                pWindow,
+                mrModel.GetPageCount());
+        }
+        else
+        {
+            bRearrangeSuccess = mpLayouter->RearrangeVertical (
+                pWindow->GetSizePixel(),
+                mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+                pWindow);
+        }
+
+        if (bRearrangeSuccess)
         {
             Layout();
             pWindow->Invalidate();
@@ -379,8 +388,8 @@ void SlideSorterView::Layout ()
 
         // Iterate over all page objects and place them relative to the
         // containing page.
-        model::SlideSorterModel::Enumeration aPageEnumeration (
-            mrModel.GetAllPagesEnumeration());
+        model::PageEnumeration aPageEnumeration (
+            model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
         int nIndex = 0;
         while (aPageEnumeration.HasMoreElements())
         {
@@ -393,6 +402,11 @@ void SlideSorterView::Layout ()
         }
         // Set the page so that it encloses all page objects.
         mpPage->SetSize (aViewBox.GetSize());
+
+        view::HighlightObject* pHighlightObject
+            = mrSlideSorter.GetController().GetHighlightObject();
+        if  (pHighlightObject != NULL)
+            pHighlightObject->UpdatePosition();
     }
 
     InvalidatePageObjectVisibilities ();
@@ -472,22 +486,17 @@ void SlideSorterView::UpdatePreciousFlags (void)
     {
         mbPreciousFlagUpdatePending = false;
 
-        view::PageObjectViewObjectContact* pContact = NULL;
         model::SharedPageDescriptor pDescriptor;
         ::boost::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
         sal_Int32 nPageCount (mrModel.GetPageCount());
 
         for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
         {
-            pContact = NULL;
-            pDescriptor = mrModel.GetPageDescriptor (nIndex);
+            pDescriptor = mrModel.GetPageDescriptor(nIndex);
             if (pDescriptor.get() != NULL)
-                pContact = pDescriptor->GetViewObjectContact();
-
-            if (pContact != NULL)
             {
                 pCache->SetPreciousFlag(
-                    *pContact,
+                    pDescriptor->GetPage(),
                     (nIndex>=mnFirstVisiblePageIndex && nIndex<=mnLastVisiblePageIndex));
                 SSCD_SET_VISIBILITY(mrModel.GetDocument(), nIndex,
                     (nIndex>=mnFirstVisiblePageIndex && nIndex<=mnLastVisiblePageIndex));
@@ -501,6 +510,23 @@ void SlideSorterView::UpdatePreciousFlags (void)
             }
         }
     }
+}
+
+
+
+
+void SlideSorterView::SetOrientation (const Orientation eOrientation)
+{
+    meOrientation = eOrientation;
+    RequestRepaint();
+}
+
+
+
+
+SlideSorterView::Orientation SlideSorterView::GetOrientation (void) const
+{
+    return meOrientation;
 }
 
 
@@ -684,9 +710,11 @@ void SlideSorterView::AdaptBoundingBox (
     ::sd::Window* pWindow = GetWindow();
     if (pWindow != NULL && mpPreviewCache.get() == NULL)
     {
-        Resize();
         maPreviewSize = pWindow->LogicToPixel(mpLayouter->GetPageObjectSize());
-        mpPreviewCache.reset(new cache::PageCache(*this, mrModel, maPreviewSize));
+        mpPreviewCache.reset(
+            new cache::PageCache(
+                maPreviewSize,
+                cache::SharedCacheContext(new ViewCacheContext(mrSlideSorter.GetModel(), *this))));
     }
 
     return mpPreviewCache;
@@ -750,10 +778,23 @@ void SlideSorterView::UpdatePageBorders (void)
             pWindow,
             mrModel.GetPageCount());
 
+        // Depending on values in the global properties the border has to be
+        // extended a little bit.
+        ::boost::shared_ptr<controller::Properties> pProperties(
+            mrSlideSorter.GetController().GetProperties());
+        if (pProperties.get()!=NULL && pProperties->IsHighlightCurrentSlide())
+        {
+            Size aBorderSize (pWindow->PixelToLogic (Size(3,3)));
+            maModelBorder.Left() += aBorderSize.Width();
+            maModelBorder.Right() += aBorderSize.Width();
+            maModelBorder.Top() += aBorderSize.Height();
+            maModelBorder.Bottom() += aBorderSize.Height();
+        }
+
         // Set the border at all page descriptors so that the contact
         // objects have access to them.
-        model::SlideSorterModel::Enumeration aPageEnumeration (
-            mrModel.GetAllPagesEnumeration());
+        model::PageEnumeration aPageEnumeration (
+            model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
         while (aPageEnumeration.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
@@ -773,7 +814,6 @@ void SlideSorterView::UpdatePageBorders (void)
             aBottomRightBorders.Width(),
             aBottomRightBorders.Height());
     }
-    while (false);
 
     // Finally tell the layouter about the borders.
     mpLayouter->SetBorders (2,5,4,5);
@@ -800,5 +840,13 @@ SvBorder SlideSorterView::GetModelBorder (void) const
     return maModelBorder;
 }
 
-} } } // end of namespace ::sd::slidesorter::view
 
+
+
+void SlideSorterView::AddSdrObject (SdrObject& rObject)
+{
+    mpPage->InsertObject(&rObject);
+    rObject.SetModel(&maPageModel);
+}
+
+} } } // end of namespace ::sd::slidesorter::view
