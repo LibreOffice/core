@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageSelector.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:22:00 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,15 +32,21 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_PAGE_SELECTOR_HXX
 #define SD_SLIDESORTER_PAGE_SELECTOR_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
 
-#include <set>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <vector>
 #include <memory>
 
 class SdPage;
+
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
@@ -57,8 +63,9 @@ class SlideSorterController;
 
 /** A sub-controller that handles page selection of the slide browser.
     Selecting a page does not make it the current page (of the main view)
-    automatically as this would not be desired in a multi selection.
-    This has to be done explicitly by calling the SetCurrentPage() method.
+    automatically as this would not be desired in a multi selection.  This
+    has to be done explicitly by calling the
+    CurrentSlideManager::SetCurrentSlide() method.
 
     Indices of pages relate allways to the number of all pages in the model
     (as returned by GetPageCount()) not just the selected pages.
@@ -66,9 +73,7 @@ class SlideSorterController;
 class PageSelector
 {
 public:
-    PageSelector (
-        model::SlideSorterModel& rModel,
-        SlideSorterController& rController);
+    PageSelector (SlideSorter& rSlideSorter);
 
     void SelectAllPages (void);
     void DeselectAllPages (void);
@@ -96,13 +101,6 @@ public:
     void DeselectPage (int nPageIndex);
     void DeselectPage (const SdPage* pPage);
     void DeselectPage (const model::SharedPageDescriptor& rpDescriptor);
-
-    /** Set the current page of the main view to the one associated with the
-        given descriptor.  Its selection is not modified.
-    */
-    void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
-    void SetCurrentPage (const SdPage* pPage);
-    void SetCurrentPage (int nPageIndex);
 
     /** This convenience method returns the same number of pages that
         SlideSorterModel.GetPageCount() returns.  It is included here so
@@ -149,7 +147,7 @@ public:
     model::SharedPageDescriptor GetSelectionAnchor (void) const;
 
 
-    typedef ::std::set<int> PageSelection;
+    typedef ::std::vector<SdPage*> PageSelection;
 
     /** Return an object that describes the current selection.  The caller
         can use that object to later restore the selection.
@@ -158,7 +156,7 @@ public:
             even if pages are exchanged a later call to SetPageSelection()
             is valid.
     */
-    ::std::auto_ptr<PageSelection> GetPageSelection (void);
+    ::boost::shared_ptr<PageSelection> GetPageSelection (void) const;
 
     /** Restore a page selection according to the given selection object.
         @param rSelection
@@ -168,10 +166,13 @@ public:
             this method with the selection.  When pages have been inserted
             or removed the result may be unexpected.
     */
-    void SetPageSelection (const PageSelection& rSelection);
+    void SetPageSelection (const ::boost::shared_ptr<PageSelection>& rSelection);
+
+    void UpdateCurrentPage (const model::SharedPageDescriptor& rCurrentPageDescriptor);
 
 private:
     model::SlideSorterModel& mrModel;
+    SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
     int mnSelectedPageCount;
     int mnBroadcastDisableLevel;
@@ -179,6 +180,7 @@ private:
     model::SharedPageDescriptor mpMostRecentlySelectedPage;
     /// Anchor for a range selection.
     model::SharedPageDescriptor mpSelectionAnchor;
+    model::SharedPageDescriptor mpCurrentPage;
 
     void CountSelectedPages (void);
 };
