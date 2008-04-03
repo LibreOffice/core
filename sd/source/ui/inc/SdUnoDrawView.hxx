@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-04-28 14:58:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,15 @@
 #ifndef SD_UNO_DRAW_VIEW_HXX
 #define SD_UNO_DRAW_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
 #include "DrawSubController.hxx"
-#endif
+#include "DrawController.hxx"
+#include "DrawViewShell.hxx"
+#include <cppuhelper/basemutex.hxx>
 
 class SdXImpressDocument;
 class SdPage;
+
+namespace css = ::com::sun::star;
 
 namespace com { namespace sun { namespace star { namespace drawing {
 class XLayer;
@@ -55,7 +58,8 @@ class DrawViewShell;
 /** This class implements the DrawViewShell specific part of the controller.
 */
 class SdUnoDrawView
-    : public DrawSubController
+    : private cppu::BaseMutex,
+      public DrawSubControllerInterfaceBase
 {
 public:
     SdUnoDrawView (
@@ -65,46 +69,50 @@ public:
     virtual ~SdUnoDrawView (void) throw();
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL select (
+        const css::uno::Any& aSelection)
+        throw(css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL getSelection (void)
+        throw(css::uno::RuntimeException);
+
+    virtual void SAL_CALL addSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
 
     // XDrawView
-    virtual void SAL_CALL setCurrentPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getCurrentPage(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    /**
-     * Converted the value rValue and return the result in rConvertedValue and the
-     * old value in rOldValue. A IllegalArgumentException is thrown.
-     * The method is not implemented in this class. After this call the vetoable
-     * listeners are notified.
-     *
-     * @param rConvertedValue the converted value. Only set if return is true.
-     * @param rOldValue the old value. Only set if return is true.
-     * @param nHandle the handle of the proberty.
-     * @return true if the value converted.
-     */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any & rConvertedValue,
-        ::com::sun::star::uno::Any & rOldValue,
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage >& xPage)
+        throw(css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+        throw(css::uno::RuntimeException);
+
+
+    // XFastPropertySet
+
+    virtual void SAL_CALL setFastPropertyValue (
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
-    /**
-     * The same as setFastProperyValue, but no exception is thrown and nHandle
-     * is always valid. You must not broadcast the changes in this method.<BR>
-     * <B>You type is correct you need't test it.</B>
-     */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-    /**
-     * The same as getFastProperyValue, but return the value through
-     * rValue and nHandle is always valid.
-     */
-    virtual void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
-        sal_Int32 nHandle ) const;
+        const css::uno::Any& rValue)
+        throw(css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL getFastPropertyValue (
+        sal_Int32 nHandle)
+        throw(css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
 
 protected:
     sal_Bool getMasterPageMode(void) const throw();
