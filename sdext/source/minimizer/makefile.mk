@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 12:23:43 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:54:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+.IF "$(ENABLE_MINIMIZER)" == "NO"
+@all:
+    @echo "Presentation Minimizer build disabled."
+.ELSE
 
 DESCRIPTION:=$(MISC)$/SunPresentationMinimizer$/description.xml
 
@@ -176,3 +181,4 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $@
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
 
+.ENDIF #  "$(ENABLE_MINIMIZER)" != "YES"
