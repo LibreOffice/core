@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFileBasedDatabase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:50:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #include <tools/diagnose_ex.h>
 #endif
 #include <comphelper/sequence.hxx>
-
+#include "dsntypes.hxx"
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -119,26 +119,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
     if ( sLocation.getLength() && sMediaType.getLength() )
     {
-        ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("sdbc:"));
-        if ( sMediaType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "text/csv" ) ) )
-        {
-            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flat:"));
-        }
-        else if ( sMediaType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "application/dbase" ) ) )
-        {
-            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbase:"));
-        }
-        else if ( sMediaType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "application/vnd.oasis.opendocument.spreadsheet" ) ) )
-        {
-            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc:"));
-        }
-        else if ( sMediaType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "application/msaccess" ) ) )
-        {
-            if ( sFileTypeExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "mdb" ) ) )
-                sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
-            else
-                sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE="));
-        }
+        ::rtl::OUString sURL(dbaui::ODsnTypeCollection::getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try
         {
